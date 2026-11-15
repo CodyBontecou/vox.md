@@ -176,10 +176,49 @@ final class CaptureURLDeliveryIntegrationTests: XCTestCase {
         let finishedDraft = try await CaptureDraftStore(rootDirectoryURL: fixture.root).load(id: draftID)
         XCTAssertNil(finishedDraft)
         XCTAssertEqual(try FileManager.default.contentsOfDirectory(atPath: fixture.vault.path), [])
-        // Activity keeps a record of the capture.
-        let record = try XCTUnwrap(fixture.model.historyRecords.first(where: { $0.requestID == requestID }))
-        XCTAssertEqual(record.outcome, .delivered)
+        // Activity reports it delivered once the POST succeeded.
+        let record = try await historyRecord(requestID, in: fixture.model) { $0.outcome == .delivered }
+        XCTAssertNil(record.failureCategory)
         XCTAssertEqual(record.destinationName, "example.invalid")
+    }
+
+    func testRemoteOnlyRefusesAttachmentsAndKeepsDraft() async throws {
+        let fixture = try await makeFixture(maxAttempts: 1, responseStatuses: [200], remoteOnly: true)
+        fixture.model.draft.text = "Synthetic text with an attachment"
+        let asset = try CaptureAssetReference(
+            relativePath: "synthetic.pdf", originalFilename: "synthetic.pdf", contentTypeIdentifier: "com.adobe.pdf"
+        )
+        fixture.model.draft.additionalPayloads = [.file(asset)]
+        let draftID = fixture.model.draft.id
+
+        await fixture.model.submit()
+
+        XCTAssertEqual(fixture.model.errorMessage,
+                       QuickCaptureViewModelError.remoteOnlyAttachmentsUnsupported.localizedDescription)
+        XCTAssertEqual(fixture.model.draft.id, draftID)
+        XCTAssertEqual(fixture.model.draft.text, "Synthetic text with an attachment")
+        XCTAssertEqual(fixture.model.draft.additionalPayloads, [.file(asset)])
+        XCTAssertEqual(ComposerHTTPProtocol.requestCount, 0)
+        await fixture.owner.refresh()
+        XCTAssertTrue(fixture.owner.receipts.isEmpty)
+    }
+
+    func testRemoteOnlyUsesTheFreeCaptureQuota() async throws {
+        let fixture = try await makeFixture(
+            maxAttempts: 1, responseStatuses: [200], remoteOnly: true,
+            pipeline: CapturePipeline(deliveryAccounting: ComposerDenyingAccounting())
+        )
+        fixture.model.draft.text = "Synthetic over-limit capture"
+        let draftID = fixture.model.draft.id
+
+        await fixture.model.submit()
+
+        XCTAssertTrue(fixture.model.needsCaptureUnlock)
+        XCTAssertEqual(fixture.model.draft.id, draftID)
+        XCTAssertEqual(fixture.model.draft.text, "Synthetic over-limit capture")
+        XCTAssertEqual(ComposerHTTPProtocol.requestCount, 0)
+        await fixture.owner.refresh()
+        XCTAssertTrue(fixture.owner.receipts.isEmpty)
     }
 
     func testRemoteOnlyFailedDeliveryCanBeRetriedFromURLDeliveries() async throws {
@@ -195,10 +234,30 @@ final class CaptureURLDeliveryIntegrationTests: XCTestCase {
         XCTAssertEqual(fixture.model.draft.text, "")
         XCTAssertEqual(fixture.owner.receipts.first?.id, id.uuidString.lowercased())
         XCTAssertEqual(fixture.owner.receipts.first?.outcome, .retryable)
+        // A failed POST is not reported as delivered.
+        let failed = try await historyRecord(id, in: fixture.model) { $0.failureCategory == .urlDeliveryFailed }
+        XCTAssertEqual(failed.outcome, .failed)
         await fixture.owner.retry(id: id)
         XCTAssertEqual(ComposerHTTPProtocol.requestCount, 2)
         XCTAssertTrue(fixture.owner.receipts.isEmpty)
         XCTAssertEqual(try FileManager.default.contentsOfDirectory(atPath: fixture.vault.path), [])
+        _ = try await historyRecord(id, in: fixture.model) { $0.outcome == .delivered }
+    }
+
+    /// The Activity row is updated asynchronously after each send attempt.
+    private func historyRecord(
+        _ requestID: UUID, in model: QuickCaptureViewModel,
+        where condition: (CaptureHistoryRecord) -> Bool
+    ) async throws -> CaptureHistoryRecord {
+        for _ in 0..<500 {
+            if let record = model.historyRecords.first(where: { $0.requestID == requestID }), condition(record) {
+                return record
+            }
+            try await Task.sleep(for: .milliseconds(10))
+        }
+        let record = try XCTUnwrap(model.historyRecords.first(where: { $0.requestID == requestID }))
+        XCTFail("Unexpected Activity record: \(record.outcome) \(String(describing: record.failureCategory))")
+        return record
     }
 
     func testRemoteOnlyWithoutEnabledURLDeliveryStillRequiresDestination() async throws {
@@ -272,7 +331,7 @@ final class CaptureURLDeliveryIntegrationTests: XCTestCase {
     private func makeFixture(
         processor: (any CapturePresetTextProcessing)? = nil, brokenJournal: Bool = false,
         refuseLease: Bool = false, maxAttempts: Int = 2, responseStatuses: [Int] = [503], sleeper: @escaping TranscriptURLDeliverer.Sleeper = { _ in },
-        remoteOnly: Bool = false, urlDeliveryEnabled: Bool = true
+        remoteOnly: Bool = false, urlDeliveryEnabled: Bool = true, pipeline: CapturePipeline = CapturePipeline()
     ) async throws -> Fixture {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("ComposerURL-\(UUID().uuidString)")
         let vault = root.appendingPathComponent("vault")
@@ -303,7 +362,7 @@ final class CaptureURLDeliveryIntegrationTests: XCTestCase {
         let sender = TranscriptURLDeliverer(session: URLSession(configuration: configuration), receiptsDirectoryURL: journal,
                                             credentialsProvider: { _ in nil }, logger: { _ in }, sleeper: sleeper)
         let owner = URLDeliveryCoordinator(deliverer: sender, beginExecution: { _ in refuseLease ? nil : .init() })
-        let model = QuickCaptureViewModel(captureRootURL: root, defaults: defaults, pipeline: CapturePipeline(),
+        let model = QuickCaptureViewModel(captureRootURL: root, defaults: defaults, pipeline: pipeline,
             requestProcessor: CapturePresetRequestProcessor(textProcessor: processor), urlDeliveryCoordinator: owner)
         addTeardownBlock {
             await owner.cancelAll()
@@ -320,6 +379,14 @@ final class CaptureURLDeliveryIntegrationTests: XCTestCase {
         let data = try Data(contentsOf: directory.appendingPathComponent("\(id.uuidString.lowercased()).request.json"))
         return try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
     }
+}
+
+private struct ComposerDenyingAccounting: CaptureDeliveryAccounting {
+    func reserve(for request: CaptureRequest) async throws -> CaptureDeliveryReservation {
+        throw CaptureDeliveryQuotaError.limitReached(limit: 3)
+    }
+    func commit(_ reservation: CaptureDeliveryReservation) async throws {}
+    func release(_ reservation: CaptureDeliveryReservation) async {}
 }
 
 private actor PausedComposerTextProcessor: CapturePresetTextProcessing {

@@ -6,9 +6,17 @@ public enum CapturePipelineError: Error, Equatable, LocalizedError, Sendable {
     /// Durable unattended requests with an `.ask` policy stop here until a
     /// foreground surface records an explicit decision.
     case locationDecisionRequired(CaptureLocationUnavailableReason?)
+    /// A Remote-only request names no vault and must never be written to one;
+    /// a vault request must never be metered as Remote only.
+    case remoteOnlyRequestHasNoVault
+    case remoteOnlyRequestRequired
 
     public var errorDescription: String? {
         switch self {
+        case .remoteOnlyRequestHasNoVault:
+            return "This Capture belongs to a Remote-only Route and cannot be written to a vault."
+        case .remoteOnlyRequestRequired:
+            return "Only a Remote-only Capture can skip its vault destination."
         case .destinationMismatch(let expected, let actual):
             return "Capture destination mismatch. Expected \(expected.uuidString), received \(actual.uuidString)."
         case .unsafeNotePath(let path):
@@ -139,6 +147,7 @@ public actor CapturePipeline {
         rootURL: URL,
         assetRootURL: URL? = nil
     ) async throws -> CaptureReceipt {
+        guard !request.isRemoteOnly else { throw CapturePipelineError.remoteOnlyRequestHasNoVault }
         try Self.validateLocationDecision(in: request)
         // Resolve one immutable operation-scoped engine route before acquiring the
         // process gate or crossing quota/filesystem/attachment/success boundaries.
@@ -200,6 +209,47 @@ public actor CapturePipeline {
             try await deliveryAccounting.commit(reservation)
             await CapturePipelineGate.shared.release()
             return receipt
+        } catch {
+            await CapturePipelineGate.shared.release()
+            throw error
+        }
+    }
+
+    /// Meters a Remote-only Capture exactly like a vault delivery. `handoff`
+    /// persists the URL delivery; it is that Capture's success boundary, so the
+    /// free-capture slot is committed only after it returns and released if it
+    /// throws. Returns `nil` without running `handoff` when this request ID
+    /// was already counted, because its handoff is already durable.
+    public func meterRemoteOnlyDelivery<T: Sendable>(
+        _ request: CaptureRequest,
+        handoff: @Sendable () async throws -> T
+    ) async throws -> T? {
+        guard request.isRemoteOnly else { throw CapturePipelineError.remoteOnlyRequestRequired }
+        try Self.validateLocationDecision(in: request)
+        await CapturePipelineGate.shared.acquire()
+        let reservation: CaptureDeliveryReservation
+        do {
+            reservation = try await deliveryAccounting.reserve(for: request)
+        } catch {
+            await CapturePipelineGate.shared.release()
+            throw error
+        }
+        if case .alreadyCounted = reservation {
+            await CapturePipelineGate.shared.release()
+            return nil
+        }
+        let result: T
+        do {
+            result = try await handoff()
+        } catch {
+            await deliveryAccounting.release(reservation)
+            await CapturePipelineGate.shared.release()
+            throw error
+        }
+        do {
+            try await deliveryAccounting.commit(reservation)
+            await CapturePipelineGate.shared.release()
+            return result
         } catch {
             await CapturePipelineGate.shared.release()
             throw error

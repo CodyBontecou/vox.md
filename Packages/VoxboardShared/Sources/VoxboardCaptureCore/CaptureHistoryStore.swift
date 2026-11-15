@@ -14,10 +14,18 @@ public enum CaptureHistoryFailureCategory: String, Codable, CaseIterable, Sendab
     case attachment
     case fileWrite
     case storage
+    /// A Remote-only Capture whose URL delivery has not finished yet.
+    case urlDeliveryPending
+    /// A Remote-only Capture whose POST failed; retry it in URL Deliveries.
+    case urlDeliveryFailed
     case unknown
 
     public var displayName: String {
         switch self {
+        case .urlDeliveryPending:
+            return "Waiting for URL delivery"
+        case .urlDeliveryFailed:
+            return "URL delivery failed"
         case .destinationUnavailable:
             return "Destination unavailable"
         case .permissionDenied:

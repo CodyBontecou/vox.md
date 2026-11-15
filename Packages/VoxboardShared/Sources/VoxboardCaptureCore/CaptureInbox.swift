@@ -56,6 +56,8 @@ public actor CaptureInbox {
     }
 
     public func enqueue(_ request: CaptureRequest) throws {
+        // The inbox delivers to vaults; a Remote-only request has none.
+        guard !request.isRemoteOnly else { throw CapturePipelineError.remoteOnlyRequestHasNoVault }
         try coordinator.coordinateWriting(at: rootDirectoryURL) { _ in
             try ensureDirectories()
             if CaptureInboxState.allCases.contains(where: {

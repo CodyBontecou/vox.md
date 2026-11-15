@@ -737,6 +737,18 @@ final class URLDeliveryRedirectBlocker: NSObject, URLSessionTaskDelegate, @unche
     }
 }
 
+public extension CapturePayload {
+    /// URL delivery posts text only. Any other payload (an image, file,
+    /// sketch, recording or scan) would be dropped, so a Remote-only Route
+    /// refuses to send it.
+    var isCarriedByURLDelivery: Bool {
+        switch self {
+        case .text, .url: return true
+        default: return false
+        }
+    }
+}
+
 public extension CaptureRequest {
     var urlDeliveryText: String {
         payloads.compactMap { payload -> String? in

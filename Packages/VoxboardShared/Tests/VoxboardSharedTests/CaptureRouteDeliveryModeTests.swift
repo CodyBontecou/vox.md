@@ -84,3 +84,16 @@ final class CaptureRouteDeliveryModeTests: XCTestCase {
         XCTAssertTrue(settings.enabled)
     }
 }
+
+final class CapturePayloadURLDeliveryTests: XCTestCase {
+    func testOnlyTextPayloadsAreCarriedByURLDelivery() throws {
+        let asset = try CaptureAssetReference(
+            relativePath: "synthetic.png", originalFilename: "synthetic.png", contentTypeIdentifier: "public.png"
+        )
+        XCTAssertTrue(CapturePayload.text("Synthetic").isCarriedByURLDelivery)
+        XCTAssertTrue(CapturePayload.url(try XCTUnwrap(URL(string: "https://example.invalid")), title: nil).isCarriedByURLDelivery)
+        XCTAssertFalse(CapturePayload.image(asset, altText: nil).isCarriedByURLDelivery)
+        XCTAssertFalse(CapturePayload.file(asset).isCarriedByURLDelivery)
+        XCTAssertFalse(CapturePayload.audio(asset, transcript: "Synthetic").isCarriedByURLDelivery)
+    }
+}

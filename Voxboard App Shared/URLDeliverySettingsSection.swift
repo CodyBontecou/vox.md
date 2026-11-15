@@ -101,9 +101,15 @@ struct URLDeliverySettingsSection: View {
                 .tracking(0.66)
                 .foregroundStyle(Geist.muted)
         } footer: {
-            Text("Local + remote adds a JSON POST to this route’s existing destinations. Remote only sends just the POST and needs Deliver to URL with a saved endpoint. Off by default. Draft recordings are not sent until you choose Send. Redirects are not followed. Failed deliveries are retained for HTTP-only retry or discard in URL Deliveries.")
-                .font(Geist.caption())
-                .foregroundStyle(Geist.muted)
+            if settings.deliveryMode == .remoteOnly {
+                Text("Sends a JSON POST instead of writing a note. Draft recordings are not sent until you choose Send. Redirects are not followed. Failed deliveries are retained for HTTP-only retry or discard in URL Deliveries.")
+                    .font(Geist.caption())
+                    .foregroundStyle(Geist.muted)
+            } else {
+                Text("Adds a JSON POST to this route’s existing destinations; it does not replace note delivery. Off by default. Draft recordings are not sent until you choose Send. Redirects are not followed. Failed deliveries are retained for HTTP-only retry or discard in URL Deliveries.")
+                    .font(Geist.caption())
+                    .foregroundStyle(Geist.muted)
+            }
         }
         .tint(Geist.accent)
         .onAppear(perform: loadCredentials)
