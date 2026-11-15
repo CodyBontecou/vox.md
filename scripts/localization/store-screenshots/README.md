@@ -7,9 +7,11 @@ and swapping the text — and, where a real localized capture of the app exists,
 **Real captures** (`CAPTURE.md`): the iPhone (composer, live recording, Routes, Library), iPad (capture,
 Library) and iPhone Duo (inner composer/Library, tabletop, cover capture/recording) screens are real
 simulator captures of the Debug app in each language, seeded with the same notes as the frames
-(`seed_samples.py` → `-VoxSeedSamples`). The voice keyboard, Lock Screen, iPad/Duo Split View and Mac
-frames still use the translated Design mockups. `capture_mac.py` exists but runs against the Mac app's real
-sandbox container (shared bundle id), so don't use it on a machine with real Vox.md data.
+(`seed_samples.py` → `-VoxSeedSamples`). The Mac workspace, quick capture, Library and Activity screens are
+real window captures of the Debug Mac app (`capture_mac.py`; it backs up and restores this Mac's Vox.md data,
+since the Debug build shares the container, and needs Accessibility + Screen Recording permission). The voice
+keyboard, Lock Screen and iPad/Duo Split View frames still use the translated Design mockups. The Mac app's
+built-in demo history and activity text (e.g. "Mac navigation review") is English in every locale.
 
 Pipeline: capture (CAPTURE.md) → `normalize_captures.py` (rotates iPad/Duo-inner buffers upright into
 `store-signal-captures/_ready/`) → `render.mjs` (uses a capture when present, `--mock` to ignore them).
