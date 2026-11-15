@@ -177,6 +177,10 @@ struct QuickCaptureView: View {
     /// The editor's on-screen height, so the quote can step aside when the
     /// keyboard and attachments leave no room beside the Route prompt.
     @State private var composerViewportHeight: CGFloat = .infinity
+    /// iPhone: the floating header's height (the editor's top inset) and
+    /// whether the writer is scrolling text beneath it.
+    @State private var floatingChromeHeight: CGFloat = 0
+    @State private var floatingChromeState = QuickCaptureFloatingChrome.State()
     /// True while an on-screen keyboard (or the ••• panel in its place) is up.
     /// A hardware keyboard only shows the accessory bar, which stays false.
     @State private var hasPerformedInitialLoad = false
@@ -252,7 +256,11 @@ struct QuickCaptureView: View {
                 fileExport: fileExportOverlay,
                 sentToast: sentToastOverlay,
                 showsPreview: showsInlinePreview,
-                preview: draftPreview
+                preview: draftPreview,
+                floatingChrome: floatsCaptureHeader ? floatingChromeState : nil,
+                floatingChromeHeightChanged: { height in
+                    if abs(floatingChromeHeight - height) > 0.5 { floatingChromeHeight = height }
+                }
             )
             .overlay { liveRecordingScreen }
             .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { workspaceWidth = $0 }
@@ -277,6 +285,17 @@ struct QuickCaptureView: View {
                 sendComposerCapture()
             }
         }
+    }
+
+    /// Phone: the header floats and the note scrolls beneath it. The iPad
+    /// panes keep their fixed header row.
+    private var floatsCaptureHeader: Bool {
+        layout == .compact
+    }
+
+    /// The editor's top inset: room for the floating header.
+    private var composerTopInset: CGFloat {
+        floatsCaptureHeader ? floatingChromeHeight : 0
     }
 
     private var showsInlinePencil: Bool {
@@ -1935,7 +1954,14 @@ struct QuickCaptureView: View {
                 },
                 highlightedEntry: viewModel.liveNoteHighlightedEntry,
                 showsRawMarkdown: showsRawMarkdown,
-                resolveEmbedURL: { [viewModel] target in viewModel.liveNoteEmbedURL(target) }
+                resolveEmbedURL: { [viewModel] target in viewModel.liveNoteEmbedURL(target) },
+                topContentInset: composerTopInset,
+                scrollActivityDidChange: { activity in
+                    floatingChromeState = QuickCaptureFloatingChrome.State(
+                        isScrolling: activity.isScrolling,
+                        hasContentBeneath: activity.isBelowTop
+                    )
+                }
             )
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Geist.bg)
@@ -1944,7 +1970,18 @@ struct QuickCaptureView: View {
                 // centers its children, which drew the idle caret in the
                 // middle of the Route prompt instead of before it.
                 ZStack(alignment: .topLeading) {
-                if viewModel.draft.text.isEmpty, let prompt = composerPlaceholderPrompt {
+                if let status = composerRecordingStatus {
+                    // Recording into an empty draft: say so on the line where
+                    // the live transcript starts; the words replace it.
+                    Text(verbatim: status)
+                        .font(Geist.body())
+                        .foregroundStyle(Geist.faint)
+                        .padding(.leading, composerIsFocused ? 27 : 31)
+                        .padding(.trailing, 25)
+                        .padding(.top, 12)
+                        .allowsHitTesting(false)
+                        .accessibilityIdentifier("composer.recordingStatus")
+                } else if viewModel.draft.text.isEmpty, let prompt = composerPlaceholderPrompt {
                     // The Route's own empty prompt, above the centered quote.
                     Text(verbatim: prompt)
                         .font(Geist.body())
@@ -1964,6 +2001,8 @@ struct QuickCaptureView: View {
                         .accessibilityHidden(true)
                 }
                 }
+                // The text starts below the floating header.
+                .padding(.top, composerTopInset)
             }
             .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { composerViewportHeight = $0 }
             .overlay(alignment: .center) {
@@ -1972,9 +2011,11 @@ struct QuickCaptureView: View {
                 if InspirationQuotePresentation.shouldShow(
                     forDraftText: viewModel.draft.text,
                     hasPrompt: composerPlaceholderPrompt != nil,
-                    editorHeight: composerViewportHeight
+                    editorHeight: composerViewportHeight - composerTopInset,
+                    isRecording: persistentRecorder.isAppRecordingSegmentActive
                 ) {
                     inspirationPlaceholder
+                        .padding(.top, composerTopInset)
                         .task { await loadInspirationQuote() }
                 }
             }
@@ -1988,6 +2029,14 @@ struct QuickCaptureView: View {
             return String(localized: "Type, paste or attach — or turn on the microphone to speak.")
         }
         return nil
+    }
+
+    private var composerRecordingStatus: String? {
+        InspirationQuotePresentation.recordingStatus(
+            forDraftText: viewModel.draft.text,
+            isRecording: persistentRecorder.isAppRecordingSegmentActive,
+            isPaused: persistentRecorder.isSegmentPaused
+        )
     }
 
     private var inspirationPlaceholder: CaptureViewSection {

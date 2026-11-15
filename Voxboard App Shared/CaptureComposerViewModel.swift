@@ -3080,6 +3080,55 @@ extension QuickCaptureViewModel {
         }.value
     }
 
+    /// Copies notes out of the vault into a fresh temporary folder, so the
+    /// share sheet and the Files exporter can read them without the vault's
+    /// security scope. Notes with the same name in different folders get a
+    /// " (2)" suffix. Returns the copies in the order given; notes that
+    /// can't be read are skipped.
+    func vaultShareCopies(rootDestinationID: UUID, relativePaths: [String]) async -> [URL] {
+        guard !relativePaths.isEmpty,
+              let rootURL = vaultRootURL(destinationID: rootDestinationID) else { return [] }
+        return await Task.detached(priority: .userInitiated) {
+            let fileManager = FileManager.default
+            let shareRoot = fileManager.temporaryDirectory.appendingPathComponent("VaultShare", isDirectory: true)
+            // Earlier shares are finished by the time a new one starts.
+            try? fileManager.removeItem(at: shareRoot)
+            let folder = shareRoot.appendingPathComponent(UUID().uuidString, isDirectory: true)
+            guard (try? fileManager.createDirectory(at: folder, withIntermediateDirectories: true)) != nil else {
+                return []
+            }
+            let didAccess = rootURL.startAccessingSecurityScopedResource()
+            defer { if didAccess { rootURL.stopAccessingSecurityScopedResource() } }
+            var usedNames = Set<String>()
+            var copies: [URL] = []
+            for path in relativePaths {
+                guard (try? CapturePathValidation.validateRelativePath(path)) != nil else { continue }
+                let source = rootURL.appendingPathComponent(path)
+                let name = Self.uniqueShareName((path as NSString).lastPathComponent, used: &usedNames)
+                let destination = folder.appendingPathComponent(name)
+                do {
+                    try fileManager.copyItem(at: source, to: destination)
+                    copies.append(destination)
+                } catch {
+                    usedNames.remove(name.lowercased())
+                }
+            }
+            return copies
+        }.value
+    }
+
+    nonisolated static func uniqueShareName(_ name: String, used: inout Set<String>) -> String {
+        if used.insert(name.lowercased()).inserted { return name }
+        let stem = (name as NSString).deletingPathExtension
+        let ext = (name as NSString).pathExtension
+        var index = 2
+        while true {
+            let candidate = ext.isEmpty ? "\(stem) (\(index))" : "\(stem) (\(index)).\(ext)"
+            if used.insert(candidate.lowercased()).inserted { return candidate }
+            index += 1
+        }
+    }
+
     nonisolated static func previewLine(from markdown: String) -> String? {
         var lines = markdown.components(separatedBy: .newlines)[...]
         if lines.first?.trimmingCharacters(in: .whitespaces) == "---" {

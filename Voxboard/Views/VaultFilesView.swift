@@ -16,6 +16,9 @@ struct VaultFilesView: View {
     @State private var unreachable = false
     @State private var filter = ""
     @State private var openingFolder: VaultFolderRoute?
+    @State private var isSelecting = false
+    @State private var selection: Set<String> = []
+    @State private var sharing = VaultShareState()
 
     private var roots: [VaultRoot] { viewModel.vaultRoots }
 
@@ -28,7 +31,16 @@ struct VaultFilesView: View {
             ZStack {
                 Geist.bg.ignoresSafeArea()
                 VStack(spacing: 0) {
-                    header
+                    if isSelecting {
+                        VaultSelectionHeader(
+                            selectedCount: selection.count,
+                            allSelected: !visibleFilePaths.isEmpty && visibleFilePaths.allSatisfy(selection.contains),
+                            onToggleAll: toggleSelectAll,
+                            onDone: endSelecting
+                        )
+                    } else {
+                        header
+                    }
                     ScrollView {
                         VStack(alignment: .leading, spacing: Geist.Spacing.three) {
                             titleBlock
@@ -40,9 +52,21 @@ struct VaultFilesView: View {
                         .padding(.bottom, Geist.Spacing.six)
                     }
                     .refreshable { await reloadAll() }
+                    .safeAreaInset(edge: .bottom) {
+                        if isSelecting {
+                            VaultSelectionBar(
+                                selectedCount: selection.count,
+                                isPreparing: sharing.isPreparing,
+                                onShare: { share(.share, paths: selectedPaths) },
+                                onExport: { share(.export, paths: selectedPaths) }
+                            )
+                        }
+                    }
                 }
             }
             .toolbar(.hidden, for: .navigationBar)
+            .vaultSharing(sharing)
+            .animation(.snappy(duration: 0.2), value: isSelecting)
             .navigationDestination(item: $openingFolder) { route in
                 VaultFolderView(
                     viewModel: viewModel,
@@ -53,6 +77,7 @@ struct VaultFilesView: View {
                 )
             }
             .task(id: root?.id) { await reloadAll() }
+            .onChange(of: selectedRootID) { selection = [] }
         }
     }
 
@@ -64,6 +89,9 @@ struct VaultFilesView: View {
                 .buttonStyle(SignalCircleButtonStyle())
                 .accessibilityLabel("Back to Capture")
             Spacer()
+            Button { isSelecting = true } label: { Image(systemName: "checkmark.circle") }
+                .buttonStyle(SignalCircleButtonStyle())
+                .accessibilityLabel("Select notes")
             Button(action: startNewNote) { Image(systemName: "plus") }
                 .buttonStyle(SignalCircleButtonStyle())
                 .accessibilityLabel("New note")
@@ -233,11 +261,18 @@ struct VaultFilesView: View {
             .accessibilityHint(isExpanded ? "Collapses the folder" : "Expands the folder")
         case .file(let entry, let depth):
             let isOpen = viewModel.liveNote?.binding.relativePath == entry.relativePath
+            let isChecked = selection.contains(entry.relativePath)
             Button {
-                open(entry)
+                if isSelecting {
+                    toggleSelection(entry.relativePath)
+                } else {
+                    open(entry)
+                }
             } label: {
                 HStack(spacing: 8) {
-                    if depth == 0 {
+                    if isSelecting {
+                        VaultSelectionCheck(isSelected: isChecked)
+                    } else if depth == 0 {
                         Image(systemName: "doc.text")
                             .foregroundStyle(Geist.muted)
                             .frame(width: 22)
@@ -266,11 +301,24 @@ struct VaultFilesView: View {
                 .padding(.leading, depth == 0 ? 12 : 12 + CGFloat(depth) * 22 + 20)
                 .padding(.trailing, 14)
                 .frame(minHeight: 44)
-                .background(isOpen ? Geist.accentSoft.opacity(0.6) : Color.clear)
+                .background(rowHighlight(isOpen: isOpen, isChecked: isChecked))
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .accessibilityHint("Opens this note in Capture")
+            .accessibilityAddTraits(isSelecting && isChecked ? .isSelected : [])
+            .accessibilityHint(isSelecting ? "Selects this note" : "Opens this note in Capture")
+            .contextMenu {
+                if !isSelecting {
+                    VaultNoteContextMenu(
+                        onShare: { share(.share, paths: [entry.relativePath]) },
+                        onExport: { share(.export, paths: [entry.relativePath]) },
+                        onSelect: {
+                            isSelecting = true
+                            selection = [entry.relativePath]
+                        }
+                    )
+                }
+            }
         case .more(let directory, let count, let depth):
             Button {
                 if let root { openingFolder = VaultFolderRoute(rootDestinationID: root.destinationID, relativeDirectory: directory) }
@@ -286,6 +334,11 @@ struct VaultFilesView: View {
             .buttonStyle(.plain)
             .accessibilityHint("Shows every note in this folder")
         }
+    }
+
+    private func rowHighlight(isOpen: Bool, isChecked: Bool) -> Color {
+        if isSelecting { return isChecked ? Geist.accentSoft.opacity(0.6) : .clear }
+        return isOpen ? Geist.accentSoft.opacity(0.6) : .clear
     }
 
     @ViewBuilder
@@ -365,6 +418,51 @@ struct VaultFilesView: View {
             onOpenedNote()
         }
     }
+
+    // MARK: Selection
+
+    private var visibleFilePaths: [String] {
+        visibleRows.compactMap { row in
+            if case .file(let entry, _) = row { return entry.relativePath }
+            return nil
+        }
+    }
+
+    /// Selected notes in the order they appear in the tree.
+    private var selectedPaths: [String] {
+        let shown = visibleFilePaths
+        let hidden = selection.subtracting(shown).sorted()
+        return shown.filter(selection.contains) + hidden
+    }
+
+    private func toggleSelection(_ path: String) {
+        if selection.contains(path) {
+            selection.remove(path)
+        } else {
+            selection.insert(path)
+        }
+    }
+
+    private func toggleSelectAll() {
+        let shown = visibleFilePaths
+        if !shown.isEmpty, shown.allSatisfy(selection.contains) {
+            selection.subtract(shown)
+        } else {
+            selection.formUnion(shown)
+        }
+    }
+
+    private func endSelecting() {
+        isSelecting = false
+        selection = []
+    }
+
+    private func share(_ mode: VaultShareState.Mode, paths: [String]) {
+        guard let root else { return }
+        Task {
+            await sharing.run(mode, paths: paths, rootDestinationID: root.destinationID, viewModel: viewModel)
+        }
+    }
 }
 
 enum VaultTreeRow: Identifiable {
@@ -423,6 +521,9 @@ struct VaultFolderView: View {
     @State private var entries: [VaultFileEntry] = []
     @State private var previews: [String: String] = [:]
     @State private var filter = ""
+    @State private var isSelecting = false
+    @State private var selection: Set<String> = []
+    @State private var sharing = VaultShareState()
 
     private var folderName: String { (route.relativeDirectory as NSString).lastPathComponent }
     private var parentPath: String {
@@ -453,14 +554,26 @@ struct VaultFolderView: View {
         ZStack(alignment: .bottom) {
             Geist.bg.ignoresSafeArea()
             VStack(spacing: 0) {
-                HStack {
-                    Button { dismiss() } label: { Image(systemName: "chevron.left") }
-                        .buttonStyle(SignalCircleButtonStyle())
-                        .accessibilityLabel("Back")
-                    Spacer()
+                if isSelecting {
+                    VaultSelectionHeader(
+                        selectedCount: selection.count,
+                        allSelected: !files.isEmpty && files.allSatisfy { selection.contains($0.relativePath) },
+                        onToggleAll: toggleSelectAll,
+                        onDone: endSelecting
+                    )
+                } else {
+                    HStack {
+                        Button { dismiss() } label: { Image(systemName: "chevron.left") }
+                            .buttonStyle(SignalCircleButtonStyle())
+                            .accessibilityLabel("Back")
+                        Spacer()
+                        Button { isSelecting = true } label: { Image(systemName: "checkmark.circle") }
+                            .buttonStyle(SignalCircleButtonStyle())
+                            .accessibilityLabel("Select notes")
+                    }
+                    .padding(.horizontal, Geist.Spacing.four)
+                    .padding(.vertical, Geist.Spacing.two)
                 }
-                .padding(.horizontal, Geist.Spacing.four)
-                .padding(.vertical, Geist.Spacing.two)
                 ScrollView {
                     VStack(alignment: .leading, spacing: Geist.Spacing.three) {
                         VStack(alignment: .leading, spacing: 4) {
@@ -515,19 +628,30 @@ struct VaultFolderView: View {
                     .padding(.bottom, 110)
                 }
             }
-            Button(action: onNewNote) {
-                Label("New note", systemImage: "square.and.pencil")
-                    .font(Geist.label(.body))
-                    .foregroundStyle(Color.white)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 56)
-                    .background(Geist.text, in: Capsule())
+            if isSelecting {
+                VaultSelectionBar(
+                    selectedCount: selection.count,
+                    isPreparing: sharing.isPreparing,
+                    onShare: { share(.share, paths: selectedPaths) },
+                    onExport: { share(.export, paths: selectedPaths) }
+                )
+            } else {
+                Button(action: onNewNote) {
+                    Label("New note", systemImage: "square.and.pencil")
+                        .font(Geist.label(.body))
+                        .foregroundStyle(Color.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 56)
+                        .background(Geist.text, in: Capsule())
+                }
+                .buttonStyle(.plain)
+                .padding(.horizontal, Geist.Spacing.four)
+                .padding(.bottom, Geist.Spacing.two)
             }
-            .buttonStyle(.plain)
-            .padding(.horizontal, Geist.Spacing.four)
-            .padding(.bottom, Geist.Spacing.two)
         }
         .toolbar(.hidden, for: .navigationBar)
+        .vaultSharing(sharing)
+        .animation(.snappy(duration: 0.2), value: isSelecting)
         .task {
             entries = await viewModel.vaultChildren(
                 rootDestinationID: route.rootDestinationID,
@@ -537,42 +661,66 @@ struct VaultFolderView: View {
     }
 
     private func fileRow(_ file: VaultFileEntry) -> some View {
-        Button { onOpen(file) } label: {
-            VStack(alignment: .leading, spacing: 2) {
-                HStack(spacing: 8) {
-                    Text(verbatim: file.name)
-                        .font(Geist.mono(size: 15, relativeTo: .body))
-                        .foregroundStyle(Geist.text)
-                        .lineLimit(1)
-                        .truncationMode(.middle)
-                    if let modified = file.modifiedAt, Calendar.current.isDateInToday(modified) {
-                        Text("today")
-                            .font(Geist.caption(.caption2).weight(.medium))
-                            .foregroundStyle(Geist.success)
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 1)
-                            .background(Geist.Palette.green100, in: RoundedRectangle(cornerRadius: 6))
+        let isChecked = selection.contains(file.relativePath)
+        return Button {
+            if isSelecting {
+                if isChecked { selection.remove(file.relativePath) } else { selection.insert(file.relativePath) }
+            } else {
+                onOpen(file)
+            }
+        } label: {
+            HStack(spacing: 10) {
+                if isSelecting { VaultSelectionCheck(isSelected: isChecked) }
+                VStack(alignment: .leading, spacing: 2) {
+                    HStack(spacing: 8) {
+                        Text(verbatim: file.name)
+                            .font(Geist.mono(size: 15, relativeTo: .body))
+                            .foregroundStyle(Geist.text)
+                            .lineLimit(1)
+                            .truncationMode(.middle)
+                        if let modified = file.modifiedAt, Calendar.current.isDateInToday(modified) {
+                            Text("today")
+                                .font(Geist.caption(.caption2).weight(.medium))
+                                .foregroundStyle(Geist.success)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 1)
+                                .background(Geist.Palette.green100, in: RoundedRectangle(cornerRadius: 6))
+                        }
+                        Spacer(minLength: 4)
+                        if let modified = file.modifiedAt {
+                            Text(verbatim: VaultFilesView.shortDate(modified))
+                                .font(Geist.mono(size: 12, relativeTo: .caption))
+                                .foregroundStyle(Geist.faint)
+                        }
                     }
-                    Spacer(minLength: 4)
-                    if let modified = file.modifiedAt {
-                        Text(verbatim: VaultFilesView.shortDate(modified))
-                            .font(Geist.mono(size: 12, relativeTo: .caption))
-                            .foregroundStyle(Geist.faint)
+                    if let preview = previews[file.relativePath] {
+                        Text(verbatim: preview)
+                            .font(Geist.body(.subheadline))
+                            .foregroundStyle(Geist.muted)
+                            .lineLimit(1)
                     }
-                }
-                if let preview = previews[file.relativePath] {
-                    Text(verbatim: preview)
-                        .font(Geist.body(.subheadline))
-                        .foregroundStyle(Geist.muted)
-                        .lineLimit(1)
                 }
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 11)
             .frame(maxWidth: .infinity, alignment: .leading)
+            .background(isSelecting && isChecked ? Geist.accentSoft.opacity(0.6) : Color.clear)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelecting && isChecked ? .isSelected : [])
+        .contextMenu {
+            if !isSelecting {
+                VaultNoteContextMenu(
+                    onShare: { share(.share, paths: [file.relativePath]) },
+                    onExport: { share(.export, paths: [file.relativePath]) },
+                    onSelect: {
+                        isSelecting = true
+                        selection = [file.relativePath]
+                    }
+                )
+            }
+        }
         .task(id: file.relativePath) {
             guard previews[file.relativePath] == nil else { return }
             if let preview = await viewModel.vaultNotePreview(
@@ -582,5 +730,203 @@ struct VaultFolderView: View {
                 previews[file.relativePath] = preview
             }
         }
+    }
+}
+
+extension VaultFolderView {
+    /// Selected notes in list order.
+    fileprivate var selectedPaths: [String] {
+        files.map(\.relativePath).filter(selection.contains)
+    }
+
+    fileprivate func toggleSelectAll() {
+        let shown = files.map(\.relativePath)
+        if !shown.isEmpty, shown.allSatisfy(selection.contains) {
+            selection.subtract(shown)
+        } else {
+            selection.formUnion(shown)
+        }
+    }
+
+    fileprivate func endSelecting() {
+        isSelecting = false
+        selection = []
+    }
+
+    fileprivate func share(_ mode: VaultShareState.Mode, paths: [String]) {
+        Task {
+            await sharing.run(mode, paths: paths, rootDestinationID: route.rootDestinationID, viewModel: viewModel)
+        }
+    }
+}
+
+// MARK: - Select, share, export
+
+/// Copies the chosen notes out of the vault, then hands them to the share
+/// sheet or the Files exporter.
+@MainActor
+@Observable
+final class VaultShareState {
+    enum Mode { case share, export }
+
+    struct SharePayload: Identifiable {
+        let id = UUID()
+        let urls: [URL]
+    }
+
+    var sharePayload: SharePayload?
+    var exportURLs: [URL] = []
+    var isExporting = false
+    var isPreparing = false
+    var failureMessage: String?
+
+    func run(
+        _ mode: Mode,
+        paths: [String],
+        rootDestinationID: UUID,
+        viewModel: QuickCaptureViewModel
+    ) async {
+        guard !paths.isEmpty, !isPreparing else { return }
+        isPreparing = true
+        defer { isPreparing = false }
+        let urls = await viewModel.vaultShareCopies(rootDestinationID: rootDestinationID, relativePaths: paths)
+        guard !urls.isEmpty else {
+            failureMessage = String(localized: "Couldn’t read the selected notes. Folder access may have expired.")
+            return
+        }
+        switch mode {
+        case .share:
+            sharePayload = SharePayload(urls: urls)
+        case .export:
+            exportURLs = urls
+            isExporting = true
+        }
+    }
+}
+
+extension View {
+    func vaultSharing(_ state: VaultShareState) -> some View {
+        modifier(VaultSharingModifier(state: state))
+    }
+}
+
+private struct VaultSharingModifier: ViewModifier {
+    @Bindable var state: VaultShareState
+
+    func body(content: Content) -> some View {
+        content
+            .sheet(item: $state.sharePayload) { payload in
+                TranscriptActivityView(activityItems: payload.urls)
+                    .presentationDetents([.medium, .large])
+                    .ignoresSafeArea()
+            }
+            .fileMover(isPresented: $state.isExporting, files: state.exportURLs) { result in
+                if case .failure(let error) = result {
+                    state.failureMessage = error.localizedDescription
+                }
+            }
+            .alert(
+                "Couldn’t share notes",
+                isPresented: Binding(
+                    get: { state.failureMessage != nil },
+                    set: { if !$0 { state.failureMessage = nil } }
+                )
+            ) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(verbatim: state.failureMessage ?? "")
+            }
+    }
+}
+
+/// Round check shown in place of a note's icon while selecting.
+struct VaultSelectionCheck: View {
+    let isSelected: Bool
+
+    var body: some View {
+        Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+            .font(.system(size: 19, weight: .regular))
+            .foregroundStyle(isSelected ? Geist.accent : Geist.faint)
+            .frame(width: 22)
+            .accessibilityHidden(true)
+    }
+}
+
+/// Header shown while selecting: Select all on the left, Done on the right.
+struct VaultSelectionHeader: View {
+    let selectedCount: Int
+    let allSelected: Bool
+    var onToggleAll: () -> Void
+    var onDone: () -> Void
+
+    var body: some View {
+        HStack {
+            Button(allSelected ? "Deselect all" : "Select all", action: onToggleAll)
+                .buttonStyle(ActivitySignalPillButtonStyle(kind: .secondary))
+            Spacer()
+            Text(selectedCount == 0 ? "Select notes" : "\(selectedCount) selected")
+                .font(Geist.label(.subheadline))
+                .foregroundStyle(Geist.text)
+                .contentTransition(.numericText())
+            Spacer()
+            Button("Done", action: onDone)
+                .buttonStyle(ActivitySignalPillButtonStyle(kind: .primary))
+        }
+        .padding(.horizontal, Geist.Spacing.four)
+        .padding(.vertical, Geist.Spacing.two)
+    }
+}
+
+/// Bottom bar while selecting: Share and Export (save copies to Files).
+struct VaultSelectionBar: View {
+    let selectedCount: Int
+    let isPreparing: Bool
+    var onShare: () -> Void
+    var onExport: () -> Void
+
+    var body: some View {
+        HStack(spacing: Geist.Spacing.two) {
+            Button(action: onShare) {
+                Label("Share", systemImage: "square.and.arrow.up")
+                    .font(Geist.label(.body))
+                    .foregroundStyle(Color.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 56)
+                    .background(Geist.text, in: Capsule())
+            }
+            .buttonStyle(.plain)
+            .accessibilityHint("Shares copies of the selected notes")
+            Button(action: onExport) {
+                Label("Export", systemImage: "folder")
+                    .font(Geist.label(.body))
+                    .foregroundStyle(Geist.text)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 56)
+                    .background(Geist.card, in: Capsule())
+                    .overlay(Capsule().stroke(Geist.border, lineWidth: 1))
+            }
+            .buttonStyle(.plain)
+            .accessibilityHint("Saves copies of the selected notes to a folder in Files")
+        }
+        .overlay {
+            if isPreparing { ProgressView() }
+        }
+        .disabled(selectedCount == 0 || isPreparing)
+        .opacity(selectedCount == 0 ? 0.5 : 1)
+        .padding(.horizontal, Geist.Spacing.four)
+        .padding(.bottom, Geist.Spacing.two)
+    }
+}
+
+/// Long-press menu on a single note.
+struct VaultNoteContextMenu: View {
+    var onShare: () -> Void
+    var onExport: () -> Void
+    var onSelect: () -> Void
+
+    var body: some View {
+        Button(action: onShare) { Label("Share", systemImage: "square.and.arrow.up") }
+        Button(action: onExport) { Label("Export to Files", systemImage: "folder") }
+        Button(action: onSelect) { Label("Select", systemImage: "checkmark.circle") }
     }
 }

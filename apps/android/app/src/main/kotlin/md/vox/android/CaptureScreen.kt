@@ -38,6 +38,9 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.material3.minimumInteractiveComponentSize
@@ -1211,6 +1214,18 @@ internal fun CaptureScreen(
     // words stream into the editor. Larger windows keep the full-screen recording.
     val usesInlineRecordingDock = maxWidth < 600.dp || compactHeight
     val coversComposer = recordingStatus.isActive && !usesInlineRecordingDock
+    val editorScroll = rememberScrollState()
+    // Phones: the header floats over the note, which scrolls up beneath it and has the
+    // header step aside while the writer scrolls (iOS QuickCaptureFloatingChrome). Banners
+    // and the entry-template row sit above the editor, so those states keep the fixed header.
+    val floatsHeader = maxWidth < 600.dp && !compactHeight && liveNote.conflict == null &&
+        !liveNote.isUnreachable && !vaultUnreachable && state.entryTemplates.isEmpty()
+    val noteTouch = remember { CaptureNoteTouch() }
+    val floatingHeader = rememberCaptureFloatingHeaderState(editorScroll, noteTouch, enabled = floatsHeader)
+    val statusBarTop = with(androidx.compose.ui.platform.LocalDensity.current) {
+        androidx.compose.foundation.layout.WindowInsets.statusBars.getTop(this).toDp()
+    }
+    val layoutDirection = androidx.compose.ui.platform.LocalLayoutDirection.current
     Scaffold(
         // While the full-screen live recording covers the composer, the covered
         // composer (and its inline recording card) must not be read, announced or
@@ -1218,6 +1233,7 @@ internal fun CaptureScreen(
         modifier = if (coversComposer) Modifier.clearAndSetSemantics {} else Modifier,
         containerColor = c.bg,
         topBar = {
+            CaptureFloatingHeader(floatingHeader) {
             CaptureTopControls(
                 liveBreadcrumb = liveNoteBreadcrumb(
                     routeDestination?.displayName,
@@ -1251,6 +1267,7 @@ internal fun CaptureScreen(
                     keyboardController?.hide()
                 },
             )
+            }
         },
         bottomBar = {
             CaptureBottomControls(
@@ -1320,13 +1337,24 @@ internal fun CaptureScreen(
             )
         },
     ) { padding ->
+        // Floating: the note runs up to the status bar and makes room for the header
+        // inside its own scroll, so text scrolls beneath it.
+        val headerInset = if (floatsHeader) (padding.calculateTopPadding() - statusBarTop).coerceAtLeast(0.dp) else 0.dp
+        val workspacePadding = if (floatsHeader) {
+            PaddingValues(
+                start = padding.calculateStartPadding(layoutDirection),
+                top = statusBarTop,
+                end = padding.calculateEndPadding(layoutDirection),
+                bottom = padding.calculateBottomPadding(),
+            )
+        } else padding
         CaptureWorkspace(
             text = editorValue.text,
             preset = activePreset,
             destination = routeDestination,
             route = state.draft.routeOverride,
             attachmentCount = state.draft.attachments.size,
-            modifier = Modifier.fillMaxSize().padding(padding),
+            modifier = Modifier.fillMaxSize().padding(workspacePadding),
         ) {
         Column(
             modifier = Modifier
@@ -1407,10 +1435,10 @@ internal fun CaptureScreen(
                     // its own last caret, which would hide the block again.)
                     editorValue = editorValue.copy(selection = TextRange(inside))
                 }
-                val editorScroll = rememberScrollState()
                 androidx.compose.foundation.layout.BoxWithConstraints(Modifier.fillMaxSize()) {
-                val viewport = maxHeight
-                Box(Modifier.fillMaxSize().verticalScroll(editorScroll)) {
+                val viewport = maxHeight - headerInset
+                ProvideTopObscuredBringIntoView(headerInset) {
+                Box(Modifier.fillMaxSize().trackCaptureNoteTouch(noteTouch).verticalScroll(editorScroll).padding(top = headerInset)) {
                 BasicTextField(
                     value = editorValue,
                     onValueChange = { commitEditorValue(it) },
@@ -1433,7 +1461,17 @@ internal fun CaptureScreen(
                     cursorBrush = SolidColor(c.tint),
                     decorationBox = { inner ->
                         Box(Modifier.fillMaxWidth().padding(top = 8.dp)) {
-                            if (editorValue.text.isEmpty() && composerPlaceholder != null) {
+                            val recordingLine = composerRecordingStatusUiText(editorValue.text, recordingStatus.phase)
+                            if (recordingLine != null) {
+                                // Recording into an empty draft: say so on the line where the
+                                // live transcript starts; the words replace it.
+                                Text(
+                                    recordingLine.localized(),
+                                    color = c.faint,
+                                    style = TextStyle(fontFamily = GeistFontFamily, fontSize = 18.sp, lineHeight = 27.sp),
+                                    modifier = Modifier.testTag("composer-recording-status"),
+                                )
+                            } else if (editorValue.text.isEmpty() && composerPlaceholder != null) {
                                 // Microphone-off guidance only; otherwise the caret stands alone.
                                 Text(
                                     composerPlaceholder,
@@ -1466,6 +1504,7 @@ internal fun CaptureScreen(
                             is EmbedBlock -> EmbedPreview(block, resolve = resolveEmbedCached, reveal = { revealBlock(block) }, modifier = panel)
                         }
                     }
+                }
                 }
                 }
                 }

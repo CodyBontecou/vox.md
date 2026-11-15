@@ -147,6 +147,12 @@ struct MarkdownComposerTextView: UIViewRepresentable {
     var showsRawMarkdown = false
     /// Finds the file an embed (`![[clip.wav]]`) points to, for live preview.
     var resolveEmbedURL: ((String) -> URL?)? = nil
+    /// Room for chrome that floats over the top of the editor (the iPhone
+    /// capture header): the text starts below it and scrolls up beneath it.
+    var topContentInset: CGFloat = 0
+    /// The writer's own scrolling: `isScrolling` covers dragging and the
+    /// fling after it; `isBelowTop` is true once text sits under the inset.
+    var scrollActivityDidChange: ((MarkdownComposerScrollActivity) -> Void)? = nil
 
     func makeCoordinator() -> Coordinator {
         Coordinator(parent: self)
@@ -173,6 +179,7 @@ struct MarkdownComposerTextView: UIViewRepresentable {
         textView.adjustsFontForContentSizeCategory = true
         textView.textContainerInset = UIEdgeInsets(top: 12, left: 20, bottom: 24, right: 20)
         textView.keyboardDismissMode = .interactive
+        textView.applyTopContentInset(topContentInset)
         textView.smartQuotesType = .no
         textView.smartDashesType = .no
         textView.smartInsertDeleteType = .no
@@ -209,6 +216,7 @@ struct MarkdownComposerTextView: UIViewRepresentable {
         (textView as? MarkdownComposerUITextView)?.highlightedEntry = highlightedEntry
         (textView as? MarkdownComposerUITextView)?.showsRawMarkdown = showsRawMarkdown
         (textView as? MarkdownComposerUITextView)?.resolveEmbedURL = resolveEmbedURL
+        textView.applyTopContentInset(topContentInset)
 
         let textChanged = textView.text != text
         if textChanged {
@@ -310,6 +318,51 @@ struct MarkdownComposerTextView: UIViewRepresentable {
 
         func textViewDidBeginEditing(_ textView: UITextView) {
             parent.controller.publishCurrentState()
+        }
+
+        // MARK: Scroll activity (floating header)
+
+        private var reportedScrollActivity = MarkdownComposerScrollActivity()
+        private var isDragging = false
+        private var isDecelerating = false
+
+        func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+            isDragging = true
+            reportScrollActivity(scrollView)
+        }
+
+        func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+            isDragging = false
+            isDecelerating = decelerate
+            reportScrollActivity(scrollView)
+        }
+
+        func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+            isDecelerating = false
+            reportScrollActivity(scrollView)
+        }
+
+        func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
+            isDecelerating = false
+            reportScrollActivity(scrollView)
+        }
+
+        func scrollViewDidScroll(_ scrollView: UIScrollView) {
+            reportScrollActivity(scrollView)
+        }
+
+        private func reportScrollActivity(_ scrollView: UIScrollView) {
+            guard let report = parent.scrollActivityDidChange else { return }
+            let activity = MarkdownComposerScrollActivity(
+                // Programmatic scrolls (the caret following speech) are not
+                // the writer scrolling; only a touch and its fling count.
+                isScrolling: isDragging || isDecelerating,
+                isBelowTop: scrollView.contentOffset.y + scrollView.adjustedContentInset.top > 1
+            )
+            guard activity != reportedScrollActivity else { return }
+            reportedScrollActivity = activity
+            // Never write SwiftUI state from inside a layout pass.
+            DispatchQueue.main.async { report(activity) }
         }
 
         func textViewDidEndEditing(_ textView: UITextView) {
@@ -417,6 +470,25 @@ struct MarkdownComposerTextView: UIViewRepresentable {
 /// UITextView that renders Markdown attributes over plain Markdown text and
 /// overlays tappable checkboxes on task markers. The text itself never changes
 /// unless the user toggles a task.
+struct MarkdownComposerScrollActivity: Equatable {
+    var isScrolling = false
+    var isBelowTop = false
+}
+
+extension UITextView {
+    /// Sets the top inset without jumping the text: an editor resting at the
+    /// top stays at the top of the new inset.
+    func applyTopContentInset(_ top: CGFloat) {
+        guard abs(contentInset.top - top) > 0.5 else { return }
+        let wasAtTop = contentOffset.y <= -adjustedContentInset.top + 1
+        contentInset.top = top
+        verticalScrollIndicatorInsets.top = top
+        if wasAtTop {
+            contentOffset.y = -adjustedContentInset.top
+        }
+    }
+}
+
 final class MarkdownComposerUITextView: UITextView {
     var toggleTask: ((Int) -> Void)?
     var contentHeightDidChange: ((CGFloat) -> Void)?

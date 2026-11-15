@@ -864,6 +864,7 @@ internal fun VoxNavigation(
                     destination = destination,
                     presets = latestState.presetCollection?.presets.orEmpty(),
                     list = { folder -> model.listVault(destination, folder) },
+                    read = model::readVaultFile,
                     openFile = { entry, preset -> openVaultFile(entry.relativePath, preset) },
                     openFolder = { folder -> navController.navigate("$FILES_FOLDER_ROUTE/${Uri.encode(folder)}") },
                     reconnect = { openTree(null) },
@@ -879,6 +880,7 @@ internal fun VoxNavigation(
                     presets = latestState.presetCollection?.presets.orEmpty(),
                     list = { path -> model.listVault(destination, path, countChildren = false) },
                     preview = model::previewFile,
+                    read = model::readVaultFile,
                     openFile = { file, preset -> openVaultFile(file.relativePath, preset) },
                     startInPreset = { preset ->
                         model.selectPreset(preset.id)
