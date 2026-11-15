@@ -19,6 +19,16 @@ ROTATION = {
 }
 
 
+def flatten_window_corners(im: Image.Image) -> Image.Image:
+    """Mac window captures (screencapture -l) have transparent rounded corners. Fill them with
+    the sidebar colour on the left and the content colour on the right so the frame's screen
+    shows no gaps."""
+    bg = Image.new("RGBA", im.size, im.getpixel((im.width // 2, im.height - 6))[:3] + (255,))
+    bg.paste(Image.new("RGBA", (im.width // 2, im.height), im.getpixel((30, im.height // 2))[:3] + (255,)), (0, 0))
+    bg.alpha_composite(im)
+    return bg.convert("RGB")
+
+
 def main() -> None:
     count = 0
     for raw in sorted(ROOT.glob("*/*/*.png")):
@@ -29,6 +39,8 @@ def main() -> None:
         angle = ROTATION.get((device, name))
         if angle and im.height > im.width:
             im = im.rotate(angle, expand=True)
+        if device == "mac" and im.mode == "RGBA":
+            im = flatten_window_corners(im)
         dest = READY / locale / device / f"{name}.png"
         dest.parent.mkdir(parents=True, exist_ok=True)
         im.save(dest)
