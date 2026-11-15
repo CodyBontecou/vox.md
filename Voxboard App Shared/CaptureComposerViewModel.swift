@@ -2921,6 +2921,25 @@ extension QuickCaptureViewModel {
         try? await persistDurableDraft()
     }
 
+    /// Record new note is offered once there is a note to leave: an open
+    /// file, or words that New note would save first.
+    var canRecordNewNote: Bool {
+        liveNotesEnabled
+            && (liveNote != nil || draft.hasCaptureContent)
+            && !isSubmitting
+            && !hasLiveRecordedTranscriptPreview
+    }
+
+    /// Record new note, step one: close the open note exactly like New note
+    /// and leave a blank, unbound composer for the recorder. Returns `false`
+    /// (the open note stays put, nothing records) when that is not possible,
+    /// for example when the first save of unsaved words did not go through.
+    func prepareNewNoteForRecording() async -> Bool {
+        guard canRecordNewNote else { return false }
+        await startNewNote()
+        return liveNote == nil && !draft.hasCaptureContent
+    }
+
     /// Switching presets while a file is open closes that file first.
     func closeLiveNoteForPresetSwitch() {
         guard let session = liveNote else { return }
