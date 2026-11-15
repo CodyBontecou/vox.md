@@ -25,11 +25,11 @@
   "androidCatalog": "apps/android/localization/android-strings.json",
   "androidCatalogBackedSourceCount": 665,
   "catalog": "Voxboard/Localizable.xcstrings",
-  "catalogBackedSourceCount": 474,
+  "catalogBackedSourceCount": 479,
   "dynamicRuntimeCallSiteCount": 0,
   "dynamicRuntimeCalls": [],
   "dynamicRuntimeExpressionCount": 0,
-  "fallbackSourceCount": 5,
+  "fallbackSourceCount": 0,
   "formatArgumentContractStatus": "validated",
   "incompleteCatalogSourceCount": 0,
   "incompleteCatalogSources": [],
@@ -153,40 +153,8 @@
     "Missing sources fall back to English; Android machine translations require human linguistic review."
   ],
   "literalRuntimeSourceCount": 1149,
-  "missingCatalogSourceCount": 5,
-  "missingCatalogSources": [
-    {
-      "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/VaultSharing.kt:201"
-      ],
-      "source": "%@ selected"
-    },
-    {
-      "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/VaultSharing.kt:193"
-      ],
-      "source": "Deselect all"
-    },
-    {
-      "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:296"
-      ],
-      "source": "Export to folder"
-    },
-    {
-      "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/VaultSharing.kt:193"
-      ],
-      "source": "Select all"
-    },
-    {
-      "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:277",
-        "apps/android/app/src/main/kotlin/md/vox/android/VaultSharing.kt:201"
-      ],
-      "source": "Select notes"
-    }
-  ],
+  "missingCatalogSourceCount": 0,
+  "missingCatalogSources": [],
   "pluralImplementationStatus": "cldr-aware",
   "pluralReviewStatus": "requires-human-review",
   "pluralSourceCount": 12,
@@ -223,5 +191,5 @@
     "zh-Hans",
     "zh-Hant"
   ],
-  "translationCoverageStatus": "incomplete"
+  "translationCoverageStatus": "complete"
 }
