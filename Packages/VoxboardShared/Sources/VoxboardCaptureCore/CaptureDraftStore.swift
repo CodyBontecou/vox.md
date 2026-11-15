@@ -239,12 +239,21 @@ public struct CaptureDraft: Identifiable, Codable, Equatable, Sendable {
         )
     }
 
+    /// - Parameter remoteOnly: the Route delivers only to its URL endpoint, so
+    ///   no vault destination is required. The request carries
+    ///   `CaptureRequest.remoteOnlyDestinationID` and is never written to a vault.
     public func makeRequest(
         source: CaptureSource,
         resolvedDestinationID: UUID? = nil,
-        voxProfile: CapturePresetProfile? = nil
+        voxProfile: CapturePresetProfile? = nil,
+        remoteOnly: Bool = false
     ) throws -> CaptureRequest {
-        guard let destinationID = resolvedDestinationID ?? destinationID else {
+        let destinationID: UUID
+        if remoteOnly {
+            destinationID = CaptureRequest.remoteOnlyDestinationID
+        } else if let resolved = resolvedDestinationID ?? self.destinationID {
+            destinationID = resolved
+        } else {
             throw CaptureDraftError.destinationRequired
         }
         let resolvedVoxProfile = voxProfileSnapshot ?? voxProfile

@@ -1,5 +1,38 @@
 import Foundation
 
+/// Where a Route delivers a Capture.
+///
+/// `localOnly` and `localAndRemote` are today's behaviours: the vault
+/// destination, plus URL delivery when it is enabled. `remoteOnly` skips the
+/// vault entirely and needs no destination; it is only valid while URL
+/// delivery is enabled with a saved endpoint.
+public enum CaptureRouteDeliveryMode: String, Codable, CaseIterable, Identifiable, Sendable {
+    case localOnly
+    case remoteOnly
+    case localAndRemote
+
+    public var id: String { rawValue }
+
+    public var displayName: String {
+        switch self {
+        case .localOnly: return String(localized: "Local only")
+        case .remoteOnly: return String(localized: "Remote only")
+        case .localAndRemote: return String(localized: "Local + remote")
+        }
+    }
+}
+
+public enum CaptureRouteDeliveryModeError: LocalizedError, Equatable, Sendable {
+    case remoteOnlyRequiresEndpoint
+
+    public var errorDescription: String? {
+        switch self {
+        case .remoteOnlyRequiresEndpoint:
+            return String(localized: "Remote only needs Deliver to URL turned on with a saved endpoint.")
+        }
+    }
+}
+
 /// Per-preset HTTP delivery. Off unless the user enables it and supplies a URL.
 ///
 /// The bearer token is deliberately *not* stored here. Only `hasBearerToken`
@@ -27,6 +60,10 @@ public struct CapturePresetURLDeliverySettings: Codable, Equatable, Sendable {
     public var maxAttempts: Int
     /// Prefer `cleanedText` when present in the JSON body.
     public var includeCleanedText: Bool
+    /// Skip the vault destination and deliver only to the URL. Missing in
+    /// archives written before Remote only existed, which decode as `false`.
+    /// Read `deliveryMode` / `isRemoteOnly` rather than this flag directly.
+    public var remoteOnly: Bool
 
     public init(
         enabled: Bool = false,
@@ -40,7 +77,8 @@ public struct CapturePresetURLDeliverySettings: Codable, Equatable, Sendable {
         credentialID: String? = nil,
         credentialURLString: String? = nil,
         requiresCredentialMigration: Bool = false,
-        allowingInsecureLocal: Bool = false
+        allowingInsecureLocal: Bool = false,
+        remoteOnly: Bool = false
     ) {
         self.enabled = enabled
         self.urlString = urlString
@@ -54,6 +92,51 @@ public struct CapturePresetURLDeliverySettings: Codable, Equatable, Sendable {
         self.deliverOnFailureFallbackFile = deliverOnFailureFallbackFile
         self.maxAttempts = maxAttempts
         self.includeCleanedText = includeCleanedText
+        self.remoteOnly = remoteOnly
+    }
+
+    /// True once a valid endpoint has been saved for this Route.
+    public var hasSavedEndpoint: Bool {
+        (try? URLDeliveryValidator.validate(urlString, allowingInsecureLocal: allowingInsecureLocal)) != nil
+    }
+
+    /// The host shown on the capture screen for a Remote-only Route.
+    public var endpointHost: String? {
+        guard hasSavedEndpoint else { return nil }
+        return URLComponents(string: urlString.trimmingCharacters(in: .whitespacesAndNewlines))?.host
+    }
+
+    /// Remote only takes effect only while it is still valid, so a Route
+    /// whose endpoint was removed falls back to writing its vault copy.
+    public var isRemoteOnly: Bool {
+        enabled && remoteOnly && hasSavedEndpoint
+    }
+
+    public var canSelectRemoteOnly: Bool {
+        enabled && hasSavedEndpoint
+    }
+
+    public var deliveryMode: CaptureRouteDeliveryMode {
+        if isRemoteOnly { return .remoteOnly }
+        return enabled ? .localAndRemote : .localOnly
+    }
+
+    /// Applies a delivery mode. Remote only is rejected unless URL delivery
+    /// is enabled with a saved endpoint; the settings are left unchanged.
+    public mutating func setDeliveryMode(_ mode: CaptureRouteDeliveryMode) throws {
+        switch mode {
+        case .localOnly:
+            enabled = false
+            remoteOnly = false
+        case .localAndRemote:
+            enabled = true
+            remoteOnly = false
+        case .remoteOnly:
+            guard canSelectRemoteOnly else {
+                throw CaptureRouteDeliveryModeError.remoteOnlyRequiresEndpoint
+            }
+            remoteOnly = true
+        }
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -69,6 +152,7 @@ public struct CapturePresetURLDeliverySettings: Codable, Equatable, Sendable {
         case deliverOnFailureFallbackFile
         case maxAttempts
         case includeCleanedText
+        case remoteOnly
     }
 
     public init(from decoder: Decoder) throws {
@@ -88,6 +172,7 @@ public struct CapturePresetURLDeliverySettings: Codable, Equatable, Sendable {
         deliverOnFailureFallbackFile = try container.decodeIfPresent(Bool.self, forKey: .deliverOnFailureFallbackFile) ?? true
         maxAttempts = try container.decodeIfPresent(Int.self, forKey: .maxAttempts) ?? 5
         includeCleanedText = try container.decodeIfPresent(Bool.self, forKey: .includeCleanedText) ?? true
+        remoteOnly = try container.decodeIfPresent(Bool.self, forKey: .remoteOnly) ?? false
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -103,6 +188,7 @@ public struct CapturePresetURLDeliverySettings: Codable, Equatable, Sendable {
         try container.encode(deliverOnFailureFallbackFile, forKey: .deliverOnFailureFallbackFile)
         try container.encode(maxAttempts, forKey: .maxAttempts)
         try container.encode(includeCleanedText, forKey: .includeCleanedText)
+        try container.encode(remoteOnly, forKey: .remoteOnly)
     }
 }
 

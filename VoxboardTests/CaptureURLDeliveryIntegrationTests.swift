@@ -146,6 +146,71 @@ final class CaptureURLDeliveryIntegrationTests: XCTestCase {
         XCTAssertEqual(fixture.model.draft.text, "")
     }
 
+    func testRemoteOnlySendQueuesURLDeliveryWithoutDestinationOrVaultWrite() async throws {
+        let fixture = try await makeFixture(maxAttempts: 1, responseStatuses: [200], remoteOnly: true)
+        XCTAssertTrue(fixture.model.selectedRouteIsRemoteOnly)
+        XCTAssertNil(fixture.model.selectedDestination)
+        XCTAssertEqual(fixture.model.selectedRouteRemoteEndpointHost, "example.invalid")
+        fixture.model.draft.text = "Synthetic remote-only capture"
+        let draftID = fixture.model.draft.id
+        let requestID = fixture.model.draft.requestID
+        XCTAssertTrue(fixture.model.canSubmit)
+
+        await fixture.model.submit()
+        for _ in 0..<500 {
+            if fixture.owner.activeIDs.isEmpty { break }
+            try await Task.sleep(for: .milliseconds(10))
+        }
+
+        XCTAssertNil(fixture.model.errorMessage)
+        XCTAssertNil(fixture.model.lastReceipt)
+        XCTAssertEqual(ComposerHTTPProtocol.requestCount, 1)
+        XCTAssertEqual(ComposerHTTPProtocol.lastIdempotencyKey, requestID.uuidString.lowercased())
+        let payload = try XCTUnwrap(ComposerHTTPProtocol.lastBody.flatMap {
+            try JSONSerialization.jsonObject(with: $0) as? [String: Any]
+        })
+        XCTAssertEqual(payload["text"] as? String, "Synthetic remote-only capture")
+        // The draft is finished and nothing reached a vault.
+        XCTAssertEqual(fixture.model.draft.text, "")
+        XCTAssertNotEqual(fixture.model.draft.id, draftID)
+        let finishedDraft = try await CaptureDraftStore(rootDirectoryURL: fixture.root).load(id: draftID)
+        XCTAssertNil(finishedDraft)
+        XCTAssertEqual(try FileManager.default.contentsOfDirectory(atPath: fixture.vault.path), [])
+        // Activity keeps a record of the capture.
+        let record = try XCTUnwrap(fixture.model.historyRecords.first(where: { $0.requestID == requestID }))
+        XCTAssertEqual(record.outcome, .delivered)
+        XCTAssertEqual(record.destinationName, "example.invalid")
+    }
+
+    func testRemoteOnlyFailedDeliveryCanBeRetriedFromURLDeliveries() async throws {
+        let fixture = try await makeFixture(maxAttempts: 1, responseStatuses: [503, 200], remoteOnly: true)
+        fixture.model.draft.text = "Synthetic remote-only retry"
+        let id = fixture.model.draft.requestID
+        await fixture.model.submit()
+        for _ in 0..<500 {
+            if fixture.owner.activeIDs.isEmpty { break }
+            try await Task.sleep(for: .milliseconds(10))
+        }
+        XCTAssertNil(fixture.model.errorMessage)
+        XCTAssertEqual(fixture.model.draft.text, "")
+        XCTAssertEqual(fixture.owner.receipts.first?.id, id.uuidString.lowercased())
+        XCTAssertEqual(fixture.owner.receipts.first?.outcome, .retryable)
+        await fixture.owner.retry(id: id)
+        XCTAssertEqual(ComposerHTTPProtocol.requestCount, 2)
+        XCTAssertTrue(fixture.owner.receipts.isEmpty)
+        XCTAssertEqual(try FileManager.default.contentsOfDirectory(atPath: fixture.vault.path), [])
+    }
+
+    func testRemoteOnlyWithoutEnabledURLDeliveryStillRequiresDestination() async throws {
+        let fixture = try await makeFixture(remoteOnly: true, urlDeliveryEnabled: false)
+        XCTAssertFalse(fixture.model.selectedRouteIsRemoteOnly)
+        fixture.model.draft.text = "Synthetic local-only capture"
+        XCTAssertFalse(fixture.model.canSubmit)
+        await fixture.model.submit()
+        XCTAssertEqual(fixture.model.draft.text, "Synthetic local-only capture")
+        XCTAssertEqual(ComposerHTTPProtocol.requestCount, 0)
+    }
+
     func testNativeKeychainRoundTripAndDeletionForSyntheticAccount() throws {
         let id = UUID().uuidString
         defer { try? URLDeliveryKeychain.deleteCredentials(forID: id) }
@@ -206,7 +271,8 @@ final class CaptureURLDeliveryIntegrationTests: XCTestCase {
 
     private func makeFixture(
         processor: (any CapturePresetTextProcessing)? = nil, brokenJournal: Bool = false,
-        refuseLease: Bool = false, maxAttempts: Int = 2, responseStatuses: [Int] = [503], sleeper: @escaping TranscriptURLDeliverer.Sleeper = { _ in }
+        refuseLease: Bool = false, maxAttempts: Int = 2, responseStatuses: [Int] = [503], sleeper: @escaping TranscriptURLDeliverer.Sleeper = { _ in },
+        remoteOnly: Bool = false, urlDeliveryEnabled: Bool = true
     ) async throws -> Fixture {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("ComposerURL-\(UUID().uuidString)")
         let vault = root.appendingPathComponent("vault")
@@ -215,16 +281,21 @@ final class CaptureURLDeliveryIntegrationTests: XCTestCase {
         if brokenJournal { try Data("Not a directory".utf8).write(to: journal) }
         let destination = CaptureDestination(name: "Synthetic", rootBookmark: try vault.bookmarkData(), rootName: "Synthetic Vault",
                                              noteTarget: .existingNote(relativePath: "Inbox.md"), retryProtectionEnabled: true)
+        // A Remote-only Route has no vault destination at all.
         try await CaptureLibraryStore(fileURL: root.appendingPathComponent(AppConstants.captureLibraryFilename))
-            .save(CaptureLibraryEnvelope(destinations: [destination], defaultDestinationID: destination.id))
+            .save(remoteOnly
+                ? CaptureLibraryEnvelope(destinations: [], defaultDestinationID: nil)
+                : CaptureLibraryEnvelope(destinations: [destination], defaultDestinationID: destination.id))
         let suite = "ComposerURL-\(UUID().uuidString)"
         let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
         var preset = CapturePresetStore.makeCustomFlow()
         preset.name = "Synthetic HTTP"
-        preset.captureDestinationID = destination.id
+        preset.captureDestinationID = remoteOnly ? nil : destination.id
         preset.postProcessingMode = processor == nil ? .none : .clean
         preset.captureProcessingEnabled = true
         preset.exportSettings.urlDelivery = .init(enabled: true, urlString: "https://example.invalid/ingest", maxAttempts: maxAttempts)
+        if remoteOnly { try preset.exportSettings.urlDelivery.setDeliveryMode(.remoteOnly) }
+        if !urlDeliveryEnabled { preset.exportSettings.urlDelivery.enabled = false }
         CapturePresetStore.saveFlows([preset], defaults: defaults, widgetRefresh: .disabled)
         ComposerHTTPProtocol.reset(statuses: responseStatuses)
         let configuration = URLSessionConfiguration.ephemeral
@@ -267,20 +338,41 @@ nonisolated private final class ComposerHTTPProtocol: URLProtocol, @unchecked Se
     private static let lock = NSLock()
     nonisolated(unsafe) private static var count = 0
     nonisolated(unsafe) private static var statuses = [503]
+    nonisolated(unsafe) private static var idempotencyKey: String?
+    nonisolated(unsafe) private static var body: Data?
     static var requestCount: Int { lock.lock(); defer { lock.unlock() }; return count }
-    static func reset(statuses: [Int] = [503]) { lock.lock(); defer { lock.unlock() }; count = 0; self.statuses = statuses }
+    static var lastIdempotencyKey: String? { lock.lock(); defer { lock.unlock() }; return idempotencyKey }
+    static var lastBody: Data? { lock.lock(); defer { lock.unlock() }; return body }
+    static func reset(statuses: [Int] = [503]) {
+        lock.lock(); defer { lock.unlock() }
+        count = 0; self.statuses = statuses; idempotencyKey = nil; body = nil
+    }
     override class func canInit(with request: URLRequest) -> Bool { true }
     override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
     override func startLoading() {
         Self.lock.lock()
         let status = Self.statuses[min(Self.count, Self.statuses.count - 1)]
         Self.count += 1
+        Self.idempotencyKey = request.value(forHTTPHeaderField: "Idempotency-Key")
+        Self.body = request.httpBody ?? request.httpBodyStream.map(Self.read)
         Self.lock.unlock()
         guard let url = request.url, let response = HTTPURLResponse(url: url, statusCode: status, httpVersion: "HTTP/1.1", headerFields: nil) else { return }
         client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
         client?.urlProtocolDidFinishLoading(self)
     }
     override func stopLoading() {}
+
+    private static func read(_ stream: InputStream) -> Data {
+        stream.open(); defer { stream.close() }
+        var data = Data()
+        var buffer = [UInt8](repeating: 0, count: 4096)
+        while stream.hasBytesAvailable {
+            let count = stream.read(&buffer, maxLength: buffer.count)
+            guard count > 0 else { break }
+            data.append(buffer, count: count)
+        }
+        return data
+    }
 }
 
 nonisolated private final class ComposerLoopbackServer: @unchecked Sendable {

@@ -388,6 +388,12 @@ public enum CaptureDeliveryKind: String, Codable, Sendable {
 }
 
 public struct CaptureRequest: Identifiable, Codable, Equatable, Sendable {
+    /// Destination of a Remote-only Route's request: it names no vault and is
+    /// never resolved against the library or written to disk.
+    public static let remoteOnlyDestinationID = UUID(uuid: (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
+
+    public var isRemoteOnly: Bool { destinationID == Self.remoteOnlyDestinationID }
+
     public var id: UUID
     public var createdAt: Date
     public var source: CaptureSource

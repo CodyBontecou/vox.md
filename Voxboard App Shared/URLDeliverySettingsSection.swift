@@ -9,7 +9,7 @@ struct URLDeliverySettingsSection: View {
     @State private var tokenDraft = ""
     @State private var headersDraft = ""
     @State private var savedHeadersDraft = ""
-    private enum ErrorArea { case endpoint, credentials, headers }
+    private enum ErrorArea { case mode, endpoint, credentials, headers }
     @State private var errorArea = ErrorArea.credentials
     @State private var errorMessage: String?
     @State private var testResult: String?
@@ -23,6 +23,21 @@ struct URLDeliverySettingsSection: View {
         Section {
             Toggle("Deliver to URL", isOn: $settings.enabled)
                 .accessibilityIdentifier("preset_url_delivery_enabled")
+                .onChange(of: settings.enabled) { _, enabled in
+                    // Turning delivery off returns the Route to Local only.
+                    if !enabled { settings.remoteOnly = false }
+                }
+            Picker("Delivery Mode", selection: deliveryModeBinding) {
+                ForEach(CaptureRouteDeliveryMode.allCases) { mode in
+                    Text(mode.displayName).tag(mode)
+                }
+            }
+            .accessibilityIdentifier("preset_url_delivery_mode")
+            if settings.deliveryMode == .remoteOnly {
+                Text("Captures go only to this endpoint. Nothing is written to a vault, so this Route needs no destination.")
+                    .font(Geist.caption()).foregroundStyle(Geist.muted)
+            }
+            inlineError(.mode)
             if settings.enabled {
                 fieldLabel("Endpoint")
                 endpointField
@@ -86,7 +101,7 @@ struct URLDeliverySettingsSection: View {
                 .tracking(0.66)
                 .foregroundStyle(Geist.muted)
         } footer: {
-            Text("Adds a JSON POST to this route’s existing destinations; it does not replace note delivery. Off by default. Draft recordings are not sent until you choose Send. Redirects are not followed. Failed deliveries are retained for HTTP-only retry or discard in URL Deliveries.")
+            Text("Local + remote adds a JSON POST to this route’s existing destinations. Remote only sends just the POST and needs Deliver to URL with a saved endpoint. Off by default. Draft recordings are not sent until you choose Send. Redirects are not followed. Failed deliveries are retained for HTTP-only retry or discard in URL Deliveries.")
                 .font(Geist.caption())
                 .foregroundStyle(Geist.muted)
         }
@@ -107,6 +122,21 @@ struct URLDeliverySettingsSection: View {
             .frame(minWidth: 500, minHeight: 440)
         }
         #endif
+    }
+
+    private var deliveryModeBinding: Binding<CaptureRouteDeliveryMode> {
+        Binding(
+            get: { settings.deliveryMode },
+            set: { mode in
+                do {
+                    try settings.setDeliveryMode(mode)
+                    if errorArea == .mode { errorMessage = nil }
+                } catch {
+                    errorArea = .mode
+                    errorMessage = error.localizedDescription
+                }
+            }
+        )
     }
 
     private func fieldLabel(_ title: LocalizedStringKey) -> some View {

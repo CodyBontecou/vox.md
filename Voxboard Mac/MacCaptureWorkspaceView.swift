@@ -272,7 +272,8 @@ struct MacCaptureWorkspaceView: View {
                         firstNoteReceipt = nil
                     })
                     .padding(.horizontal, 30)
-                } else if viewModel.selectedDestination == nil && !isLocalizationScreenshot {
+                } else if viewModel.selectedDestination == nil && !viewModel.selectedRouteIsRemoteOnly
+                            && !isLocalizationScreenshot {
                     destinationSetupNotice
                 }
 
@@ -1304,6 +1305,9 @@ struct MacCaptureWorkspaceView: View {
     private var routeLabel: String {
         if let override = viewModel.draft.relativeNotePathOverride {
             return URL(fileURLWithPath: override).deletingPathExtension().lastPathComponent
+        }
+        if viewModel.selectedRouteIsRemoteOnly {
+            return viewModel.selectedRouteRemoteEndpointHost ?? String(localized: "Remote only")
         }
         return viewModel.selectedDestination?.rootName ?? String(localized: "Set up destination")
     }
