@@ -61,8 +61,9 @@ struct CaptureEditorToolbar: View {
     /// background or rule) and "•••" opens the full panel as a popover.
     var isInline = false
     /// Keyboard down (CaptureRestActions board): the row rests bare above the
-    /// footer, without the bar's band or rule, and "•••" expands the panel
-    /// inline instead of into the keyboard area.
+    /// footer, and "•••" expands the panel inline instead of into the keyboard
+    /// area. Both states sit on the page background, so the bar keeps its look
+    /// when the keyboard comes and goes.
     var isResting = false
 
     @State private var showsAllActions = false
@@ -148,16 +149,13 @@ struct CaptureEditorToolbar: View {
             .padding(.leading, isInline ? 0 : 8)
             .padding(.trailing, isInline ? 0 : 8)
             .padding(.vertical, isInline ? 0 : 8)
-            .background(showsBand ? Geist.Palette.gray200 : Color.clear)
+            // Same page black as the resting row, so the bar doesn't change
+            // colour when the keyboard comes up.
+            .background(showsBand ? Geist.bg : Color.clear)
 
             if showsAllActions, !usesKeyboardAreaPanel, !isInline {
                 allActionsPanel
                     .transition(.move(edge: .bottom).combined(with: .opacity))
-            }
-        }
-        .overlay(alignment: .top) {
-            if showsBand {
-                Rectangle().fill(Geist.border).frame(height: 1)
             }
         }
         .onChange(of: isResting) {
@@ -186,7 +184,7 @@ struct CaptureEditorToolbar: View {
     private var keyboardAreaPanel: some View {
         allActionsPanelContent
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .background(Geist.Palette.gray100.ignoresSafeArea())
+            .background(Geist.bg.ignoresSafeArea())
             .accessibilityLabel("All quick actions")
     }
 
@@ -195,7 +193,7 @@ struct CaptureEditorToolbar: View {
     private var allActionsPanel: some View {
         allActionsPanelContent
             .frame(maxHeight: 236)
-            .background(Geist.Palette.gray100)
+            .background(Geist.bg)
             .accessibilityLabel("All quick actions")
     }
 
