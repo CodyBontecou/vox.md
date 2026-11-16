@@ -1974,6 +1974,16 @@ final class QuickCaptureViewModel {
 
     private func openComposer(_ incoming: CaptureDeepLinkDraft) async throws {
         guard requireCaptureRouteAvailable() else { throw QuickCaptureViewModelError.captureRouteBusy }
+        if Self.quickCaptureStartsBlankNote(source: incoming.source, liveNoteIsOpen: liveNotesEnabled && liveNote != nil) {
+            // Quick Capture (lock screen, Control Center, widgets) opens a
+            // blank capture in the launching preset, as it did before Live
+            // Notes, rather than dropping into whichever file was left open.
+            // The open note is already saved, so closing it loses nothing.
+            // Presets that append to one note (rolling or existing-note
+            // destinations) still land in that file on the first save.
+            await startNewNote()
+            guard requireCaptureRouteAvailable() else { throw QuickCaptureViewModelError.captureRouteBusy }
+        }
         let profiles = try await validateComposerLaunch(incoming)
         guard requireCaptureRouteAvailable() else { throw QuickCaptureViewModelError.captureRouteBusy }
         if incoming.source == .widget, let id = incoming.voxID,
@@ -1987,6 +1997,13 @@ final class QuickCaptureViewModel {
             return
         }
         try await applyComposerLaunch(incoming, profiles: profiles)
+    }
+
+    /// Whether a composer launch should close the open Live Note first. Only
+    /// widget-sourced launches (the Quick Capture control and widgets) do;
+    /// capture links and Shortcuts keep adding to what is open.
+    nonisolated static func quickCaptureStartsBlankNote(source: CaptureSource?, liveNoteIsOpen: Bool) -> Bool {
+        source == .widget && liveNoteIsOpen
     }
 
     func cancelPresetSwitch(id: UUID) {
