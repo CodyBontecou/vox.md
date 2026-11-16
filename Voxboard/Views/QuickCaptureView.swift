@@ -241,7 +241,7 @@ struct QuickCaptureView: View {
         CaptureViewSection {
             QuickCaptureCanvas(
                 showsDestination: !isLocalizationScreenshot
-                    && (showsFirstNoteGuide || viewModel.selectedDestination == nil || !vaultIsReachable),
+                    && (showsFirstNoteGuide || routeNeedsVaultGuidance),
                 showsWatchStatus: watchRecordingPipeline.hasVisibleItems,
                 showsAttachments: !viewModel.draft.additionalPayloads.isEmpty,
                 header: captureHeader,
@@ -602,7 +602,8 @@ struct QuickCaptureView: View {
     private func routePathText(_ text: String) -> CaptureViewSection {
         CaptureViewSection {
             Text(verbatim: text)
-                .strikethrough(!vaultIsReachable && viewModel.selectedDestination != nil)
+                .strikethrough(!vaultIsReachable && viewModel.selectedDestination != nil
+                    && !viewModel.selectedRouteIsRemoteOnly)
                 .lineLimit(1)
         }
     }
@@ -629,6 +630,8 @@ struct QuickCaptureView: View {
             let parts = ([vault].compactMap { $0 }) + relativePath.split(separator: "/").map(String.init)
             return parts.joined(separator: " / ")
         }
+        // Remote only: there is no vault path, only the endpoint.
+        if viewModel.selectedRouteIsRemoteOnly { return routeLabel }
         // The iPad sidebar editor header shows only the note path, as in
         // `Meetings / 2026-11-01.md`; the phone shows vault, path and heading.
         if layout == .regularSidebar,
@@ -2161,9 +2164,18 @@ struct QuickCaptureView: View {
         }
     }
 
+    /// A Remote-only Route never writes to a vault, so it needs neither the
+    /// "Destination Not Configured" nor the vault-unreachable banner.
+    private var routeNeedsVaultGuidance: Bool {
+        !viewModel.selectedRouteIsRemoteOnly
+            && (viewModel.selectedDestination == nil || !vaultIsReachable)
+    }
+
     private var emptyDestinationBanner: CaptureViewSection {
         CaptureViewSection {
-            if viewModel.selectedDestination != nil, !vaultIsReachable {
+            if viewModel.selectedRouteIsRemoteOnly {
+                EmptyView()
+            } else if viewModel.selectedDestination != nil, !vaultIsReachable {
                 CaptureVaultUnreachableBanner {
                     dismissComposer()
                     showsVaultRegrantPicker = true
@@ -2506,6 +2518,7 @@ struct QuickCaptureView: View {
     /// an outlined Save that queues the capture until access is back.
     private var captureFooterIsVaultUnreachable: Bool {
         viewModel.selectedDestination != nil && !vaultIsReachable && footerShowsSend
+            && !viewModel.selectedRouteIsRemoteOnly
     }
 
     private var queueSaveControl: CaptureViewSection {
@@ -2583,7 +2596,8 @@ struct QuickCaptureView: View {
 
                     voiceCaptureButton
 
-                    if viewModel.liveNotesEnabled {
+                    // Remote only has no note to keep editing; it always Sends.
+                    if viewModel.liveNotesEnabled, !viewModel.selectedRouteIsRemoteOnly {
                         if showsRecordNewNote { recordNewNoteControl }
                         if footerShowsSend { newNoteControl }
                     } else if captureFooterIsVaultUnreachable {
@@ -2828,6 +2842,9 @@ struct QuickCaptureView: View {
     private var routeLabel: String {
         if let override = viewModel.draft.relativeNotePathOverride {
             return URL(fileURLWithPath: override).deletingPathExtension().lastPathComponent
+        }
+        if viewModel.selectedRouteIsRemoteOnly {
+            return viewModel.selectedRouteRemoteEndpointHost ?? String(localized: "Remote only")
         }
         return viewModel.selectedDestination?.rootName ?? String(localized: "Set up destination")
     }

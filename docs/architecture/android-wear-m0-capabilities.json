@@ -10245,6 +10245,14 @@
         ],
         "unknown": [
           "cap.store.history"
+        ],
+        "urlDeliveryFailed": [
+          "cap.store.history",
+          "cap.delivery.url"
+        ],
+        "urlDeliveryPending": [
+          "cap.store.history",
+          "cap.delivery.url"
         ]
       },
       "enum": "CaptureHistoryFailureCategory",

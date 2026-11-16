@@ -26,6 +26,7 @@ public final class URLDeliveryCoordinator {
     @ObservationIgnored private let deliverer: TranscriptURLDeliverer
     @ObservationIgnored private let beginExecution: BeginExecution
     @ObservationIgnored private var tasks: [UUID: Task<Void, Never>] = [:]
+    @ObservationIgnored private var finishObservers: [UUID: @MainActor (_ id: UUID, _ result: URLDeliveryEvent.Result) -> Bool] = [:]
 
     public init(deliverer: TranscriptURLDeliverer, beginExecution: @escaping BeginExecution = { _ in .init() }) {
         self.deliverer = deliverer
@@ -86,6 +87,27 @@ public final class URLDeliveryCoordinator {
         await refresh()
     }
 
+    /// Called on the main actor with the delivery ID (the capture or
+    /// transcript ID) after every send attempt, first dispatch or explicit
+    /// retry, finishes. Return `false` to stop observing, for example
+    /// once the observer's owner has been released.
+    @discardableResult
+    public func addFinishObserver(
+        _ observer: @escaping @MainActor (_ id: UUID, _ result: URLDeliveryEvent.Result) -> Bool
+    ) -> UUID {
+        let token = UUID()
+        finishObservers[token] = observer
+        return token
+    }
+
+    public func removeFinishObserver(_ token: UUID) { finishObservers[token] = nil }
+
+    private func notifyFinished(id: UUID, result: URLDeliveryEvent.Result) {
+        for (token, observer) in finishObservers where !observer(id, result) {
+            finishObservers[token] = nil
+        }
+    }
+
     private func start(
         id: UUID, explicitRetry: Bool, authorization: CapturePresetURLDeliverySettings? = nil,
         cancellation: URLDeliveryCancellation? = nil
@@ -114,6 +136,7 @@ public final class URLDeliveryCoordinator {
                 : await deliverer.sendQueuedDelivery(id: id)
             if case .failed(let message, _) = event.result { lastError = message }
             await refresh()
+            notifyFinished(id: id, result: event.result)
         }
         tasks[id] = task
         cancellation?.register { task.cancel() }

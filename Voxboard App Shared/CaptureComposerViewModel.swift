@@ -13,6 +13,11 @@ final class QuickCaptureViewModel {
     var destinations: [CaptureDestination] = []
     var entryTemplates: [CaptureEntryTemplate] = []
     var voxProfiles: [CapturePresetProfile]
+    /// Each Route's URL delivery settings, decoded once per stored Route
+    /// change. The capture screen reads this; Send re-reads the stored Route.
+    @ObservationIgnored private var routeURLDeliveryCache: (
+        data: Data?, settings: [String: CapturePresetURLDeliverySettings]
+    )?
     var defaultDestinationID: UUID?
     var isLoading = false
     var isSubmitting = false
@@ -119,6 +124,33 @@ final class QuickCaptureViewModel {
         self.urlDeliveryCoordinator = urlDeliveryCoordinator ?? URLDeliveryRuntime.coordinator
         self.requestProcessor = requestProcessor
         self.locationProvider = locationProvider ?? CaptureLocationService()
+        observeRemoteOnlyURLDeliveries()
+    }
+
+    /// Revalidated against the stored Routes on every read, so an edited Route
+    /// never leaves the capture screen with a stale banner or label.
+    private var routeURLDeliverySettings: [String: CapturePresetURLDeliverySettings] {
+        let data = defaults?.data(forKey: CapturePresetStore.flowsKey)
+        if let cache = routeURLDeliveryCache, cache.data == data { return cache.settings }
+        let settings = Dictionary(
+            CapturePresetStore.loadFlows(defaults: defaults).map { ($0.id, $0.exportSettings.urlDelivery) },
+            uniquingKeysWith: { first, _ in first }
+        )
+        routeURLDeliveryCache = (data, settings)
+        return settings
+    }
+
+    /// The selected Route delivers only to its URL endpoint: no vault
+    /// destination is needed and nothing is written to a vault.
+    var selectedRouteIsRemoteOnly: Bool {
+        guard let id = selectedVoxProfile?.id else { return false }
+        return routeURLDeliverySettings[id]?.isRemoteOnly == true
+    }
+
+    /// The endpoint host of a Remote-only Route, shown in place of a vault.
+    var selectedRouteRemoteEndpointHost: String? {
+        guard selectedRouteIsRemoteOnly, let id = selectedVoxProfile?.id else { return nil }
+        return routeURLDeliverySettings[id]?.endpointHost
     }
 
     var selectedVoxProfile: CapturePresetProfile? {
@@ -227,7 +259,7 @@ final class QuickCaptureViewModel {
     var canSubmit: Bool {
         canChangeCaptureRoute
             && selectedVoxProfile != nil
-            && selectedDestination != nil
+            && (selectedRouteIsRemoteOnly || selectedDestination != nil)
             && draft.hasCaptureContent
     }
 
@@ -1607,7 +1639,22 @@ final class QuickCaptureViewModel {
         let submittedURLDeliverySettings = submittedVoxProfile.flatMap {
             CapturePresetStore.flow(id: $0.id, defaults: defaults)?.exportSettings.urlDelivery
         }
-        guard let submittedDestinationID = effectiveDestinationID else {
+        // Remote only: the capture goes only to URL delivery, so it needs no
+        // vault destination and writes nothing to a vault.
+        let submittedIsRemoteOnly = submittedURLDeliverySettings?.isRemoteOnly == true
+        let submittedDestinationID: UUID
+        if submittedIsRemoteOnly {
+            // URL delivery posts text only. Refuse before any processing so no
+            // attachment is ever silently dropped; the draft stays as it is.
+            guard submittedDraft.additionalPayloads.allSatisfy(\.isCarriedByURLDelivery) else {
+                isSubmitting = false
+                errorMessage = QuickCaptureViewModelError.remoteOnlyAttachmentsUnsupported.localizedDescription
+                return
+            }
+            submittedDestinationID = CaptureRequest.remoteOnlyDestinationID
+        } else if let destinationID = effectiveDestinationID {
+            submittedDestinationID = destinationID
+        } else {
             isSubmitting = false
             errorMessage = CaptureDraftError.destinationRequired.localizedDescription
             return
@@ -1683,6 +1730,17 @@ final class QuickCaptureViewModel {
             let pipeline = self.pipeline
             let requestProcessor = self.requestProcessor
             let outcome = try await draftStore.submit(draftID: submittedDraftID) { draft in
+                if submittedIsRemoteOnly {
+                    let request = try await self.preparedRequest(
+                        for: draft,
+                        reusing: reusablePrepared,
+                        destinationID: submittedDestinationID,
+                        voxProfile: submittedVoxProfile,
+                        remoteOnly: true
+                    )
+                    try await self.deliverRemoteOnly(request: request, settings: submittedURLDeliverySettings)
+                    return ComposerSubmitOutcome.sentRemoteOnly(request)
+                }
                 let library = try await libraryStore.load()
                 guard let storedDestination = library.destinations.first(where: {
                     $0.id == submittedDestinationID
@@ -1705,26 +1763,13 @@ final class QuickCaptureViewModel {
                     }
                     destination.noteTarget = .existingNote(relativePath: noteOverride)
                 }
-                let request: CaptureRequest
-                if let reusablePrepared {
-                    request = reusablePrepared
-                } else {
-                    let unresolved = try draft.makeRequest(
-                        source: defaultCaptureSource,
-                        resolvedDestinationID: submittedDestinationID,
-                        voxProfile: submittedVoxProfile
-                    )
-                    let assetRoot = captureRootURL
-                        .appendingPathComponent("staging", isDirectory: true)
-                        .appendingPathComponent(draft.id.uuidString.lowercased(), isDirectory: true)
-                    let processed = await requestProcessor.process(unresolved, assetRootURL: assetRoot) { [weak self] in
-                        await self?.setDescribingImages(true)
-                    }
-                    await self.setDescribingImages(false)
-                    try Task.checkCancellation()
-                    try await draftStore.savePreparedRequest(processed, draftID: draft.id)
-                    request = processed
-                }
+                let request = try await self.preparedRequest(
+                    for: draft,
+                    reusing: reusablePrepared,
+                    destinationID: submittedDestinationID,
+                    voxProfile: submittedVoxProfile,
+                    remoteOnly: false
+                )
                 let stagingURL = captureRootURL
                     .appendingPathComponent("staging", isDirectory: true)
                     .appendingPathComponent(draft.id.uuidString.lowercased(), isDirectory: true)
@@ -1767,7 +1812,10 @@ final class QuickCaptureViewModel {
             guard case .delivered(let receipt) = outcome else {
                 // Held for an unreachable vault: the draft is cleared like a
                 // send; the capture now waits in the inbox (Activity).
+                // Remote only: the capture now belongs to URL Deliveries; its
+                // Activity row was written before the POST was dispatched.
                 try? await draftStore.removePreparedRequest(draftID: submittedDraftID)
+
                 if let concurrentlyEdited = try await draftStore.load(id: submittedDraftID),
                    case let rebased = concurrentlyEdited.rebased(afterSubmitting: submittedDraft),
                    rebased.hasCaptureContent {
@@ -1856,11 +1904,13 @@ final class QuickCaptureViewModel {
             if let request = try? submittedDraft.makeRequest(
                 source: defaultCaptureSource,
                 resolvedDestinationID: submittedDestinationID,
-                voxProfile: submittedVoxProfile
+                voxProfile: submittedVoxProfile,
+                remoteOnly: submittedIsRemoteOnly
             ) {
                 await recordHistory(
                     request: request,
                     destinationName: destinations.first(where: { $0.id == request.destinationID })?.name
+                        ?? (submittedIsRemoteOnly ? submittedURLDeliverySettings?.endpointHost : nil)
                         ?? String(localized: "Unavailable destination"),
                     relativeNotePath: submittedDraft.relativeNotePathOverride,
                     attachmentCount: request.payloads.flatMap(Self.assets(in:)).count,
@@ -2438,6 +2488,37 @@ final class QuickCaptureViewModel {
         if outcome == .delivered { Self.reloadRouteTodayWidget() }
     }
 
+    /// The exact Preset-processed request for a Send, journaled before any
+    /// delivery so a retry neither reruns AI nor reads changed settings.
+    nonisolated private func preparedRequest(
+        for draft: CaptureDraft,
+        reusing reusablePrepared: CaptureRequest?,
+        destinationID: UUID,
+        voxProfile: CapturePresetProfile?,
+        remoteOnly: Bool
+    ) async throws -> CaptureRequest {
+        if let reusablePrepared { return reusablePrepared }
+        guard let captureRootURL, let draftStore else {
+            throw CaptureDraftError.draftNotFound(draft.id)
+        }
+        let unresolved = try draft.makeRequest(
+            source: defaultCaptureSource,
+            resolvedDestinationID: destinationID,
+            voxProfile: voxProfile,
+            remoteOnly: remoteOnly
+        )
+        let assetRoot = captureRootURL
+            .appendingPathComponent("staging", isDirectory: true)
+            .appendingPathComponent(draft.id.uuidString.lowercased(), isDirectory: true)
+        let processed = await requestProcessor.process(unresolved, assetRootURL: assetRoot) { [weak self] in
+            await self?.setDescribingImages(true)
+        }
+        await setDescribingImages(false)
+        try Task.checkCancellation()
+        try await draftStore.savePreparedRequest(processed, draftID: draft.id)
+        return processed
+    }
+
     /// Called only inside explicit Send. A preparation failure preserves the
     /// draft before any note mutation; a POST failure belongs to HTTP recovery.
     private func enqueueCaptureToURLIfConfigured(
@@ -2451,6 +2532,81 @@ final class QuickCaptureViewModel {
             throw QuickCaptureViewModelError.urlDeliveryHandoffFailed(message)
         }
         return event
+    }
+
+    private func observeRemoteOnlyURLDeliveries() {
+        urlDeliveryCoordinator.addFinishObserver { [weak self] id, result in
+            guard let self else { return false }
+            Task { await self.updateRemoteOnlyHistory(id: id, result: result) }
+            return true
+        }
+    }
+
+    /// Activity reports a Remote-only Capture as delivered only once its POST
+    /// succeeded, including after a retry from URL Deliveries.
+    private func updateRemoteOnlyHistory(id: UUID, result: URLDeliveryEvent.Result) async {
+        guard let historyStore else { return }
+        let outcome: CaptureHistoryOutcome
+        let category: CaptureHistoryFailureCategory?
+        switch result {
+        case .delivered:
+            outcome = .delivered
+            category = nil
+        case .failed:
+            outcome = .failed
+            category = .urlDeliveryFailed
+        case .queued, .retained, .disabled:
+            return
+        }
+        guard let records = try? await historyStore.list(),
+              var record = records.first(where: { $0.requestID == id }),
+              record.destinationID == CaptureRequest.remoteOnlyDestinationID,
+              record.outcome != outcome || record.failureCategory != category else { return }
+        record.outcome = outcome
+        record.failureCategory = category
+        if outcome == .delivered { record.deliveredAt = Date() }
+        _ = await historyStore.upsertBestEffort(record)
+        historyRecords = (try? await historyStore.list()) ?? historyRecords
+        if outcome == .delivered { Self.reloadRouteTodayWidget() }
+    }
+
+    /// A Remote-only Send: queue the same capture payload URL delivery uses
+    /// for Local + remote, then dispatch it. Nothing touches a vault.
+    private func deliverRemoteOnly(
+        request: CaptureRequest, settings: CapturePresetURLDeliverySettings?
+    ) async throws {
+        guard request.payloads.allSatisfy(\.isCarriedByURLDelivery) else {
+            throw QuickCaptureViewModelError.remoteOnlyAttachmentsUnsupported
+        }
+        guard !request.urlDeliveryText.isEmpty else {
+            throw QuickCaptureViewModelError.remoteOnlyNothingToSend
+        }
+        let remoteCancellation = URLDeliveryCancellation()
+        try await withTaskCancellationHandler {
+            // The durable handoff is this Capture's delivery, so it uses the
+            // same free-capture quota as a vault write.
+            let urlEvent = try await pipeline.meterRemoteOnlyDelivery(request) { [self] in
+                guard let event = try await enqueueCaptureToURLIfConfigured(
+                    request: request, settings: settings
+                ) else { throw QuickCaptureViewModelError.remoteOnlyNothingToSend }
+                return event
+            }
+            try Task.checkCancellation()
+            // `nil`: already counted, so this exact handoff and its Activity
+            // row exist; never reset the row or send again from here.
+            guard case .queued? = urlEvent?.result else { return }
+            // Not delivered until the POST succeeds. Written before dispatch so
+            // the finish observer always finds the row to update.
+            await recordHistory(
+                request: request,
+                destinationName: settings?.endpointHost ?? String(localized: "Remote only"),
+                relativeNotePath: nil,
+                attachmentCount: 0,
+                outcome: .failed,
+                failureCategory: .urlDeliveryPending
+            )
+            dispatchCaptureURLDelivery(id: request.id, cancellation: remoteCancellation)
+        } onCancel: { remoteCancellation.cancel() }
     }
 
     private func dispatchCaptureURLDelivery(id: UUID, cancellation: URLDeliveryCancellation) {
@@ -2662,6 +2818,8 @@ enum ComposerSubmitOutcome: Sendable {
     case delivered(CaptureReceipt)
     /// Held in the inbox because the vault folder couldn't be reached.
     case heldForVault(UUID)
+    /// A Remote-only Route queued the capture for URL delivery only.
+    case sentRemoteOnly(CaptureRequest)
 }
 
 struct CaptureInboxLocationDecision: Equatable {
@@ -2691,9 +2849,15 @@ enum QuickCaptureViewModelError: Error, LocalizedError {
     case captureRouteBusy
     case stalePresetSwitch
     case urlDeliveryHandoffFailed(String)
+    case remoteOnlyNothingToSend
+    case remoteOnlyAttachmentsUnsupported
 
     var errorDescription: String? {
         switch self {
+        case .remoteOnlyAttachmentsUnsupported:
+            return String(localized: "This Route only sends text to its URL. Remove attachments before sending.")
+        case .remoteOnlyNothingToSend:
+            return String(localized: "This Route only delivers text to its URL. Add text before sending.")
         case .urlDeliveryHandoffFailed(let message):
             return String(localized: "URL delivery could not be saved. Your draft is preserved. \(message)")
         case .storageUnavailable:
@@ -2808,7 +2972,10 @@ extension QuickCaptureViewModel {
     func scheduleAutoFirstSave() {
         autoFirstSaveTask?.cancel()
         autoFirstSaveTask = nil
-        guard liveNotesEnabled, liveNote == nil, draft.hasCaptureContent else {
+        // A Remote-only Route has no note to keep editing; it sends only on
+        // an explicit Send.
+        guard liveNotesEnabled, liveNote == nil, draft.hasCaptureContent,
+              !selectedRouteIsRemoteOnly else {
             liveNoteFirstSaveBlocked = false
             return
         }
@@ -2822,7 +2989,7 @@ extension QuickCaptureViewModel {
 
     private func performAutoFirstSave() async {
         autoFirstSaveTask = nil
-        guard liveNotesEnabled, liveNote == nil, !isSubmitting,
+        guard liveNotesEnabled, liveNote == nil, !isSubmitting, !selectedRouteIsRemoteOnly,
               liveRecordedTranscriptPreview == nil, canSubmit else { return }
         guard let destination = selectedDestination,
               Self.reachableRootURL(for: destination) != nil else {
@@ -2939,9 +3106,11 @@ extension QuickCaptureViewModel {
     }
 
     /// Record new note is offered once there is a note to leave: an open
-    /// file, or words that New note would save first.
+    /// file, or words that New note would save first. Never on a Remote-only
+    /// Route, where closing the note would Send the draft to its URL.
     var canRecordNewNote: Bool {
         liveNotesEnabled
+            && !selectedRouteIsRemoteOnly
             && (liveNote != nil || draft.hasCaptureContent)
             && !isSubmitting
             && !hasLiveRecordedTranscriptPreview

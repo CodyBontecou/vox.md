@@ -48240,6 +48240,148 @@
         }
       }
     },
+    "Captures go only to this endpoint. Nothing is written to a vault, so this Route needs no destination.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تُرسل الالتقاطات إلى نقطة النهاية هذه فقط. لا يُكتب أي شيء في الخزنة، لذلك لا يحتاج هذا المسار إلى وجهة."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ক্যাপচার শুধু এই এন্ডপয়েন্টে যায়। ভল্টে কিছুই লেখা হয় না, তাই এই রুটের কোনো গন্তব্য লাগে না।"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aufnahmen gehen nur an diesen Endpunkt. In keinen Vault wird etwas geschrieben, daher braucht diese Route kein Ziel."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Captures go only to this endpoint. Nothing is written to a vault, so this Route needs no destination."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las capturas solo van a este punto de conexión. No se escribe nada en ningún vault, así que esta ruta no necesita destino."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les captures vont uniquement vers ce point de terminaison. Rien n’est écrit dans un coffre : ce parcours n’a donc pas besoin de destination."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "कैप्चर केवल इसी एंडपॉइंट पर जाते हैं। किसी वॉल्ट में कुछ नहीं लिखा जाता, इसलिए इस रूट को गंतव्य की ज़रूरत नहीं है।"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tangkapan hanya dikirim ke endpoint ini. Tidak ada yang ditulis ke vault, jadi rute ini tidak memerlukan tujuan."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le acquisizioni vanno solo a questo endpoint. Nulla viene scritto in un vault, quindi questo percorso non richiede una destinazione."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キャプチャはこのエンドポイントにのみ送られます。保管庫には何も書き込まれないため、このルートに保存先は不要です。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "캡처는 이 엔드포인트로만 전송됩니다. 보관소에는 아무것도 기록되지 않으므로 이 루트에는 대상이 필요하지 않습니다."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vastleggingen gaan alleen naar dit eindpunt. Er wordt niets naar een kluis geschreven, dus deze route heeft geen bestemming nodig."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Przechwycenia trafiają tylko do tego punktu końcowego. Nic nie jest zapisywane w sejfie, więc ta trasa nie potrzebuje miejsca docelowego."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As capturas vão apenas para este endpoint. Nada é gravado em um cofre, então esta rota não precisa de destino."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Записи отправляются только по этому адресу. В хранилище ничего не записывается, поэтому маршруту не нужно место назначения."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "பதிவுகள் இந்த முனைப்புள்ளிக்கு மட்டுமே செல்லும். வால்ட்டில் எதுவும் எழுதப்படாது, எனவே இந்த வழித்தடத்துக்கு இலக்கு தேவையில்லை."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "การบันทึกจะส่งไปยังปลายทางนี้เท่านั้น ไม่มีการเขียนลงคลัง เส้นทางนี้จึงไม่ต้องมีปลายทางในเครื่อง"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yakalamalar yalnızca bu uç noktaya gider. Kasaya hiçbir şey yazılmaz, bu yüzden bu rotanın hedefe ihtiyacı yoktur."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Записи надсилаються лише за цією адресою. У сховище нічого не записується, тож маршруту не потрібне місце призначення."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "کیپچرز صرف اسی اینڈ پوائنٹ پر جاتے ہیں۔ والٹ میں کچھ نہیں لکھا جاتا، اس لیے اس روٹ کو منزل کی ضرورت نہیں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bản ghi chỉ được gửi đến điểm cuối này. Không có gì được ghi vào kho, nên lộ trình này không cần đích."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "捕获内容只会发送到此端点。不会写入任何资料库，因此此路线无需目标位置。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "擷取內容只會傳送到此端點。不會寫入任何資料庫，因此此路線不需要目的地。"
+          }
+        }
+      }
+    },
     "Captures Need Attention": {
       "localizations": {
         "ar": {
@@ -67552,6 +67694,148 @@
           "stringUnit": {
             "state": "translated",
             "value": "傳送失敗"
+          }
+        }
+      }
+    },
+    "Delivery Mode": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "وضع التسليم"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ডেলিভারি মোড"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zustellmodus"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delivery Mode"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modo de entrega"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode de livraison"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "डिलीवरी मोड"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode pengiriman"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modalità di consegna"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "配信モード"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "전달 모드"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leveringsmodus"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tryb dostarczania"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modo de entrega"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Режим доставки"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "வழங்கல் பயன்முறை"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "โหมดการส่ง"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Teslim Modu"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Режим доставки"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ڈیلیوری موڈ"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chế độ gửi"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "递送模式"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "傳送模式"
           }
         }
       }
@@ -94316,6 +94600,290 @@
           "stringUnit": {
             "state": "translated",
             "value": "正在載入影片。%@。%@"
+          }
+        }
+      }
+    },
+    "Local + remote": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "محلي + عن بُعد"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "লোকাল + রিমোট"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lokal + remote"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local + remote"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local + remoto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local + distant"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "लोकल + रिमोट"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lokal + jarak jauh"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Locale + remoto"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ローカル＋リモート"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "로컬 + 원격"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lokaal + extern"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lokalnie + zdalnie"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local + remoto"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Локально + удалённо"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உள்ளூர் + தொலைநிலை"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ในเครื่อง + ระยะไกล"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yerel + uzak"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Локально + віддалено"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مقامی + ریموٹ"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cục bộ + từ xa"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本地 + 远程"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本機 + 遠端"
+          }
+        }
+      }
+    },
+    "Local only": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "محلي فقط"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "শুধু লোকাল"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur lokal"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local only"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo local"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local uniquement"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "केवल लोकल"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hanya lokal"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo locale"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ローカルのみ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "로컬만"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alleen lokaal"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tylko lokalnie"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Somente local"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Только локально"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உள்ளூர் மட்டும்"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "เฉพาะในเครื่อง"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yalnızca yerel"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Лише локально"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صرف مقامی"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chỉ cục bộ"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "仅本地"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "僅本機"
           }
         }
       }
@@ -129248,6 +129816,290 @@
           "stringUnit": {
             "state": "translated",
             "value": "放開以停止 · %@"
+          }
+        }
+      }
+    },
+    "Remote only": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عن بُعد فقط"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "শুধু রিমোট"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur remote"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remote only"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo remoto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Distant uniquement"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "केवल रिमोट"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hanya jarak jauh"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo remoto"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "リモートのみ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "원격만"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alleen extern"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tylko zdalnie"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Somente remoto"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Только удалённо"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "தொலைநிலை மட்டும்"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "เฉพาะระยะไกล"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yalnızca uzak"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Лише віддалено"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صرف ریموٹ"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chỉ từ xa"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "仅远程"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "僅遠端"
+          }
+        }
+      }
+    },
+    "Remote only needs Deliver to URL turned on with a saved endpoint.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يتطلب وضع «عن بُعد فقط» تشغيل «التسليم إلى URL» مع نقطة نهاية محفوظة."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "‘শুধু রিমোট’-এর জন্য একটি সেভ করা এন্ডপয়েন্টসহ ‘URL-এ ডেলিভার করুন’ চালু থাকতে হবে।"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "„Nur remote“ erfordert, dass „An URL senden“ mit einem gesicherten Endpunkt aktiviert ist."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remote only needs Deliver to URL turned on with a saved endpoint."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo remoto requiere activar Entregar a una URL con un punto de conexión guardado."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Distant uniquement nécessite d’activer Livrer à une URL avec un point de terminaison enregistré."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "‘केवल रिमोट’ के लिए सहेजे गए एंडपॉइंट के साथ ‘URL पर डिलीवर करें’ चालू होना चाहिए।"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hanya jarak jauh memerlukan Kirim ke URL aktif dengan endpoint yang tersimpan."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo remoto richiede che Consegna a un URL sia attivo con un endpoint salvato."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「リモートのみ」を使うには、エンドポイントを保存して「URLに配信」をオンにしてください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "원격만을 사용하려면 저장된 엔드포인트와 함께 URL로 전달을 켜야 합니다."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alleen extern vereist dat Lever af bij URL aan staat met een bewaard eindpunt."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tryb Tylko zdalnie wymaga włączenia opcji Dostarczaj pod URL z zapisanym punktem końcowym."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Somente remoto exige que Entregar em URL esteja ativado com um endpoint salvo."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Для режима «Только удалённо» включите «Доставлять по URL» и сохраните адрес."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "தொலைநிலை மட்டும் பயன்முறைக்கு, சேமித்த முனைப்புள்ளியுடன் URL க்கு வழங்கு இயக்கப்பட்டிருக்க வேண்டும்."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "เฉพาะระยะไกลต้องเปิด ส่งไปยัง URL และบันทึกปลายทาง (Endpoint) ไว้"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yalnızca uzak için, kayıtlı bir uç noktayla URL'ye Teslim Et açık olmalıdır."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Для режиму «Лише віддалено» увімкніть «Доставляти за URL» і збережіть адресу."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صرف ریموٹ کے لیے محفوظ اینڈ پوائنٹ کے ساتھ URL پر ڈیلیور کریں آن ہونا ضروری ہے۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chỉ từ xa cần bật Gửi đến URL với một điểm cuối đã lưu."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“仅远程”需要开启“递送到 URL”并保存端点。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「僅遠端」需要開啟「傳送到 URL」並儲存端點。"
           }
         }
       }
@@ -262105,6 +262957,148 @@
         }
       }
     },
+    "Sends a JSON POST instead of writing a note. Draft recordings are not sent until you choose Send. Redirects are not followed. Failed deliveries are retained for HTTP-only retry or discard in URL Deliveries.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يرسل طلب JSON POST بدلًا من كتابة ملاحظة. لا تُرسل تسجيلات المسودة حتى تختار «إرسال». لا تتم متابعة عمليات إعادة التوجيه. يتم الاحتفاظ بعمليات التسليم الفاشلة لإعادة المحاولة عبر HTTP فقط أو تجاهلها في «عمليات التسليم إلى URL»."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "নোট লেখার বদলে একটি JSON POST পাঠায়। আপনি ‘পাঠান’ বেছে না নেওয়া পর্যন্ত খসড়া রেকর্ডিং পাঠানো হয় না। রিডাইরেক্ট অনুসরণ করা হয় না। ব্যর্থ ডেলিভারি শুধু HTTP-তে আবার চেষ্টা করা বা বাতিলের জন্য ‘URL ডেলিভারি’-তে রাখা হয়।"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sendet einen JSON-POST, statt eine Notiz zu schreiben. Entwurfsaufnahmen werden erst gesendet, wenn du „Senden“ wählst. Weiterleitungen werden nicht befolgt. Fehlgeschlagene Zustellungen bleiben unter „URL-Zustellungen“ erhalten, um sie nur per HTTP erneut zu versuchen oder zu verwerfen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sends a JSON POST instead of writing a note. Draft recordings are not sent until you choose Send. Redirects are not followed. Failed deliveries are retained for HTTP-only retry or discard in URL Deliveries."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envía un POST JSON en lugar de escribir una nota. Las grabaciones en borrador no se envían hasta que eliges Enviar. No se siguen redirecciones. Las entregas fallidas se conservan en Entregas por URL para reintentarlas solo por HTTP o descartarlas."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoie un POST JSON au lieu d’écrire une note. Les enregistrements en brouillon ne sont envoyés que lorsque vous choisissez Envoyer. Les redirections ne sont pas suivies. Les livraisons échouées sont conservées dans Livraisons URL pour être relancées en HTTP uniquement ou supprimées."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "नोट लिखने के बजाय JSON POST भेजता है। जब तक आप ‘भेजें’ नहीं चुनते, ड्राफ़्ट रिकॉर्डिंग नहीं भेजी जातीं। रीडायरेक्ट फ़ॉलो नहीं किए जाते। विफल डिलीवरी ‘URL डिलीवरी’ में केवल HTTP पुनः प्रयास या हटाने के लिए रखी जाती हैं।"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mengirim JSON POST alih-alih menulis catatan. Rekaman draf tidak dikirim sampai Anda memilih Kirim. Pengalihan tidak diikuti. Pengiriman yang gagal disimpan di Pengiriman URL untuk dicoba ulang hanya lewat HTTP atau dibuang."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invia un POST JSON invece di scrivere una nota. Le registrazioni in bozza non vengono inviate finché non scegli Invia. I reindirizzamenti non vengono seguiti. Le consegne non riuscite restano in Consegne URL per un nuovo tentativo solo HTTP o per essere scartate."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "メモを書き込む代わりにJSON POSTを送信します。下書きの録音は「送信」を選ぶまで送信されません。リダイレクトはたどりません。失敗した配信は「URL配信」に保持され、HTTPのみで再試行するか破棄できます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "노트를 작성하는 대신 JSON POST를 보냅니다. 초안 녹음은 보내기를 선택할 때까지 전송되지 않습니다. 리디렉션은 따르지 않습니다. 실패한 전달은 URL 전달에 보관되어 HTTP로만 다시 시도하거나 삭제할 수 있습니다."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stuurt een JSON-POST in plaats van een notitie te schrijven. Conceptopnamen worden pas verstuurd als je Stuur kiest. Omleidingen worden niet gevolgd. Mislukte leveringen blijven bewaard in URL-leveringen om alleen via HTTP opnieuw te proberen of te verwijderen."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wysyła żądanie JSON POST zamiast zapisywać notatkę. Nagrania robocze nie są wysyłane, dopóki nie wybierzesz Wyślij. Przekierowania nie są obsługiwane. Nieudane dostarczenia są przechowywane w sekcji Dostarczanie pod URL, gdzie można je ponowić tylko przez HTTP lub odrzucić."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envia um POST JSON em vez de gravar uma nota. Gravações de rascunho só são enviadas quando você escolhe Enviar. Redirecionamentos não são seguidos. Entregas com falha ficam em Entregas por URL para nova tentativa somente via HTTP ou descarte."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отправляет JSON POST вместо записи заметки. Черновые записи не отправляются, пока вы не выберете «Отправить». Перенаправления не выполняются. Неудачные доставки сохраняются в разделе «Доставки по URL» для повтора только по HTTP или удаления."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "குறிப்பை எழுதுவதற்குப் பதிலாக JSON POST ஐ அனுப்பும். நீங்கள் அனுப்பு என்பதைத் தேர்ந்தெடுக்கும் வரை வரைவுப் பதிவுகள் அனுப்பப்படாது. திசைதிருப்பல்கள் பின்பற்றப்படாது. தோல்வியடைந்த வழங்கல்கள் HTTP மட்டும் மீண்டும் முயல அல்லது நிராகரிக்க URL வழங்கல்களில் வைக்கப்படும்."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ส่ง JSON POST แทนการเขียนโน้ต การบันทึกแบบร่างจะไม่ถูกส่งจนกว่าคุณจะเลือก ส่ง ไม่ติดตามการเปลี่ยนเส้นทาง การส่งที่ล้มเหลวจะเก็บไว้ใน การส่งไปยัง URL เพื่อลองใหม่ผ่าน HTTP เท่านั้นหรือทิ้ง"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not yazmak yerine bir JSON POST gönderir. Taslak kayıtlar siz Gönder'i seçene kadar gönderilmez. Yönlendirmeler izlenmez. Başarısız teslimler, yalnızca HTTP ile yeniden denemek veya atmak için URL Teslimleri'nde tutulur."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Надсилає JSON POST замість запису нотатки. Чернеткові записи не надсилаються, доки ви не виберете «Надіслати». Перенаправлення не виконуються. Невдалі доставки зберігаються в розділі «Доставки за URL» для повтору лише через HTTP або видалення."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نوٹ لکھنے کے بجائے JSON POST بھیجتا ہے۔ جب تک آپ بھیجیں منتخب نہ کریں، ڈرافٹ ریکارڈنگز نہیں بھیجی جاتیں۔ ری ڈائریکٹس کی پیروی نہیں کی جاتی۔ ناکام ڈیلیوریز صرف HTTP دوبارہ کوشش یا رد کرنے کے لیے URL ڈیلیوریز میں رکھی جاتی ہیں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gửi một JSON POST thay vì ghi ghi chú. Bản ghi âm nháp chỉ được gửi khi bạn chọn Gửi. Không theo chuyển hướng. Các lần gửi thất bại được giữ trong Gửi qua URL để thử lại chỉ qua HTTP hoặc loại bỏ."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "发送 JSON POST，而不写入笔记。草稿录音在你选择“发送”之前不会发送。不跟随重定向。失败的递送会保留在“URL 递送”中，可仅通过 HTTP 重试或丢弃。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "傳送 JSON POST，而不寫入筆記。草稿錄音在你選擇「發送」之前不會傳送。不跟隨重新導向。失敗的傳送會保留在「URL 傳送」中，可僅透過 HTTP 重試或捨棄。"
+          }
+        }
+      }
+    },
     "Sends a web link with a configured Route.": {
       "localizations": {
         "ar": {
@@ -295332,6 +296326,290 @@
           "stringUnit": {
             "state": "translated",
             "value": "此路線無法使用。請先重新載入，再將其釘選到擷取列。"
+          }
+        }
+      }
+    },
+    "This Route only delivers text to its URL. Add text before sending.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يسلّم هذا المسار النص فقط إلى عنوان URL الخاص به. أضف نصًا قبل الإرسال."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "এই রুট শুধু তার URL-এ টেক্সট ডেলিভার করে। পাঠানোর আগে টেক্সট যোগ করুন।"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese Route sendet nur Text an ihre URL. Füge vor dem Senden Text hinzu."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This Route only delivers text to its URL. Add text before sending."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta ruta solo entrega texto a su URL. Añade texto antes de enviar."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce parcours ne livre que du texte à son URL. Ajoutez du texte avant d’envoyer."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "यह रूट अपने URL पर केवल टेक्स्ट डिलीवर करता है। भेजने से पहले टेक्स्ट जोड़ें।"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rute ini hanya mengirim teks ke URL-nya. Tambahkan teks sebelum mengirim."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questo percorso consegna solo testo al suo URL. Aggiungi del testo prima di inviare."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このルートはURLにテキストのみを配信します。送信する前にテキストを追加してください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 루트는 URL로 텍스트만 전달합니다. 보내기 전에 텍스트를 추가하세요."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deze route levert alleen tekst af bij de URL. Voeg tekst toe voordat je verstuurt."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta trasa dostarcza pod swój URL tylko tekst. Dodaj tekst przed wysłaniem."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta rota entrega apenas texto à URL. Adicione texto antes de enviar."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Этот маршрут доставляет по URL только текст. Добавьте текст перед отправкой."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "இந்த வழித்தடம் அதன் URL க்கு உரையை மட்டுமே வழங்கும். அனுப்பும் முன் உரையைச் சேர்க்கவும்."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "เส้นทางนี้ส่งเฉพาะข้อความไปยัง URL เพิ่มข้อความก่อนส่ง"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu rota URL'sine yalnızca metin teslim eder. Göndermeden önce metin ekleyin."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Цей маршрут доставляє за URL лише текст. Додайте текст перед надсиланням."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "یہ روٹ اپنے URL پر صرف ٹیکسٹ ڈیلیور کرتا ہے۔ بھیجنے سے پہلے ٹیکسٹ شامل کریں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lộ trình này chỉ gửi văn bản đến URL. Hãy thêm văn bản trước khi gửi."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此路线只向其 URL 递送文本。请先添加文本再发送。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此路線只會將文字傳送到其 URL。請先加入文字再發送。"
+          }
+        }
+      }
+    },
+    "This Route only sends text to its URL. Remove attachments before sending.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يرسل هذا المسار النص فقط إلى عنوان URL الخاص به. أزل المرفقات قبل الإرسال."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "এই রুট শুধু তার URL-এ টেক্সট পাঠায়। পাঠানোর আগে সংযুক্তিগুলো সরান।"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese Route sendet nur Text an ihre URL. Entferne vor dem Senden die Anhänge."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This Route only sends text to its URL. Remove attachments before sending."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta ruta solo envía texto a su URL. Quita los archivos adjuntos antes de enviar."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce parcours n’envoie que du texte à son URL. Retirez les pièces jointes avant d’envoyer."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "यह रूट अपने URL पर केवल टेक्स्ट भेजता है। भेजने से पहले अटैचमेंट हटाएँ।"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rute ini hanya mengirim teks ke URL-nya. Hapus lampiran sebelum mengirim."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questo percorso invia solo testo al suo URL. Rimuovi gli allegati prima di inviare."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このルートはURLにテキストのみを送信します。送信する前に添付ファイルを削除してください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 루트는 URL로 텍스트만 보냅니다. 보내기 전에 첨부 파일을 제거하세요."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deze route stuurt alleen tekst naar de URL. Verwijder bijlagen voordat je verstuurt."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta trasa wysyła pod swój URL tylko tekst. Usuń załączniki przed wysłaniem."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta rota envia apenas texto à URL. Remova os anexos antes de enviar."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Этот маршрут отправляет по URL только текст. Удалите вложения перед отправкой."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "இந்த வழித்தடம் அதன் URL க்கு உரையை மட்டுமே அனுப்பும். அனுப்பும் முன் இணைப்புகளை அகற்றவும்."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "เส้นทางนี้ส่งเฉพาะข้อความไปยัง URL เอาไฟล์แนบออกก่อนส่ง"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu rota URL'sine yalnızca metin gönderir. Göndermeden önce ekleri kaldırın."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Цей маршрут надсилає за URL лише текст. Вилучіть вкладення перед надсиланням."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "یہ روٹ اپنے URL پر صرف ٹیکسٹ بھیجتا ہے۔ بھیجنے سے پہلے اٹیچمنٹس ہٹائیں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lộ trình này chỉ gửi văn bản đến URL. Hãy xóa tệp đính kèm trước khi gửi."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此路线只向其 URL 发送文本。请先移除附件再发送。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此路線只會將文字發送到其 URL。請先移除附件再發送。"
           }
         }
       }
