@@ -2024,6 +2024,16 @@ final class QuickCaptureViewModel {
 
     private func openComposer(_ incoming: CaptureDeepLinkDraft) async throws {
         guard requireCaptureRouteAvailable() else { throw QuickCaptureViewModelError.captureRouteBusy }
+        if Self.quickCaptureStartsBlankNote(source: incoming.source, liveNoteIsOpen: liveNotesEnabled && liveNote != nil) {
+            // Quick Capture (lock screen, Control Center, widgets) opens a
+            // blank capture in the launching preset, as it did before Live
+            // Notes, rather than dropping into whichever file was left open.
+            // The open note is already saved, so closing it loses nothing.
+            // Presets that append to one note (rolling or existing-note
+            // destinations) still land in that file on the first save.
+            await startNewNote()
+            guard requireCaptureRouteAvailable() else { throw QuickCaptureViewModelError.captureRouteBusy }
+        }
         let profiles = try await validateComposerLaunch(incoming)
         guard requireCaptureRouteAvailable() else { throw QuickCaptureViewModelError.captureRouteBusy }
         if incoming.source == .widget, let id = incoming.voxID,
@@ -2037,6 +2047,13 @@ final class QuickCaptureViewModel {
             return
         }
         try await applyComposerLaunch(incoming, profiles: profiles)
+    }
+
+    /// Whether a composer launch should close the open Live Note first. Only
+    /// widget-sourced launches (the Quick Capture control and widgets) do;
+    /// capture links and Shortcuts keep adding to what is open.
+    nonisolated static func quickCaptureStartsBlankNote(source: CaptureSource?, liveNoteIsOpen: Bool) -> Bool {
+        source == .widget && liveNoteIsOpen
     }
 
     func cancelPresetSwitch(id: UUID) {
@@ -3086,6 +3103,27 @@ extension QuickCaptureViewModel {
         }
         draft = CaptureDraft(voxID: presetID, destinationSelectionMode: .inherited)
         try? await persistDurableDraft()
+    }
+
+    /// Record new note is offered once there is a note to leave: an open
+    /// file, or words that New note would save first. Never on a Remote-only
+    /// Route, where closing the note would Send the draft to its URL.
+    var canRecordNewNote: Bool {
+        liveNotesEnabled
+            && !selectedRouteIsRemoteOnly
+            && (liveNote != nil || draft.hasCaptureContent)
+            && !isSubmitting
+            && !hasLiveRecordedTranscriptPreview
+    }
+
+    /// Record new note, step one: close the open note exactly like New note
+    /// and leave a blank, unbound composer for the recorder. Returns `false`
+    /// (the open note stays put, nothing records) when that is not possible,
+    /// for example when the first save of unsaved words did not go through.
+    func prepareNewNoteForRecording() async -> Bool {
+        guard canRecordNewNote else { return false }
+        await startNewNote()
+        return liveNote == nil && !draft.hasCaptureContent
     }
 
     /// Switching presets while a file is open closes that file first.

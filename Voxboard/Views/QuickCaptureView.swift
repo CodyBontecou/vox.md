@@ -2467,6 +2467,47 @@ struct QuickCaptureView: View {
         }
     }
 
+    /// Live Notes, from an open note: one tap closes it like New note, opens
+    /// a blank note and starts recording into it through the regular Speak
+    /// path (permission prompt, paywall, Live Activity).
+    private var recordNewNoteControl: CaptureViewSection {
+        CaptureViewSection {
+            Button(action: recordNewNote) {
+                Image(systemName: "mic.badge.plus")
+                    .accessibilityLabel("Record new note")
+            }
+            .buttonStyle(SignalCircleButtonStyle(diameter: Geist.ControlHeight.large))
+            .disabled(isProcessingMedia || persistentRecorder.ownsCaptureRoute)
+            .accessibilityHint(Text("Closes this file, starts a blank note and starts recording"))
+            .accessibilityIdentifier("capture_record_new_note")
+            .keyboardShortcut("n", modifiers: [.command, .shift])
+            .transition(.scale.combined(with: .opacity))
+        }
+    }
+
+    /// Shown only while there is a note to leave; on a blank note Speak
+    /// already records into a new note.
+    private var showsRecordNewNote: Bool {
+        viewModel.canRecordNewNote && !persistentRecorder.isAppRecordingSegmentActive
+    }
+
+    private func recordNewNote() {
+        guard microphonePermissionTask == nil, !persistentRecorder.ownsCaptureRoute else { return }
+        if usageTracker.isAtLimit {
+            presentPaywall(context: .recording)
+            return
+        }
+        Task {
+            guard await viewModel.prepareNewNoteForRecording() else {
+                if viewModel.needsCaptureUnlock {
+                    presentPaywall(context: .captureLimit)
+                }
+                return
+            }
+            startInlineRecording()
+        }
+    }
+
     private var canStartNewNote: Bool {
         (viewModel.liveNote != nil || viewModel.draft.hasCaptureContent)
             && !viewModel.isSubmitting
@@ -2557,6 +2598,7 @@ struct QuickCaptureView: View {
 
                     // Remote only has no note to keep editing; it always Sends.
                     if viewModel.liveNotesEnabled, !viewModel.selectedRouteIsRemoteOnly {
+                        if showsRecordNewNote { recordNewNoteControl }
                         if footerShowsSend { newNoteControl }
                     } else if captureFooterIsVaultUnreachable {
                         queueSaveControl
@@ -2564,6 +2606,7 @@ struct QuickCaptureView: View {
                         sendRouteControl
                     }
                 }
+                .animation(reduceMotion ? nil : .easeInOut(duration: 0.18), value: showsRecordNewNote)
             }
             .padding(.horizontal, Geist.Spacing.four)
             .padding(.top, Geist.Spacing.three)
