@@ -280,3 +280,21 @@ final class RecordingCompletionModeTests: XCTestCase {
         return (try XCTUnwrap(UserDefaults(suiteName: suiteName)), suiteName)
     }
 }
+
+final class DraftRecordingAudioDefaultTests: XCTestCase {
+    func testDraftRecordingKeepsAudioWhenPresetSavesIt() {
+        XCTAssertTrue(QuickCaptureView.draftRecordingAttachesAudio(
+            presetAudioSaveMode: .alongsideTranscript, override: nil))
+        XCTAssertTrue(QuickCaptureView.draftRecordingAttachesAudio(
+            presetAudioSaveMode: .attachmentsFolder, override: nil))
+        XCTAssertFalse(QuickCaptureView.draftRecordingAttachesAudio(
+            presetAudioSaveMode: .off, override: nil))
+    }
+
+    func testAudioSwitchOverridesThePreset() {
+        XCTAssertFalse(QuickCaptureView.draftRecordingAttachesAudio(
+            presetAudioSaveMode: .alongsideTranscript, override: false))
+        XCTAssertTrue(QuickCaptureView.draftRecordingAttachesAudio(
+            presetAudioSaveMode: .off, override: true))
+    }
+}
