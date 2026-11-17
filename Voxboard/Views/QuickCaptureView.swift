@@ -97,7 +97,6 @@ struct QuickCaptureView: View {
     @Environment(\.calendar) private var calendar
     @Environment(\.locale) private var locale
     @Environment(\.timeZone) private var timeZone
-    @Environment(\.adaptiveCanExpandWindow) private var canExpandWindow
     @Environment(\.adaptiveHingeState) private var hingeState
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -122,6 +121,7 @@ struct QuickCaptureView: View {
     @AppStorage("capture.editor.showsRawMarkdown") private var showsRawMarkdown = false
     @State private var showsRoutePicker = false
     @State private var showsDueDate = false
+    @State private var showsQuickActionsEditor = false
     @State private var showsInternalLinks = false
     @State private var showsPaywall = false
     @State private var paywallContext: PaywallContext = .limit
@@ -1044,6 +1044,21 @@ struct QuickCaptureView: View {
                         focusComposer()
                     }
                 }
+                .sheet(isPresented: $showsQuickActionsEditor) {
+                    NavigationStack {
+                        RouteQuickActionsView(
+                            presetID: selectedFlow.id,
+                            preferences: captureToolbarPreferences
+                        )
+                        .toolbar {
+                            ToolbarItem(placement: .topBarLeading) {
+                                Button("Done") { showsQuickActionsEditor = false }
+                                    .accessibilityIdentifier("capture_quick_actions_editor_done")
+                            }
+                        }
+                    }
+                    .presentationDetents([.large])
+                }
                 .sheet(isPresented: $showsInternalLinks) {
                     CaptureInternalLinkPicker(rootURL: viewModel.selectedRootURL()) { markdown in
                         applyComposerCommand(.replaceSelection(with: markdown))
@@ -1786,12 +1801,6 @@ struct QuickCaptureView: View {
                     locationProgressBar
                 }
                 entryLocationTokenHintSection
-                if layout == .compact, canExpandWindow, !composerIsFocused,
-                   !persistentRecorder.isAppRecordingSegmentActive {
-                    AdaptiveExpandHint(kind: .capture)
-                        .padding(.horizontal, Geist.Spacing.four)
-                        .padding(.top, Geist.Spacing.three)
-                }
                 if isMicrophoneDenied, !composerIsFocused, !isLocalizationScreenshot,
                    !persistentRecorder.isAppRecordingSegmentActive {
                     CaptureMicrophoneOffCard(openSettings: openAppSettings)
@@ -1853,6 +1862,7 @@ struct QuickCaptureView: View {
                 isFindingLocation: isFindingLocation,
                 preferences: captureToolbarPreferences,
                 dismissKeyboard: toggleKeyboard,
+                configure: { showsQuickActionsEditor = true },
                 routeID: selectedFlow.id,
                 presentAllActionsInKeyboardArea: isInline ? nil : { panel in
                     composerController.setInputPanel(panel)
@@ -3112,6 +3122,7 @@ struct QuickCaptureView: View {
             || firstNoteDocument != nil
             || showsMicrophoneSettings
             || showsDueDate
+            || showsQuickActionsEditor
             || showsInternalLinks
             || showsPaywall
             || showsAudioImporter
