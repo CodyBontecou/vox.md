@@ -766,10 +766,6 @@ struct QuickCaptureView: View {
                     viewModel.scheduleDraftSave()
                     if let id { selectedFlowId = id }
                 }
-                .onChange(of: selectedFlowId) { _, _ in
-                    // A new preset brings its own "Save audio" choice.
-                    attachRecordingAudioOverride = nil
-                }
                 .onChange(of: viewModel.draft.destinationID) { _, _ in viewModel.scheduleDraftSave() }
                 .onChange(of: viewModel.draft.destinationSelectionMode) { _, _ in viewModel.scheduleDraftSave() }
                 .onChange(of: viewModel.draft.entryTemplateID) { _, _ in viewModel.scheduleDraftSave() }
@@ -819,6 +815,10 @@ struct QuickCaptureView: View {
         CaptureViewSection {
             draftLifecycleContent
                 .onAppear(perform: prepareRecordingFeatures)
+                .onChange(of: selectedFlowId) { _, _ in
+                    // A new preset brings its own "Save audio" choice.
+                    attachRecordingAudioOverride = nil
+                }
                 .onChange(of: pendingKeyboardLaunch) { _, isPending in
                     if isPending { consumePendingKeyboardLaunchIfNeeded() }
                 }
