@@ -214,38 +214,21 @@ enum AdaptiveLayout {
 
 // MARK: - Cover hint
 
-/// Accent hint shown on a compact cover-sized window that can grow, pointing
-/// at what the wide layout adds (DuoCoverCapture / DuoCoverRecording).
+/// Muted hint shown on a compact cover-sized window that can grow, while
+/// recording (DuoCoverRecording).
 struct AdaptiveExpandHint: View {
-    enum Kind { case capture, recording }
-    let kind: Kind
-
     var body: some View {
         HStack(spacing: 8) {
             Image(systemName: "rectangle.split.2x1")
                 .font(.system(size: 14, weight: .semibold))
                 .accessibilityHidden(true)
-            Text(message)
+            Text("Open, or prop it up, to keep recording on the big screen")
                 .font(Geist.caption(.footnote))
                 .fixedSize(horizontal: false, vertical: true)
         }
-        .foregroundStyle(kind == .capture ? Geist.Palette.blue800 : Color(captureHex: 0x9A9A95))
-        .padding(.horizontal, kind == .capture ? 12 : 0)
-        .padding(.vertical, kind == .capture ? 8 : 0)
-        .frame(maxWidth: .infinity, alignment: kind == .capture ? .leading : .center)
-        .background {
-            if kind == .capture {
-                RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Geist.accentSoft)
-            }
-        }
+        .foregroundStyle(Color(captureHex: 0x9A9A95))
+        .frame(maxWidth: .infinity, alignment: .center)
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier("adaptive_expand_hint")
-    }
-
-    private var message: LocalizedStringKey {
-        switch kind {
-        case .capture: "Open to see route steps and the “will write” preview"
-        case .recording: "Open, or prop it up, to keep recording on the big screen"
-        }
     }
 }

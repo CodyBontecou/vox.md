@@ -50,6 +50,9 @@ struct CaptureEditorToolbar: View {
     /// Hides the keyboard. Shown inside the "•••" panel (per design the row
     /// itself ends with "•••" only).
     var dismissKeyboard: (() -> Void)? = nil
+    /// Opens the editor for this bar's pins. Shown as "Configure" at the top
+    /// of the "•••" panel; the panel closes first.
+    var configure: (() -> Void)? = nil
     /// The composer's current route (`CapturePreset.id`). `nil` uses the
     /// global default row.
     var routeID: String? = nil
@@ -173,6 +176,12 @@ struct CaptureEditorToolbar: View {
         }
     }
 
+    private func closeAllActions() {
+        guard showsAllActions else { return }
+        showsAllActions = false
+        presentAllActionsInKeyboardArea?(nil)
+    }
+
     private var inlinePanelIsPresented: Binding<Bool> {
         Binding(
             get: { isInline && showsAllActions },
@@ -207,6 +216,25 @@ struct CaptureEditorToolbar: View {
                             .tracking(0.6)
                             .foregroundStyle(Geist.muted)
                         Spacer()
+                        if group == CaptureQuickActionGroup.allCases.first, let configure {
+                            Button {
+                                closeAllActions()
+                                configure()
+                            } label: {
+                                Label("Configure", systemImage: "slider.horizontal.3")
+                                    .font(Geist.mono(size: 11, relativeTo: .caption2, medium: true))
+                                    .foregroundStyle(Geist.text)
+                                    .padding(.horizontal, 10)
+                                    .frame(height: 28)
+                                    .overlay(
+                                        Capsule().stroke(Geist.border, lineWidth: 1)
+                                    )
+                                    .contentShape(Capsule())
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityHint("Choose which actions sit on the bar")
+                            .accessibilityIdentifier("capture_quick_actions_configure")
+                        }
                         if group == .markdown, !isResting, let dismissKeyboard {
                             Button(action: dismissKeyboard) {
                                 Label("Hide keyboard", systemImage: "keyboard.chevron.compact.down")

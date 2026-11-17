@@ -120,7 +120,7 @@ struct CaptureLiveRecordingScreen: View {
                 .frame(height: 72)
                 .padding(.horizontal, 24)
             if canExpandWindow {
-                AdaptiveExpandHint(kind: .recording)
+                AdaptiveExpandHint()
                     .padding(.horizontal, 20)
                     .padding(.top, 6)
             }
@@ -164,7 +164,7 @@ struct CaptureLiveRecordingScreen: View {
                 .frame(height: 52)
                 .padding(.horizontal, 24)
             if canExpandWindow {
-                AdaptiveExpandHint(kind: .recording)
+                AdaptiveExpandHint()
                     .padding(.horizontal, 20)
                     .padding(.top, 6)
             }
