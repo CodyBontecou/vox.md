@@ -26,6 +26,7 @@ struct MetaSettingsView: View {
     @State private var liveActivityMonitorEnabled: Bool = AppConstants.liveActivityMonitorEnabled
     @State private var shortcutRecordingLiveActivityEnabled: Bool = AppConstants.shortcutRecordingLiveActivityEnabled
     @State private var lockScreenQuickRecordEnabled: Bool = AppConstants.lockScreenQuickRecordEnabled
+    @State private var recordingQuality = RecordingQuality.load(from: AppConstants.sharedDefaults)
     @State private var vault: VoxVault?
     @State private var isPickingVault = false
     @State private var vaultMessage: String?
@@ -214,7 +215,24 @@ struct MetaSettingsView: View {
             summaryRow(String(localized: "Language"), subtitle: languageSummary, identifier: "settings_language") {
                 TranscriptionLanguageSettingsView()
             }
+            rowDivider
+            summaryRow(
+                String(localized: "Recording Quality"),
+                subtitle: recordingQualitySummary,
+                identifier: "settings_recording_quality"
+            ) {
+                RecordingQualitySettingsView { quality in
+                    recordingQuality = quality
+                    persistentRecorder.recordingQualityDidChange()
+                    WatchRecordingController.shared.publishState()
+                }
+            }
         }
+    }
+
+    /// "High · ≈ 0.5 MB/min"
+    private var recordingQualitySummary: String {
+        "\(recordingQuality.displayName) · \(recordingQuality.approximateStoragePerMinuteDescription)"
     }
 
     private var modelSummary: String {

@@ -164,6 +164,13 @@ public enum AudioAttachmentExporter {
             at: folderURL,
             withIntermediateDirectories: true
         )
+        // High (48 kHz AAC) and Lossless (ALAC) recordings are already the
+        // `.m4a` the user chose. The AAC export preset would re-encode them and
+        // turn Lossless into AAC, so keep their bytes.
+        if KeptAudioInspector.shouldPreserveEncoding(sourceURL) {
+            try atomicCopy(from: sourceURL, to: destinationURL)
+            return
+        }
         let temporaryURL = temporaryURL(for: destinationURL)
         defer { try? FileManager.default.removeItem(at: temporaryURL) }
 

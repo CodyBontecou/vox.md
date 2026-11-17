@@ -851,7 +851,16 @@ final class WatchRecordingPipeline {
         let convertedURL: URL
         do {
             let conversionTask = Task.detached(priority: .userInitiated) {
-                try AudioFileConverter.convertToWhisperWAV(
+                // High/Lossless Watch recordings are 48 kHz; stream them down
+                // so long takes never load whole into memory. Speech (16 kHz)
+                // keeps its existing conversion.
+                if KeptAudioInspector.needsTranscriptionCopy(sourceURL) {
+                    return try KeptAudioInspector.makeTranscriptionCopy(
+                        of: sourceURL,
+                        at: workingURL
+                    )
+                }
+                return try AudioFileConverter.convertToWhisperWAV(
                     inputURL: sourceURL,
                     outputURL: workingURL
                 )

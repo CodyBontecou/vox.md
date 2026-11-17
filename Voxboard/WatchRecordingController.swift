@@ -340,6 +340,8 @@ final class WatchRecordingController: NSObject {
         payload[WatchRecordingPayloadKey.stateEpoch] = currentStateEpoch()
         payload[WatchRecordingPayloadKey.queuedCount] = visibleJobs.filter { !$0.phase.isTerminal }.count
         payload[WatchRecordingPayloadKey.presetSelectionAvailable] = selectedPreset != nil
+        payload[RecordingQuality.watchPayloadKey] = RecordingQuality
+            .load(from: AppConstants.sharedDefaults).rawValue
         if let selectedPreset {
             payload[WatchRecordingPayloadKey.selectedPresetID] = selectedPreset.id
             payload[WatchRecordingPayloadKey.selectedPresetName] = selectedPreset.accessibilityName
