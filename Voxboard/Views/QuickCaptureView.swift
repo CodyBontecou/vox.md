@@ -140,7 +140,9 @@ struct QuickCaptureView: View {
             forKey: CapturePreferenceKeys.defaultRecordingResultMode
         )
     )
-    @State private var attachRecordingAudio = false
+    /// A per-preset manual choice for the Audio switch. `nil` follows the
+    /// preset's own "Save audio" setting; cleared whenever the preset changes.
+    @State private var attachRecordingAudioOverride: Bool?
     @State private var lastStartedRecordingMode: CaptureRecordingMode = .preset
     @State private var microphonePermissionTask: Task<Void, Never>?
     @State private var showsMicrophoneSettings = false
@@ -763,6 +765,10 @@ struct QuickCaptureView: View {
                 .onChange(of: viewModel.draft.voxID) { _, id in
                     viewModel.scheduleDraftSave()
                     if let id { selectedFlowId = id }
+                }
+                .onChange(of: selectedFlowId) { _, _ in
+                    // A new preset brings its own "Save audio" choice.
+                    attachRecordingAudioOverride = nil
                 }
                 .onChange(of: viewModel.draft.destinationID) { _, _ in viewModel.scheduleDraftSave() }
                 .onChange(of: viewModel.draft.destinationSelectionMode) { _, _ in viewModel.scheduleDraftSave() }
@@ -1503,7 +1509,7 @@ struct QuickCaptureView: View {
                 .accessibilityLabel("Route \(selectedFlow.accessibilityName)")
 
                 if recordingMode == .draft {
-                    Toggle(isOn: $attachRecordingAudio) {
+                    Toggle(isOn: attachRecordingAudioSelection) {
                         Label("Audio", systemImage: "paperclip")
                             .font(Geist.caption())
                     }
@@ -3738,6 +3744,32 @@ struct QuickCaptureView: View {
 
     private var selectedFlow: CapturePreset {
         enabledFlows.first(where: { $0.id == selectedFlowId }) ?? enabledFlows[0]
+    }
+
+    /// Whether a draft recording keeps its audio: the preset's "Save audio"
+    /// setting unless the Audio switch was flipped for this preset.
+    private var attachRecordingAudio: Bool {
+        Self.draftRecordingAttachesAudio(
+            presetAudioSaveMode: selectedFlow.audioSaveMode,
+            override: attachRecordingAudioOverride
+        )
+    }
+
+    private var attachRecordingAudioSelection: Binding<Bool> {
+        Binding(
+            get: { attachRecordingAudio },
+            set: { attachRecordingAudioOverride = $0 }
+        )
+    }
+
+    /// Draft ("Add to Draft") recordings used to drop audio unless the Audio
+    /// switch was turned on by hand each time, ignoring a preset set to save
+    /// and embed it. The preset now decides; the switch only overrides.
+    static nonisolated func draftRecordingAttachesAudio(
+        presetAudioSaveMode: CapturePresetAudioSaveMode,
+        override: Bool?
+    ) -> Bool {
+        override ?? (presetAudioSaveMode != .off)
     }
 
     private var selectedRecordingCompletionMode: RecordingCompletionMode {
