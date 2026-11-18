@@ -235,10 +235,13 @@ final class MacQuickCapturePanelController {
             // A release that landed while permission was pending ends the take.
             if pushToTalk, !isPushToTalkActive { return }
             let flowID = viewModel.draft.voxID ?? CapturePresetStore.selectedFlowId()
+            // The panel has no Audio switch, so the preset's "Save audio" decides.
+            let attachAudio = (CapturePresetStore.flow(id: flowID)?.audioSaveMode ?? .off)
+                .draftRecordingAttachesAudio(override: nil)
             recorder.startRecording(
                 modelManager: modelManager,
                 flowId: flowID,
-                completionMode: .captureDraft(attachAudio: false),
+                completionMode: .captureDraft(attachAudio: attachAudio),
                 draftRequestID: viewModel.draft.requestID
             )
         }

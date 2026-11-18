@@ -57,7 +57,9 @@ struct MacCaptureWorkspaceView: View {
     @State private var selectedInspectorTool: MacCaptureInspectorTool? = .route
     @State private var inputMode: MacCaptureInputMode = .microphone
     @State private var recordingMode: MacCaptureRecordingMode = .preset
-    @State private var attachRecordingAudio = false
+    /// A per-preset manual choice for the Audio switch. `nil` follows the
+    /// preset's own "Save audio" setting; cleared whenever the preset changes.
+    @State private var attachRecordingAudioOverride: Bool?
     @State private var showsPaywall = false
     @State private var showsInboxDiscardConfirmation = false
     @State private var showsClearDraftConfirmation = false
@@ -157,6 +159,10 @@ struct MacCaptureWorkspaceView: View {
             if !viewModel.hasLiveRecordedTranscriptPreview {
                 viewModel.scheduleDraftSave()
             }
+        }
+        .onChange(of: selectedFlow.id) { _, _ in
+            // A new preset brings its own "Save audio" choice.
+            attachRecordingAudioOverride = nil
         }
         .onChange(of: viewModel.lastReceipt) { _, receipt in
             guard let receipt else { return }
@@ -619,7 +625,10 @@ struct MacCaptureWorkspaceView: View {
                 get: { recordingMode == .preset },
                 set: { recordingMode = $0 ? .preset : .draft }
             ),
-            attachesRecordingAudio: $attachRecordingAudio,
+            attachesRecordingAudio: Binding(
+                get: { attachRecordingAudio },
+                set: { attachRecordingAudioOverride = $0 }
+            ),
             isRecording: recorder.isRecording,
             revealLastCapture: lastRevealedReceiptURL.map { url in { revealInFinder(url) } },
             unlock: usageTracker.hasUnlocked ? nil : { showsPaywall = true },
@@ -1413,6 +1422,12 @@ struct MacCaptureWorkspaceView: View {
                 )
             }
         }
+    }
+
+    /// Whether a draft recording keeps its audio: the preset's "Save audio"
+    /// setting unless the Audio switch was flipped for this preset.
+    private var attachRecordingAudio: Bool {
+        selectedFlow.audioSaveMode.draftRecordingAttachesAudio(override: attachRecordingAudioOverride)
     }
 
     private var selectedRecordingCompletionMode: MacRecordingCompletionMode {
