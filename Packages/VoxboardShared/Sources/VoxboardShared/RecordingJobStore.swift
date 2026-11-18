@@ -944,10 +944,10 @@ public actor RecordingJobStore {
                     audioFilename: url.lastPathComponent,
                     originalFilename: url.lastPathComponent,
                     createdAt: (try? url.resourceValues(forKeys: [.creationDateKey]).creationDate) ?? Date(),
-                    duration: 0,
+                    duration: Self.recoveredDuration(of: url),
                     source: .recovered,
                     delivery: .recovery,
-                    modelID: "",
+                    modelID: AppConstants.defaultTranscriptionBackendID,
                     language: "auto",
                     retentionPolicy: .permanent,
                     processingPolicy: .manual,
@@ -1041,10 +1041,10 @@ public actor RecordingJobStore {
                 sourceURL: url,
                 originalFilename: url.lastPathComponent,
                 createdAt: (try? url.resourceValues(forKeys: [.creationDateKey]).creationDate) ?? Date(),
-                duration: 0,
+                duration: Self.recoveredDuration(of: url),
                 source: .recovered,
                 delivery: .recovery,
-                modelID: "",
+                modelID: AppConstants.defaultTranscriptionBackendID,
                 language: "auto",
                 configuration: RecordingQueueConfiguration(
                     sourceAudioRetention: .permanent,
@@ -1353,6 +1353,14 @@ public actor RecordingJobStore {
         }
     }
 
+    /// The length of a recovered recording, read from its header (the 16 kHz
+    /// journal rewrites it on every write, so it survives a crash). 0 if the
+    /// file isn't readable audio.
+    static func recoveredDuration(of url: URL) -> TimeInterval {
+        guard let seconds = AudioFileConverter.duration(of: url), seconds.isFinite, seconds > 0 else { return 0 }
+        return seconds
+    }
+
     public func retry(
         id: UUID,
         modelID: String? = nil,
@@ -1367,6 +1375,9 @@ public actor RecordingJobStore {
             }
             try ensureAudioExists(for: job)
             if let modelID { job.modelID = modelID }
+            // Jobs recovered by earlier builds were saved with no model, which
+            // the transcriber reads as an undownloaded one. Use the default.
+            if job.modelID.isEmpty { job.modelID = AppConstants.defaultTranscriptionBackendID }
             if replaceFallbackModelID {
                 job.fallbackModelID = fallbackModelID
             } else if let fallbackModelID {

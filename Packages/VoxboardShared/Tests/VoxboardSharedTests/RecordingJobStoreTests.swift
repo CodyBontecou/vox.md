@@ -712,6 +712,79 @@ final class RecordingJobStoreTests: XCTestCase {
         XCTAssertTrue(FileManager.default.fileExists(atPath: intentURL.path))
     }
 
+    func test_crashedJournalRecoversWithItsLengthAndTheDefaultModel() async throws {
+        let fixture = try makeFixture()
+        defer { fixture.cleanup() }
+        // A journal cut off mid-take: IncrementalWAVWriter keeps its header
+        // current, so the file left behind by a crash still states its length.
+        let journalURL = fixture.root.appendingPathComponent("segment_crashed.wav")
+        let writer = try IncrementalWAVWriter(url: journalURL, sampleRate: 16_000)
+        try writer.append(samples: [Float](repeating: 0.1, count: 16_000 * 3))
+
+        let recovered = try await fixture.store.recoverExternalOrphans(
+            recordingsDirectoryURL: fixture.root,
+            olderThan: .distantFuture
+        )
+
+        let job = try XCTUnwrap(recovered.first)
+        XCTAssertEqual(recovered.count, 1)
+        XCTAssertEqual(job.duration, 3, accuracy: 0.01)
+        XCTAssertEqual(job.modelID, AppConstants.defaultTranscriptionBackendID)
+        XCTAssertFalse(job.modelID.isEmpty)
+    }
+
+    func test_unreadableOrphanRecoversWithZeroLength() async throws {
+        let fixture = try makeFixture()
+        defer { fixture.cleanup() }
+        _ = try fixture.makeAudio(named: "recording_garbage.wav")
+
+        let recovered = try await fixture.store.recoverExternalOrphans(
+            recordingsDirectoryURL: fixture.root,
+            olderThan: .distantFuture
+        )
+
+        XCTAssertEqual(recovered.map(\.duration), [0])
+    }
+
+    func test_retryGivesAModellessRecoveredJobTheDefaultModel() async throws {
+        let fixture = try makeFixture()
+        defer { fixture.cleanup() }
+        // Saved by an earlier build, before recovery set a model.
+        let recovered = try await fixture.store.enqueue(
+            sourceURL: try fixture.makeAudio(),
+            duration: 0,
+            source: .recovered,
+            delivery: .recovery,
+            modelID: "",
+            language: "auto",
+            configuration: RecordingQueueConfiguration(
+                sourceAudioRetention: .permanent,
+                processingPolicy: .manual
+            )
+        )
+        _ = try await fixture.store.claim(id: recovered.id)
+        _ = try await fixture.store.markFailed(id: recovered.id, stage: .storage, message: "Choose a route")
+
+        let retried = try await fixture.store.retry(
+            id: recovered.id,
+            delivery: .preset(CapturePresetStore.defaultFlows[0])
+        )
+
+        XCTAssertEqual(retried.modelID, AppConstants.defaultTranscriptionBackendID)
+    }
+
+    func test_retryKeepsAnExplicitModel() async throws {
+        let fixture = try makeFixture()
+        defer { fixture.cleanup() }
+        let job = try await fixture.enqueue()
+        _ = try await fixture.store.claim(id: job.id)
+        _ = try await fixture.store.markFailed(id: job.id, stage: .transcription, message: "failed")
+
+        let retried = try await fixture.store.retry(id: job.id, modelID: "chosen")
+
+        XCTAssertEqual(retried.modelID, "chosen")
+    }
+
     func test_primaryCleanupFailureReceiptPreventsDuplicateRecovery() async throws {
         let fileManager = FailingRemovalFileManager()
         let fixture = try makeFixture(fileManager: fileManager)
