@@ -97,7 +97,6 @@ struct QuickCaptureView: View {
     @Environment(\.calendar) private var calendar
     @Environment(\.locale) private var locale
     @Environment(\.timeZone) private var timeZone
-    @Environment(\.adaptiveCanExpandWindow) private var canExpandWindow
     @Environment(\.adaptiveHingeState) private var hingeState
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -122,6 +121,7 @@ struct QuickCaptureView: View {
     @AppStorage("capture.editor.showsRawMarkdown") private var showsRawMarkdown = false
     @State private var showsRoutePicker = false
     @State private var showsDueDate = false
+    @State private var showsQuickActionsEditor = false
     @State private var showsInternalLinks = false
     @State private var showsPaywall = false
     @State private var paywallContext: PaywallContext = .limit
@@ -140,7 +140,9 @@ struct QuickCaptureView: View {
             forKey: CapturePreferenceKeys.defaultRecordingResultMode
         )
     )
-    @State private var attachRecordingAudio = false
+    /// A per-preset manual choice for the Audio switch. `nil` follows the
+    /// preset's own "Save audio" setting; cleared whenever the preset changes.
+    @State private var attachRecordingAudioOverride: Bool?
     @State private var lastStartedRecordingMode: CaptureRecordingMode = .preset
     @State private var microphonePermissionTask: Task<Void, Never>?
     @State private var showsMicrophoneSettings = false
@@ -813,6 +815,10 @@ struct QuickCaptureView: View {
         CaptureViewSection {
             draftLifecycleContent
                 .onAppear(perform: prepareRecordingFeatures)
+                .onChange(of: selectedFlowId) { _, _ in
+                    // A new preset brings its own "Save audio" choice.
+                    attachRecordingAudioOverride = nil
+                }
                 .onChange(of: pendingKeyboardLaunch) { _, isPending in
                     if isPending { consumePendingKeyboardLaunchIfNeeded() }
                 }
@@ -1043,6 +1049,21 @@ struct QuickCaptureView: View {
                         applyComposerCommand(.replaceSelection(with: token))
                         focusComposer()
                     }
+                }
+                .sheet(isPresented: $showsQuickActionsEditor) {
+                    NavigationStack {
+                        RouteQuickActionsView(
+                            presetID: selectedFlow.id,
+                            preferences: captureToolbarPreferences
+                        )
+                        .toolbar {
+                            ToolbarItem(placement: .topBarLeading) {
+                                Button("Done") { showsQuickActionsEditor = false }
+                                    .accessibilityIdentifier("capture_quick_actions_editor_done")
+                            }
+                        }
+                    }
+                    .presentationDetents([.large])
                 }
                 .sheet(isPresented: $showsInternalLinks) {
                     CaptureInternalLinkPicker(rootURL: viewModel.selectedRootURL()) { markdown in
@@ -1488,7 +1509,7 @@ struct QuickCaptureView: View {
                 .accessibilityLabel("Route \(selectedFlow.accessibilityName)")
 
                 if recordingMode == .draft {
-                    Toggle(isOn: $attachRecordingAudio) {
+                    Toggle(isOn: attachRecordingAudioSelection) {
                         Label("Audio", systemImage: "paperclip")
                             .font(Geist.caption())
                     }
@@ -1786,12 +1807,6 @@ struct QuickCaptureView: View {
                     locationProgressBar
                 }
                 entryLocationTokenHintSection
-                if layout == .compact, canExpandWindow, !composerIsFocused,
-                   !persistentRecorder.isAppRecordingSegmentActive {
-                    AdaptiveExpandHint(kind: .capture)
-                        .padding(.horizontal, Geist.Spacing.four)
-                        .padding(.top, Geist.Spacing.three)
-                }
                 if isMicrophoneDenied, !composerIsFocused, !isLocalizationScreenshot,
                    !persistentRecorder.isAppRecordingSegmentActive {
                     CaptureMicrophoneOffCard(openSettings: openAppSettings)
@@ -1853,6 +1868,7 @@ struct QuickCaptureView: View {
                 isFindingLocation: isFindingLocation,
                 preferences: captureToolbarPreferences,
                 dismissKeyboard: toggleKeyboard,
+                configure: { showsQuickActionsEditor = true },
                 routeID: selectedFlow.id,
                 presentAllActionsInKeyboardArea: isInline ? nil : { panel in
                     composerController.setInputPanel(panel)
@@ -3112,6 +3128,7 @@ struct QuickCaptureView: View {
             || firstNoteDocument != nil
             || showsMicrophoneSettings
             || showsDueDate
+            || showsQuickActionsEditor
             || showsInternalLinks
             || showsPaywall
             || showsAudioImporter
@@ -3727,6 +3744,32 @@ struct QuickCaptureView: View {
 
     private var selectedFlow: CapturePreset {
         enabledFlows.first(where: { $0.id == selectedFlowId }) ?? enabledFlows[0]
+    }
+
+    /// Whether a draft recording keeps its audio: the preset's "Save audio"
+    /// setting unless the Audio switch was flipped for this preset.
+    private var attachRecordingAudio: Bool {
+        Self.draftRecordingAttachesAudio(
+            presetAudioSaveMode: selectedFlow.audioSaveMode,
+            override: attachRecordingAudioOverride
+        )
+    }
+
+    private var attachRecordingAudioSelection: Binding<Bool> {
+        Binding(
+            get: { attachRecordingAudio },
+            set: { attachRecordingAudioOverride = $0 }
+        )
+    }
+
+    /// Draft ("Add to Draft") recordings used to drop audio unless the Audio
+    /// switch was turned on by hand each time, ignoring a preset set to save
+    /// and embed it. The preset now decides; the switch only overrides.
+    static nonisolated func draftRecordingAttachesAudio(
+        presetAudioSaveMode: CapturePresetAudioSaveMode,
+        override: Bool?
+    ) -> Bool {
+        override ?? (presetAudioSaveMode != .off)
     }
 
     private var selectedRecordingCompletionMode: RecordingCompletionMode {

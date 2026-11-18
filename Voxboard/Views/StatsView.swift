@@ -9,6 +9,7 @@ struct StatsView: View {
     @State private var statsLedger: ActivityStatsLedger?
     @State private var statsLoadError: String?
     @State private var referenceDate = Date()
+    @State private var isSharing = false
 
     private let overviewColumns = [
         GridItem(.flexible(), spacing: Geist.Spacing.three),
@@ -60,6 +61,18 @@ struct StatsView: View {
                     .font(Geist.heading(.headline))
                     .foregroundStyle(Geist.text)
             }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    isSharing = true
+                } label: {
+                    Image(systemName: "square.and.arrow.up")
+                        .foregroundStyle(Geist.text)
+                }
+                .accessibilityLabel("Share stats")
+            }
+        }
+        .sheet(isPresented: $isSharing) {
+            StatsShareSheet(data: shareCardData)
         }
         .toolbarBackground(Geist.bg, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
@@ -341,6 +354,34 @@ struct StatsView: View {
             loadErrors.append(error.localizedDescription)
         }
         statsLoadError = loadErrors.isEmpty ? nil : loadErrors.joined(separator: "\n")
+    }
+
+    // MARK: - Share card
+
+    private var shareCardData: StatsShareCardData {
+        let stats = stats
+        let average: String = stats.recordingCount > 0
+            ? formattedDuration(stats.averageRecordingDuration)
+            : "—"
+        return StatsShareCardData(
+            recordingCount: stats.recordingCount,
+            captureCount: stats.captureCount,
+            recordings: formattedCount(stats.recordingCount),
+            captures: formattedCount(stats.captureCount),
+            recorded: formattedDuration(stats.totalRecordingDuration),
+            attachments: formattedCount(stats.attachmentCount),
+            averageTake: average,
+            thisWeek: formattedCount(stats.recentRecordingCount + stats.recentCaptureCount),
+            days: stats.recentDays.map {
+                StatsShareCardData.Day(
+                    weekday: $0.date.formatted(.dateTime.weekday(.narrow)),
+                    total: $0.totalCount
+                )
+            },
+            topSources: stats.captureSources.prefix(3).map {
+                StatsShareCardData.Source(name: captureSourceName($0.source), count: formattedCount($0.count))
+            }
+        )
     }
 
     // MARK: - Formatting
