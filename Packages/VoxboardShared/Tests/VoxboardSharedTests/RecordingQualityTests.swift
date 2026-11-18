@@ -116,19 +116,183 @@ final class RecordingQualityTests: XCTestCase {
         XCTAssertFalse(FileManager.default.fileExists(atPath: url.path))
     }
 
-    func test_resamplerConvertsTo48kMono() throws {
+    func test_resamplerConvertsTo48kMonoAcrossChunks() throws {
         let resampler = try XCTUnwrap(KeptAudioResampler(sampleRate: 48_000))
-        let input = try XCTUnwrap(AVAudioFormat(
-            commonFormat: .pcmFormatFloat32, sampleRate: 44_100, channels: 2, interleaved: false
-        ))
         var total = 0
         for _ in 0..<10 {
-            let buffer = try XCTUnwrap(AVAudioPCMBuffer(pcmFormat: input, frameCapacity: 4_410))
-            buffer.frameLength = 4_410
-            total += resampler.convert(buffer).count
+            total += resampler.convert(samples: [Float](repeating: 0.1, count: 4_410), sampleRate: 44_100).count
         }
-        // 0.1 s × 10 at 48 kHz, allowing for converter priming latency.
-        XCTAssertEqual(Double(total), 48_000, accuracy: 600)
+        total += resampler.flush().count
+        // 0.1 s × 10 at 48 kHz once the converter's held-back tail is flushed.
+        XCTAssertEqual(Double(total), 48_000, accuracy: 100)
+        XCTAssertEqual(resampler.convert(samples: [1, 2, 3], sampleRate: 48_000), [1, 2, 3])
+    }
+
+    func test_writerResamplesRawMicrophoneSamples() throws {
+        let url = root.appendingPathComponent("raw.m4a")
+        let writer = try KeptAudioFileWriter(url: url, quality: .high)
+        for _ in 0..<20 {
+            try writer.append(samples: [Float](repeating: 0.05, count: 4_410), sourceSampleRate: 44_100)
+        }
+        XCTAssertNotNil(writer.finalize())
+        XCTAssertEqual(writer.duration, 2, accuracy: 0.01)
+        XCTAssertEqual(KeptAudioInspector.format(of: url)?.sampleRate, 48_000)
+    }
+
+    // MARK: - Pre-roll alignment
+
+    func test_preRollSeedCoversTheSameSpanAsTheJournalSeed() {
+        // Hardware-rate history and 16 kHz journal fed from the same buffers.
+        let history = CircularAudioBuffer(capacity: 48_000 * 4)
+        history.append((0..<(48_000 * 3)).map { Float($0) })
+
+        let seed = KeptAudioFileWriter.preRollSeed(
+            from: history,
+            historySampleRate: 48_000,
+            journalSeedCount: 32_000 // 2 s at 16 kHz
+        )
+
+        XCTAssertEqual(seed.count, 96_000)
+        XCTAssertEqual(seed.first, Float(48_000))
+        XCTAssertEqual(seed.last, Float(48_000 * 3 - 1), "Seed must end where the journal seed ends")
+
+        // 44.1 kHz input, odd journal length: duration still matches.
+        let other = CircularAudioBuffer(capacity: 44_100 * 4)
+        other.append([Float](repeating: 1, count: 44_100 * 3))
+        let otherSeed = KeptAudioFileWriter.preRollSeed(
+            from: other, historySampleRate: 44_100, journalSeedCount: 24_321
+        )
+        XCTAssertEqual(Double(otherSeed.count) / 44_100, 24_321 / 16_000, accuracy: 1 / 44_100)
+    }
+
+    func test_preRollSeedPadsShortHistoryWithLeadingSilence() {
+        let history = CircularAudioBuffer(capacity: 48_000)
+        history.append([Float](repeating: 0.5, count: 1_000))
+
+        let seed = KeptAudioFileWriter.preRollSeed(
+            from: history, historySampleRate: 48_000, journalSeedCount: 16_000
+        )
+
+        XCTAssertEqual(seed.count, 48_000, "Kept file keeps the journal's timeline")
+        XCTAssertTrue(seed.prefix(47_000).allSatisfy { $0 == 0 })
+        XCTAssertTrue(seed.suffix(1_000).allSatisfy { $0 == 0.5 })
+        XCTAssertTrue(KeptAudioFileWriter.preRollSeed(
+            from: history, historySampleRate: 48_000, journalSeedCount: 0
+        ).isEmpty)
+    }
+
+    // MARK: - Crash recovery
+
+    func test_unclaimedKeptTakeIsNeverRecoveredAndJournalIsRecoveredOnce() async throws {
+        let recordings = root.appendingPathComponent("Recordings", isDirectory: true)
+        try FileManager.default.createDirectory(at: recordings, withIntermediateDirectories: true)
+        // Crash after Stop closed the kept file, before the intent was saved.
+        let kept = KeptAudioArtifacts.makeURL(in: recordings, requestID: "req", quality: .lossless)
+        try Data("kept-lossless".utf8).write(to: kept)
+        let journal = recordings.appendingPathComponent("segment_active_req_1.wav")
+        try Data("journal".utf8).write(to: journal)
+        XCTAssertTrue(kept.lastPathComponent.hasPrefix(KeptAudioArtifacts.filenamePrefix))
+
+        let store = RecordingJobStore(rootDirectoryURL: root.appendingPathComponent("queue"))
+        let first = try await store.recoverExternalOrphans(
+            recordingsDirectoryURL: recordings, olderThan: Date().addingTimeInterval(60)
+        )
+        XCTAssertEqual(first.map(\.originalFilename), [journal.lastPathComponent])
+
+        // Next launch: the unclaimed kept file goes, nothing is recovered twice.
+        XCTAssertEqual(
+            KeptAudioArtifacts.removeUnclaimed(in: recordings).map(\.lastPathComponent),
+            [kept.lastPathComponent]
+        )
+        XCTAssertFalse(FileManager.default.fileExists(atPath: kept.path))
+        let second = try await store.recoverExternalOrphans(
+            recordingsDirectoryURL: recordings, olderThan: Date().addingTimeInterval(60)
+        )
+        XCTAssertTrue(second.isEmpty)
+        let jobs = try await store.load(recoverInterrupted: false)
+        XCTAssertEqual(jobs.count, 1)
+    }
+
+    func test_claimedKeptTakeRecoversAsOneJobAcrossRepeatedRecovery() async throws {
+        let recordings = root.appendingPathComponent("Recordings", isDirectory: true)
+        try FileManager.default.createDirectory(at: recordings, withIntermediateDirectories: true)
+        let kept = KeptAudioArtifacts.makeURL(in: recordings, requestID: "req", quality: .high)
+        try Data("kept-high".utf8).write(to: kept)
+        let wav = recordings.appendingPathComponent("segment_\(UUID().uuidString).wav")
+        try Data("wav".utf8).write(to: wav)
+        let journal = recordings.appendingPathComponent("segment_active_req_2.wav")
+        try Data("journal".utf8).write(to: journal)
+        let createdAt = Date().addingTimeInterval(-120)
+        let jobID = UUID()
+        // Crash after the handoff intent was saved, before the queue enqueue.
+        try RecordingJobHandoffIntentStore(recordingsDirectoryURL: recordings).save(
+            RecordingJobHandoffIntent(
+                jobID: jobID,
+                readiness: .ready,
+                audioFilename: kept.lastPathComponent,
+                relatedAudioFilenames: [wav.lastPathComponent, journal.lastPathComponent],
+                createdAt: createdAt,
+                duration: 3,
+                source: .iOSApp,
+                delivery: .captureDraft(attachAudio: true),
+                modelID: "automatic",
+                language: "auto",
+                configuration: .default
+            )
+        )
+
+        // Start-up cleanup keeps a claimed kept file.
+        XCTAssertTrue(KeptAudioArtifacts.removeUnclaimed(in: recordings).isEmpty)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: kept.path))
+
+        let store = RecordingJobStore(rootDirectoryURL: root.appendingPathComponent("queue"))
+        let first = try await store.recoverExternalOrphans(recordingsDirectoryURL: recordings)
+        XCTAssertEqual(first.map(\.id), [jobID])
+        XCTAssertEqual(first.first?.originalFilename, kept.lastPathComponent)
+        XCTAssertEqual(first.first?.audioFilename, "\(jobID.uuidString.lowercased()).m4a")
+        for leftover in [kept, wav, journal] {
+            XCTAssertFalse(FileManager.default.fileExists(atPath: leftover.path), leftover.lastPathComponent)
+        }
+
+        let second = try await store.recoverExternalOrphans(recordingsDirectoryURL: recordings)
+        XCTAssertTrue(second.isEmpty)
+        let jobs = try await store.load(recoverInterrupted: false)
+        XCTAssertEqual(jobs.map(\.id), [jobID])
+    }
+
+    // MARK: - Storage guard (Watch transfers)
+
+    func test_storageGuardStepsDownWhenSpaceIsShort() {
+        let lossless = RecordingQualityStorageGuard.requiredFreeBytes(for: .lossless)
+        let high = RecordingQualityStorageGuard.requiredFreeBytes(for: .high)
+        XCTAssertGreaterThan(lossless, high)
+        // 90 minutes of Lossless ≈ 261 MB on top of the 200 MB floor.
+        XCTAssertEqual(lossless, 200_000_000 + 2_900_000 * 90)
+
+        typealias Guard = RecordingQualityStorageGuard
+        XCTAssertEqual(Guard.effectiveQuality(requested: .lossless, availableBytes: lossless), .lossless)
+        XCTAssertEqual(Guard.effectiveQuality(requested: .lossless, availableBytes: lossless - 1), .high)
+        XCTAssertEqual(Guard.effectiveQuality(requested: .lossless, availableBytes: high - 1), .speech)
+        XCTAssertEqual(Guard.effectiveQuality(requested: .high, availableBytes: high), .high)
+        XCTAssertEqual(Guard.effectiveQuality(requested: .high, availableBytes: high - 1), .speech)
+        XCTAssertEqual(Guard.effectiveQuality(requested: .speech, availableBytes: 0), .speech)
+        XCTAssertEqual(Guard.effectiveQuality(requested: .lossless, availableBytes: nil), .lossless)
+        XCTAssertNotNil(Guard.availableBytes(at: root))
+    }
+
+    func test_longLosslessTakeStreamsToA16kTranscriptionCopy() throws {
+        // A 5-minute Lossless Watch take: the copy is streamed, not loaded whole.
+        let url = root.appendingPathComponent("watch-long.m4a")
+        let writer = try KeptAudioFileWriter(url: url, quality: .lossless)
+        let minute = (0..<48_000 * 60).map { Float(sin(Double($0) / 30) * 0.2) }
+        for _ in 0..<5 { try writer.append(samples: minute) }
+        XCTAssertNotNil(writer.finalize())
+        let size = try XCTUnwrap(
+            try url.resourceValues(forKeys: [.fileSizeKey]).fileSize
+        )
+        XCTAssertLessThan(size, RecordingQuality.lossless.approximateBytesPerMinute * 5 * 2)
+
+        try assertTranscriptionCopy(of: url, expectedSeconds: 300)
     }
 
     func test_audioAttachmentExportKeepsLosslessBytes() async throws {

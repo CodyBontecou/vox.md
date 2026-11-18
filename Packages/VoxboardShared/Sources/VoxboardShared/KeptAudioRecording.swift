@@ -2,17 +2,18 @@
 import AVFoundation
 import Foundation
 
-/// Converts microphone buffers to the mono Float32 stream a kept recording is
-/// written from. Holds one `AVAudioConverter` so sample-rate conversion stays
-/// continuous across buffers; rebuilds it when the input format changes
-/// (route change or engine restart).
+/// Resamples mono Float32 microphone samples to the kept recording's rate.
+/// Holds one `AVAudioConverter` so sample-rate conversion stays continuous
+/// across chunks; rebuilds it when the input rate changes (route change or
+/// engine restart).
 ///
-/// Not thread-safe: call from the audio tap only.
+/// Not thread-safe: `KeptAudioFileWriter` drives it from its serial write
+/// queue, never from the audio tap.
 public final class KeptAudioResampler: @unchecked Sendable {
     public let outputFormat: AVAudioFormat
 
     private var converter: AVAudioConverter?
-    private var converterInputFormat: AVAudioFormat?
+    private var converterInputRate: Double?
 
     public init?(sampleRate: Double) {
         guard let format = AVAudioFormat(
@@ -24,37 +25,57 @@ public final class KeptAudioResampler: @unchecked Sendable {
         outputFormat = format
     }
 
-    /// Returns an owned copy of `buffer` in `outputFormat`.
-    public func convert(_ buffer: AVAudioPCMBuffer) -> [Float] {
-        guard buffer.frameLength > 0 else { return [] }
-        let input = buffer.format
-        if input.sampleRate == outputFormat.sampleRate,
-           input.channelCount == 1,
-           input.commonFormat == .pcmFormatFloat32,
-           let data = buffer.floatChannelData?[0] {
-            return Array(UnsafeBufferPointer(start: data, count: Int(buffer.frameLength)))
-        }
+    /// Converts mono samples recorded at `sampleRate`.
+    public func convert(samples: [Float], sampleRate: Double) -> [Float] {
+        guard !samples.isEmpty, sampleRate > 0 else { return [] }
+        if sampleRate == outputFormat.sampleRate { return samples }
+        guard let inputFormat = AVAudioFormat(
+            commonFormat: .pcmFormatFloat32,
+            sampleRate: sampleRate,
+            channels: 1,
+            interleaved: false
+        ), let input = AVAudioPCMBuffer(
+            pcmFormat: inputFormat,
+            frameCapacity: AVAudioFrameCount(samples.count)
+        ), let channel = input.floatChannelData?[0] else { return [] }
+        samples.withUnsafeBufferPointer { channel.update(from: $0.baseAddress!, count: samples.count) }
+        input.frameLength = AVAudioFrameCount(samples.count)
 
-        if converterInputFormat != input {
-            converter = AVAudioConverter(from: input, to: outputFormat)
-            converterInputFormat = input
+        if converterInputRate != sampleRate {
+            converter = AVAudioConverter(from: inputFormat, to: outputFormat)
+            converterInputRate = sampleRate
         }
+        return run(input: input, endOfStream: false)
+    }
+
+    /// Drains the samples the converter holds back for filtering.
+    public func flush() -> [Float] {
+        guard converter != nil else { return [] }
+        defer {
+            converter = nil
+            converterInputRate = nil
+        }
+        return run(input: nil, endOfStream: true)
+    }
+
+    private func run(input: AVAudioPCMBuffer?, endOfStream: Bool) -> [Float] {
         guard let converter else { return [] }
-        let ratio = outputFormat.sampleRate / input.sampleRate
-        let capacity = AVAudioFrameCount((Double(buffer.frameLength) * ratio).rounded(.up)) + 32
+        let inputFrames = Double(input?.frameLength ?? 0)
+        let ratio = outputFormat.sampleRate / (converterInputRate ?? outputFormat.sampleRate)
+        let capacity = AVAudioFrameCount((inputFrames * ratio).rounded(.up)) + 1_024
         guard let output = AVAudioPCMBuffer(pcmFormat: outputFormat, frameCapacity: capacity) else {
             return []
         }
         var supplied = false
         var error: NSError?
         converter.convert(to: output, error: &error) { _, status in
-            if supplied {
-                status.pointee = .noDataNow
+            if supplied || input == nil {
+                status.pointee = endOfStream ? .endOfStream : .noDataNow
                 return nil
             }
             supplied = true
             status.pointee = .haveData
-            return buffer
+            return input
         }
         guard error == nil, let data = output.floatChannelData?[0], output.frameLength > 0 else {
             return []
@@ -64,7 +85,8 @@ public final class KeptAudioResampler: @unchecked Sendable {
 }
 
 /// Encodes a kept recording (AAC or ALAC in `.m4a`) at the chosen
-/// `RecordingQuality`. Appends are serialized by the caller's write queue.
+/// `RecordingQuality`. Callers append raw mono microphone samples from one
+/// serial queue; resampling to 48 kHz happens there, never on the audio tap.
 public final class KeptAudioFileWriter: @unchecked Sendable {
     public let url: URL
     public let quality: RecordingQuality
@@ -72,6 +94,7 @@ public final class KeptAudioFileWriter: @unchecked Sendable {
     private let lock = NSLock()
     private var file: AVAudioFile?
     private let processingFormat: AVAudioFormat
+    private let resampler: KeptAudioResampler?
     private var framesWritten: AVAudioFramePosition = 0
 
     public init(url: URL, quality: RecordingQuality) throws {
@@ -90,6 +113,7 @@ public final class KeptAudioFileWriter: @unchecked Sendable {
         )
         self.file = file
         processingFormat = file.processingFormat
+        resampler = KeptAudioResampler(sampleRate: file.processingFormat.sampleRate)
     }
 
     public var sampleRate: Double { processingFormat.sampleRate }
@@ -98,30 +122,43 @@ public final class KeptAudioFileWriter: @unchecked Sendable {
         lock.withLock { Double(framesWritten) / processingFormat.sampleRate }
     }
 
-    public func append(samples: [Float]) throws {
+    /// Appends mono samples captured at `sourceSampleRate`, resampling them
+    /// to the kept rate.
+    public func append(samples: [Float], sourceSampleRate: Double) throws {
         guard !samples.isEmpty else { return }
         try lock.withLock {
-            guard let file else { throw CocoaError(.fileWriteUnknown) }
-            var offset = 0
-            // Bound the PCM buffer so a long pre-roll seed does not allocate
-            // one huge buffer.
-            let chunk = 16_384
-            while offset < samples.count {
-                let count = min(chunk, samples.count - offset)
-                guard let buffer = AVAudioPCMBuffer(
-                    pcmFormat: processingFormat,
-                    frameCapacity: AVAudioFrameCount(count)
-                ), let channel = buffer.floatChannelData?[0] else {
-                    throw CocoaError(.fileWriteUnknown)
-                }
-                samples.withUnsafeBufferPointer { source in
-                    channel.update(from: source.baseAddress! + offset, count: count)
-                }
-                buffer.frameLength = AVAudioFrameCount(count)
-                try file.write(from: buffer)
-                framesWritten += AVAudioFramePosition(count)
-                offset += count
+            guard let resampler else { throw CocoaError(.fileWriteUnknown) }
+            try writeUnlocked(resampler.convert(samples: samples, sampleRate: sourceSampleRate))
+        }
+    }
+
+    /// Appends samples already at the kept sample rate.
+    public func append(samples: [Float]) throws {
+        try lock.withLock { try writeUnlocked(samples) }
+    }
+
+    private func writeUnlocked(_ samples: [Float]) throws {
+        guard !samples.isEmpty else { return }
+        guard let file else { throw CocoaError(.fileWriteUnknown) }
+        var offset = 0
+        // Bound the PCM buffer so a long pre-roll seed does not allocate
+        // one huge buffer.
+        let chunk = 16_384
+        while offset < samples.count {
+            let count = min(chunk, samples.count - offset)
+            guard let buffer = AVAudioPCMBuffer(
+                pcmFormat: processingFormat,
+                frameCapacity: AVAudioFrameCount(count)
+            ), let channel = buffer.floatChannelData?[0] else {
+                throw CocoaError(.fileWriteUnknown)
             }
+            samples.withUnsafeBufferPointer { source in
+                channel.update(from: source.baseAddress! + offset, count: count)
+            }
+            buffer.frameLength = AVAudioFrameCount(count)
+            try file.write(from: buffer)
+            framesWritten += AVAudioFramePosition(count)
+            offset += count
         }
     }
 
@@ -130,6 +167,7 @@ public final class KeptAudioFileWriter: @unchecked Sendable {
     @discardableResult
     public func finalize() -> URL? {
         let wrote = lock.withLock { () -> Bool in
+            if let tail = resampler?.flush() { try? writeUnlocked(tail) }
             file = nil
             return framesWritten > 0
         }
@@ -144,6 +182,70 @@ public final class KeptAudioFileWriter: @unchecked Sendable {
     public func discard() {
         lock.withLock { file = nil }
         try? FileManager.default.removeItem(at: url)
+    }
+
+    /// Pre-roll for a kept recording, aligned to the 16 kHz journal's seed.
+    ///
+    /// Both histories are appended under one lock from the same tap buffers,
+    /// so their tails end at the same instant. Returns exactly the raw-rate
+    /// equivalent of `journalSeedCount` samples. When the history is shorter
+    /// it is padded with leading silence so the kept file and the transcript
+    /// stay on the same timeline.
+    public static func preRollSeed(
+        from history: CircularAudioBuffer,
+        historySampleRate: Double,
+        journalSeedCount: Int,
+        journalSampleRate: Double = AudioFileConverter.whisperSampleRate
+    ) -> [Float] {
+        guard journalSeedCount > 0, historySampleRate > 0, journalSampleRate > 0 else { return [] }
+        let wanted = Int((Double(journalSeedCount) * historySampleRate / journalSampleRate).rounded())
+        guard wanted > 0 else { return [] }
+        let end = history.totalSamplesWritten
+        let start = max(end - Int64(wanted), history.earliestAvailableIndex, 0)
+        let available = end > start ? (history.extract(from: start, to: end) ?? []) : []
+        guard available.count < wanted else { return available }
+        return [Float](repeating: 0, count: wanted - available.count) + available
+    }
+}
+
+/// Files of kept (High/Lossless) recordings in the app's recordings folder.
+///
+/// They never use a prefix that orphan recovery scans (`segment_`,
+/// `recording_`, …). Only a handoff intent can claim one, so a crash can't
+/// turn one take into two recovered jobs: without an intent the 16 kHz
+/// journal/WAV is the single recovery copy and the kept file is removed.
+public enum KeptAudioArtifacts {
+    public static let filenamePrefix = "kept_"
+
+    public static func makeURL(in directory: URL, requestID: String, quality: RecordingQuality) -> URL {
+        let safeRequestID = requestID
+            .filter { $0.isLetter || $0.isNumber || $0 == "-" || $0 == "_" }
+            .prefix(80)
+        return directory
+            .appendingPathComponent("\(filenamePrefix)\(safeRequestID)_\(UUID().uuidString.lowercased())")
+            .appendingPathExtension(quality.fileExtension)
+    }
+
+    /// Removes kept files no handoff intent claims. Call only when no
+    /// recording is in progress in this process (at recorder start-up).
+    @discardableResult
+    public static func removeUnclaimed(in recordingsDirectoryURL: URL) -> [URL] {
+        let claimed = RecordingJobHandoffIntentStore(recordingsDirectoryURL: recordingsDirectoryURL)
+            .claimedAudioFilenames()
+        let contents = (try? FileManager.default.contentsOfDirectory(
+            at: recordingsDirectoryURL,
+            includingPropertiesForKeys: nil,
+            options: [.skipsHiddenFiles]
+        )) ?? []
+        var removed: [URL] = []
+        for url in contents
+            where url.lastPathComponent.hasPrefix(filenamePrefix)
+                && !claimed.contains(url.lastPathComponent) {
+            if (try? FileManager.default.removeItem(at: url)) != nil {
+                removed.append(url)
+            }
+        }
+        return removed
     }
 }
 

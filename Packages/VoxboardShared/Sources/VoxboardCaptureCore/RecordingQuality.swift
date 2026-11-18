@@ -119,3 +119,37 @@ public enum RecordingQuality: String, CaseIterable, Codable, Sendable, Identifia
     }
     #endif
 }
+
+/// Keeps High/Lossless from filling a device (Apple Watch above all), where a
+/// long take waits on disk until it reaches iPhone. Before recording, the
+/// requested quality must leave room for `reservedRecordingMinutes` of audio
+/// on top of `minimumFreeBytes`. If it doesn't, the recorder steps down
+/// (Lossless → High → Speech) instead of failing mid-take or mid-transfer.
+public enum RecordingQualityStorageGuard {
+    /// Length of recording the free space must cover before starting.
+    public static let reservedRecordingMinutes = 90
+    /// Space always left for the system, the transfer queue and other apps.
+    public static let minimumFreeBytes: Int64 = 200_000_000
+
+    public static func requiredFreeBytes(for quality: RecordingQuality) -> Int64 {
+        minimumFreeBytes + Int64(quality.approximateBytesPerMinute) * Int64(reservedRecordingMinutes)
+    }
+
+    /// Quality to record with, given free space on the recordings volume.
+    /// Unknown free space keeps the request; Speech is never downgraded.
+    public static func effectiveQuality(
+        requested: RecordingQuality,
+        availableBytes: Int64?
+    ) -> RecordingQuality {
+        guard requested != .speech, let availableBytes else { return requested }
+        let candidates: [RecordingQuality] = requested == .lossless ? [.lossless, .high] : [.high]
+        return candidates.first { availableBytes >= requiredFreeBytes(for: $0) } ?? .speech
+    }
+
+    /// Free space on the volume holding `url`, if the system reports it.
+    public static func availableBytes(at url: URL) -> Int64? {
+        guard let capacity = try? url.resourceValues(forKeys: [.volumeAvailableCapacityKey])
+            .volumeAvailableCapacity else { return nil }
+        return Int64(capacity)
+    }
+}

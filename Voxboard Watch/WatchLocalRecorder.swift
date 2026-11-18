@@ -1019,8 +1019,15 @@ final class WatchLocalRecorder: ObservableObject {
     /// Recording quality synced from iPhone (Speech until the first sync).
     /// Speech is the original 16 kHz AAC; High is 48 kHz AAC and Lossless is
     /// 48 kHz ALAC, both still `.m4a`. The iPhone transcribes a 16 kHz copy.
+    /// Steps down when the Watch lacks room for a long High/Lossless take
+    /// (see `RecordingQualityStorageGuard`).
     private var recordingSettings: [String: Any] {
-        RecordingQuality.load(from: .standard).recorderSettings
+        let requested = RecordingQuality.load(from: .standard)
+        let quality = RecordingQualityStorageGuard.effectiveQuality(
+            requested: requested,
+            availableBytes: RecordingQualityStorageGuard.availableBytes(at: Self.recordingsDirectoryURL)
+        )
+        return quality.recorderSettings
     }
 
     private func makeRecordingURL(id: String) throws -> URL {

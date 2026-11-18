@@ -5,25 +5,6 @@ import VoxboardShared
 
 @MainActor
 final class RecordingQualityRecorderTests: XCTestCase {
-    func testKeptAudioSeedTakesTheMatchingPreRollTail() {
-        let buffer = CircularAudioBuffer(capacity: 48_000 * 3)
-        buffer.append((0..<(48_000 * 3)).map { Float($0) })
-
-        let seed = PersistentRecorder.keptAudioSeed(from: buffer, seconds: 2, sampleRate: 48_000)
-
-        XCTAssertEqual(seed.count, 96_000)
-        XCTAssertEqual(seed.first, Float(48_000))
-        XCTAssertEqual(seed.last, Float(48_000 * 3 - 1))
-    }
-
-    func testKeptAudioSeedIsLimitedToAvailableHistory() {
-        let buffer = CircularAudioBuffer(capacity: 1_000)
-        buffer.append([Float](repeating: 0.1, count: 500))
-
-        XCTAssertEqual(PersistentRecorder.keptAudioSeed(from: buffer, seconds: 2, sampleRate: 48_000).count, 500)
-        XCTAssertTrue(PersistentRecorder.keptAudioSeed(from: buffer, seconds: 0, sampleRate: 48_000).isEmpty)
-    }
-
     func testHighQualityAppRecordingTranscribesA16kCopy() async throws {
         let root = FileManager.default.temporaryDirectory
             .appendingPathComponent("RecordingQualityRecorderTests-\(UUID().uuidString)", isDirectory: true)
