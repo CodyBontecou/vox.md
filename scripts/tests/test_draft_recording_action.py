@@ -75,10 +75,11 @@ class DraftRecordingActionRegistrationTests(unittest.TestCase):
     def test_draft_launch_waiting_text_is_an_existing_translated_string(self):
         import json
         view = (ROOT / "Voxboard/Views/QuickCaptureView.swift").read_text()
+        banner = (ROOT / "Voxboard/Capture/WidgetRecordLaunchWaitingBanner.swift").read_text()
         text = "Saving the recording to your durable draft…"
-        self.assertIn(f'QuickCaptureOCRProgress("{text}")', view)
-        self.assertIn("widgetRecordLaunches.cancel()", view.split(text, 1)[1].split(".accessibilityIdentifier", 1)[0])
-        # Its Cancel button reuses the translated "Cancel".
+        self.assertIn("WidgetRecordLaunchWaitingBanner { widgetRecordLaunches.cancel() }", view)
+        self.assertIn(f'Text("{text}")', banner)
+        self.assertIn('Button("Cancel", action: cancel)', banner)
         catalog = json.loads((ROOT / "Voxboard/Localizable.xcstrings").read_text())
         localizations = catalog["strings"][text]["localizations"]
         self.assertEqual(len(localizations), 23)

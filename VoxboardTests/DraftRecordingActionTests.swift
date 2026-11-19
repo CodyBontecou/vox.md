@@ -401,6 +401,70 @@ final class DraftRecordingActionTests: XCTestCase {
         XCTAssertTrue(files.contains { $0.pathExtension == "md" })
     }
 
+    /// #115: an immediate Lock Screen/widget launch starts without checking
+    /// that the composer is free (a Send, OCR or preset switch may own it).
+    /// That is only safe if its recording never reaches the composer: no live
+    /// preview, no draft origin, audio or transcript events, from start
+    /// through queue processing.
+    func testImmediateControlRecordingNeverSendsEventsToTheComposer() async throws {
+        guard AppConstants.recordingsDirectoryURL != nil else {
+            throw XCTSkip("Requires a signed host with the App Group recordings container")
+        }
+        let shared = try XCTUnwrap(AppConstants.sharedDefaults)
+        let previousUnlock = shared.object(forKey: "hasUnlocked")
+        let previousExpiration = shared.object(forKey: "storeAccessExpirationV1")
+        shared.set(true, forKey: "hasUnlocked")
+        shared.removeObject(forKey: "storeAccessExpirationV1")
+        defer {
+            shared.set(previousUnlock, forKey: "hasUnlocked")
+            shared.set(previousExpiration, forKey: "storeAccessExpirationV1")
+        }
+        let fixture = try await makeDraftFixture()
+        let jobStore = RecordingJobStore(rootDirectoryURL: fixture.root.appendingPathComponent("jobs"))
+        let buffer = CircularAudioBuffer(capacity: 100_000)
+        let composerEvents = ComposerEventLog()
+        let originalRecorder = PersistentRecorder.active
+        let recorder = PersistentRecorder(
+            transcriptStore: TranscriptStore(),
+            usageTracker: UsageTracker(defaults: fixture.defaults),
+            transcriptionService: OnDeviceTranscriptionService(
+                systemBackend: DraftActionEmptySpeechBackend(), usesDownloadedLocalFallbacks: false
+            ),
+            captureDraftEventHandler: { event in
+                composerEvents.record(event)
+                return true
+            },
+            recordingJobStore: jobStore,
+            circularBuffer: buffer
+        )
+        let lease = recorder.recordingQueue.beginCaptureLease()
+        recorder.isListening = true
+        defer {
+            recorder.stopListening()
+            PersistentRecorder.active = originalRecorder
+        }
+
+        // Exactly what WidgetRecordingLaunch's immediate start passes.
+        let flowID = CapturePresetStore.selectedFlowId()
+        recorder.startInAppSegment(flowId: flowID, completionMode: .runVox(flowID: flowID), origin: .quickRecord)
+        XCTAssertTrue(recorder.isSegmentActive)
+        buffer.append(Array(repeating: Float(0.1), count: 16_000))
+        recorder.stopInAppSegment()
+        recorder.recordingQueue.endCaptureLease(lease)
+
+        let deadline = Date().addingTimeInterval(10)
+        var job: RecordingJob?
+        while Date() < deadline {
+            job = try await jobStore.load(recoverInterrupted: false).first
+            if job?.phase == .completed || job?.phase == .failed { break }
+            try await Task.sleep(for: .milliseconds(25))
+        }
+        let processed = try XCTUnwrap(job, "The recording must reach the durable queue")
+        XCTAssertTrue(processed.phase == .completed || processed.phase == .failed, "Queue did not process the job")
+        if case .preset = processed.delivery {} else { XCTFail("Immediate launch must queue a Preset job") }
+        XCTAssertEqual(composerEvents.names, [], "An immediate launch recording touched the composer")
+    }
+
     /// #115: a control press while recording stops the active recording and
     /// at once starts a new one, which releases a temporary engine first
     /// (startOneShotInAppSegment → stopListening). The stopped recording's
@@ -622,5 +686,22 @@ private struct DraftActionEmptySpeechBackend: SystemTranscriptionBackend {
         onUpdate: @escaping @concurrent @Sendable (SystemTranscriptionUpdate) async -> Void
     ) async throws -> any SystemLiveTranscriptionSession {
         throw OnDeviceTranscriptionError.systemBackendUnavailable
+    }
+}
+
+/// Records composer events delivered by the recorder (#115 tests).
+@MainActor
+private final class ComposerEventLog {
+    private(set) var names: [String] = []
+
+    func record(_ event: CaptureDraftRecordingEvent) {
+        switch event {
+        case .origin: names.append("origin")
+        case .clearOrigin: names.append("clearOrigin")
+        case .audio: names.append("audio")
+        case .liveTranscript: names.append("liveTranscript")
+        case .cancelLiveTranscript: names.append("cancelLiveTranscript")
+        case .transcript: names.append("transcript")
+        }
     }
 }

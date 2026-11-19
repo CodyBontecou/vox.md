@@ -7,11 +7,13 @@
 # (QuickCaptureView.consumePendingWidgetRecordIfNeeded → WidgetRecordingLaunch).
 # open-url is the entry point under test here, not a stand-in for in-app navigation.
 #
-# Prerequisites: iOS simulator with a DEBUG build installed (-VoxScreenshotUnlocked
-#   skips the paywall), microphone and speech-recognition access granted
-#   (`xcrun simctl privacy <udid> grant microphone bontecou.Voxboard`, and allow the
-#   speech prompt once), and the one-time "Open in “Vox.md”?" URL prompt already
-#   answered with Open.
+# Setup the test does itself: grants the microphone (settings-permissions) and
+#   launches the DEBUG build with -VoxScreenshotUnlocked (skips the paywall) and
+#   -AppleLanguages (en) -AppleLocale en_US, so the timer text below is English
+#   whatever the simulator's language.
+# Prerequisites it can't automate: the one-time speech-recognition prompt (not a
+#   settings-permissions service) and the one-time "Open in “Vox.md”?" URL prompt,
+#   both answered once on this simulator (Allow / Open).
 # Side effects: the first recording is saved to the recording queue (on a simulator
 #   without a speech model it is "preserved in the queue"); the second recording is
 #   left running and is discarded by the next run's restart.
@@ -29,7 +31,13 @@ version: 1
 requires:
   platform: ios
 steps:
-  - echo: Restart Vox.md unlocked (DEBUG). Expect the Capture composer with Speak
+  - echo: Grant the microphone, then restart Vox.md unlocked (DEBUG) in English.
+      Expect the Capture composer with Speak
+  - tool: settings-permissions
+    args:
+      action: grant
+      permission: microphone
+      bundleId: bontecou.Voxboard
   - launch:
       native: bontecou.Voxboard
       ios:
@@ -37,13 +45,18 @@ steps:
         args:
           - -VoxScreenshotUnlocked
           - --disable-release-notes
+          - -AppleLanguages
+          - (en)
+          - -AppleLocale
+          - en_US
   - tool: await-ui-element
     args:
       condition: visible
       selector:
         identifier: capture_voice_recording
       timeoutMs: 20000
-  - echo: Idle composer. Fire the widget/control record launch. Expect a recording to start
+  - echo: Idle composer. Fire the widget/control record launch. Expect a recording
+      to start
   - tool: open-url
     args:
       url: voxboard://widget-record

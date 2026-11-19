@@ -686,10 +686,7 @@ struct QuickCaptureView: View {
                 // soon as the previous recording has reached the draft (#115).
                 // Cancel ends the wait without recording, so a composer that
                 // stays busy never leaves a spinner the user can't dismiss.
-                QuickCaptureOCRProgress("Saving the recording to your durable draft…") {
-                    widgetRecordLaunches.cancel()
-                }
-                .accessibilityIdentifier("capture_widget_record_waiting")
+                WidgetRecordLaunchWaitingBanner { widgetRecordLaunches.cancel() }
             }
             if isExtractingText {
                 QuickCaptureOCRProgress()
