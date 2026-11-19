@@ -24,6 +24,45 @@ public struct CapturePathPlanner: Sendable {
         }
     }
 
+    /// The note path this request will actually be written to inside
+    /// `rootURL`: for a new-note target, the first `-N` candidate whose file
+    /// does not exist yet (or already holds this request's marker, so a retry
+    /// or an already-saved capture resolves to its own file). Other targets
+    /// resolve exactly as `relativePath(for:destination:)`.
+    ///
+    /// Delivery and every "where will this land" preview use this one method,
+    /// so the label shown before Send names the file Send writes.
+    public func availableRelativePath(
+        for request: CaptureRequest,
+        destination: CaptureDestination,
+        rootURL: URL,
+        fileManager: FileManager = .default,
+        containedURL: (String) throws -> URL? = { _ in nil }
+    ) throws -> String {
+        guard case .newNote = destination.noteTarget else {
+            return try relativePath(for: request, destination: destination)
+        }
+
+        var existing: Set<String> = []
+        while true {
+            let candidate = try relativePath(
+                for: request,
+                destination: destination,
+                existingRelativePaths: existing
+            )
+            let candidateURL = try containedURL(candidate)
+                ?? CapturePathValidation.containedFileURL(relativePath: candidate, rootURL: rootURL)
+            if !fileManager.fileExists(atPath: candidateURL.path) {
+                return candidate
+            }
+            if let content = try? String(contentsOf: candidateURL, encoding: .utf8),
+               CaptureRequestMarker.isPresent(in: content, requestID: request.id) {
+                return candidate
+            }
+            existing.insert(candidate)
+        }
+    }
+
     private func renderedMarkdownPath(
         _ template: String,
         request: CaptureRequest,
