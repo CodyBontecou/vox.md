@@ -931,6 +931,40 @@ final class CapturePipelineTests: XCTestCase {
         XCTAssertTrue(FileManager.default.fileExists(atPath: staging.appendingPathComponent("request/photo.jpg").path))
     }
 
+    func test_twoSameDayCapturesWriteDistinctFilesNamedByThePreview() async throws {
+        let root = try temporaryFolder()
+        defer { try? FileManager.default.removeItem(at: root) }
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        calendar.locale = Locale(identifier: "en_US_POSIX")
+        let planner = CapturePathPlanner(calendar: calendar)
+        let pipeline = CapturePipeline(pathPlanner: planner)
+        let destination = destination(target: .newNote(pathTemplate: "{date}.md"))
+        let morning = Date(timeIntervalSince1970: 1_704_164_645) // 2024-01-02T03:04:05Z
+        func request(_ text: String, at date: Date) -> CaptureRequest {
+            CaptureRequest(createdAt: date, source: .app, destinationID: destination.id, payloads: [.text(text)])
+        }
+
+        let first = request("First capture", at: morning)
+        XCTAssertEqual(
+            try planner.availableRelativePath(for: first, destination: destination, rootURL: root),
+            "2024-01-02.md"
+        )
+        let firstReceipt = try await pipeline.capture(first, destination: destination, rootURL: root)
+        let firstContent = try String(contentsOf: firstReceipt.noteURL, encoding: .utf8)
+
+        let second = request("Second capture", at: morning.addingTimeInterval(3_600))
+        let previewed = try planner.availableRelativePath(for: second, destination: destination, rootURL: root)
+        XCTAssertEqual(previewed, "2024-01-02-2.md")
+        let secondReceipt = try await pipeline.capture(second, destination: destination, rootURL: root)
+
+        XCTAssertEqual(secondReceipt.noteURL.lastPathComponent, previewed)
+        XCTAssertNotEqual(firstReceipt.noteURL.standardizedFileURL, secondReceipt.noteURL.standardizedFileURL)
+        XCTAssertEqual(try String(contentsOf: firstReceipt.noteURL, encoding: .utf8), firstContent)
+        XCTAssertTrue(try String(contentsOf: secondReceipt.noteURL, encoding: .utf8).contains("Second capture"))
+        XCTAssertFalse(firstContent.contains("Second capture"))
+    }
+
     private func destination(
         target: CaptureNoteTarget,
         placement: CapturePlacement = .append,

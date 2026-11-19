@@ -380,27 +380,13 @@ public actor CapturePipeline {
         destination: CaptureDestination,
         rootURL: URL
     ) throws -> String {
-        guard case .newNote = destination.noteTarget else {
-            return try pathPlanner.relativePath(for: request, destination: destination)
-        }
-
-        var existing: Set<String> = []
-        while true {
-            let candidate = try pathPlanner.relativePath(
-                for: request,
-                destination: destination,
-                existingRelativePaths: existing
-            )
-            let candidateURL = try containedNoteURL(relativePath: candidate, root: rootURL)
-            if !fileManager.fileExists(atPath: candidateURL.path) {
-                return candidate
-            }
-            if let content = try? String(contentsOf: candidateURL, encoding: .utf8),
-               CaptureRequestMarker.isPresent(in: content, requestID: request.id) {
-                return candidate
-            }
-            existing.insert(candidate)
-        }
+        try pathPlanner.availableRelativePath(
+            for: request,
+            destination: destination,
+            rootURL: rootURL,
+            fileManager: fileManager,
+            containedURL: { try containedNoteURL(relativePath: $0, root: rootURL) }
+        )
     }
 
     private static func validateLocationDecision(in request: CaptureRequest) throws {

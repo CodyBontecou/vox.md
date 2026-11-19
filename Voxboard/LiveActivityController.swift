@@ -341,11 +341,31 @@ final class LiveActivityController {
             payloads: [],
             voxProfile: flow.captureProfile
         )
-        if let path = try? CapturePathPlanner().relativePath(for: request, destination: destination) {
+        // Name the real file, with the `-N` suffix delivery adds when the
+        // rendered note already exists.
+        if let path = availableRelativePath(for: request, destination: destination)
+            ?? (try? CapturePathPlanner().relativePath(for: request, destination: destination)) {
             return path
         }
         let name = destination.name.trimmingCharacters(in: .whitespacesAndNewlines)
         return name.isEmpty ? nil : name
+    }
+
+    private static func availableRelativePath(
+        for request: CaptureRequest,
+        destination: CaptureDestination
+    ) -> String? {
+        guard let resolution = try? CaptureBookmarkResolver.resolve(destination.rootBookmark),
+              !resolution.isStale else { return nil }
+        let rootURL = resolution.url
+        let didAccess = rootURL.startAccessingSecurityScopedResource()
+        defer { if didAccess { rootURL.stopAccessingSecurityScopedResource() } }
+        guard FileManager.default.fileExists(atPath: rootURL.path) else { return nil }
+        return try? CapturePathPlanner().availableRelativePath(
+            for: request,
+            destination: destination,
+            rootURL: rootURL
+        )
     }
 
     private func decorated(_ base: VoxboardLiveActivityState) -> VoxboardLiveActivityState {

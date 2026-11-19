@@ -564,6 +564,7 @@ struct QuickCaptureView: View {
                         }
                         .accessibilityElement(children: .ignore)
                         .accessibilityLabel(Text(verbatim: routeDestinationPath))
+                        .accessibilityIdentifier("capture_route_path")
                         if viewModel.hasAnyRouteOverride {
                             SignalBadge(text: "Override")
                         }

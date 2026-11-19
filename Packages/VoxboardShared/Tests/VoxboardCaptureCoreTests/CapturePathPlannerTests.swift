@@ -176,6 +176,100 @@ final class CapturePathPlannerTests: XCTestCase {
         }
     }
 
+    // MARK: availableRelativePath (issue #116)
+
+    func test_availablePath_isBaseNameWhenNoCaptureExistsToday() throws {
+        let root = try vault(files: [])
+        defer { try? FileManager.default.removeItem(at: root) }
+
+        XCTAssertEqual(try availablePath(in: root), "2024-01-02.md")
+    }
+
+    func test_availablePath_skipsExistingBaseAndSecondCapture() throws {
+        let root = try vault(files: ["2024-01-02.md", "2024-01-02-2.md"])
+        defer { try? FileManager.default.removeItem(at: root) }
+
+        XCTAssertEqual(try availablePath(in: root), "2024-01-02-3.md")
+    }
+
+    func test_availablePath_withNExistingCapturesNamesTheNextOne() throws {
+        let files = ["2024-01-02.md"] + (2...6).map { "2024-01-02-\($0).md" }
+        let root = try vault(files: files)
+        defer { try? FileManager.default.removeItem(at: root) }
+
+        XCTAssertEqual(try availablePath(in: root), "2024-01-02-7.md")
+    }
+
+    func test_availablePath_numberingGapReusesFreeBaseWithoutTouchingSuffixedFile() throws {
+        let root = try vault(files: ["2024-01-02-2.md"])
+        defer { try? FileManager.default.removeItem(at: root) }
+
+        XCTAssertEqual(try availablePath(in: root), "2024-01-02.md")
+    }
+
+    func test_availablePath_middleGapIsFilledBeforeHigherSuffix() throws {
+        let root = try vault(files: ["2024-01-02.md", "2024-01-02-3.md"])
+        defer { try? FileManager.default.removeItem(at: root) }
+
+        XCTAssertEqual(try availablePath(in: root), "2024-01-02-2.md")
+    }
+
+    func test_availablePath_resolvesToTheFileThisRequestAlreadySaved() throws {
+        let root = try vault(files: ["2024-01-02.md"])
+        defer { try? FileManager.default.removeItem(at: root) }
+        try ("saved\n" + CaptureRequestMarker.text(for: requestID))
+            .write(to: root.appendingPathComponent("2024-01-02-2.md"), atomically: true, encoding: .utf8)
+
+        XCTAssertEqual(try availablePath(in: root), "2024-01-02-2.md")
+    }
+
+    func test_availablePath_captureCrossingMidnightKeepsItsStartDate() throws {
+        // Started 23:59:30 on Jan 2; the 2nd's note exists. Resolving after
+        // midnight still uses the capture's start date, so it neither
+        // overwrites that note nor jumps to the 3rd's name.
+        let root = try vault(files: ["2024-01-02.md"])
+        defer { try? FileManager.default.removeItem(at: root) }
+        let startedBeforeMidnight = Date(timeIntervalSince1970: 1_704_239_970) // 2024-01-02T23:59:30Z
+
+        XCTAssertEqual(
+            try availablePath(in: root, request: makeRequest(date: startedBeforeMidnight)),
+            "2024-01-02-2.md"
+        )
+    }
+
+    func test_availablePath_nonNewNoteTargetsIgnoreExistingFiles() throws {
+        let root = try vault(files: ["Daily/2024-01-02.md"])
+        defer { try? FileManager.default.removeItem(at: root) }
+        let rolling = makeDestination(target: .rollingNote(pathTemplate: "Daily/{date}.md", period: .daily))
+
+        XCTAssertEqual(
+            try planner().availableRelativePath(for: makeRequest(), destination: rolling, rootURL: root),
+            "Daily/2024-01-02.md"
+        )
+    }
+
+    private func availablePath(in root: URL, request: CaptureRequest? = nil) throws -> String {
+        try planner().availableRelativePath(
+            for: request ?? makeRequest(),
+            destination: makeDestination(target: .newNote(pathTemplate: "{date}.md")),
+            rootURL: root
+        )
+    }
+
+    private func vault(files: [String]) throws -> URL {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent("CapturePathPlannerTests-\(UUID().uuidString)", isDirectory: true)
+        for file in files {
+            let url = root.appendingPathComponent(file)
+            try FileManager.default.createDirectory(
+                at: url.deletingLastPathComponent(), withIntermediateDirectories: true
+            )
+            try "existing \(file)".write(to: url, atomically: true, encoding: .utf8)
+        }
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        return root
+    }
+
     private func planner() -> CapturePathPlanner {
         var calendar = Calendar(identifier: .gregorian)
         calendar.locale = Locale(identifier: "en_US_POSIX")

@@ -35,7 +35,13 @@ final class QuickCaptureViewModel {
     /// entitlement mirror; injectable for tests.
     @ObservationIgnored private let hasPaidCaptureAccess: @MainActor () -> Bool
     var errorMessage: String?
-    var lastReceipt: CaptureReceipt?
+    var lastReceipt: CaptureReceipt? {
+        // A delivery may have taken the file the preview named; re-resolve.
+        didSet { previewPathGeneration &+= 1 }
+    }
+    /// Bumped after each delivery so the route label re-reads the vault.
+    @ObservationIgnored private var previewPathGeneration = 0
+    @ObservationIgnored private var availablePreviewPathCache: (key: AvailablePreviewPathKey, path: String)?
     /// Set when Send held the capture because its vault was unreachable.
     var lastHeldForVaultRequestID: UUID?
     var failedInboxCount = 0
@@ -205,7 +211,43 @@ final class QuickCaptureViewModel {
             for: request,
             destination: destination
         ) else { return nil }
-        return destination.rootName + " / " + relativePath
+        return destination.rootName + " / "
+            + availablePreviewPath(request: request, destination: destination, renderedPath: relativePath)
+    }
+
+    /// The file a new-note capture will really be written to, with the same
+    /// `-N` suffix delivery picks when today's note already exists. Cached per
+    /// request and rendered path so the vault is read only when either changes.
+    private func availablePreviewPath(
+        request: CaptureRequest,
+        destination: CaptureDestination,
+        renderedPath: String
+    ) -> String {
+        guard case .newNote = destination.noteTarget else { return renderedPath }
+        let key = AvailablePreviewPathKey(
+            requestID: request.id,
+            destinationID: destination.id,
+            renderedPath: renderedPath,
+            deliveryGeneration: previewPathGeneration
+        )
+        if let cached = availablePreviewPathCache, cached.key == key { return cached.path }
+        let path = Self.availableRelativePath(for: request, destination: destination) ?? renderedPath
+        availablePreviewPathCache = (key, path)
+        return path
+    }
+
+    nonisolated static func availableRelativePath(
+        for request: CaptureRequest,
+        destination: CaptureDestination
+    ) -> String? {
+        guard let rootURL = reachableRootURL(for: destination) else { return nil }
+        let didAccess = rootURL.startAccessingSecurityScopedResource()
+        defer { if didAccess { rootURL.stopAccessingSecurityScopedResource() } }
+        return try? CapturePathPlanner().availableRelativePath(
+            for: request,
+            destination: destination,
+            rootURL: rootURL
+        )
     }
 
     var effectivePlacementLabel: String {
@@ -391,6 +433,8 @@ final class QuickCaptureViewModel {
 
     func refreshHistory() async {
         historyRecords = (try? await historyStore?.list()) ?? []
+        // Another surface (watch, keyboard, inbox) may have saved a note.
+        previewPathGeneration &+= 1
     }
 
     /// The Lock Screen "Route Today" widget reads the snapshot the history
@@ -2811,6 +2855,13 @@ final class QuickCaptureViewModel {
         }
         return resolution.url
     }
+}
+
+private struct AvailablePreviewPathKey: Equatable {
+    var requestID: UUID
+    var destinationID: UUID
+    var renderedPath: String
+    var deliveryGeneration: Int
 }
 
 /// What a composer Send did with the capture.
