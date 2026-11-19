@@ -10,9 +10,27 @@ play_phone_assert_version_code() {
     || play_phone_policy_fail "phone versionCode must be between 1 and 999999: $code"
 }
 
+# Wear shares md.vox.android with the phone. wear/build.gradle.kts derives its code as the phone
+# code + 1,000,000, so the two form factors can never claim the same versionCode.
+play_wear_assert_version_code() {
+  local code=$1
+  [[ "$code" =~ ^[1-9][0-9]*$ ]] && (( code > 1000000 && code < 2000000 )) \
+    || play_phone_policy_fail "Wear versionCode must be between 1000001 and 1999999: $code"
+}
+
+play_assert_version_code() {
+  local form_factor=$1 code=$2
+  case "$form_factor" in
+    phone) play_phone_assert_version_code "$code" ;;
+    wear) play_wear_assert_version_code "$code" ;;
+    *) play_phone_policy_fail "unsupported form factor: $form_factor" ;;
+  esac
+}
+
+# Optional fifth argument selects the form factor whose versionCode range applies (default phone).
 play_phone_release_payload() {
-  local code=$1 status=$2 language=$3 notes_file=$4
-  play_phone_assert_version_code "$code" || return
+  local code=$1 status=$2 language=$3 notes_file=$4 form_factor=${5:-phone}
+  play_assert_version_code "$form_factor" "$code" || return
   case "$status" in completed|draft) ;; *) play_phone_policy_fail "unsupported release status: $status"; return ;; esac
   [[ -n "$language" && -s "$notes_file" ]] \
     || play_phone_policy_fail 'release-note language and non-empty file are required' || return

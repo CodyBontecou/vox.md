@@ -10,17 +10,25 @@ source "${PLAY_PHONE_POLICY_PATH:-$script_dir/google-play-phone-policy.sh}"
 key=${PLAY_CONSOLE_KEY_PATH:-}
 token=${PLAY_ACCESS_TOKEN:-}
 package=${PLAY_PACKAGE_NAME:-md.vox.android}
-track=${PHONE_PLAY_TRACK:-internal}
+# The phone and Wear bundles share md.vox.android. Wear uploads go to Play's Wear form-factor track,
+# whose API name carries the "wear:" prefix.
+form_factor=${PLAY_FORM_FACTOR:-phone}
+case "$form_factor" in
+  phone) label=Phone; internal_track=internal; default_aab=app/build/outputs/bundle/release/app-release.aab ;;
+  wear) label=Wear; internal_track=wear:internal; default_aab=wear/build/outputs/bundle/release/wear-release.aab ;;
+  *) printf 'Play upload: unsupported PLAY_FORM_FACTOR: %s\n' "$form_factor" >&2; exit 1 ;;
+esac
+track=${PHONE_PLAY_TRACK:-$internal_track}
 release_status=${PLAY_RELEASE_STATUS:-completed}
 version_code=${PHONE_VERSION_CODE:-}
-aab=${PHONE_AAB:-app/build/outputs/bundle/release/app-release.aab}
+aab=${PHONE_AAB:-$default_aab}
 locale=${PLAY_LISTING_LOCALE:-en-US}
 release_notes=${PLAY_RELEASE_NOTES:-play-console/listing/$locale/release-notes/$locale/default.txt}
 confirmation=${CONFIRM_PLAY_PHONE_UPLOAD:-}
 expected_confirmation="$package:$track:$version_code"
 receipt=${PLAY_UPLOAD_RECEIPT_PATH:-}
 
-fail() { printf 'Phone Play upload: %s\n' "$*" >&2; exit 1; }
+fail() { printf '%s Play upload: %s\n' "$label" "$*" >&2; exit 1; }
 play_http_error() {
   local stage=$1 status=$2 response_file=$3 detail
   detail=$(jq -r '
@@ -34,15 +42,15 @@ play_http_error() {
   ' "$response_file" 2>/dev/null || true)
   detail=$(printf '%s' "$detail" | tr '\r\n\t' '   ' | cut -c1-500)
   [[ -n "$detail" ]] || detail='no structured error detail'
-  printf 'Phone Play upload: %s failed (HTTP %s): %s\n' "$stage" "${status:-000}" "$detail" >&2
+  printf '%s Play upload: %s failed (HTTP %s): %s\n' "$label" "$stage" "${status:-000}" "$detail" >&2
 }
 
 [[ -n "$token" || ( -n "$key" && -r "$key" ) ]] \
   || fail 'PLAY_ACCESS_TOKEN or a readable PLAY_CONSOLE_KEY_PATH is required'
-play_phone_assert_version_code "$version_code" || exit 1
-[[ "$track" == internal ]] || fail 'the release workflow may upload only to the internal track'
+play_assert_version_code "$form_factor" "$version_code" || exit 1
+[[ "$track" == "$internal_track" ]] || fail "the release workflow may upload only to the $internal_track track"
 [[ "$confirmation" == "$expected_confirmation" ]] || fail "set CONFIRM_PLAY_PHONE_UPLOAD=$expected_confirmation"
-[[ -f "$aab" ]] || fail "phone AAB is missing: $aab"
+[[ -f "$aab" ]] || fail "$label AAB is missing: $aab"
 [[ -s "$release_notes" ]] || fail "release notes are missing: $release_notes"
 for command in curl jq sha256sum; do command -v "$command" >/dev/null || fail "$command is required"; done
 [[ -n "$token" ]] || command -v openssl >/dev/null || fail 'openssl is required for service-account JSON authentication'
@@ -123,7 +131,7 @@ if track_contains_code "$work/track-before.json" "$version_code"; then
         editCommitted:true,commitResponseReceived:false,reconciledExisting:true,
         verifiedAtUtc:$reconciledAt}' >"$receipt"
   fi
-  printf 'Phone %s is already active on %s; reconciled without another upload.\n' "$version_code" "$track"
+  printf '%s %s is already active on %s; reconciled without another upload.\n' "$label" "$version_code" "$track"
   exit 0
 fi
 
@@ -149,17 +157,17 @@ bundle_http=$(curl --fail-with-body --max-time 300 -sS \
 bundle_exit=$?
 set -e
 if [[ $bundle_exit -ne 0 || ! "$bundle_http" =~ ^2[0-9][0-9]$ ]]; then
-  play_http_error 'phone bundle upload' "$bundle_http" "$work/bundle-upload.json"
+  play_http_error "$label bundle upload" "$bundle_http" "$work/bundle-upload.json"
   if [[ $bundle_exit -eq 22 ]]; then
-    fail 'Play definitively rejected the phone bundle; the uncommitted edit will be deleted'
+    fail "Play definitively rejected the $label bundle; the uncommitted edit will be deleted"
   fi
-  fail 'phone bundle upload response was lost; the uncommitted edit will be deleted before recovery'
+  fail "$label bundle upload response was lost; the uncommitted edit will be deleted before recovery"
 fi
 actual=$(jq -er '.versionCode | tostring' "$work/bundle-upload.json") \
-  || fail 'phone bundle upload response omitted versionCode'
+  || fail "$label bundle upload response omitted versionCode"
 [[ "$actual" == "$version_code" ]] || fail "$aab uploaded unexpected versionCode $actual"
 
-release_payload=$(play_phone_release_payload "$version_code" "$release_status" "$locale" "$release_notes")
+release_payload=$(play_phone_release_payload "$version_code" "$release_status" "$locale" "$release_notes" "$form_factor")
 curl --fail-with-body --retry 3 --retry-all-errors --max-time 30 -sS \
   -X PUT "${auth[@]}" -H 'Content-Type: application/json' --data "$release_payload" \
   "$api/edits/$edit_id/tracks/$encoded_track" >"$work/track-update.json"
@@ -173,7 +181,7 @@ validation_body=$(printf '%s' "$validation_response" | sed '$d')
 validation_errors=$(printf '%s' "$validation_body" \
   | jq -r '(.error.message // .errorMessage // empty)' 2>/dev/null || true)
 if [[ "$validation_http" != 200 || -n "$validation_errors" ]]; then
-  fail "Play rejected the phone edit at validation: $validation_errors${validation_body:+ ($validation_body)}"
+  fail "Play rejected the $label edit at validation: $validation_errors${validation_body:+ ($validation_body)}"
 fi
 
 # The edit commit is non-idempotent: issue it exactly once. A lost transport response is reconciled
@@ -188,7 +196,7 @@ commit_exit_code=$?
 set -e
 if [[ $commit_exit_code -eq 22 ]]; then
   jq -r '.error.message // .errorMessage // "(no body)"' "$work/commit-response.json" >&2 2>/dev/null || true
-  fail 'phone Play commit received a definite HTTP rejection; reconciliation is forbidden'
+  fail "$label Play commit received a definite HTTP rejection; reconciliation is forbidden"
 elif [[ $commit_exit_code -ne 0 ]]; then
   commit_response_received=false
 fi
@@ -203,7 +211,7 @@ for _ in $(seq 1 20); do
   fi
   sleep 5
 done
-$commit_visible || fail 'phone Play commit response/postcondition is absent; edit was not proven committed'
+$commit_visible || fail "$label Play commit response/postcondition is absent; edit was not proven committed"
 committed=true
 
 if [[ -n "$receipt" ]]; then
@@ -217,5 +225,5 @@ if [[ -n "$receipt" ]]; then
       reconciledExisting:false,verifiedAtUtc:$completedAt
     }' >"$receipt"
 fi
-printf 'Uploaded phone %s to %s in one Play edit (commit response received: %s).\n' \
-  "$version_code" "$track" "$commit_response_received"
+printf 'Uploaded %s %s to %s in one Play edit (commit response received: %s).\n' \
+  "$label" "$version_code" "$track" "$commit_response_received"

@@ -42,6 +42,12 @@ With all four values present, run:
 
 That task performs every credential-free release check and then verifies the JAR signatures on both AABs. It fails closed for a partial environment, missing keystore, unsigned bundle, or invalid signature. Keystores are ignored by Git and must remain outside the repository and CI logs.
 
+## Wear OS bundle
+
+The Wear app ships inside `md.vox.android` with the phone app. `wear/build.gradle.kts` takes its version from `app/build.gradle.kts`: the same `versionName`, and the phone `versionCode` plus 1,000,000 (phone 3.0.1 / code 7 is Wear 3.0.1 / code 1000007). Bump only the phone version; Wear follows it.
+
+The Android Release workflow signs both bundles, uploads the phone bundle to `internal`, then uploads the Wear bundle to `wear:internal` with `PLAY_FORM_FACTOR=wear`. Play accepts the Wear track only after Wear OS is enabled under Test and release → Production → Manage form factors, and Wear production releases also need the Wear store listing screenshots and Google's Wear OS review.
+
 Passing this local gate does not constitute a Play release. The Play Console product configuration, app-signing enrollment, Data Safety and foreground-service declarations, internal/closed/staged tracks, rollback, provider repair, purchase repair, and content-recovery drills still require their retained external evidence.
 
 Passing the visual-evidence integrity gate is likewise not human visual approval. The current manifest intentionally remains `captured-unreviewed`; approve it only through a reviewed change that also updates the gate's policy and retained evidence.
