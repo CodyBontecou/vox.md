@@ -145,6 +145,10 @@ struct QuickCaptureView: View {
     @State private var attachRecordingAudioOverride: Bool?
     @State private var lastStartedRecordingMode: CaptureRecordingMode = .preset
     @State private var microphonePermissionTask: Task<Void, Never>?
+    /// One Lock Screen / widget launch at a time; a duplicate delivery of the
+    /// same press is dropped instead of racing the first start (#115).
+    @State private var widgetRecordLaunchTask: Task<Void, Never>?
+    @State private var widgetRecordLaunchStartedAt: Date?
     @State private var showsMicrophoneSettings = false
     @State private var showsFirstNoteFolderPicker = false
     @State private var isSavingFirstNoteFolder = false
@@ -4088,32 +4092,59 @@ struct QuickCaptureView: View {
         pendingWidgetRecord = false
         let request = PendingQuickRecordingRequest.consume()
         guard AppConstants.lockScreenQuickRecordEnabled else { return }
+        // The same press can reach the app more than once (launch flag,
+        // notification, scene activation). Never let the copy race the start
+        // in flight: that used to show "Finish the current recording…" while
+        // the first copy was already recording the user's reaction to it.
+        guard widgetRecordLaunchTask == nil else { return }
 
-        switch request.recordingAction.command(isRecording: persistentRecorder.isSegmentActive) {
-        case .none:
-            return
-        case .stop:
-            // Stop preserves the active segment's preset and completion mode,
-            // and does not require loading or changing the composer's route.
-            persistentRecorder.stopInAppSegment()
-            return
-        case .start:
-            break
-        }
-        Task { @MainActor in
-            await viewModel.load()
-            guard viewModel.requireCaptureRouteAvailable(), !persistentRecorder.isSegmentActive else { return }
-            let selection = WidgetRecordingFlowSelection.resolve(requestedFlowID: request.requestedFlowID)
-            // Draft delivery preserves the composer's route; the requested
-            // preset supplies only the frozen voice-processing policy.
-            lastStartedRecordingMode = request.draftAttachAudio == nil ? .preset : .draft
-            persistentRecorder.lastTranscriptionResult = nil
-            _ = persistentRecorder.startOneShotInAppSegment(
-                flowId: selection.flowID,
-                completionMode: request.completionMode(flowID: selection.flowID),
-                origin: .quickRecord,
-                draftRequestID: request.draftRequestID(in: viewModel.draft)
+        let isDraft = request.draftAttachAudio != nil
+        let effects = WidgetRecordingLaunch.Effects(
+            isRecording: { persistentRecorder.isSegmentActive },
+            isRecentLaunchRecording: {
+                guard let startedAt = widgetRecordLaunchStartedAt else { return false }
+                return Date().timeIntervalSince(startedAt) < 2
+            },
+            finishActiveRecording: { persistentRecorder.stopInAppSegment() },
+            loadComposer: { await viewModel.load() },
+            isComposerAvailable: { viewModel.canChangeCaptureRoute },
+            prepareNewNote: {
+                // A blank composer is already a new note. A Remote-only Route
+                // keeps its draft, because closing it would Send it.
+                guard viewModel.canRecordNewNote else { return true }
+                return await viewModel.prepareNewNoteForRecording()
+            },
+            start: {
+                let selection = WidgetRecordingFlowSelection.resolve(requestedFlowID: request.requestedFlowID)
+                // Draft delivery preserves the composer's route; the requested
+                // preset supplies only the frozen voice-processing policy.
+                lastStartedRecordingMode = isDraft ? .draft : .preset
+                persistentRecorder.lastTranscriptionResult = nil
+                return persistentRecorder.startOneShotInAppSegment(
+                    flowId: selection.flowID,
+                    completionMode: request.completionMode(flowID: selection.flowID),
+                    origin: .quickRecord,
+                    draftRequestID: request.draftRequestID(in: viewModel.draft)
+                )
+            }
+        )
+        widgetRecordLaunchTask = Task { @MainActor in
+            defer { widgetRecordLaunchTask = nil }
+            let outcome = await WidgetRecordingLaunch.perform(
+                action: request.recordingAction,
+                isDraftDelivery: isDraft,
+                effects: effects
             )
+            switch outcome {
+            case .started:
+                widgetRecordLaunchStartedAt = Date()
+            case .composerBusy:
+                // Draft delivery only: real composer work (an import, a Send)
+                // outlasted the wait. Explain why nothing is recording.
+                viewModel.requireCaptureRouteAvailable()
+            case .stopped, .unchanged, .notStarted:
+                break
+            }
         }
     }
 
