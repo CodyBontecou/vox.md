@@ -17,8 +17,12 @@ struct PendingQuickRecordingRequest: Equatable {
     let startsNewRecording: Bool
 
     /// Written by the control/widget entry point before it hands off to the
-    /// foreground intent, which does not know who asked. Consumed once.
+    /// foreground intent, which does not know who asked. Consumed once. It
+    /// holds the press time: a mark older than `startsNewRecordingLifetime`
+    /// (the app was never brought up to consume it) is ignored, so it can't
+    /// make a much later launch finish an active recording.
     static let startsNewRecordingKey = "pendingWidgetRecordStartsNewRecording"
+    static let startsNewRecordingLifetime: TimeInterval = 60
 
     init(
         requestedFlowID: String?,
@@ -36,10 +40,11 @@ struct PendingQuickRecordingRequest: Equatable {
     /// control left behind.
     static func markStartsNewRecording(
         _ startsNewRecording: Bool,
-        defaults: UserDefaults? = AppConstants.sharedDefaults
+        defaults: UserDefaults? = AppConstants.sharedDefaults,
+        now: Date = Date()
     ) {
         if startsNewRecording {
-            defaults?.set(true, forKey: startsNewRecordingKey)
+            defaults?.set(now.timeIntervalSince1970, forKey: startsNewRecordingKey)
         } else {
             defaults?.removeObject(forKey: startsNewRecordingKey)
         }
@@ -70,14 +75,16 @@ struct PendingQuickRecordingRequest: Equatable {
 
     /// The app has already transferred the pending flag into its scene binding.
     /// Consume the launch's policy once, before asynchronous draft loading.
-    static func consume(defaults: UserDefaults? = AppConstants.sharedDefaults) -> Self {
+    static func consume(defaults: UserDefaults? = AppConstants.sharedDefaults, now: Date = Date()) -> Self {
+        let markAge = (defaults?.object(forKey: startsNewRecordingKey) as? Double)
+            .map { now.timeIntervalSince1970 - $0 }
         let request = Self(
             requestedFlowID: defaults?.string(forKey: AppConstants.pendingWidgetRecordFlowIdKey),
             // A malformed override may drop the attachment, never the review step.
             draftAttachAudio: defaults?.object(forKey: AppConstants.pendingWidgetRecordDraftAttachAudioKey)
                 .map { $0 as? Bool ?? false },
             recordingAction: WidgetRecordingActionSelection.consume(defaults: defaults),
-            startsNewRecording: defaults?.bool(forKey: startsNewRecordingKey) == true
+            startsNewRecording: markAge.map { (0..<startsNewRecordingLifetime).contains($0) } ?? false
         )
         defaults?.removeObject(forKey: AppConstants.pendingWidgetRecordFlowIdKey)
         defaults?.removeObject(forKey: startsNewRecordingKey)

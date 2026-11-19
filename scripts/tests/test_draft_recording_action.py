@@ -77,11 +77,14 @@ class DraftRecordingActionRegistrationTests(unittest.TestCase):
         view = (ROOT / "Voxboard/Views/QuickCaptureView.swift").read_text()
         text = "Saving the recording to your durable draft…"
         self.assertIn(f'QuickCaptureOCRProgress("{text}")', view)
+        self.assertIn("widgetRecordLaunches.cancel()", view.split(text, 1)[1].split(".accessibilityIdentifier", 1)[0])
+        # Its Cancel button reuses the translated "Cancel".
         catalog = json.loads((ROOT / "Voxboard/Localizable.xcstrings").read_text())
         localizations = catalog["strings"][text]["localizations"]
         self.assertEqual(len(localizations), 23)
         for locale, entry in localizations.items():
             self.assertEqual(entry["stringUnit"]["state"], "translated", locale)
+        self.assertEqual(len(catalog["strings"]["Cancel"]["localizations"]), 23)
 
     def test_draft_event_sink_has_no_delivery_api(self):
         sink = (ROOT / "Voxboard/QuickRecordingDraftRouting.swift").read_text()

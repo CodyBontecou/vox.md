@@ -127,8 +127,9 @@ enum WidgetRecordingLaunch {
 /// Serializes launches for the composer: the same press can reach the app
 /// more than once (launch flag, notification, scene activation).
 ///
-/// - A copy that arrives while a launch is starting is dropped instead of
-///   racing it.
+/// - A copy that arrives while a launch is starting (the same action) is
+///   dropped instead of racing it. A different action (Stop, Start or Stop)
+///   is not a copy: it runs right after the start finishes.
 /// - A press that arrives while a draft launch is waiting for the composer
 ///   replaces it: the waiting launch is cancelled and the newest press runs.
 ///   Nothing is silently swallowed behind a wait.
@@ -145,7 +146,7 @@ final class WidgetRecordingLaunchCoordinator {
     private(set) var isInFlight = false
     private(set) var isWaitingForComposer = false
     private var lastStartedAt: Date?
-    private var current: (id: UUID, task: Task<WidgetRecordingLaunch.Outcome?, Never>)?
+    private var current: (id: UUID, action: RecordingAction, task: Task<WidgetRecordingLaunch.Outcome?, Never>)?
     private let now: () -> Date
 
     init(now: @escaping () -> Date = Date.init) {
@@ -166,8 +167,12 @@ final class WidgetRecordingLaunchCoordinator {
         effects: WidgetRecordingLaunch.Effects
     ) -> Task<WidgetRecordingLaunch.Outcome?, Never>? {
         if let current {
-            guard isWaitingForComposer else { return nil }
-            current.task.cancel()
+            if isWaitingForComposer {
+                current.task.cancel()
+            } else if current.action == action {
+                return nil
+            }
+            // Otherwise (Stop or Toggle behind a starting Start) queue it.
         }
         let previous = current?.task
         let id = UUID()
@@ -183,7 +188,7 @@ final class WidgetRecordingLaunchCoordinator {
                 effects: effects
             )
         }
-        current = (id, task)
+        current = (id, action, task)
         return task
     }
 

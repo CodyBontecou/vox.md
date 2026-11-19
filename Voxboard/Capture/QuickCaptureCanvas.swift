@@ -209,9 +209,12 @@ struct QuickCaptureScrollEdgeBackdrop: View {
 
 struct QuickCaptureOCRProgress: View {
     var message: LocalizedStringKey = "Extracting text on this device…"
+    /// Shows a Cancel button when set (a waiting Lock Screen/widget launch).
+    var cancel: (() -> Void)?
 
-    init(_ message: LocalizedStringKey = "Extracting text on this device…") {
+    init(_ message: LocalizedStringKey = "Extracting text on this device…", cancel: (() -> Void)? = nil) {
         self.message = message
+        self.cancel = cancel
     }
 
     var body: some View {
@@ -221,6 +224,11 @@ struct QuickCaptureOCRProgress: View {
                 .font(Geist.caption())
                 .foregroundStyle(Geist.muted)
             Spacer()
+            if let cancel {
+                Button("Cancel", action: cancel)
+                    .font(Geist.caption())
+                    .accessibilityIdentifier("capture_progress_cancel")
+            }
         }
         .padding(.horizontal, Geist.Spacing.four)
         .frame(minHeight: Geist.ControlHeight.medium)
@@ -228,7 +236,8 @@ struct QuickCaptureOCRProgress: View {
         .overlay(Capsule(style: .continuous).stroke(Geist.border, lineWidth: 1))
         .padding(.horizontal, Geist.Spacing.four)
         .padding(.bottom, Geist.Spacing.two)
-        .accessibilityElement(children: .combine)
+        // Keep Cancel its own control; plain progress reads as one element.
+        .accessibilityElement(children: cancel == nil ? .combine : .contain)
         .accessibilityIdentifier("capture_ocr_progress")
     }
 }

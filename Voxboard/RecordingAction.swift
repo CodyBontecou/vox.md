@@ -99,6 +99,11 @@ enum BackgroundRecordingAction {
         }
 
         if action == .start, startsNewRecording, effects.isRecording() {
+            // Without a status card the new recording can't start in the
+            // background. Leave the active one running and let the app finish
+            // and restart it in one step (the press is still marked), so the
+            // user is never left with no recording in between.
+            guard effects.ensureLiveActivity() else { return .openApp(action: .start) }
             // The stopped recording keeps its own Route and completion mode
             // and is processed from the queue; the new one gets a fresh
             // engine (startOneShotInAppSegment) and the same status card.

@@ -169,6 +169,32 @@ final class WidgetRecordingLaunchTests: XCTestCase {
         XCTAssertFalse(coordinator.isBusy)
     }
 
+    func testStopBehindAStartingLaunchRunsAfterItInsteadOfBeingDropped() async {
+        let coordinator = WidgetRecordingLaunchCoordinator(now: { Date(timeIntervalSince1970: 1_000) })
+        let launch = LaunchEffects()
+        let start = coordinator.launch(action: .start, isDraftDelivery: false, startsNewRecording: true, effects: launch.effects)
+        let stop = coordinator.launch(action: .stop, isDraftDelivery: false, startsNewRecording: true, effects: launch.effects)
+        XCTAssertNotNil(stop, "Stop is not a copy of Start")
+        let startOutcome = await start?.value
+        let stopOutcome = await stop?.value
+        XCTAssertEqual(startOutcome, .started(finishedActiveRecording: false))
+        XCTAssertEqual(stopOutcome, .stopped)
+        XCTAssertEqual(launch.events, ["load", "start", "finish"])
+        XCTAssertFalse(launch.isRecording)
+        XCTAssertFalse(coordinator.isBusy)
+    }
+
+    func testToggleBehindAStartingLaunchStopsTheNewRecording() async {
+        let coordinator = WidgetRecordingLaunchCoordinator()
+        let launch = LaunchEffects()
+        let start = coordinator.launch(action: .start, isDraftDelivery: false, startsNewRecording: true, effects: launch.effects)
+        let toggle = coordinator.launch(action: .toggle, isDraftDelivery: false, startsNewRecording: true, effects: launch.effects)
+        _ = await start?.value
+        let outcome = await toggle?.value
+        XCTAssertEqual(outcome, .stopped)
+        XCTAssertFalse(launch.isRecording)
+    }
+
     func testNewPressReplacesALaunchWaitingForTheComposer() async {
         let coordinator = WidgetRecordingLaunchCoordinator()
         let waiting = LaunchEffects(composerAvailable: false, plan: .closeOpenNote)
@@ -261,18 +287,27 @@ final class WidgetRecordingLaunchTests: XCTestCase {
         let recording = BackgroundEffects(isRecording: true)
         let outcome = BackgroundRecordingAction.perform(action: .start, flowID: "preset", startsNewRecording: true, effects: recording.effects)
         XCTAssertEqual(outcome, .completed)
-        XCTAssertEqual(recording.events, ["stop", "start:preset", "activity"])
+        // The status card is confirmed before anything is stopped.
+        XCTAssertEqual(recording.events, ["activity", "stop", "start:preset", "activity"])
         XCTAssertTrue(recording.isRecording)
     }
 
-    func testBackgroundControlRestartWithoutAStatusCardFallsBackToAForegroundStart() {
-        // The old recording is already saved; the app starts the new one
-        // (the launch is marked as a control press, see below).
+    func testBackgroundControlRestartWithoutAStatusCardKeepsRecordingAndLetsTheAppRestart() {
+        // Nothing is stopped in the background, so there is never a moment
+        // with no recording. The app opens with Start and the press is still
+        // marked, so it finishes and restarts in one step there.
         let recording = BackgroundEffects(isRecording: true, activityAllowed: false)
         let outcome = BackgroundRecordingAction.perform(action: .start, flowID: "preset", startsNewRecording: true, effects: recording.effects)
         XCTAssertEqual(outcome, .openApp(action: .start))
-        XCTAssertEqual(recording.events, ["stop", "start:preset", "activity", "stopListening", "endActivity"])
-        XCTAssertFalse(recording.isRecording)
+        XCTAssertEqual(recording.events, ["activity"])
+        XCTAssertTrue(recording.isRecording)
+    }
+
+    func testForegroundHandoffAfterABackgroundRestartFinishesAndStartsInOneStep() async {
+        let launch = LaunchEffects(isRecording: true)
+        let outcome = await launch.perform(.start, startsNewRecording: true)
+        XCTAssertEqual(outcome, .started(finishedActiveRecording: true))
+        XCTAssertEqual(launch.events, ["finish", "load", "start"])
     }
 
     func testBackgroundShortcutStartWhileRecordingStillLeavesItUnchanged() {
@@ -328,6 +363,22 @@ final class WidgetRecordingLaunchTests: XCTestCase {
         PendingQuickRecordingRequest.markStartsNewRecording(true, defaults: defaults)
         _ = try await VoxboardRecordingControlIntent(vox: preset, action: .stop, openApp: false).perform()
         XCTAssertNil(defaults.object(forKey: PendingQuickRecordingRequest.startsNewRecordingKey))
+
+        // A mark the app never consumed (it was never brought up) expires,
+        // so a much later launch can't inherit it and finish a recording.
+        let pressedAt = Date()
+        PendingQuickRecordingRequest.markStartsNewRecording(true, defaults: defaults, now: pressedAt)
+        _ = try await OpenVoxboardRecordingActionIntent(vox: preset, action: .start).perform()
+        request = PendingQuickRecordingRequest.consume(
+            defaults: defaults,
+            now: pressedAt.addingTimeInterval(PendingQuickRecordingRequest.startsNewRecordingLifetime + 1)
+        )
+        XCTAssertFalse(request.startsNewRecording)
+        XCTAssertNil(defaults.object(forKey: PendingQuickRecordingRequest.startsNewRecordingKey))
+        PendingQuickRecordingRequest.markStartsNewRecording(true, defaults: defaults, now: pressedAt)
+        _ = try await OpenVoxboardRecordingActionIntent(vox: preset, action: .start).perform()
+        request = PendingQuickRecordingRequest.consume(defaults: defaults, now: pressedAt.addingTimeInterval(5))
+        XCTAssertTrue(request.startsNewRecording)
 
         // Home Screen widget tap (voxboard://widget-record).
         WidgetRecordingFlowSelection.persistRequestedFlowID(
