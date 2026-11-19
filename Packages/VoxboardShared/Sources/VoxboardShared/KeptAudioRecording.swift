@@ -335,6 +335,18 @@ public enum KeptAudioInspector {
         )
     }
 
+    /// True for a file in the format Vox.md writes for High/Lossless kept
+    /// recordings: `.m4a`, AAC or ALAC, 48 kHz, mono or stereo. Used to give
+    /// a recovered take the same downmixed transcription copy it would have
+    /// had, without changing how imported files are transcribed.
+    public static func isKeptRecordingFormat(_ url: URL) -> Bool {
+        guard url.pathExtension.lowercased() == "m4a",
+              let format = format(of: url) else { return false }
+        return (format.formatID == kAudioFormatMPEG4AAC || format.formatID == kAudioFormatAppleLossless)
+            && format.sampleRate == RecordingQuality.high.sampleRate
+            && (1...2).contains(format.channelCount)
+    }
+
     /// True for a recording above the 16 kHz the transcription engines use.
     /// Those need a downsampled temporary copy before transcription.
     public static func needsTranscriptionCopy(_ url: URL) -> Bool {
@@ -359,7 +371,11 @@ public enum KeptAudioInspector {
     /// engine hears both microphones, as it does with a mono take.
     @discardableResult
     public static func makeTranscriptionCopy(of sourceURL: URL, at outputURL: URL) throws -> URL {
-        try AudioFileConverter.convertToWhisperWAVStreaming(inputURL: sourceURL, outputURL: outputURL)
+        try AudioFileConverter.convertToWhisperWAVStreaming(
+            inputURL: sourceURL,
+            outputURL: outputURL,
+            downmix: true
+        )
     }
 }
 #endif

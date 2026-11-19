@@ -46,6 +46,39 @@ final class RecordingQualityRecorderTests: XCTestCase {
         XCTAssertEqual(format.channelCount, 1)
     }
 
+    func testRecoveredStereoTakeGetsADownmixedCopyButImportsDoNot() async throws {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent("RecordingQualityRecorderTests-\(UUID().uuidString)", isDirectory: true)
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+
+        // Right channel only: a left-only conversion would be silent.
+        let kept = root.appendingPathComponent("recovered.m4a")
+        let writer = try KeptAudioFileWriter(url: kept, quality: .lossless, channelCount: 2)
+        var samples = [Float](repeating: 0, count: 48_000 * 2)
+        for frame in 0..<48_000 { samples[frame * 2 + 1] = Float(sin(Double(frame) / 15) * 0.5) }
+        try writer.append(samples: samples)
+        XCTAssertNotNil(writer.finalize())
+
+        let copy = try await PersistentRecorder.transcriptionAudio(for: kept, source: .recovered)
+        defer { try? FileManager.default.removeItem(at: copy) }
+        XCTAssertNotEqual(copy, kept)
+        let file = try AVAudioFile(forReading: copy)
+        XCTAssertEqual(file.fileFormat.sampleRate, 16_000)
+        XCTAssertEqual(file.fileFormat.channelCount, 1)
+        let buffer = try XCTUnwrap(AVAudioPCMBuffer(
+            pcmFormat: file.processingFormat, frameCapacity: AVAudioFrameCount(file.length)
+        ))
+        try file.read(into: buffer)
+        let mono = try XCTUnwrap(buffer.floatChannelData?[0])
+        let peak = (0..<Int(buffer.frameLength)).reduce(Float(0)) { max($0, abs(mono[$1])) }
+        XCTAssertGreaterThan(peak, 0.1)
+
+        // Imported files keep their existing path to the engine.
+        let imported = try await PersistentRecorder.transcriptionAudio(for: kept, source: .importedAudio)
+        XCTAssertEqual(imported, kept)
+    }
+
     func testSpeechWAVIsTranscribedUnchanged() async throws {
         let root = FileManager.default.temporaryDirectory
             .appendingPathComponent("RecordingQualityRecorderTests-\(UUID().uuidString)", isDirectory: true)

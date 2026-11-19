@@ -101,7 +101,14 @@ struct RecordingQualitySettingsView: View {
                     .tint(Geist.accent)
                     .accessibilityIdentifier("recording_quality_stereo")
                 } footer: {
-                    Text("Records High and Lossless in stereo with the iPhone's built-in microphones, for a more natural sound with music and nature. External, Bluetooth and AirPods microphones, and Apple Watch, record in mono.")
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Records High and Lossless in stereo with the iPhone's built-in microphones, for a more natural sound with music and nature. External, Bluetooth and AirPods microphones, and Apple Watch, record in mono.")
+                        // Keyboard Listening keeps one always-on mono input so
+                        // dictation transcripts don't change; recordings that
+                        // reuse it are mono too.
+                        Text("Keyboard dictation, and recordings made while Keyboard Listening is on, stay mono.")
+                            .accessibilityIdentifier("recording_quality_stereo_keyboard_note")
+                    }
                 }
                 .listRowBackground(Geist.card)
             }

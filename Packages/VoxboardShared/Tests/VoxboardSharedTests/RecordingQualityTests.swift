@@ -264,6 +264,47 @@ final class RecordingQualityTests: XCTestCase {
         XCTAssertEqual(jobs.map(\.id), [jobID])
     }
 
+    func test_claimedStereoTakeRecoversAsOneStereoJobWithA16kMonoCopy() async throws {
+        let recordings = root.appendingPathComponent("Recordings", isDirectory: true)
+        try FileManager.default.createDirectory(at: recordings, withIntermediateDirectories: true)
+        let kept = KeptAudioArtifacts.makeURL(in: recordings, requestID: "stereo", quality: .lossless)
+        let writer = try KeptAudioFileWriter(url: kept, quality: .lossless, channelCount: 2)
+        try writer.append(samples: (0..<(48_000 * 2)).map { Float(sin(Double($0 / 2) / 15) * 0.3) })
+        XCTAssertNotNil(writer.finalize())
+        let journal = recordings.appendingPathComponent("segment_active_stereo_2.wav")
+        try Data("journal".utf8).write(to: journal)
+        let jobID = UUID()
+        try RecordingJobHandoffIntentStore(recordingsDirectoryURL: recordings).save(
+            RecordingJobHandoffIntent(
+                jobID: jobID,
+                readiness: .ready,
+                audioFilename: kept.lastPathComponent,
+                relatedAudioFilenames: [journal.lastPathComponent],
+                createdAt: Date().addingTimeInterval(-120),
+                duration: 1,
+                source: .iOSApp,
+                delivery: .captureDraft(attachAudio: true),
+                modelID: "automatic",
+                language: "auto",
+                configuration: .default
+            )
+        )
+        XCTAssertTrue(KeptAudioArtifacts.removeUnclaimed(in: recordings).isEmpty)
+
+        let store = RecordingJobStore(rootDirectoryURL: root.appendingPathComponent("queue"))
+        let recovered = try await store.recoverExternalOrphans(recordingsDirectoryURL: recordings)
+        let job = try XCTUnwrap(recovered.first)
+        XCTAssertEqual(recovered.map(\.id), [jobID])
+        let audio = store.audioURL(for: job)
+        let format = try XCTUnwrap(KeptAudioInspector.format(of: audio))
+        XCTAssertEqual(format.channelCount, 2)
+        XCTAssertEqual(format.sampleRate, 48_000)
+        XCTAssertTrue(KeptAudioInspector.isKeptRecordingFormat(audio))
+        try assertTranscriptionCopy(of: audio, expectedSeconds: 1)
+        let again = try await store.recoverExternalOrphans(recordingsDirectoryURL: recordings)
+        XCTAssertTrue(again.isEmpty)
+    }
+
     // MARK: - Storage guard (Watch transfers)
 
     func test_storageGuardStepsDownWhenSpaceIsShort() {
@@ -408,9 +449,8 @@ final class RecordingQualityTests: XCTestCase {
         XCTAssertGreaterThan(peak, 0.1)
     }
 
-    func test_bothWhisperConvertersMixARightOnlyStereoFile() throws {
-        // A stereo Vox recording can reach the import paths too (for example
-        // after an export and re-import). Neither converter may drop a side.
+    func test_importConvertersKeepTodaysChannelAndKeptCopiesMixBoth() throws {
+        // Right-only stereo file in the kept format.
         let url = root.appendingPathComponent("right-only.m4a")
         let writer = try KeptAudioFileWriter(url: url, quality: .lossless, channelCount: 2)
         var samples = [Float](repeating: 0, count: 48_000 * 2)
@@ -419,14 +459,32 @@ final class RecordingQualityTests: XCTestCase {
         }
         try writer.append(samples: samples)
         XCTAssertNotNil(writer.finalize())
+        XCTAssertTrue(KeptAudioInspector.isKeptRecordingFormat(url))
 
+        // Imports are transcribed exactly as before: first channel only.
         let whole = root.appendingPathComponent("whole.wav")
         try AudioFileConverter.convertToWhisperWAV(inputURL: url, outputURL: whole)
         let streamed = root.appendingPathComponent("streamed.wav")
         try AudioFileConverter.convertToWhisperWAVStreaming(inputURL: url, outputURL: streamed)
-        for copy in [whole, streamed] {
-            XCTAssertGreaterThan(try peak(of: copy), 0.1, copy.lastPathComponent)
-        }
+        XCTAssertEqual(try peak(of: whole), 0, accuracy: 0.001)
+        XCTAssertEqual(try peak(of: streamed), 0, accuracy: 0.001)
+
+        // Opting in mixes both sides, in either converter.
+        let mixedWhole = root.appendingPathComponent("mixed-whole.wav")
+        try AudioFileConverter.convertToWhisperWAV(inputURL: url, outputURL: mixedWhole, downmix: true)
+        let mixedStreamed = root.appendingPathComponent("mixed-streamed.wav")
+        try AudioFileConverter.convertToWhisperWAVStreaming(inputURL: url, outputURL: mixedStreamed, downmix: true)
+        XCTAssertGreaterThan(try peak(of: mixedWhole), 0.1)
+        XCTAssertGreaterThan(try peak(of: mixedStreamed), 0.1)
+    }
+
+    func test_keptRecordingFormatExcludesSpeechAndWAV() throws {
+        let speech = try writeKeptRecording(.speech, seconds: 0.5)
+        XCTAssertFalse(KeptAudioInspector.isKeptRecordingFormat(speech))
+        XCTAssertTrue(KeptAudioInspector.isKeptRecordingFormat(try writeKeptRecording(.high, seconds: 0.5)))
+        let wav = root.appendingPathComponent("speech.wav")
+        try KeptAudioInspector.makeTranscriptionCopy(of: speech, at: wav)
+        XCTAssertFalse(KeptAudioInspector.isKeptRecordingFormat(wav))
     }
 
     func test_stereoWriterResamplesInterleavedFramesAndKeepsChannelsApart() throws {

@@ -21,7 +21,7 @@ public enum AudioFileConverter {
         inputURL: URL,
         outputURL: URL,
         targetSampleRate: Double = whisperSampleRate,
-        downmix: Bool = true
+        downmix: Bool = false
     ) throws -> URL {
         try Task.checkCancellation()
         let inputFile = try AVAudioFile(forReading: inputURL)
@@ -48,8 +48,8 @@ public enum AudioFileConverter {
             guard let converter = AVAudioConverter(from: sourceFormat, to: targetFormat) else {
                 throw ConversionError.couldNotCreateConverter
             }
-            // Mix all channels instead of keeping only the first (see the
-            // streaming converter below).
+            // Opt-in: mix all channels instead of keeping only the first
+            // (see the streaming converter below).
             if downmix, sourceFormat.channelCount > 1 { converter.downmix = true }
             let ratio = targetSampleRate / sourceFormat.sampleRate
             let outputCapacity = AVAudioFrameCount(Double(inputBuffer.frameLength) * ratio) + 8
@@ -90,7 +90,7 @@ public enum AudioFileConverter {
         outputURL: URL,
         targetSampleRate: Double = whisperSampleRate,
         inputFramesPerChunk: AVAudioFrameCount = 16_384,
-        downmix: Bool = true
+        downmix: Bool = false
     ) throws -> URL {
         try Task.checkCancellation()
         let input = try AVAudioFile(forReading: inputURL)
@@ -104,9 +104,10 @@ public enum AudioFileConverter {
         guard let converter = AVAudioConverter(from: sourceFormat, to: targetFormat) else {
             throw ConversionError.couldNotCreateConverter
         }
-        // Multichannel sources mix every channel into the mono copy. Without
-        // this AVAudioConverter keeps only the first channel, so a stereo
-        // recording would be transcribed from its left side alone.
+        // With `downmix`, multichannel sources mix every channel into the mono
+        // copy. Without it AVAudioConverter keeps only the first channel,
+        // which is how imported files have always been transcribed; Vox.md's
+        // own stereo recordings opt in (KeptAudioInspector).
         if downmix, sourceFormat.channelCount > 1 { converter.downmix = true }
         try FileManager.default.createDirectory(at: outputURL.deletingLastPathComponent(), withIntermediateDirectories: true)
         try? FileManager.default.removeItem(at: outputURL)

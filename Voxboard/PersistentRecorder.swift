@@ -3297,14 +3297,19 @@ final class PersistentRecorder {
     }
 
     /// The 16 kHz file the transcription engine reads for a queued job.
-    /// Returns `audioURL` itself unless it is a High/Lossless app recording.
+    /// Returns `audioURL` itself unless it is a High/Lossless app recording,
+    /// including one recovered after a crash. Those get a 16 kHz mono copy
+    /// with stereo downmixed; imported files keep their existing path.
     nonisolated static func transcriptionAudio(
         for audioURL: URL,
         source: RecordingJobSource
     ) async throws -> URL {
-        guard source == .iOSApp else { return audioURL }
+        guard source == .iOSApp || source == .recovered else { return audioURL }
         let task = Task.detached(priority: .userInitiated) { () throws -> URL in
-            guard KeptAudioInspector.needsTranscriptionCopy(audioURL) else { return audioURL }
+            guard KeptAudioInspector.needsTranscriptionCopy(audioURL),
+                  source == .iOSApp || KeptAudioInspector.isKeptRecordingFormat(audioURL) else {
+                return audioURL
+            }
             let copyURL = FileManager.default.temporaryDirectory
                 .appendingPathComponent("vox-kept-transcription-\(UUID().uuidString.lowercased())")
                 .appendingPathExtension("wav")
