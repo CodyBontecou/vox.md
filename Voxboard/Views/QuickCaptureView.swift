@@ -145,6 +145,11 @@ struct QuickCaptureView: View {
     @State private var attachRecordingAudioOverride: Bool?
     @State private var lastStartedRecordingMode: CaptureRecordingMode = .preset
     @State private var microphonePermissionTask: Task<Void, Never>?
+    /// One Lock Screen / widget launch at a time; a duplicate delivery of the
+    /// same press is dropped instead of racing the first start (#115).
+    @State private var widgetRecordLaunches = WidgetRecordingLaunchCoordinator()
+    /// A draft launch is waiting for earlier work on the composer to finish.
+    @State private var isWidgetRecordWaitingForComposer = false
     @State private var showsMicrophoneSettings = false
     @State private var showsFirstNoteFolderPicker = false
     @State private var isSavingFirstNoteFolder = false
@@ -676,6 +681,13 @@ struct QuickCaptureView: View {
                 .padding(.horizontal, Geist.Spacing.four)
                 .padding(.bottom, Geist.Spacing.two)
                 .transition(.move(edge: .top).combined(with: .opacity))
+            }
+            if isWidgetRecordWaitingForComposer {
+                // A Lock Screen / widget draft launch starts its new note as
+                // soon as the previous recording has reached the draft (#115).
+                // Cancel ends the wait without recording, so a composer that
+                // stays busy never leaves a spinner the user can't dismiss.
+                WidgetRecordLaunchWaitingBanner { widgetRecordLaunches.cancel() }
             }
             if isExtractingText {
                 QuickCaptureOCRProgress()
@@ -2969,6 +2981,8 @@ struct QuickCaptureView: View {
     }
 
     private func handleScenePhaseChange(_ phase: ScenePhase) {
+        // A draft launch waiting for the composer must not outlive the visit.
+        if phase == .background { widgetRecordLaunches.cancel() }
         if phase == .active {
             reloadFlows()
             // Returning from Settings may have changed folder access.
@@ -2997,6 +3011,7 @@ struct QuickCaptureView: View {
 
     private func handleCaptureDisappear() {
         microphonePermissionTask?.cancel()
+        widgetRecordLaunches.cancel()
         locationRequestTask?.cancel()
         initialComposerFocusIsPending = false
         sentToastPresentationID = nil
@@ -4089,33 +4104,51 @@ struct QuickCaptureView: View {
         pendingWidgetRecord = false
         let request = PendingQuickRecordingRequest.consume()
         guard AppConstants.lockScreenQuickRecordEnabled else { return }
+        // The same press can reach the app more than once (launch flag,
+        // notification, scene activation). The coordinator drops a copy that
+        // would race the start in flight (that used to show "Finish the
+        // current recording…" while the first copy recorded the reaction) and
+        // lets a newer press replace a launch that is waiting.
 
-        switch request.recordingAction.command(isRecording: persistentRecorder.isSegmentActive) {
-        case .none:
-            return
-        case .stop:
-            // Stop preserves the active segment's preset and completion mode,
-            // and does not require loading or changing the composer's route.
-            persistentRecorder.stopInAppSegment()
-            return
-        case .start:
-            break
-        }
-        Task { @MainActor in
-            await viewModel.load()
-            guard viewModel.requireCaptureRouteAvailable(), !persistentRecorder.isSegmentActive else { return }
-            let selection = WidgetRecordingFlowSelection.resolve(requestedFlowID: request.requestedFlowID)
-            // Draft delivery preserves the composer's route; the requested
-            // preset supplies only the frozen voice-processing policy.
-            lastStartedRecordingMode = request.draftAttachAudio == nil ? .preset : .draft
-            persistentRecorder.lastTranscriptionResult = nil
-            _ = persistentRecorder.startOneShotInAppSegment(
-                flowId: selection.flowID,
-                completionMode: request.completionMode(flowID: selection.flowID),
-                origin: .quickRecord,
-                draftRequestID: request.draftRequestID(in: viewModel.draft)
-            )
-        }
+        let isDraft = request.draftAttachAudio != nil
+        let effects = WidgetRecordingLaunch.Effects(
+            isRecording: { persistentRecorder.isSegmentActive },
+            finishActiveRecording: { persistentRecorder.stopInAppSegment() },
+            loadComposer: { await viewModel.load() },
+            isComposerAvailable: { viewModel.canChangeCaptureRoute },
+            setWaitingForComposer: { isWaiting in
+                withAnimation(.easeInOut(duration: 0.18)) {
+                    isWidgetRecordWaitingForComposer = isWaiting
+                }
+            },
+            newNotePlan: {
+                WidgetRecordingLaunch.newNotePlan(
+                    hasOpenNote: viewModel.liveNote != nil,
+                    hasContent: viewModel.draft.hasCaptureContent,
+                    canCloseIntoNewNote: viewModel.canRecordNewNote
+                )
+            },
+            prepareNewNote: { await viewModel.prepareNewNoteForRecording() },
+            start: {
+                let selection = WidgetRecordingFlowSelection.resolve(requestedFlowID: request.requestedFlowID)
+                // Draft delivery preserves the composer's route; the requested
+                // preset supplies only the frozen voice-processing policy.
+                lastStartedRecordingMode = isDraft ? .draft : .preset
+                persistentRecorder.lastTranscriptionResult = nil
+                return persistentRecorder.startOneShotInAppSegment(
+                    flowId: selection.flowID,
+                    completionMode: request.completionMode(flowID: selection.flowID),
+                    origin: .quickRecord,
+                    draftRequestID: request.draftRequestID(in: viewModel.draft)
+                )
+            }
+        )
+        widgetRecordLaunches.launch(
+            action: request.recordingAction,
+            isDraftDelivery: isDraft,
+            startsNewRecording: request.startsNewRecording,
+            effects: effects
+        )
     }
 
     private func handleRecorderNeedsUnlock(_ needsUnlock: Bool) {
