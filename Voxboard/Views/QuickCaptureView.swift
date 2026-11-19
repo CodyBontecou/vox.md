@@ -147,8 +147,9 @@ struct QuickCaptureView: View {
     @State private var microphonePermissionTask: Task<Void, Never>?
     /// One Lock Screen / widget launch at a time; a duplicate delivery of the
     /// same press is dropped instead of racing the first start (#115).
-    @State private var widgetRecordLaunchTask: Task<Void, Never>?
-    @State private var widgetRecordLaunchStartedAt: Date?
+    @State private var widgetRecordLaunches = WidgetRecordingLaunchCoordinator()
+    /// A draft launch is waiting for earlier work on the composer to finish.
+    @State private var isWidgetRecordWaitingForComposer = false
     @State private var showsMicrophoneSettings = false
     @State private var showsFirstNoteFolderPicker = false
     @State private var isSavingFirstNoteFolder = false
@@ -679,6 +680,12 @@ struct QuickCaptureView: View {
                 .padding(.horizontal, Geist.Spacing.four)
                 .padding(.bottom, Geist.Spacing.two)
                 .transition(.move(edge: .top).combined(with: .opacity))
+            }
+            if isWidgetRecordWaitingForComposer {
+                // A Lock Screen / widget draft launch starts its new note as
+                // soon as the previous recording has reached the draft (#115).
+                QuickCaptureOCRProgress("Saving the recording to your durable draft…")
+                    .accessibilityIdentifier("capture_widget_record_waiting")
             }
             if isExtractingText {
                 QuickCaptureOCRProgress()
@@ -4093,27 +4100,30 @@ struct QuickCaptureView: View {
         let request = PendingQuickRecordingRequest.consume()
         guard AppConstants.lockScreenQuickRecordEnabled else { return }
         // The same press can reach the app more than once (launch flag,
-        // notification, scene activation). Never let the copy race the start
-        // in flight: that used to show "Finish the current recording…" while
-        // the first copy was already recording the user's reaction to it.
-        guard widgetRecordLaunchTask == nil else { return }
+        // notification, scene activation). The coordinator drops a copy that
+        // would race the start in flight: that used to show "Finish the
+        // current recording…" while the first copy recorded the reaction.
+        guard !widgetRecordLaunches.isInFlight else { return }
 
         let isDraft = request.draftAttachAudio != nil
         let effects = WidgetRecordingLaunch.Effects(
             isRecording: { persistentRecorder.isSegmentActive },
-            isRecentLaunchRecording: {
-                guard let startedAt = widgetRecordLaunchStartedAt else { return false }
-                return Date().timeIntervalSince(startedAt) < 2
-            },
             finishActiveRecording: { persistentRecorder.stopInAppSegment() },
             loadComposer: { await viewModel.load() },
             isComposerAvailable: { viewModel.canChangeCaptureRoute },
-            prepareNewNote: {
-                // A blank composer is already a new note. A Remote-only Route
-                // keeps its draft, because closing it would Send it.
-                guard viewModel.canRecordNewNote else { return true }
-                return await viewModel.prepareNewNoteForRecording()
+            setWaitingForComposer: { isWaiting in
+                withAnimation(.easeInOut(duration: 0.18)) {
+                    isWidgetRecordWaitingForComposer = isWaiting
+                }
             },
+            newNotePlan: {
+                WidgetRecordingLaunch.newNotePlan(
+                    hasOpenNote: viewModel.liveNote != nil,
+                    hasContent: viewModel.draft.hasCaptureContent,
+                    canCloseIntoNewNote: viewModel.canRecordNewNote
+                )
+            },
+            prepareNewNote: { await viewModel.prepareNewNoteForRecording() },
             start: {
                 let selection = WidgetRecordingFlowSelection.resolve(requestedFlowID: request.requestedFlowID)
                 // Draft delivery preserves the composer's route; the requested
@@ -4128,23 +4138,14 @@ struct QuickCaptureView: View {
                 )
             }
         )
-        widgetRecordLaunchTask = Task { @MainActor in
-            defer { widgetRecordLaunchTask = nil }
-            let outcome = await WidgetRecordingLaunch.perform(
+        let launches = widgetRecordLaunches
+        Task { @MainActor in
+            _ = await launches.run(
                 action: request.recordingAction,
                 isDraftDelivery: isDraft,
+                startsNewRecording: request.startsNewRecording,
                 effects: effects
             )
-            switch outcome {
-            case .started:
-                widgetRecordLaunchStartedAt = Date()
-            case .composerBusy:
-                // Draft delivery only: real composer work (an import, a Send)
-                // outlasted the wait. Explain why nothing is recording.
-                viewModel.requireCaptureRouteAvailable()
-            case .stopped, .unchanged, .notStarted:
-                break
-            }
         }
     }
 

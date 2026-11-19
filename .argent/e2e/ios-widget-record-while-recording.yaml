@@ -17,7 +17,10 @@
 #   left running and is discarded by the next run's restart.
 # The recording timer text ("Recording, 00:1…", "Recording, 00:0…") is the evidence
 #   that a new recording started: before the fix the second launch left the first
-#   recording running (timer kept counting past 10s) or showed the prompt.
+#   recording running (timer kept counting past 10s) or showed the prompt. The new
+#   recording reads 00:0x for its first 10s, so the check allows up to 10s for the
+#   launch to start it; a slower start would be a regression worth failing on.
+#   Unit tests (WidgetRecordingLaunchTests) cover the same flow without timing.
 # Waits stay raw `tool: await-ui-element`: the runner's native tree does not carry
 #   these SwiftUI accessibility ids/labels, the AX tree the tool reads does.
 version: 1
@@ -66,7 +69,7 @@ steps:
       condition: exists
       selector:
         text: Recording, 00:0
-      timeoutMs: 8000
+      timeoutMs: 10000
   - tool: await-ui-element
     args:
       condition: visible

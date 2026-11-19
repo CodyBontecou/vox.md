@@ -11,11 +11,38 @@ struct PendingQuickRecordingRequest: Equatable {
     let requestedFlowID: String?
     let draftAttachAudio: Bool?
     let recordingAction: RecordingAction
+    /// A Lock Screen control or widget press: Start finishes and saves an
+    /// active recording and starts a new one (#115). Shortcuts leave this
+    /// `false`, so their Start keeps an active recording unchanged.
+    let startsNewRecording: Bool
 
-    init(requestedFlowID: String?, draftAttachAudio: Bool?, recordingAction: RecordingAction = .start) {
+    /// Written by the control/widget entry point before it hands off to the
+    /// foreground intent, which does not know who asked. Consumed once.
+    static let startsNewRecordingKey = "pendingWidgetRecordStartsNewRecording"
+
+    init(
+        requestedFlowID: String?,
+        draftAttachAudio: Bool?,
+        recordingAction: RecordingAction = .start,
+        startsNewRecording: Bool = false
+    ) {
         self.requestedFlowID = requestedFlowID
         self.draftAttachAudio = draftAttachAudio
         self.recordingAction = recordingAction
+        self.startsNewRecording = startsNewRecording
+    }
+
+    /// Every entry point sets this, so a Shortcut never inherits a value a
+    /// control left behind.
+    static func markStartsNewRecording(
+        _ startsNewRecording: Bool,
+        defaults: UserDefaults? = AppConstants.sharedDefaults
+    ) {
+        if startsNewRecording {
+            defaults?.set(true, forKey: startsNewRecordingKey)
+        } else {
+            defaults?.removeObject(forKey: startsNewRecordingKey)
+        }
     }
 
     func persist(
@@ -49,9 +76,11 @@ struct PendingQuickRecordingRequest: Equatable {
             // A malformed override may drop the attachment, never the review step.
             draftAttachAudio: defaults?.object(forKey: AppConstants.pendingWidgetRecordDraftAttachAudioKey)
                 .map { $0 as? Bool ?? false },
-            recordingAction: WidgetRecordingActionSelection.consume(defaults: defaults)
+            recordingAction: WidgetRecordingActionSelection.consume(defaults: defaults),
+            startsNewRecording: defaults?.bool(forKey: startsNewRecordingKey) == true
         )
         defaults?.removeObject(forKey: AppConstants.pendingWidgetRecordFlowIdKey)
+        defaults?.removeObject(forKey: startsNewRecordingKey)
         defaults?.removeObject(forKey: AppConstants.pendingWidgetRecordDraftAttachAudioKey)
         return request
     }

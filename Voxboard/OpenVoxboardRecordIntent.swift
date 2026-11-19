@@ -187,7 +187,8 @@ struct VoxboardRecordingControlIntent: AppIntent {
 
     @MainActor
     func perform() async throws -> some IntentResult & OpensIntent {
-        try await RecordingIntentExecution.perform(vox: vox, action: recordingAction, openApp: openApp, delivery: delivery, attachAudio: attachAudio)
+        // A control press always records a new note (#115).
+        try await RecordingIntentExecution.perform(vox: vox, action: recordingAction, openApp: openApp, delivery: delivery, attachAudio: attachAudio, startsNewRecording: true)
     }
 }
 
@@ -198,8 +199,14 @@ extension VoxboardRecordingControlIntent: AudioRecordingIntent, LiveActivityInte
 /// toggles. Presentation is chosen by the caller; recorder safety is shared.
 @MainActor
 enum RecordingIntentExecution {
-    static func perform(vox: VoxEntity?, action: RecordingAction, openApp: Bool, delivery: RecordingDelivery = .immediate, attachAudio: Bool = false) async throws -> some IntentResult & OpensIntent {
+    /// `startsNewRecording`: Lock Screen / Control Center controls. Start then
+    /// finishes and saves an active recording and starts a new one; Shortcuts
+    /// keep Start's "leave an active recording unchanged" meaning.
+    static func perform(vox: VoxEntity?, action: RecordingAction, openApp: Bool, delivery: RecordingDelivery = .immediate, attachAudio: Bool = false, startsNewRecording: Bool = false) async throws -> some IntentResult & OpensIntent {
         guard AppConstants.lockScreenQuickRecordEnabled else { return .result() }
+        // Published before any foreground handoff below, which carries only
+        // the Route, Action and delivery.
+        PendingQuickRecordingRequest.markStartsNewRecording(startsNewRecording)
         let foreground = OpenVoxboardRecordingActionIntent(vox: vox, action: action, delivery: delivery, attachAudio: attachAudio)
         guard #available(iOS 18.2, *) else {
 #if VOXBOARD_WIDGET_EXTENSION
@@ -236,7 +243,7 @@ enum RecordingIntentExecution {
                 endShortcutActivity: { LiveActivityController.shared.endShortcutRecordingActivityIfNeeded() }
             )
         }
-        switch BackgroundRecordingAction.perform(action: action, flowID: VoxEntity.requestedFlowID(for: vox), effects: effects) {
+        switch BackgroundRecordingAction.perform(action: action, flowID: VoxEntity.requestedFlowID(for: vox), startsNewRecording: startsNewRecording, effects: effects) {
         case .completed:
             return .result()
         case .openApp(let fallbackAction):
@@ -266,6 +273,8 @@ struct WidgetRecordingFlowSelection {
     ) {
         defaults?.removeObject(forKey: AppConstants.pendingWidgetRecordDraftAttachAudioKey)
         WidgetRecordingActionSelection.persist(.start, defaults: defaults)
+        // A widget tap records a new note, like the Lock Screen control (#115).
+        PendingQuickRecordingRequest.markStartsNewRecording(true, defaults: defaults)
         let requestedFlowID = URLComponents(url: url, resolvingAgainstBaseURL: false)?
             .queryItems?
             .first(where: { $0.name == "flowId" })?
