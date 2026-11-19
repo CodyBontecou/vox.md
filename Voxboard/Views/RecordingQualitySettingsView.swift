@@ -10,9 +10,12 @@ extension RecordingQuality {
         }
     }
 
-    /// "≈ 0.5 MB/min"
+    /// "≈ 0.5 MB/min". The number uses the app's UI language, not the device
+    /// region, so it reads the same way as the words around it.
     var localizedStoragePerMinute: String {
-        let megabytes = approximateMegabytesPerMinuteText
+        let language = Bundle.main.preferredLocalizations.first
+        let locale = language.map(Locale.init(identifier:)) ?? .current
+        let megabytes = approximateMegabytesPerMinuteText(locale: locale)
         return String(localized: "≈ \(megabytes) MB/min")
     }
 

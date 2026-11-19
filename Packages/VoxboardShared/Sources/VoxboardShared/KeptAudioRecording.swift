@@ -276,19 +276,15 @@ public enum KeptAudioInspector {
         return format.sampleRate > AudioFileConverter.whisperSampleRate
     }
 
-    /// True for a file in exactly the encoding Vox.md writes for High or
-    /// Lossless (mono 48 kHz AAC or ALAC `.m4a`), which the AAC export preset
-    /// would re-encode or turn lossy. Anything else, including stereo or
-    /// 44.1 kHz imports, keeps the existing normalizing export.
+    /// True when re-encoding with the AAC export preset would lose quality:
+    /// an Apple Lossless file, or a High-quality (48 kHz) AAC recording.
+    /// 16 kHz Speech recordings keep the existing export path.
     public static func shouldPreserveEncoding(_ url: URL) -> Bool {
         guard url.pathExtension.lowercased() == "m4a",
               let format = format(of: url) else { return false }
-        return RecordingQuality.allCases.contains { quality in
-            quality.recordsSeparateKeptAudio
-                && quality.formatID == format.formatID
-                && quality.sampleRate == format.sampleRate
-                && format.channelCount == 1
-        }
+        if format.formatID == kAudioFormatAppleLossless { return true }
+        return format.formatID == kAudioFormatMPEG4AAC
+            && format.sampleRate > AudioFileConverter.whisperSampleRate
     }
 
     /// Writes the 16 kHz mono WAV copy the transcription engine reads. Streams
