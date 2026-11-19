@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr" data-search-section="Section" data-search-guide="Guide" data-search-empty="Aucun résultat pour « {query} »">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transcrire localement les réunions sur Mac dans Obsidian | Vox.md</title>
+  <meta name="description" content="Enregistrez l’audio d’une app et votre micro sur des pistes séparées avec Vox.md pour Mac, transcrivez les deux sur l’appareil et enregistrez dans Obsidian une note Markdown avec les intervenants identifiés. Sans bot de réunion ni compte.">
+  <link rel="canonical" href="https://vox.isolated.tech/fr/blog/transcribe-meetings-mac-obsidian/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Documentation Vox.md pour les modèles de langage">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Transcrire localement les réunions sur Mac dans Obsidian">
+  <meta property="og:description" content="Enregistrez l’audio d’une app et votre micro sur des pistes séparées avec Vox.md pour Mac, transcrivez les deux sur l’appareil et enregistrez dans Obsidian une note Markdown avec les intervenants identifiés. Sans bot de réunion ni compte.">
+  <meta property="og:url" content="https://vox.isolated.tech/fr/blog/transcribe-meetings-mac-obsidian/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-18">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Transcrire localement les réunions sur Mac dans Obsidian">
+  <meta name="twitter:description" content="Enregistrez l’audio d’une app et votre micro sur des pistes séparées avec Vox.md pour Mac, transcrivez les deux sur l’appareil et enregistrez dans Obsidian une note Markdown avec les intervenants identifiés. Sans bot de réunion ni compte.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Transcrire localement les réunions sur Mac dans Obsidian",
+  "description": "Enregistrez l’audio d’une app et votre micro sur des pistes séparées avec Vox.md pour Mac, transcrivez les deux sur l’appareil et enregistrez dans Obsidian une note Markdown avec les intervenants identifiés. Sans bot de réunion ni compte.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-18",
+  "dateModified": "2026-11-18",
+  "mainEntityOfPage": "https://vox.isolated.tech/fr/blog/transcribe-meetings-mac-obsidian/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "fr",
+  "name": "Transcrire localement les réunions sur Mac dans Obsidian | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/fr/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Guides",
+      "item": "https://vox.isolated.tech/fr/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Transcrire localement les réunions sur Mac dans Obsidian",
+      "item": "https://vox.isolated.tech/fr/blog/transcribe-meetings-mac-obsidian/"
+    }
+  ],
+  "inLanguage": "fr",
+  "name": "Transcrire localement les réunions sur Mac dans Obsidian | Vox.md",
+  "description": "Enregistrez l’audio d’une app et votre micro sur des pistes séparées avec Vox.md pour Mac, transcrivez les deux sur l’appareil et enregistrez dans Obsidian une note Markdown avec les intervenants identifiés. Sans bot de réunion ni compte."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-meetings-mac-obsidian/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Aller au guide</a>
+<nav aria-label="Navigation principale">
+  <div class="nav-inner">
+    <a href="/fr/" class="logo" aria-label="accueil Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/fr/#how">Fonctionnement</a></li>
+      <li><a href="/fr/docs/">Documentation</a></li>
+      <li><a href="/fr/blog/">Guides</a></li>
+      <li><a href="/fr/compare/">Comparer</a></li>
+      <li><a href="/fr/privacy.html">Confidentialité</a></li>
+      <li><a href="/fr/terms.html">Conditions</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_fr_f0ba2ed6ae97">Télécharger Vox.md</a>
+  <details class="language-switcher"><summary>Langue</summary><ul><li><a href="/blog/transcribe-meetings-mac-obsidian/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-meetings-mac-obsidian/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-meetings-mac-obsidian/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-meetings-mac-obsidian/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-meetings-mac-obsidian/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-meetings-mac-obsidian/" lang="fr" hreflang="fr" aria-current="page">Français</a></li><li><a href="/hi/blog/transcribe-meetings-mac-obsidian/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-meetings-mac-obsidian/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-meetings-mac-obsidian/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-meetings-mac-obsidian/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-meetings-mac-obsidian/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-meetings-mac-obsidian/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-meetings-mac-obsidian/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-meetings-mac-obsidian/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-meetings-mac-obsidian/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-meetings-mac-obsidian/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-meetings-mac-obsidian/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-meetings-mac-obsidian/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-meetings-mac-obsidian/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-meetings-mac-obsidian/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-meetings-mac-obsidian/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Mac · Réunions · Markdown</div>
+        <h1 class="hero-title">Transcrire localement les réunions sur Mac dans Obsidian</h1>
+        <p class="hero-subtitle">Choisissez l’app d’appel, enregistrez, arrêtez et obtenez une note Markdown dans votre coffre. Sachez ce qui reste sur votre Mac et ce qui en sort.</p>
+      </div>
+      <aside class="meta-card" aria-label="À propos de ce guide">
+        <dl>
+          <div><dt>Par</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Mis à jour</dt><dd><time datetime="2026-11-18">18 novembre 2026</time></dd></div>
+          <div><dt>Nécessite</dt><dd>macOS 14+ · modèle vocal téléchargé · dossier de coffre accessible en écriture</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Transcrire localement les réunions sur Mac dans Obsidian">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">La réponse courte</div>
+        <p>Vox.md pour Mac peut enregistrer l’audio d’une app et votre micro sur des pistes séparées, transcrire les deux sur votre Mac et enregistrer une note Markdown avec les intervenants identifiés dans un coffre Obsidian ou n’importe quel dossier. Il n’y a ni bot de réunion ni compte.</p>
+      </div>
+      <p>Ce guide présente une configuration fonctionnelle, d’un parcours qui écrit dans <code>Meetings/</code> de votre coffre jusqu’à la note terminée. Les étapes suivent la <a href="/fr/docs/#mac-meeting">documentation de la capture de réunions sur Mac</a> et le comportement de l’app telle qu’elle est publiée. Le Markdown présenté ci-dessous est un exemple illustratif, pas l’enregistrement d’un vrai appel.</p>
+      <nav class="toc" aria-label="Dans ce guide"><div class="toc-title">Dans ce guide</div><ol>
+        <li><a href="#requirements">Ce qu’il vous faut</a></li>
+        <li><a href="#prepare-route">Préparer un parcours de réunion</a></li>
+        <li><a href="#record">Enregistrer l’appel</a></li>
+        <li><a href="#stop-transcribe">Arrêter, transcrire et livrer</a></li>
+        <li><a href="#recovery">Si l’enregistrement est interrompu</a></li>
+        <li><a href="#consent">Prévenir les participants que vous enregistrez</a></li>
+        <li><a href="#compare">Comparer les approches de prise de notes de réunion</a></li>
+        <li><a href="#limitations">Limites à connaître avant un long appel</a></li>
+      </ol></nav>
+
+      <h2 id="requirements">1. Ce qu’il vous faut</h2>
+      <ul>
+        <li><strong>Un Mac sous macOS 14 ou version ultérieure</strong> avec l’app Vox.md pour Mac, installée depuis la même fiche App Store que l’app iPhone.</li>
+        <li><strong>Accès au micro</strong> pour Vox.md, afin que votre propre voix soit enregistrée.</li>
+        <li><strong>Accès à l’enregistrement de l’écran et de l’audio du système.</strong> La capture de réunion utilise le <a href="https://developer.apple.com/documentation/screencapturekit" target="_blank" rel="noopener">framework ScreenCaptureKit</a> d’Apple pour enregistrer l’audio de l’app choisie. Si macOS le demande, autorisez-le. Vous pouvez vérifier les deux autorisations dans Réglages Système → Confidentialité et sécurité ; Apple explique ce réglage dans <a href="https://support.apple.com/guide/mac-help/control-access-screen-system-audio-recording-mchld6aa7d23/mac" target="_blank" rel="noopener">Contrôler l’accès à l’enregistrement de l’écran et de l’audio du système sur Mac</a>.</li>
+        <li><strong>Un modèle Whisper ou Parakeet téléchargé.</strong> Ouvrez l’écran Modèles sur Mac, téléchargez un modèle et définissez la langue de transcription. La <a href="/fr/docs/#models">référence des modèles</a> indique les tailles et les langues. Whisper fonctionne via <a href="https://github.com/ggml-org/whisper.cpp" target="_blank" rel="noopener">whisper.cpp</a> et Parakeet via <a href="https://github.com/FluidInference/FluidAudio" target="_blank" rel="noopener">FluidAudio</a>.</li>
+        <li><strong>Un dossier accessible en écriture</strong>, comme votre coffre Obsidian ou un dossier <code>Meetings</code> qu’il contient.</li>
+      </ul>
+      <p>Le traitement facultatif par Apple Intelligence, que le mode Notes de réunion utilise pour restructurer la transcription, nécessite un Mac compatible sous macOS 26. Sans lui, Vox.md utilise à la place un formateur déterministe, et le parcours fonctionne donc quand même.</p>
+
+      <h2 id="prepare-route">2. Préparer un parcours de réunion</h2>
+      <p>Un parcours détermine comment une capture est traitée et où son Markdown est écrit. Certaines versions Mac affichent les parcours sous le nom Préréglages de capture dans les Réglages.</p>
+      <ol>
+        <li>Ouvrez les Réglages dans l’app Mac et créez un nouveau parcours, nommé par exemple <em>Réunions</em>.</li>
+        <li>Dans sa destination, choisissez votre coffre comme dossier. Comme cible de note, choisissez <strong>Nouvelle note</strong> pour que chaque réunion ait son propre fichier.</li>
+        <li>Saisissez un modèle de chemin, par exemple <code>Meetings/{date}-{hour}{minute}.md</code>. Inclure l’heure place deux réunions du même jour dans des notes distinctes. Consultez <a href="/fr/blog/obsidian-capture-templates/">Modèles de capture Obsidian</a> pour d’autres recettes de chemins et de jetons.</li>
+        <li>Choisissez pour le traitement un <strong>Mode</strong>. <strong>Conserver l’original</strong> livre la transcription avec ses libellés telle qu’elle a été reconnue. <strong>Notes de réunion</strong> produit une section <code>## Notes</code> et, si le texte contient des actions à mener, une liste de contrôle <code>## Action Items</code> à cocher.</li>
+        <li>Facultatif : activez <strong>Identifier les intervenants</strong> si plusieurs personnes à distance parlent. Le modèle d’intervenants est téléchargé la première fois que ce parcours l’utilise.</li>
+        <li>Facultatif : activez <strong>Sauvegarder l’audio</strong> pour conserver l’enregistrement à côté de la note ou dans un dossier de pièces jointes. Laissez-le désactivé si vous ne voulez que le texte.</li>
+      </ol>
+
+      <h2 id="record">3. Enregistrer l’appel</h2>
+      <ol>
+        <li>Rejoignez l’appel dans son app : Zoom, Microsoft Teams, FaceTime ou un navigateur qui exécute Google Meet.</li>
+        <li>Dans la fenêtre Capture de Vox.md, sélectionnez <em>Réunions</em> comme parcours.</li>
+        <li>Réglez la source audio sur <strong>Réunion</strong>; la valeur par défaut est <strong>Micro</strong>. Selon la version de l’app, cette commande se trouve dans la fenêtre Capture ou sous Capture → Source audio dans la barre des menus.</li>
+        <li>Lancez l’enregistrement. macOS affiche son sélecteur de contenu ; choisissez exactement une application. Vox.md n’enregistre jamais son propre audio. Pour un appel dans un navigateur, choisissez le navigateur. Son audio est enregistré dans son ensemble, alors coupez le son des autres onglets qui en diffusent.</li>
+        <li>Pendant l’enregistrement, la barre d’état affiche en direct les vumètres Système et Micro, l’état de chaque source et les éventuels avertissements de capture. Vérifiez que les deux vumètres bougent quand les gens parlent.</li>
+      </ol>
+      <p>La capture de réunion ne peut pas être mise en pause. Les enregistrements au micro proposent Pause et Reprendre, mais une réunion va du début jusqu’à l’arrêt. Vous ne pouvez pas non plus passer à une autre app en cours de route ; arrêtez et lancez plutôt un nouvel enregistrement.</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_fr_f0ba2ed6ae97">Télécharger Vox.md gratuitement</a></p>
+      <p>Le téléchargement gratuit inclut 15 minutes de transcription. L’utilisation illimitée est un achat unique à vie.</p>
+
+      <h2 id="stop-transcribe">4. Arrêter, transcrire et livrer</h2>
+      <p>Appuyez sur Arrêter à la fin de l’appel. Vox.md transcrit les deux pistes séparément sur votre Mac avec le modèle choisi, puis les entrelace sur une chronologie commune. Votre piste micro reçoit le libellé <code>You</code>, et la piste de l’application reçoit le libellé d’un intervenant distant, comme <code>Speaker 2</code>. Avec Conserver l’original, une courte réunion pourrait produire un corps de note comme cet exemple illustratif :</p>
+      <pre class="guide-code"><code>You:
+Thanks for joining. Can we start with the launch checklist?
+
+Speaker 2:
+Sure. The release notes are ready, but we still need screenshots.
+
+You:
+I’ll take the screenshots by Friday.</code></pre>
+      <p>Avec Identifier les intervenants activé, Vox.md essaie de séparer la piste distante en davantage de libellés, comme <code>Speaker 2</code> et <code>Speaker 3</code>. Ces libellés sont anonymes et fournis au mieux. Si l’identification ne peut pas s’exécuter, vous conservez la transcription normale et l’app indique pourquoi.</p>
+      <p>Les pistes séparées expliquent pourquoi le libellé <code>You</code> fonctionne. Votre voix provient de la piste micro et les autres participants de la piste de l’app, donc Vox.md n’a pas à deviner à partir d’un seul enregistrement mixé quel côté de l’appel a dit quoi. Les libellés peuvent tout de même être erronés. Par exemple, le micro peut capter l’audio de vos haut-parleurs si vous ne portez pas de casque.</p>
+      <p>La suite dépend de l’option d’enregistrement choisie avant de commencer :</p>
+      <ul>
+        <li><strong>Ajouter au brouillon</strong> place la transcription dans l’éditeur Capture. Relisez-la et modifiez-la, puis appuyez sur Command-Return pour l’envoyer via le parcours.</li>
+        <li><strong>Envoyer immédiatement</strong> livre la note via le parcours dès la fin de la transcription.</li>
+      </ul>
+      <p>La transcription suit aussi vos réglages de presse-papiers, comme tout autre enregistrement. Un mixage de lecture des deux pistes est conservé comme audio de l’enregistrement, et il n’est enregistré avec la note que si le réglage Sauvegarder l’audio du parcours conserve l’audio. Ouvrez la note une fois dans Obsidian pour vérifier que le chemin et les libellés ressemblent à ce que vous attendez.</p>
+
+      <h2 id="recovery">5. Si l’enregistrement est interrompu</h2>
+      <p>Les deux pistes sont écrites sur le disque en segments durables avec un manifeste de récupération. Si le flux s’arrête, si le micro est débranché ou si Vox.md est forcé à quitter, les segments enregistrés jusque-là peuvent quand même être finalisés et transcrits. La récupération s’exécute quand la file d’enregistrement reprend, par exemple la prochaine fois que vous ouvrez Vox.md.</p>
+      <p>Une note issue d’une capture incomplète commence par une ligne d’avertissement qui indique quelle partie manquait, pour que vous sachiez que la transcription peut comporter des lacunes.</p>
+
+      <h2 id="consent">6. Prévenir les participants que vous enregistrez</h2>
+      <p>Les lois sur l’enregistrement et les règles des lieux de travail varient selon l’endroit et l’organisation. Certaines exigent le consentement de chacun. Dites aux autres participants que vous enregistrez et transcrivez, et obtenez leur consentement avant de commencer. Ceci n’est pas un conseil juridique ; vérifiez les règles qui s’appliquent à vous.</p>
+
+      <h2 id="compare">7. Comparer les approches de prise de notes de réunion</h2>
+      <p>Les outils de notes de réunion se répartissent grosso modo en trois groupes. Les produits diffèrent et évoluent, donc ce tableau décrit les approches, pas des produits précis. Si vous comparez des apps comme Granola, Otter ou Fireflies, consultez la documentation de chaque éditeur pour savoir où l’audio est traité et où les notes sont stockées.</p>
+      <p class="guide-table-hint">Sur un petit écran, balayez le tableau latéralement pour comparer les approches.</p>
+      <div class="guide-comparison" role="region" aria-label="Comparaison des approches de notes de réunion ; défilement horizontal sur petit écran" tabindex="0">
+        <table class="comparison">
+          <caption>Approches générales, revues le 18 novembre 2026</caption>
+          <thead><tr><th scope="col">Critère</th><th scope="col">Bot preneur de notes</th><th scope="col">App cloud sans bot</th><th scope="col">Capture locale Vox.md</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Comment il rejoint l’appel</th><td>Un bot rejoint l’appel en tant que participant</td><td>Une app sur votre ordinateur enregistre l’appel</td><td>L’app Mac enregistre l’audio d’une app et votre micro</td></tr>
+            <tr><th scope="row">Où l’audio est traité</td><td>Généralement sur les serveurs de l’éditeur</td><td>Généralement sur les serveurs de l’éditeur</td><td>Sur votre Mac</td></tr>
+            <tr><th scope="row">Où vivent les notes</td><td>Généralement dans l’espace de travail de l’éditeur</td><td>Généralement dans l’espace de travail de l’éditeur</td><td>Fichiers Markdown dans un dossier de votre choix</td></tr>
+            <tr><th scope="row">Compte</th><td>Généralement requis</td><td>Généralement requis</td><td>Non requis</td></tr>
+            <tr><th scope="row">Modèle tarifaire</td><td>Consultez la page de tarifs de l’éditeur</td><td>Consultez la page de tarifs de l’éditeur</td><td>15 minutes de transcription gratuites, puis un déblocage unique à vie</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Les outils cloud peuvent offrir des fonctions qu’une app locale n’a pas, comme des espaces de travail partagés ou des résumés couvrant de nombreuses réunions. Choisissez selon l’endroit où vous voulez que l’audio soit traité et où vous voulez que les notes aboutissent.</p>
+
+      <h2 id="limitations">8. Limites à connaître avant un long appel</h2>
+      <ul>
+        <li><strong>Une app par enregistrement.</strong> La capture de réunion enregistre une seule application plus votre micro.</li>
+        <li><strong>Les libellés sont fournis au mieux.</strong> Les étiquettes de locuteur dépendent d’un audio propre et séparé, et l’identification des locuteurs peut fusionner ou séparer des voix.</li>
+        <li><strong>La qualité dépend du modèle et de la langue.</strong> Les modèles plus grands demandent plus de stockage et de temps. Vérifiez les formulations importantes par rapport à l’audio avant de vous y fier.</li>
+        <li><strong>L’offre gratuite comprend 15 minutes de transcription.</strong> Une longue réunion peut les épuiser. L’utilisation illimitée est un achat unique à vie ; voir <a href="/fr/docs/#pricing-limits">utilisation gratuite et déblocage à vie</a>.</li>
+        <li><strong>Certaines choses quittent votre Mac.</strong> L’enregistrement et la transcription restent sur l’appareil, et l’audio n’est pas envoyé pour la transcription. Télécharger un modèle Whisper ou Parakeet contacte Hugging Face, comme décrit dans la <a href="/fr/privacy.html#third-party-services">politique de confidentialité</a>, et le modèle d’intervenants est lui aussi un téléchargement unique. Si votre coffre se synchronise avec iCloud Drive ou Obsidian Sync, la note terminée se synchronise selon les conditions de ce service. Vox.md écrit des fichiers ; la synchronisation est votre choix.</li>
+      </ul>
+      <p>Vous cherchez plutôt un moyen rapide de taper à la voix ? Sur Mac, le raccourci <strong>Transcrire à Clipboard</strong> dicte dans n’importe quelle app sans créer de note ; voir <a href="/fr/docs/#mac-keybinds">raccourcis globaux</a>.</p>
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Vos réunions,<br>sous forme de fichiers qui vous appartiennent.</h2>
+        <p>Faites un court appel de test avec un collègue qui l’a accepté, puis vérifiez la note Markdown dans votre coffre.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_fr_f0ba2ed6ae97">Télécharger Vox.md gratuitement</a></p>
+        <p>15 minutes de transcription gratuites · aucun compte requis · un déblocage à vie</p>
+      </section>
+      <nav class="toc" aria-label="Guides associés" id="related"><div class="toc-title">Poursuivre la configuration</div><ul>
+        <li><a href="/fr/docs/#mac-meeting">Référence de la capture de réunions sur Mac</a></li>
+        <li><a href="/fr/docs/#models">Modèles vocaux et langues</a></li>
+        <li><a href="/fr/blog/obsidian-capture-templates/">Recettes de chemins et de modèles</a></li>
+        <li><a href="/fr/blog/voice-notes-to-obsidian-iphone/">Enregistrer les notes vocales iPhone dans Obsidian</a></li>
+        <li><a href="/fr/blog/offline-transcription-iphone-markdown/">Préparer la transcription locale et une destination Markdown</a></li>
+        <li><a href="/fr/compare/vox-md-vs-obsidian-quick-capture/">Comparer Vox.md avec Obsidian Quick Capture</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/fr/">Accueil</a></li>
+        <li><a href="/fr/docs/">Documentation</a></li>
+        <li><a href="/fr/blog/">Guides</a></li>
+        <li><a href="/fr/compare/">Comparer</a></li>
+        <li><a href="/fr/privacy.html">Confidentialité</a></li>
+        <li><a href="/fr/terms.html">Conditions</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Assistance</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_fr_f0ba2ed6ae97">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Capture rapide pour notes locales · Aucun envoi de contenu.</div>
+    </div>
+  <details class="language-switcher"><summary>Langue</summary><ul><li><a href="/blog/transcribe-meetings-mac-obsidian/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-meetings-mac-obsidian/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-meetings-mac-obsidian/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-meetings-mac-obsidian/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-meetings-mac-obsidian/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-meetings-mac-obsidian/" lang="fr" hreflang="fr" aria-current="page">Français</a></li><li><a href="/hi/blog/transcribe-meetings-mac-obsidian/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-meetings-mac-obsidian/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-meetings-mac-obsidian/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-meetings-mac-obsidian/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-meetings-mac-obsidian/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-meetings-mac-obsidian/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-meetings-mac-obsidian/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-meetings-mac-obsidian/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-meetings-mac-obsidian/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-meetings-mac-obsidian/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-meetings-mac-obsidian/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-meetings-mac-obsidian/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-meetings-mac-obsidian/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-meetings-mac-obsidian/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-meetings-mac-obsidian/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
