@@ -1,36 +1,44 @@
-# Walks the Vox.md Wear OS screens used for the Play Store Wear screenshots:
-# Ready -> Recording -> Paused -> Stop (saved on watch). The preset chip exposes no text or id
-# to the runner tree, so the Capture Preset picker is not covered here.
+# Walks the redesigned Vox.md Wear OS screens used for the Play Store Wear screenshots:
+# Speak to… -> tap Daily (records) -> Pause below the fold -> Stop -> result screen (Speak again).
 #
 # Prerequisites: Wear OS emulator (AVD vox-wear-os5-large-round, Wear OS 5, 454x454 round) with
 #   the Wear debug APK installed (./gradlew -p apps/android :wear:assembleDebug) and the
-#   microphone and notification permissions granted. No phone pairing is needed.
-# Side effects: records a ~5 s audio clip that stays in the watch's saved-recordings queue
-#   (no paired phone to sync to). Discard it from Review recordings, or wipe app data.
+#   microphone and notification permissions granted. No phone pairing is needed; without one
+#   the result screen reads "Saved on Watch", with a connected phone "Sent to Daily".
+# Side effects: records a short audio clip that stays in the watch queue until a phone syncs it.
+#   Clear with `adb shell pm clear md.vox.android` (then re-grant permissions).
 # Store captures: run `adb exec-out screencap -p` at each state; outputs live in
 #   apps/android/play-console/graphics/screenshots/wear/raw/.
 # While a recording runs, `describe` (android-devtools) stops refreshing; the runner tree used
-#   here still exposes the control glyphs, so Pause and Stop are matched by their fixed glyphs.
+#   by these steps still resolves the controls.
 version: 1
 requires:
   platform: android
 steps:
-  - echo: Restart Vox.md on Wear. Expect the Ready recorder screen
+  - echo: Restart Vox.md on Wear. Expect the Speak to… preset list
   - launch: md.vox.android
   - await:
       visible:
-        text: Start Watch recording
+        text: Speak to…
       timeout: 10000
   - await: { idle: true }
-  - echo: On Ready. Tap REC to start recording
+  - echo: On Speak to…. Tap the Daily preset to start recording. Expect the Stop edge button
   - tap:
-      text: REC
-  - echo: Recording. Tap Pause, then Stop to save the clip on the watch
-  - tap:
-      text: Ⅱ
-  - tap:
-      text: ■
+      text: Start Watch recording
   - await:
       visible:
-        text: Start Watch recording
+        text: Stop Watch recording
       timeout: 10000
+  - echo: Recording. Scroll below the fold to Pause and tap it
+  - scroll-to:
+      target:
+        text: Pause
+  - tap:
+      text: Pause
+  - echo: Paused. Tap Stop and expect the result screen with Speak again
+  - tap:
+      text: Stop
+  - await:
+      visible:
+        text: Speak again
+      timeout: 15000

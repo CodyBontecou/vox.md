@@ -116,6 +116,14 @@ WEAR_PLATFORM_STRINGS = {
     "wear_discard_recording": "Discard Recording",
     "wear_keep_recording": "Done",
     "wear_back": "Done",
+    "wear_speak_to": "Speak to…",
+    "wear_speak_again": "Speak again",
+    "wear_sent_to": "Sent to %@",
+    "wear_saved_on_watch": "Saved on Watch",
+    "wear_pause": "Pause",
+    "wear_resume": "Resume",
+    "wear_cancel": "Cancel",
+    "wear_stop": "Stop",
 }
 SOURCE_ALIASES = {
     "Advanced YAML template": "Advanced YAML Template",
@@ -655,7 +663,7 @@ def platform_resource_files(catalog: dict) -> dict[Path, str]:
                 if value is None:
                     raise SystemExit(f"missing {locale} platform translation: {source}")
                 validate_format_compatibility(source, value, locale)
-                value = value.replace("%lld", "%1$d")
+                value = value.replace("%lld", "%1$d").replace("%@", "%1$s")
                 lines.append(f'    <string name="{name}">{android_string(value)}</string>')
             lines.append("</resources>")
             result[resource_root / f"values-{qualifier}" / "platform_localizations.xml"] = "\n".join(lines) + "\n"
