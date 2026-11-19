@@ -195,6 +195,7 @@ jobs:
     environment: google-play-qa
     outputs:
       aab_sha256: ${{ steps.signed.outputs.aab_sha256 }}
+      wear_aab_sha256: ${{ steps.signed.outputs.wear_aab_sha256 }}
     steps:
       - name: Check out the exact qualified source
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -280,6 +281,9 @@ jobs:
           aab="apps/android/app/build/outputs/bundle/release/app-release.aab"
           [[ -f "$aab" ]] || { echo '::error::signed phone AAB is missing'; exit 1; }
           echo "aab_sha256=$(sha256sum "$aab" | awk '{print $1}')" >>"$GITHUB_OUTPUT"
+          wear_aab="apps/android/wear/build/outputs/bundle/release/wear-release.aab"
+          [[ -f "$wear_aab" ]] || { echo '::error::signed Wear AAB is missing'; exit 1; }
+          echo "wear_aab_sha256=$(sha256sum "$wear_aab" | awk '{print $1}')" >>"$GITHUB_OUTPUT"
 
       - name: Delete the temporary upload keystore
         if: always()
@@ -291,6 +295,15 @@ jobs:
         with:
           name: vox-android-phone-signed-aab-${{ needs.resolve.outputs.version }}-${{ needs.resolve.outputs.release_sha }}
           path: apps/android/app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
+
+      - name: Transfer only the exact signed Wear artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: vox-android-wear-signed-aab-${{ needs.resolve.outputs.version }}-${{ needs.resolve.outputs.release_sha }}
+          path: apps/android/wear/build/outputs/bundle/release/wear-release.aab
           if-no-files-found: error
           retention-days: 7
           compression-level: 0
@@ -370,6 +383,94 @@ jobs:
         with:
           name: vox-android-phone-upload-result-${{ needs.resolve.outputs.version }}-${{ needs.resolve.outputs.release_sha }}-attempt-${{ github.run_attempt }}
           path: ${{ runner.temp }}/phone-upload-receipt.json
+          if-no-files-found: error
+          retention-days: 90
+          compression-level: 0
+
+  # Runs after the phone upload so the two Play edits never overlap. Requires Wear OS to be enabled
+  # as a form factor in Play Console; until then Play rejects the wear:internal track.
+  upload-wear:
+    name: Upload the Wear bundle to Wear Internal Testing
+    needs: [resolve, sign, upload]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment: google-play
+    steps:
+      - name: Check out release tooling
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ needs.resolve.outputs.release_sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Download the exact signed Wear artifact
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          name: vox-android-wear-signed-aab-${{ needs.resolve.outputs.version }}-${{ needs.resolve.outputs.release_sha }}
+          path: signed
+
+      - name: Verify the transferred artifact digest and derive the Wear versionCode
+        id: wear
+        shell: bash
+        env:
+          EXPECTED_SHA256: ${{ needs.sign.outputs.wear_aab_sha256 }}
+          PHONE_VERSION_CODE: ${{ needs.resolve.outputs.version_code }}
+        run: |
+          set -euo pipefail
+          actual=$(sha256sum signed/wear-release.aab | awk '{print $1}')
+          [[ "$actual" == "$EXPECTED_SHA256" ]] || {
+            echo "::error::signed Wear artifact digest mismatch: $actual"; exit 1;
+          }
+          # Mirrors wear/build.gradle.kts: the phone versionCode offset by 1,000,000.
+          echo "version_code=$((1000000 + PHONE_VERSION_CODE))" >>"$GITHUB_OUTPUT"
+
+      - name: Authenticate to Google Play with protected Workload Identity
+        id: play-auth
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
+        if: vars.GOOGLE_PLAY_WORKLOAD_IDENTITY_PROVIDER != ''
+        with:
+          workload_identity_provider: ${{ vars.GOOGLE_PLAY_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GOOGLE_PLAY_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/androidpublisher
+          create_credentials_file: false
+
+      - name: Stage service-account JSON authentication
+        if: vars.GOOGLE_PLAY_WORKLOAD_IDENTITY_PROVIDER == ''
+        shell: bash
+        env:
+          PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+        run: |
+          set -euo pipefail
+          [[ -n "$PLAY_SERVICE_ACCOUNT_JSON" ]] || {
+            echo '::error::set GOOGLE_PLAY_WORKLOAD_IDENTITY_PROVIDER vars or the PLAY_SERVICE_ACCOUNT_JSON secret'; exit 1;
+          }
+          key="$RUNNER_TEMP/vox-play-key.json"
+          printf '%s' "$PLAY_SERVICE_ACCOUNT_JSON" >"$key"
+          chmod 600 "$key"
+          echo "PLAY_CONSOLE_KEY_PATH=$key" >>"$GITHUB_ENV"
+
+      # The upload script's PHONE_* inputs predate Wear; PLAY_FORM_FACTOR=wear switches it to the
+      # Wear track, AAB and versionCode range.
+      - name: Upload Wear bundle to Wear Internal Testing
+        env:
+          PLAY_FORM_FACTOR: wear
+          CONFIRM_PLAY_PHONE_UPLOAD: md.vox.android:wear:internal:${{ steps.wear.outputs.version_code }}
+          PHONE_VERSION_CODE: ${{ steps.wear.outputs.version_code }}
+          PHONE_PLAY_TRACK: wear:internal
+          PLAY_RELEASE_STATUS: completed
+          PLAY_UPLOAD_RECEIPT_PATH: ${{ runner.temp }}/wear-upload-receipt.json
+          PLAY_ACCESS_TOKEN: ${{ steps.play-auth.outputs.access_token }}
+          PLAY_CONSOLE_KEY_PATH: ${{ env.PLAY_CONSOLE_KEY_PATH }}
+          PLAY_RELEASE_ROOT: ${{ github.workspace }}/apps/android
+          PHONE_AAB: ${{ github.workspace }}/signed/wear-release.aab
+        run: ./apps/android/scripts/upload-google-play-phone-release.sh
+
+      - name: Retain verified Wear upload receipt
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: vox-android-wear-upload-result-${{ needs.resolve.outputs.version }}-${{ needs.resolve.outputs.release_sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/wear-upload-receipt.json
           if-no-files-found: error
           retention-days: 90
           compression-level: 0
