@@ -1,5 +1,6 @@
 import AVFoundation
 import UIKit
+import VoxboardShared
 import XCTest
 @testable import Voxboard
 
@@ -50,5 +51,46 @@ final class StereoRecordingInputTests: XCTestCase {
 
     func testNotRequestedNeverTouchesTheSession() {
         XCTAssertEqual(StereoRecordingInput.configure(requested: false), .notRequested)
+    }
+
+    // MARK: - Which recordings may use stereo
+
+    func testKeyboardAndContinuousDictationStayMono() {
+        let ending: (RecordingCommand) -> VoiceAutoStopEndOfSpeechAction? = { _ in .endRecording }
+        let continuing: (RecordingCommand) -> VoiceAutoStopEndOfSpeechAction? = { _ in .commitSegmentAndContinue }
+        let off: (RecordingCommand) -> VoiceAutoStopEndOfSpeechAction? = { _ in nil }
+
+        XCTAssertFalse(PersistentRecorder.oneShotMayKeepAudio(
+            completionMode: .keyboardTranscription, flowId: nil, origin: nil, endOfSpeechAction: off
+        ))
+        XCTAssertFalse(PersistentRecorder.oneShotMayKeepAudio(
+            completionMode: .runVox(flowID: "flow"), flowId: "flow", origin: .quickRecord,
+            endOfSpeechAction: continuing
+        ))
+        XCTAssertTrue(PersistentRecorder.oneShotMayKeepAudio(
+            completionMode: .runVox(flowID: "flow"), flowId: "flow", origin: .quickRecord,
+            endOfSpeechAction: ending
+        ))
+        XCTAssertTrue(PersistentRecorder.oneShotMayKeepAudio(
+            completionMode: nil, flowId: "flow", origin: nil, endOfSpeechAction: off
+        ))
+    }
+
+    // MARK: - Tap scratch buffer
+
+    func testScratchInterleavesDuplicatesMonoAndGrows() {
+        let scratch = StereoInterleaveScratch(initialFrames: 2)
+        let left: [Float] = [1, 2, 3]
+        let right: [Float] = [-1, -2, -3]
+        left.withUnsafeBufferPointer { l in
+            right.withUnsafeBufferPointer { r in
+                let out = scratch.interleave(left: l.baseAddress!, right: r.baseAddress!, frames: 3)
+                XCTAssertEqual(Array(out), [1, -1, 2, -2, 3, -3])
+                // A mono buffer after a route change fills both sides.
+                let mono = scratch.interleave(left: l.baseAddress!, right: l.baseAddress!, frames: 2)
+                XCTAssertEqual(Array(mono), [1, 1, 2, 2])
+                XCTAssertTrue(scratch.interleave(left: l.baseAddress!, right: r.baseAddress!, frames: 0).isEmpty)
+            }
+        }
     }
 }

@@ -455,9 +455,6 @@ final class PersistentRecorder {
     private var keptAudioPreRollChannelCount = 1
     /// True when the current tap was installed with stereo built-in mic input.
     private var stereoInputActive = false
-    /// Stereo request (High/Lossless with Stereo on) the current tap was
-    /// installed for, so a settings change knows whether to rebuild it.
-    private var stereoRequestedForTap = false
     /// Pre-roll plus headroom for the main-queue hop before the journal opens.
     private var keptAudioPreRollSeconds: Double { preRollSeconds + 2 }
     private var segmentStartedAt: TimeInterval = 0
@@ -663,8 +660,13 @@ final class PersistentRecorder {
     /// Persistent keyboard-listening sessions save the auto-listen preference so
     /// the recorder can restart when the app is reopened. One-shot recordings pass
     /// `persistPreference: false` so the app returns to a fully idle audio session.
+    ///
+    /// `stereoEligible` is true only for a one-shot recording that can keep its
+    /// audio (not keyboard dictation or continuous dictation). Everything else,
+    /// including persistent keyboard listening, keeps today's mono input so
+    /// dictation transcripts are unchanged.
     @discardableResult
-    func startListening(persistPreference: Bool = true) -> Bool {
+    func startListening(persistPreference: Bool = true, stereoEligible: Bool = false) -> Bool {
         guard !isListening else {
             log.log("[PersistentRecorder] Already listening")
             if persistPreference {
@@ -687,7 +689,7 @@ final class PersistentRecorder {
         }
 
         let keptQuality = RecordingQuality.load(from: AppConstants.sharedDefaults)
-        let stereoRequested = StereoRecordingPreference.requestsStereo(
+        let stereoRequested = stereoEligible && StereoRecordingPreference.requestsStereo(
             quality: keptQuality,
             enabled: StereoRecordingPreference.load(from: AppConstants.sharedDefaults)
         )
@@ -744,7 +746,8 @@ final class PersistentRecorder {
             log.log("[PersistentRecorder] Stereo input reported \(hwFormat.channelCount) ch; keeping mono")
         }
         stereoInputActive = keptChannelCount == 2
-        stereoRequestedForTap = stereoRequested
+        // Reused by the tap for interleaved stereo; no per-buffer allocation.
+        let stereoScratch = keptChannelCount == 2 ? StereoInterleaveScratch() : nil
         configureKeptAudioPreRoll(
             keptQuality,
             inputSampleRate: hwFormat.sampleRate,
@@ -757,38 +760,30 @@ final class PersistentRecorder {
         inputNode.installTap(onBus: 0, bufferSize: bufferSize, format: hwFormat) { [weak self] buffer, _ in
             guard let self else { return }
 
-            // Raw channel 0 for High/Lossless (left and right interleaved in
-            // stereo); only copied if a kept recording or its pre-roll history
-            // is active (see appendToSegmentJournal).
-            var stereoInput: [Float] = []
+            // Raw channel 0 for High/Lossless; in stereo, left and right
+            // interleaved into a reused scratch buffer (a mono buffer after a
+            // route change is duplicated to both sides so the take continues).
+            // Only copied on if a kept recording or its pre-roll history is
+            // active (see appendToSegmentJournal).
             let rawInput: UnsafeBufferPointer<Float>?
-            if keptChannelCount == 2, let data = buffer.floatChannelData, buffer.format.channelCount >= 2 {
-                let frames = Int(buffer.frameLength)
-                stereoInput = [Float](repeating: 0, count: frames * 2)
-                for frame in 0..<frames {
-                    stereoInput[frame * 2] = data[0][frame]
-                    stereoInput[frame * 2 + 1] = data[1][frame]
-                }
-                rawInput = nil
+            let rawChannelCount: Int
+            if let stereoScratch, let data = buffer.floatChannelData {
+                rawInput = stereoScratch.interleave(
+                    left: data[0],
+                    right: buffer.format.channelCount >= 2 ? data[1] : data[0],
+                    frames: Int(buffer.frameLength)
+                )
+                rawChannelCount = 2
             } else {
                 rawInput = buffer.floatChannelData.map {
                     UnsafeBufferPointer(start: $0[0], count: Int(buffer.frameLength))
                 }
+                rawChannelCount = 1
             }
-            let rawChannelCount = stereoInput.isEmpty ? 1 : 2
             func appendRaw(_ ptr: UnsafeBufferPointer<Float>) {
-                if stereoInput.isEmpty {
-                    self.appendToSegmentJournal(
-                        ptr, rawInput: rawInput, rawSampleRate: inputSampleRate, rawChannelCount: 1
-                    )
-                } else {
-                    stereoInput.withUnsafeBufferPointer { stereo in
-                        self.appendToSegmentJournal(
-                            ptr, rawInput: stereo, rawSampleRate: inputSampleRate,
-                            rawChannelCount: rawChannelCount
-                        )
-                    }
-                }
+                self.appendToSegmentJournal(
+                    ptr, rawInput: rawInput, rawSampleRate: inputSampleRate, rawChannelCount: rawChannelCount
+                )
             }
 
             if let converter, let targetFormat {
@@ -1116,7 +1111,12 @@ final class PersistentRecorder {
         let startedTemporaryListening = !isListening
         if startedTemporaryListening {
             shouldAutoStopListeningAfterCurrentRecording = true
-            guard startListening(persistPreference: false) else {
+            let stereoEligible = Self.oneShotMayKeepAudio(
+                completionMode: completionMode,
+                flowId: requestedFlowId,
+                origin: requestedOrigin
+            )
+            guard startListening(persistPreference: false, stereoEligible: stereoEligible) else {
                 shouldAutoStopListeningAfterCurrentRecording = false
                 return false
             }
@@ -3002,26 +3002,35 @@ final class PersistentRecorder {
 
     // MARK: - Recording Quality (kept audio)
 
+    /// True when a one-shot recording may keep its audio, so it may record
+    /// stereo. Keyboard dictation never keeps audio, and continuous dictation
+    /// (voice auto-stop commits segments) never does either; both keep the
+    /// mono input their transcripts have always used.
+    static func oneShotMayKeepAudio(
+        completionMode: RecordingCompletionMode?,
+        flowId: String?,
+        origin: RecordingCommand.Origin?,
+        endOfSpeechAction: (RecordingCommand) -> VoiceAutoStopEndOfSpeechAction? = {
+            VoiceAutoStopPolicy.endOfSpeechAction(for: $0)
+        }
+    ) -> Bool {
+        let mode = completionMode ?? .runVox(flowID: flowId ?? CapturePresetStore.selectedFlowId())
+        guard mode != .keyboardTranscription else { return false }
+        let probe = RecordingCommand(
+            requestId: "stereo-eligibility",
+            action: .startSegment,
+            origin: mode.commandOrigin(overriding: origin)
+        )
+        return endOfSpeechAction(probe) != .commitSegmentAndContinue
+    }
+
     /// Applies the current Recording quality to the live tap. Called when
     /// listening starts and when the setting changes; the next recording uses
     /// it. A recording already in progress keeps its own writer.
     func recordingQualityDidChange() {
+        // Mono ↔ stereo is chosen when a one-shot recording starts listening,
+        // so a settings change never restarts a running engine.
         let quality = RecordingQuality.load(from: AppConstants.sharedDefaults)
-        let stereoRequested = StereoRecordingPreference.requestsStereo(
-            quality: quality,
-            enabled: StereoRecordingPreference.load(from: AppConstants.sharedDefaults)
-        )
-        if isListening, stereoRequested != stereoRequestedForTap {
-            // Mono ↔ stereo changes the input format, so the tap has to be
-            // rebuilt. Only while idle: a take in progress keeps its layout
-            // and the next listening start applies the change.
-            guard !isSegmentActive, !shouldAutoStopListeningAfterCurrentRecording else { return }
-            let persist = AppConstants.sharedDefaults?.bool(forKey: AppConstants.autoListenEnabledKey) ?? false
-            log.log("[PersistentRecorder] Stereo \(stereoRequested ? "on" : "off") — restarting input")
-            stopListening(endLiveActivity: false)
-            startListening(persistPreference: persist)
-            return
-        }
         let (rate, channels) = segmentJournalLock.withLock {
             (keptAudioPreRollSampleRate, keptAudioPreRollChannelCount)
         }

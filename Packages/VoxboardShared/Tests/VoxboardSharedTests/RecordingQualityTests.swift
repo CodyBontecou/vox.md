@@ -408,6 +408,27 @@ final class RecordingQualityTests: XCTestCase {
         XCTAssertGreaterThan(peak, 0.1)
     }
 
+    func test_bothWhisperConvertersMixARightOnlyStereoFile() throws {
+        // A stereo Vox recording can reach the import paths too (for example
+        // after an export and re-import). Neither converter may drop a side.
+        let url = root.appendingPathComponent("right-only.m4a")
+        let writer = try KeptAudioFileWriter(url: url, quality: .lossless, channelCount: 2)
+        var samples = [Float](repeating: 0, count: 48_000 * 2)
+        for frame in 0..<48_000 {
+            samples[frame * 2 + 1] = Float(sin(2 * Double.pi * 440 * Double(frame) / 48_000) * 0.5)
+        }
+        try writer.append(samples: samples)
+        XCTAssertNotNil(writer.finalize())
+
+        let whole = root.appendingPathComponent("whole.wav")
+        try AudioFileConverter.convertToWhisperWAV(inputURL: url, outputURL: whole)
+        let streamed = root.appendingPathComponent("streamed.wav")
+        try AudioFileConverter.convertToWhisperWAVStreaming(inputURL: url, outputURL: streamed)
+        for copy in [whole, streamed] {
+            XCTAssertGreaterThan(try peak(of: copy), 0.1, copy.lastPathComponent)
+        }
+    }
+
     func test_stereoWriterResamplesInterleavedFramesAndKeepsChannelsApart() throws {
         let resampler = try XCTUnwrap(KeptAudioResampler(sampleRate: 48_000, channelCount: 2))
         var out: [Float] = []
@@ -490,6 +511,18 @@ final class RecordingQualityTests: XCTestCase {
         try writer.append(samples: samples)
         XCTAssertEqual(writer.duration, seconds, accuracy: 0.001)
         return try XCTUnwrap(writer.finalize())
+    }
+
+    private func peak(of url: URL) throws -> Float {
+        let file = try AVAudioFile(forReading: url)
+        XCTAssertEqual(file.fileFormat.channelCount, 1)
+        let buffer = try XCTUnwrap(AVAudioPCMBuffer(
+            pcmFormat: file.processingFormat,
+            frameCapacity: AVAudioFrameCount(file.length)
+        ))
+        try file.read(into: buffer)
+        let mono = try XCTUnwrap(buffer.floatChannelData?[0])
+        return (0..<Int(buffer.frameLength)).reduce(Float(0)) { max($0, abs(mono[$1])) }
     }
 
     private func assertTranscriptionCopy(of kept: URL, expectedSeconds: Double) throws {

@@ -10,6 +10,9 @@ import VoxboardShared
 /// Only used for High and Lossless with the Stereo setting on. Everything else,
 /// including an external, Bluetooth or AirPods input, or a device without a
 /// stereo polar pattern, stays mono and still records.
+///
+/// Main actor only: it touches UIKit scenes and shared session state.
+@MainActor
 enum StereoRecordingInput {
     enum Outcome: Equatable {
         /// Stereo was not asked for; any earlier stereo selection was undone.
@@ -64,18 +67,14 @@ enum StereoRecordingInput {
 
     /// Interface orientation of the foreground window scene, if any.
     static func currentInterfaceOrientation() -> UIInterfaceOrientation {
-        let read = { () -> UIInterfaceOrientation in
-            let scenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
-            let scene = scenes.first { $0.activationState == .foregroundActive } ?? scenes.first
-            return scene?.effectiveGeometry.interfaceOrientation ?? .portrait
-        }
-        if Thread.isMainThread { return MainActor.assumeIsolated { read() } }
-        return DispatchQueue.main.sync { MainActor.assumeIsolated { read() } }
+        let scenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+        let scene = scenes.first { $0.activationState == .foregroundActive } ?? scenes.first
+        return scene?.effectiveGeometry.interfaceOrientation ?? .portrait
     }
 
     /// The data source this process switched to stereo, so it can be undone
     /// when Stereo is turned off or the quality goes back to Speech.
-    nonisolated(unsafe) private static var configuredSource: (port: String, source: NSNumber)?
+    private static var configuredSource: (port: String, source: NSNumber)?
 
     /// Applies (or undoes) stereo on the active session. Call after
     /// `setCategory` / `setActive` and before reading the input node's format.
@@ -137,5 +136,44 @@ enum StereoRecordingInput {
             try? source.setPreferredPolarPattern(nil)
         }
         try? port.setPreferredDataSource(nil)
+    }
+}
+
+/// Interleaves two Float32 channels (L R L R …) into a buffer the audio tap
+/// reuses, so stereo capture does not allocate on every tap callback. It only
+/// grows when a larger buffer arrives.
+///
+/// Not thread-safe: one instance belongs to one tap, which AVAudioEngine calls
+/// serially. The returned pointer is valid until the next `interleave` call.
+nonisolated final class StereoInterleaveScratch: @unchecked Sendable {
+    private var storage: UnsafeMutablePointer<Float>
+    private var capacity: Int
+
+    init(initialFrames: Int = 8_192) {
+        capacity = max(1, initialFrames) * 2
+        storage = .allocate(capacity: capacity)
+    }
+
+    deinit { storage.deallocate() }
+
+    /// Interleaves `frames` frames from `left` and `right`. Pass the same
+    /// pointer twice to duplicate a mono buffer into both channels.
+    func interleave(
+        left: UnsafePointer<Float>,
+        right: UnsafePointer<Float>,
+        frames: Int
+    ) -> UnsafeBufferPointer<Float> {
+        guard frames > 0 else { return UnsafeBufferPointer(start: storage, count: 0) }
+        let needed = frames * 2
+        if needed > capacity {
+            storage.deallocate()
+            capacity = needed
+            storage = .allocate(capacity: capacity)
+        }
+        for frame in 0..<frames {
+            storage[frame * 2] = left[frame]
+            storage[frame * 2 + 1] = right[frame]
+        }
+        return UnsafeBufferPointer(start: storage, count: needed)
     }
 }

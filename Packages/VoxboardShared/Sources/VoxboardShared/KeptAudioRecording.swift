@@ -359,11 +359,7 @@ public enum KeptAudioInspector {
     /// engine hears both microphones, as it does with a mono take.
     @discardableResult
     public static func makeTranscriptionCopy(of sourceURL: URL, at outputURL: URL) throws -> URL {
-        try AudioFileConverter.convertToWhisperWAVStreaming(
-            inputURL: sourceURL,
-            outputURL: outputURL,
-            downmix: true
-        )
+        try AudioFileConverter.convertToWhisperWAVStreaming(inputURL: sourceURL, outputURL: outputURL)
     }
 }
 #endif
