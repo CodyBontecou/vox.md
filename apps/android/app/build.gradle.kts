@@ -32,8 +32,8 @@ android {
         // Setup links for ScrawlKit (debug builds): `scrawl link --scheme voxscrawl`.
         manifestPlaceholders["scrawlScheme"] = "voxscrawl"
         applicationId = "md.vox.android"
-        versionCode = 8
-        versionName = "3.0.2"
+        versionCode = 9
+        versionName = "3.0.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     packaging.jniLibs.excludes += setOf(
