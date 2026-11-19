@@ -11,21 +11,36 @@ extension RecordingQuality {
     }
 
     /// "≈ 0.5 MB/min". The number uses the app's UI language, not the device
-    /// region, so it reads the same way as the words around it.
-    var localizedStoragePerMinute: String {
+    /// region, so it reads the same way as the words around it. With Stereo on,
+    /// High and Lossless show the two-channel size.
+    func localizedStoragePerMinute(stereo: Bool = false) -> String {
         let language = Bundle.main.preferredLocalizations.first
         let locale = language.map(Locale.init(identifier:)) ?? .current
-        let megabytes = approximateMegabytesPerMinuteText(locale: locale)
+        let megabytes = approximateMegabytesPerMinuteText(
+            channelCount: StereoRecordingPreference.requestedChannelCount(quality: self, enabled: stereo),
+            locale: locale
+        )
         return String(localized: "≈ \(megabytes) MB/min")
     }
 
-    var formatSummary: String {
+    var localizedStoragePerMinute: String { localizedStoragePerMinute() }
+
+    func formatSummary(stereo: Bool = false) -> String {
+        let stereo = StereoRecordingPreference.requestsStereo(quality: self, enabled: stereo)
         switch self {
         case .speech: return String(localized: "16 kHz mono AAC")
-        case .high: return String(localized: "48 kHz mono AAC, about 64 kbps")
-        case .lossless: return String(localized: "48 kHz mono Apple Lossless (ALAC)")
+        case .high:
+            return stereo
+                ? String(localized: "48 kHz stereo AAC, about 128 kbps")
+                : String(localized: "48 kHz mono AAC, about 64 kbps")
+        case .lossless:
+            return stereo
+                ? String(localized: "48 kHz stereo Apple Lossless (ALAC)")
+                : String(localized: "48 kHz mono Apple Lossless (ALAC)")
         }
     }
+
+    var formatSummary: String { formatSummary() }
 
     var settingsDescription: String {
         switch self {
@@ -45,6 +60,11 @@ struct RecordingQualitySettingsView: View {
     var onChange: (RecordingQuality) -> Void = { _ in }
 
     @State private var selection = RecordingQuality.load(from: AppConstants.sharedDefaults)
+    @State private var stereo = StereoRecordingPreference.load(from: AppConstants.sharedDefaults)
+    /// Keyboard Listening keeps the always-on mono input, which new
+    /// recordings reuse; warn when that overrides Stereo.
+    @State private var keyboardListeningOn = AppConstants.sharedDefaults?
+        .bool(forKey: AppConstants.autoListenEnabledKey) ?? false
 
     var body: some View {
         Form {
@@ -67,12 +87,62 @@ struct RecordingQualitySettingsView: View {
             }
             .listRowBackground(Geist.card)
 
+            if selection.supportsStereo {
+                Section {
+                    Toggle(isOn: Binding(
+                        get: { stereo },
+                        set: { enabled in
+                            guard stereo != enabled else { return }
+                            stereo = enabled
+                            StereoRecordingPreference.save(enabled, to: AppConstants.sharedDefaults)
+                            onChange(selection)
+                        }
+                    )) {
+                        Text("Stereo")
+                            .font(Geist.label(.body))
+                            .foregroundStyle(Geist.text)
+                    }
+                    .tint(Geist.accent)
+                    .accessibilityIdentifier("recording_quality_stereo")
+
+                    if stereo, keyboardListeningOn {
+                        Label {
+                            Text("Keyboard Listening is on, so new recordings are mono. Turn it off to record in stereo.")
+                                .font(Geist.caption())
+                                .foregroundStyle(Geist.text)
+                                .fixedSize(horizontal: false, vertical: true)
+                        } icon: {
+                            Image(systemName: "exclamationmark.triangle")
+                                .foregroundStyle(Geist.muted)
+                        }
+                        .accessibilityIdentifier("recording_quality_stereo_keyboard_listening_warning")
+                    }
+                } footer: {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Records High and Lossless in stereo with the iPhone's built-in microphones, for a more natural sound with music and nature. External, Bluetooth and AirPods microphones, and Apple Watch, record in mono.")
+                        // Keyboard Listening keeps one always-on mono input so
+                        // dictation transcripts don't change; recordings that
+                        // reuse it are mono too.
+                        Text("Keyboard dictation, and recordings made while Keyboard Listening is on, stay mono.")
+                            .accessibilityIdentifier("recording_quality_stereo_keyboard_note")
+                    }
+                }
+                .listRowBackground(Geist.card)
+            }
+
             if selection != .speech {
                 Section {
                     Label {
-                        Text("High and Lossless use more Apple Watch battery and take longer to send to iPhone.")
-                            .font(Geist.caption())
-                            .foregroundStyle(Geist.muted)
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("High and Lossless use more Apple Watch battery and take longer to send to iPhone.")
+                            if StereoRecordingPreference.requestsStereo(quality: selection, enabled: stereo) {
+                                // The sizes above are stereo; the Watch has one
+                                // microphone and keeps recording mono.
+                                Text("Apple Watch records in mono: \(selection.localizedStoragePerMinute(stereo: false))")
+                            }
+                        }
+                        .font(Geist.caption())
+                        .foregroundStyle(Geist.muted)
                     } icon: {
                         Image(systemName: "applewatch")
                             .foregroundStyle(Geist.muted)
@@ -84,6 +154,10 @@ struct RecordingQualitySettingsView: View {
         }
         .scrollContentBackground(.hidden)
         .background(Geist.bg.ignoresSafeArea())
+        .onAppear {
+            keyboardListeningOn = AppConstants.sharedDefaults?
+                .bool(forKey: AppConstants.autoListenEnabledKey) ?? false
+        }
         .navigationTitle("Recording Quality")
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -95,11 +169,11 @@ struct RecordingQualitySettingsView: View {
                     Text(quality.displayName)
                         .font(Geist.label(.body))
                         .foregroundStyle(Geist.text)
-                    Text(quality.localizedStoragePerMinute)
+                    Text(quality.localizedStoragePerMinute(stereo: stereo))
                         .font(Geist.mono(size: 11, relativeTo: .caption))
                         .foregroundStyle(Geist.muted)
                 }
-                Text(quality.formatSummary)
+                Text(quality.formatSummary(stereo: stereo))
                     .font(Geist.mono(size: 11, relativeTo: .caption))
                     .foregroundStyle(Geist.muted)
                 Text(quality.settingsDescription)

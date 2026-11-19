@@ -43,34 +43,51 @@ public enum RecordingQuality: String, CaseIterable, Codable, Sendable, Identifia
     /// file links and Recording Only exports keep the same extension.
     public var fileExtension: String { "m4a" }
 
-    /// Target AAC bit rate, when the format uses one.
-    public var encoderBitRate: Int? {
+    /// Target AAC bit rate, when the format uses one. Stereo doubles it so
+    /// each channel keeps the mono rate.
+    public func encoderBitRate(channelCount: Int = 1) -> Int? {
         switch self {
-        case .high: return 64_000
+        case .high: return 64_000 * max(1, channelCount)
         case .speech, .lossless: return nil
         }
     }
+
+    /// Target AAC bit rate of a mono recording, when the format uses one.
+    public var encoderBitRate: Int? { encoderBitRate(channelCount: 1) }
+
+    /// True when the Stereo setting can apply to this quality. Speech stays
+    /// 16 kHz mono: it is the transcription format.
+    public var supportsStereo: Bool { recordsSeparateKeptAudio }
 
     /// Bit depth of the lossless encoding.
     public static let losslessBitDepth = 16
 
     /// Rough size of one minute of kept audio, used for the storage hint.
     /// Speech and High are AAC bit rates; Lossless assumes ALAC compresses
-    /// 16-bit 48 kHz mono PCM (5.76 MB/min) to roughly half.
-    public var approximateBytesPerMinute: Int {
+    /// 16-bit 48 kHz mono PCM (5.76 MB/min) to roughly half. Stereo doubles
+    /// High and Lossless; Speech is always mono.
+    public func approximateBytesPerMinute(channelCount: Int) -> Int {
+        let channels = supportsStereo ? max(1, channelCount) : 1
         switch self {
         case .speech: return 240_000
-        case .high: return 480_000
-        case .lossless: return 2_900_000
+        case .high: return 480_000 * channels
+        case .lossless: return 2_900_000 * channels
         }
     }
+
+    /// Rough size of one minute of mono kept audio.
+    public var approximateBytesPerMinute: Int { approximateBytesPerMinute(channelCount: 1) }
 
     /// Megabytes per minute for the storage hint ("0.5", "3"), formatted for
     /// `locale`. The app passes the locale of its UI language so the number
     /// matches the localized "≈ … MB/min" around it.
-    public func approximateMegabytesPerMinuteText(locale: Locale = .current) -> String {
-        let megabytes = Double(approximateBytesPerMinute) / 1_000_000
-        let digits = megabytes >= 1 ? 0 : 1
+    public func approximateMegabytesPerMinuteText(
+        channelCount: Int = 1,
+        locale: Locale = .current
+    ) -> String {
+        let megabytes = Double(approximateBytesPerMinute(channelCount: channelCount)) / 1_000_000
+        // Decide on the rounded value so 0.96 reads "1", not "1.0".
+        let digits = (megabytes * 10).rounded() / 10 >= 1 ? 0 : 1
         return megabytes.formatted(.number.precision(.fractionLength(digits)).locale(locale))
     }
 
@@ -97,17 +114,22 @@ public enum RecordingQuality: String, CaseIterable, Codable, Sendable, Identifia
     ///
     /// `speech` is exactly the 16 kHz AAC configuration the Watch has always
     /// used, so choosing it keeps file format and size unchanged.
-    public var recorderSettings: [String: Any] {
+    public var recorderSettings: [String: Any] { recorderSettings(channelCount: 1) }
+
+    /// Settings for a kept recording with `channelCount` channels (1 or 2).
+    /// Speech ignores the count and stays mono.
+    public func recorderSettings(channelCount: Int) -> [String: Any] {
+        let channels = supportsStereo ? min(max(1, channelCount), 2) : 1
         var settings: [String: Any] = [
             AVFormatIDKey: Int(formatID),
             AVSampleRateKey: sampleRate,
-            AVNumberOfChannelsKey: 1,
+            AVNumberOfChannelsKey: channels,
         ]
         switch self {
         case .speech:
             settings[AVEncoderAudioQualityKey] = AVAudioQuality.high.rawValue
         case .high:
-            settings[AVEncoderBitRateKey] = encoderBitRate ?? 64_000
+            settings[AVEncoderBitRateKey] = encoderBitRate(channelCount: channels) ?? 64_000
             settings[AVEncoderAudioQualityKey] = AVAudioQuality.high.rawValue
         case .lossless:
             settings[AVEncoderBitDepthHintKey] = Self.losslessBitDepth
@@ -115,6 +137,35 @@ public enum RecordingQuality: String, CaseIterable, Codable, Sendable, Identifia
         return settings
     }
     #endif
+}
+
+/// iPhone setting that records High and Lossless in stereo from the built-in
+/// microphones. It is stored next to `RecordingQuality` on iPhone and is never
+/// synced to Apple Watch, which has a single microphone and stays mono.
+///
+/// Stereo is a request: the recorder falls back to mono, without failing the
+/// recording, when the input is an external, Bluetooth or AirPods microphone or
+/// the device has no stereo polar pattern.
+public enum StereoRecordingPreference {
+    public static let defaultsKey = "recordingStereo"
+
+    public static func load(from defaults: UserDefaults?) -> Bool {
+        defaults?.bool(forKey: defaultsKey) ?? false
+    }
+
+    public static func save(_ enabled: Bool, to defaults: UserDefaults?) {
+        defaults?.set(enabled, forKey: defaultsKey)
+    }
+
+    /// True when a recording at `quality` should ask for stereo input.
+    public static func requestsStereo(quality: RecordingQuality, enabled: Bool) -> Bool {
+        enabled && quality.supportsStereo
+    }
+
+    /// Channel count used for storage hints and the storage guard.
+    public static func requestedChannelCount(quality: RecordingQuality, enabled: Bool) -> Int {
+        requestsStereo(quality: quality, enabled: enabled) ? 2 : 1
+    }
 }
 
 /// Keeps High/Lossless from filling a device (Apple Watch above all), where a
@@ -128,19 +179,25 @@ public enum RecordingQualityStorageGuard {
     /// Space always left for the system, the transfer queue and other apps.
     public static let minimumFreeBytes: Int64 = 200_000_000
 
-    public static func requiredFreeBytes(for quality: RecordingQuality) -> Int64 {
-        minimumFreeBytes + Int64(quality.approximateBytesPerMinute) * Int64(reservedRecordingMinutes)
+    public static func requiredFreeBytes(for quality: RecordingQuality, channelCount: Int = 1) -> Int64 {
+        minimumFreeBytes
+            + Int64(quality.approximateBytesPerMinute(channelCount: channelCount)) * Int64(reservedRecordingMinutes)
     }
 
     /// Quality to record with, given free space on the recordings volume.
     /// Unknown free space keeps the request; Speech is never downgraded.
+    /// `channelCount` is the requested layout (2 for stereo); the space check
+    /// covers that many channels.
     public static func effectiveQuality(
         requested: RecordingQuality,
-        availableBytes: Int64?
+        availableBytes: Int64?,
+        channelCount: Int = 1
     ) -> RecordingQuality {
         guard requested != .speech, let availableBytes else { return requested }
         let candidates: [RecordingQuality] = requested == .lossless ? [.lossless, .high] : [.high]
-        return candidates.first { availableBytes >= requiredFreeBytes(for: $0) } ?? .speech
+        return candidates.first {
+            availableBytes >= requiredFreeBytes(for: $0, channelCount: channelCount)
+        } ?? .speech
     }
 
     /// Free space on the volume holding `url`, if the system reports it.

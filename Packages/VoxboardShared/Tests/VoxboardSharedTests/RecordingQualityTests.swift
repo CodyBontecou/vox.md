@@ -264,6 +264,47 @@ final class RecordingQualityTests: XCTestCase {
         XCTAssertEqual(jobs.map(\.id), [jobID])
     }
 
+    func test_claimedStereoTakeRecoversAsOneStereoJobWithA16kMonoCopy() async throws {
+        let recordings = root.appendingPathComponent("Recordings", isDirectory: true)
+        try FileManager.default.createDirectory(at: recordings, withIntermediateDirectories: true)
+        let kept = KeptAudioArtifacts.makeURL(in: recordings, requestID: "stereo", quality: .lossless)
+        let writer = try KeptAudioFileWriter(url: kept, quality: .lossless, channelCount: 2)
+        try writer.append(samples: (0..<(48_000 * 2)).map { Float(sin(Double($0 / 2) / 15) * 0.3) })
+        XCTAssertNotNil(writer.finalize())
+        let journal = recordings.appendingPathComponent("segment_active_stereo_2.wav")
+        try Data("journal".utf8).write(to: journal)
+        let jobID = UUID()
+        try RecordingJobHandoffIntentStore(recordingsDirectoryURL: recordings).save(
+            RecordingJobHandoffIntent(
+                jobID: jobID,
+                readiness: .ready,
+                audioFilename: kept.lastPathComponent,
+                relatedAudioFilenames: [journal.lastPathComponent],
+                createdAt: Date().addingTimeInterval(-120),
+                duration: 1,
+                source: .iOSApp,
+                delivery: .captureDraft(attachAudio: true),
+                modelID: "automatic",
+                language: "auto",
+                configuration: .default
+            )
+        )
+        XCTAssertTrue(KeptAudioArtifacts.removeUnclaimed(in: recordings).isEmpty)
+
+        let store = RecordingJobStore(rootDirectoryURL: root.appendingPathComponent("queue"))
+        let recovered = try await store.recoverExternalOrphans(recordingsDirectoryURL: recordings)
+        let job = try XCTUnwrap(recovered.first)
+        XCTAssertEqual(recovered.map(\.id), [jobID])
+        let audio = store.audioURL(for: job)
+        let format = try XCTUnwrap(KeptAudioInspector.format(of: audio))
+        XCTAssertEqual(format.channelCount, 2)
+        XCTAssertEqual(format.sampleRate, 48_000)
+        XCTAssertTrue(KeptAudioInspector.isKeptRecordingFormat(audio))
+        try assertTranscriptionCopy(of: audio, expectedSeconds: 1)
+        let again = try await store.recoverExternalOrphans(recordingsDirectoryURL: recordings)
+        XCTAssertTrue(again.isEmpty)
+    }
+
     // MARK: - Storage guard (Watch transfers)
 
     func test_storageGuardStepsDownWhenSpaceIsShort() {
@@ -319,6 +360,225 @@ final class RecordingQualityTests: XCTestCase {
         XCTAssertEqual(KeptAudioInspector.format(of: url)?.formatID, kAudioFormatAppleLossless)
     }
 
+    // MARK: - Stereo (#118)
+
+    func test_stereoPreferenceDefaultsOffAndOnlyAppliesToHighAndLossless() throws {
+        let suite = "RecordingQualityTests-\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+
+        XCTAssertFalse(StereoRecordingPreference.load(from: defaults))
+        XCTAssertFalse(StereoRecordingPreference.load(from: nil))
+        StereoRecordingPreference.save(true, to: defaults)
+        XCTAssertTrue(StereoRecordingPreference.load(from: defaults))
+        XCTAssertNotEqual(StereoRecordingPreference.defaultsKey, RecordingQuality.watchPayloadKey)
+
+        XCTAssertFalse(StereoRecordingPreference.requestsStereo(quality: .speech, enabled: true))
+        XCTAssertTrue(StereoRecordingPreference.requestsStereo(quality: .high, enabled: true))
+        XCTAssertTrue(StereoRecordingPreference.requestsStereo(quality: .lossless, enabled: true))
+        XCTAssertFalse(StereoRecordingPreference.requestsStereo(quality: .lossless, enabled: false))
+        XCTAssertEqual(StereoRecordingPreference.requestedChannelCount(quality: .speech, enabled: true), 1)
+        XCTAssertEqual(StereoRecordingPreference.requestedChannelCount(quality: .high, enabled: true), 2)
+    }
+
+    func test_stereoSettingsAndStorageHints() {
+        let high = RecordingQuality.high.recorderSettings(channelCount: 2)
+        XCTAssertEqual(high[AVNumberOfChannelsKey] as? Int, 2)
+        XCTAssertEqual(high[AVEncoderBitRateKey] as? Int, 128_000)
+        XCTAssertEqual(RecordingQuality.lossless.recorderSettings(channelCount: 2)[AVNumberOfChannelsKey] as? Int, 2)
+        // Speech is the transcription format and never records stereo.
+        XCTAssertEqual(RecordingQuality.speech.recorderSettings(channelCount: 2)[AVNumberOfChannelsKey] as? Int, 1)
+        XCTAssertEqual(RecordingQuality.high.recorderSettings[AVNumberOfChannelsKey] as? Int, 1)
+
+        XCTAssertEqual(RecordingQuality.high.approximateBytesPerMinute(channelCount: 2), 960_000)
+        XCTAssertEqual(RecordingQuality.lossless.approximateBytesPerMinute(channelCount: 2), 5_800_000)
+        XCTAssertEqual(RecordingQuality.speech.approximateBytesPerMinute(channelCount: 2), 240_000)
+        let english = Locale(identifier: "en")
+        XCTAssertEqual(RecordingQuality.high.approximateMegabytesPerMinuteText(channelCount: 2, locale: english), "1")
+        XCTAssertEqual(RecordingQuality.lossless.approximateMegabytesPerMinuteText(channelCount: 2, locale: english), "6")
+
+        typealias Guard = RecordingQualityStorageGuard
+        let stereoLossless = Guard.requiredFreeBytes(for: .lossless, channelCount: 2)
+        XCTAssertGreaterThan(stereoLossless, Guard.requiredFreeBytes(for: .lossless))
+        XCTAssertEqual(
+            Guard.effectiveQuality(requested: .lossless, availableBytes: stereoLossless - 1, channelCount: 2),
+            .high
+        )
+        XCTAssertEqual(
+            Guard.effectiveQuality(requested: .lossless, availableBytes: stereoLossless, channelCount: 2),
+            .lossless
+        )
+    }
+
+    func test_stereoHighAndLosslessAreTwoChannel48kAndTranscriptionCopyIs16kMono() throws {
+        for quality in [RecordingQuality.high, .lossless] {
+            let kept = try writeStereoRecording(quality, seconds: 1.5)
+            let format = try XCTUnwrap(KeptAudioInspector.format(of: kept))
+            XCTAssertEqual(format.sampleRate, 48_000)
+            XCTAssertEqual(format.channelCount, 2, "\(quality)")
+            XCTAssertEqual(format.formatID, quality.formatID)
+            XCTAssertTrue(KeptAudioInspector.needsTranscriptionCopy(kept))
+            XCTAssertTrue(KeptAudioInspector.shouldPreserveEncoding(kept))
+            try assertTranscriptionCopy(of: kept, expectedSeconds: 1.5)
+        }
+    }
+
+    func test_stereoTranscriptionCopyMixesBothChannels() throws {
+        // Left silent, right a tone: the mono copy must still hear the tone,
+        // so a person on one side of the phone is transcribed.
+        let url = root.appendingPathComponent("stereo-right.m4a")
+        let writer = try KeptAudioFileWriter(url: url, quality: .lossless, channelCount: 2)
+        var samples = [Float](repeating: 0, count: 48_000 * 2)
+        for frame in 0..<48_000 {
+            samples[frame * 2 + 1] = Float(sin(2 * Double.pi * 440 * Double(frame) / 48_000) * 0.5)
+        }
+        try writer.append(samples: samples)
+        XCTAssertNotNil(writer.finalize())
+
+        let copy = root.appendingPathComponent("stereo-right.wav")
+        try KeptAudioInspector.makeTranscriptionCopy(of: url, at: copy)
+        let file = try AVAudioFile(forReading: copy)
+        XCTAssertEqual(file.fileFormat.channelCount, 1)
+        let buffer = try XCTUnwrap(AVAudioPCMBuffer(
+            pcmFormat: file.processingFormat,
+            frameCapacity: AVAudioFrameCount(file.length)
+        ))
+        try file.read(into: buffer)
+        let mono = try XCTUnwrap(buffer.floatChannelData?[0])
+        let peak = (0..<Int(buffer.frameLength)).reduce(Float(0)) { max($0, abs(mono[$1])) }
+        XCTAssertGreaterThan(peak, 0.1)
+    }
+
+    func test_importConvertersKeepTodaysChannelAndKeptCopiesMixBoth() throws {
+        // Right-only stereo file in the kept format.
+        let url = root.appendingPathComponent("right-only.m4a")
+        let writer = try KeptAudioFileWriter(url: url, quality: .lossless, channelCount: 2)
+        var samples = [Float](repeating: 0, count: 48_000 * 2)
+        for frame in 0..<48_000 {
+            samples[frame * 2 + 1] = Float(sin(2 * Double.pi * 440 * Double(frame) / 48_000) * 0.5)
+        }
+        try writer.append(samples: samples)
+        XCTAssertNotNil(writer.finalize())
+        XCTAssertTrue(KeptAudioInspector.isKeptRecordingFormat(url))
+
+        // Imports are transcribed exactly as before: first channel only.
+        let whole = root.appendingPathComponent("whole.wav")
+        try AudioFileConverter.convertToWhisperWAV(inputURL: url, outputURL: whole)
+        let streamed = root.appendingPathComponent("streamed.wav")
+        try AudioFileConverter.convertToWhisperWAVStreaming(inputURL: url, outputURL: streamed)
+        XCTAssertEqual(try peak(of: whole), 0, accuracy: 0.001)
+        XCTAssertEqual(try peak(of: streamed), 0, accuracy: 0.001)
+
+        // Opting in mixes both sides, in either converter.
+        let mixedWhole = root.appendingPathComponent("mixed-whole.wav")
+        try AudioFileConverter.convertToWhisperWAV(inputURL: url, outputURL: mixedWhole, downmix: true)
+        let mixedStreamed = root.appendingPathComponent("mixed-streamed.wav")
+        try AudioFileConverter.convertToWhisperWAVStreaming(inputURL: url, outputURL: mixedStreamed, downmix: true)
+        XCTAssertGreaterThan(try peak(of: mixedWhole), 0.1)
+        XCTAssertGreaterThan(try peak(of: mixedStreamed), 0.1)
+    }
+
+    func test_centredStereoMixesToTheSame16kSignalAsMonoWithoutClipping() throws {
+        // A loud source heard equally by both mics (a speaker in front of the
+        // phone). The downmix averages, so the transcription input matches a
+        // mono take of the same signal and never clips.
+        let frames = 48_000
+        let signal = (0..<frames).map { Float(sin(2 * Double.pi * 300 * Double($0) / 48_000) * 0.9) }
+        let mono = root.appendingPathComponent("centre-mono.m4a")
+        let monoWriter = try KeptAudioFileWriter(url: mono, quality: .lossless)
+        try monoWriter.append(samples: signal)
+        XCTAssertNotNil(monoWriter.finalize())
+        let stereo = root.appendingPathComponent("centre-stereo.m4a")
+        let stereoWriter = try KeptAudioFileWriter(url: stereo, quality: .lossless, channelCount: 2)
+        try stereoWriter.append(samples: signal.flatMap { [$0, $0] })
+        XCTAssertNotNil(stereoWriter.finalize())
+
+        let monoCopy = root.appendingPathComponent("centre-mono.wav")
+        try KeptAudioInspector.makeTranscriptionCopy(of: mono, at: monoCopy)
+        let stereoCopy = root.appendingPathComponent("centre-stereo.wav")
+        try KeptAudioInspector.makeTranscriptionCopy(of: stereo, at: stereoCopy)
+        let monoSamples = try samples(of: monoCopy)
+        let stereoSamples = try samples(of: stereoCopy)
+        XCTAssertEqual(monoSamples.count, stereoSamples.count)
+        let maxDifference = zip(monoSamples, stereoSamples).map { abs($0 - $1) }.max() ?? 1
+        XCTAssertLessThan(maxDifference, 0.002, "Centred stereo must transcribe from the mono signal")
+        let stereoPeak = stereoSamples.map(abs).max() ?? 0
+        XCTAssertEqual(stereoPeak, 0.9, accuracy: 0.02, "Average, not sum: no clipping")
+
+        // The whole-file converter mixes at the same level.
+        let wholeCopy = root.appendingPathComponent("centre-whole.wav")
+        try AudioFileConverter.convertToWhisperWAV(inputURL: stereo, outputURL: wholeCopy, downmix: true)
+        XCTAssertEqual(try samples(of: wholeCopy).map(abs).max() ?? 0, 0.9, accuracy: 0.02)
+    }
+
+    func test_keptRecordingFormatExcludesSpeechAndWAV() throws {
+        let speech = try writeKeptRecording(.speech, seconds: 0.5)
+        XCTAssertFalse(KeptAudioInspector.isKeptRecordingFormat(speech))
+        XCTAssertTrue(KeptAudioInspector.isKeptRecordingFormat(try writeKeptRecording(.high, seconds: 0.5)))
+        let wav = root.appendingPathComponent("speech.wav")
+        try KeptAudioInspector.makeTranscriptionCopy(of: speech, at: wav)
+        XCTAssertFalse(KeptAudioInspector.isKeptRecordingFormat(wav))
+        // Only stereo takes change their recovered path.
+        XCTAssertFalse(KeptAudioInspector.isKeptStereoRecording(try writeKeptRecording(.lossless, seconds: 0.5)))
+        XCTAssertTrue(KeptAudioInspector.isKeptStereoRecording(try writeStereoRecording(.high, seconds: 0.5)))
+        XCTAssertFalse(KeptAudioInspector.isKeptStereoRecording(wav))
+    }
+
+    func test_stereoWriterResamplesInterleavedFramesAndKeepsChannelsApart() throws {
+        let resampler = try XCTUnwrap(KeptAudioResampler(sampleRate: 48_000, channelCount: 2))
+        var out: [Float] = []
+        for _ in 0..<10 {
+            var chunk = [Float](repeating: 0, count: 4_410 * 2)
+            for frame in 0..<4_410 { chunk[frame * 2] = 0.25; chunk[frame * 2 + 1] = -0.25 }
+            out += resampler.convert(samples: chunk, sampleRate: 44_100)
+        }
+        out += resampler.flush()
+        XCTAssertEqual(out.count % 2, 0)
+        XCTAssertEqual(Double(out.count / 2), 48_000, accuracy: 100)
+        // Away from the filter edges, left stays positive and right negative.
+        let middle = out.count / 4 * 2
+        XCTAssertEqual(out[middle], 0.25, accuracy: 0.01)
+        XCTAssertEqual(out[middle + 1], -0.25, accuracy: 0.01)
+
+        let url = root.appendingPathComponent("raw-stereo.m4a")
+        let writer = try KeptAudioFileWriter(url: url, quality: .high, channelCount: 2)
+        XCTAssertEqual(writer.channelCount, 2)
+        for _ in 0..<20 {
+            try writer.append(samples: [Float](repeating: 0.05, count: 4_410 * 2), sourceSampleRate: 44_100)
+        }
+        XCTAssertNotNil(writer.finalize())
+        XCTAssertEqual(writer.duration, 2, accuracy: 0.01)
+        XCTAssertEqual(KeptAudioInspector.format(of: url)?.channelCount, 2)
+    }
+
+    func test_stereoPreRollSeedIsWholeFramesOnTheJournalTimeline() {
+        // Interleaved history: frame n is (n, -n).
+        let frames = 48_000 * 3
+        let history = CircularAudioBuffer(capacity: 48_000 * 4 * 2)
+        var interleaved = [Float](repeating: 0, count: frames * 2)
+        for frame in 0..<frames { interleaved[frame * 2] = Float(frame); interleaved[frame * 2 + 1] = -Float(frame) }
+        history.append(interleaved)
+
+        let seed = KeptAudioFileWriter.preRollSeed(
+            from: history, historySampleRate: 48_000, journalSeedCount: 32_000, channelCount: 2
+        )
+        XCTAssertEqual(seed.count, 96_000 * 2)
+        XCTAssertEqual(seed[0], Float(48_000))
+        XCTAssertEqual(seed[1], -Float(48_000))
+        XCTAssertEqual(seed[seed.count - 2], Float(frames - 1))
+        XCTAssertEqual(seed[seed.count - 1], -Float(frames - 1))
+
+        // Short history pads whole silent frames in front.
+        let short = CircularAudioBuffer(capacity: 48_000 * 2)
+        short.append([Float](repeating: 0.5, count: 1_000 * 2))
+        let padded = KeptAudioFileWriter.preRollSeed(
+            from: short, historySampleRate: 48_000, journalSeedCount: 16_000, channelCount: 2
+        )
+        XCTAssertEqual(padded.count, 48_000 * 2)
+        XCTAssertTrue(padded.prefix(47_000 * 2).allSatisfy { $0 == 0 })
+        XCTAssertTrue(padded.suffix(1_000 * 2).allSatisfy { $0 == 0.5 })
+    }
+
     // MARK: - Helpers
 
     private func writeKeptRecording(_ quality: RecordingQuality, seconds: Double) throws -> URL {
@@ -331,6 +591,44 @@ final class RecordingQualityTests: XCTestCase {
         try writer.append(samples: samples)
         XCTAssertEqual(writer.duration, seconds, accuracy: 0.001)
         return try XCTUnwrap(writer.finalize())
+    }
+
+    private func writeStereoRecording(_ quality: RecordingQuality, seconds: Double) throws -> URL {
+        let url = root.appendingPathComponent("kept-stereo-\(quality.rawValue).m4a")
+        let writer = try KeptAudioFileWriter(url: url, quality: quality, channelCount: 2)
+        let frames = Int(quality.sampleRate * seconds)
+        var samples = [Float](repeating: 0, count: frames * 2)
+        for frame in 0..<frames {
+            let t = Double(frame) / quality.sampleRate
+            samples[frame * 2] = Float(sin(2 * Double.pi * 440 * t) * 0.3)
+            samples[frame * 2 + 1] = Float(sin(2 * Double.pi * 660 * t) * 0.3)
+        }
+        try writer.append(samples: samples)
+        XCTAssertEqual(writer.duration, seconds, accuracy: 0.001)
+        return try XCTUnwrap(writer.finalize())
+    }
+
+    private func samples(of url: URL) throws -> [Float] {
+        let file = try AVAudioFile(forReading: url)
+        let buffer = try XCTUnwrap(AVAudioPCMBuffer(
+            pcmFormat: file.processingFormat,
+            frameCapacity: AVAudioFrameCount(file.length)
+        ))
+        try file.read(into: buffer)
+        let data = try XCTUnwrap(buffer.floatChannelData?[0])
+        return Array(UnsafeBufferPointer(start: data, count: Int(buffer.frameLength)))
+    }
+
+    private func peak(of url: URL) throws -> Float {
+        let file = try AVAudioFile(forReading: url)
+        XCTAssertEqual(file.fileFormat.channelCount, 1)
+        let buffer = try XCTUnwrap(AVAudioPCMBuffer(
+            pcmFormat: file.processingFormat,
+            frameCapacity: AVAudioFrameCount(file.length)
+        ))
+        try file.read(into: buffer)
+        let mono = try XCTUnwrap(buffer.floatChannelData?[0])
+        return (0..<Int(buffer.frameLength)).reduce(Float(0)) { max($0, abs(mono[$1])) }
     }
 
     private func assertTranscriptionCopy(of kept: URL, expectedSeconds: Double) throws {

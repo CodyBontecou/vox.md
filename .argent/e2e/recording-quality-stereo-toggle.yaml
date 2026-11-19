@@ -1,0 +1,138 @@
+# Issue #118: Settings → Recording Quality offers a Stereo toggle for High and
+# Lossless. It is hidden for Speech; turning it on switches the format lines to
+# stereo (128 kbps AAC / stereo ALAC), doubles the storage hint, and the Settings
+# summary row reads "High · Stereo · ≈ … MB/min".
+#
+# Prerequisites: iOS simulator (iPhone 17 layout) with a DEBUG build of Vox.md
+#   (bontecou.Voxboard) installed, starting with Recording Quality = Speech and
+#   Stereo off (the defaults). `-VoxAdaptiveSeedDemo` seeds the demo vault so the
+#   composer opens without onboarding.
+# Side effects: none left behind. The test turns Stereo off and selects Speech
+#   again at the end, so it can be rerun.
+# Selectors: taps are documented coordinates (frame centres from `describe` on an
+#   iPhone 17 simulator). The runner's directive tree carries none of these
+#   SwiftUI controls (the recorder derived a wrong `quick_capture_text` id and
+#   role-only `AXScrollArea`/`AXAdjustable` targets), while the raw accessibility
+#   waits resolve, so every check stays a raw `tool: await-ui-element` step.
+version: 1
+requires:
+  platform: ios
+steps:
+  - echo: Launch Vox.md (DEBUG) with the seeded demo vault. Expect the composer
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+          - -VoxScreenshotUnlocked
+          - -VoxAdaptiveSeedDemo
+          - -VoxAdaptiveNoAutofocus
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_settings
+      timeoutMs: 20000
+  - await: { idle: true }
+  - echo: Open Settings
+  # Settings button capture_settings: frame (0.841,0.080,0.109,0.050)
+  - tap:
+      x: 0.895
+      y: 0.105
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: settings_recording_quality
+      timeoutMs: 10000
+  - await: { idle: true }
+  - echo: Open Recording Quality. Speech is selected and Stereo is hidden
+  # Recording Quality row settings_recording_quality: frame (0.040,0.571,0.920,0.069)
+  - tap:
+      x: 0.5
+      y: 0.605
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: recording_quality_high
+      timeoutMs: 10000
+  - await: { idle: true }
+  - echo: Select High. Expect the Stereo toggle to appear
+  # High row recording_quality_high: frame (0.040,0.278,0.920,0.106)
+  - tap:
+      x: 0.5
+      y: 0.331
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: recording_quality_stereo
+      timeoutMs: 10000
+  - echo: Turn Stereo on. Expect stereo formats on High and Lossless
+  # Switch inside recording_quality_stereo: row frame (0.040,0.599,0.920,0.059),
+  # switch at its trailing edge
+  - tap:
+      x: 0.85
+      y: 0.628
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: recording_quality_high
+      expectedText: 48 kHz stereo AAC, about 128 kbps
+      timeoutMs: 10000
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: recording_quality_lossless
+      expectedText: 48 kHz stereo Apple Lossless (ALAC)
+      timeoutMs: 10000
+  - echo: Back to Settings. Expect the summary to name Stereo
+  # Back button BackButton: frame (0.040,0.071,0.109,0.050)
+  - tap:
+      x: 0.094
+      y: 0.096
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: settings_recording_quality
+      expectedText: High · Stereo ·
+      timeoutMs: 10000
+  - await: { idle: true }
+  - echo: Restore defaults. Turn Stereo off, then select Speech
+  # Recording Quality row: frame (0.040,0.571,0.920,0.069)
+  - tap:
+      x: 0.5
+      y: 0.605
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: recording_quality_stereo
+      timeoutMs: 10000
+  - await: { idle: true }
+  # Stereo switch: row frame (0.040,0.599,0.920,0.059)
+  - tap:
+      x: 0.85
+      y: 0.628
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: recording_quality_high
+      expectedText: 48 kHz mono AAC, about 64 kbps
+      timeoutMs: 10000
+  # Speech row recording_quality_speech: frame (0.040,0.173,0.920,0.106)
+  - tap:
+      x: 0.5
+      y: 0.226
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: recording_quality_stereo
+      timeoutMs: 10000
