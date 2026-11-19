@@ -10,6 +10,15 @@ extension RecordingQuality {
         }
     }
 
+    /// "≈ 0.5 MB/min". The number uses the app's UI language, not the device
+    /// region, so it reads the same way as the words around it.
+    var localizedStoragePerMinute: String {
+        let language = Bundle.main.preferredLocalizations.first
+        let locale = language.map(Locale.init(identifier:)) ?? .current
+        let megabytes = approximateMegabytesPerMinuteText(locale: locale)
+        return String(localized: "≈ \(megabytes) MB/min")
+    }
+
     var formatSummary: String {
         switch self {
         case .speech: return String(localized: "16 kHz mono AAC")
@@ -86,7 +95,7 @@ struct RecordingQualitySettingsView: View {
                     Text(quality.displayName)
                         .font(Geist.label(.body))
                         .foregroundStyle(Geist.text)
-                    Text(quality.approximateStoragePerMinuteDescription)
+                    Text(quality.localizedStoragePerMinute)
                         .font(Geist.mono(size: 11, relativeTo: .caption))
                         .foregroundStyle(Geist.muted)
                 }

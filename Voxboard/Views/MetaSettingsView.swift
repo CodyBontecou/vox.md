@@ -232,7 +232,7 @@ struct MetaSettingsView: View {
 
     /// "High · ≈ 0.5 MB/min"
     private var recordingQualitySummary: String {
-        "\(recordingQuality.displayName) · \(recordingQuality.approximateStoragePerMinuteDescription)"
+        String(localized: "\(recordingQuality.displayName) · \(recordingQuality.localizedStoragePerMinute)")
     }
 
     private var modelSummary: String {

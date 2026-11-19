@@ -1,3 +1,4 @@
+import VoxboardCaptureCore
 import XCTest
 
 final class WatchRouteSummaryPayloadTests: XCTestCase {
@@ -84,5 +85,27 @@ final class WatchRouteSummaryPayloadTests: XCTestCase {
         XCTAssertEqual(WatchRecordingDeepLink.routeID(from: url), "route with space")
         XCTAssertEqual(WatchRecordingDeepLink.startURL(routeID: nil), WatchRecordingDeepLink.startURL)
         XCTAssertNil(WatchRecordingDeepLink.routeID(from: WatchRecordingDeepLink.toggleURL))
+    }
+}
+
+final class WatchRecordingQualitySyncTests: XCTestCase {
+    func testKeyAndValuesMatchRecordingQuality() {
+        XCTAssertEqual(WatchRecordingQualitySync.key, RecordingQuality.watchPayloadKey)
+        XCTAssertEqual(WatchRecordingQualitySync.key, RecordingQuality.defaultsKey)
+        XCTAssertEqual(WatchRecordingQualitySync.knownValues, Set(RecordingQuality.allCases.map(\.rawValue)))
+    }
+
+    func testStoreKeepsLastKnownQualityForUnknownValues() throws {
+        let suite = "WatchRecordingQualitySyncTests-\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+
+        WatchRecordingQualitySync.store([WatchRecordingQualitySync.key: "lossless"], defaults: defaults)
+        XCTAssertEqual(RecordingQuality.load(from: defaults), .lossless)
+
+        WatchRecordingQualitySync.store([WatchRecordingQualitySync.key: "studio"], defaults: defaults)
+        WatchRecordingQualitySync.store([WatchRecordingQualitySync.key: 3], defaults: defaults)
+        WatchRecordingQualitySync.store([:], defaults: defaults)
+        XCTAssertEqual(RecordingQuality.load(from: defaults), .lossless)
     }
 }

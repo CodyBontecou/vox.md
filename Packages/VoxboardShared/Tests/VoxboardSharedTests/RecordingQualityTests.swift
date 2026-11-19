@@ -70,7 +70,11 @@ final class RecordingQualityTests: XCTestCase {
             RecordingQuality.high.approximateBytesPerMinute,
             RecordingQuality.lossless.approximateBytesPerMinute
         )
-        XCTAssertTrue(RecordingQuality.high.approximateStoragePerMinuteDescription.hasSuffix("MB/min"))
+        let english = Locale(identifier: "en")
+        let german = Locale(identifier: "de")
+        XCTAssertEqual(RecordingQuality.speech.approximateMegabytesPerMinuteText(locale: english), "0.2")
+        XCTAssertEqual(RecordingQuality.speech.approximateMegabytesPerMinuteText(locale: german), "0,2")
+        XCTAssertEqual(RecordingQuality.lossless.approximateMegabytesPerMinuteText(locale: english), "3")
     }
 
     // MARK: - Kept audio files
