@@ -65,16 +65,14 @@ public enum RecordingQuality: String, CaseIterable, Codable, Sendable, Identifia
         }
     }
 
-    /// "≈ 0.5 MB per minute" style hint.
-    public var approximateStoragePerMinuteDescription: String {
+    /// Megabytes per minute for the storage hint, formatted for the current
+    /// locale ("0.5", "3"). The app wraps it in its localized "≈ … MB/min".
+    public var approximateMegabytesPerMinuteText: String {
         let megabytes = Double(approximateBytesPerMinute) / 1_000_000
-        let formatted: String
         if megabytes >= 1 {
-            formatted = megabytes.formatted(.number.precision(.fractionLength(0)))
-        } else {
-            formatted = megabytes.formatted(.number.precision(.fractionLength(1)))
+            return megabytes.formatted(.number.precision(.fractionLength(0)))
         }
-        return "≈ \(formatted) MB/min"
+        return megabytes.formatted(.number.precision(.fractionLength(1)))
     }
 
     public static func load(from defaults: UserDefaults?) -> RecordingQuality {

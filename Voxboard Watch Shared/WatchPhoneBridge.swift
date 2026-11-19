@@ -47,12 +47,20 @@ enum WatchRecordingPayloadKey {
 /// `RecordingQuality.rawValue` under `RecordingQuality.watchPayloadKey`; the
 /// Watch keeps it under `RecordingQuality.defaultsKey` in its own defaults so
 /// recordings made while iPhone is away use the last synced choice.
+///
+/// This file is also built into the Watch widget, which does not link
+/// VoxboardCaptureCore, so the key and values are spelled out here.
+/// `WatchRecordingQualitySyncTests` keeps them equal to `RecordingQuality`.
 enum WatchRecordingQualitySync {
     /// Same string as `RecordingQuality.watchPayloadKey` / `.defaultsKey`.
     static let key = "recordingQuality"
+    /// `RecordingQuality.allCases` raw values.
+    static let knownValues: Set<String> = ["speech", "high", "lossless"]
 
+    /// Stores a known quality from the payload. A missing or unknown value
+    /// leaves the last synced choice in place.
     static func store(_ payload: [String: Any], defaults: UserDefaults = .standard) {
-        guard let raw = payload[key] as? String, !raw.isEmpty else { return }
+        guard let raw = payload[key] as? String, knownValues.contains(raw) else { return }
         defaults.set(raw, forKey: key)
     }
 }

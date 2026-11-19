@@ -70,7 +70,7 @@ final class RecordingQualityTests: XCTestCase {
             RecordingQuality.high.approximateBytesPerMinute,
             RecordingQuality.lossless.approximateBytesPerMinute
         )
-        XCTAssertTrue(RecordingQuality.high.approximateStoragePerMinuteDescription.hasSuffix("MB/min"))
+        XCTAssertFalse(RecordingQuality.high.approximateMegabytesPerMinuteText.isEmpty)
     }
 
     // MARK: - Kept audio files
@@ -313,6 +313,29 @@ final class RecordingQualityTests: XCTestCase {
         XCTAssertEqual(url.pathExtension, "m4a")
         XCTAssertEqual(try Data(contentsOf: url), try Data(contentsOf: kept))
         XCTAssertEqual(KeptAudioInspector.format(of: url)?.formatID, kAudioFormatAppleLossless)
+    }
+
+    func test_onlyVoxKeptEncodingsPreserveBytesOnExport() throws {
+        // A 44.1 kHz stereo AAC import is normalized as before.
+        let stereo = root.appendingPathComponent("import-stereo.m4a")
+        do {
+            let file = try AVAudioFile(
+                forWriting: stereo,
+                settings: [
+                    AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+                    AVSampleRateKey: 44_100.0,
+                    AVNumberOfChannelsKey: 2,
+                    AVEncoderBitRateKey: 128_000,
+                ],
+                commonFormat: .pcmFormatFloat32,
+                interleaved: false
+            )
+            let buffer = try XCTUnwrap(AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: 44_100))
+            buffer.frameLength = 44_100
+            try file.write(from: buffer)
+        }
+        XCTAssertEqual(KeptAudioInspector.format(of: stereo)?.channelCount, 2)
+        XCTAssertFalse(KeptAudioInspector.shouldPreserveEncoding(stereo))
     }
 
     // MARK: - Helpers

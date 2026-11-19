@@ -10,6 +10,12 @@ extension RecordingQuality {
         }
     }
 
+    /// "≈ 0.5 MB/min"
+    var localizedStoragePerMinute: String {
+        let megabytes = approximateMegabytesPerMinuteText
+        return String(localized: "≈ \(megabytes) MB/min")
+    }
+
     var formatSummary: String {
         switch self {
         case .speech: return String(localized: "16 kHz mono AAC")
@@ -86,7 +92,7 @@ struct RecordingQualitySettingsView: View {
                     Text(quality.displayName)
                         .font(Geist.label(.body))
                         .foregroundStyle(Geist.text)
-                    Text(quality.approximateStoragePerMinuteDescription)
+                    Text(quality.localizedStoragePerMinute)
                         .font(Geist.mono(size: 11, relativeTo: .caption))
                         .foregroundStyle(Geist.muted)
                 }
