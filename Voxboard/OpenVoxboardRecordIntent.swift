@@ -245,6 +245,9 @@ enum RecordingIntentExecution {
         }
         switch BackgroundRecordingAction.perform(action: action, flowID: VoxEntity.requestedFlowID(for: vox), startsNewRecording: startsNewRecording, effects: effects) {
         case .completed:
+            // Handled in the background: no foreground launch will consume
+            // the mark, so don't leave it for whatever reads it next.
+            PendingQuickRecordingRequest.markStartsNewRecording(false)
             return .result()
         case .openApp(let fallbackAction):
             return .result(opensIntent: OpenVoxboardRecordingActionIntent(vox: vox, action: fallbackAction))

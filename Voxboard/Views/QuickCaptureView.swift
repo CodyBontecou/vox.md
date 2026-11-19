@@ -4139,25 +4139,6 @@ struct QuickCaptureView: View {
                     origin: .quickRecord,
                     draftRequestID: request.draftRequestID(in: viewModel.draft)
                 )
-            },
-            canStartWithoutComposer: {
-                // A Remote-only Route would send this recording to its URL
-                // without the review its draft delivery promised.
-                let selection = WidgetRecordingFlowSelection.resolve(requestedFlowID: request.requestedFlowID)
-                return CapturePresetStore.flow(id: selection.flowID)?.exportSettings.urlDelivery.isRemoteOnly != true
-            },
-            startWithoutComposer: {
-                // The composer stayed busy: record now through the Route's own
-                // delivery, which never touches the composer, rather than
-                // losing the user's words to a longer wait.
-                let selection = WidgetRecordingFlowSelection.resolve(requestedFlowID: request.requestedFlowID)
-                lastStartedRecordingMode = .preset
-                persistentRecorder.lastTranscriptionResult = nil
-                return persistentRecorder.startOneShotInAppSegment(
-                    flowId: selection.flowID,
-                    completionMode: .runVox(flowID: selection.flowID),
-                    origin: .quickRecord
-                )
             }
         )
         widgetRecordLaunches.launch(

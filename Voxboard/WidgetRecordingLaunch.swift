@@ -11,14 +11,13 @@ import Foundation
 /// - Immediate delivery runs from the recorder's frozen Route snapshot and
 ///   never touches the composer, so earlier transcription, a recovered queue
 ///   job from a killed app, or a leftover draft does not block it.
-/// - Draft delivery records into the composer. It waits up to
-///   `composerWaitLimit` for earlier work on the composer to finish (the
-///   caller shows that it is waiting), then opens a blank note and starts. If
-///   the composer is still busy then, it records at once through the
-///   requested Route's own delivery instead, which never touches the composer;
-///   it never falls back to the "Finish the current recording…" prompt. A
-///   Remote-only Route would send that recording without review, so it gets no
-///   fallback and the launch ends quietly.
+/// - Draft delivery records into the composer. It waits until earlier work
+///   on the composer is done (the caller shows that it is waiting), then
+///   opens a blank note and starts. It never records outside the draft, so
+///   "Add to Draft" always keeps its review step, and it never falls back to
+///   the "Finish the current recording…" prompt. The wait ends when the
+///   caller cancels it (app backgrounded, Capture closed) or a newer press
+///   replaces it (`WidgetRecordingLaunchCoordinator`).
 ///
 /// A Shortcut's Start keeps its documented meaning: an active recording is
 /// left unchanged.
@@ -28,12 +27,6 @@ import Foundation
 enum WidgetRecordingLaunch {
     enum Outcome: Equatable {
         case started(finishedActiveRecording: Bool)
-        /// Draft delivery only: the composer stayed busy past the wait, so the
-        /// recording went through the Route's own delivery.
-        case startedWithoutComposer(finishedActiveRecording: Bool)
-        /// Draft delivery only: the composer stayed busy and the Route can't
-        /// record without review (Remote-only). Nothing was recorded.
-        case composerStillBusy
         case stopped
         case unchanged
         /// Draft delivery only: the launch was cancelled while waiting for
@@ -75,16 +68,10 @@ enum WidgetRecordingLaunch {
         /// Close the open note like New note; `false` keeps it and records nothing.
         var prepareNewNote: () async -> Bool
         var start: () -> Bool
-        /// The draft wait timed out: may this launch record through the
-        /// requested Route's own delivery instead?
-        var canStartWithoutComposer: () -> Bool = { false }
-        var startWithoutComposer: () -> Bool = { false }
         var sleep: (Duration) async -> Void = { try? await Task.sleep(for: $0) }
     }
 
     static let composerPollInterval: Duration = .milliseconds(100)
-    /// Speech is not recorded while a draft launch waits, so keep this short.
-    static let composerWaitLimit: Duration = .seconds(10)
 
     static func perform(
         action: RecordingAction,
@@ -109,17 +96,7 @@ enum WidgetRecordingLaunch {
 
         await effects.loadComposer()
         if isDraft {
-            switch await waitForComposer(effects) {
-            case .available:
-                break
-            case .cancelled:
-                return .cancelled
-            case .timedOut:
-                guard effects.canStartWithoutComposer() else { return .composerStillBusy }
-                guard !effects.isRecording() else { return .unchanged }
-                guard effects.startWithoutComposer() else { return .notStarted }
-                return .startedWithoutComposer(finishedActiveRecording: finishedActiveRecording)
-            }
+            guard await waitForComposer(effects) else { return .cancelled }
             switch effects.newNotePlan() {
             case .alreadyBlank, .keepDraft:
                 break
@@ -134,24 +111,16 @@ enum WidgetRecordingLaunch {
         return .started(finishedActiveRecording: finishedActiveRecording)
     }
 
-    enum ComposerWait: Equatable {
-        case available
-        case timedOut
-        case cancelled
-    }
-
-    private static func waitForComposer(_ effects: Effects) async -> ComposerWait {
-        guard !effects.isComposerAvailable() else { return .available }
+    /// `false` when the launch was cancelled while waiting.
+    private static func waitForComposer(_ effects: Effects) async -> Bool {
+        guard !effects.isComposerAvailable() else { return true }
         effects.setWaitingForComposer(true)
         defer { effects.setWaitingForComposer(false) }
-        var waited: Duration = .zero
         while !effects.isComposerAvailable() {
-            guard !Task.isCancelled else { return .cancelled }
-            guard waited < composerWaitLimit else { return .timedOut }
+            guard !Task.isCancelled else { return false }
             await effects.sleep(composerPollInterval)
-            waited += composerPollInterval
         }
-        return Task.isCancelled ? .cancelled : .available
+        return !Task.isCancelled
     }
 }
 
@@ -253,10 +222,7 @@ final class WidgetRecordingLaunchCoordinator {
             startsNewRecording: startsNewRecording,
             effects: effects
         )
-        switch outcome {
-        case .started, .startedWithoutComposer: lastStartedAt = now()
-        default: break
-        }
+        if case .started = outcome { lastStartedAt = now() }
         return outcome
     }
 }

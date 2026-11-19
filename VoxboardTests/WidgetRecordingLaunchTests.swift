@@ -52,25 +52,17 @@ final class WidgetRecordingLaunchTests: XCTestCase {
         XCTAssertEqual(launch.events, ["finish", "load", "waiting:true", "waiting:false", "newNote", "start"])
     }
 
-    func testDraftWaitIsBoundedThenRecordsThroughTheRouteInsteadOfPrompting() async {
+    func testDraftDeliveryNeverRecordsOutsideTheDraftWhileTheComposerStaysBusy() async {
         // A composer that never frees (stuck preset switch, a queue job that
-        // never releases the route): the launch must still record.
+        // never releases the route): "Add to Draft" keeps its review step. It
+        // records nothing elsewhere and keeps showing that it is waiting until
+        // the wait is cancelled or replaced (coordinator tests below).
         let launch = LaunchEffects(isRecording: true, composerAvailable: false, plan: .closeOpenNote)
-        launch.canRecordWithoutComposer = true
-        let outcome = await launch.perform(.start, isDraft: true)
-        XCTAssertEqual(outcome, .startedWithoutComposer(finishedActiveRecording: true))
-        let limitPolls = Int(WidgetRecordingLaunch.composerWaitLimit / WidgetRecordingLaunch.composerPollInterval)
-        XCTAssertEqual(launch.polls, limitPolls)
-        XCTAssertEqual(launch.events, ["finish", "load", "waiting:true", "waiting:false", "startWithoutComposer"])
-        XCTAssertTrue(launch.isRecording)
-    }
-
-    func testRemoteOnlyRouteNeverRecordsWithoutReviewWhenTheComposerStaysBusy() async {
-        let launch = LaunchEffects(composerAvailable: false, plan: .closeOpenNote)
-        launch.canRecordWithoutComposer = false
-        let outcome = await launch.perform(.start, isDraft: true)
-        XCTAssertEqual(outcome, .composerStillBusy)
-        XCTAssertEqual(launch.events, ["load", "waiting:true", "waiting:false"])
+        launch.cancelsAfterPolls = 3_000
+        let outcome = await Task { await launch.perform(.start, isDraft: true) }.value
+        XCTAssertEqual(outcome, .cancelled)
+        XCTAssertEqual(launch.polls, 3_000)
+        XCTAssertEqual(launch.events, ["finish", "load", "waiting:true", "waiting:false"])
         XCTAssertFalse(launch.isRecording)
     }
 
@@ -331,6 +323,12 @@ final class WidgetRecordingLaunchTests: XCTestCase {
         request = PendingQuickRecordingRequest.consume(defaults: defaults)
         XCTAssertFalse(request.startsNewRecording)
 
+        // A control handled in the background (Open App off) clears its own
+        // mark: nothing in the foreground will consume it.
+        PendingQuickRecordingRequest.markStartsNewRecording(true, defaults: defaults)
+        _ = try await VoxboardRecordingControlIntent(vox: preset, action: .stop, openApp: false).perform()
+        XCTAssertNil(defaults.object(forKey: PendingQuickRecordingRequest.startsNewRecordingKey))
+
         // Home Screen widget tap (voxboard://widget-record).
         WidgetRecordingFlowSelection.persistRequestedFlowID(
             from: try XCTUnwrap(URL(string: "voxboard://widget-record")),
@@ -351,7 +349,6 @@ private final class LaunchEffects {
     var plan: WidgetRecordingLaunch.NewNotePlan
     var composerFreesAfterPolls: Int?
     var cancelsAfterPolls: Int?
-    var canRecordWithoutComposer = false
     /// Real poll sleeps, for tests that cancel or replace a waiting launch
     /// before the wait limit runs out.
     var sleepsForReal = false
@@ -407,12 +404,6 @@ private final class LaunchEffects {
             start: {
                 self.events.append("start")
                 guard self.startAllowed else { return false }
-                self.isRecording = true
-                return true
-            },
-            canStartWithoutComposer: { self.canRecordWithoutComposer },
-            startWithoutComposer: {
-                self.events.append("startWithoutComposer")
                 self.isRecording = true
                 return true
             },

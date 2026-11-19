@@ -65,15 +65,23 @@ class DraftRecordingActionRegistrationTests(unittest.TestCase):
         launch = (ROOT / "Voxboard/WidgetRecordingLaunch.swift").read_text()
         perform = launch.split("static func perform(", 1)[1].split("private static func waitForComposer", 1)[0]
         draft = perform.split("if isDraft {", 1)[1]
-        self.assertIn("switch await waitForComposer(effects) {", draft)
+        self.assertIn("guard await waitForComposer(effects) else { return .cancelled }", draft)
         self.assertLess(draft.index("waitForComposer(effects)"), draft.index("effects.start()"))
-        # A composer that stays busy never records into it: the fallback goes
-        # through the Route's own delivery, and never prompts.
-        timed_out = draft.split("case .timedOut:", 1)[1].split("switch effects.newNotePlan()", 1)[0]
-        self.assertIn("effects.canStartWithoutComposer()", timed_out)
-        self.assertIn("effects.startWithoutComposer()", timed_out)
-        self.assertNotIn("effects.start()", timed_out)
+        # "Add to Draft" keeps its review step: no path records outside the draft.
+        self.assertNotIn("runVox", launch)
+        self.assertNotIn("WithoutComposer", launch)
         self.assertNotIn("requireCaptureRouteAvailable", launch)
+
+    def test_draft_launch_waiting_text_is_an_existing_translated_string(self):
+        import json
+        view = (ROOT / "Voxboard/Views/QuickCaptureView.swift").read_text()
+        text = "Saving the recording to your durable draft…"
+        self.assertIn(f'QuickCaptureOCRProgress("{text}")', view)
+        catalog = json.loads((ROOT / "Voxboard/Localizable.xcstrings").read_text())
+        localizations = catalog["strings"][text]["localizations"]
+        self.assertEqual(len(localizations), 23)
+        for locale, entry in localizations.items():
+            self.assertEqual(entry["stringUnit"]["state"], "translated", locale)
 
     def test_draft_event_sink_has_no_delivery_api(self):
         sink = (ROOT / "Voxboard/QuickRecordingDraftRouting.swift").read_text()
