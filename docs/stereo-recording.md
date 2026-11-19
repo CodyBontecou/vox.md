@@ -18,9 +18,23 @@ dictation and Keyboard Listening stay mono.
   dictation and Keyboard Listening keep the mono input their transcripts have
   always used. A recording started while Keyboard Listening is already on
   reuses that mono engine; the settings footer says so.
-- If the engine's input node still reports one channel after configuration,
-  the take records mono and the log says
-  `Stereo input reported 1 ch; keeping mono`. Nothing fails.
+- Stereo counts only when the route confirms it: the active input must report
+  the chosen data source with the stereo polar pattern selected
+  (`Stereo input: unavailable(reason: "stereo polar pattern not applied")`
+  otherwise), and the engine's input node must deliver two channels
+  (`Stereo input reported 1 ch; keeping mono` otherwise). Either way the take
+  records mono and nothing fails.
+- The stereo data source is undone when listening stops, so it never carries
+  over to Keyboard Listening or another app. It is never pinned with
+  `setPreferredInput`, so AirPods or a headset connected later still win.
+- The live 16 kHz stream mixes channels only for a stereo take. Other
+  multichannel inputs (USB, line in) keep their first-channel conversion.
+  The mix is an average: a source centred between the mics gives the same
+  16 kHz signal as a mono take, without clipping (tested).
+- An interruption or engine restart ends the current take before listening
+  restarts, so a take never switches from stereo to mono halfway. A route
+  change the engine survives (one channel arriving on a stereo tap) is
+  copied to both sides.
 - Transcription: the live 16 kHz stream and the 16 kHz copy of a kept file
   mix both channels (`downmix`). Imported files keep their existing
   conversion (first channel only), so their transcripts do not change.

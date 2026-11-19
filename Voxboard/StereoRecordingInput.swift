@@ -109,17 +109,45 @@ enum StereoRecordingInput {
         }
         let source = sources[index]
         do {
+            // The built-in mic is already the active input (checked above),
+            // so its data source changes take effect immediately. No
+            // setPreferredInput: pinning the built-in mic would stop iOS from
+            // switching to AirPods or a headset plugged in later.
             try source.setPreferredPolarPattern(.stereo)
             try port.setPreferredDataSource(source)
             let interface = orientation ?? currentInterfaceOrientation()
             try session.setPreferredInputOrientation(stereoOrientation(for: interface))
             configuredSource = (port.uid, source.dataSourceID)
+            // Trust what the route reports, not what was requested: if the
+            // stereo pattern is not selected now, record mono.
+            let selected = session.currentRoute.inputs.first?.selectedDataSource
+            guard stereoApplied(
+                selectedDataSourceID: selected?.dataSourceID,
+                selectedPattern: selected?.selectedPolarPattern,
+                requestedDataSourceID: source.dataSourceID
+            ) else {
+                resetIfNeeded(session: session)
+                return .unavailable(reason: "stereo polar pattern not applied")
+            }
             return .stereo(dataSource: source.dataSourceName)
         } catch {
             resetIfNeeded(session: session)
             return .unavailable(reason: "stereo setup failed: \(error.localizedDescription)")
         }
     }
+
+    /// True when the active route reports the requested data source with the
+    /// stereo polar pattern selected.
+    static func stereoApplied(
+        selectedDataSourceID: NSNumber?,
+        selectedPattern: AVAudioSession.PolarPattern?,
+        requestedDataSourceID: NSNumber
+    ) -> Bool {
+        selectedDataSourceID == requestedDataSourceID && selectedPattern == .stereo
+    }
+
+    /// True while this process has a built-in mic data source set to stereo.
+    static var hasStereoSelection: Bool { configuredSource != nil }
 
     /// Updates the stereo image for the current interface orientation, for
     /// example when a new take starts after the phone was rotated.

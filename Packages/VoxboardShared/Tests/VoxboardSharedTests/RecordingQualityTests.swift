@@ -478,6 +478,39 @@ final class RecordingQualityTests: XCTestCase {
         XCTAssertGreaterThan(try peak(of: mixedStreamed), 0.1)
     }
 
+    func test_centredStereoMixesToTheSame16kSignalAsMonoWithoutClipping() throws {
+        // A loud source heard equally by both mics (a speaker in front of the
+        // phone). The downmix averages, so the transcription input matches a
+        // mono take of the same signal and never clips.
+        let frames = 48_000
+        let signal = (0..<frames).map { Float(sin(2 * Double.pi * 300 * Double($0) / 48_000) * 0.9) }
+        let mono = root.appendingPathComponent("centre-mono.m4a")
+        let monoWriter = try KeptAudioFileWriter(url: mono, quality: .lossless)
+        try monoWriter.append(samples: signal)
+        XCTAssertNotNil(monoWriter.finalize())
+        let stereo = root.appendingPathComponent("centre-stereo.m4a")
+        let stereoWriter = try KeptAudioFileWriter(url: stereo, quality: .lossless, channelCount: 2)
+        try stereoWriter.append(samples: signal.flatMap { [$0, $0] })
+        XCTAssertNotNil(stereoWriter.finalize())
+
+        let monoCopy = root.appendingPathComponent("centre-mono.wav")
+        try KeptAudioInspector.makeTranscriptionCopy(of: mono, at: monoCopy)
+        let stereoCopy = root.appendingPathComponent("centre-stereo.wav")
+        try KeptAudioInspector.makeTranscriptionCopy(of: stereo, at: stereoCopy)
+        let monoSamples = try samples(of: monoCopy)
+        let stereoSamples = try samples(of: stereoCopy)
+        XCTAssertEqual(monoSamples.count, stereoSamples.count)
+        let maxDifference = zip(monoSamples, stereoSamples).map { abs($0 - $1) }.max() ?? 1
+        XCTAssertLessThan(maxDifference, 0.002, "Centred stereo must transcribe from the mono signal")
+        let stereoPeak = stereoSamples.map(abs).max() ?? 0
+        XCTAssertEqual(stereoPeak, 0.9, accuracy: 0.02, "Average, not sum: no clipping")
+
+        // The whole-file converter mixes at the same level.
+        let wholeCopy = root.appendingPathComponent("centre-whole.wav")
+        try AudioFileConverter.convertToWhisperWAV(inputURL: stereo, outputURL: wholeCopy, downmix: true)
+        XCTAssertEqual(try samples(of: wholeCopy).map(abs).max() ?? 0, 0.9, accuracy: 0.02)
+    }
+
     func test_keptRecordingFormatExcludesSpeechAndWAV() throws {
         let speech = try writeKeptRecording(.speech, seconds: 0.5)
         XCTAssertFalse(KeptAudioInspector.isKeptRecordingFormat(speech))
@@ -569,6 +602,17 @@ final class RecordingQualityTests: XCTestCase {
         try writer.append(samples: samples)
         XCTAssertEqual(writer.duration, seconds, accuracy: 0.001)
         return try XCTUnwrap(writer.finalize())
+    }
+
+    private func samples(of url: URL) throws -> [Float] {
+        let file = try AVAudioFile(forReading: url)
+        let buffer = try XCTUnwrap(AVAudioPCMBuffer(
+            pcmFormat: file.processingFormat,
+            frameCapacity: AVAudioFrameCount(file.length)
+        ))
+        try file.read(into: buffer)
+        let data = try XCTUnwrap(buffer.floatChannelData?[0])
+        return Array(UnsafeBufferPointer(start: data, count: Int(buffer.frameLength)))
     }
 
     private func peak(of url: URL) throws -> Float {

@@ -93,4 +93,25 @@ final class StereoRecordingInputTests: XCTestCase {
             }
         }
     }
+
+    // MARK: - Stereo must be confirmed by the route
+
+    func testStereoCountsOnlyWhenTheRouteReportsIt() {
+        let front = NSNumber(value: 1)
+        let back = NSNumber(value: 2)
+        XCTAssertTrue(StereoRecordingInput.stereoApplied(
+            selectedDataSourceID: front, selectedPattern: .stereo, requestedDataSourceID: front
+        ))
+        // Pattern not (yet) applied, wrong source, or nothing reported: mono.
+        XCTAssertFalse(StereoRecordingInput.stereoApplied(
+            selectedDataSourceID: front, selectedPattern: .omnidirectional, requestedDataSourceID: front
+        ))
+        XCTAssertFalse(StereoRecordingInput.stereoApplied(
+            selectedDataSourceID: back, selectedPattern: .stereo, requestedDataSourceID: front
+        ))
+        XCTAssertFalse(StereoRecordingInput.stereoApplied(
+            selectedDataSourceID: nil, selectedPattern: nil, requestedDataSourceID: front
+        ))
+        XCTAssertFalse(StereoRecordingInput.hasStereoSelection)
+    }
 }

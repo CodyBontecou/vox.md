@@ -717,6 +717,13 @@ final class PersistentRecorder {
         let hwFormat = inputNode.outputFormat(forBus: 0)
         log.log("[PersistentRecorder] Input format: \(hwFormat.sampleRate) Hz, \(hwFormat.channelCount) ch")
 
+        // Stereo only when it was configured and the input node really
+        // delivers two channels; otherwise the take is mono as before.
+        let keptChannelCount = stereoOutcome.isStereo && hwFormat.channelCount >= 2 ? 2 : 1
+        if stereoOutcome.isStereo, keptChannelCount == 1 {
+            log.log("[PersistentRecorder] Stereo input reported \(hwFormat.channelCount) ch; keeping mono")
+        }
+
         // Create converter if needed (hardware format → 16kHz mono)
         let needsConversion = hwFormat.sampleRate != whisperSampleRate || hwFormat.channelCount != 1
 
@@ -732,19 +739,16 @@ final class PersistentRecorder {
             )
             if let tf = targetFormat {
                 converter = AVAudioConverter(from: hwFormat, to: tf)
-                // Stereo input: the 16 kHz transcription stream averages both
-                // channels instead of keeping only the left one.
-                if hwFormat.channelCount > 1 { converter?.downmix = true }
+                // Stereo takes: the 16 kHz transcription stream averages both
+                // channels. Any other multichannel input (USB, line in) keeps
+                // the first-channel conversion it has always had.
+                if keptChannelCount == 2 { converter?.downmix = true }
                 log.log("[PersistentRecorder] Converter created: \(hwFormat.sampleRate)Hz → \(whisperSampleRate)Hz")
             }
         }
 
         // Reset buffer
         circularBuffer.reset()
-        let keptChannelCount = stereoOutcome.isStereo && hwFormat.channelCount >= 2 ? 2 : 1
-        if stereoOutcome.isStereo, keptChannelCount == 1 {
-            log.log("[PersistentRecorder] Stereo input reported \(hwFormat.channelCount) ch; keeping mono")
-        }
         stereoInputActive = keptChannelCount == 2
         // Reused by the tap for interleaved stereo; no per-buffer allocation.
         let stereoScratch = keptChannelCount == 2 ? StereoInterleaveScratch() : nil
@@ -1053,8 +1057,13 @@ final class PersistentRecorder {
         stopListeningHeartbeat()
         stopCommandPolling()
 
-        // Deactivate audio session
+        // Deactivate audio session. A stereo data source never outlives the
+        // listening session that chose it.
         let session = AVAudioSession.sharedInstance()
+        if stereoInputActive || StereoRecordingInput.hasStereoSelection {
+            StereoRecordingInput.configure(session: session, requested: false)
+        }
+        stereoInputActive = false
         try? session.setActive(false, options: .notifyOthersOnDeactivation)
 
         // Update IPC
