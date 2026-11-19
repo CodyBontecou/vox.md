@@ -475,9 +475,12 @@ jobs:
           retention-days: 90
           compression-level: 0
 
+  # Play allows one open edit per app: a parallel edit deletes this one. Wait for the Wear upload,
+  # but still sync graphics when it fails (the phone upload is what this depends on).
   listing:
     name: Sync Play listing graphics
-    needs: [resolve, upload]
+    needs: [resolve, upload, upload-wear]
+    if: ${{ !cancelled() && needs.upload.result == 'success' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     environment: google-play
