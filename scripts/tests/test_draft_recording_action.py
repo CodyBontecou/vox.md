@@ -49,7 +49,10 @@ class DraftRecordingActionRegistrationTests(unittest.TestCase):
         handler = view[start:end]
         self.assertIn("PendingQuickRecordingRequest.consume()", handler)
         self.assertIn("await viewModel.load()", handler)
-        self.assertIn("viewModel.requireCaptureRouteAvailable()", handler)
+        # Draft launches still never record into a busy composer, but wait for
+        # it instead of prompting "Finish the current recording…" (#115).
+        self.assertIn("isComposerAvailable: { viewModel.canChangeCaptureRoute }", handler)
+        self.assertNotIn("requireCaptureRouteAvailable", handler)
         self.assertIn("persistentRecorder.startOneShotInAppSegment(", handler)
         self.assertIn("completionMode: request.completionMode(flowID: selection.flowID)", handler)
         self.assertIn("draftRequestID: request.draftRequestID(in: viewModel.draft)", handler)
@@ -57,6 +60,14 @@ class DraftRecordingActionRegistrationTests(unittest.TestCase):
         self.assertNotIn("selectFlow(", handler)
         self.assertNotIn("submit(", handler)
         self.assertNotIn("externallyRequestedVoiceRecordingMode", handler)
+
+    def test_draft_launch_waits_for_composer_before_recording(self):
+        launch = (ROOT / "Voxboard/WidgetRecordingLaunch.swift").read_text()
+        perform = launch.split("static func perform(", 1)[1].split("private static func waitForComposer", 1)[0]
+        draft = perform.split("if isDraft {", 1)[1]
+        self.assertIn("guard await waitForComposer(effects) else { return .cancelled }", draft)
+        self.assertLess(draft.index("waitForComposer(effects)"), draft.index("effects.start()"))
+        self.assertNotIn("requireCaptureRouteAvailable", launch)
 
     def test_draft_event_sink_has_no_delivery_api(self):
         sink = (ROOT / "Voxboard/QuickRecordingDraftRouting.swift").read_text()
