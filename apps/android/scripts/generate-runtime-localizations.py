@@ -20,6 +20,7 @@ RUNTIME_SOURCE_ROOTS = tuple(
 OUTPUT = ROOT / "apps" / "android" / "app" / "src" / "main" / "res" / "raw" / "vox_runtime_localizations.json"
 ANDROID_CATALOG = ROOT / "apps/android/localization/android-strings.json"
 ANDROID_OVERRIDES = ROOT / "apps/android/localization/android-overrides.json"
+WEAR_CATALOG = ROOT / "apps/android/localization/wear-strings.json"
 PLURAL_SPEC = ROOT / "apps/android/localization/plural-spec.json"
 AUDIT = ROOT / "apps" / "android" / "localization-review.json"
 DYNAMIC_AUDIT_EXCLUDED_PATHS = {
@@ -27,6 +28,7 @@ DYNAMIC_AUDIT_EXCLUDED_PATHS = {
 }
 RESOURCES = ROOT / "apps" / "android" / "app" / "src" / "main" / "res"
 WEAR_RESOURCES = ROOT / "apps" / "android" / "wear" / "src" / "main" / "res"
+WEAR_PLACEHOLDER = re.compile(r"%\d+\$[sd]")
 LOCALES = (
     "ar", "bn", "de", "es", "fr", "hi", "id", "it", "ja", "ko", "nl", "pl",
     "pt-BR", "ru", "ta", "th", "tr", "uk", "ur", "vi", "zh-Hans", "zh-Hant",
@@ -56,74 +58,6 @@ PLATFORM_STRINGS = {
     "widget_description": "Capture an idea, task, link, file, scan, or recording.",
     "tile_capture_label": "Quick Capture",
     "tile_capture_subtitle": "Capture note",
-}
-WEAR_PLATFORM_STRINGS = {
-    "wear_brand": "Vox.md",
-    "wear_record": "Record",
-    "wear_recording": "Recording",
-    "wear_ready": "Ready",
-    "wear_paused": "Paused",
-    "wear_needs_attention": "Needs attention",
-    "wear_failed": "Watch recording needs attention",
-    "wear_saved": "Saved",
-    "wear_saved_watch": "Watch recording saved",
-    "wear_capture_preset": "Capture Preset",
-    "wear_selected": "Selected",
-    "wear_done": "Done",
-    "wear_sync": "Sync",
-    "wear_sync_status": "Sync Status",
-    "wear_syncing": "Syncing",
-    "wear_queued": "Queued",
-    "wear_nothing_to_sync": "No Watch recordings waiting to sync.",
-    "wear_recording_detail": "Pause for a break, Stop to save, or Cancel to delete.",
-    "wear_paused_detail": "Recording paused. Resume when you're ready, or stop to save it.",
-    "wear_failure_detail": "Open Vox.md to review a Watch recording delivery problem.",
-    "wear_ready_detail": "Start a local Watch recording and sync it to Vox.md.",
-    "wear_queue_preserved": "Watch recordings sync back",
-    "wear_synced": "Synced",
-    "wear_remote_waiting": "Waiting for iPhone",
-    "wear_remote_transcribing": "Transcribing on iPhone",
-    "wear_remote_saving": "Saving on iPhone",
-    "wear_remote_failed": "Delivery failed",
-    "wear_remote_transport_failed": "Needs attention",
-    "wear_pause_action": "Pause Watch recording",
-    "wear_resume_action": "Resume Watch recording",
-    "wear_stop_action": "Stop Watch recording",
-    "wear_cancel_action": "Cancel and delete Watch recording",
-    "wear_start_action": "Start Watch recording",
-    "wear_open_controls": "Show detailed recording controls",
-    "wear_is_recording": "Vox.md is recording",
-    "wear_one_recording_saved": "1 recording saved on Watch.",
-    "wear_recordings_saved_count": "%lld recordings saved on Watch.",
-    "wear_quick_capture": "Quick Capture",
-    "wear_listening": "Listening",
-    "wear_pending": "Queued",
-    "wear_delivering": "Syncing",
-    "wear_unavailable": "Unavailable",
-    "wear_listening_detail": "Preparing microphone…",
-    "wear_pending_detail": "Watch recordings stay saved locally and appear in your iPhone queue when your devices reconnect.",
-    "wear_syncing_detail": "Sending Watch recording to the iPhone queue.",
-    "wear_unavailable_detail": "Recording is safe on Watch. Tap Sync Queue to retry.",
-    "wear_microphone_unavailable": "Microphone permission required on Apple Watch.",
-    "wear_delivery_complete": "Delivered successfully. You can record another.",
-    "wear_phone_receiving": "Your recording remains safe while it moves to iPhone.",
-    "wear_review_recordings": "Watch Recordings",
-    "wear_saved_recordings": "Recordings",
-    "wear_retry_action": "Retry",
-    "wear_discard_action": "Discard",
-    "wear_confirm_discard_title": "Discard this Watch recording?",
-    "wear_confirm_discard_detail": "Stops and permanently deletes this recording without syncing it to your iPhone.",
-    "wear_discard_recording": "Discard Recording",
-    "wear_keep_recording": "Done",
-    "wear_back": "Done",
-    "wear_speak_to": "Speak to…",
-    "wear_speak_again": "Speak again",
-    "wear_sent_to": "Sent to %@",
-    "wear_saved_on_watch": "Saved on Watch",
-    "wear_pause": "Pause",
-    "wear_resume": "Resume",
-    "wear_cancel": "Cancel",
-    "wear_stop": "Stop",
 }
 SOURCE_ALIASES = {
     "Advanced YAML template": "Advanced YAML Template",
@@ -652,7 +586,7 @@ def raw_accessibility_text_paths() -> list[Path]:
 
 def platform_resource_files(catalog: dict) -> dict[Path, str]:
     result: dict[Path, str] = {}
-    for resource_root, strings in ((RESOURCES, PLATFORM_STRINGS), (WEAR_RESOURCES, WEAR_PLATFORM_STRINGS)):
+    for resource_root, strings in ((RESOURCES, PLATFORM_STRINGS),):
         for locale, qualifier in ANDROID_QUALIFIERS.items():
             lines = ['<?xml version="1.0" encoding="utf-8"?>', "<resources>"]
             for name, source in strings.items():
@@ -667,6 +601,50 @@ def platform_resource_files(catalog: dict) -> dict[Path, str]:
                 lines.append(f'    <string name="{name}">{android_string(value)}</string>')
             lines.append("</resources>")
             result[resource_root / f"values-{qualifier}" / "platform_localizations.xml"] = "\n".join(lines) + "\n"
+    result.update(wear_resource_files())
+    return result
+
+
+def wear_english_strings() -> dict[str, str]:
+    """Translatable strings of the Wear module's English resources, unescaped."""
+    contents = (WEAR_RESOURCES / "values" / "strings.xml").read_text(encoding="utf-8")
+    result = {}
+    for match in re.finditer(r'<string name="([a-z0-9_]+)"([^>]*)>(.*?)</string>', contents, re.S):
+        if 'translatable="false"' in match.group(2):
+            continue
+        value = match.group(3).replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">")
+        result[match.group(1)] = re.sub(r"\\(['\"\\])", r"\1", value)
+    return result
+
+
+def wear_resource_files() -> dict[Path, str]:
+    """Wear OS strings come from their own catalog, written for the watch rather than borrowed from iOS."""
+    data = json.loads(WEAR_CATALOG.read_text(encoding="utf-8"))
+    if data.get("schemaVersion") != 1 or data.get("sourceLanguage") != "en":
+        raise SystemExit("Wear catalog must use schemaVersion 1 with English sources")
+    catalog = data["strings"]
+    english = wear_english_strings()
+    if set(catalog) != set(english):
+        missing = sorted(set(english) - set(catalog))
+        unused = sorted(set(catalog) - set(english))
+        raise SystemExit(f"Wear catalog out of sync with values/strings.xml; missing {missing}, unused {unused}")
+    for name, entry in catalog.items():
+        if entry.get("en") != english[name]:
+            raise SystemExit(f"Wear catalog English for {name} differs from values/strings.xml")
+        expected = sorted(WEAR_PLACEHOLDER.findall(english[name]))
+        for locale in LOCALES:
+            value = entry.get(locale)
+            if not isinstance(value, str) or not value.strip():
+                raise SystemExit(f"missing {locale} Wear translation: {name}")
+            if sorted(WEAR_PLACEHOLDER.findall(value)) != expected or value.count("%") != english[name].count("%"):
+                raise SystemExit(f"{locale} Wear translation of {name} changes its placeholders")
+    result: dict[Path, str] = {}
+    for locale, qualifier in ANDROID_QUALIFIERS.items():
+        lines = ['<?xml version="1.0" encoding="utf-8"?>', "<resources>"]
+        for name in english:
+            lines.append(f'    <string name="{name}">{android_string(catalog[name][locale])}</string>')
+        lines.append("</resources>")
+        result[WEAR_RESOURCES / f"values-{qualifier}" / "platform_localizations.xml"] = "\n".join(lines) + "\n"
     return result
 
 
