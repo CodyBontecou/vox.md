@@ -450,6 +450,14 @@ final class PersistentRecorder {
     private var keptAudioPreRoll: CircularAudioBuffer?
     /// Sample rate of `keptAudioPreRoll` (the input node's rate).
     private var keptAudioPreRollSampleRate: Double = 0
+    /// Channels in `keptAudioPreRoll` and the kept file: 2 while the tap
+    /// captures stereo from the built-in mics (samples interleaved L R), else 1.
+    private var keptAudioPreRollChannelCount = 1
+    /// True when the current tap was installed with stereo built-in mic input.
+    private var stereoInputActive = false
+    /// Stereo request (High/Lossless with Stereo on) the current tap was
+    /// installed for, so a settings change knows whether to rebuild it.
+    private var stereoRequestedForTap = false
     /// Pre-roll plus headroom for the main-queue hop before the journal opens.
     private var keptAudioPreRollSeconds: Double { preRollSeconds + 2 }
     private var segmentStartedAt: TimeInterval = 0
@@ -678,9 +686,19 @@ final class PersistentRecorder {
             return false
         }
 
+        let keptQuality = RecordingQuality.load(from: AppConstants.sharedDefaults)
+        let stereoRequested = StereoRecordingPreference.requestsStereo(
+            quality: keptQuality,
+            enabled: StereoRecordingPreference.load(from: AppConstants.sharedDefaults)
+        )
+        var stereoOutcome = StereoRecordingInput.Outcome.notRequested
         do {
             try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth, .mixWithOthers])
             try session.setActive(true)
+            // Stereo from the built-in mics for High/Lossless. Falls back to
+            // mono (never fails listening) on other inputs or devices.
+            stereoOutcome = StereoRecordingInput.configure(session: session, requested: stereoRequested)
+            log.log("[PersistentRecorder] Stereo input: \(stereoOutcome)")
             log.log("[PersistentRecorder] Audio session active — inputs=\(session.currentRoute.inputs.map { $0.portType.rawValue }), sampleRate=\(session.sampleRate), inputGain=\(session.inputGain)")
             if #available(iOS 17.0, *) {
                 log.log("[PersistentRecorder] Input muted=\(AVAudioApplication.shared.isInputMuted)")
@@ -712,15 +730,25 @@ final class PersistentRecorder {
             )
             if let tf = targetFormat {
                 converter = AVAudioConverter(from: hwFormat, to: tf)
+                // Stereo input: the 16 kHz transcription stream averages both
+                // channels instead of keeping only the left one.
+                if hwFormat.channelCount > 1 { converter?.downmix = true }
                 log.log("[PersistentRecorder] Converter created: \(hwFormat.sampleRate)Hz → \(whisperSampleRate)Hz")
             }
         }
 
         // Reset buffer
         circularBuffer.reset()
+        let keptChannelCount = stereoOutcome.isStereo && hwFormat.channelCount >= 2 ? 2 : 1
+        if stereoOutcome.isStereo, keptChannelCount == 1 {
+            log.log("[PersistentRecorder] Stereo input reported \(hwFormat.channelCount) ch; keeping mono")
+        }
+        stereoInputActive = keptChannelCount == 2
+        stereoRequestedForTap = stereoRequested
         configureKeptAudioPreRoll(
-            RecordingQuality.load(from: AppConstants.sharedDefaults),
-            inputSampleRate: hwFormat.sampleRate
+            keptQuality,
+            inputSampleRate: hwFormat.sampleRate,
+            channelCount: keptChannelCount
         )
         let inputSampleRate = hwFormat.sampleRate
 
@@ -729,10 +757,38 @@ final class PersistentRecorder {
         inputNode.installTap(onBus: 0, bufferSize: bufferSize, format: hwFormat) { [weak self] buffer, _ in
             guard let self else { return }
 
-            // Raw channel 0 for High/Lossless; only copied if a kept recording
-            // or its pre-roll history is active (see appendToSegmentJournal).
-            let rawInput: UnsafeBufferPointer<Float>? = buffer.floatChannelData.map {
-                UnsafeBufferPointer(start: $0[0], count: Int(buffer.frameLength))
+            // Raw channel 0 for High/Lossless (left and right interleaved in
+            // stereo); only copied if a kept recording or its pre-roll history
+            // is active (see appendToSegmentJournal).
+            var stereoInput: [Float] = []
+            let rawInput: UnsafeBufferPointer<Float>?
+            if keptChannelCount == 2, let data = buffer.floatChannelData, buffer.format.channelCount >= 2 {
+                let frames = Int(buffer.frameLength)
+                stereoInput = [Float](repeating: 0, count: frames * 2)
+                for frame in 0..<frames {
+                    stereoInput[frame * 2] = data[0][frame]
+                    stereoInput[frame * 2 + 1] = data[1][frame]
+                }
+                rawInput = nil
+            } else {
+                rawInput = buffer.floatChannelData.map {
+                    UnsafeBufferPointer(start: $0[0], count: Int(buffer.frameLength))
+                }
+            }
+            let rawChannelCount = stereoInput.isEmpty ? 1 : 2
+            func appendRaw(_ ptr: UnsafeBufferPointer<Float>) {
+                if stereoInput.isEmpty {
+                    self.appendToSegmentJournal(
+                        ptr, rawInput: rawInput, rawSampleRate: inputSampleRate, rawChannelCount: 1
+                    )
+                } else {
+                    stereoInput.withUnsafeBufferPointer { stereo in
+                        self.appendToSegmentJournal(
+                            ptr, rawInput: stereo, rawSampleRate: inputSampleRate,
+                            rawChannelCount: rawChannelCount
+                        )
+                    }
+                }
             }
 
             if let converter, let targetFormat {
@@ -754,14 +810,14 @@ final class PersistentRecorder {
 
                 if let floatData = outputBuffer.floatChannelData?[0], outputBuffer.frameLength > 0 {
                     let ptr = UnsafeBufferPointer(start: floatData, count: Int(outputBuffer.frameLength))
-                    self.appendToSegmentJournal(ptr, rawInput: rawInput, rawSampleRate: inputSampleRate)
+                    appendRaw(ptr)
                     self.writeAudioLevelIfNeeded(floatData, frameCount: Int(outputBuffer.frameLength))
                 }
             } else {
                 // Already 16kHz mono — direct append
                 if let floatData = buffer.floatChannelData?[0], buffer.frameLength > 0 {
                     let ptr = UnsafeBufferPointer(start: floatData, count: Int(buffer.frameLength))
-                    self.appendToSegmentJournal(ptr, rawInput: rawInput, rawSampleRate: inputSampleRate)
+                    appendRaw(ptr)
                     self.writeAudioLevelIfNeeded(floatData, frameCount: Int(buffer.frameLength))
                 }
             }
@@ -1603,6 +1659,10 @@ final class PersistentRecorder {
         do {
             try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth, .mixWithOthers])
             try session.setActive(true)
+            if stereoInputActive {
+                // Keep the stereo image matched to how the phone is held now.
+                StereoRecordingInput.updateOrientation(session: session)
+            }
             log.log("[PersistentRecorder] ✅ Audio session re-asserted for segment")
         } catch {
             log.log("[PersistentRecorder] ⚠️ Audio session re-assert failed: \(error)")
@@ -2863,7 +2923,8 @@ final class PersistentRecorder {
                         from: history,
                         historySampleRate: rate,
                         journalSeedCount: seed.count,
-                        journalSampleRate: whisperSampleRate
+                        journalSampleRate: whisperSampleRate,
+                        channelCount: keptAudioPreRollChannelCount
                     )
                     segmentJournalWriteQueue.async {
                         do { try keptWriter.append(samples: keptSeed, sourceSampleRate: rate) }
@@ -2882,13 +2943,15 @@ final class PersistentRecorder {
     private func appendToSegmentJournal(
         _ samples: UnsafeBufferPointer<Float>,
         rawInput: UnsafeBufferPointer<Float>? = nil,
-        rawSampleRate: Double = 0
+        rawSampleRate: Double = 0,
+        rawChannelCount: Int = 1
     ) {
         segmentJournalLock.withLock {
             // Keep the ring cursor and journal seed boundary in the same lock.
             circularBuffer.append(samples)
             if let rawInput, !rawInput.isEmpty, let history = keptAudioPreRoll,
-               rawSampleRate == keptAudioPreRollSampleRate {
+               rawSampleRate == keptAudioPreRollSampleRate,
+               rawChannelCount == keptAudioPreRollChannelCount {
                 // Idle cost for High/Lossless: one copy into a fixed ring.
                 history.append(rawInput)
                 if let keptWriter = keptAudioWriter, !journalPaused {
@@ -2943,26 +3006,47 @@ final class PersistentRecorder {
     /// listening starts and when the setting changes; the next recording uses
     /// it. A recording already in progress keeps its own writer.
     func recordingQualityDidChange() {
-        let rate = segmentJournalLock.withLock { keptAudioPreRollSampleRate }
-        guard rate > 0 else { return }
-        configureKeptAudioPreRoll(
-            RecordingQuality.load(from: AppConstants.sharedDefaults),
-            inputSampleRate: rate
+        let quality = RecordingQuality.load(from: AppConstants.sharedDefaults)
+        let stereoRequested = StereoRecordingPreference.requestsStereo(
+            quality: quality,
+            enabled: StereoRecordingPreference.load(from: AppConstants.sharedDefaults)
         )
+        if isListening, stereoRequested != stereoRequestedForTap {
+            // Mono ↔ stereo changes the input format, so the tap has to be
+            // rebuilt. Only while idle: a take in progress keeps its layout
+            // and the next listening start applies the change.
+            guard !isSegmentActive, !shouldAutoStopListeningAfterCurrentRecording else { return }
+            let persist = AppConstants.sharedDefaults?.bool(forKey: AppConstants.autoListenEnabledKey) ?? false
+            log.log("[PersistentRecorder] Stereo \(stereoRequested ? "on" : "off") — restarting input")
+            stopListening(endLiveActivity: false)
+            startListening(persistPreference: persist)
+            return
+        }
+        let (rate, channels) = segmentJournalLock.withLock {
+            (keptAudioPreRollSampleRate, keptAudioPreRollChannelCount)
+        }
+        guard rate > 0 else { return }
+        configureKeptAudioPreRoll(quality, inputSampleRate: rate, channelCount: channels)
     }
 
-    private func configureKeptAudioPreRoll(_ quality: RecordingQuality, inputSampleRate: Double) {
+    private func configureKeptAudioPreRoll(
+        _ quality: RecordingQuality,
+        inputSampleRate: Double,
+        channelCount: Int = 1
+    ) {
         segmentJournalLock.withLock {
-            let rateChanged = keptAudioPreRollSampleRate != inputSampleRate
+            let layoutChanged = keptAudioPreRollSampleRate != inputSampleRate
+                || keptAudioPreRollChannelCount != channelCount
             keptAudioPreRollSampleRate = inputSampleRate
+            keptAudioPreRollChannelCount = channelCount
             guard quality.recordsSeparateKeptAudio, inputSampleRate > 0 else {
                 keptAudioPreRoll = nil
                 return
             }
-            if keptAudioPreRoll == nil || rateChanged {
-                keptAudioPreRoll = CircularAudioBuffer(
-                    capacity: Int((inputSampleRate * keptAudioPreRollSeconds).rounded(.up))
-                )
+            if keptAudioPreRoll == nil || layoutChanged {
+                // Whole frames: interleaved stereo needs twice the samples.
+                let frames = Int((inputSampleRate * keptAudioPreRollSeconds).rounded(.up))
+                keptAudioPreRoll = CircularAudioBuffer(capacity: frames * channelCount)
             }
         }
     }
@@ -2970,9 +3054,11 @@ final class PersistentRecorder {
     /// Opens a kept-audio writer for a recording that keeps its audio.
     /// Keyboard dictation and continuous dictation never keep audio.
     private func makeKeptAudioWriter(requestID: String, directory: URL) -> KeptAudioFileWriter? {
+        let channelCount = segmentJournalLock.withLock { keptAudioPreRollChannelCount }
         let quality = RecordingQualityStorageGuard.effectiveQuality(
             requested: RecordingQuality.load(from: AppConstants.sharedDefaults),
-            availableBytes: RecordingQualityStorageGuard.availableBytes(at: directory)
+            availableBytes: RecordingQualityStorageGuard.availableBytes(at: directory),
+            channelCount: channelCount
         )
         guard quality.recordsSeparateKeptAudio,
               let mode = segmentCompletionMode,
@@ -2984,7 +3070,7 @@ final class PersistentRecorder {
         // crash never recovers one take twice (see KeptAudioArtifacts).
         let url = KeptAudioArtifacts.makeURL(in: directory, requestID: requestID, quality: quality)
         do {
-            return try KeptAudioFileWriter(url: url, quality: quality)
+            return try KeptAudioFileWriter(url: url, quality: quality, channelCount: channelCount)
         } catch {
             log.log("[PersistentRecorder] ⚠️ Could not start \(quality.rawValue) recording; keeping Speech quality: \(error.localizedDescription)")
             return nil

@@ -27,6 +27,7 @@ struct MetaSettingsView: View {
     @State private var shortcutRecordingLiveActivityEnabled: Bool = AppConstants.shortcutRecordingLiveActivityEnabled
     @State private var lockScreenQuickRecordEnabled: Bool = AppConstants.lockScreenQuickRecordEnabled
     @State private var recordingQuality = RecordingQuality.load(from: AppConstants.sharedDefaults)
+    @State private var recordingStereo = StereoRecordingPreference.load(from: AppConstants.sharedDefaults)
     @State private var vault: VoxVault?
     @State private var isPickingVault = false
     @State private var vaultMessage: String?
@@ -223,6 +224,7 @@ struct MetaSettingsView: View {
             ) {
                 RecordingQualitySettingsView { quality in
                     recordingQuality = quality
+                    recordingStereo = StereoRecordingPreference.load(from: AppConstants.sharedDefaults)
                     persistentRecorder.recordingQualityDidChange()
                     WatchRecordingController.shared.publishState()
                 }
@@ -230,9 +232,14 @@ struct MetaSettingsView: View {
         }
     }
 
-    /// "High · ≈ 0.5 MB/min"
+    /// "High · ≈ 0.5 MB/min", or "High · Stereo · ≈ 1 MB/min"
     private var recordingQualitySummary: String {
-        String(localized: "\(recordingQuality.displayName) · \(recordingQuality.localizedStoragePerMinute)")
+        let storage = recordingQuality.localizedStoragePerMinute(stereo: recordingStereo)
+        guard StereoRecordingPreference.requestsStereo(quality: recordingQuality, enabled: recordingStereo) else {
+            return String(localized: "\(recordingQuality.displayName) · \(storage)")
+        }
+        let name = String(localized: "\(recordingQuality.displayName) · \(String(localized: "Stereo"))")
+        return String(localized: "\(name) · \(storage)")
     }
 
     private var modelSummary: String {

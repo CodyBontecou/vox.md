@@ -11,21 +11,36 @@ extension RecordingQuality {
     }
 
     /// "≈ 0.5 MB/min". The number uses the app's UI language, not the device
-    /// region, so it reads the same way as the words around it.
-    var localizedStoragePerMinute: String {
+    /// region, so it reads the same way as the words around it. With Stereo on,
+    /// High and Lossless show the two-channel size.
+    func localizedStoragePerMinute(stereo: Bool = false) -> String {
         let language = Bundle.main.preferredLocalizations.first
         let locale = language.map(Locale.init(identifier:)) ?? .current
-        let megabytes = approximateMegabytesPerMinuteText(locale: locale)
+        let megabytes = approximateMegabytesPerMinuteText(
+            channelCount: StereoRecordingPreference.requestedChannelCount(quality: self, enabled: stereo),
+            locale: locale
+        )
         return String(localized: "≈ \(megabytes) MB/min")
     }
 
-    var formatSummary: String {
+    var localizedStoragePerMinute: String { localizedStoragePerMinute() }
+
+    func formatSummary(stereo: Bool = false) -> String {
+        let stereo = StereoRecordingPreference.requestsStereo(quality: self, enabled: stereo)
         switch self {
         case .speech: return String(localized: "16 kHz mono AAC")
-        case .high: return String(localized: "48 kHz mono AAC, about 64 kbps")
-        case .lossless: return String(localized: "48 kHz mono Apple Lossless (ALAC)")
+        case .high:
+            return stereo
+                ? String(localized: "48 kHz stereo AAC, about 128 kbps")
+                : String(localized: "48 kHz mono AAC, about 64 kbps")
+        case .lossless:
+            return stereo
+                ? String(localized: "48 kHz stereo Apple Lossless (ALAC)")
+                : String(localized: "48 kHz mono Apple Lossless (ALAC)")
         }
     }
+
+    var formatSummary: String { formatSummary() }
 
     var settingsDescription: String {
         switch self {
@@ -45,6 +60,7 @@ struct RecordingQualitySettingsView: View {
     var onChange: (RecordingQuality) -> Void = { _ in }
 
     @State private var selection = RecordingQuality.load(from: AppConstants.sharedDefaults)
+    @State private var stereo = StereoRecordingPreference.load(from: AppConstants.sharedDefaults)
 
     var body: some View {
         Form {
@@ -66,6 +82,29 @@ struct RecordingQualitySettingsView: View {
                 Text("Applies to new recordings on iPhone and Apple Watch. Existing recordings are not changed. Transcription always uses a 16 kHz copy, so accuracy is the same at every quality.")
             }
             .listRowBackground(Geist.card)
+
+            if selection.supportsStereo {
+                Section {
+                    Toggle(isOn: Binding(
+                        get: { stereo },
+                        set: { enabled in
+                            guard stereo != enabled else { return }
+                            stereo = enabled
+                            StereoRecordingPreference.save(enabled, to: AppConstants.sharedDefaults)
+                            onChange(selection)
+                        }
+                    )) {
+                        Text("Stereo")
+                            .font(Geist.label(.body))
+                            .foregroundStyle(Geist.text)
+                    }
+                    .tint(Geist.accent)
+                    .accessibilityIdentifier("recording_quality_stereo")
+                } footer: {
+                    Text("Records High and Lossless in stereo with the iPhone's built-in microphones, for a more natural sound with music and nature. External, Bluetooth and AirPods microphones, and Apple Watch, record in mono.")
+                }
+                .listRowBackground(Geist.card)
+            }
 
             if selection != .speech {
                 Section {
@@ -95,11 +134,11 @@ struct RecordingQualitySettingsView: View {
                     Text(quality.displayName)
                         .font(Geist.label(.body))
                         .foregroundStyle(Geist.text)
-                    Text(quality.localizedStoragePerMinute)
+                    Text(quality.localizedStoragePerMinute(stereo: stereo))
                         .font(Geist.mono(size: 11, relativeTo: .caption))
                         .foregroundStyle(Geist.muted)
                 }
-                Text(quality.formatSummary)
+                Text(quality.formatSummary(stereo: stereo))
                     .font(Geist.mono(size: 11, relativeTo: .caption))
                     .foregroundStyle(Geist.muted)
                 Text(quality.settingsDescription)

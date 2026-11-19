@@ -2,7 +2,8 @@
 import AVFoundation
 import Foundation
 
-/// Resamples mono Float32 microphone samples to the kept recording's rate.
+/// Resamples Float32 microphone samples to the kept recording's rate.
+/// Samples are interleaved when `channelCount` is above 1 (L R L R …).
 /// Holds one `AVAudioConverter` so sample-rate conversion stays continuous
 /// across chunks; rebuilds it when the input rate changes (route change or
 /// engine restart).
@@ -11,35 +12,37 @@ import Foundation
 /// queue, never from the audio tap.
 public final class KeptAudioResampler: @unchecked Sendable {
     public let outputFormat: AVAudioFormat
+    public let channelCount: Int
 
     private var converter: AVAudioConverter?
     private var converterInputRate: Double?
 
-    public init?(sampleRate: Double) {
-        guard let format = AVAudioFormat(
+    public init?(sampleRate: Double, channelCount: Int = 1) {
+        guard channelCount >= 1, let format = AVAudioFormat(
             commonFormat: .pcmFormatFloat32,
             sampleRate: sampleRate,
-            channels: 1,
+            channels: AVAudioChannelCount(channelCount),
             interleaved: false
         ) else { return nil }
         outputFormat = format
+        self.channelCount = channelCount
     }
 
-    /// Converts mono samples recorded at `sampleRate`.
+    /// Converts samples recorded at `sampleRate`, interleaved for stereo.
     public func convert(samples: [Float], sampleRate: Double) -> [Float] {
         guard !samples.isEmpty, sampleRate > 0 else { return [] }
         if sampleRate == outputFormat.sampleRate { return samples }
-        guard let inputFormat = AVAudioFormat(
+        let frames = samples.count / channelCount
+        guard frames > 0, let inputFormat = AVAudioFormat(
             commonFormat: .pcmFormatFloat32,
             sampleRate: sampleRate,
-            channels: 1,
+            channels: AVAudioChannelCount(channelCount),
             interleaved: false
         ), let input = AVAudioPCMBuffer(
             pcmFormat: inputFormat,
-            frameCapacity: AVAudioFrameCount(samples.count)
-        ), let channel = input.floatChannelData?[0] else { return [] }
-        samples.withUnsafeBufferPointer { channel.update(from: $0.baseAddress!, count: samples.count) }
-        input.frameLength = AVAudioFrameCount(samples.count)
+            frameCapacity: AVAudioFrameCount(frames)
+        ) else { return [] }
+        guard KeptAudioPCM.deinterleave(samples, frames: frames, into: input) else { return [] }
 
         if converterInputRate != sampleRate {
             converter = AVAudioConverter(from: inputFormat, to: outputFormat)
@@ -77,19 +80,72 @@ public final class KeptAudioResampler: @unchecked Sendable {
             status.pointee = .haveData
             return input
         }
-        guard error == nil, let data = output.floatChannelData?[0], output.frameLength > 0 else {
-            return []
+        guard error == nil, output.frameLength > 0 else { return [] }
+        return KeptAudioPCM.interleave(output)
+    }
+}
+
+/// Interleaved ↔ non-interleaved Float32 helpers for kept audio.
+enum KeptAudioPCM {
+    /// Copies `frames` interleaved frames from `samples` (starting at frame
+    /// `offset`) into the non-interleaved `buffer`.
+    static func deinterleave(
+        _ samples: [Float],
+        frames: Int,
+        offset: Int = 0,
+        into buffer: AVAudioPCMBuffer
+    ) -> Bool {
+        let channels = Int(buffer.format.channelCount)
+        guard let data = buffer.floatChannelData,
+              Int(buffer.frameCapacity) >= frames,
+              samples.count >= (offset + frames) * channels else { return false }
+        samples.withUnsafeBufferPointer { source in
+            guard let base = source.baseAddress else { return }
+            if channels == 1 {
+                data[0].update(from: base + offset, count: frames)
+            } else {
+                for channel in 0..<channels {
+                    let destination = data[channel]
+                    var index = offset * channels + channel
+                    for frame in 0..<frames {
+                        destination[frame] = base[index]
+                        index += channels
+                    }
+                }
+            }
         }
-        return Array(UnsafeBufferPointer(start: data, count: Int(output.frameLength)))
+        buffer.frameLength = AVAudioFrameCount(frames)
+        return true
+    }
+
+    /// Interleaved samples of a non-interleaved Float32 buffer.
+    static func interleave(_ buffer: AVAudioPCMBuffer) -> [Float] {
+        guard let data = buffer.floatChannelData else { return [] }
+        let frames = Int(buffer.frameLength)
+        let channels = Int(buffer.format.channelCount)
+        if channels == 1 { return Array(UnsafeBufferPointer(start: data[0], count: frames)) }
+        var result = [Float](repeating: 0, count: frames * channels)
+        for channel in 0..<channels {
+            let source = data[channel]
+            var index = channel
+            for frame in 0..<frames {
+                result[index] = source[frame]
+                index += channels
+            }
+        }
+        return result
     }
 }
 
 /// Encodes a kept recording (AAC or ALAC in `.m4a`) at the chosen
-/// `RecordingQuality`. Callers append raw mono microphone samples from one
-/// serial queue; resampling to 48 kHz happens there, never on the audio tap.
+/// `RecordingQuality`, mono or stereo. Callers append raw microphone samples
+/// (interleaved for stereo) from one serial queue; resampling to 48 kHz
+/// happens there, never on the audio tap.
 public final class KeptAudioFileWriter: @unchecked Sendable {
     public let url: URL
     public let quality: RecordingQuality
+    /// Channels in the file and in every appended sample array.
+    public let channelCount: Int
 
     private let lock = NSLock()
     private var file: AVAudioFile?
@@ -97,7 +153,7 @@ public final class KeptAudioFileWriter: @unchecked Sendable {
     private let resampler: KeptAudioResampler?
     private var framesWritten: AVAudioFramePosition = 0
 
-    public init(url: URL, quality: RecordingQuality) throws {
+    public init(url: URL, quality: RecordingQuality, channelCount: Int = 1) throws {
         self.url = url
         self.quality = quality
         try FileManager.default.createDirectory(
@@ -107,13 +163,17 @@ public final class KeptAudioFileWriter: @unchecked Sendable {
         try? FileManager.default.removeItem(at: url)
         let file = try AVAudioFile(
             forWriting: url,
-            settings: quality.recorderSettings,
+            settings: quality.recorderSettings(channelCount: channelCount),
             commonFormat: .pcmFormatFloat32,
             interleaved: false
         )
         self.file = file
         processingFormat = file.processingFormat
-        resampler = KeptAudioResampler(sampleRate: file.processingFormat.sampleRate)
+        self.channelCount = Int(file.processingFormat.channelCount)
+        resampler = KeptAudioResampler(
+            sampleRate: file.processingFormat.sampleRate,
+            channelCount: Int(file.processingFormat.channelCount)
+        )
     }
 
     public var sampleRate: Double { processingFormat.sampleRate }
@@ -122,8 +182,8 @@ public final class KeptAudioFileWriter: @unchecked Sendable {
         lock.withLock { Double(framesWritten) / processingFormat.sampleRate }
     }
 
-    /// Appends mono samples captured at `sourceSampleRate`, resampling them
-    /// to the kept rate.
+    /// Appends samples captured at `sourceSampleRate` (interleaved for
+    /// stereo), resampling them to the kept rate.
     public func append(samples: [Float], sourceSampleRate: Double) throws {
         guard !samples.isEmpty else { return }
         try lock.withLock {
@@ -140,22 +200,19 @@ public final class KeptAudioFileWriter: @unchecked Sendable {
     private func writeUnlocked(_ samples: [Float]) throws {
         guard !samples.isEmpty else { return }
         guard let file else { throw CocoaError(.fileWriteUnknown) }
+        let totalFrames = samples.count / channelCount
         var offset = 0
         // Bound the PCM buffer so a long pre-roll seed does not allocate
         // one huge buffer.
         let chunk = 16_384
-        while offset < samples.count {
-            let count = min(chunk, samples.count - offset)
+        while offset < totalFrames {
+            let count = min(chunk, totalFrames - offset)
             guard let buffer = AVAudioPCMBuffer(
                 pcmFormat: processingFormat,
                 frameCapacity: AVAudioFrameCount(count)
-            ), let channel = buffer.floatChannelData?[0] else {
+            ), KeptAudioPCM.deinterleave(samples, frames: count, offset: offset, into: buffer) else {
                 throw CocoaError(.fileWriteUnknown)
             }
-            samples.withUnsafeBufferPointer { source in
-                channel.update(from: source.baseAddress! + offset, count: count)
-            }
-            buffer.frameLength = AVAudioFrameCount(count)
             try file.write(from: buffer)
             framesWritten += AVAudioFramePosition(count)
             offset += count
@@ -191,17 +248,26 @@ public final class KeptAudioFileWriter: @unchecked Sendable {
     /// equivalent of `journalSeedCount` samples. When the history is shorter
     /// it is padded with leading silence so the kept file and the transcript
     /// stay on the same timeline.
+    ///
+    /// A stereo history holds interleaved frames (`channelCount` samples per
+    /// frame); the seed is whole frames, interleaved the same way.
     public static func preRollSeed(
         from history: CircularAudioBuffer,
         historySampleRate: Double,
         journalSeedCount: Int,
-        journalSampleRate: Double = AudioFileConverter.whisperSampleRate
+        journalSampleRate: Double = AudioFileConverter.whisperSampleRate,
+        channelCount: Int = 1
     ) -> [Float] {
-        guard journalSeedCount > 0, historySampleRate > 0, journalSampleRate > 0 else { return [] }
-        let wanted = Int((Double(journalSeedCount) * historySampleRate / journalSampleRate).rounded())
-        guard wanted > 0 else { return [] }
+        guard journalSeedCount > 0, historySampleRate > 0, journalSampleRate > 0,
+              channelCount >= 1 else { return [] }
+        let wantedFrames = Int((Double(journalSeedCount) * historySampleRate / journalSampleRate).rounded())
+        guard wantedFrames > 0 else { return [] }
+        let wanted = wantedFrames * channelCount
         let end = history.totalSamplesWritten
-        let start = max(end - Int64(wanted), history.earliestAvailableIndex, 0)
+        let channels = Int64(channelCount)
+        // Round the oldest index up to a frame boundary so channels never swap.
+        let earliest = (history.earliestAvailableIndex + channels - 1) / channels * channels
+        let start = max(end - Int64(wanted), earliest, 0)
         let available = end > start ? (history.extract(from: start, to: end) ?? []) : []
         guard available.count < wanted else { return available }
         return [Float](repeating: 0, count: wanted - available.count) + available
@@ -289,9 +355,15 @@ public enum KeptAudioInspector {
 
     /// Writes the 16 kHz mono WAV copy the transcription engine reads. Streams
     /// the source so hour-long 48 kHz recordings do not load into memory.
+    /// A stereo kept recording is downmixed (left and right averaged), so the
+    /// engine hears both microphones, as it does with a mono take.
     @discardableResult
     public static func makeTranscriptionCopy(of sourceURL: URL, at outputURL: URL) throws -> URL {
-        try AudioFileConverter.convertToWhisperWAVStreaming(inputURL: sourceURL, outputURL: outputURL)
+        try AudioFileConverter.convertToWhisperWAVStreaming(
+            inputURL: sourceURL,
+            outputURL: outputURL,
+            downmix: true
+        )
     }
 }
 #endif

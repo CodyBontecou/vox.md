@@ -27,6 +27,25 @@ final class RecordingQualityRecorderTests: XCTestCase {
         XCTAssertEqual(imported, kept)
     }
 
+    func testStereoHighRecordingTranscribesA16kMonoCopy() async throws {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent("RecordingQualityRecorderTests-\(UUID().uuidString)", isDirectory: true)
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+
+        let kept = root.appendingPathComponent("segment_kept_stereo.m4a")
+        let writer = try KeptAudioFileWriter(url: kept, quality: .high, channelCount: 2)
+        try writer.append(samples: (0..<96_000).map { Float(sin(Double($0 / 2) / 20) * 0.2) })
+        XCTAssertNotNil(writer.finalize())
+        XCTAssertEqual(try AVAudioFile(forReading: kept).fileFormat.channelCount, 2)
+
+        let copy = try await PersistentRecorder.transcriptionAudio(for: kept, source: .iOSApp)
+        defer { try? FileManager.default.removeItem(at: copy) }
+        let format = try AVAudioFile(forReading: copy).fileFormat
+        XCTAssertEqual(format.sampleRate, 16_000)
+        XCTAssertEqual(format.channelCount, 1)
+    }
+
     func testSpeechWAVIsTranscribedUnchanged() async throws {
         let root = FileManager.default.temporaryDirectory
             .appendingPathComponent("RecordingQualityRecorderTests-\(UUID().uuidString)", isDirectory: true)
