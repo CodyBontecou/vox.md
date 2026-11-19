@@ -438,6 +438,20 @@ final class PersistentRecorder {
     /// the real-time tap never journals paused audio.
     private var journalPaused = false
     private var segmentJournalWriter: IncrementalWAVWriter?
+    /// Kept recording at the user's Recording quality (High / Lossless).
+    /// Guarded by `segmentJournalLock`; nil for Speech, where the 16 kHz
+    /// journal is the kept audio as before.
+    private var keptAudioWriter: KeptAudioFileWriter?
+    /// Raw (hardware-rate, channel 0) microphone history so the kept file gets
+    /// the same pre-roll as the 16 kHz journal. Guarded by `segmentJournalLock`.
+    /// nil while Speech is selected. While idle the tap only copies samples
+    /// into this fixed ring: no resampling, no allocation. 48 kHz conversion
+    /// runs on the write queue, and only while a take is recording.
+    private var keptAudioPreRoll: CircularAudioBuffer?
+    /// Sample rate of `keptAudioPreRoll` (the input node's rate).
+    private var keptAudioPreRollSampleRate: Double = 0
+    /// Pre-roll plus headroom for the main-queue hop before the journal opens.
+    private var keptAudioPreRollSeconds: Double { preRollSeconds + 2 }
     private var segmentStartedAt: TimeInterval = 0
     private var liveTranscriptionSetupTask: Task<LiveSegmentTranscriptionCoordinator?, Never>?
     private var endOfSpeechSetupTask: Task<VoiceAutoStopCoordinator?, Never>?
@@ -704,11 +718,22 @@ final class PersistentRecorder {
 
         // Reset buffer
         circularBuffer.reset()
+        configureKeptAudioPreRoll(
+            RecordingQuality.load(from: AppConstants.sharedDefaults),
+            inputSampleRate: hwFormat.sampleRate
+        )
+        let inputSampleRate = hwFormat.sampleRate
 
         // Install tap — capture audio and write to circular buffer
         let bufferSize: AVAudioFrameCount = 4096
         inputNode.installTap(onBus: 0, bufferSize: bufferSize, format: hwFormat) { [weak self] buffer, _ in
             guard let self else { return }
+
+            // Raw channel 0 for High/Lossless; only copied if a kept recording
+            // or its pre-roll history is active (see appendToSegmentJournal).
+            let rawInput: UnsafeBufferPointer<Float>? = buffer.floatChannelData.map {
+                UnsafeBufferPointer(start: $0[0], count: Int(buffer.frameLength))
+            }
 
             if let converter, let targetFormat {
                 // Convert to 16kHz mono
@@ -729,14 +754,14 @@ final class PersistentRecorder {
 
                 if let floatData = outputBuffer.floatChannelData?[0], outputBuffer.frameLength > 0 {
                     let ptr = UnsafeBufferPointer(start: floatData, count: Int(outputBuffer.frameLength))
-                    self.appendToSegmentJournal(ptr)
+                    self.appendToSegmentJournal(ptr, rawInput: rawInput, rawSampleRate: inputSampleRate)
                     self.writeAudioLevelIfNeeded(floatData, frameCount: Int(outputBuffer.frameLength))
                 }
             } else {
                 // Already 16kHz mono — direct append
                 if let floatData = buffer.floatChannelData?[0], buffer.frameLength > 0 {
                     let ptr = UnsafeBufferPointer(start: floatData, count: Int(buffer.frameLength))
-                    self.appendToSegmentJournal(ptr)
+                    self.appendToSegmentJournal(ptr, rawInput: rawInput, rawSampleRate: inputSampleRate)
                     self.writeAudioLevelIfNeeded(floatData, frameCount: Int(buffer.frameLength))
                 }
             }
@@ -2291,7 +2316,16 @@ final class PersistentRecorder {
         // Fix the stop cursor before detaching/draining the journal. The audio
         // tap can keep filling the preview ring while disk writes finish.
         let endIndex = segmentJournalLock.withLock { circularBuffer.totalSamplesWritten }
+        let keptAudioURL = finalizeKeptAudio()
         let segmentJournalURL = finalizeSegmentJournal()
+        // The kept High/Lossless file belongs to the queued job once the
+        // app-recording handoff starts; every earlier exit removes it.
+        var keptAudioHandedOff = false
+        defer {
+            if !keptAudioHandedOff, let keptAudioURL {
+                try? FileManager.default.removeItem(at: keptAudioURL)
+            }
+        }
         cancelEndOfSpeechDetection()
         TranscriptionIPC.clearAudioLevel()
 
@@ -2405,6 +2439,14 @@ final class PersistentRecorder {
             let modelId = segmentModelId ?? command.modelId ?? AppConstants.defaultTranscriptionBackendID
             let language = segmentLanguage ?? command.language ?? "auto"
             let duration = TimeInterval(durationSec)
+            // High/Lossless: the queued job owns the kept 48 kHz recording and
+            // transcribes a 16 kHz copy of it. Speech keeps the 16 kHz WAV.
+            keptAudioHandedOff = true
+            let jobAudioURL = keptAudioURL ?? wavURL
+            let jobRelatedAudioFilenames = [
+                keptAudioURL == nil ? nil : wavURL.lastPathComponent,
+                segmentJournalURL?.lastPathComponent,
+            ].compactMap { $0 }
 
             if shouldAutoStopListeningAfterCurrentRecording {
                 if UIApplication.shared.applicationState == .active {
@@ -2449,8 +2491,8 @@ final class PersistentRecorder {
             do {
                 try handoffIntentStore.save(RecordingJobHandoffIntent(
                     jobID: jobID,
-                    audioFilename: wavURL.lastPathComponent,
-                    relatedAudioFilenames: [segmentJournalURL?.lastPathComponent].compactMap { $0 },
+                    audioFilename: jobAudioURL.lastPathComponent,
+                    relatedAudioFilenames: jobRelatedAudioFilenames,
                     requestID: requestId,
                     draftRequestID: draftRequestID,
                     liveSessionID: captureSessionID,
@@ -2495,8 +2537,8 @@ final class PersistentRecorder {
                         throw NSError(domain: "RecordingHandoff", code: 2)
                     }
                     try handoffIntentStore.save(stagedIntent.finalized(
-                        audioFilename: wavURL.lastPathComponent,
-                        relatedAudioFilenames: [segmentJournalURL?.lastPathComponent].compactMap { $0 },
+                        audioFilename: jobAudioURL.lastPathComponent,
+                        relatedAudioFilenames: jobRelatedAudioFilenames,
                         duration: duration,
                         captureSource: originSnapshot?.source,
                         locationOutcome: originSnapshot?.outcome
@@ -2507,7 +2549,7 @@ final class PersistentRecorder {
                     return
                 }
                 self.enqueueAppRecording(
-                    audioURL: wavURL,
+                    audioURL: jobAudioURL,
                     requestId: requestId,
                     modelId: modelId,
                     fallbackModelId: fallbackModelID,
@@ -2788,8 +2830,10 @@ final class PersistentRecorder {
             segmentJournalWriteQueue.sync {}
             _ = try? oldWriter?.finalize()
         }
+        discardKeptAudio()
 
         guard let directory = AppConstants.recordingsDirectoryURL else { return }
+        let keptWriter = makeKeptAudioWriter(requestID: requestID, directory: directory)
         let safeRequestID = requestID
             .filter { $0.isLetter || $0.isNumber || $0 == "-" || $0 == "_" }
             .prefix(80)
@@ -2811,16 +2855,55 @@ final class PersistentRecorder {
                     catch { log.log("[PersistentRecorder] Could not seed recording journal: \(error)") }
                 }
                 segmentJournalWriter = writer
+                if let keptWriter, let history = keptAudioPreRoll {
+                    // Same instant and same duration as the journal's seed,
+                    // taken from the raw history appended under this lock.
+                    let rate = keptAudioPreRollSampleRate
+                    let keptSeed = KeptAudioFileWriter.preRollSeed(
+                        from: history,
+                        historySampleRate: rate,
+                        journalSeedCount: seed.count,
+                        journalSampleRate: whisperSampleRate
+                    )
+                    segmentJournalWriteQueue.async {
+                        do { try keptWriter.append(samples: keptSeed, sourceSampleRate: rate) }
+                        catch { log.log("[PersistentRecorder] Could not seed kept recording: \(error)") }
+                    }
+                    keptAudioWriter = keptWriter
+                } else if let keptWriter {
+                    keptWriter.discard()
+                }
             }
         } catch {
             log.log("[PersistentRecorder] ⚠️ Could not start durable recording journal: \(error.localizedDescription)")
         }
     }
 
-    private func appendToSegmentJournal(_ samples: UnsafeBufferPointer<Float>) {
+    private func appendToSegmentJournal(
+        _ samples: UnsafeBufferPointer<Float>,
+        rawInput: UnsafeBufferPointer<Float>? = nil,
+        rawSampleRate: Double = 0
+    ) {
         segmentJournalLock.withLock {
             // Keep the ring cursor and journal seed boundary in the same lock.
             circularBuffer.append(samples)
+            if let rawInput, !rawInput.isEmpty, let history = keptAudioPreRoll,
+               rawSampleRate == keptAudioPreRollSampleRate {
+                // Idle cost for High/Lossless: one copy into a fixed ring.
+                history.append(rawInput)
+                if let keptWriter = keptAudioWriter, !journalPaused {
+                    let owned = Array(rawInput)
+                    segmentJournalWriteQueue.async {
+                        do {
+                            try keptWriter.append(samples: owned, sourceSampleRate: rawSampleRate)
+                        } catch {
+                            KeyboardDebugLog.shared.log(
+                                "[PersistentRecorder] ⚠️ Kept recording write failed: \(error.localizedDescription)"
+                            )
+                        }
+                    }
+                }
+            }
             guard let writer = segmentJournalWriter, !journalPaused else { return }
             let ownedSamples = Array(samples)
             segmentJournalWriteQueue.async {
@@ -2836,6 +2919,9 @@ final class PersistentRecorder {
     }
 
     private func finalizeSegmentJournal() -> URL? {
+        // Callers that keep the High/Lossless file take it first with
+        // `finalizeKeptAudio()`; anything still open here is abandoned.
+        discardKeptAudio()
         let writer = segmentJournalLock.withLock { () -> IncrementalWAVWriter? in
             let writer = segmentJournalWriter
             segmentJournalWriter = nil
@@ -2849,6 +2935,85 @@ final class PersistentRecorder {
             log.log("[PersistentRecorder] ⚠️ Could not finalize durable recording journal: \(error.localizedDescription)")
             return writer.url
         }
+    }
+
+    // MARK: - Recording Quality (kept audio)
+
+    /// Applies the current Recording quality to the live tap. Called when
+    /// listening starts and when the setting changes; the next recording uses
+    /// it. A recording already in progress keeps its own writer.
+    func recordingQualityDidChange() {
+        let rate = segmentJournalLock.withLock { keptAudioPreRollSampleRate }
+        guard rate > 0 else { return }
+        configureKeptAudioPreRoll(
+            RecordingQuality.load(from: AppConstants.sharedDefaults),
+            inputSampleRate: rate
+        )
+    }
+
+    private func configureKeptAudioPreRoll(_ quality: RecordingQuality, inputSampleRate: Double) {
+        segmentJournalLock.withLock {
+            let rateChanged = keptAudioPreRollSampleRate != inputSampleRate
+            keptAudioPreRollSampleRate = inputSampleRate
+            guard quality.recordsSeparateKeptAudio, inputSampleRate > 0 else {
+                keptAudioPreRoll = nil
+                return
+            }
+            if keptAudioPreRoll == nil || rateChanged {
+                keptAudioPreRoll = CircularAudioBuffer(
+                    capacity: Int((inputSampleRate * keptAudioPreRollSeconds).rounded(.up))
+                )
+            }
+        }
+    }
+
+    /// Opens a kept-audio writer for a recording that keeps its audio.
+    /// Keyboard dictation and continuous dictation never keep audio.
+    private func makeKeptAudioWriter(requestID: String, directory: URL) -> KeptAudioFileWriter? {
+        let quality = RecordingQualityStorageGuard.effectiveQuality(
+            requested: RecordingQuality.load(from: AppConstants.sharedDefaults),
+            availableBytes: RecordingQualityStorageGuard.availableBytes(at: directory)
+        )
+        guard quality.recordsSeparateKeptAudio,
+              let mode = segmentCompletionMode,
+              mode != .keyboardTranscription,
+              continuousDictationSession == nil,
+              segmentJournalLock.withLock({ keptAudioPreRoll != nil }) else { return nil }
+        // `kept_` is not a recoverable prefix. The file keeps this name until
+        // the queue copies it, and only the handoff intent can claim it, so a
+        // crash never recovers one take twice (see KeptAudioArtifacts).
+        let url = KeptAudioArtifacts.makeURL(in: directory, requestID: requestID, quality: quality)
+        do {
+            return try KeptAudioFileWriter(url: url, quality: quality)
+        } catch {
+            log.log("[PersistentRecorder] ⚠️ Could not start \(quality.rawValue) recording; keeping Speech quality: \(error.localizedDescription)")
+            return nil
+        }
+    }
+
+    /// Closes the kept recording. Returns nil when High/Lossless was not
+    /// recording this segment. The file keeps its unrecoverable `kept_` name;
+    /// the handoff intent saved next is what makes it recoverable.
+    private func finalizeKeptAudio() -> URL? {
+        let writer = segmentJournalLock.withLock { () -> KeptAudioFileWriter? in
+            let writer = keptAudioWriter
+            keptAudioWriter = nil
+            return writer
+        }
+        guard let writer else { return nil }
+        segmentJournalWriteQueue.sync {}
+        return writer.finalize()
+    }
+
+    private func discardKeptAudio() {
+        let writer = segmentJournalLock.withLock { () -> KeptAudioFileWriter? in
+            let writer = keptAudioWriter
+            keptAudioWriter = nil
+            return writer
+        }
+        guard let writer else { return }
+        segmentJournalWriteQueue.sync {}
+        writer.discard()
     }
 
     // MARK: - Durable Recording Queue
@@ -2984,9 +3149,27 @@ final class PersistentRecorder {
             }
         }
 
+        // High/Lossless app recordings keep 48 kHz audio. Hand the engine a
+        // temporary 16 kHz copy so its input is identical to a Speech take;
+        // the kept file stays the source for audio delivery.
+        let transcriptionAudioURL: URL
+        do {
+            transcriptionAudioURL = try await Self.transcriptionAudio(for: audioURL, source: job.source)
+        } catch is CancellationError {
+            throw CancellationError()
+        } catch {
+            lastError = String(localized: "The recording could not be prepared for transcription. The recording was preserved in the queue.")
+            throw error
+        }
+        defer {
+            if transcriptionAudioURL != audioURL {
+                try? FileManager.default.removeItem(at: transcriptionAudioURL)
+            }
+        }
+
         do {
             return try await transcribe(
-                audioURL: audioURL,
+                audioURL: transcriptionAudioURL,
                 modelId: job.modelID,
                 fallbackModelId: job.fallbackModelID,
                 language: job.language,
@@ -3015,6 +3198,32 @@ final class PersistentRecorder {
             lastSpeakerDiarizationSkipReason = nil
             lastError = "\(error.localizedDescription) The recording was preserved in the queue."
             throw error
+        }
+    }
+
+    /// The 16 kHz file the transcription engine reads for a queued job.
+    /// Returns `audioURL` itself unless it is a High/Lossless app recording.
+    nonisolated static func transcriptionAudio(
+        for audioURL: URL,
+        source: RecordingJobSource
+    ) async throws -> URL {
+        guard source == .iOSApp else { return audioURL }
+        let task = Task.detached(priority: .userInitiated) { () throws -> URL in
+            guard KeptAudioInspector.needsTranscriptionCopy(audioURL) else { return audioURL }
+            let copyURL = FileManager.default.temporaryDirectory
+                .appendingPathComponent("vox-kept-transcription-\(UUID().uuidString.lowercased())")
+                .appendingPathExtension("wav")
+            do {
+                return try KeptAudioInspector.makeTranscriptionCopy(of: audioURL, at: copyURL)
+            } catch {
+                try? FileManager.default.removeItem(at: copyURL)
+                throw error
+            }
+        }
+        return try await withTaskCancellationHandler {
+            try await task.value
+        } onCancel: {
+            task.cancel()
         }
     }
 
@@ -4229,6 +4438,9 @@ final class PersistentRecorder {
     private func ensureRecordingsDirectory() {
         guard let dir = AppConstants.recordingsDirectoryURL else { return }
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        // A new process owns no in-progress take. Kept files an intent
+        // claims stay for recovery; the rest were never handed off.
+        KeptAudioArtifacts.removeUnclaimed(in: dir)
     }
 }
 

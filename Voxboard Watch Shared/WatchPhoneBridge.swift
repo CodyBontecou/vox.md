@@ -43,6 +43,20 @@ enum WatchRecordingPayloadKey {
     static let stateRevision = "stateRevision"
 }
 
+/// Mirrors the iPhone's Recording quality on Apple Watch. The iPhone sends
+/// `RecordingQuality.rawValue` under `RecordingQuality.watchPayloadKey`; the
+/// Watch keeps it under `RecordingQuality.defaultsKey` in its own defaults so
+/// recordings made while iPhone is away use the last synced choice.
+enum WatchRecordingQualitySync {
+    /// Same string as `RecordingQuality.watchPayloadKey` / `.defaultsKey`.
+    static let key = "recordingQuality"
+
+    static func store(_ payload: [String: Any], defaults: UserDefaults = .standard) {
+        guard let raw = payload[key] as? String, !raw.isEmpty else { return }
+        defaults.set(raw, forKey: key)
+    }
+}
+
 enum WatchRemoteRecordingPhase: String, Codable, Equatable, Sendable {
     case queued
     case transcribing
@@ -1151,6 +1165,7 @@ final class WatchPhoneBridge: NSObject, ObservableObject {
 
     private func apply(_ payload: [String: Any]) {
         guard !payload.isEmpty else { return }
+        WatchRecordingQualitySync.store(payload)
         setSnapshot(
             WatchRecordingSnapshot(dictionary: payload),
             preservingRemoteContext: false

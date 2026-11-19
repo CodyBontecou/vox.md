@@ -280,6 +280,25 @@ public struct RecordingJobHandoffIntentStore: Sendable {
         }
     }
 
+    /// Every source and related filename named by a saved intent, staging or
+    /// ready. Read-only; used to keep claimed artifacts during cleanup.
+    public func claimedAudioFilenames() -> Set<String> {
+        let directory = Self.directoryURL(in: recordingsDirectoryURL)
+        let urls = (try? FileManager.default.contentsOfDirectory(
+            at: directory,
+            includingPropertiesForKeys: nil
+        )) ?? []
+        var result = Set<String>()
+        for url in urls where url.pathExtension == "json" {
+            guard let data = try? Data(contentsOf: url),
+                  let intent = try? JSONDecoder().decode(RecordingJobHandoffIntent.self, from: data)
+            else { continue }
+            result.insert(intent.audioFilename)
+            result.formUnion(intent.relatedAudioFilenames)
+        }
+        return result
+    }
+
     static func directoryURL(in recordingsDirectoryURL: URL) -> URL {
         recordingsDirectoryURL.appendingPathComponent(".recording-handoff-intents", isDirectory: true)
     }
