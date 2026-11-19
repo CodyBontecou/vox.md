@@ -19,12 +19,14 @@ dictation and Keyboard Listening stay mono.
   always used. A recording started while Keyboard Listening is already on
   reuses that mono engine; the footer says so, and while Keyboard Listening
   is on and Stereo is on, the Stereo row shows a warning.
-- Stereo counts only when the route confirms it: the active input must report
-  the chosen data source with the stereo polar pattern selected
-  (`Stereo input: unavailable(reason: "stereo polar pattern not applied")`
-  otherwise), and the engine's input node must deliver two channels
-  (`Stereo input reported 1 ch; keeping mono` otherwise). Either way the take
-  records mono and nothing fails.
+- The input node's real channel count decides stereo vs mono
+  (`StereoRecordingInput.keptChannelCount`): two only when stereo was set up
+  and the node delivers two channels. The route is given ~200 ms to report the
+  stereo pattern, and the log records whether it did
+  (`stereo(dataSource:…, routeConfirmed:…)`), but a late route report never
+  turns stereo off. A two-channel interface that was not set up for stereo
+  (USB, line in) stays mono, and a node that still delivers one channel logs
+  `Stereo input reported 1 ch; keeping mono`.
 - The stereo data source is undone when listening stops, so it never carries
   over to Keyboard Listening or another app. It is never pinned with
   `setPreferredInput`, so AirPods or a headset connected later still win.
@@ -71,9 +73,13 @@ Run before release on an iPhone XS or later, built-in mics, no headset:
    (Lossless). Playback should pan left/right.
 4. Connect AirPods (or a wired/USB mic), record again: expect `1 ch` and a
    saved recording. Disconnect them and record again: expect `2 ch`.
-5. With Stereo still on, turn on Keyboard Listening and dictate: it stays
+5. A/B transcript check: record the same short speech (same position, front
+   of the phone) once with Stereo off and once with Stereo on; the two
+   transcripts should match. The unit tests only prove that a centred source
+   gives the same 16 kHz signal.
+6. With Stereo still on, turn on Keyboard Listening and dictate: it stays
    mono (log shows `Stereo input: notRequested`) and transcribes as before.
-6. Optional: rotate to landscape before a take; left/right should follow the
+7. Optional: rotate to landscape before a take; left/right should follow the
    screen.
 
 ## Follow-up: Spatial Audio (not in this change)

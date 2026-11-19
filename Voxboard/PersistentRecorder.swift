@@ -721,7 +721,10 @@ final class PersistentRecorder {
 
         // Stereo only when it was configured and the input node really
         // delivers two channels; otherwise the take is mono as before.
-        let keptChannelCount = stereoOutcome.isStereo && hwFormat.channelCount >= 2 ? 2 : 1
+        let keptChannelCount = StereoRecordingInput.keptChannelCount(
+            outcome: stereoOutcome,
+            inputNodeChannels: hwFormat.channelCount
+        )
         if stereoOutcome.isStereo, keptChannelCount == 1 {
             log.log("[PersistentRecorder] Stereo input reported \(hwFormat.channelCount) ch; keeping mono")
         }

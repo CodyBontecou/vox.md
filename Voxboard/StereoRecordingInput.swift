@@ -18,7 +18,10 @@ enum StereoRecordingInput {
         /// Stereo was not asked for; any earlier stereo selection was undone.
         case notRequested
         /// The built-in mic data source with this name is set to stereo.
-        case stereo(dataSource: String)
+        /// `routeConfirmed` is false when the route had not reported the
+        /// stereo pattern yet; the input node's channel count decides then
+        /// (see `keptChannelCount`).
+        case stereo(dataSource: String, routeConfirmed: Bool)
         /// Stereo was asked for but is not available; recording stays mono.
         case unavailable(reason: String)
 
@@ -85,6 +88,8 @@ enum StereoRecordingInput {
         requested: Bool,
         orientation: UIInterfaceOrientation? = nil
     ) -> Outcome {
+        // Shared session state: main actor only, checked at run time too.
+        MainActor.preconditionIsolated()
         guard requested else {
             resetIfNeeded(session: session)
             return .notRequested
@@ -118,21 +123,40 @@ enum StereoRecordingInput {
             let interface = orientation ?? currentInterfaceOrientation()
             try session.setPreferredInputOrientation(stereoOrientation(for: interface))
             configuredSource = (port.uid, source.dataSourceID)
-            // Trust what the route reports, not what was requested: if the
-            // stereo pattern is not selected now, record mono.
-            let selected = session.currentRoute.inputs.first?.selectedDataSource
-            guard stereoApplied(
-                selectedDataSourceID: selected?.dataSourceID,
-                selectedPattern: selected?.selectedPolarPattern,
-                requestedDataSourceID: source.dataSourceID
-            ) else {
-                resetIfNeeded(session: session)
-                return .unavailable(reason: "stereo polar pattern not applied")
+            // The route normally reports the new pattern at once. Give it a
+            // moment if not (at most ~200 ms, only when a stereo take starts),
+            // but don't treat a late report as failure: the input node's
+            // channel count, read next, is what decides stereo vs mono.
+            let routeConfirmed = waitForRoute(timeout: 0.2) {
+                let selected = session.currentRoute.inputs.first?.selectedDataSource
+                return stereoApplied(
+                    selectedDataSourceID: selected?.dataSourceID,
+                    selectedPattern: selected?.selectedPolarPattern,
+                    requestedDataSourceID: source.dataSourceID
+                )
             }
-            return .stereo(dataSource: source.dataSourceName)
+            return .stereo(dataSource: source.dataSourceName, routeConfirmed: routeConfirmed)
         } catch {
             resetIfNeeded(session: session)
             return .unavailable(reason: "stereo setup failed: \(error.localizedDescription)")
+        }
+    }
+
+    /// Channels the kept file records. Two only when stereo was configured
+    /// and the input node actually delivers two channels: the node's format
+    /// is the ground truth, so a route that reports the pattern late still
+    /// records stereo, and a two-channel input that was not configured for
+    /// stereo (a USB or line-in interface) stays on today's mono path.
+    static func keptChannelCount(outcome: Outcome, inputNodeChannels: AVAudioChannelCount) -> Int {
+        outcome.isStereo && inputNodeChannels >= 2 ? 2 : 1
+    }
+
+    private static func waitForRoute(timeout: TimeInterval, until applied: () -> Bool) -> Bool {
+        let deadline = Date().addingTimeInterval(timeout)
+        while true {
+            if applied() { return true }
+            if Date() >= deadline { return false }
+            Thread.sleep(forTimeInterval: 0.02)
         }
     }
 
@@ -161,6 +185,7 @@ enum StereoRecordingInput {
     /// (Session preferences are per process, so a relaunch always starts
     /// from the system default.)
     private static func resetIfNeeded(session: AVAudioSession) {
+        MainActor.preconditionIsolated()
         guard let configured = configuredSource else { return }
         guard let port = session.availableInputs?.first(where: { $0.uid == configured.port }) else {
             // The built-in mic is not available right now (another route);

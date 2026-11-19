@@ -131,4 +131,24 @@ final class StereoRecordingInputTests: XCTestCase {
             }
         }
     }
+
+    // MARK: - The input node decides stereo vs mono
+
+    func testInputNodeChannelsDecideTheKeptLayout() {
+        typealias Input = StereoRecordingInput
+        let confirmed = Input.Outcome.stereo(dataSource: "Front", routeConfirmed: true)
+        let late = Input.Outcome.stereo(dataSource: "Front", routeConfirmed: false)
+        // Configured stereo + a 2-channel node: stereo, even if the route
+        // reported the pattern late.
+        XCTAssertEqual(Input.keptChannelCount(outcome: confirmed, inputNodeChannels: 2), 2)
+        XCTAssertEqual(Input.keptChannelCount(outcome: late, inputNodeChannels: 2), 2)
+        // Configured but the node still delivers one channel: mono.
+        XCTAssertEqual(Input.keptChannelCount(outcome: confirmed, inputNodeChannels: 1), 1)
+        // A 2-channel interface that was not set up for stereo (USB, line in,
+        // or Stereo off) keeps today's mono path.
+        XCTAssertEqual(Input.keptChannelCount(outcome: .notRequested, inputNodeChannels: 2), 1)
+        XCTAssertEqual(
+            Input.keptChannelCount(outcome: .unavailable(reason: "input route [usbAudio]"), inputNodeChannels: 2), 1
+        )
+    }
 }

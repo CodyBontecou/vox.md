@@ -133,9 +133,16 @@ struct RecordingQualitySettingsView: View {
             if selection != .speech {
                 Section {
                     Label {
-                        Text("High and Lossless use more Apple Watch battery and take longer to send to iPhone.")
-                            .font(Geist.caption())
-                            .foregroundStyle(Geist.muted)
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("High and Lossless use more Apple Watch battery and take longer to send to iPhone.")
+                            if StereoRecordingPreference.requestsStereo(quality: selection, enabled: stereo) {
+                                // The sizes above are stereo; the Watch has one
+                                // microphone and keeps recording mono.
+                                Text("Apple Watch records in mono: \(selection.localizedStoragePerMinute(stereo: false))")
+                            }
+                        }
+                        .font(Geist.caption())
+                        .foregroundStyle(Geist.muted)
                     } icon: {
                         Image(systemName: "applewatch")
                             .foregroundStyle(Geist.muted)
