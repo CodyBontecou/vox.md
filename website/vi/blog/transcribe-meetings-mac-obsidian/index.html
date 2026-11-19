@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="vi" dir="ltr" data-search-section="Mục" data-search-guide="Hướng dẫn" data-search-empty="Không khớp “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chép lời cuộc họp trên Mac cục bộ vào Obsidian | Vox.md</title>
+  <meta name="description" content="Ghi âm thanh của một ứng dụng và micrô của bạn thành các rãnh riêng với Vox.md cho Mac, chép lời cả hai trên thiết bị và lưu ghi chú Markdown có nhãn người nói vào Obsidian. Không cần bot cuộc họp hay tài khoản.">
+  <link rel="canonical" href="https://vox.isolated.tech/vi/blog/transcribe-meetings-mac-obsidian/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Tài liệu Vox.md về mô hình ngôn ngữ">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Chép lời cuộc họp trên Mac cục bộ vào Obsidian">
+  <meta property="og:description" content="Ghi âm thanh của một ứng dụng và micrô của bạn thành các rãnh riêng với Vox.md cho Mac, chép lời cả hai trên thiết bị và lưu ghi chú Markdown có nhãn người nói vào Obsidian. Không cần bot cuộc họp hay tài khoản.">
+  <meta property="og:url" content="https://vox.isolated.tech/vi/blog/transcribe-meetings-mac-obsidian/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-18">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Chép lời cuộc họp trên Mac cục bộ vào Obsidian">
+  <meta name="twitter:description" content="Ghi âm thanh của một ứng dụng và micrô của bạn thành các rãnh riêng với Vox.md cho Mac, chép lời cả hai trên thiết bị và lưu ghi chú Markdown có nhãn người nói vào Obsidian. Không cần bot cuộc họp hay tài khoản.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Chép lời cuộc họp trên Mac cục bộ vào Obsidian",
+  "description": "Ghi âm thanh của một ứng dụng và micrô của bạn thành các rãnh riêng với Vox.md cho Mac, chép lời cả hai trên thiết bị và lưu ghi chú Markdown có nhãn người nói vào Obsidian. Không cần bot cuộc họp hay tài khoản.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-18",
+  "dateModified": "2026-11-18",
+  "mainEntityOfPage": "https://vox.isolated.tech/vi/blog/transcribe-meetings-mac-obsidian/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "vi",
+  "name": "Chép lời cuộc họp trên Mac cục bộ vào Obsidian | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/vi/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Hướng dẫn",
+      "item": "https://vox.isolated.tech/vi/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Chép lời cuộc họp trên Mac cục bộ vào Obsidian",
+      "item": "https://vox.isolated.tech/vi/blog/transcribe-meetings-mac-obsidian/"
+    }
+  ],
+  "inLanguage": "vi",
+  "name": "Chép lời cuộc họp trên Mac cục bộ vào Obsidian | Vox.md",
+  "description": "Ghi âm thanh của một ứng dụng và micrô của bạn thành các rãnh riêng với Vox.md cho Mac, chép lời cả hai trên thiết bị và lưu ghi chú Markdown có nhãn người nói vào Obsidian. Không cần bot cuộc họp hay tài khoản."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-meetings-mac-obsidian/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Đến hướng dẫn</a>
+<nav aria-label="Điều hướng chính">
+  <div class="nav-inner">
+    <a href="/vi/" class="logo" aria-label="trang chủ Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/vi/#how">Cách hoạt động</a></li>
+      <li><a href="/vi/docs/">Tài liệu</a></li>
+      <li><a href="/vi/blog/">Hướng dẫn</a></li>
+      <li><a href="/vi/compare/">So sánh</a></li>
+      <li><a href="/vi/privacy.html">Quyền riêng tư</a></li>
+      <li><a href="/vi/terms.html">Điều khoản</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_vi_f0ba2ed6ae97">Tải Vox.md</a>
+  <details class="language-switcher"><summary>Ngôn ngữ</summary><ul><li><a href="/blog/transcribe-meetings-mac-obsidian/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-meetings-mac-obsidian/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-meetings-mac-obsidian/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-meetings-mac-obsidian/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-meetings-mac-obsidian/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-meetings-mac-obsidian/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-meetings-mac-obsidian/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-meetings-mac-obsidian/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-meetings-mac-obsidian/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-meetings-mac-obsidian/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-meetings-mac-obsidian/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-meetings-mac-obsidian/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-meetings-mac-obsidian/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-meetings-mac-obsidian/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-meetings-mac-obsidian/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-meetings-mac-obsidian/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-meetings-mac-obsidian/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-meetings-mac-obsidian/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-meetings-mac-obsidian/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-meetings-mac-obsidian/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-meetings-mac-obsidian/" lang="vi" hreflang="vi" aria-current="page">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Mac · Cuộc họp · Markdown</div>
+        <h1 class="hero-title">Chép lời cuộc họp trên Mac cục bộ vào Obsidian</h1>
+        <p class="hero-subtitle">Chọn ứng dụng gọi, ghi, dừng và nhận ghi chú Markdown trong kho của bạn. Biết những gì ở lại trên Mac và những gì không.</p>
+      </div>
+      <aside class="meta-card" aria-label="Về hướng dẫn này">
+        <dl>
+          <div><dt>Bởi</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Cập nhật</dt><dd><time datetime="2026-11-18">18/11/2026</time></dd></div>
+          <div><dt>Yêu cầu</dt><dd>macOS 14+ · mô hình giọng nói đã tải · thư mục kho có thể ghi</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Chép lời cuộc họp trên Mac cục bộ vào Obsidian">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Trả lời ngắn</div>
+        <p>Vox.md cho Mac có thể ghi âm thanh của một ứng dụng và micrô của bạn thành các rãnh riêng, chép lời cả hai trên Mac và lưu ghi chú Markdown có nhãn người nói vào kho Obsidian hoặc bất kỳ thư mục nào. Không có bot cuộc họp và không cần tài khoản.</p>
+      </div>
+      <p>Hướng dẫn này đi qua một thiết lập hoạt động được, từ một Lộ trình ghi vào <code>Meetings/</code> trong kho của bạn đến một ghi chú hoàn chỉnh. Các bước dựa theo <a href="/vi/docs/#mac-meeting">tài liệu ghi cuộc họp trên Mac</a> và hành vi của ứng dụng đã phát hành. Markdown bên dưới là ví dụ minh họa, không phải bản ghi của một cuộc gọi thật.</p>
+      <nav class="toc" aria-label="Trong hướng dẫn này"><div class="toc-title">Trong hướng dẫn này</div><ol>
+        <li><a href="#requirements">Bạn cần gì</a></li>
+        <li><a href="#prepare-route">Chuẩn bị Lộ trình cho cuộc họp</a></li>
+        <li><a href="#record">Ghi cuộc gọi</a></li>
+        <li><a href="#stop-transcribe">Dừng, chép lời và gửi</a></li>
+        <li><a href="#recovery">Nếu bản ghi bị gián đoạn</a></li>
+        <li><a href="#consent">Cho mọi người biết bạn đang ghi</a></li>
+        <li><a href="#compare">So sánh các cách ghi chú cuộc họp</a></li>
+        <li><a href="#limitations">Giới hạn cần biết trước một cuộc gọi dài</a></li>
+      </ol></nav>
+
+      <h2 id="requirements">1. Bạn cần gì</h2>
+      <ul>
+        <li><strong>Một máy Mac chạy macOS 14 trở lên</strong> có ứng dụng Vox.md cho Mac, cài từ cùng trang App Store với ứng dụng iPhone.</li>
+        <li><strong>Quyền truy cập micrô</strong> cho Vox.md, để giọng của bạn được ghi lại.</li>
+        <li><strong>Quyền ghi màn hình và âm thanh hệ thống.</strong> Ghi cuộc họp dùng <a href="https://developer.apple.com/documentation/screencapturekit" target="_blank" rel="noopener">khung ScreenCaptureKit của Apple</a> để ghi âm thanh của ứng dụng bạn chọn. Nếu macOS hỏi, hãy cho phép. Bạn có thể xem lại cả hai quyền trong Cài đặt hệ thống → Quyền riêng tư &amp; Bảo mật; Apple giải thích cài đặt này trong <a href="https://support.apple.com/guide/mac-help/control-access-screen-system-audio-recording-mchld6aa7d23/mac" target="_blank" rel="noopener">Kiểm soát quyền truy cập ghi màn hình và âm thanh hệ thống trên Mac</a>.</li>
+        <li><strong>Một mô hình Whisper hoặc Parakeet đã tải.</strong> Mở màn hình Mô hình trên Mac, tải một mô hình và đặt ngôn ngữ chép lời. Phần <a href="/vi/docs/#models">tham chiếu mô hình</a> liệt kê kích thước và ngôn ngữ. Whisper chạy qua <a href="https://github.com/ggml-org/whisper.cpp" target="_blank" rel="noopener">whisper.cpp</a> còn Parakeet chạy qua <a href="https://github.com/FluidInference/FluidAudio" target="_blank" rel="noopener">FluidAudio</a>.</li>
+        <li><strong>Một thư mục có thể ghi</strong>, chẳng hạn kho Obsidian của bạn hoặc thư mục <code>Meetings</code> bên trong kho.</li>
+      </ul>
+      <p>Xử lý Apple Intelligence tùy chọn, mà chế độ Ghi chú cuộc họp dùng để sắp xếp lại bản chép, cần một máy Mac tương thích chạy macOS 26. Nếu không có, Vox.md dùng bộ định dạng tất định thay thế, nên Lộ trình vẫn hoạt động.</p>
+
+      <h2 id="prepare-route">2. Chuẩn bị Lộ trình cho cuộc họp</h2>
+      <p>Lộ trình quyết định cách xử lý một lần ghi nhanh và nơi ghi Markdown. Một số phiên bản Mac gọi Lộ trình là Cấu hình ghi nhanh trong Cài đặt.</p>
+      <ol>
+        <li>Mở Cài đặt trong ứng dụng Mac và tạo Lộ trình mới, đặt tên kiểu như <em>Cuộc họp</em>.</li>
+        <li>Trong đích đến, hãy chọn vault của bạn làm thư mục. Với mục tiêu ghi chú, hãy chọn <strong>Note mới</strong> để mỗi cuộc họp có tệp riêng.</li>
+        <li>Nhập mẫu đường dẫn, chẳng hạn <code>Meetings/{date}-{hour}{minute}.md</code>. Thêm giờ giúp hai cuộc họp cùng ngày nằm ở hai ghi chú riêng. Xem <a href="/vi/blog/obsidian-capture-templates/">Mẫu ghi nhanh cho Obsidian</a> để có thêm công thức đường dẫn và token.</li>
+        <li>Chọn cách xử lý trong mục <strong>Chế độ</strong>. <strong>Giữ nguyên bản</strong> gửi bản chép có nhãn đúng như nhận dạng. <strong>Ghi chú cuộc họp</strong> tạo phần <code>## Notes</code> và, khi văn bản có việc cần làm, một danh sách <code>## Action Items</code> để đánh dấu.</li>
+        <li>Tùy chọn: bật <strong>Xác định Speakers</strong> nếu có nhiều người từ xa cùng nói. Mô hình người nói được tải về lần đầu Lộ trình này dùng nó.</li>
+        <li>Tùy chọn: đặt <strong>Lưu âm thanh</strong> để giữ bản ghi cạnh ghi chú hoặc trong thư mục đính kèm. Để tắt nếu bạn chỉ cần văn bản.</li>
+      </ol>
+
+      <h2 id="record">3. Ghi cuộc gọi</h2>
+      <ol>
+        <li>Tham gia cuộc gọi trong ứng dụng của nó: Zoom, Microsoft Teams, FaceTime hoặc trình duyệt đang mở Google Meet.</li>
+        <li>Trong cửa sổ Ghi nhanh của Vox.md, chọn Lộ trình <em>Cuộc họp</em> đã tạo.</li>
+        <li>Chuyển nguồn âm thanh sang <strong>Cuộc họp</strong>; mặc định là <strong>Micrô</strong>. Tùy phiên bản ứng dụng, điều khiển này nằm trong cửa sổ Ghi nhanh hoặc ở Ghi nhanh → Nguồn âm thanh trên thanh menu.</li>
+        <li>Bắt đầu ghi. macOS hiện bộ chọn nội dung; chọn đúng một ứng dụng. Vox.md không bao giờ ghi âm thanh của chính nó. Với cuộc gọi trong trình duyệt, hãy chọn trình duyệt. Âm thanh của trình duyệt được ghi toàn bộ, nên hãy tắt tiếng các thẻ khác đang phát âm thanh.</li>
+        <li>Trong khi ghi, thanh trạng thái hiện đồng hồ mức Hệ thống và Micrô trực tiếp, trạng thái của từng nguồn và mọi cảnh báo ghi. Hãy kiểm tra cả hai đồng hồ đều nhích khi có người nói.</li>
+      </ol>
+      <p>Không thể tạm dừng ghi cuộc họp. Bản ghi micrô có Tạm dừng và Tiếp tục, nhưng cuộc họp chạy liên tục từ lúc bắt đầu đến lúc dừng. Bạn cũng không thể chuyển sang ứng dụng khác giữa chừng; hãy dừng và bắt đầu bản ghi mới.</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_f0ba2ed6ae97">Tải Vox.md miễn phí</a></p>
+      <p>Bản tải miễn phí gồm 15 phút chép lời. Dùng không giới hạn là mua một lần trọn đời.</p>
+
+      <h2 id="stop-transcribe">4. Dừng, chép lời và gửi</h2>
+      <p>Nhấn Dừng khi cuộc gọi kết thúc. Vox.md chép lời riêng hai rãnh trên Mac bằng mô hình bạn chọn, rồi xen kẽ chúng trên một dòng thời gian chung. Rãnh micrô của bạn có nhãn <code>You</code>, còn rãnh ứng dụng có nhãn người nói từ xa, chẳng hạn <code>Speaker 2</code>. Với Giữ nguyên bản, một cuộc họp ngắn có thể tạo thân ghi chú như ví dụ minh họa này:</p>
+      <pre class="guide-code"><code>You:
+Thanks for joining. Can we start with the launch checklist?
+
+Speaker 2:
+Sure. The release notes are ready, but we still need screenshots.
+
+You:
+I’ll take the screenshots by Friday.</code></pre>
+      <p>Khi bật Xác định Speakers, Vox.md cố tách rãnh từ xa thành nhiều nhãn hơn, chẳng hạn <code>Speaker 2</code> và <code>Speaker 3</code>. Các nhãn này ẩn danh và chỉ ở mức cố gắng tốt nhất. Nếu không chạy được nhận dạng, bạn vẫn giữ bản chép thường và ứng dụng cho biết lý do.</p>
+      <p>Các rãnh riêng là lý do nhãn <code>You</code> hoạt động. Giọng bạn đến từ rãnh micrô và những người khác đến từ rãnh của ứng dụng, nên Vox.md không phải đoán bên nào trong cuộc gọi đã nói gì từ một bản ghi trộn duy nhất. Nhãn vẫn có thể sai. Ví dụ, micrô có thể thu âm thanh từ loa nếu bạn không đeo tai nghe.</p>
+      <p>Bước tiếp theo phụ thuộc vào tùy chọn ghi bạn đã chọn trước khi bắt đầu:</p>
+      <ul>
+        <li><strong>Thêm vào bản nháp</strong> đưa bản chép vào trình soạn Ghi nhanh. Xem lại và chỉnh sửa, rồi nhấn Command-Return để gửi qua Lộ trình.</li>
+        <li><strong>Gửi ngay</strong> gửi ghi chú qua Lộ trình ngay khi chép lời xong.</li>
+      </ul>
+      <p>Bản chép cũng theo cài đặt bộ nhớ tạm của bạn, như mọi bản ghi khác. Một bản trộn phát lại của cả hai rãnh được giữ làm âm thanh của bản ghi, và chỉ được lưu cùng ghi chú nếu cài đặt Lưu âm thanh của Lộ trình giữ âm thanh. Hãy mở ghi chú trong Obsidian một lần để xác nhận đường dẫn và nhãn đúng như bạn mong đợi.</p>
+
+      <h2 id="recovery">5. Nếu bản ghi bị gián đoạn</h2>
+      <p>Cả hai rãnh được ghi xuống đĩa thành các khối bền vững kèm một tệp kê khai khôi phục. Nếu luồng dừng, micrô bị rút hoặc Vox.md bị buộc thoát, các khối đã ghi đến lúc đó vẫn có thể được hoàn tất và chép lời. Việc khôi phục chạy khi hàng đợi ghi tiếp tục, ví dụ lần tới bạn mở Vox.md.</p>
+      <p>Ghi chú từ một lần ghi chưa hoàn chỉnh bắt đầu bằng một dòng cảnh báo cho biết phần nào bị thiếu, để bạn biết bản chép có thể có chỗ trống.</p>
+
+      <h2 id="consent">6. Cho mọi người biết bạn đang ghi</h2>
+      <p>Luật về ghi âm và chính sách nơi làm việc khác nhau theo địa phương và tổ chức. Một số nơi yêu cầu sự đồng ý của mọi người. Hãy cho những người tham gia khác biết bạn đang ghi và chép lời, và xin sự đồng ý của họ trước khi bắt đầu. Đây không phải tư vấn pháp lý; hãy kiểm tra các quy định áp dụng cho bạn.</p>
+
+      <h2 id="compare">7. So sánh các cách ghi chú cuộc họp</h2>
+      <p>Công cụ ghi chú cuộc họp đại khái chia thành ba nhóm. Sản phẩm khác nhau và thay đổi, nên bảng này mô tả các cách tiếp cận chứ không phải sản phẩm cụ thể. Nếu bạn đang so sánh các ứng dụng như Granola, Otter hay Fireflies, hãy xem tài liệu riêng của từng nhà cung cấp về nơi xử lý âm thanh và nơi lưu ghi chú.</p>
+      <p class="guide-table-hint">Trên màn hình nhỏ, vuốt bảng sang ngang để so sánh các cách.</p>
+      <div class="guide-comparison" role="region" aria-label="So sánh các cách ghi chú cuộc họp; cuộn ngang trên màn hình nhỏ" tabindex="0">
+        <table class="comparison">
+          <caption>Các cách tiếp cận chung, xem xét ngày 18/11/2026</caption>
+          <thead><tr><th scope="col">Câu hỏi</th><th scope="col">Bot ghi chú</th><th scope="col">Ứng dụng đám mây không dùng bot</th><th scope="col">Ghi cục bộ bằng Vox.md</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Cách tham gia</th><td>Một bot tham gia cuộc gọi như người dự</td><td>Một ứng dụng trên máy tính của bạn ghi cuộc gọi</td><td>Ứng dụng Mac ghi âm thanh của một ứng dụng và micrô của bạn</td></tr>
+            <tr><th scope="row">Nơi xử lý âm thanh</td><td>Thường trên máy chủ của nhà cung cấp</td><td>Thường trên máy chủ của nhà cung cấp</td><td>Trên Mac của bạn</td></tr>
+            <tr><th scope="row">Nơi lưu ghi chú</td><td>Thường trong không gian làm việc của nhà cung cấp</td><td>Thường trong không gian làm việc của nhà cung cấp</td><td>Tệp Markdown trong thư mục bạn chọn</td></tr>
+            <tr><th scope="row">Tài khoản</th><td>Thường bắt buộc</td><td>Thường bắt buộc</td><td>Không cần</td></tr>
+            <tr><th scope="row">Mô hình giá</td><td>Xem trang giá của nhà cung cấp</td><td>Xem trang giá của nhà cung cấp</td><td>15 phút chép lời miễn phí, sau đó mở khóa trọn đời một lần</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Công cụ đám mây có thể có tính năng mà ứng dụng cục bộ không có, như không gian làm việc chung hay tóm tắt qua nhiều cuộc họp. Hãy chọn dựa trên nơi bạn muốn xử lý âm thanh và nơi bạn muốn ghi chú được lưu.</p>
+
+      <h2 id="limitations">8. Giới hạn cần biết trước một cuộc gọi dài</h2>
+      <ul>
+        <li><strong>Mỗi bản ghi một ứng dụng.</strong> Ghi cuộc họp ghi một ứng dụng duy nhất cùng micrô của bạn.</li>
+        <li><strong>Nhãn chỉ ở mức cố gắng tốt nhất.</strong> Nhãn người nói phụ thuộc vào âm thanh sạch và tách biệt, và tính năng nhận dạng người nói có thể gộp hoặc tách giọng.</li>
+        <li><strong>Chất lượng phụ thuộc vào mô hình và ngôn ngữ.</strong> Mô hình lớn hơn tốn nhiều dung lượng và thời gian hơn. Hãy đối chiếu câu chữ quan trọng với âm thanh trước khi dựa vào chúng.</li>
+        <li><strong>Gói miễn phí là 15 phút chép lời.</strong> Một cuộc họp dài có thể dùng hết. Dùng không giới hạn là mua một lần trọn đời; xem <a href="/vi/docs/#pricing-limits">dùng miễn phí và mở khóa trọn đời</a>.</li>
+        <li><strong>Một số thứ rời khỏi Mac của bạn.</strong> Việc ghi và chép lời diễn ra trên thiết bị, và âm thanh không được tải lên để chép lời. Tải mô hình Whisper hoặc Parakeet sẽ kết nối với Hugging Face, như mô tả trong <a href="/vi/privacy.html#third-party-services">chính sách riêng tư</a>, và mô hình người nói cũng chỉ tải một lần. Nếu kho của bạn đồng bộ bằng iCloud Drive hoặc Obsidian Sync, ghi chú hoàn chỉnh sẽ đồng bộ theo điều khoản của dịch vụ đó. Vox.md ghi tệp; đồng bộ là lựa chọn của bạn.</li>
+      </ul>
+      <p>Bạn cần một cách nhanh để gõ bằng giọng nói? Phím tắt <strong>Tải về Clipboard</strong> của Mac đọc chính tả vào mọi ứng dụng mà không tạo ghi chú; xem <a href="/vi/docs/#mac-keybinds">phím tắt toàn cục</a>.</p>
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Cuộc họp của bạn,<br>thành tệp do bạn sở hữu.</h2>
+        <p>Thử một cuộc gọi ngắn với đồng nghiệp đã đồng ý, rồi kiểm tra ghi chú Markdown trong kho của bạn.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_f0ba2ed6ae97">Tải Vox.md miễn phí</a></p>
+        <p>15 phút chép lời miễn phí · không cần tài khoản · mở khóa trọn đời một lần</p>
+      </section>
+      <nav class="toc" aria-label="Hướng dẫn liên quan" id="related"><div class="toc-title">Tiếp tục thiết lập</div><ul>
+        <li><a href="/vi/docs/#mac-meeting">Tham chiếu ghi cuộc họp trên Mac</a></li>
+        <li><a href="/vi/docs/#models">Mô hình giọng nói và ngôn ngữ</a></li>
+        <li><a href="/vi/blog/obsidian-capture-templates/">Công thức đường dẫn và mẫu</a></li>
+        <li><a href="/vi/blog/voice-notes-to-obsidian-iphone/">Lưu giọng nói iPhone vào Obsidian</a></li>
+        <li><a href="/vi/blog/offline-transcription-iphone-markdown/">Chuẩn bị chép lời cục bộ và đích Markdown</a></li>
+        <li><a href="/vi/compare/vox-md-vs-obsidian-quick-capture/">So sánh Vox.md với Obsidian Quick Capture</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/vi/">Trang chủ</a></li>
+        <li><a href="/vi/docs/">Tài liệu</a></li>
+        <li><a href="/vi/blog/">Hướng dẫn</a></li>
+        <li><a href="/vi/compare/">So sánh</a></li>
+        <li><a href="/vi/privacy.html">Quyền riêng tư</a></li>
+        <li><a href="/vi/terms.html">Điều khoản</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Hỗ trợ</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_f0ba2ed6ae97">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Ghi nhanh cho ghi chú cục bộ · Không tải nội dung lên.</div>
+    </div>
+  <details class="language-switcher"><summary>Ngôn ngữ</summary><ul><li><a href="/blog/transcribe-meetings-mac-obsidian/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-meetings-mac-obsidian/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-meetings-mac-obsidian/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-meetings-mac-obsidian/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-meetings-mac-obsidian/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-meetings-mac-obsidian/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-meetings-mac-obsidian/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-meetings-mac-obsidian/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-meetings-mac-obsidian/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-meetings-mac-obsidian/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-meetings-mac-obsidian/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-meetings-mac-obsidian/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-meetings-mac-obsidian/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-meetings-mac-obsidian/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-meetings-mac-obsidian/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-meetings-mac-obsidian/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-meetings-mac-obsidian/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-meetings-mac-obsidian/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-meetings-mac-obsidian/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-meetings-mac-obsidian/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-meetings-mac-obsidian/" lang="vi" hreflang="vi" aria-current="page">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

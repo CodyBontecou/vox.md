@@ -145,8 +145,8 @@ layout were checked; the QR disclosure is hidden on phones.
 The deployment script also runs `scripts/build-website.py`, preserving the inline
 CSS, Markdown negotiation and read-only discovery API introduced on main. The
 site check covers extensionless public pages and excludes the noindex 404 page
-from sitemap requirements. Full localization covers 506 HTML pages (22 per language) and 483 sitemap
-URLs (21 indexable pages per language). The noindex 404 pages are excluded.
+from sitemap requirements. Full localization covers 529 HTML pages (23 per language) and 506 sitemap
+URLs (22 indexable pages per language). The noindex 404 pages are excluded.
 
 
 ## Cloud publishing

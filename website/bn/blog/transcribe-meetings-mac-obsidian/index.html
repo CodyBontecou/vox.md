@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="bn" dir="ltr" data-search-section="অংশ" data-search-guide="গাইড" data-search-empty="“{query}”-এর কোনো ফল নেই">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mac-এর মিটিং স্থানীয়ভাবে প্রতিলিখন করে Obsidian-এ রাখুন | Vox.md</title>
+  <meta name="description" content="Mac-এর জন্য Vox.md দিয়ে একটি অ্যাপের অডিও ও আপনার মাইক্রোফোন আলাদা ট্র্যাকে রেকর্ড করুন, দুটোই ডিভাইসে প্রতিলিখন করুন, এবং বক্তার লেবেলসহ Markdown নোট Obsidian-এ সংরক্ষণ করুন। কোনো মিটিং বট বা অ্যাকাউন্ট নেই।">
+  <link rel="canonical" href="https://vox.isolated.tech/bn/blog/transcribe-meetings-mac-obsidian/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="ভাষা মডেলের জন্য Vox.md নথি">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Mac-এর মিটিং স্থানীয়ভাবে প্রতিলিখন করে Obsidian-এ রাখুন">
+  <meta property="og:description" content="Mac-এর জন্য Vox.md দিয়ে একটি অ্যাপের অডিও ও আপনার মাইক্রোফোন আলাদা ট্র্যাকে রেকর্ড করুন, দুটোই ডিভাইসে প্রতিলিখন করুন, এবং বক্তার লেবেলসহ Markdown নোট Obsidian-এ সংরক্ষণ করুন। কোনো মিটিং বট বা অ্যাকাউন্ট নেই।">
+  <meta property="og:url" content="https://vox.isolated.tech/bn/blog/transcribe-meetings-mac-obsidian/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-18">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mac-এর মিটিং স্থানীয়ভাবে প্রতিলিখন করে Obsidian-এ রাখুন">
+  <meta name="twitter:description" content="Mac-এর জন্য Vox.md দিয়ে একটি অ্যাপের অডিও ও আপনার মাইক্রোফোন আলাদা ট্র্যাকে রেকর্ড করুন, দুটোই ডিভাইসে প্রতিলিখন করুন, এবং বক্তার লেবেলসহ Markdown নোট Obsidian-এ সংরক্ষণ করুন। কোনো মিটিং বট বা অ্যাকাউন্ট নেই।">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Mac-এর মিটিং স্থানীয়ভাবে প্রতিলিখন করে Obsidian-এ রাখুন",
+  "description": "Mac-এর জন্য Vox.md দিয়ে একটি অ্যাপের অডিও ও আপনার মাইক্রোফোন আলাদা ট্র্যাকে রেকর্ড করুন, দুটোই ডিভাইসে প্রতিলিখন করুন, এবং বক্তার লেবেলসহ Markdown নোট Obsidian-এ সংরক্ষণ করুন। কোনো মিটিং বট বা অ্যাকাউন্ট নেই।",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-18",
+  "dateModified": "2026-11-18",
+  "mainEntityOfPage": "https://vox.isolated.tech/bn/blog/transcribe-meetings-mac-obsidian/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "bn",
+  "name": "Mac-এর মিটিং স্থানীয়ভাবে প্রতিলিখন করে Obsidian-এ রাখুন | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/bn/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "গাইড",
+      "item": "https://vox.isolated.tech/bn/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Mac-এর মিটিং স্থানীয়ভাবে প্রতিলিখন করে Obsidian-এ রাখুন",
+      "item": "https://vox.isolated.tech/bn/blog/transcribe-meetings-mac-obsidian/"
+    }
+  ],
+  "inLanguage": "bn",
+  "name": "Mac-এর মিটিং স্থানীয়ভাবে প্রতিলিখন করে Obsidian-এ রাখুন | Vox.md",
+  "description": "Mac-এর জন্য Vox.md দিয়ে একটি অ্যাপের অডিও ও আপনার মাইক্রোফোন আলাদা ট্র্যাকে রেকর্ড করুন, দুটোই ডিভাইসে প্রতিলিখন করুন, এবং বক্তার লেবেলসহ Markdown নোট Obsidian-এ সংরক্ষণ করুন। কোনো মিটিং বট বা অ্যাকাউন্ট নেই।"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-meetings-mac-obsidian/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">সরাসরি গাইডে যান</a>
+<nav aria-label="প্রধান নেভিগেশন">
+  <div class="nav-inner">
+    <a href="/bn/" class="logo" aria-label="Vox.md হোম">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/bn/#how">যেভাবে কাজ করে</a></li>
+      <li><a href="/bn/docs/">নথি</a></li>
+      <li><a href="/bn/blog/">গাইড</a></li>
+      <li><a href="/bn/compare/">তুলনা করুন</a></li>
+      <li><a href="/bn/privacy.html">গোপনীয়তা</a></li>
+      <li><a href="/bn/terms.html">শর্তাবলি</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_bn_f0ba2ed6ae97">Vox.md ডাউনলোড করুন</a>
+  <details class="language-switcher"><summary>ভাষা</summary><ul><li><a href="/blog/transcribe-meetings-mac-obsidian/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-meetings-mac-obsidian/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-meetings-mac-obsidian/" lang="bn" hreflang="bn" aria-current="page">বাংলা</a></li><li><a href="/de/blog/transcribe-meetings-mac-obsidian/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-meetings-mac-obsidian/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-meetings-mac-obsidian/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-meetings-mac-obsidian/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-meetings-mac-obsidian/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-meetings-mac-obsidian/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-meetings-mac-obsidian/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-meetings-mac-obsidian/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-meetings-mac-obsidian/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-meetings-mac-obsidian/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-meetings-mac-obsidian/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-meetings-mac-obsidian/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-meetings-mac-obsidian/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-meetings-mac-obsidian/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-meetings-mac-obsidian/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-meetings-mac-obsidian/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-meetings-mac-obsidian/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-meetings-mac-obsidian/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Mac · মিটিং · Markdown</div>
+        <h1 class="hero-title">Mac-এর মিটিং স্থানীয়ভাবে প্রতিলিখন করে Obsidian-এ রাখুন</h1>
+        <p class="hero-subtitle">কলের অ্যাপ বেছে নিন, রেকর্ড করুন, থামান, আর ভল্টে একটি Markdown নোট পান। জানুন কী আপনার Mac-এ থাকে আর কী থাকে না।</p>
+      </div>
+      <aside class="meta-card" aria-label="এই গাইড সম্পর্কে">
+        <dl>
+          <div><dt>লিখেছেন</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>হালনাগাদ</dt><dd><time datetime="2026-11-18">১৮ নভেম্বর, ২০২৬</time></dd></div>
+          <div><dt>প্রয়োজন</dt><dd>macOS 14+ · ডাউনলোড করা স্পিচ মডেল · লেখার অনুমতিযুক্ত ভল্ট ফোল্ডার</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Mac-এর মিটিং স্থানীয়ভাবে প্রতিলিখন করে Obsidian-এ রাখুন">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">সংক্ষিপ্ত উত্তর</div>
+        <p>Mac-এর জন্য Vox.md একটি অ্যাপের অডিও ও আপনার মাইক্রোফোন আলাদা ট্র্যাকে রেকর্ড করতে, দুটোই আপনার Mac-এ প্রতিলিখন করতে, এবং বক্তার লেবেলসহ Markdown নোট কোনো Obsidian ভল্ট বা যেকোনো ফোল্ডারে সংরক্ষণ করতে পারে। কোনো মিটিং বট নেই, কোনো অ্যাকাউন্টও নেই।</p>
+      </div>
+      <p>এই গাইড একটি কার্যকর সেটআপ ধাপে ধাপে দেখায়: আপনার ভল্টের <code>Meetings/</code> ফোল্ডারে লেখে এমন একটি রুট থেকে শুরু করে তৈরি নোট পর্যন্ত। ধাপগুলো <a href="/bn/docs/#mac-meeting">Mac মিটিং ক্যাপচার নথি</a> এবং অ্যাপের প্রকাশিত আচরণ অনুসরণ করে। নিচে দেখানো Markdown একটি উদাহরণ মাত্র, কোনো আসল কলের রেকর্ডিং নয়।</p>
+      <nav class="toc" aria-label="এই গাইডে"><div class="toc-title">এই গাইডে</div><ol>
+        <li><a href="#requirements">যা লাগবে</a></li>
+        <li><a href="#prepare-route">মিটিং রুট প্রস্তুত করুন</a></li>
+        <li><a href="#record">কল রেকর্ড করুন</a></li>
+        <li><a href="#stop-transcribe">থামান, প্রতিলিখন করুন ও পাঠান</a></li>
+        <li><a href="#recovery">রেকর্ডিং বাধা পেলে</a></li>
+        <li><a href="#consent">সবাইকে জানান যে আপনি রেকর্ড করছেন</a></li>
+        <li><a href="#compare">মিটিং নোটের পদ্ধতিগুলো তুলনা করুন</a></li>
+        <li><a href="#limitations">দীর্ঘ কলের আগে যে সীমাগুলো জানা দরকার</a></li>
+      </ol></nav>
+
+      <h2 id="requirements">১. যা লাগবে</h2>
+      <ul>
+        <li><strong>macOS 14 বা পরবর্তী সংস্করণ চালানো একটি Mac</strong> যাতে Vox.md Mac অ্যাপ আছে; এটি iPhone অ্যাপের একই App Store তালিকা থেকে ইনস্টল হয়।</li>
+        <li><strong>মাইক্রোফোনের অনুমতি</strong> Vox.md-এর জন্য, যাতে আপনার নিজের কণ্ঠ রেকর্ড হয়।</li>
+        <li><strong>স্ক্রিন ও সিস্টেম অডিও রেকর্ডিংয়ের অনুমতি।</strong> মিটিং ক্যাপচার Apple-এর <a href="https://developer.apple.com/documentation/screencapturekit" target="_blank" rel="noopener">ScreenCaptureKit ফ্রেমওয়ার্ক</a> ব্যবহার করে আপনার বেছে নেওয়া অ্যাপের অডিও রেকর্ড করে। macOS জিজ্ঞেস করলে অনুমতি দিন। দুটো অনুমতিই সিস্টেম সেটিংস → গোপনীয়তা ও নিরাপত্তা-তে দেখতে পারেন; Apple সেটিংটি এখানে ব্যাখ্যা করেছে: <a href="https://support.apple.com/guide/mac-help/control-access-screen-system-audio-recording-mchld6aa7d23/mac" target="_blank" rel="noopener">Mac-এ স্ক্রিন ও সিস্টেম অডিও রেকর্ডিংয়ের অ্যাক্সেস নিয়ন্ত্রণ করুন</a>.</li>
+        <li><strong>একটি ডাউনলোড করা Whisper বা Parakeet মডেল।</strong> Mac-এর মডেল স্ক্রিন খুলুন, একটি মডেল ডাউনলোড করুন এবং প্রতিলিখনের ভাষা সেট করুন। <a href="/bn/docs/#models">মডেল রেফারেন্স</a> অংশে আকার ও ভাষার তালিকা আছে। Whisper চলে এর মাধ্যমে: <a href="https://github.com/ggml-org/whisper.cpp" target="_blank" rel="noopener">whisper.cpp</a> এবং Parakeet চলে এর মাধ্যমে: <a href="https://github.com/FluidInference/FluidAudio" target="_blank" rel="noopener">FluidAudio</a>.</li>
+        <li><strong>লেখার অনুমতিযুক্ত একটি ফোল্ডার</strong>, যেমন আপনার Obsidian ভল্ট বা তার ভেতরের একটি <code>Meetings</code> ফোল্ডার।</li>
+      </ul>
+      <p>মিটিং নোট মোড প্রতিলিপি নতুনভাবে সাজাতে ঐচ্ছিক Apple Intelligence প্রক্রিয়াকরণ ব্যবহার করে; এর জন্য macOS 26 চালানো একটি সামঞ্জস্যপূর্ণ Mac লাগে। এটি না থাকলে Vox.md নির্দিষ্ট নিয়মে চলা একটি ফরম্যাটার ব্যবহার করে, তাই রুট তবুও কাজ করে।</p>
+
+      <h2 id="prepare-route">২. মিটিং রুট প্রস্তুত করুন</h2>
+      <p>রুট ঠিক করে একটি ক্যাপচার কীভাবে প্রক্রিয়া হবে এবং তার Markdown কোথায় লেখা হবে। কিছু Mac সংস্করণে সেটিংসে রুটগুলোকে ক্যাপচার প্রিসেট নামে দেখায়।</p>
+      <ol>
+        <li>Mac অ্যাপে সেটিংস খুলুন এবং একটি নতুন রুট তৈরি করুন, নাম দিন এরকম কিছু: <em>মিটিংগুলো</em>.</li>
+        <li>এর গন্তব্যে আপনার ভল্টকে ফোল্ডার হিসেবে বেছে নিন। নোটের লক্ষ্য হিসেবে এটি বেছে নিন: <strong>নতুন নোট</strong> — এতে প্রতিটি মিটিং নিজের ফাইল পায়।</li>
+        <li>একটি পাথ টেমপ্লেট লিখুন, যেমন <code>Meetings/{date}-{hour}{minute}.md</code>। সময় যুক্ত করলে একই দিনের দুটি মিটিং আলাদা নোটে থাকে। আরও পাথ ও টোকেনের রেসিপির জন্য দেখুন <a href="/bn/blog/obsidian-capture-templates/">Obsidian ক্যাপচার টেমপ্লেট</a> গাইডটি।</li>
+        <li>প্রক্রিয়াকরণের জন্য বেছে নিন: <strong>মোড</strong>. <strong>মূলটি রাখুন</strong> লেবেলসহ প্রতিলিপি যেমন শনাক্ত হয়েছে তেমনই পাঠায়। <strong>মিটিং নোট</strong> তৈরি করে একটি <code>## Notes</code> অংশ এবং, লেখায় করণীয় কাজ থাকলে, একটি <code>## Action Items</code> চেকলিস্ট।</li>
+        <li>ঐচ্ছিক: দূরের কয়েকজন কথা বললে <strong>বক্তারা চিহ্নিত</strong> চালু করুন। এই রুট প্রথমবার এটি ব্যবহার করলে বক্তার মডেল ডাউনলোড হয়।</li>
+        <li>ঐচ্ছিক: <strong>অডিও সংরক্ষণ</strong> সেট করুন, যাতে রেকর্ডিং নোটের পাশে বা একটি সংযুক্তি ফোল্ডারে থাকে। শুধু লেখা চাইলে এটি বন্ধ রাখুন।</li>
+      </ol>
+
+      <h2 id="record">৩. কল রেকর্ড করুন</h2>
+      <ol>
+        <li>কলটিতে তার নিজের অ্যাপে যোগ দিন: Zoom, Microsoft Teams, FaceTime, বা Google Meet চালানো একটি ব্রাউজার।</li>
+        <li>Vox.md ক্যাপচার উইন্ডোতে <em>মিটিংগুলো</em> রুটটি বেছে নিন।</li>
+        <li>অডিও উৎস এতে বদলান: <strong>মিটিং</strong>; ডিফল্ট হলো <strong>মাইক্রোফোন</strong>। অ্যাপের সংস্করণ অনুযায়ী এই নিয়ন্ত্রণ ক্যাপচার উইন্ডোতে বা মেনু বারে ক্যাপচার → অডিও উৎস-এর নিচে থাকে।</li>
+        <li>রেকর্ডিং শুরু করুন। macOS তার কনটেন্ট পিকার দেখায়; ঠিক একটি অ্যাপ্লিকেশন বেছে নিন। Vox.md কখনো নিজের অডিও রেকর্ড করে না। ব্রাউজারের কলের জন্য ব্রাউজারটি বেছে নিন। এর অডিও পুরোটা একসঙ্গে রেকর্ড হয়, তাই শব্দ বাজানো অন্য ট্যাবগুলো মিউট করুন।</li>
+        <li>রেকর্ড করার সময় স্ট্যাটাস বারে লাইভ সিস্টেম ও মাইক লেভেল মিটার, প্রতিটি উৎসের অবস্থা এবং যেকোনো ক্যাপচার সতর্কতা দেখা যায়। কেউ কথা বললে দুটো মিটারই নড়ছে কি না দেখুন।</li>
+      </ol>
+      <p>মিটিং ক্যাপচারে বিরতি দেওয়া যায় না। মাইক্রোফোন রেকর্ডিংয়ে বিরতি ও চালিয়ে যান আছে, কিন্তু মিটিং শুরু থেকে থামানো পর্যন্ত একটানা চলে। মাঝপথে অন্য অ্যাপেও যাওয়া যায় না; তার বদলে থামিয়ে নতুন রেকর্ডিং শুরু করুন।</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_bn_f0ba2ed6ae97">Vox.md বিনামূল্যে ডাউনলোড করুন</a></p>
+      <p>বিনামূল্যের ডাউনলোডে ১৫ মিনিট প্রতিলিখন অন্তর্ভুক্ত। সীমাহীন ব্যবহার একবারের আজীবন কেনাকাটা।</p>
+
+      <h2 id="stop-transcribe">৪. থামান, প্রতিলিখন করুন ও পাঠান</h2>
+      <p>কল শেষ হলে থামান চাপুন। Vox.md আপনার বেছে নেওয়া মডেল দিয়ে আপনার Mac-এ দুটি ট্র্যাক আলাদাভাবে প্রতিলিখন করে, তারপর একটি সাধারণ টাইমলাইনে সেগুলো ক্রম অনুযায়ী মেলায়। আপনার মাইক্রোফোন ট্র্যাকের লেবেল <code>You</code>, আর অ্যাপ্লিকেশন ট্র্যাকের লেবেল হয় দূরের বক্তা হিসেবে, যেমন <code>Speaker 2</code>। মূলটি রাখুন দিয়ে একটি ছোট মিটিং থেকে এই উদাহরণের মতো নোটের মূল অংশ তৈরি হতে পারে:</p>
+      <pre class="guide-code"><code>You:
+Thanks for joining. Can we start with the launch checklist?
+
+Speaker 2:
+Sure. The release notes are ready, but we still need screenshots.
+
+You:
+I’ll take the screenshots by Friday.</code></pre>
+      <p>বক্তারা চিহ্নিত চালু থাকলে Vox.md দূরের ট্র্যাককে আরও লেবেলে ভাগ করার চেষ্টা করে, যেমন <code>Speaker 2</code> এবং <code>Speaker 3</code>। এই লেবেলগুলো বেনামি এবং যথাসাধ্য চেষ্টার ভিত্তিতে। চিহ্নিতকরণ চালানো না গেলে আপনি সাধারণ প্রতিলিপিই পান এবং অ্যাপ কারণ দেখায়।</p>
+      <p>আলাদা ট্র্যাকের কারণেই <code>You</code> লেবেলটি কাজ করে। আপনার কণ্ঠ আসে মাইক্রোফোন ট্র্যাক থেকে আর অন্য অংশগ্রহণকারীরা আসেন অ্যাপের ট্র্যাক থেকে, তাই একটি মিশ্র রেকর্ডিং থেকে কলের কোন পক্ষ কী বলেছে তা Vox.md-কে অনুমান করতে হয় না। তবুও লেবেল ভুল হতে পারে। যেমন, হেডফোন না পরলে মাইক্রোফোন আপনার স্পিকারের অডিও ধরে ফেলতে পারে।</p>
+      <p>এরপর কী হবে তা নির্ভর করে শুরু করার আগে বেছে নেওয়া রেকর্ডিং বিকল্পের ওপর:</p>
+      <ul>
+        <li><strong>খসড়ায় যোগ করুন</strong> প্রতিলিপিটি ক্যাপচার কম্পোজারে রাখে। পর্যালোচনা ও সম্পাদনা করুন, তারপর রুট দিয়ে পাঠাতে Command-Return চাপুন।</li>
+        <li><strong>এখনই পাঠান</strong> প্রতিলিখন শেষ হওয়ামাত্র রুট দিয়ে নোটটি পাঠিয়ে দেয়।</li>
+      </ul>
+      <p>অন্য যেকোনো রেকর্ডিংয়ের মতো প্রতিলিপিটি আপনার ক্লিপবোর্ড সেটিংসও মেনে চলে। দুটি ট্র্যাকের একটি প্লেব্যাক মিক্স রেকর্ডিংয়ের অডিও হিসেবে রাখা হয়, এবং রুটের অডিও সংরক্ষণ সেটিং অডিও রাখলে তবেই সেটি নোটের সঙ্গে সংরক্ষিত হয়। পাথ ও লেবেল প্রত্যাশামতো আছে কি না নিশ্চিত করতে একবার Obsidian-এ নোটটি খুলুন।</p>
+
+      <h2 id="recovery">৫. রেকর্ডিং বাধা পেলে</h2>
+      <p>দুটি ট্র্যাকই একটি রিকভারি ম্যানিফেস্টসহ টেকসই খণ্ডে ডিস্কে লেখা হয়। স্ট্রিম থেমে গেলে, মাইক্রোফোন খুলে গেলে, বা Vox.md জোর করে বন্ধ হলেও এ পর্যন্ত রেকর্ড হওয়া খণ্ডগুলো চূড়ান্ত করে প্রতিলিখন করা যায়। রেকর্ডিং কিউ আবার চালু হলে রিকভারি চলে, যেমন পরের বার Vox.md খুললে।</p>
+      <p>অসম্পূর্ণ ক্যাপচার থেকে তৈরি নোট একটি সতর্কতা লাইন দিয়ে শুরু হয়, যা জানায় কোন অংশ বাদ পড়েছে, যাতে আপনি বোঝেন প্রতিলিপিতে ফাঁক থাকতে পারে।</p>
+
+      <h2 id="consent">৬. সবাইকে জানান যে আপনি রেকর্ড করছেন</h2>
+      <p>রেকর্ডিং আইন ও কর্মস্থলের নীতি জায়গা ও প্রতিষ্ঠানভেদে আলাদা। কোথাও কোথাও সবার সম্মতি লাগে। অন্য অংশগ্রহণকারীদের জানান যে আপনি রেকর্ড ও প্রতিলিখন করছেন, এবং শুরু করার আগে তাঁদের সম্মতি নিন। এটি আইনি পরামর্শ নয়; আপনার ক্ষেত্রে প্রযোজ্য নিয়ম দেখে নিন।</p>
+
+      <h2 id="compare">৭. মিটিং নোটের পদ্ধতিগুলো তুলনা করুন</h2>
+      <p>মিটিং নোটের টুলগুলো মোটামুটি তিনটি দলে পড়ে। পণ্যগুলো আলাদা ও পরিবর্তনশীল, তাই এই সারণি নির্দিষ্ট পণ্য নয়, পদ্ধতিগুলো বর্ণনা করে। Granola, Otter বা Fireflies-এর মতো অ্যাপ তুলনা করলে অডিও কোথায় প্রক্রিয়া হয় আর নোট কোথায় রাখা হয়, তা জানতে প্রতিটি বিক্রেতার নিজস্ব নথি দেখুন।</p>
+      <p class="guide-table-hint">ছোট স্ক্রিনে পদ্ধতিগুলো তুলনা করতে সারণিটি পাশের দিকে সোয়াইপ করুন।</p>
+      <div class="guide-comparison" role="region" aria-label="মিটিং নোট পদ্ধতির তুলনা; ছোট স্ক্রিনে আনুভূমিকভাবে স্ক্রল করুন" tabindex="0">
+        <table class="comparison">
+          <caption>সাধারণ পদ্ধতি, পর্যালোচনা: ১৮ নভেম্বর, ২০২৬</caption>
+          <thead><tr><th scope="col">প্রশ্ন</th><th scope="col">বট নোটটেকার</th><th scope="col">বট ছাড়া ক্লাউড অ্যাপ</th><th scope="col">Vox.md স্থানীয় ক্যাপচার</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">কীভাবে যুক্ত হয়</th><td>একটি বট অংশগ্রহণকারী হিসেবে কলে যোগ দেয়</td><td>আপনার কম্পিউটারের একটি অ্যাপ কল রেকর্ড করে</td><td>Mac অ্যাপ একটি অ্যাপের অডিও ও আপনার মাইক্রোফোন রেকর্ড করে</td></tr>
+            <tr><th scope="row">অডিও কোথায় প্রক্রিয়া হয়</td><td>সাধারণত বিক্রেতার সার্ভারে</td><td>সাধারণত বিক্রেতার সার্ভারে</td><td>আপনার Mac-এ</td></tr>
+            <tr><th scope="row">নোট কোথায় থাকে</td><td>সাধারণত বিক্রেতার ওয়ার্কস্পেসে</td><td>সাধারণত বিক্রেতার ওয়ার্কস্পেসে</td><td>আপনার বেছে নেওয়া ফোল্ডারে Markdown ফাইল</td></tr>
+            <tr><th scope="row">অ্যাকাউন্ট</th><td>সাধারণত আবশ্যক</td><td>সাধারণত আবশ্যক</td><td>প্রয়োজন নেই</td></tr>
+            <tr><th scope="row">মূল্য মডেল</td><td>বিক্রেতার মূল্যের পাতা দেখুন</td><td>বিক্রেতার মূল্যের পাতা দেখুন</td><td>১৫ মিনিট বিনামূল্যে প্রতিলিখন, তারপর একবারের আজীবন আনলক</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>ক্লাউড টুল এমন সুবিধা দিতে পারে যা স্থানীয় অ্যাপে নেই, যেমন শেয়ার করা ওয়ার্কস্পেস বা অনেক মিটিং জুড়ে সারাংশ। অডিও কোথায় প্রক্রিয়া করাতে চান এবং নোট শেষে কোথায় রাখতে চান, তার ভিত্তিতে বেছে নিন।</p>
+
+      <h2 id="limitations">৮. দীর্ঘ কলের আগে যে সীমাগুলো জানা দরকার</h2>
+      <ul>
+        <li><strong>প্রতি রেকর্ডিংয়ে একটি অ্যাপ।</strong> মিটিং ক্যাপচার একটি অ্যাপ্লিকেশন ও আপনার মাইক্রোফোন রেকর্ড করে।</li>
+        <li><strong>লেবেল যথাসাধ্য চেষ্টার ভিত্তিতে।</strong> স্পিকার লেবেল পরিষ্কার, আলাদা অডিওর উপর নির্ভর করে, এবং স্পিকার শনাক্তকরণ কণ্ঠস্বর একত্র বা বিভক্ত করতে পারে।</li>
+        <li><strong>মান মডেল ও ভাষার ওপর নির্ভর করে।</strong> বড় মডেল বেশি জায়গা ও সময় নেয়। গুরুত্বপূর্ণ শব্দের ওপর ভরসা করার আগে অডিওর সঙ্গে মিলিয়ে দেখুন।</li>
+        <li><strong>বিনামূল্যের স্তরে ১৫ মিনিট প্রতিলিখন।</strong> একটি দীর্ঘ মিটিংয়েই তা শেষ হয়ে যেতে পারে। সীমাহীন ব্যবহার একবারের আজীবন কেনাকাটা; দেখুন <a href="/bn/docs/#pricing-limits">বিনামূল্যে ব্যবহার ও আজীবন আনলক</a>.</li>
+        <li><strong>কিছু জিনিস আপনার Mac-এর বাইরে যায়।</strong> রেকর্ডিং ও প্রতিলিখন ডিভাইসেই থাকে, এবং প্রতিলিখনের জন্য অডিও আপলোড হয় না। Whisper বা Parakeet মডেল ডাউনলোড করলে Hugging Face-এর সঙ্গে যোগাযোগ হয়, যেমন উল্লেখ আছে <a href="/bn/privacy.html#third-party-services">গোপনীয়তা নীতি</a>নথিতে, এবং বক্তার মডেলও একবারের ডাউনলোড। আপনার ভল্ট iCloud Drive বা Obsidian Sync দিয়ে সিঙ্ক হলে তৈরি নোট সেই সেবার শর্তে সিঙ্ক হয়। Vox.md ফাইল লেখে; সিঙ্ক করবেন কি না তা আপনার সিদ্ধান্ত।</li>
+      </ul>
+      <p>বরং কণ্ঠ দিয়ে দ্রুত টাইপ করতে চান? Mac-এর <strong>Clipboard এর জন্য অনুবাদ</strong> কীবাইন্ড নোট তৈরি না করেই যেকোনো অ্যাপে ডিক্টেট করে; দেখুন <a href="/bn/docs/#mac-keybinds">গ্লোবাল কীবাইন্ড</a>.</p>
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">আপনার মিটিং,<br>আপনার নিজের ফাইল হিসেবে।</h2>
+        <p>রাজি হয়েছেন এমন একজন সহকর্মীর সঙ্গে একটি ছোট পরীক্ষামূলক কল করুন, তারপর ভল্টে Markdown নোটটি দেখুন।</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_bn_f0ba2ed6ae97">Vox.md বিনামূল্যে ডাউনলোড করুন</a></p>
+        <p>১৫ মিনিট বিনামূল্যে প্রতিলিখন · অ্যাকাউন্ট লাগে না · একবারের আজীবন আনলক</p>
+      </section>
+      <nav class="toc" aria-label="সম্পর্কিত গাইড" id="related"><div class="toc-title">সেটআপ চালিয়ে যান</div><ul>
+        <li><a href="/bn/docs/#mac-meeting">Mac মিটিং ক্যাপচার রেফারেন্স</a></li>
+        <li><a href="/bn/docs/#models">স্পিচ মডেল ও ভাষা</a></li>
+        <li><a href="/bn/blog/obsidian-capture-templates/">পাথ ও টেমপ্লেটের রেসিপি</a></li>
+        <li><a href="/bn/blog/voice-notes-to-obsidian-iphone/">iPhone ভয়েস নোট Obsidian-এ সংরক্ষণ করুন</a></li>
+        <li><a href="/bn/blog/offline-transcription-iphone-markdown/">স্থানীয় প্রতিলিখন ও Markdown গন্তব্য প্রস্তুত করুন</a></li>
+        <li><a href="/bn/compare/vox-md-vs-obsidian-quick-capture/">Vox.md ও Obsidian Quick Capture তুলনা করুন</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/bn/">হোম</a></li>
+        <li><a href="/bn/docs/">নথি</a></li>
+        <li><a href="/bn/blog/">গাইড</a></li>
+        <li><a href="/bn/compare/">তুলনা করুন</a></li>
+        <li><a href="/bn/privacy.html">গোপনীয়তা</a></li>
+        <li><a href="/bn/terms.html">শর্তাবলি</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">সহায়তা</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_bn_f0ba2ed6ae97">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© ২০২৬ Vox.md · স্থানীয় নোটের দ্রুত ক্যাপচার · বিষয়বস্তু আপলোড নেই।</div>
+    </div>
+  <details class="language-switcher"><summary>ভাষা</summary><ul><li><a href="/blog/transcribe-meetings-mac-obsidian/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-meetings-mac-obsidian/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-meetings-mac-obsidian/" lang="bn" hreflang="bn" aria-current="page">বাংলা</a></li><li><a href="/de/blog/transcribe-meetings-mac-obsidian/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-meetings-mac-obsidian/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-meetings-mac-obsidian/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-meetings-mac-obsidian/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-meetings-mac-obsidian/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-meetings-mac-obsidian/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-meetings-mac-obsidian/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-meetings-mac-obsidian/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-meetings-mac-obsidian/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-meetings-mac-obsidian/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-meetings-mac-obsidian/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-meetings-mac-obsidian/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-meetings-mac-obsidian/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-meetings-mac-obsidian/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-meetings-mac-obsidian/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-meetings-mac-obsidian/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-meetings-mac-obsidian/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-meetings-mac-obsidian/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
