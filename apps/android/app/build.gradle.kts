@@ -167,6 +167,7 @@ val generateRuntimeLocalizations by tasks.registering(Exec::class) {
     inputs.file(generator)
     inputs.file(catalog)
     inputs.files(rootProject.fileTree("localization") { include("*.json") })
+    inputs.file(rootProject.file("wear/src/main/res/values/strings.xml"))
     inputs.files(fileTree("src/main/kotlin") { include("**/*.kt") })
     inputs.files(rootProject.fileTree("capture-domain/src/main/kotlin") { include("**/*.kt") })
     inputs.files(rootProject.fileTree("data/src/main/kotlin") { include("**/*.kt") })

@@ -30,3 +30,11 @@ English source strings to `translate-android-localizations.py --model PATH
 strings are never sent to a translation service. The model is MIT licensed.
 Review generated drafts and edit explicit overrides before regenerating resources.
 Machine output alone must never set `humanApproved` to true.
+
+`wear-strings.json` is the Wear OS app's own catalog, keyed by resource name. It
+must list exactly the translatable strings in `wear/src/main/res/values/strings.xml`
+with the same English text, plus a translator context note and all 22 languages;
+the generator writes each `values-*/platform_localizations.xml` from it. Wear no
+longer borrows iOS strings, which said iPhone and Apple Watch and lost their
+meaning out of context ("Done" had become the name "Donde"). Its plural,
+`wear_recordings_saved`, stays in `plural-spec.json`.

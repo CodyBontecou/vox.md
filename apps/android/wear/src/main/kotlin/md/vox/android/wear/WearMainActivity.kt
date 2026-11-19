@@ -58,6 +58,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -718,9 +719,7 @@ private fun wearQueuePhaseLabel(phase: WearQueuePhase): String = when (phase) {
 
 
 @Composable
-private fun savedRecordingsLabel(count: Int): String = if (count == 1) {
-    stringResource(R.string.wear_one_recording_saved)
-} else stringResource(R.string.wear_recordings_saved_count, count)
+private fun savedRecordingsLabel(count: Int): String = pluralStringResource(R.plurals.wear_recordings_saved, count, count)
 
 private fun formatWearDuration(milliseconds: Long): String {
     val seconds = milliseconds.coerceAtLeast(0) / 1_000
