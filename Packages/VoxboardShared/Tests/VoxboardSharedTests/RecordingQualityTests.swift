@@ -518,6 +518,10 @@ final class RecordingQualityTests: XCTestCase {
         let wav = root.appendingPathComponent("speech.wav")
         try KeptAudioInspector.makeTranscriptionCopy(of: speech, at: wav)
         XCTAssertFalse(KeptAudioInspector.isKeptRecordingFormat(wav))
+        // Only stereo takes change their recovered path.
+        XCTAssertFalse(KeptAudioInspector.isKeptStereoRecording(try writeKeptRecording(.lossless, seconds: 0.5)))
+        XCTAssertTrue(KeptAudioInspector.isKeptStereoRecording(try writeStereoRecording(.high, seconds: 0.5)))
+        XCTAssertFalse(KeptAudioInspector.isKeptStereoRecording(wav))
     }
 
     func test_stereoWriterResamplesInterleavedFramesAndKeepsChannelsApart() throws {

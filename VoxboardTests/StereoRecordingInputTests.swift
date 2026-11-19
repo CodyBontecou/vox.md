@@ -114,4 +114,21 @@ final class StereoRecordingInputTests: XCTestCase {
         ))
         XCTAssertFalse(StereoRecordingInput.hasStereoSelection)
     }
+
+    func testDualMonoFramesAfterARouteChangeAreCounted() {
+        let scratch = StereoInterleaveScratch(initialFrames: 4)
+        let mono: [Float] = [0.1, 0.2, 0.3]
+        let right: [Float] = [-0.1, -0.2, -0.3]
+        mono.withUnsafeBufferPointer { m in
+            right.withUnsafeBufferPointer { r in
+                _ = scratch.interleave(left: m.baseAddress!, right: r.baseAddress!, frames: 3)
+                XCTAssertEqual(scratch.takeDuplicatedFrameCount(), 0, "True stereo is not counted")
+                let out = scratch.duplicateMono(m.baseAddress!, frames: 3)
+                XCTAssertEqual(Array(out), [0.1, 0.1, 0.2, 0.2, 0.3, 0.3])
+                _ = scratch.duplicateMono(m.baseAddress!, frames: 2)
+                XCTAssertEqual(scratch.takeDuplicatedFrameCount(), 5)
+                XCTAssertEqual(scratch.takeDuplicatedFrameCount(), 0, "Reading resets the count")
+            }
+        }
+    }
 }

@@ -156,14 +156,28 @@ enum StereoRecordingInput {
         try? session.setPreferredInputOrientation(stereoOrientation(for: currentInterfaceOrientation()))
     }
 
+    /// Undoes the stereo selection. The selection is kept on record if the
+    /// session refuses, so the next listening start or stop tries again.
+    /// (Session preferences are per process, so a relaunch always starts
+    /// from the system default.)
     private static func resetIfNeeded(session: AVAudioSession) {
         guard let configured = configuredSource else { return }
-        configuredSource = nil
-        guard let port = session.availableInputs?.first(where: { $0.uid == configured.port }) else { return }
-        if let source = port.dataSources?.first(where: { $0.dataSourceID == configured.source }) {
-            try? source.setPreferredPolarPattern(nil)
+        guard let port = session.availableInputs?.first(where: { $0.uid == configured.port }) else {
+            // The built-in mic is not available right now (another route);
+            // its preference does not apply until it is, so retry later.
+            return
         }
-        try? port.setPreferredDataSource(nil)
+        do {
+            if let source = port.dataSources?.first(where: { $0.dataSourceID == configured.source }) {
+                try source.setPreferredPolarPattern(nil)
+            }
+            try port.setPreferredDataSource(nil)
+            configuredSource = nil
+        } catch {
+            KeyboardDebugLog.shared.log(
+                "[StereoRecordingInput] ⚠️ Could not undo stereo input; will retry: \(error.localizedDescription)"
+            )
+        }
     }
 }
 
@@ -176,6 +190,8 @@ enum StereoRecordingInput {
 nonisolated final class StereoInterleaveScratch: @unchecked Sendable {
     private var storage: UnsafeMutablePointer<Float>
     private var capacity: Int
+    private let counterLock = NSLock()
+    private var duplicatedFrames = 0
 
     init(initialFrames: Int = 8_192) {
         capacity = max(1, initialFrames) * 2
@@ -183,6 +199,22 @@ nonisolated final class StereoInterleaveScratch: @unchecked Sendable {
     }
 
     deinit { storage.deallocate() }
+
+    /// Frames that arrived mono on this stereo tap since the last call
+    /// (after a route change), then resets the count.
+    func takeDuplicatedFrameCount() -> Int {
+        counterLock.withLock {
+            defer { duplicatedFrames = 0 }
+            return duplicatedFrames
+        }
+    }
+
+    /// Copies a mono buffer into both channels and counts it, so the
+    /// recorder can report that part of a stereo take is dual-mono.
+    func duplicateMono(_ mono: UnsafePointer<Float>, frames: Int) -> UnsafeBufferPointer<Float> {
+        if frames > 0 { counterLock.withLock { duplicatedFrames += frames } }
+        return interleave(left: mono, right: mono, frames: frames)
+    }
 
     /// Interleaves `frames` frames from `left` and `right`. Pass the same
     /// pointer twice to duplicate a mono buffer into both channels.

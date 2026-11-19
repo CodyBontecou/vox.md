@@ -455,6 +455,8 @@ final class PersistentRecorder {
     private var keptAudioPreRollChannelCount = 1
     /// True when the current tap was installed with stereo built-in mic input.
     private var stereoInputActive = false
+    /// The stereo tap's scratch buffer, kept to report dual-mono frames.
+    private var activeStereoScratch: StereoInterleaveScratch?
     /// Pre-roll plus headroom for the main-queue hop before the journal opens.
     private var keptAudioPreRollSeconds: Double { preRollSeconds + 2 }
     private var segmentStartedAt: TimeInterval = 0
@@ -752,6 +754,7 @@ final class PersistentRecorder {
         stereoInputActive = keptChannelCount == 2
         // Reused by the tap for interleaved stereo; no per-buffer allocation.
         let stereoScratch = keptChannelCount == 2 ? StereoInterleaveScratch() : nil
+        activeStereoScratch = stereoScratch
         configureKeptAudioPreRoll(
             keptQuality,
             inputSampleRate: hwFormat.sampleRate,
@@ -772,11 +775,10 @@ final class PersistentRecorder {
             let rawInput: UnsafeBufferPointer<Float>?
             let rawChannelCount: Int
             if let stereoScratch, let data = buffer.floatChannelData {
-                rawInput = stereoScratch.interleave(
-                    left: data[0],
-                    right: buffer.format.channelCount >= 2 ? data[1] : data[0],
-                    frames: Int(buffer.frameLength)
-                )
+                let frames = Int(buffer.frameLength)
+                rawInput = buffer.format.channelCount >= 2
+                    ? stereoScratch.interleave(left: data[0], right: data[1], frames: frames)
+                    : stereoScratch.duplicateMono(data[0], frames: frames)
                 rawChannelCount = 2
             } else {
                 rawInput = buffer.floatChannelData.map {
@@ -1007,7 +1009,10 @@ final class PersistentRecorder {
                 // dead tap that never delivers samples. A full restart is the
                 // only way to reliably self-heal.
                 stopListening()
-                startListening()
+                // The interrupted take was cancelled (audio kept for
+                // recovery) when the interruption began, so this restart has
+                // no take to continue: back to the mono listening input.
+                startListening(stereoEligible: false)
             }
 
         @unknown default:
@@ -1064,6 +1069,7 @@ final class PersistentRecorder {
             StereoRecordingInput.configure(session: session, requested: false)
         }
         stereoInputActive = false
+        activeStereoScratch = nil
         try? session.setActive(false, options: .notifyOthersOnDeactivation)
 
         // Update IPC
@@ -2442,7 +2448,8 @@ final class PersistentRecorder {
                     clearSegmentState()
                     recordingQueue.setCaptureActive(false)
                     stopListening()
-                    startListening()
+                    // The failed take has ended; restart the mono listening input.
+                    startListening(stereoEligible: false)
                 }
             } else {
                 log.log("[PersistentRecorder] ❌ Could not extract audio — data was overwritten")
@@ -2900,6 +2907,8 @@ final class PersistentRecorder {
             _ = try? oldWriter?.finalize()
         }
         discardKeptAudio()
+        // Count dual-mono frames per take, not across idle listening.
+        _ = activeStereoScratch?.takeDuplicatedFrameCount()
 
         guard let directory = AppConstants.recordingsDirectoryURL else { return }
         let keptWriter = makeKeptAudioWriter(requestID: requestID, directory: directory)
@@ -3106,6 +3115,10 @@ final class PersistentRecorder {
         }
         guard let writer else { return nil }
         segmentJournalWriteQueue.sync {}
+        if writer.channelCount == 2,
+           let duplicated = activeStereoScratch?.takeDuplicatedFrameCount(), duplicated > 0 {
+            log.log("[PersistentRecorder] ⚠️ Stereo take: \(duplicated) frames arrived mono after a route change and were kept as dual-mono")
+        }
         return writer.finalize()
     }
 
@@ -3307,8 +3320,9 @@ final class PersistentRecorder {
 
     /// The 16 kHz file the transcription engine reads for a queued job.
     /// Returns `audioURL` itself unless it is a High/Lossless app recording,
-    /// including one recovered after a crash. Those get a 16 kHz mono copy
-    /// with stereo downmixed; imported files keep their existing path.
+    /// or a stereo one recovered after a crash. Those get a 16 kHz mono copy
+    /// with stereo downmixed. Imported files and mono recovered files keep
+    /// their existing path to the engine.
     nonisolated static func transcriptionAudio(
         for audioURL: URL,
         source: RecordingJobSource
@@ -3316,7 +3330,7 @@ final class PersistentRecorder {
         guard source == .iOSApp || source == .recovered else { return audioURL }
         let task = Task.detached(priority: .userInitiated) { () throws -> URL in
             guard KeptAudioInspector.needsTranscriptionCopy(audioURL),
-                  source == .iOSApp || KeptAudioInspector.isKeptRecordingFormat(audioURL) else {
+                  source == .iOSApp || KeptAudioInspector.isKeptStereoRecording(audioURL) else {
                 return audioURL
             }
             let copyURL = FileManager.default.temporaryDirectory

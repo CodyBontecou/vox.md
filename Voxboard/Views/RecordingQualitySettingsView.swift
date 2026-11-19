@@ -61,6 +61,10 @@ struct RecordingQualitySettingsView: View {
 
     @State private var selection = RecordingQuality.load(from: AppConstants.sharedDefaults)
     @State private var stereo = StereoRecordingPreference.load(from: AppConstants.sharedDefaults)
+    /// Keyboard Listening keeps the always-on mono input, which new
+    /// recordings reuse; warn when that overrides Stereo.
+    @State private var keyboardListeningOn = AppConstants.sharedDefaults?
+        .bool(forKey: AppConstants.autoListenEnabledKey) ?? false
 
     var body: some View {
         Form {
@@ -100,6 +104,19 @@ struct RecordingQualitySettingsView: View {
                     }
                     .tint(Geist.accent)
                     .accessibilityIdentifier("recording_quality_stereo")
+
+                    if stereo, keyboardListeningOn {
+                        Label {
+                            Text("Keyboard Listening is on, so new recordings are mono. Turn it off to record in stereo.")
+                                .font(Geist.caption())
+                                .foregroundStyle(Geist.text)
+                                .fixedSize(horizontal: false, vertical: true)
+                        } icon: {
+                            Image(systemName: "exclamationmark.triangle")
+                                .foregroundStyle(Geist.muted)
+                        }
+                        .accessibilityIdentifier("recording_quality_stereo_keyboard_listening_warning")
+                    }
                 } footer: {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Records High and Lossless in stereo with the iPhone's built-in microphones, for a more natural sound with music and nature. External, Bluetooth and AirPods microphones, and Apple Watch, record in mono.")
@@ -130,6 +147,10 @@ struct RecordingQualitySettingsView: View {
         }
         .scrollContentBackground(.hidden)
         .background(Geist.bg.ignoresSafeArea())
+        .onAppear {
+            keyboardListeningOn = AppConstants.sharedDefaults?
+                .bool(forKey: AppConstants.autoListenEnabledKey) ?? false
+        }
         .navigationTitle("Recording Quality")
         .navigationBarTitleDisplayMode(.inline)
     }

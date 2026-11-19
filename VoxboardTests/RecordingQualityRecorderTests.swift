@@ -79,6 +79,23 @@ final class RecordingQualityRecorderTests: XCTestCase {
         XCTAssertEqual(imported, kept)
     }
 
+    func testRecoveredMonoTakeKeepsItsExistingPath() async throws {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent("RecordingQualityRecorderTests-\(UUID().uuidString)", isDirectory: true)
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+
+        // A mono High take recovered after a crash reaches the engine exactly
+        // as before this change: the original file, converted by the engine.
+        let kept = root.appendingPathComponent("recovered-mono.m4a")
+        let writer = try KeptAudioFileWriter(url: kept, quality: .high)
+        try writer.append(samples: (0..<48_000).map { Float(sin(Double($0) / 20) * 0.2) })
+        XCTAssertNotNil(writer.finalize())
+
+        let audio = try await PersistentRecorder.transcriptionAudio(for: kept, source: .recovered)
+        XCTAssertEqual(audio, kept)
+    }
+
     func testSpeechWAVIsTranscribedUnchanged() async throws {
         let root = FileManager.default.temporaryDirectory
             .appendingPathComponent("RecordingQualityRecorderTests-\(UUID().uuidString)", isDirectory: true)

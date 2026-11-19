@@ -347,6 +347,13 @@ public enum KeptAudioInspector {
             && (1...2).contains(format.channelCount)
     }
 
+    /// True for a stereo file in the kept-recording format. Only these need a
+    /// different transcription path when recovered: a mono file already
+    /// reaches the engine exactly as before.
+    public static func isKeptStereoRecording(_ url: URL) -> Bool {
+        isKeptRecordingFormat(url) && format(of: url)?.channelCount == 2
+    }
+
     /// True for a recording above the 16 kHz the transcription engines use.
     /// Those need a downsampled temporary copy before transcription.
     public static func needsTranscriptionCopy(_ url: URL) -> Bool {

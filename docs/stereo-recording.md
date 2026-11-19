@@ -17,7 +17,8 @@ dictation and Keyboard Listening stay mono.
   (`PersistentRecorder.oneShotMayKeepAudio`). Keyboard dictation, continuous
   dictation and Keyboard Listening keep the mono input their transcripts have
   always used. A recording started while Keyboard Listening is already on
-  reuses that mono engine; the settings footer says so.
+  reuses that mono engine; the footer says so, and while Keyboard Listening
+  is on and Stereo is on, the Stereo row shows a warning.
 - Stereo counts only when the route confirms it: the active input must report
   the chosen data source with the stereo polar pattern selected
   (`Stereo input: unavailable(reason: "stereo polar pattern not applied")`
@@ -34,7 +35,22 @@ dictation and Keyboard Listening stay mono.
 - An interruption or engine restart ends the current take before listening
   restarts, so a take never switches from stereo to mono halfway. A route
   change the engine survives (one channel arriving on a stereo tap) is
-  copied to both sides.
+  copied to both sides (dual-mono). The recorder logs how many frames of the
+  take that affected when the file is finished.
+- Recovered takes: only stereo kept files get the new downmixed copy. Mono
+  recovered files reach the engine exactly as before.
+- Undoing the stereo selection is retried until the session accepts it; a
+  relaunch always starts from the system default (session preferences are
+  per process).
+
+## Checked on the simulator
+
+`.argent/e2e/stereo-recording-mono-fallback.yaml` records a real take with
+High + Stereo on. The simulator mic has no stereo data sources, which is the
+same fallback path as an external, Bluetooth or AirPods mic: the log reads
+`Stereo input: unavailable(reason: "built-in mic has no data sources")` and
+the saved file is `1 ch, 48000 Hz, aac` (afinfo). Real 2-channel output still
+needs the device check below.
 - Transcription: the live 16 kHz stream and the 16 kHz copy of a kept file
   mix both channels (`downmix`). Imported files keep their existing
   conversion (first channel only), so their transcripts do not change.
