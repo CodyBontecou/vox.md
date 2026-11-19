@@ -43,15 +43,35 @@ final class WidgetRecordingLaunchTests: XCTestCase {
         XCTAssertEqual(launch.events, ["load", "start"])
     }
 
-    func testDraftStartWaitsAsLongAsEarlierWorkTakesShowsItThenRecordsIntoANewNote() async {
-        // Far longer than the old 20 s cap: a long recording still transcribing.
+    func testDraftStartWaitsForEarlierWorkShowsItThenRecordsIntoANewNote() async {
         let launch = LaunchEffects(isRecording: true, composerAvailable: false, plan: .closeOpenNote)
-        launch.composerFreesAfterPolls = 500
+        launch.composerFreesAfterPolls = 50
         let outcome = await launch.perform(.start, isDraft: true)
         XCTAssertEqual(outcome, .started(finishedActiveRecording: true))
-        XCTAssertEqual(launch.polls, 500)
+        XCTAssertEqual(launch.polls, 50)
         XCTAssertEqual(launch.events, ["finish", "load", "waiting:true", "waiting:false", "newNote", "start"])
-        XCTAssertFalse(launch.events.contains("prompt"))
+    }
+
+    func testDraftWaitIsBoundedThenRecordsThroughTheRouteInsteadOfPrompting() async {
+        // A composer that never frees (stuck preset switch, a queue job that
+        // never releases the route): the launch must still record.
+        let launch = LaunchEffects(isRecording: true, composerAvailable: false, plan: .closeOpenNote)
+        launch.canRecordWithoutComposer = true
+        let outcome = await launch.perform(.start, isDraft: true)
+        XCTAssertEqual(outcome, .startedWithoutComposer(finishedActiveRecording: true))
+        let limitPolls = Int(WidgetRecordingLaunch.composerWaitLimit / WidgetRecordingLaunch.composerPollInterval)
+        XCTAssertEqual(launch.polls, limitPolls)
+        XCTAssertEqual(launch.events, ["finish", "load", "waiting:true", "waiting:false", "startWithoutComposer"])
+        XCTAssertTrue(launch.isRecording)
+    }
+
+    func testRemoteOnlyRouteNeverRecordsWithoutReviewWhenTheComposerStaysBusy() async {
+        let launch = LaunchEffects(composerAvailable: false, plan: .closeOpenNote)
+        launch.canRecordWithoutComposer = false
+        let outcome = await launch.perform(.start, isDraft: true)
+        XCTAssertEqual(outcome, .composerStillBusy)
+        XCTAssertEqual(launch.events, ["load", "waiting:true", "waiting:false"])
+        XCTAssertFalse(launch.isRecording)
     }
 
     func testDraftStartWithAFreeComposerShowsNoWaitingState() async {
@@ -127,9 +147,74 @@ final class WidgetRecordingLaunchTests: XCTestCase {
         XCTAssertEqual(outcome, .notStarted)
     }
 
+    func testImmediateLaunchRecordingNeverWritesIntoTheComposer() {
+        // Immediate delivery starts while Send, OCR or an import may own the
+        // composer. Its recording must not render live words into, or deliver
+        // into, that composer: it previews nowhere and runs from the Route's
+        // frozen snapshot, independent of the composer's preset.
+        let immediate = RecordingCompletionMode.runVox(flowID: "route")
+        XCTAssertFalse(immediate.previewsLiveTranscriptInComposer(commandOrigin: .quickRecord))
+        XCTAssertFalse(immediate.blocksCapturePresetSelectionDuringProcessing)
+        XCTAssertNil(RecordingCompletionMode.voiceProcessingConfiguration(for: immediate, selectedPreset: nil))
+        if case .preset = immediate.recordingJobDelivery {} else { XCTFail("Immediate delivery must use the Preset job") }
+        // Draft delivery does write into the composer, which is why it waits.
+        XCTAssertTrue(RecordingCompletionMode.captureDraft(attachAudio: false)
+            .previewsLiveTranscriptInComposer(commandOrigin: .quickRecord))
+    }
+
     // MARK: Duplicate deliveries of one press
 
-    func testCopyArrivingWhileALaunchIsInFlightIsDropped() async {
+    func testCopyArrivingWhileALaunchIsStartingIsDropped() async {
+        let coordinator = WidgetRecordingLaunchCoordinator()
+        let launch = LaunchEffects()
+        let first = coordinator.launch(action: .start, isDraftDelivery: false, startsNewRecording: true, effects: launch.effects)
+        let copy = coordinator.launch(action: .start, isDraftDelivery: false, startsNewRecording: true, effects: launch.effects)
+        XCTAssertNotNil(first)
+        XCTAssertNil(copy)
+        let outcome = await first?.value
+        XCTAssertEqual(outcome, .started(finishedActiveRecording: false))
+        XCTAssertEqual(launch.events, ["load", "start"])
+        XCTAssertFalse(coordinator.isBusy)
+    }
+
+    func testNewPressReplacesALaunchWaitingForTheComposer() async {
+        let coordinator = WidgetRecordingLaunchCoordinator()
+        let waiting = LaunchEffects(composerAvailable: false, plan: .closeOpenNote)
+        waiting.sleepsForReal = true
+        let first = coordinator.launch(action: .start, isDraftDelivery: true, startsNewRecording: true, effects: waiting.effects)
+        for _ in 0..<200 where !coordinator.isWaitingForComposer { await Task.yield() }
+        XCTAssertTrue(coordinator.isWaitingForComposer)
+
+        let next = LaunchEffects()
+        let second = coordinator.launch(action: .start, isDraftDelivery: false, startsNewRecording: true, effects: next.effects)
+        XCTAssertNotNil(second, "A press behind a wait is never silently dropped")
+        let firstOutcome = await first?.value
+        let secondOutcome = await second?.value
+        XCTAssertEqual(firstOutcome, .cancelled)
+        XCTAssertEqual(waiting.events.last, "waiting:false")
+        XCTAssertFalse(waiting.events.contains("start"))
+        XCTAssertEqual(secondOutcome, .started(finishedActiveRecording: false))
+        XCTAssertFalse(coordinator.isBusy)
+    }
+
+    func testCancelEndsAWaitingLaunchAndFreesTheCoordinator() async {
+        let coordinator = WidgetRecordingLaunchCoordinator()
+        let waiting = LaunchEffects(composerAvailable: false, plan: .closeOpenNote)
+        waiting.sleepsForReal = true
+        let first = coordinator.launch(action: .start, isDraftDelivery: true, startsNewRecording: true, effects: waiting.effects)
+        for _ in 0..<200 where !coordinator.isWaitingForComposer { await Task.yield() }
+        coordinator.cancel()
+        let outcome = await first?.value
+        XCTAssertEqual(outcome, .cancelled)
+        XCTAssertFalse(coordinator.isBusy)
+        XCTAssertFalse(coordinator.isWaitingForComposer)
+
+        let later = LaunchEffects()
+        let next = await coordinator.launch(action: .start, isDraftDelivery: false, startsNewRecording: true, effects: later.effects)?.value
+        XCTAssertEqual(next, .started(finishedActiveRecording: false))
+    }
+
+    func testRunRefusesASecondLaunchWhileOneIsInFlight() async {
         let coordinator = WidgetRecordingLaunchCoordinator()
         let launch = LaunchEffects(composerAvailable: false, plan: .alreadyBlank)
         launch.composerFreesAfterPolls = 5
@@ -266,6 +351,10 @@ private final class LaunchEffects {
     var plan: WidgetRecordingLaunch.NewNotePlan
     var composerFreesAfterPolls: Int?
     var cancelsAfterPolls: Int?
+    var canRecordWithoutComposer = false
+    /// Real poll sleeps, for tests that cancel or replace a waiting launch
+    /// before the wait limit runs out.
+    var sleepsForReal = false
     var startsElsewhereDuringLoad = false
     var polls = 0
     var events: [String] = []
@@ -321,7 +410,18 @@ private final class LaunchEffects {
                 self.isRecording = true
                 return true
             },
-            sleep: { _ in
+            canStartWithoutComposer: { self.canRecordWithoutComposer },
+            startWithoutComposer: {
+                self.events.append("startWithoutComposer")
+                self.isRecording = true
+                return true
+            },
+            sleep: { interval in
+                if self.sleepsForReal {
+                    self.polls += 1
+                    try? await Task.sleep(for: interval)
+                    return
+                }
                 self.polls += 1
                 if let cancelAt = self.cancelsAfterPolls, self.polls >= cancelAt {
                     withUnsafeCurrentTask { $0?.cancel() }

@@ -2979,6 +2979,8 @@ struct QuickCaptureView: View {
     }
 
     private func handleScenePhaseChange(_ phase: ScenePhase) {
+        // A draft launch waiting for the composer must not outlive the visit.
+        if phase == .background { widgetRecordLaunches.cancel() }
         if phase == .active {
             reloadFlows()
             // Returning from Settings may have changed folder access.
@@ -3007,6 +3009,7 @@ struct QuickCaptureView: View {
 
     private func handleCaptureDisappear() {
         microphonePermissionTask?.cancel()
+        widgetRecordLaunches.cancel()
         locationRequestTask?.cancel()
         initialComposerFocusIsPending = false
         sentToastPresentationID = nil
@@ -4101,9 +4104,9 @@ struct QuickCaptureView: View {
         guard AppConstants.lockScreenQuickRecordEnabled else { return }
         // The same press can reach the app more than once (launch flag,
         // notification, scene activation). The coordinator drops a copy that
-        // would race the start in flight: that used to show "Finish the
-        // current recording…" while the first copy recorded the reaction.
-        guard !widgetRecordLaunches.isInFlight else { return }
+        // would race the start in flight (that used to show "Finish the
+        // current recording…" while the first copy recorded the reaction) and
+        // lets a newer press replace a launch that is waiting.
 
         let isDraft = request.draftAttachAudio != nil
         let effects = WidgetRecordingLaunch.Effects(
@@ -4136,17 +4139,33 @@ struct QuickCaptureView: View {
                     origin: .quickRecord,
                     draftRequestID: request.draftRequestID(in: viewModel.draft)
                 )
+            },
+            canStartWithoutComposer: {
+                // A Remote-only Route would send this recording to its URL
+                // without the review its draft delivery promised.
+                let selection = WidgetRecordingFlowSelection.resolve(requestedFlowID: request.requestedFlowID)
+                return CapturePresetStore.flow(id: selection.flowID)?.exportSettings.urlDelivery.isRemoteOnly != true
+            },
+            startWithoutComposer: {
+                // The composer stayed busy: record now through the Route's own
+                // delivery, which never touches the composer, rather than
+                // losing the user's words to a longer wait.
+                let selection = WidgetRecordingFlowSelection.resolve(requestedFlowID: request.requestedFlowID)
+                lastStartedRecordingMode = .preset
+                persistentRecorder.lastTranscriptionResult = nil
+                return persistentRecorder.startOneShotInAppSegment(
+                    flowId: selection.flowID,
+                    completionMode: .runVox(flowID: selection.flowID),
+                    origin: .quickRecord
+                )
             }
         )
-        let launches = widgetRecordLaunches
-        Task { @MainActor in
-            _ = await launches.run(
-                action: request.recordingAction,
-                isDraftDelivery: isDraft,
-                startsNewRecording: request.startsNewRecording,
-                effects: effects
-            )
-        }
+        widgetRecordLaunches.launch(
+            action: request.recordingAction,
+            isDraftDelivery: isDraft,
+            startsNewRecording: request.startsNewRecording,
+            effects: effects
+        )
     }
 
     private func handleRecorderNeedsUnlock(_ needsUnlock: Bool) {

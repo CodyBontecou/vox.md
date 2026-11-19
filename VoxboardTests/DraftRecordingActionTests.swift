@@ -401,6 +401,74 @@ final class DraftRecordingActionTests: XCTestCase {
         XCTAssertTrue(files.contains { $0.pathExtension == "md" })
     }
 
+    /// #115: a control press while recording stops the active recording and
+    /// at once starts a new one, which releases a temporary engine first
+    /// (startOneShotInAppSegment → stopListening). The stopped recording's
+    /// audio must already be in the durable queue, complete, by then.
+    func testControlRestartQueuesTheStoppedRecordingCompleteBeforeTheEngineIsReleased() async throws {
+        guard AppConstants.recordingsDirectoryURL != nil else {
+            throw XCTSkip("Requires a signed host with the App Group recordings container")
+        }
+        let shared = try XCTUnwrap(AppConstants.sharedDefaults)
+        let previousUnlock = shared.object(forKey: "hasUnlocked")
+        let previousExpiration = shared.object(forKey: "storeAccessExpirationV1")
+        shared.set(true, forKey: "hasUnlocked")
+        shared.removeObject(forKey: "storeAccessExpirationV1")
+        defer {
+            shared.set(previousUnlock, forKey: "hasUnlocked")
+            shared.set(previousExpiration, forKey: "storeAccessExpirationV1")
+        }
+        let fixture = try await makeDraftFixture()
+        let jobStore = RecordingJobStore(rootDirectoryURL: fixture.root.appendingPathComponent("jobs"))
+        let buffer = CircularAudioBuffer(capacity: 200_000)
+        let originalRecorder = PersistentRecorder.active
+        let recorder = PersistentRecorder(
+            transcriptStore: TranscriptStore(),
+            usageTracker: UsageTracker(defaults: fixture.defaults),
+            transcriptionService: OnDeviceTranscriptionService(
+                systemBackend: DraftActionEmptySpeechBackend(), usesDownloadedLocalFallbacks: false
+            ),
+            recordingJobStore: jobStore,
+            circularBuffer: buffer
+        )
+        // Hold processing; samples are injected at the audio-tap boundary.
+        _ = recorder.recordingQueue.beginCaptureLease()
+        recorder.isListening = true
+        defer {
+            recorder.stopListening()
+            PersistentRecorder.active = originalRecorder
+        }
+
+        let first = Array(repeating: Float(0.1), count: 24_000)
+        recorder.startInAppSegment(completionMode: .captureDraft(attachAudio: false), origin: .quickRecord)
+        XCTAssertTrue(recorder.isSegmentActive)
+        buffer.append(first)
+        // WidgetRecordingLaunch: finishActiveRecording, then start, which for
+        // a temporary engine stops listening before acquiring a fresh one.
+        recorder.stopInAppSegment()
+        XCTAssertFalse(recorder.isSegmentActive)
+        recorder.stopListening()
+
+        recorder.isListening = true
+        recorder.startInAppSegment(completionMode: .captureDraft(attachAudio: false), origin: .quickRecord)
+        XCTAssertTrue(recorder.isSegmentActive, "The new recording starts right after the stop")
+        buffer.append(Array(repeating: Float(0.2), count: 8_000))
+        recorder.stopInAppSegment()
+
+        let deadline = Date().addingTimeInterval(3)
+        var jobs: [RecordingJob] = []
+        while Date() < deadline {
+            jobs = try await jobStore.load(recoverInterrupted: false)
+            if jobs.count == 2 { break }
+            try await Task.sleep(for: .milliseconds(25))
+        }
+        XCTAssertEqual(jobs.count, 2, recorder.lastError ?? "Both recordings must reach the durable queue")
+        let firstJob = try XCTUnwrap(jobs.min(by: { $0.createdAt < $1.createdAt }))
+        let saved = try Data(contentsOf: jobStore.audioURL(for: firstJob))
+        XCTAssertEqual(saved.count, 44 + first.count * 2, "The stopped recording was saved whole")
+        XCTAssertEqual(firstJob.duration, Double(first.count) / 16_000, accuracy: 0.000_1)
+    }
+
     func testRepeatedStopsPreserveShortQuietAndSilentRecordingAudio() async throws {
         guard AppConstants.recordingsDirectoryURL != nil else {
             throw XCTSkip("Requires a signed host with the App Group recordings container")

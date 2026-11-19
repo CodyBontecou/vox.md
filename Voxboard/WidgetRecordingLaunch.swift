@@ -11,9 +11,14 @@ import Foundation
 /// - Immediate delivery runs from the recorder's frozen Route snapshot and
 ///   never touches the composer, so earlier transcription, a recovered queue
 ///   job from a killed app, or a leftover draft does not block it.
-/// - Draft delivery records into the composer. It waits, for as long as it
-///   takes, until earlier work on the composer is done (the caller shows that
-///   it is waiting), then opens a blank note and starts.
+/// - Draft delivery records into the composer. It waits up to
+///   `composerWaitLimit` for earlier work on the composer to finish (the
+///   caller shows that it is waiting), then opens a blank note and starts. If
+///   the composer is still busy then, it records at once through the
+///   requested Route's own delivery instead, which never touches the composer;
+///   it never falls back to the "Finish the current recording…" prompt. A
+///   Remote-only Route would send that recording without review, so it gets no
+///   fallback and the launch ends quietly.
 ///
 /// A Shortcut's Start keeps its documented meaning: an active recording is
 /// left unchanged.
@@ -23,6 +28,12 @@ import Foundation
 enum WidgetRecordingLaunch {
     enum Outcome: Equatable {
         case started(finishedActiveRecording: Bool)
+        /// Draft delivery only: the composer stayed busy past the wait, so the
+        /// recording went through the Route's own delivery.
+        case startedWithoutComposer(finishedActiveRecording: Bool)
+        /// Draft delivery only: the composer stayed busy and the Route can't
+        /// record without review (Remote-only). Nothing was recorded.
+        case composerStillBusy
         case stopped
         case unchanged
         /// Draft delivery only: the launch was cancelled while waiting for
@@ -64,10 +75,16 @@ enum WidgetRecordingLaunch {
         /// Close the open note like New note; `false` keeps it and records nothing.
         var prepareNewNote: () async -> Bool
         var start: () -> Bool
+        /// The draft wait timed out: may this launch record through the
+        /// requested Route's own delivery instead?
+        var canStartWithoutComposer: () -> Bool = { false }
+        var startWithoutComposer: () -> Bool = { false }
         var sleep: (Duration) async -> Void = { try? await Task.sleep(for: $0) }
     }
 
     static let composerPollInterval: Duration = .milliseconds(100)
+    /// Speech is not recorded while a draft launch waits, so keep this short.
+    static let composerWaitLimit: Duration = .seconds(10)
 
     static func perform(
         action: RecordingAction,
@@ -92,7 +109,17 @@ enum WidgetRecordingLaunch {
 
         await effects.loadComposer()
         if isDraft {
-            guard await waitForComposer(effects) else { return .cancelled }
+            switch await waitForComposer(effects) {
+            case .available:
+                break
+            case .cancelled:
+                return .cancelled
+            case .timedOut:
+                guard effects.canStartWithoutComposer() else { return .composerStillBusy }
+                guard !effects.isRecording() else { return .unchanged }
+                guard effects.startWithoutComposer() else { return .notStarted }
+                return .startedWithoutComposer(finishedActiveRecording: finishedActiveRecording)
+            }
             switch effects.newNotePlan() {
             case .alreadyBlank, .keepDraft:
                 break
@@ -107,36 +134,96 @@ enum WidgetRecordingLaunch {
         return .started(finishedActiveRecording: finishedActiveRecording)
     }
 
-    private static func waitForComposer(_ effects: Effects) async -> Bool {
-        guard !effects.isComposerAvailable() else { return true }
+    enum ComposerWait: Equatable {
+        case available
+        case timedOut
+        case cancelled
+    }
+
+    private static func waitForComposer(_ effects: Effects) async -> ComposerWait {
+        guard !effects.isComposerAvailable() else { return .available }
         effects.setWaitingForComposer(true)
         defer { effects.setWaitingForComposer(false) }
+        var waited: Duration = .zero
         while !effects.isComposerAvailable() {
-            guard !Task.isCancelled else { return false }
+            guard !Task.isCancelled else { return .cancelled }
+            guard waited < composerWaitLimit else { return .timedOut }
             await effects.sleep(composerPollInterval)
+            waited += composerPollInterval
         }
-        return !Task.isCancelled
+        return Task.isCancelled ? .cancelled : .available
     }
 }
 
 /// Serializes launches for the composer: the same press can reach the app
-/// more than once (launch flag, notification, scene activation). A copy that
-/// arrives while a launch is in flight is dropped instead of racing it, and a
-/// copy that arrives within `duplicateWindow` of the recording a launch just
-/// started is treated as the same press rather than as "start another one".
+/// more than once (launch flag, notification, scene activation).
+///
+/// - A copy that arrives while a launch is starting is dropped instead of
+///   racing it.
+/// - A press that arrives while a draft launch is waiting for the composer
+///   replaces it: the waiting launch is cancelled and the newest press runs.
+///   Nothing is silently swallowed behind a wait.
+/// - A press within `duplicateWindow` of the recording a launch just started
+///   is treated as the same press, not as "start another one". The new
+///   recording is already on screen, so a quick double press shows one
+///   recording rather than a two-second clip and a second recording.
+/// - `cancel()` ends a waiting launch (scene background, view gone), so the
+///   coordinator can never stay busy and drop every later press.
 @MainActor
 final class WidgetRecordingLaunchCoordinator {
     static let duplicateWindow: TimeInterval = 2
 
     private(set) var isInFlight = false
+    private(set) var isWaitingForComposer = false
     private var lastStartedAt: Date?
+    private var current: (id: UUID, task: Task<WidgetRecordingLaunch.Outcome?, Never>)?
     private let now: () -> Date
 
     init(now: @escaping () -> Date = Date.init) {
         self.now = now
     }
 
-    /// `nil` when the launch was dropped as a copy of one in flight.
+    /// A launch is starting or waiting.
+    var isBusy: Bool { current != nil || isInFlight }
+
+    /// Starts a launch, unless it is a copy of one that is already starting
+    /// (then `nil`). A launch that is only waiting for the composer is
+    /// replaced by this one.
+    @discardableResult
+    func launch(
+        action: RecordingAction,
+        isDraftDelivery: Bool,
+        startsNewRecording: Bool,
+        effects: WidgetRecordingLaunch.Effects
+    ) -> Task<WidgetRecordingLaunch.Outcome?, Never>? {
+        if let current {
+            guard isWaitingForComposer else { return nil }
+            current.task.cancel()
+        }
+        let previous = current?.task
+        let id = UUID()
+        let task = Task { @MainActor [weak self] () -> WidgetRecordingLaunch.Outcome? in
+            // Let the replaced launch unwind (it clears its waiting state).
+            _ = await previous?.value
+            guard let self else { return nil }
+            defer { if self.current?.id == id { self.current = nil } }
+            return await self.run(
+                action: action,
+                isDraftDelivery: isDraftDelivery,
+                startsNewRecording: startsNewRecording,
+                effects: effects
+            )
+        }
+        current = (id, task)
+        return task
+    }
+
+    /// Ends a waiting launch without recording.
+    func cancel() {
+        current?.task.cancel()
+    }
+
+    /// Runs one launch now; `nil` when another one is in flight.
     func run(
         action: RecordingAction,
         isDraftDelivery: Bool,
@@ -145,12 +232,20 @@ final class WidgetRecordingLaunchCoordinator {
     ) async -> WidgetRecordingLaunch.Outcome? {
         guard !isInFlight else { return nil }
         isInFlight = true
-        defer { isInFlight = false }
+        defer {
+            isInFlight = false
+            isWaitingForComposer = false
+        }
 
         var effects = effects
         effects.isRecentLaunchRecording = { [weak self] in
             guard let self, let startedAt = self.lastStartedAt else { return false }
             return self.now().timeIntervalSince(startedAt) < Self.duplicateWindow
+        }
+        let showWaiting = effects.setWaitingForComposer
+        effects.setWaitingForComposer = { [weak self] isWaiting in
+            self?.isWaitingForComposer = isWaiting
+            showWaiting(isWaiting)
         }
         let outcome = await WidgetRecordingLaunch.perform(
             action: action,
@@ -158,7 +253,10 @@ final class WidgetRecordingLaunchCoordinator {
             startsNewRecording: startsNewRecording,
             effects: effects
         )
-        if case .started = outcome { lastStartedAt = now() }
+        switch outcome {
+        case .started, .startedWithoutComposer: lastStartedAt = now()
+        default: break
+        }
         return outcome
     }
 }
