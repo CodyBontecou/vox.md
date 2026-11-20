@@ -1,0 +1,134 @@
+<!--{
+  "slug": "whisper-vs-parakeet",
+  "title": "Whisper vs Parakeet on iPhone and Mac: which local model?",
+  "description": "Choose between Whisper, Parakeet v2, Parakeet v3 and Apple Speech for on-device transcription in Vox.md. Sizes, languages, live vs batch, and a test on your own audio.",
+  "subtitle": "Pick by language, storage and how you dictate, then run the same clip through two backends and compare the Markdown.",
+  "eyebrow": "iPhone · Mac · Local transcription · Comparison",
+  "requirements": "Documented Vox.md model options",
+  "published": "2026-11-20",
+  "modified": "2026-11-20",
+  "image": "/screenshots/00-capture-light.png",
+  "section": "compare",
+  "fact_label": "Scope"
+}-->
+<div class="answer-box" id="quick-answer-box"><div class="label">The short answer</div>
+        <p>Use Parakeet v2 for English when speed matters, and Parakeet v3 for its 25 European languages. Use Whisper for any language Parakeet lacks, or for Auto Detect. If you would rather download nothing, keep Automatic on a supported iOS 26 device, which uses Apple Speech.</p>
+      </div>
+      <p>This page is published by Vox.md. It compares the options as documented in the app on November 20, 2026. We did not run our own accuracy or speed tests, so any speed or accuracy figure below is quoted from its publisher and labelled as such. For your voice, <a href="#test-your-audio">the test on your own audio</a> is the real answer.</p>
+      <nav class="toc" aria-label="In this comparison"><div class="toc-title">In this comparison</div><ol>
+        <li><a href="#quick-answer">Decision table</a></li>
+        <li><a href="#what-they-are">What Whisper and Parakeet are</a></li>
+        <li><a href="#languages">Languages</a></li>
+        <li><a href="#speed-accuracy">Speed and accuracy: what is published</a></li>
+        <li><a href="#storage">Storage and downloads</a></li>
+        <li><a href="#iphone-vs-mac">iPhone vs Mac</a></li>
+        <li><a href="#test-your-audio">Test both on your own audio</a></li>
+        <li><a href="#privacy">Privacy</a></li>
+        <li><a href="#limitations">Limitations</a></li>
+        <li><a href="#faq">Questions</a></li>
+      </ol></nav>
+
+      <h2 id="quick-answer">Decision table</h2>
+      <p>Sizes, languages and behavior come from the <a href="../../docs/#model-options">Vox.md model options</a> and <a href="../../docs/#model-languages">language lists</a>. Sizes are approximate.</p>
+      <p class="guide-table-hint">On a small screen, swipe the table sideways.</p>
+      <div class="guide-comparison" role="region" aria-label="Transcription option comparison; scroll horizontally on small screens" tabindex="0">
+        <table class="comparison">
+          <caption>Vox.md transcription options, as documented November 20, 2026</caption>
+          <thead><tr><th scope="col">Option</th><th scope="col">Download</th><th scope="col">Languages</th><th scope="col">Live or batch</th><th scope="col">Best fit</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Automatic (Apple Speech)</th><td>None from you; system managed</td><td>System Language, or a listed language when Apple supports that locale</td><td>Live text on a supported iOS 26 device and language</td><td>You would rather not download a model. Never downloads a Whisper or Parakeet fallback silently.</td></tr>
+            <tr><th scope="row">Whisper Tiny</th><td>75 MB</td><td>Whisper list, or Auto Detect</td><td>Batch, after the segment ends</td><td>Smallest download and fastest Whisper option.</td></tr>
+            <tr><th scope="row">Whisper Base</th><td>142 MB</td><td>Whisper list, or Auto Detect</td><td>Batch</td><td>Balanced small model; the legacy Mac default.</td></tr>
+            <tr><th scope="row">Whisper Small</th><td>466 MB</td><td>Whisper list, or Auto Detect</td><td>Batch</td><td>More accuracy for more storage and processing.</td></tr>
+            <tr><th scope="row">Whisper Medium</th><td>1.5 GB</td><td>Whisper list, or Auto Detect</td><td>Batch</td><td>Larger multilingual Whisper model.</td></tr>
+            <tr><th scope="row">Whisper Large v3 Turbo</th><td>1.6 GB</td><td>Whisper list, or Auto Detect</td><td>Batch</td><td>Largest Whisper option in Vox.md.</td></tr>
+            <tr><th scope="row">Parakeet v2</th><td>~800 MB</td><td>English</td><td>Batch</td><td>English, optimized for English.</td></tr>
+            <tr><th scope="row">Parakeet v3</th><td>~800 MB</td><td>25 European languages, detected automatically</td><td>Batch</td><td>Multilingual European audio.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>“Batch” means Vox.md transcribes after you stop recording or finish an import. Only Automatic with Apple Speech shows live text while you speak.</p>
+
+      <h2 id="what-they-are">What Whisper and Parakeet are</h2>
+      <p><strong>Whisper</strong> is a speech recognition model family from OpenAI. Its repository describes a Transformer sequence-to-sequence model trained on several speech tasks, and releases the code and weights under the MIT License. See <a href="https://github.com/openai/whisper"><code>github.com/openai/whisper</code></a> and the paper <a href="https://arxiv.org/abs/2212.04356">“Robust Speech Recognition via Large-Scale Weak Supervision”</a>. Vox.md runs Whisper through <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a>.</p>
+      <p><strong>Parakeet TDT models</strong> come from NVIDIA. Their model cards describe 600-million-parameter FastConformer encoders with a TDT decoder, released under CC-BY-4.0: <a href="https://huggingface.co/nvidia/parakeet-tdt-0.6b-v2"><code>parakeet-tdt-0.6b-v2</code></a> is English, and <a href="https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3"><code>parakeet-tdt-0.6b-v3</code></a> covers 25 European languages. Vox.md runs Parakeet through <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a>, a Swift SDK for local audio models on Apple devices, using Core ML.</p>
+      <p>The third option is Apple’s own Speech framework. On iOS 26, Apple documents <a href="https://developer.apple.com/documentation/speech/speechanalyzer"><code>SpeechAnalyzer</code></a> for on-device recognition. Vox.md’s Automatic mode prefers it on a supported device and language.</p>
+
+      <h2 id="languages">Languages</h2>
+      <ul>
+        <li><strong>Whisper in Vox.md:</strong> Auto Detect, English, Spanish, French, German, Italian, Portuguese, Dutch, Polish, Russian, Chinese, Japanese, Korean, Arabic, Hindi, Turkish, Vietnamese, Thai, Ukrainian, Swedish, Danish, Norwegian, and Finnish.</li>
+        <li><strong>Parakeet v3:</strong> Bulgarian, Croatian, Czech, Danish, Dutch, English, Estonian, Finnish, French, German, Greek, Hungarian, Italian, Latvian, Lithuanian, Maltese, Polish, Portuguese, Romanian, Slovak, Slovenian, Spanish, Swedish, Russian, and Ukrainian.</li>
+        <li><strong>Parakeet v2:</strong> English only.</li>
+      </ul>
+      <p>In Vox.md, only Whisper covers Chinese, Japanese, Korean, Arabic, Hindi, Turkish, Vietnamese, Thai and Norwegian. Parakeet v3 covers several languages that Whisper’s Vox.md list does not offer, such as Bulgarian, Croatian, Czech, Estonian, Greek, Hungarian, Latvian, Lithuanian, Maltese, Romanian, Slovak and Slovenian. Automatic follows System Language, plus the Whisper-listed languages when Apple supports that locale.</p>
+
+      <h2 id="speed-accuracy">Speed and accuracy: what is published</h2>
+      <p>These figures are the publishers’ own measurements, checked November 20, 2026. They are not Vox.md results and do not predict how an iPhone or Mac will behave.</p>
+      <ul>
+        <li><strong>Parakeet v2 model card (NVIDIA):</strong> a mean word error rate of 6.05% on the Hugging Face Open ASR Leaderboard datasets, using greedy decoding without an external language model. The card says RTFx is about 3,380 at batch size 128 and “may vary depending on dataset audio duration and batch size.” It does not name the GPU for that figure.</li>
+        <li><strong>Parakeet v3 model card (NVIDIA):</strong> a 6.34% average WER on the same leaderboard datasets, and averages of 11.97% (Fleurs), 7.83% (MLS) and 11.98% (CoVoST) for the multilingual sets.</li>
+        <li><strong>Whisper repository (OpenAI):</strong> the <code>turbo</code> model is described as an optimized <code>large-v3</code> with faster transcription and minimal accuracy loss, at about 8x the speed of <code>large</code>, measured “transcribing English speech on a A100.”</li>
+        <li><strong>FluidAudio README:</strong> reports a real-time factor of about 190x for Parakeet v3 batch transcription on an M4 Pro.</li>
+      </ul>
+      <p>The <a href="https://huggingface.co/spaces/hf-audio/open_asr_leaderboard">Open ASR Leaderboard</a> lists more models and datasets; check it for current numbers, because it changes. Leaderboard datasets are not your recording. Results vary with the device, accent, background noise, microphone, audio length and the model size you pick. Speed multipliers measured on data-center GPUs say little about a phone. Treat any unsourced “X times faster” claim with caution.</p>
+
+      <h2 id="storage">Storage and downloads</h2>
+      <p>Whisper models range from 75 MB (Tiny) to 1.6 GB (Large v3 Turbo). Each Parakeet model is about 800 MB. Automatic needs no model from you; on a supported device it may prepare an Apple language asset.</p>
+      <p>Downloads happen only when you ask for them, can be canceled while in progress, and can be deleted later. A download needs a network connection once. After the selected backend is ready, transcription runs locally.</p>
+
+      <h2 id="iphone-vs-mac">iPhone vs Mac</h2>
+      <ul>
+        <li><strong>iPhone:</strong> Automatic (Apple Speech on a supported iOS 26 device and language), Whisper and Parakeet are available. Automatic is the iOS default.</li>
+        <li><strong>Mac:</strong> the Models screen downloads, selects and deletes Whisper or Parakeet models and changes the transcription language. Whisper uses Metal acceleration on supported Macs. Whisper Base is the legacy Mac default.</li>
+        <li><strong>Keyboard pause auto-stop (Parakeet only):</strong> an optional ~1 MB Voice Pause Detection model can stop an explicit Parakeet v2 or v3 keyboard recording after silence. Enable <strong>Stop Parakeet after a pause</strong> and choose about 0.5, 0.75, 1, 1.5 or 2 seconds. Automatic and Whisper stay manual-stop. See <a href="../../docs/#parakeet-autostop">Parakeet keyboard auto-stop</a> and <a href="../../blog/best-voice-to-text-keyboard-iphone/">the voice keyboard guide</a>.</li>
+      </ul>
+      <p>The Mac model screen is described under <a href="../../docs/#mac-history">Mac history and models</a>. For recording calls, see <a href="../../blog/transcribe-meetings-mac-obsidian/">Mac meetings into Obsidian</a>.</p>
+
+      <h2 id="test-your-audio">Test both on your own audio</h2>
+      <p>Use a 60–120 second clip of the kind of speech you actually record, with the names, numbers and accents you care about. Choose non-sensitive audio. You can run this on the free tier (15 minutes of transcription and 10 successful deliveries).</p>
+      <ol>
+        <li>Connected to the internet, open <strong>Settings → Models</strong> and download the two candidates you want to compare, for example Parakeet v3 and Whisper Small. Leave out any option that does not cover your language.</li>
+        <li>Create or select a <strong>Route</strong> with a writable Markdown folder, and use a New Note target so the result is easy to find. Use Keep Original processing so the note contains recognized text without an AI rewrite.</li>
+        <li>In Quick Capture’s voice controls, choose <strong>Add to Draft</strong>. Add to Draft appends each finished transcript to one draft instead of sending it.</li>
+        <li>Select the first model in <strong>Settings → Models</strong>, then record the clip or use <strong>Import audio</strong> with an existing file. Importing one file is best, because both models then hear identical audio.</li>
+        <li>Type a short label line in the draft, such as the model name. Select the second model in <strong>Settings → Models</strong> and import the same clip again.</li>
+        <li>Tap <strong>Send</strong> to deliver both transcripts to one Markdown note through the Route. (<strong>Send Immediately</strong> would deliver each transcript as it finishes instead, giving you two notes.)</li>
+        <li>Open the note and compare against the audio: proper names, numbers and dates, punctuation, and any dropped or repeated phrases. Also note how long each transcription took on your device.</li>
+        <li>Delete the model you will not use in <strong>Settings → Models</strong> to free the storage.</li>
+      </ol>
+      <p>If Automatic is available on your phone, add it as a third run: select Automatic and import the same clip. See <a href="../../blog/transcribe-voice-memos-iphone/">transcribing imported audio</a> for import details and <a href="../../blog/offline-transcription-iphone-markdown/">offline transcription setup</a> for checking the workflow without a connection.</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Try both on your own recording</a></p>
+
+      <h2 id="privacy">Privacy</h2>
+      <p>Transcription runs on your device. Downloading a Whisper or Parakeet model contacts Hugging Face, directly or through FluidAudio, as described in <a href="../../privacy.html#third-party-services">the privacy policy</a>. No capture content is sent in that download. If you save the note in a cloud-backed folder, that provider syncs the finished file under its own terms.</p>
+
+      <h2 id="limitations">Limitations</h2>
+      <ul>
+        <li>There is no universal winner. The best option depends on your language, voice, microphone, device and tolerance for storage use.</li>
+        <li>The published numbers above are the publishers’ own, measured on their datasets and hardware.</li>
+        <li>Apple Speech needs a supported iOS 26 device and language. Otherwise Automatic uses only a local model you already downloaded.</li>
+        <li>Review important transcripts against the audio, whichever backend you choose.</li>
+      </ul>
+
+      <h2 id="faq">Questions</h2>
+      <h3>Is Parakeet better than Whisper?</h3>
+      <p>Not in general. NVIDIA publishes low English word error rates for Parakeet on the Open ASR Leaderboard datasets, but that does not cover your accent, microphone or room. Parakeet fits English and European languages; Whisper covers more languages. Test both on your own clip.</p>
+      <h3>Does Parakeet support other languages?</h3>
+      <p>Parakeet v2 is English only. Parakeet v3 supports 25 European languages, listed above. It does not cover Chinese, Japanese, Korean, Arabic, Hindi, Turkish, Vietnamese, Thai or Norwegian in Vox.md; use Whisper for those.</p>
+      <h3>Can I run Whisper on iPhone offline?</h3>
+      <p>Yes, after a one-time model download. Download a Whisper model in Settings → Models while connected; later transcription runs on the phone. Saving the Markdown offline also needs a locally available, writable folder.</p>
+      <h3>Do I need to download a model at all?</h3>
+      <p>Not if Automatic works for you. On a supported iOS 26 device and language it uses Apple Speech and shows live text. Download Whisper or Parakeet when your language or device is not supported, or when your test shows a better result.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Try both on your own recording.</h2>
+        <p>The free tier’s 15 transcription minutes and 10 deliveries are enough to run the comparison above.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Download Vox.md free</a></p>
+      </section>
+      <nav class="toc" aria-label="Related guides"><div class="toc-title">Continue</div><ul>
+        <li><a href="../../docs/#models">Model options and languages in the docs</a></li>
+        <li><a href="../../blog/offline-transcription-iphone-markdown/">Transcribe audio to Markdown offline on iPhone</a></li>
+        <li><a href="../../blog/transcribe-voice-memos-iphone/">Transcribe iPhone Voice Memos to Markdown</a></li>
+        <li><a href="../../blog/transcribe-meetings-mac-obsidian/">Transcribe Mac meetings locally into Obsidian</a></li>
+        <li><a href="../../blog/best-voice-to-text-keyboard-iphone/">Best voice-to-text keyboard for iPhone</a></li>
+      </ul></nav>

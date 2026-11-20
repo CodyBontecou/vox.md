@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" dir="ltr" data-search-section="段落" data-search-guide="指南" data-search-empty="沒有與“{query}”匹配的結果">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iPhone 和 Mac 上的 Whisper 與 Parakeet：該選哪個本機模型？ | Vox.md</title>
+  <meta name="description" content="在 Vox.md 中為裝置端轉錄選擇 Whisper、Parakeet v2、Parakeet v3 或 Apple Speech。包含模型大小、語言、即時與批次處理，以及用你自己的音訊進行測試。">
+  <link rel="canonical" href="https://vox.isolated.tech/zh-hant/compare/whisper-vs-parakeet/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="供語言模型使用的 Vox.md 文件">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="iPhone 和 Mac 上的 Whisper 與 Parakeet：該選哪個本機模型？">
+  <meta property="og:description" content="在 Vox.md 中為裝置端轉錄選擇 Whisper、Parakeet v2、Parakeet v3 或 Apple Speech。包含模型大小、語言、即時與批次處理，以及用你自己的音訊進行測試。">
+  <meta property="og:url" content="https://vox.isolated.tech/zh-hant/compare/whisper-vs-parakeet/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-20">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="iPhone 和 Mac 上的 Whisper 與 Parakeet：該選哪個本機模型？">
+  <meta name="twitter:description" content="在 Vox.md 中為裝置端轉錄選擇 Whisper、Parakeet v2、Parakeet v3 或 Apple Speech。包含模型大小、語言、即時與批次處理，以及用你自己的音訊進行測試。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "iPhone 和 Mac 上的 Whisper 與 Parakeet：該選哪個本機模型？",
+  "description": "在 Vox.md 中為裝置端轉錄選擇 Whisper、Parakeet v2、Parakeet v3 或 Apple Speech。包含模型大小、語言、即時與批次處理，以及用你自己的音訊進行測試。",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-20",
+  "dateModified": "2026-11-20",
+  "mainEntityOfPage": "https://vox.isolated.tech/zh-hant/compare/whisper-vs-parakeet/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "zh-Hant",
+  "name": "iPhone 和 Mac 上的 Whisper 與 Parakeet：該選哪個本機模型？ | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/zh-hant/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "對比",
+      "item": "https://vox.isolated.tech/zh-hant/compare/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "iPhone 和 Mac 上的 Whisper 與 Parakeet：該選哪個本機模型？",
+      "item": "https://vox.isolated.tech/zh-hant/compare/whisper-vs-parakeet/"
+    }
+  ],
+  "inLanguage": "zh-Hant",
+  "name": "iPhone 和 Mac 上的 Whisper 與 Parakeet：該選哪個本機模型？ | Vox.md",
+  "description": "在 Vox.md 中為裝置端轉錄選擇 Whisper、Parakeet v2、Parakeet v3 或 Apple Speech。包含模型大小、語言、即時與批次處理，以及用你自己的音訊進行測試。"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/compare/whisper-vs-parakeet/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/compare/whisper-vs-parakeet/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳至指南</a>
+<nav aria-label="主導航">
+  <div class="nav-inner">
+    <a href="/zh-hant/" class="logo" aria-label="Vox.md 首頁">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/zh-hant/#how">工作原理</a></li>
+      <li><a href="/zh-hant/docs/">文件</a></li>
+      <li><a href="/zh-hant/blog/">指南</a></li>
+      <li><a href="/zh-hant/compare/">比較</a></li>
+      <li><a href="/zh-hant/privacy.html">隱私</a></li>
+      <li><a href="/zh-hant/terms.html">條款</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_1d0d3b732b34">下載 Vox.md</a>
+  <details class="language-switcher"><summary>語言</summary><ul><li><a href="/compare/whisper-vs-parakeet/" lang="en" hreflang="en">English</a></li><li><a href="/ar/compare/whisper-vs-parakeet/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/compare/whisper-vs-parakeet/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/compare/whisper-vs-parakeet/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/compare/whisper-vs-parakeet/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/compare/whisper-vs-parakeet/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/compare/whisper-vs-parakeet/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/compare/whisper-vs-parakeet/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/compare/whisper-vs-parakeet/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/compare/whisper-vs-parakeet/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/compare/whisper-vs-parakeet/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/compare/whisper-vs-parakeet/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/compare/whisper-vs-parakeet/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/compare/whisper-vs-parakeet/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/compare/whisper-vs-parakeet/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/compare/whisper-vs-parakeet/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/compare/whisper-vs-parakeet/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/compare/whisper-vs-parakeet/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/compare/whisper-vs-parakeet/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/compare/whisper-vs-parakeet/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/compare/whisper-vs-parakeet/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/compare/whisper-vs-parakeet/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/compare/whisper-vs-parakeet/" lang="zh-Hant" hreflang="zh-Hant" aria-current="page">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">iPhone · Mac · 本機轉錄 · 對比</div>
+        <h1 class="hero-title">iPhone 和 Mac 上的 Whisper 與 Parakeet：該選哪個本機模型？</h1>
+        <p class="hero-subtitle">按語言、儲存空間和你的聽寫方式來選擇，然後把同一段音訊交給兩個後端處理，並比較生成的 Markdown。</p>
+      </div>
+      <aside class="meta-card" aria-label="關於本指南">
+        <dl>
+          <div><dt>作者：</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>更新於</dt><dd><time datetime="2026-11-20">2026年11月20日</time></dd></div>
+          <div><dt>範圍</dt><dd>文件中的 Vox.md 模型選項</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="iPhone 和 Mac 上的 Whisper 與 Parakeet：該選哪個本機模型？">
+    <div class="article-container article-body">
+<div class="answer-box" id="quick-answer-box"><div class="label">簡短回答</div>
+        <p>若看重速度且使用英語，請用 Parakeet v2；需要 25 種歐洲語言，請用 Parakeet v3。Parakeet 不支援的語言，或需要自動偵測時，請用 Whisper。如果你不想下載任何內容，請在受支援的 iOS 26 裝置上保持「自動」，它使用 Apple Speech。</p>
+      </div>
+      <p>本頁由 Vox.md 發布，依 2026 年 11 月 20 日應用程式內文件的說明比較各選項。我們沒有自行進行準確度或速度測試，因此下文的任何速度或準確度數據均引自其發布方，並已如此標註。對於您的聲音， <a href="#test-your-audio">用您自己的音訊測試</a> 才是真正的答案。</p>
+      <nav class="toc" aria-label="本次對比中"><div class="toc-title">本次對比中</div><ol>
+        <li><a href="#quick-answer">決策表</a></li>
+        <li><a href="#what-they-are">Whisper 和 Parakeet 是什麼</a></li>
+        <li><a href="#languages">語言</a></li>
+        <li><a href="#speed-accuracy">速度與準確度：已公布的資料</a></li>
+        <li><a href="#storage">儲存與下載</a></li>
+        <li><a href="#iphone-vs-mac">iPhone 與 Mac</a></li>
+        <li><a href="#test-your-audio">用你自己的音訊測試兩者</a></li>
+        <li><a href="#privacy">隱私</a></li>
+        <li><a href="#limitations">局限性</a></li>
+        <li><a href="#faq">常見問題</a></li>
+      </ol></nav>
+
+      <h2 id="quick-answer">決策表</h2>
+      <p>模型大小、語言和行為資訊來自 <a href="/zh-hant/docs/#model-options">Vox.md 模型選項</a> 和 <a href="/zh-hant/docs/#model-languages">語言列表</a>。大小為近似值。</p>
+      <p class="guide-table-hint">在小螢幕上，請左右滑動表格。</p>
+      <div class="guide-comparison" role="region" aria-label="轉錄選項對比；在小螢幕上請橫向滾動" tabindex="0">
+        <table class="comparison">
+          <caption>Vox.md 轉錄選項（截至2026年11月20日的文件內容）</caption>
+          <thead><tr><th scope="col">選項</th><th scope="col">下載</th><th scope="col">語言</th><th scope="col">即時或批次</th><th scope="col">最適合</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">自動（Apple Speech）</th><td>無需你操作；由系統管理</td><td>系統語言，或在 Apple 支援該語言區域時使用所列語言</td><td>在受支援的 iOS 26 裝置和語言上顯示即時文字</td><td>你不想下載模型。絕不會悄悄下載 Whisper 或 Parakeet 備用模型。</td></tr>
+            <tr><th scope="row">Whisper Tiny</th><td>75 MB</td><td>Whisper 列表，或自動偵測</td><td>批次，在分段結束後</td><td>下載最小、速度最快的 Whisper 選項。</td></tr>
+            <tr><th scope="row">Whisper Base</th><td>142 MB</td><td>Whisper 列表，或自動偵測</td><td>批次</td><td>均衡的小型模型；Mac 上舊版的預設模型。</td></tr>
+            <tr><th scope="row">Whisper Small</th><td>466 MB</td><td>Whisper 列表，或自動偵測</td><td>批次</td><td>更高的準確度，代價是更多儲存和處理資源。</td></tr>
+            <tr><th scope="row">Whisper Medium</th><td>1.5 GB</td><td>Whisper 列表，或自動偵測</td><td>批次</td><td>較大的多語言 Whisper 模型。</td></tr>
+            <tr><th scope="row">Whisper Large v3 Turbo</th><td>1.6 GB</td><td>Whisper 列表，或自動偵測</td><td>批次</td><td>Vox.md 中最大的 Whisper 選項。</td></tr>
+            <tr><th scope="row">Parakeet v2</th><td>~800 MB</td><td>英語</td><td>批次</td><td>英語，針對英語優化。</td></tr>
+            <tr><th scope="row">Parakeet v3</th><td>~800 MB</td><td>25 種歐洲語言，自動偵測</td><td>批次</td><td>多語言歐洲語音。</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>「批次」指 Vox.md 在你停止錄音或匯入完成後再進行轉錄。只有使用 Apple Speech 的「自動」會在你說話時顯示即時文字。</p>
+
+      <h2 id="what-they-are">Whisper 和 Parakeet 是什麼</h2>
+      <p><strong>Whisper</strong> 是 OpenAI 推出的語音辨識模型系列。其程式碼庫描述了一個在多種語音任務上訓練的 Transformer 序列到序列模型，並以 MIT 授權發佈程式碼和權重。參見 <a href="https://github.com/openai/whisper"><code>github.com/openai/whisper</code></a> 以及論文 <a href="https://arxiv.org/abs/2212.04356">《Robust Speech Recognition via Large-Scale Weak Supervision》</a>。Vox.md 透過以下方式運行 Whisper： <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a>.</p>
+      <p><strong>Parakeet TDT 模型</strong> 來自 NVIDIA。其模型卡描述了採用 TDT 解碼器的 6 億參數 FastConformer 編碼器，以 CC-BY-4.0 授權發布： <a href="https://huggingface.co/nvidia/parakeet-tdt-0.6b-v2"><code>parakeet-tdt-0.6b-v2</code></a> 是英語，而 <a href="https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3"><code>parakeet-tdt-0.6b-v3</code></a> 涵蓋 25 種歐洲語言。Vox.md 透過以下方式運行 Parakeet： <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a>，這是一個基於 Core ML、面向 Apple 裝置本機音訊模型的 Swift SDK。</p>
+      <p>第三個選項是 Apple 自家的 Speech 框架。在 iOS 26 上，Apple 的文件介紹了 <a href="https://developer.apple.com/documentation/speech/speechanalyzer"><code>SpeechAnalyzer</code></a> 用於裝置端辨識。在受支援的裝置和語言上，Vox.md 的「自動」模式會優先使用它。</p>
+
+      <h2 id="languages">語言</h2>
+      <ul>
+        <li><strong>Vox.md 中的 Whisper：</strong> 自動檢測、英語、西班牙語、法語、德語、意大利語、葡萄牙語、荷蘭語、波蘭語、俄語、中文、日語、韓語、阿拉伯語、印地語、土耳其語、越南語、泰語、烏克蘭語、瑞典語、丹麥語、挪威語和芬蘭語。</li>
+        <li><strong>Parakeet v3:</strong> 保加利亞語、克羅地亞語、捷克語、丹麥語、荷蘭語、英語、愛沙尼亞語、芬蘭語、法語、德語、希臘語、匈牙利語、意大利語、拉脫維亞語、立陶宛語、馬耳他語、波蘭語、葡萄牙語、羅馬尼亞語、斯洛伐克語、斯洛文尼亞語、西班牙語、瑞典語、俄語和烏克蘭語。</li>
+        <li><strong>Parakeet v2:</strong> 僅支援英語。</li>
+      </ul>
+      <p>在 Vox.md 中，只有 Whisper 涵蓋中文、日語、韓語、阿拉伯語、印地語、土耳其語、越南語、泰語和挪威語。Parakeet v3 涵蓋若乾 Vox.md 的 Whisper 列表中沒有的語言，例如保加利亞語、克羅地亞語、捷克語、愛沙尼亞語、希臘語、匈牙利語、拉脫維亞語、立陶宛語、馬耳他語、羅馬尼亞語、斯洛伐克語和斯洛文尼亞語。自動遵循系統語言，並在 Apple 支援該語言區域時加上 Whisper 列出的語言。</p>
+
+      <h2 id="speed-accuracy">速度與準確度：已公布的資料</h2>
+      <p>這些數字是各發佈方自己的測量結果，核查於2026年11月20日。它們不是 Vox.md 的結果，也不能預測 iPhone 或 Mac 的實際表現。</p>
+      <ul>
+        <li><strong>Parakeet v2 模型卡（NVIDIA）：</strong> 在 Hugging Face Open ASR Leaderboard 資料集上的平均字錯誤率為 6.05%，使用貪婪解碼，未使用外部語言模型。模型卡稱批大小為 128 時 RTFx 約為 3,380，並指出「可能隨資料集音訊時長和批大小而變化」。它沒有說明該數值使用的 GPU。</li>
+        <li><strong>Parakeet v3 模型卡（NVIDIA）：</strong> 在相同排行榜資料集上的平均 WER 為 6.34%，多語言資料集的平均值分別為 11.97%（Fleurs）、7.83%（MLS）和 11.98%（CoVoST）。</li>
+        <li><strong>Whisper 程式碼庫（OpenAI）：</strong> 該 <code>turbo</code> 模型被描述為經過優化的 <code>large-v3</code> ，轉錄更快且精度損失極小，速度約為 <code>large</code>，測量條件為「在 A100 上轉錄英語語音」。</li>
+        <li><strong>FluidAudio README：</strong> 報告稱，在 M4 Pro 上批次轉錄 Parakeet v3 的即時因子約為 190 倍。</li>
+      </ul>
+      <p>該 <a href="https://huggingface.co/spaces/hf-audio/open_asr_leaderboard">Open ASR 排行榜</a> 列出了更多模型和資料集；數字會變化，請查看最新數值。排行榜資料集不是你的錄音。結果會因裝置、口音、背景噪音、麥克風、音訊長度和所選模型大小而異。在資料中心 GPU 上測得的速度倍數，對手機幾乎沒有參考價值。對任何沒有來源的「快 X 倍」說法都要謹慎對待。</p>
+
+      <h2 id="storage">儲存與下載</h2>
+      <p>Whisper 模型大小從 75 MB（Tiny）到 1.6 GB（Large v3 Turbo）不等。每個 Parakeet 模型約 800 MB。自動無需你提供模型；在受支援的裝置上，它可能會準備一個 Apple 語言資源。</p>
+      <p>只有在你要求時才會下載，下載過程中可以取消，之後也可以刪除。下載只需連網一次。所選後端準備就緒後，轉錄在本機運行。</p>
+
+      <h2 id="iphone-vs-mac">iPhone 與 Mac</h2>
+      <ul>
+        <li><strong>iPhone：</strong> 「自動」（在受支援的 iOS 26 裝置和語言上使用 Apple Speech）、Whisper 和 Parakeet 均可選擇。自動是 iOS 上的預設選項。</li>
+        <li><strong>Mac：</strong> 模型畫面可下載、選擇和刪除 Whisper 或 Parakeet 模型，並更改轉錄語言。Whisper 在受支援的 Mac 上使用 Metal 加速。Whisper Base 是 Mac 上舊版的預設模型。</li>
+        <li><strong>鍵盤停頓自動停止（僅限 Parakeet）：</strong> 一個可選的約 1 MB 語音停頓偵測模型，可以在靜音後停止顯式選擇 Parakeet v2 或 v3 的鍵盤錄音。啟用 <strong>讓 Parakeet 在停頓後停止</strong> ，並選擇約 0.5、0.75、1、1.5 或 2 秒。自動和 Whisper 仍需手動停止。參見 <a href="/zh-hant/docs/#parakeet-autostop">Parakeet 鍵盤自動停止</a> 和 <a href="/zh-hant/blog/best-voice-to-text-keyboard-iphone/">語音鍵盤指南</a>.</li>
+      </ul>
+      <p>Mac 的模型畫面在以下位置介紹： <a href="/zh-hant/docs/#mac-history">Mac 歷史與模型</a>。如需錄製通話，請參閱 <a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/">將 Mac 會議錄入 Obsidian</a>.</p>
+
+      <h2 id="test-your-audio">用你自己的音訊測試兩者</h2>
+      <p>請使用一段 60–120 秒、內容與你實際錄音相近的語音片段，其中包含你在意的姓名、數字和口音。請選擇不含敏感資訊的音訊。你可以在免費版上完成（15 分鐘轉錄和 10 次成功遞送）。</p>
+      <ol>
+        <li>連網後，開啟 <strong>設定 → 模型</strong> ，下載你想比較的兩個候選模型，例如 Parakeet v3 和 Whisper Small。請排除不支援你所用語言的選項。</li>
+        <li>創建或選擇一個 <strong>路線</strong> ，選用可寫入的 Markdown 資料夾，並使用新筆記目標，方便找到結果。使用保留原文處理，這樣筆記中只有辨識出的文字，不經 AI 改寫。</li>
+        <li>在快速捕捉的語音控件中，選擇 <strong>加入草稿</strong>。添加到草稿會把每條轉錄完成的文本追加到同一份草稿中，而不是直接發送。</li>
+        <li>在以下位置選擇第一個模型： <strong>設定 → 模型</strong>，然後錄製該片段，或使用 <strong>音頻進口</strong> ，使用已有文件。最好只匯入一個文件，因為這樣兩個模型聽到的音訊完全相同。</li>
+        <li>在草稿中輸入一行簡短標簽，例如模型名稱。在以下位置選擇第二個模型： <strong>設定 → 模型</strong> ，再匯入同一段音訊。</li>
+        <li>輕點 <strong>發送</strong> ，透過路線把兩份轉錄都遞送到同一篇 Markdown 筆記。（<strong>立即傳送</strong> 則會在每份轉錄完成時分別遞送，這樣你會得到兩篇筆記。）</li>
+        <li>開啟筆記，對照音訊檢查：專有名詞、數字和日期、標點，以及任何遺漏或重復的短語。同時記下每次轉錄在你的裝置上花了多長時間。</li>
+        <li>在以下位置刪除你不會使用的模型： <strong>設定 → 模型</strong> 以釋放儲存空間。</li>
+      </ol>
+      <p>如果你的手機上可使用「自動」，就把它作為第三次運行：選擇「自動」並匯入同一段音訊。參見 <a href="/zh-hant/blog/transcribe-voice-memos-iphone/">轉錄匯入的音訊</a> 了解匯入詳情，以及 <a href="/zh-hant/blog/offline-transcription-iphone-markdown/">離線轉錄設定</a> 了解如何在無網路連接時檢查工作流程。</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_1d0d3b732b34">用你自己的錄音試試兩者</a></p>
+
+      <h2 id="privacy">隱私</h2>
+      <p>轉錄在您的裝置上執行。下載 Whisper 或 Parakeet 模型時，會直接或透過 FluidAudio 連線 Hugging Face，詳見 <a href="/zh-hant/privacy.html#third-party-services">隱私權政策</a>。該下載不會發送任何捕捉內容。如果你把筆記保存在雲端資料夾中，該服務商會按其自身條款同步生成的文件。</p>
+
+      <h2 id="limitations">局限性</h2>
+      <ul>
+        <li>沒有放之四海而皆準的贏家。最佳選擇取決於你的語言、聲音、麥克風、裝置以及對儲存佔用的容忍度。</li>
+        <li>以上公布的數字均來自各發佈方自己的資料集和硬件測量。</li>
+        <li>Apple Speech 需要受支援的 iOS 26 裝置和語言。否則，「自動」只會使用你已下載的本機模型。</li>
+        <li>無論選擇哪個後端，重要的轉錄都應對照音訊復核。</li>
+      </ul>
+
+      <h2 id="faq">常見問題</h2>
+      <h3>Parakeet 比 Whisper 更好嗎？</h3>
+      <p>總體上不是。NVIDIA 公布了 Parakeet 在 Open ASR Leaderboard 資料集上較低的英語字錯誤率，但這並不涵蓋你的口音、麥克風或房間環境。Parakeet 適合英語和歐洲語言；Whisper 涵蓋更多語言。請用你自己的片段測試兩者。</p>
+      <h3>Parakeet 支援其他語言嗎？</h3>
+      <p>Parakeet v2 僅支援英語。Parakeet v3 支援 25 種歐洲語言，列於上文。在 Vox.md 中，它不涵蓋中文、日語、韓語、阿拉伯語、印地語、土耳其語、越南語、泰語或挪威語；這些語言請使用 Whisper。</p>
+      <h3>可以在 iPhone 上離線運行 Whisper 嗎？</h3>
+      <p>可以，但需要先一次性下載模型。連網時在設定 → 模型中下載 Whisper 模型；之後的轉錄在手機上運行。離線保存 Markdown 還需要一個本機可用且可寫入的資料夾。</p>
+      <h3>我一定要下載模型嗎？</h3>
+      <p>如果「自動」對你夠用，就不需要。在受支援的 iOS 26 裝置和語言上，它使用 Apple Speech 並顯示即時文字。當你的語言或裝置不受支援，或測試顯示效果更好時，再下載 Whisper 或 Parakeet。</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">用你自己的錄音試試兩者。</h2>
+        <p>免費版的 15 分鐘轉錄和 10 次遞送足以完成上面的對比。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_1d0d3b732b34">免費下載 Vox.md</a></p>
+      </section>
+      <nav class="toc" aria-label="相關指南"><div class="toc-title">繼續</div><ul>
+        <li><a href="/zh-hant/docs/#models">文件中的模型選項和語言</a></li>
+        <li><a href="/zh-hant/blog/offline-transcription-iphone-markdown/">在 iPhone 上離線將音訊轉錄為 Markdown</a></li>
+        <li><a href="/zh-hant/blog/transcribe-voice-memos-iphone/">將 iPhone 語音備忘錄轉錄為 Markdown</a></li>
+        <li><a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/">在本機將 Mac 會議轉錄到 Obsidian</a></li>
+        <li><a href="/zh-hant/blog/best-voice-to-text-keyboard-iphone/">適用於 iPhone 的最佳語音轉文字鍵盤</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/zh-hant/">首頁</a></li>
+        <li><a href="/zh-hant/docs/">文件</a></li>
+        <li><a href="/zh-hant/blog/">指南</a></li>
+        <li><a href="/zh-hant/compare/">比較</a></li>
+        <li><a href="/zh-hant/privacy.html">隱私</a></li>
+        <li><a href="/zh-hant/terms.html">條款</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">支援</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_1d0d3b732b34">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · 本地筆記快速擷取 · 不上傳內容。</div>
+    </div>
+  <details class="language-switcher"><summary>語言</summary><ul><li><a href="/compare/whisper-vs-parakeet/" lang="en" hreflang="en">English</a></li><li><a href="/ar/compare/whisper-vs-parakeet/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/compare/whisper-vs-parakeet/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/compare/whisper-vs-parakeet/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/compare/whisper-vs-parakeet/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/compare/whisper-vs-parakeet/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/compare/whisper-vs-parakeet/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/compare/whisper-vs-parakeet/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/compare/whisper-vs-parakeet/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/compare/whisper-vs-parakeet/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/compare/whisper-vs-parakeet/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/compare/whisper-vs-parakeet/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/compare/whisper-vs-parakeet/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/compare/whisper-vs-parakeet/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/compare/whisper-vs-parakeet/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/compare/whisper-vs-parakeet/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/compare/whisper-vs-parakeet/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/compare/whisper-vs-parakeet/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/compare/whisper-vs-parakeet/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/compare/whisper-vs-parakeet/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/compare/whisper-vs-parakeet/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/compare/whisper-vs-parakeet/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/compare/whisper-vs-parakeet/" lang="zh-Hant" hreflang="zh-Hant" aria-current="page">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
