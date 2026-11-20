@@ -183,7 +183,7 @@
 
       <h2 id="before-you-start">2. Before you start</h2>
       <ul>
-        <li><strong>A vault folder.</strong> In Settings, connect a Capture Preset to your vault or another Files folder. No Obsidian plugin or account is needed.</li>
+        <li><strong>A vault folder.</strong> In Settings, connect a Route to your vault or another Files folder. No Obsidian plugin or account is needed.</li>
         <li><strong>A Route for handwritten notes.</strong> For example, a New Note path such as <code>Inbox/Handwritten</code>, or a Rolling Note that inserts under a <code>## Notebook</code> heading in your daily note. See the <a href="/blog/append-to-obsidian-daily-note-iphone/">daily-note guide</a> for heading placement.</li>
         <li><strong>Camera permission</strong> for Vox.md, which iOS asks for the first time you take a page photo.</li>
       </ul>
@@ -193,7 +193,7 @@
         <li>Open the Capture composer and pick the Route you set up.</li>
         <li>In the Capture Bar, choose <strong>Extract Text</strong>, then <strong>Capture Journal Pages</strong>.</li>
         <li>Press the shutter for each page. The camera only fires when you press it. You can capture up to 10 pages in one go.</li>
-        <li>Wait for the “Extracting text on this device” banner to finish.</li>
+        <li>Wait for the on-device text extraction banner to finish.</li>
       </ol>
       <p>Photo tips: use even light, lay the page flat, keep the writing filling the frame, and take one page per shot.</p>
       <p>Extract Text is not available while a voice capture or transcription is in progress. Finish that first.</p>
@@ -224,7 +224,7 @@ Project kickoff, notebook p. 14
 - Idea: weekly review on Sunday</code></pre>
       <h3>Meeting-pad notes into the meeting note</h3>
       <p>Photograph the pad and send to an Existing Note Route, or a New Note path such as <code>Meetings/{date}-{hour}{minute}.md</code>. To give those notes agenda and decision headings, <a href="/blog/obsidian-meeting-notes-template/">generate a meeting notes template</a>. For more structures, see <a href="/blog/obsidian-capture-templates/">Obsidian capture templates</a>.</p>
-      <p>Optional processing: Clean Prose, Todo Checklist and Meeting Notes apply to recognized text only if the Route’s <strong>Apply to Capture Text</strong> option is on. It is off by default. Apple Intelligence processing needs compatible iOS 26 hardware; without it, Todo Checklist and Meeting Notes use built-in deterministic formatters. See <a href="/docs/#presets">Capture Presets</a>.</p>
+      <p>Optional processing: the Route’s <strong>Use Apple Intelligence</strong> toggle is off by default, and nothing runs until you turn it on. Once it is on, the processing mode (Clean Prose, Todo Checklist or Meeting Notes) can apply to recognized text, because text extracted from photos counts as text. <strong>Apply To</strong> chooses between Voice &amp; Text (the default), Voice Only and Text Only. Apple Intelligence processing needs compatible iOS 26 hardware. Without it, Todo Checklist falls back to built-in formatting, while Meeting Notes leaves recognized text unchanged. See <a href="/docs/#presets">Routes and presets</a>.</p>
 
       <h2 id="photos-you-already-have">7. Photos you already have</h2>
       <p>If you already photographed a notebook, choose <strong>Extract Text</strong> then <strong>Choose Journal Photos</strong> and select the images from your library. The same recognition runs on them. There are two limits: up to 10 pages per capture, and no batch import of a whole library, so process a backlog in groups of 10. Straight, well-lit photos work best. See the <a href="/docs/#quick-capture">capture reference</a> for input limits, and <a href="/blog/obsidian-quick-capture-iphone/">choosing a capture method</a> if you are comparing options.</p>
