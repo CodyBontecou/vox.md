@@ -155,7 +155,7 @@
 <div class="answer-box" id="short-answer"><div class="label">簡短回答</div>
         <p>在 iPhone 上把紙本筆記作為文字放進 Obsidian：用 Vox.md 的「擷取文字」拍下頁面，在擷取草稿中檢查裝置端文字辨識結果，然後傳送到寫入你的資料庫的路線。如果還需要頁面影像或 PDF，請使用掃描文件。</p>
       </div>
-      <p><strong>你想在 Obsidian 中手寫，還是把紙本內容數位化？</strong> 如果你想在 Obsidian 中用手寫筆書寫，例如在 iPad 上使用 Apple Pencil，可以使用社群外掛，例如 <a href="https://obsidian.md/plugins?id=ink" target="_blank" rel="noopener">墨跡</a> 和 <a href="https://obsidian.md/plugins?id=obsidian-excalidraw-plugin" target="_blank" rel="noopener">Excalidraw 外掛</a> 它們正是為此而設計：把手寫或繪圖作為墨跡檔存放在資料庫中。請查看各外掛頁面了解其支援的功能。本指南談的是另一種情況：你在紙上書寫，並希望得到可搜尋、可連結的 Markdown 文字。</p>
+      <p><strong>你想在 Obsidian 中手寫，還是把紙本內容數位化？</strong> 如果你想在 Obsidian 中用手寫筆書寫，例如在 iPad 上使用 Apple Pencil，可以使用社群外掛，例如 <a href="https://obsidian.md/plugins?id=ink" target="_blank" rel="noopener">Ink (外掛)</a> 和 <a href="https://obsidian.md/plugins?id=obsidian-excalidraw-plugin" target="_blank" rel="noopener">Excalidraw (外掛)</a> 它們正是為此而設計：把手寫或繪圖作為墨跡檔存放在資料庫中。請查看各外掛頁面了解其支援的功能。本指南談的是另一種情況：你在紙上書寫，並希望得到可搜尋、可連結的 Markdown 文字。</p>
       <nav class="toc" aria-label="本指南中"><div class="toc-title">本指南中</div><ol>
         <li><a href="#two-meanings">在 Obsidian 中書寫與紙本數位化</a></li>
         <li><a href="#before-you-start">開始之前</a></li>
@@ -176,7 +176,7 @@
           <tr><td>手寫筆外掛（Ink、Excalidraw）</td><td>墨跡或繪圖檔</td><td>在 Obsidian 中手寫或手繪</td></tr>
           <tr><td>Apple 即時文字複製貼上</td><td>你自己貼上的純文字</td><td>照片中的一次性片段</td></tr>
           <tr><td>Vox.md 日記文字擷取</td><td>可編輯的 Markdown 文字，沒有頁面影像</td><td>你想搜尋和連結的紙本筆記</td></tr>
-          <tr><td>Vox.md 掃描文件</td><td>頁面影像、PDF 和盡力而為的文字</td><td>還想保留原件的頁面</td></tr>
+          <tr><td>Vox.md Scan Document (掃描文件)</td><td>頁面影像、PDF 和盡力而為的文字</td><td>還想保留原件的頁面</td></tr>
         </tbody>
       </table></div>
       <p>Apple 在以下文件中介紹了複製貼上的方式： <a href="https://support.apple.com/guide/iphone/use-live-text-iphcf0b71b0e/ios" target="_blank" rel="noopener">在 iPhone 上使用即時文字</a>。Apple 內建的「備忘錄」App 也可以 <a href="https://support.apple.com/guide/iphone/scan-text-and-documents-iph653f28965/ios" target="_blank" rel="noopener">掃描文字和文件</a>，但結果會留在「備忘錄」中，直到你移動它。Vox.md 則把文字直接傳送到你資料庫中的檔案。</p>
@@ -191,7 +191,7 @@
       <h2 id="photograph-pages">3. 拍攝頁面</h2>
       <ol>
         <li>開啟擷取編輯器，選擇你設定好的路線。</li>
-        <li>在擷取列中，選擇 <strong>摘取文本</strong>，然後 <strong>擷取日記頁面</strong>.</li>
+        <li>在擷取列中，選擇 <strong>摘取文本</strong>，然後 <strong>Capture Journal Pages (捕捉日誌頁面)</strong>.</li>
         <li>每頁按一次快門。只有按下快門時相機才會拍攝。一次最多可擷取 10 頁。</li>
         <li>等待「正在此裝置上擷取文字」橫幅消失。</li>
       </ol>
@@ -227,7 +227,7 @@ Project kickoff, notebook p. 14
       <p>選用處理：只有當路線的 <strong>應用於捕捉文本</strong> 選項已開啟。預設為關閉。Apple Intelligence 處理需要相容 iOS 26 的硬體；沒有時，「工作清單」和「會議記錄」使用內建的確定性格式化工具。請參閱 <a href="/zh-hant/docs/#presets">擷取預設</a>.</p>
 
       <h2 id="photos-you-already-have">7. 你已有的照片</h2>
-      <p>如果你已拍好筆記本，請選擇 <strong>摘取文本</strong> 然後 <strong>選擇日記照片</strong> 並從相簿中選取圖片。同樣的辨識會在這些圖片上執行。有兩項限制：每次擷取最多 10 頁，且不支援整個相簿的批次匯入，因此累積的內容請以每組 10 張處理。平直、光線良好的照片效果最佳。請參閱 <a href="/zh-hant/docs/#quick-capture">擷取參考</a> 有關輸入限制，以及 <a href="/zh-hant/blog/obsidian-quick-capture-iphone/">選擇擷取方式</a> 如果你在比較各種方案。</p>
+      <p>如果你已拍好筆記本，請選擇 <strong>摘取文本</strong> 然後 <strong>Choose Journal Photos (選擇日誌照片)</strong> 並從相簿中選取圖片。同樣的辨識會在這些圖片上執行。有兩項限制：每次擷取最多 10 頁，且不支援整個相簿的批次匯入，因此累積的內容請以每組 10 張處理。平直、光線良好的照片效果最佳。請參閱 <a href="/zh-hant/docs/#quick-capture">擷取參考</a> 有關輸入限制，以及 <a href="/zh-hant/blog/obsidian-quick-capture-iphone/">選擇擷取方式</a> 如果你在比較各種方案。</p>
 
       <h2 id="privacy">8. 隱私</h2>
       <p>文字辨識在你的 iPhone 上執行，頁面內容不會傳送到 Vox.md 伺服器。Markdown 接下來去哪裡取決於你選擇的資料夾提供者，例如 iCloud Drive 或其他「檔案」提供者，由它負責同步。詳情請見 <a href="/zh-hant/privacy.html">隱私權政策</a>.</p>

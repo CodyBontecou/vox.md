@@ -155,7 +155,7 @@
 <div class="answer-box" id="short-answer"><div class="label">Krótka odpowiedź</div>
         <p>Aby przenieść papierowe notatki do Obsidian jako tekst na urządzeniu iPhone, sfotografuj strony za pomocą Extract Text w Vox.md, sprawdź rozpoznany na urządzeniu tekst w szkicu Capture i wyślij go do Route zapisującego w vaulcie. Użyj Scan Document, gdy chcesz też obraz strony lub PDF.</p>
       </div>
-      <p><strong>Chcesz rysować w Obsidian czy digitalizować papier?</strong> Jeśli chcesz pisać rysikiem w Obsidian, na przykład Apple Pencil na iPadzie, służą do tego wtyczki społeczności, takie jak <a href="https://obsidian.md/plugins?id=ink" target="_blank" rel="noopener">Atrament</a> i <a href="https://obsidian.md/plugins?id=obsidian-excalidraw-plugin" target="_blank" rel="noopener">Excalidraw (wtyczka)</a> są do tego stworzone: zapisują pismo odręczne lub rysunki jako pliki ink w vaulcie. Sprawdź na stronie każdej wtyczki, co obsługuje. Ten przewodnik dotyczy innego przypadku: piszesz na papierze i chcesz mieć słowa jako Markdown, który można przeszukiwać i linkować.</p>
+      <p><strong>Chcesz rysować w Obsidian czy digitalizować papier?</strong> Jeśli chcesz pisać rysikiem w Obsidian, na przykład Apple Pencil na iPadzie, służą do tego wtyczki społeczności, takie jak <a href="https://obsidian.md/plugins?id=ink" target="_blank" rel="noopener">Ink (wtyczka)</a> i <a href="https://obsidian.md/plugins?id=obsidian-excalidraw-plugin" target="_blank" rel="noopener">Excalidraw (wtyczka)</a> są do tego stworzone: zapisują pismo odręczne lub rysunki jako pliki ink w vaulcie. Sprawdź na stronie każdej wtyczki, co obsługuje. Ten przewodnik dotyczy innego przypadku: piszesz na papierze i chcesz mieć słowa jako Markdown, który można przeszukiwać i linkować.</p>
       <nav class="toc" aria-label="W poradniku"><div class="toc-title">W poradniku</div><ol>
         <li><a href="#two-meanings">Pisanie w Obsidian a digitalizacja papieru</a></li>
         <li><a href="#before-you-start">Zanim zaczniesz</a></li>
@@ -176,7 +176,7 @@
           <tr><td>Wtyczki do rysika (Ink, Excalidraw)</td><td>Plik ink lub rysunku</td><td>Pisanie lub szkicowanie odręczne w Obsidian</td></tr>
           <tr><td>Kopiowanie i wklejanie tekstu na żywo (Live Text) od Apple</td><td>Zwykły tekst wklejany samodzielnie</td><td>Jednorazowe fragmenty ze zdjęcia</td></tr>
           <tr><td>Wyodrębnianie tekstu z dziennika w Vox.md</td><td>Edytowalny tekst Markdown, bez obrazu strony</td><td>Papierowe notatki, które chcesz przeszukiwać i linkować</td></tr>
-          <tr><td>Vox.md Skanuj dokument</td><td>Obrazy stron, PDF i tekst w trybie best-effort</td><td>Strony, które chcesz zachować także jako oryginał</td></tr>
+          <tr><td>Vox.md Scan Document (Skanowanie dokumentów)</td><td>Obrazy stron, PDF i tekst w trybie best-effort</td><td>Strony, które chcesz zachować także jako oryginał</td></tr>
         </tbody>
       </table></div>
       <p>Apple opisuje kopiowanie i wklejanie w <a href="https://support.apple.com/guide/iphone/use-live-text-iphcf0b71b0e/ios" target="_blank" rel="noopener">Używaj Live Text na urządzeniu iPhone</a>. Własna aplikacja Notatki od Apple też potrafi <a href="https://support.apple.com/guide/iphone/scan-text-and-documents-iph653f28965/ios" target="_blank" rel="noopener">skanowanie tekstu i dokumentów</a>, ale wynik zostaje w Notatkach, dopóki go nie przeniesiesz. Vox.md wysyła tekst prosto do pliku w vaulcie.</p>
@@ -191,7 +191,7 @@
       <h2 id="photograph-pages">3. Sfotografuj strony</h2>
       <ol>
         <li>Otwórz kompozytor Capture i wybierz skonfigurowany Route.</li>
-        <li>Na Capture Bar wybierz <strong>Wyciąg tekst</strong>, a potem <strong>Przechwyć strony dziennika (Capture Journal Pages)</strong>.</li>
+        <li>Na Capture Bar wybierz <strong>Wyciąg tekst</strong>, a potem <strong>Capture Journal Pages (Pobierz dzienniki stron)</strong>.</li>
         <li>Naciśnij spust migawki dla każdej strony. Aparat robi zdjęcie tylko po naciśnięciu. Za jednym razem możesz przechwycić do 10 stron.</li>
         <li>Poczekaj, aż zniknie baner „Wyodrębnianie tekstu na tym urządzeniu”.</li>
       </ol>
@@ -227,7 +227,7 @@ Project kickoff, notebook p. 14
       <p>Opcjonalne przetwarzanie: Clean Prose, Todo Checklist i Meeting Notes dotyczą rozpoznanego tekstu tylko wtedy, gdy włączona jest opcja Route <strong>Zastosuj do przechwytywania tekstu</strong> jest włączona. Domyślnie jest wyłączona. Przetwarzanie przez Apple Intelligence wymaga zgodnego sprzętu z iOS 26; bez niego Todo Checklist i Meeting Notes używają wbudowanych deterministycznych formaterów. Zobacz <a href="/pl/docs/#presets">Presety Capture</a>.</p>
 
       <h2 id="photos-you-already-have">7. Zdjęcia, które już masz</h2>
-      <p>Jeśli zeszyt jest już sfotografowany, wybierz <strong>Wyciąg tekst</strong> potem <strong>Wybierz zdjęcia dziennika</strong> i wybierz obrazy z biblioteki. Działa to samo rozpoznawanie. Obowiązują dwa limity: do 10 stron na jedno przechwycenie i brak importu zbiorczego całej biblioteki, więc zaległości przetwarzaj w grupach po 10. Najlepiej sprawdzają się proste, dobrze oświetlone zdjęcia. Zobacz <a href="/pl/docs/#quick-capture">dokumentacja zapisu</a> dla limitów wejścia oraz <a href="/pl/blog/obsidian-quick-capture-iphone/">wybór metody przechwytywania</a> jeśli porównujesz opcje.</p>
+      <p>Jeśli zeszyt jest już sfotografowany, wybierz <strong>Wyciąg tekst</strong> potem <strong>Choose Journal Photos (Wybierz dziennik Zdjęcia)</strong> i wybierz obrazy z biblioteki. Działa to samo rozpoznawanie. Obowiązują dwa limity: do 10 stron na jedno przechwycenie i brak importu zbiorczego całej biblioteki, więc zaległości przetwarzaj w grupach po 10. Najlepiej sprawdzają się proste, dobrze oświetlone zdjęcia. Zobacz <a href="/pl/docs/#quick-capture">dokumentacja zapisu</a> dla limitów wejścia oraz <a href="/pl/blog/obsidian-quick-capture-iphone/">wybór metody przechwytywania</a> jeśli porównujesz opcje.</p>
 
       <h2 id="privacy">8. Prywatność</h2>
       <p>Rozpoznawanie tekstu działa na urządzeniu iPhone, a zawartość stron nie jest wysyłana na serwery Vox.md. Dokąd trafi Markdown dalej, zależy od wybranego dostawcy folderu, takiego jak iCloud Drive lub inny dostawca w aplikacji Pliki, który zajmuje się synchronizacją. Szczegóły znajdziesz w sekcji <a href="/pl/privacy.html">politykę prywatności</a>.</p>

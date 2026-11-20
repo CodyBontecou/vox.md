@@ -155,7 +155,7 @@
 <div class="answer-box" id="short-answer"><div class="label">短く答えると</div>
         <p>iPhone で紙のノートをテキストとして Obsidian に取り込むには、Vox.md の Extract Text でページを撮影し、Capture の下書きでデバイス上のテキスト認識を確認して、Vault に書き込む Route へ送信します。ページ画像や PDF も欲しい場合は Scan Document を使います。</p>
       </div>
-      <p><strong>Obsidian 内で描きたいですか、それとも紙をデジタル化したいですか?</strong> Obsidian 内でスタイラスを使って書きたい場合(iPad の Apple Pencil など)は、次のようなコミュニティプラグインがあります: <a href="https://obsidian.md/plugins?id=ink" target="_blank" rel="noopener">Ink(インク)</a> と <a href="https://obsidian.md/plugins?id=obsidian-excalidraw-plugin" target="_blank" rel="noopener">Excalidraw(プラグイン)</a> はそのためのものです。手書きや描画をインクファイルとして Vault 内に保存します。対応内容は各プラグインのページで確認してください。このガイドが扱うのは別のケースで、紙に書いたものを、検索やリンクができる Markdown の文章として残したい場合です。</p>
+      <p><strong>Obsidian 内で描きたいですか、それとも紙をデジタル化したいですか?</strong> Obsidian 内でスタイラスを使って書きたい場合(iPad の Apple Pencil など)は、次のようなコミュニティプラグインがあります: <a href="https://obsidian.md/plugins?id=ink" target="_blank" rel="noopener">Ink (プラグイン)</a> と <a href="https://obsidian.md/plugins?id=obsidian-excalidraw-plugin" target="_blank" rel="noopener">Excalidraw (プラグイン)</a> はそのためのものです。手書きや描画をインクファイルとして Vault 内に保存します。対応内容は各プラグインのページで確認してください。このガイドが扱うのは別のケースで、紙に書いたものを、検索やリンクができる Markdown の文章として残したい場合です。</p>
       <nav class="toc" aria-label="このガイドの内容"><div class="toc-title">このガイドの内容</div><ol>
         <li><a href="#two-meanings">Obsidian で書く場合と紙をデジタル化する場合</a></li>
         <li><a href="#before-you-start">始める前に</a></li>
@@ -176,7 +176,7 @@
           <tr><td>スタイラス用プラグイン (Ink、Excalidraw)</td><td>インクまたは描画ファイル</td><td>Obsidian 内で手書きやスケッチをする</td></tr>
           <tr><td>Apple のライブテキストによるコピー&amp;ペースト</td><td>自分で貼り付けるプレーンテキスト</td><td>写真からの単発スニペット</td></tr>
           <tr><td>Vox.md のジャーナル文字抽出</td><td>編集できる Markdown テキスト、ページ画像なし</td><td>検索やリンクをしたい紙のノート</td></tr>
-          <tr><td>Vox.md の Scan Document</td><td>ページ画像、PDF、ベストエフォートのテキスト</td><td>原本としても残したいページ</td></tr>
+          <tr><td>Vox.md Scan Document (スキャンドキュメント)</td><td>ページ画像、PDF、ベストエフォートのテキスト</td><td>原本としても残したいページ</td></tr>
         </tbody>
       </table></div>
       <p>コピー&amp;ペーストの方法については Apple が次で説明しています: <a href="https://support.apple.com/guide/iphone/use-live-text-iphcf0b71b0e/ios" target="_blank" rel="noopener">iPhone でライブテキストを使う</a>。Apple 標準のメモアプリでもできます: <a href="https://support.apple.com/guide/iphone/scan-text-and-documents-iph653f28965/ios" target="_blank" rel="noopener">テキストや書類をスキャンする</a>。ただし結果は移動するまでメモに残ります。Vox.md はテキストを Vault 内のファイルに直接送ります。</p>
@@ -191,7 +191,7 @@
       <h2 id="photograph-pages">3. ページを撮影する</h2>
       <ol>
         <li>Capture コンポーザーを開き、設定した Route を選びます。</li>
-        <li>Capture Bar で次を選びます: <strong>テキスト抽出</strong>、続いて <strong>Capture Journal Pages(ジャーナルのページ)</strong>.</li>
+        <li>Capture Bar で次を選びます: <strong>テキスト抽出</strong>、続いて <strong>ジャーナルページ Capture Journal Pages</strong>.</li>
         <li>ページごとにシャッターを押します。カメラは押したときだけ撮影します。一度に最大10ページまで撮影できます。</li>
         <li>「Extracting text on this device」のバナーが消えるまで待ちます。</li>
       </ol>
@@ -227,7 +227,7 @@ Project kickoff, notebook p. 14
       <p>オプション処理: Clean Prose、Todo Checklist、Meeting Notes は、Route の <strong>テキストキャプチャのためのアプリケーション</strong> オプションがオンの場合のみ認識テキストに適用されます。デフォルトではオフです。Apple Intelligence による処理には対応する iOS 26 のハードウェアが必要で、ない場合 Todo Checklist と Meeting Notes は内蔵の決定論的フォーマッターを使います。参照: <a href="/ja/docs/#presets">Capture Presets(プリセット)</a>.</p>
 
       <h2 id="photos-you-already-have">7. すでにある写真</h2>
-      <p>すでにノートを撮影済みの場合は、次を選びます: <strong>テキスト抽出</strong> 次に <strong>Choose Journal Photos(ジャーナルの写真)</strong> を選び、ライブラリから画像を選択します。同じ認識が実行されます。制限は2つあります。1回の capture につき最大10ページで、ライブラリ全体の一括インポートはできないため、未処理分は10枚ずつ処理してください。まっすぐで明るい写真が最適です。 <a href="/ja/docs/#quick-capture">キャプチャのリファレンス</a> 入力の制限について、および <a href="/ja/blog/obsidian-quick-capture-iphone/">capture 方法の選び方</a> 選択肢を比較している場合。</p>
+      <p>すでにノートを撮影済みの場合は、次を選びます: <strong>テキスト抽出</strong> 次に <strong>Choose Journal Photos (写真選び日記)</strong> を選び、ライブラリから画像を選択します。同じ認識が実行されます。制限は2つあります。1回の capture につき最大10ページで、ライブラリ全体の一括インポートはできないため、未処理分は10枚ずつ処理してください。まっすぐで明るい写真が最適です。 <a href="/ja/docs/#quick-capture">キャプチャのリファレンス</a> 入力の制限について、および <a href="/ja/blog/obsidian-quick-capture-iphone/">capture 方法の選び方</a> 選択肢を比較している場合。</p>
 
       <h2 id="privacy">8. プライバシー</h2>
       <p>テキスト認識は iPhone 上で実行され、ページの内容は Vox.md のサーバーには送信されません。Markdown がその後どこへ行くかは、iCloud Drive や他の Files プロバイダなど、選んだフォルダのプロバイダによって決まり、同期もそちらが行います。詳細は <a href="/ja/privacy.html">プライバシーポリシー</a>.</p>
