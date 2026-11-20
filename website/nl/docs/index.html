@@ -312,8 +312,8 @@
           <li>Open Instellingen → Routes om een aangepaste route te maken, hernoemen, in- of uitschakelen, een pictogram te kiezen of te verwijderen.</li>
           <li>De doorzoekbare pictogramkiezer groepeert symbolen onder Schrijven, Spraak, Taken, Persoonlijk en Werk.</li>
           <li>Uitgeschakelde routes zijn verborgen in gewone keuzelijsten. De ingebouwde Standaard-route kan niet worden verwijderd.</li>
-          <li>De ingebouwde Standaard-route gebruikt het golfvormsymbool en de instructie <em>Leg een idee, taak, link, bestand, scan of opname vast.</em>, <code>type: capture</code> metagegevens, verwerking Heldere tekst, verwerking van getypte tekst uit en audio bewaren uit.</li>
-          <li>Een nieuwe aangepaste route begint als <em>Aangepaste route</em>gebruikt het schuifregelaarpictogram en <em>Wat wil je vastleggen?</em> instructie en begint met Aangepaste instructie geselecteerd, maar verwerking van getypte en gemengde tekst uit.</li>
+          <li>De ingebouwde Standaard-route gebruikt het golfvormsymbool en de instructie <em>Leg een idee, taak, link, bestand, scan of opname vast.</em>, <code>type: capture</code> metagegevens, verwerking Heldere tekst met <strong>Gebruik Apple Intelligence</strong> uit en audio bewaren uit.</li>
+          <li>Een nieuwe aangepaste route begint als <em>Aangepaste route</em>gebruikt het schuifregelaarpictogram en <em>Wat wil je vastleggen?</em> instructie en begint met Aangepaste instructie geselecteerd, maar <strong>Gebruik Apple Intelligence</strong> uit.</li>
         </ul>
 
         <h3 id="processing-modes">Verwerkingsmodi</h3>
@@ -324,13 +324,13 @@
               <tr><td>Origineel behouden</td><td>Bewaart vastgelegde tekst zonder herschrijven door AI.</td><td>De oorspronkelijke tekst wordt afgeleverd.</td></tr>
               <tr><td>Heldere tekst</td><td>Schoont hoofdlettergebruik en interpunctie op met behoud van betekenis en Markdown.</td><td>Originele tekst als verrijking op het apparaat niet beschikbaar is.</td></tr>
               <tr><td>Takenlijst</td><td>Maakt Markdown <code>- [ ]</code> taakitems.</td><td>Een deterministische checklistformatter.</td></tr>
-              <tr><td>Vergadernotities</td><td>Maakt een <code>## Notes</code> sectie en, indien aanwezig, <code>## Action Items</code>.</td><td>Deterministische structuur voor vergadernotities.</td></tr>
+              <tr><td>Vergadernotities</td><td>Maakt een <code>## Notes</code> sectie en, indien aanwezig, <code>## Action Items</code>.</td><td>Deterministische structuur voor vergadernotities bij spraaktranscripten; vastgelegde tekst wordt ongewijzigd afgeleverd.</td></tr>
               <tr><td>Aangepaste instructie</td><td>Volgt je instructie met Apple Intelligence op het apparaat indien beschikbaar.</td><td>Originele tekst wanneer de instructie niet lokaal kan worden uitgevoerd.</td></tr>
             </tbody>
           </table>
         </div>
         <p>Om kopjes voor agenda, deelnemers en besluiten rond de uitvoer van Vergadernotities toe te voegen: <a href="/nl/blog/obsidian-meeting-notes-template/">maak een Obsidian-sjabloon voor vergadernotities</a>.</p>
-        <p>Spraaktranscripten gebruiken de geselecteerde routemodus. <strong>Toepassen op tekst vastleggen</strong> is een aparte, standaard uitgeschakelde toestemming voor verwerking van getypte Markdown, OCR en andere gemengde vastleggingen met tekst. Uit laten voorkomt onverwacht herschrijven van zelfgeschreven Markdown. De exacte verwerkte aanvraag wordt vóór aflevering opgeslagen, zodat nieuwe pogingen verwerking niet opnieuw uitvoeren met gewijzigde instellingen.</p>
+        <p><strong>Gebruik Apple Intelligence</strong>, standaard uit, schakelt de verwerkingsmodus van de route in. <strong>Toepassen op</strong> bepaalt daarna wat er wordt verwerkt: <strong>Spraak en tekst</strong> (standaard), <strong>Alleen spraak</strong> of <strong>Alleen tekst</strong>. Tekst betekent getypte Markdown, tekst uit foto&#x27;s of scans en andere vastleggingen met tekst; kies <strong>Alleen spraak</strong> om te voorkomen dat zelfgeschreven Markdown wordt herschreven. Met de schakelaar uit krijgen spraaktranscripten nog steeds de deterministische structuur van Takenlijst en Vergadernotities, en vastgelegde tekst wordt ongewijzigd afgeleverd. De exacte verwerkte aanvraag wordt vóór aflevering opgeslagen, zodat nieuwe pogingen verwerking niet opnieuw uitvoeren met gewijzigde instellingen.</p>
 
         <h3 id="preset-metadata">Metagegevens</h3>
         <ul>

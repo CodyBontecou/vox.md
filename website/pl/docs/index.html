@@ -312,8 +312,8 @@
           <li>Ustawienia → Trasy: twórz, zmieniaj nazwę, włączaj, wyłączaj, wybieraj ikony lub usuwaj własne trasy.</li>
           <li>Wyszukiwarka ikon grupuje symbole jako pisanie, głos, zadania, osobiste i praca.</li>
           <li>Wyłączone trasy są ukryte w zwykłym wyborze. Wbudowanej Default nie można usunąć.</li>
-          <li>Default ma symbol fali, monit <em>Zapisz pomysł, zadanie, link, plik, skan lub nagranie.</em>, <code>type: capture</code> metadane, obróbkę „Uporządkowany tekst”, wyłączone przetwarzanie tekstu pisanego i wyłączony zapis audio.</li>
-          <li>Nowa własna trasa zaczyna jako <em>Własna trasa</em>, używa ikony suwaków i <em>Co chcesz zapisać?</em> i zaczyna z własną instrukcją, ale wyłączoną obróbką pisania/mieszanego.</li>
+          <li>Default ma symbol fali, monit <em>Zapisz pomysł, zadanie, link, plik, skan lub nagranie.</em>, <code>type: capture</code> metadane, obróbkę „Uporządkowany tekst” z wyłączonym <strong>Użyj Apple Intelligence</strong> oraz wyłączony zapis audio.</li>
+          <li>Nowa własna trasa zaczyna jako <em>Własna trasa</em>, używa ikony suwaków i <em>Co chcesz zapisać?</em> jako monit i zaczyna z wybraną opcją „Własna instrukcja”, ale <strong>Użyj Apple Intelligence</strong> jest wyłączone.</li>
         </ul>
 
         <h3 id="processing-modes">Tryby obróbki</h3>
@@ -324,13 +324,13 @@
               <tr><td>Zachowaj oryginał</td><td>Zachowuje tekst bez przepisywania AI.</td><td>Dostarcza oryginalny tekst.</td></tr>
               <tr><td>Uporządkowany tekst</td><td>Czyści wielkość liter i interpunkcję, zachowując sens i Markdown.</td><td>Oryginał, gdy lokalne wzbogacanie niedostępne.</td></tr>
               <tr><td>Lista zadań</td><td>Tworzy Markdown <code>- [ ]</code> punkty zadań.</td><td>Deterministyczny format listy wyboru.</td></tr>
-              <tr><td>Notatki ze spotkania</td><td>Tworzy <code>## Notes</code> sekcję i, jeśli jest, <code>## Action Items</code>.</td><td>Deterministyczna struktura notatki spotkania.</td></tr>
+              <tr><td>Notatki ze spotkania</td><td>Tworzy <code>## Notes</code> sekcję i, jeśli jest, <code>## Action Items</code>.</td><td>Deterministyczna struktura notatki spotkania dla transkrypcji głosowych; zapisany tekst jest dostarczany bez zmian.</td></tr>
               <tr><td>Własna instrukcja</td><td>Wykonuje instrukcję lokalnym Apple Intelligence, jeśli dostępne.</td><td>Oryginał, gdy instrukcja nie może działać lokalnie.</td></tr>
             </tbody>
           </table>
         </div>
         <p>Aby dodać nagłówki planu spotkania, uczestników i decyzji wokół wyniku trybu Notatki ze spotkania, <a href="/pl/blog/obsidian-meeting-notes-template/">wygeneruj szablon notatek ze spotkań dla Obsidian</a>.</p>
-        <p>Głos używa wybranego trybu trasy. <strong>Zastosuj do przechwytywania tekstu</strong> jest osobną, domyślnie wyłączoną zgodą na obróbkę pisanego Markdown, OCR i mieszanego tekstu. Bez niej brak nieoczekiwanego przepisywania autorskiego Markdown. Dokładne przetworzone żądanie zapisuje się przed dostawą, więc ponowienia nie przetwarzają według nowych ustawień.</p>
+        <p><strong>Użyj Apple Intelligence</strong>, domyślnie wyłączone, włącza tryb przetwarzania trasy. <strong>Zastosuj do</strong> określa następnie, co jest przetwarzane: <strong>Głos i tekst</strong> (domyślnie), <strong>Tylko głos</strong> lub <strong>Tylko tekst</strong>. Tekst oznacza wpisany Markdown, tekst wyodrębniony ze zdjęć lub skanów oraz inne zapisy zawierające tekst; wybierz <strong>Tylko głos</strong> – wtedy autorski Markdown nie zostanie przepisany. Przy wyłączonym przełączniku transkrypcje głosowe nadal otrzymują deterministyczną strukturę trybów „Lista zadań” i „Notatki ze spotkania”, a zapisany tekst jest dostarczany bez zmian. Dokładne przetworzone żądanie zapisuje się przed dostawą, więc ponowienia nie przetwarzają według nowych ustawień.</p>
 
         <h3 id="preset-metadata">Metadane</h3>
         <ul>
