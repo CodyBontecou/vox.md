@@ -262,8 +262,8 @@
             <tbody>
               <tr><td>Menambahkan Media</td><td>Membuka pilihan Sketsa, Kamera, Foto, Tangkapan Layar, dan Tautan Web.</td></tr>
               <tr><td>Tambahkan File</td><td>Memilih beberapa berkas dari Files dan menyiapkannya bersama draf.</td></tr>
-              <tr><td>Scan dokumen</td><td>Menyimpan pindaian multihalaman, PDF, gambar halaman, dan OCR dengan upaya terbaik.</td></tr>
-              <tr><td>Ekstrak teks</td><td>Menyediakan Simpan Halaman Jurnal dan Pilih Foto Jurnal untuk pencatatan berfokus OCR.</td></tr>
+              <tr><td>Pindai Dokumen</td><td>Menyimpan pindaian multihalaman, PDF, gambar halaman, dan OCR dengan upaya terbaik.</td></tr>
+              <tr><td>Ekstrak teks</td><td>Menyediakan Foto Halaman Jurnal dan Pilih Foto Jurnal untuk pencatatan berfokus OCR.</td></tr>
               <tr><td>Sembilan</td><td>Membatalkan operasi editor terakhir.</td></tr>
               <tr><td>Formatnya Markdown</td><td>Menerapkan Tebal, Miring, Tagar, atau Judul 1 hingga Judul 6.</td></tr>
               <tr><td>Markdown Linknya</td><td>Menyisipkan <code>[link text](url)</code> dan memilih bagian yang dapat disunting.</td></tr>
@@ -312,8 +312,8 @@
           <li>Buka Pengaturan → Rute untuk membuat, mengganti nama, mengaktifkan, menonaktifkan, memilih ikon, atau menghapus rute kustom.</li>
           <li>Pemilih ikon yang dapat dicari mengelompokkan simbol dalam Menulis, Suara, Tugas, Pribadi, dan Kerja.</li>
           <li>Rute nonaktif disembunyikan dari pemilih biasa. Rute Default bawaan tidak dapat dihapus.</li>
-          <li>Rute Default bawaan memakai simbol bentuk gelombang, perintah <em>Catat gagasan, tugas, tautan, berkas, hasil pindai, atau rekaman.</em>, <code>type: capture</code> sebagai metadata, pemrosesan Prosa Rapi, pemrosesan teks ketikan nonaktif, dan penyimpanan audio nonaktif.</li>
-          <li>Rute kustom baru dimulai sebagai <em>Rute Kustom</em>, memakai ikon penggeser dan <em>Apa yang ingin Anda catat?</em> sebagai perintah, dan dimulai dengan Instruksi Kustom dipilih tetapi pemrosesan teks ketikan/campuran nonaktif.</li>
+          <li>Rute Default bawaan memakai simbol bentuk gelombang, perintah <em>Catat gagasan, tugas, tautan, berkas, hasil pindai, atau rekaman.</em>, <code>type: capture</code> sebagai metadata, pemrosesan Prosa Rapi dengan <strong>Gunakan Apple Intelligence</strong> nonaktif, dan penyimpanan audio nonaktif.</li>
+          <li>Rute kustom baru dimulai sebagai <em>Rute Kustom</em>, memakai ikon penggeser dan <em>Apa yang ingin Anda catat?</em> sebagai perintah, dan dimulai dengan Instruksi Khusus dipilih tetapi <strong>Gunakan Apple Intelligence</strong> nonaktif.</li>
         </ul>
 
         <h3 id="processing-modes">Mode pemrosesan</h3>
@@ -324,13 +324,13 @@
               <tr><td>Pertahankan Asli</td><td>Mempertahankan teks tangkapan tanpa penulisan ulang AI.</td><td>Teks asli dikirim.</td></tr>
               <tr><td>Prosa Rapi</td><td>Merapikan kapitalisasi dan tanda baca sambil mempertahankan makna dan Markdown.</td><td>Teks asli saat pengayaan di perangkat tidak tersedia.</td></tr>
               <tr><td>Daftar Tugas</td><td>Menghasilkan Markdown <code>- [ ]</code> item tugas.</td><td>Pemformat daftar centang deterministik.</td></tr>
-              <tr><td>Catatan Rapat</td><td>Menghasilkan <code>## Notes</code> sebagai bagian dan, jika ada, <code>## Action Items</code>.</td><td>Struktur catatan rapat deterministik.</td></tr>
+              <tr><td>Catatan Rapat</td><td>Menghasilkan <code>## Notes</code> sebagai bagian dan, jika ada, <code>## Action Items</code>.</td><td>Struktur catatan rapat deterministik untuk transkrip suara; teks tangkapan dikirim tanpa perubahan.</td></tr>
               <tr><td>Instruksi Khusus</td><td>Mengikuti instruksi Anda dengan Apple Intelligence di perangkat jika tersedia.</td><td>Teks asli ketika instruksi tidak dapat dijalankan secara lokal.</td></tr>
             </tbody>
           </table>
         </div>
         <p>Untuk menambahkan judul agenda, peserta, dan keputusan di sekitar keluaran Catatan Rapat, <a href="/id/blog/obsidian-meeting-notes-template/">buat templat catatan rapat Obsidian</a>.</p>
-        <p>Transkrip suara memakai mode rute pilihan. <strong>Menggunakan capture text</strong> adalah pengaktifan terpisah, nonaktif secara default, yang mengizinkan pemrosesan Markdown ketikan, OCR, dan tangkapan campuran lain berisi teks. Membiarkannya nonaktif mencegah penulisan ulang Markdown buatan Anda yang tidak diharapkan. Permintaan yang sudah diproses disimpan persis sebelum pengiriman, sehingga percobaan ulang tidak menjalankan ulang pemrosesan dengan pengaturan yang berubah.</p>
+        <p><strong>Gunakan Apple Intelligence</strong>, yang nonaktif secara default, menyalakan mode pemrosesan rute. <strong>Terapkan Ke</strong> lalu menentukan apa yang diproses: <strong>Suara &amp; Teks</strong> (default), <strong>Hanya Suara</strong> atau <strong>Hanya Teks</strong>. Teks berarti Markdown ketikan, teks yang diekstrak dari foto atau hasil pindai, dan tangkapan lain yang berisi teks; pilih <strong>Hanya Suara</strong> agar Markdown buatan Anda tidak ditulis ulang. Saat sakelar nonaktif, transkrip suara tetap mendapat struktur deterministik Daftar Tugas dan Catatan Rapat, dan teks tangkapan dikirim tanpa perubahan. Permintaan yang sudah diproses disimpan persis sebelum pengiriman, sehingga percobaan ulang tidak menjalankan ulang pemrosesan dengan pengaturan yang berubah.</p>
 
         <h3 id="preset-metadata">Metadata</h3>
         <ul>
@@ -382,7 +382,7 @@
         <h3 id="placement-templates">Penempatan, judul, dan templat</h3>
         <ul>
           <li><strong>bawah</strong> menambahkan di akhir; <strong>Top</strong> menambahkan di awal; <strong>Kepala</strong> menyisipkan di bawah judul pilihan dari tingkat 1 hingga 6.</li>
-          <li>Jika judul tidak ada, pilih <strong>Tampilkan kesalahan</strong> atau <strong>Membuat head</strong>.</li>
+          <li>Jika judul tidak ada, pilih <strong>Tampilkan kesalahan</strong> atau <strong>Buat judul</strong>.</li>
           <li>Gunakan berkas templat Markdown langsung dari vault, Templat Entri pakai ulang, atau teks awalan dan akhiran kustom.</li>
           <li>Pemformatan entri mendukung <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>, dan <code>{location}</code>.</li>
           <li>Subfolder lampiran default adalah <code>attachments</code>.</li>
@@ -715,7 +715,7 @@
           </details>
           <details>
             <summary>Rute judul gagal</summary>
-            <p>Sunting tujuan rute dan pastikan teks serta tingkat judul. Pilih Buat Judul jika pengiriman harus membuat judul yang belum ada, bukan berhenti.</p>
+            <p>Sunting tujuan rute dan pastikan teks serta tingkat judul. Pilih Buat judul jika pengiriman harus membuat judul yang belum ada, bukan berhenti.</p>
           </details>
           <details>
             <summary>Rekaman Watch dalam antrean</summary>

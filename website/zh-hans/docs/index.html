@@ -262,8 +262,8 @@
             <tbody>
               <tr><td>添加媒体</td><td>打开草图、相机、照片、截图和网页链接选项。</td></tr>
               <tr><td>添加文件</td><td>从文件中选择多个文件，与草稿一同暂存。</td></tr>
-              <tr><td>扫描文件</td><td>采集多页扫描、PDF、页面图像，并尽力进行 OCR。</td></tr>
-              <tr><td>摘取文本</td><td>提供采集日志页面和选择日志照片，用于侧重 OCR 的采集。</td></tr>
+              <tr><td>扫描文稿</td><td>采集多页扫描、PDF、页面图像，并尽力进行 OCR。</td></tr>
+              <tr><td>提取文本</td><td>提供拍摄日记页面和选择日记照片，用于侧重 OCR 的采集。</td></tr>
               <tr><td>九 个</td><td>撤销上一次编辑器操作。</td></tr>
               <tr><td>格式 Markdown</td><td>应用粗体、斜体、井号标签，或标题 1 至标题 6。</td></tr>
               <tr><td>Markdown 链接</td><td>插入 <code>[link text](url)</code> 并选中可编辑部分。</td></tr>
@@ -312,8 +312,8 @@
           <li>打开设置 → 路由，创建、重命名、启用、停用自定义路由，为其选择图标或删除。</li>
           <li>可搜索图标选择器将符号分为写作、语音、任务、个人和工作类别。</li>
           <li>已停用的路由不在常规选择器中显示。内置默认路由不可删除。</li>
-          <li>内置默认路由使用波形符号，提示为 <em>采集想法、任务、链接、文件、扫描件或录音。</em>, <code>type: capture</code> 元数据、整理行文处理，关闭键入文本处理，关闭音频保存。</li>
-          <li>新的自定义路由初始为 <em>自定义路由</em>，使用滑块图标和 <em>想采集什么？</em> 提示，初始选择自定义指令，但关闭键入/混合文本处理。</li>
+          <li>内置默认路由使用波形符号，提示为 <em>采集想法、任务、链接、文件、扫描件或录音。</em>, <code>type: capture</code> 元数据、润色文本处理， <strong>使用 Apple Intelligence</strong> 关闭，音频保存关闭。</li>
+          <li>新的自定义路由初始为 <em>自定义路由</em>，使用滑块图标和 <em>想采集什么？</em> 提示，初始选择自定义指令，但 <strong>使用 Apple Intelligence</strong> 处于关闭状态。</li>
         </ul>
 
         <h3 id="processing-modes">处理模式</h3>
@@ -324,13 +324,13 @@
               <tr><td>保留原文</td><td>保留采集文本，不进行 AI 改写。</td><td>投递原始文本。</td></tr>
               <tr><td>润色文本</td><td>整理大小写和标点，同时保留含义与 Markdown。</td><td>设备端增强不可用时保留原文。</td></tr>
               <tr><td>任务清单</td><td>生成 Markdown <code>- [ ]</code> 任务项。</td><td>确定性的清单格式器。</td></tr>
-              <tr><td>会议记录</td><td>生成 <code>## Notes</code> 节，以及存在时的 <code>## Action Items</code>.</td><td>确定的会议笔记结构。</td></tr>
+              <tr><td>会议记录</td><td>生成 <code>## Notes</code> 节，以及存在时的 <code>## Action Items</code>.</td><td>为语音转录提供确定的会议记录结构；采集的文本原样投递。</td></tr>
               <tr><td>自定义指令</td><td>可用时使用设备端 Apple Intelligence 遵循你的指令。</td><td>指令无法在本地运行时保留原文。</td></tr>
             </tbody>
           </table>
         </div>
         <p>要在会议记录输出的前后添加议程、参会者和决策标题，请 <a href="/zh-hans/blog/obsidian-meeting-notes-template/">生成 Obsidian 会议记录模板</a>.</p>
-        <p>语音转录使用所选路由模式。 <strong>应用于捕捉文本</strong> 是默认关闭、需单独启用的选项，允许处理键入的 Markdown、OCR 和其他带文本的混合采集。保持关闭可防止意外改写已编写的 Markdown。投递前保存确切的已处理请求，因此重试不会依据变化后的设置重新处理。</p>
+        <p><strong>使用 Apple Intelligence</strong>，默认关闭，开启后会启用路由的处理模式。 <strong>应用于</strong> 随后决定处理哪些内容： <strong>语音和文本</strong> （默认）、 <strong>仅语音</strong> 或 <strong>仅文本</strong>。文本指键入的 Markdown、从照片或扫描件中提取的文字，以及其他含文本的采集；选择 <strong>仅语音</strong> 可防止已编写的 Markdown 被改写。关闭该开关时，语音转录仍会获得任务清单和会议记录的确定结构，采集的文本则原样投递。投递前保存确切的已处理请求，因此重试不会依据变化后的设置重新处理。</p>
 
         <h3 id="preset-metadata">元素</h3>
         <ul>
@@ -382,7 +382,7 @@
         <h3 id="placement-templates">放置位置、标题和模板</h3>
         <ul>
           <li><strong>底部</strong> 追加； <strong>顶部</strong> 前置插入； <strong>头条</strong> 插入到所选的 1 至 6 级标题下。</li>
-          <li>如果缺少标题，请选择 <strong>显示错误</strong> 或 <strong>创建头条</strong>.</li>
+          <li>如果缺少标题，请选择 <strong>显示错误</strong> 或 <strong>创建标题</strong>.</li>
           <li>使用仓库中的实时 Markdown 模板文件、可复用条目模板，或自定义前后缀文本。</li>
           <li>条目格式支持 <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>，以及 <code>{location}</code>.</li>
           <li>默认附件子文件夹为 <code>attachments</code>.</li>

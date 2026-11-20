@@ -263,7 +263,7 @@
               <tr><td>Adicionar mídia</td><td>Abre Desenho, Câmera, Foto, Captura e Link web.</td></tr>
               <tr><td>Adicionar arquivos</td><td>Seleciona vários Arquivos e prepara no rascunho.</td></tr>
               <tr><td>Escanear documento</td><td>Captura várias páginas, PDF, imagens e OCR conforme possível.</td></tr>
-              <tr><td>Extrair texto</td><td>Oferece Capturar páginas e Escolher fotos de diário para OCR.</td></tr>
+              <tr><td>Extrair texto</td><td>Oferece Capturar páginas do diário e Escolher fotos do diário para captura focada em OCR.</td></tr>
               <tr><td>Oitava</td><td>Desfaz a última ação do editor.</td></tr>
               <tr><td>Formato Markdown</td><td>Aplica negrito, itálico, hashtag ou título 1–6.</td></tr>
               <tr><td>Markdown Link do</td><td>Insere <code>[link text](url)</code> e seleciona a parte editável.</td></tr>
@@ -312,8 +312,8 @@
           <li>Abra Ajustes → Rotas para criar, renomear, ativar/desativar, escolher ícone ou excluir personalizada.</li>
           <li>Seletor pesquisável agrupa Escrita, Voz, Tarefas, Pessoal e Trabalho.</li>
           <li>Rotas desativadas ficam ocultas dos seletores. A rota padrão integrada não pode ser excluída.</li>
-          <li>Rota padrão usa onda e convite <em>Capture uma ideia, tarefa, link, arquivo, digitalização ou gravação.</em>, <code>type: capture</code> como metadados, Texto aprimorado, texto digitado e retenção de áudio desativados.</li>
-          <li>Rota nova começa como <em>Rota personalizada</em>, usa ícone de controles e <em>O que quer capturar?</em> como convite, com Instrução personalizada escolhida e processamento de texto e conteúdo misto desativado.</li>
+          <li>Rota padrão usa onda e convite <em>Capture uma ideia, tarefa, link, arquivo, digitalização ou gravação.</em>, <code>type: capture</code> como metadados, processamento Texto aprimorado com <strong>Usar Apple Intelligence</strong> desativado e retenção de áudio desativada.</li>
+          <li>Rota nova começa como <em>Rota personalizada</em>, usa ícone de controles e <em>O que quer capturar?</em> como convite, e começa com Instrução personalizada selecionada, mas com <strong>Usar Apple Intelligence</strong> desativado.</li>
         </ul>
 
         <h3 id="processing-modes">Modos de processamento</h3>
@@ -324,13 +324,13 @@
               <tr><td>Manter original</td><td>Preserva o texto sem reescrita IA.</td><td>O texto original é enviado.</td></tr>
               <tr><td>Texto aprimorado</td><td>Limpa caixa/pontuação mantendo sentido e Markdown.</td><td>Original se enriquecimento local indisponível.</td></tr>
               <tr><td>Lista de tarefas</td><td>Produz Markdown <code>- [ ]</code> como tarefas.</td><td>Formatador determinístico de checklist.</td></tr>
-              <tr><td>Notas da reunião</td><td>Produz uma seção <code>## Notes</code> e, quando presente, <code>## Action Items</code>.</td><td>Estrutura determinística para reunião.</td></tr>
+              <tr><td>Notas da reunião</td><td>Produz uma seção <code>## Notes</code> e, quando presente, <code>## Action Items</code>.</td><td>Estrutura determinística de notas de reunião para transcrições de voz; o texto capturado é entregue sem alterações.</td></tr>
               <tr><td>Instrução personalizada</td><td>Segue instrução com Apple Intelligence local se disponível.</td><td>Texto original se a instrução não roda localmente.</td></tr>
             </tbody>
           </table>
         </div>
         <p>Para adicionar títulos de pauta, participantes e decisões em torno da saída de Notas da reunião, <a href="/pt-br/blog/obsidian-meeting-notes-template/">gere um modelo de notas de reunião para o Obsidian</a>.</p>
-        <p>Voz usa o modo da rota escolhida. <strong>Aplicar para capturar texto</strong> é uma opção separada, desativada por padrão, para processar Markdown digitado, OCR e mistos. Desativá-la evita reescrita inesperada do Markdown. O pedido exato é salvo antes de enviar; repetir não reprocessa com ajustes novos.</p>
+        <p><strong>Usar Apple Intelligence</strong>, desativado por padrão, liga o modo de processamento da rota. <strong>Aplicar a</strong> escolhe então o que é processado: <strong>Voz e Texto</strong> (o padrão), <strong>Somente Voz</strong> ou <strong>Somente Texto</strong>. Texto significa Markdown digitado, texto extraído de fotos ou digitalizações e outras capturas com texto; escolha <strong>Somente Voz</strong> para evitar que o Markdown que você escreveu seja reescrito. Com a chave desativada, as transcrições de voz ainda recebem a estrutura determinística de Lista de tarefas e Notas da reunião, e o texto capturado é entregue sem alterações. O pedido processado exato é salvo antes do envio, então novas tentativas não reprocessam com ajustes alterados.</p>
 
         <h3 id="preset-metadata">Metadados</h3>
         <ul>

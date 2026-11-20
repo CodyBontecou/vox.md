@@ -283,8 +283,8 @@
           <li>Open Settings → Routes to create, rename, enable, disable, select an icon for, or delete a custom route.</li>
           <li>The searchable icon picker groups symbols under Writing, Voice, Tasks, Personal, and Work.</li>
           <li>Disabled routes are hidden from normal selectors. The built-in Default route cannot be deleted.</li>
-          <li>The built-in Default route uses the waveform symbol, the prompt <em>Capture an idea, task, link, file, scan, or recording.</em>, <code>type: capture</code> metadata, Clean Prose processing, typed-text processing off, and audio saving off.</li>
-          <li>A new custom route begins as <em>Custom Route</em>, uses the slider icon and <em>What do you want to capture?</em> prompt, and starts with Custom Instruction selected but typed/mixed-text processing off.</li>
+          <li>The built-in Default route uses the waveform symbol, the prompt <em>Capture an idea, task, link, file, scan, or recording.</em>, <code>type: capture</code> metadata, Clean Prose processing with <strong>Use Apple Intelligence</strong> off, and audio saving off.</li>
+          <li>A new custom route begins as <em>Custom Route</em>, uses the slider icon and <em>What do you want to capture?</em> prompt, and starts with Custom Instruction selected but <strong>Use Apple Intelligence</strong> off.</li>
         </ul>
 
         <h3 id="processing-modes">Processing modes</h3>
@@ -295,13 +295,13 @@
               <tr><td>Keep Original</td><td>Preserves captured text without AI rewriting.</td><td>The original text is delivered.</td></tr>
               <tr><td>Clean Prose</td><td>Cleans casing and punctuation while preserving meaning and Markdown.</td><td>Original text when on-device enrichment is unavailable.</td></tr>
               <tr><td>Todo Checklist</td><td>Produces Markdown <code>- [ ]</code> task items.</td><td>A deterministic checklist formatter.</td></tr>
-              <tr><td>Meeting Notes</td><td>Produces a <code>## Notes</code> section and, when present, <code>## Action Items</code>.</td><td>Deterministic meeting-note structure.</td></tr>
+              <tr><td>Meeting Notes</td><td>Produces a <code>## Notes</code> section and, when present, <code>## Action Items</code>.</td><td>Deterministic meeting-note structure for voice transcripts; captured text is delivered unchanged.</td></tr>
               <tr><td>Custom Instruction</td><td>Follows your instruction with on-device Apple Intelligence when available.</td><td>Original text when the instruction cannot run locally.</td></tr>
             </tbody>
           </table>
         </div>
         <p>To add agenda, attendee and decision headings around Meeting Notes output, <a href="../blog/obsidian-meeting-notes-template/">generate an Obsidian meeting notes template</a>.</p>
-        <p>Voice transcripts use the selected route mode. <strong>Apply to Capture Text</strong> is a separate opt-in, off by default, that allows processing of typed Markdown, OCR, and other text-bearing mixed captures. Leaving it off prevents unexpected rewriting of authored Markdown. The exact processed request is saved before delivery, so retries do not rerun processing against changed settings.</p>
+        <p><strong>Use Apple Intelligence</strong>, off by default, turns on the route's processing mode. <strong>Apply To</strong> then chooses what it processes: <strong>Voice &amp; Text</strong> (the default), <strong>Voice Only</strong> or <strong>Text Only</strong>. Text means typed Markdown, text extracted from photos or scans, and other text-bearing captures; choose <strong>Voice Only</strong> to keep authored Markdown from being rewritten. With the toggle off, voice transcripts still get the deterministic Todo Checklist and Meeting Notes structure, and captured text is delivered unchanged. The exact processed request is saved before delivery, so retries do not rerun processing against changed settings.</p>
 
         <h3 id="preset-metadata">Metadata</h3>
         <ul>

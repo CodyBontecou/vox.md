@@ -262,8 +262,8 @@
             <tbody>
               <tr><td>Aggiungi Media</td><td>Apre Schizzo, Fotocamera, Foto, Screenshot e Link web.</td></tr>
               <tr><td>Aggiungi file</td><td>Seleziona più file da File e li prepara nella bozza.</td></tr>
-              <tr><td>Scansione Documenti</td><td>Acquisisce scansione multipagina, PDF, immagini e OCR al meglio.</td></tr>
-              <tr><td>Estratto di testo</td><td>Offre Acquisisci pagine diario e Scegli foto diario per OCR.</td></tr>
+              <tr><td>Scansiona documento</td><td>Acquisisce scansione multipagina, PDF, immagini e OCR al meglio.</td></tr>
+              <tr><td>Estrai testo</td><td>Offre Acquisisci pagine del diario e Scegli foto del diario per l’acquisizione basata su OCR.</td></tr>
               <tr><td>Undici</td><td>Annulla l’ultima operazione dell’editor.</td></tr>
               <tr><td>Formato Markdown</td><td>Applica grassetto, corsivo, hashtag o titoli da 1 a 6.</td></tr>
               <tr><td>Markdown Link di</td><td>Inserisce <code>[link text](url)</code> e seleziona la parte modificabile.</td></tr>
@@ -312,8 +312,8 @@
           <li>Apri Impostazioni → Percorsi per creare, rinominare, attivare, disattivare, scegliere icona o eliminare percorsi personalizzati.</li>
           <li>Il selettore ricercabile raggruppa simboli in Scrittura, Voce, Attività, Personale e Lavoro.</li>
           <li>I percorsi disattivati sono nascosti nei selettori normali. Il percorso predefinito integrato non si elimina.</li>
-          <li>Il percorso default usa simbolo onda e messaggio <em>Acquisisci un’idea, un’attività, un link, un file, una scansione o una registrazione.</em>, <code>type: capture</code> come metadati, Testo ripulito come elaborazione, testo digitato e salvataggio audio disattivati.</li>
-          <li>Un nuovo percorso personalizzato inizia con <em>Percorso personalizzato</em>, usa l’icona dei cursori e <em>Cosa vuoi acquisire?</em> come messaggio, con Istruzione personalizzata scelta ma testo digitato/misto spento.</li>
+          <li>Il percorso default usa simbolo onda e messaggio <em>Acquisisci un’idea, un’attività, un link, un file, una scansione o una registrazione.</em>, <code>type: capture</code> come metadati, elaborazione Testo ripulito con <strong>Usa Apple Intelligence</strong> disattivato e salvataggio audio disattivato.</li>
+          <li>Un nuovo percorso personalizzato inizia con <em>Percorso personalizzato</em>, usa l’icona dei cursori e <em>Cosa vuoi acquisire?</em> come messaggio, e parte con Istruzione personalizzata selezionata ma <strong>Usa Apple Intelligence</strong> disattivato.</li>
         </ul>
 
         <h3 id="processing-modes">Modalità di elaborazione</h3>
@@ -324,13 +324,13 @@
               <tr><td>Mantieni originale</td><td>Conserva il testo senza riscrittura IA.</td><td>Viene inviato il testo originale.</td></tr>
               <tr><td>Testo ripulito</td><td>Ripulisce maiuscole e punteggiatura preservando senso e Markdown.</td><td>Testo originale se l’arricchimento locale manca.</td></tr>
               <tr><td>Elenco attività</td><td>Produce Markdown <code>- [ ]</code> come attività.</td><td>Formattazione deterministica di checklist.</td></tr>
-              <tr><td>Note riunione</td><td>Produce una sezione <code>## Notes</code> e, se presente, <code>## Action Items</code>.</td><td>Struttura deterministica delle note riunione.</td></tr>
+              <tr><td>Note riunione</td><td>Produce una sezione <code>## Notes</code> e, se presente, <code>## Action Items</code>.</td><td>Struttura deterministica delle note riunione per le trascrizioni vocali; il testo acquisito viene consegnato invariato.</td></tr>
               <tr><td>Istruzione personalizzata</td><td>Segue l’istruzione con Apple Intelligence locale se disponibile.</td><td>Testo originale quando l’istruzione non può essere eseguita localmente.</td></tr>
             </tbody>
           </table>
         </div>
         <p>Per aggiungere titoli per ordine del giorno, partecipanti e decisioni intorno all’output di Note riunione, <a href="/it/blog/obsidian-meeting-notes-template/">genera un modello di note per riunioni in Obsidian</a>.</p>
-        <p>Le trascrizioni usano la modalità del percorso scelto. <strong>Applicare per catturare il testo</strong> è scelta separata spenta per default per elaborare Markdown digitato, OCR e acquisizioni miste con testo. Tenerla spenta evita riscritture inattese del Markdown creato. La richiesta elaborata è salvata prima dell’invio, così i tentativi non rielaborano con impostazioni diverse.</p>
+        <p><strong>Usa Apple Intelligence</strong>, disattivato per impostazione predefinita, attiva la modalità di elaborazione del percorso. <strong>Applica a</strong> sceglie poi cosa elaborare: <strong>Voce e testo</strong> (predefinito), <strong>Solo voce</strong> oppure <strong>Solo testo</strong>. Per testo si intende Markdown digitato, testo estratto da foto o scansioni e altre acquisizioni con testo; scegli <strong>Solo voce</strong> per evitare che il Markdown scritto da te venga riscritto. Con l’interruttore disattivato, le trascrizioni vocali ricevono comunque la struttura deterministica di Elenco attività e Note riunione, e il testo acquisito viene consegnato invariato. La richiesta elaborata è salvata prima dell’invio, così i tentativi non rielaborano con impostazioni diverse.</p>
 
         <h3 id="preset-metadata">Metadati</h3>
         <ul>
@@ -382,7 +382,7 @@
         <h3 id="placement-templates">Posizionamento, titoli e modelli</h3>
         <ul>
           <li><strong>Sotto</strong> aggiunge alla fine; <strong>Top</strong> aggiunge all’inizio; <strong>Il capo</strong> inserisce sotto titoli di livello 1–6.</li>
-          <li>Se manca un titolo, scegli <strong>Mostra errore</strong> oppure <strong>Creare un head</strong>.</li>
+          <li>Se manca un titolo, scegli <strong>Mostra errore</strong> oppure <strong>Crea intestazione</strong>.</li>
           <li>Usa un file modello Markdown attivo del vault, un Ingresso tempio riutilizzabile oppure testo personalizzato di prefisso e suffisso.</li>
           <li>Il formato della voce supporta <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>, e <code>{location}</code>.</li>
           <li>La sottocartella allegati predefinita è <code>attachments</code>.</li>
@@ -715,7 +715,7 @@
           </details>
           <details>
             <summary>Fallisce un percorso sotto titolo</summary>
-            <p>Modifica destinazione e verifica testo e livello titolo. Usa Creare un head per creare invece di fermare.</p>
+            <p>Modifica destinazione e verifica testo e livello titolo. Usa Crea intestazione per creare invece di fermare.</p>
           </details>
           <details>
             <summary>Una registrazione Watch è in coda</summary>

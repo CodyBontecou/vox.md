@@ -262,8 +262,8 @@
             <tbody>
               <tr><td>Media toevoegen</td><td>Opent keuzes voor Schets, Camera, Foto, Schermafbeelding en Weblink.</td></tr>
               <tr><td>Files toevoegen</td><td>Selecteert meerdere bestanden uit Bestanden en zet ze klaar bij het concept.</td></tr>
-              <tr><td>Scan documenten</td><td>Legt een scan met meerdere pagina&#x27;s, PDF, pagina-afbeeldingen en zo goed mogelijke OCR vast.</td></tr>
-              <tr><td>Extract tekst</td><td>Biedt ‘Journal Pages ophalen’ en ‘Selecteer een dagboek foto&#x27;s’ voor OCR-gerichte vastlegging.</td></tr>
+              <tr><td>Document scannen</td><td>Legt een scan met meerdere pagina&#x27;s, PDF, pagina-afbeeldingen en zo goed mogelijke OCR vast.</td></tr>
+              <tr><td>Tekst extraheren</td><td>Biedt ‘Dagboekpagina&#x27;s vastleggen’ en ‘Dagboekfoto&#x27;s kiezen’ voor OCR-gerichte vastlegging.</td></tr>
               <tr><td>elf</td><td>Maakt de laatste editorbewerking ongedaan.</td></tr>
               <tr><td>Formateren Markdown</td><td>Past Vet, Cursief, Hashtag of Kop 1 tot en met Kop 6 toe.</td></tr>
               <tr><td>Markdown Link</td><td>Voegt in <code>[link text](url)</code> en selecteert het bewerkbare gedeelte.</td></tr>
@@ -312,8 +312,8 @@
           <li>Open Instellingen → Routes om een aangepaste route te maken, hernoemen, in- of uitschakelen, een pictogram te kiezen of te verwijderen.</li>
           <li>De doorzoekbare pictogramkiezer groepeert symbolen onder Schrijven, Spraak, Taken, Persoonlijk en Werk.</li>
           <li>Uitgeschakelde routes zijn verborgen in gewone keuzelijsten. De ingebouwde Standaard-route kan niet worden verwijderd.</li>
-          <li>De ingebouwde Standaard-route gebruikt het golfvormsymbool en de instructie <em>Leg een idee, taak, link, bestand, scan of opname vast.</em>, <code>type: capture</code> metagegevens, verwerking Heldere tekst, verwerking van getypte tekst uit en audio bewaren uit.</li>
-          <li>Een nieuwe aangepaste route begint als <em>Aangepaste route</em>gebruikt het schuifregelaarpictogram en <em>Wat wil je vastleggen?</em> instructie en begint met Aangepaste instructie geselecteerd, maar verwerking van getypte en gemengde tekst uit.</li>
+          <li>De ingebouwde Standaard-route gebruikt het golfvormsymbool en de instructie <em>Leg een idee, taak, link, bestand, scan of opname vast.</em>, <code>type: capture</code> metagegevens, verwerking Heldere tekst met <strong>Gebruik Apple Intelligence</strong> uit en audio bewaren uit.</li>
+          <li>Een nieuwe aangepaste route begint als <em>Aangepaste route</em>gebruikt het schuifregelaarpictogram en <em>Wat wil je vastleggen?</em> instructie en begint met Aangepaste instructie geselecteerd, maar <strong>Gebruik Apple Intelligence</strong> uit.</li>
         </ul>
 
         <h3 id="processing-modes">Verwerkingsmodi</h3>
@@ -324,13 +324,13 @@
               <tr><td>Origineel behouden</td><td>Bewaart vastgelegde tekst zonder herschrijven door AI.</td><td>De oorspronkelijke tekst wordt afgeleverd.</td></tr>
               <tr><td>Heldere tekst</td><td>Schoont hoofdlettergebruik en interpunctie op met behoud van betekenis en Markdown.</td><td>Originele tekst als verrijking op het apparaat niet beschikbaar is.</td></tr>
               <tr><td>Takenlijst</td><td>Maakt Markdown <code>- [ ]</code> taakitems.</td><td>Een deterministische checklistformatter.</td></tr>
-              <tr><td>Vergadernotities</td><td>Maakt een <code>## Notes</code> sectie en, indien aanwezig, <code>## Action Items</code>.</td><td>Deterministische structuur voor vergadernotities.</td></tr>
+              <tr><td>Vergadernotities</td><td>Maakt een <code>## Notes</code> sectie en, indien aanwezig, <code>## Action Items</code>.</td><td>Deterministische structuur voor vergadernotities bij spraaktranscripten; vastgelegde tekst wordt ongewijzigd afgeleverd.</td></tr>
               <tr><td>Aangepaste instructie</td><td>Volgt je instructie met Apple Intelligence op het apparaat indien beschikbaar.</td><td>Originele tekst wanneer de instructie niet lokaal kan worden uitgevoerd.</td></tr>
             </tbody>
           </table>
         </div>
         <p>Om kopjes voor agenda, deelnemers en besluiten rond de uitvoer van Vergadernotities toe te voegen: <a href="/nl/blog/obsidian-meeting-notes-template/">maak een Obsidian-sjabloon voor vergadernotities</a>.</p>
-        <p>Spraaktranscripten gebruiken de geselecteerde routemodus. <strong>Toepassen op tekst vastleggen</strong> is een aparte, standaard uitgeschakelde toestemming voor verwerking van getypte Markdown, OCR en andere gemengde vastleggingen met tekst. Uit laten voorkomt onverwacht herschrijven van zelfgeschreven Markdown. De exacte verwerkte aanvraag wordt vóór aflevering opgeslagen, zodat nieuwe pogingen verwerking niet opnieuw uitvoeren met gewijzigde instellingen.</p>
+        <p><strong>Gebruik Apple Intelligence</strong>, standaard uit, schakelt de verwerkingsmodus van de route in. <strong>Toepassen op</strong> bepaalt daarna wat er wordt verwerkt: <strong>Spraak en tekst</strong> (standaard), <strong>Alleen spraak</strong> of <strong>Alleen tekst</strong>. Tekst betekent getypte Markdown, tekst uit foto&#x27;s of scans en andere vastleggingen met tekst; kies <strong>Alleen spraak</strong> om te voorkomen dat zelfgeschreven Markdown wordt herschreven. Met de schakelaar uit krijgen spraaktranscripten nog steeds de deterministische structuur van Takenlijst en Vergadernotities, en vastgelegde tekst wordt ongewijzigd afgeleverd. De exacte verwerkte aanvraag wordt vóór aflevering opgeslagen, zodat nieuwe pogingen verwerking niet opnieuw uitvoeren met gewijzigde instellingen.</p>
 
         <h3 id="preset-metadata">Metagegevens</h3>
         <ul>
@@ -382,7 +382,7 @@
         <h3 id="placement-templates">Plaatsing, koppen en sjablonen</h3>
         <ul>
           <li><strong>onderaan</strong> voegt achteraan toe; <strong>Top</strong> voegt vooraan toe; <strong>Hoofd</strong> voegt onder een gekozen kop van niveau 1 tot en met 6 in.</li>
-          <li>Als een kop ontbreekt, kies <strong>Toon fout</strong> of <strong>Creëer een headline</strong>.</li>
+          <li>Als een kop ontbreekt, kies <strong>Toon fout</strong> of <strong>Kop maken</strong>.</li>
           <li>Gebruik een actueel Markdown-sjabloonbestand uit de kluis, een herbruikbaar invoersjabloon of eigen prefix- en achtervoegseltekst.</li>
           <li>Invoeropmaak ondersteunt <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>en <code>{location}</code>.</li>
           <li>De standaardbijlagensubmap is <code>attachments</code>.</li>
@@ -715,7 +715,7 @@
           </details>
           <details>
             <summary>Een koproute mislukt</summary>
-            <p>Bewerk de routebestemming en bevestig koptekst en niveau. Kies Creëer een headline als aflevering een ontbrekende kop moet maken in plaats van stoppen.</p>
+            <p>Bewerk de routebestemming en bevestig koptekst en niveau. Kies Kop maken als aflevering een ontbrekende kop moet maken in plaats van stoppen.</p>
           </details>
           <details>
             <summary>Een Watch-opname staat in de wachtrij</summary>

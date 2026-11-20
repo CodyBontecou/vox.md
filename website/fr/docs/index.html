@@ -262,8 +262,8 @@
             <tbody>
               <tr><td>Ajouter des médias</td><td>Ouvre les choix Croquis, Appareil photo, Photo, Capture d’écran et Lien web.</td></tr>
               <tr><td>Ajouter des fichiers</td><td>Sélectionne plusieurs fichiers dans Fichiers et les prépare avec le brouillon.</td></tr>
-              <tr><td>Le scanner du document</td><td>Capture un scan multipage, un PDF, les images de pages et un OCR au mieux.</td></tr>
-              <tr><td>Extrait de texte</td><td>Propose Capturer des pages de journal et Choisir des photos de journal pour une capture axée OCR.</td></tr>
+              <tr><td>Scanner un document</td><td>Capture un scan multipage, un PDF, les images de pages et un OCR au mieux.</td></tr>
+              <tr><td>Extraire le texte</td><td>Propose Capturer des pages de journal et Choisir des photos de journal pour une capture axée OCR.</td></tr>
               <tr><td>Nine</td><td>Annule la dernière opération de l’éditeur.</td></tr>
               <tr><td>Formats Markdown</td><td>Applique gras, italique, hashtag ou titres de niveau 1 à 6.</td></tr>
               <tr><td>Markdown Link à</td><td>Insère <code>[link text](url)</code> et sélectionne la partie modifiable.</td></tr>
@@ -312,8 +312,8 @@
           <li>Ouvrez Réglages → Parcours pour créer, renommer, activer, désactiver, choisir une icône ou supprimer un parcours personnalisé.</li>
           <li>Le sélecteur d’icônes recherchable regroupe les symboles sous Écriture, Voix, Tâches, Personnel et Travail.</li>
           <li>Les parcours désactivés sont masqués des sélecteurs ordinaires. Le parcours par défaut intégré ne peut pas être supprimé.</li>
-          <li>Le parcours intégré par défaut utilise le symbole d’onde et le message <em>Capturez une idée, une tâche, un lien, un fichier, un scan ou un enregistrement.</em>, <code>type: capture</code> comme métadonnées, le traitement Texte épuré, le traitement du texte saisi désactivé et la conservation audio désactivée.</li>
-          <li>Un nouveau parcours personnalisé commence par <em>Parcours personnalisé</em>, utilise l’icône de curseurs et <em>Que voulez-vous capturer ?</em> comme message et démarre avec Instruction personnalisée choisie, mais traitement saisi/mixte désactivé.</li>
+          <li>Le parcours intégré par défaut utilise le symbole d’onde et le message <em>Capturez une idée, une tâche, un lien, un fichier, un scan ou un enregistrement.</em>, <code>type: capture</code> comme métadonnées, le traitement Texte épuré avec <strong>Utiliser Apple Intelligence</strong> désactivé, et la conservation audio désactivée.</li>
+          <li>Un nouveau parcours personnalisé commence par <em>Parcours personnalisé</em>, utilise l’icône de curseurs et <em>Que voulez-vous capturer ?</em> comme message et démarre avec Instruction personnalisée choisie, mais <strong>Utiliser Apple Intelligence</strong> désactivé.</li>
         </ul>
 
         <h3 id="processing-modes">Modes de traitement</h3>
@@ -324,13 +324,13 @@
               <tr><td>Conserver l’original</td><td>Conserve le texte capturé sans réécriture par IA.</td><td>Le texte original est envoyé.</td></tr>
               <tr><td>Texte épuré</td><td>Nettoie casse et ponctuation sans changer le sens ni le Markdown.</td><td>Texte original si l’enrichissement sur appareil est indisponible.</td></tr>
               <tr><td>Liste de tâches</td><td>Produit du Markdown <code>- [ ]</code> comme éléments de tâche.</td><td>Un formateur déterministe de listes à cocher.</td></tr>
-              <tr><td>Notes de réunion</td><td>Produit une liste d’éléments <code>## Notes</code> comme section et, si présente, <code>## Action Items</code>.</td><td>Structure déterministe de notes de réunion.</td></tr>
+              <tr><td>Notes de réunion</td><td>Produit une liste d’éléments <code>## Notes</code> comme section et, si présente, <code>## Action Items</code>.</td><td>Structure déterministe de notes de réunion pour les transcriptions vocales ; le texte capturé est livré tel quel.</td></tr>
               <tr><td>Instruction personnalisée</td><td>Suit votre instruction avec Apple Intelligence sur appareil lorsque disponible.</td><td>Texte original lorsque l’instruction ne peut s’exécuter localement.</td></tr>
             </tbody>
           </table>
         </div>
         <p>Pour ajouter des titres d’ordre du jour, de participants et de décisions autour de la sortie Notes de réunion, <a href="/fr/blog/obsidian-meeting-notes-template/">générez un modèle de notes de réunion Obsidian</a>.</p>
-        <p>Les transcriptions vocales utilisent le mode du parcours choisi. <strong>Utiliser pour capturer le texte</strong> est une activation séparée, désactivée par défaut, pour traiter Markdown saisi, OCR et captures mixtes contenant du texte. La laisser éteinte évite une réécriture inattendue du Markdown rédigé. La requête traitée exacte est sauvegardée avant envoi ; les tentatives suivantes ne retraitent pas selon des réglages modifiés.</p>
+        <p><strong>Utiliser Apple Intelligence</strong>, désactivé par défaut, active le mode de traitement du parcours. <strong>Appliquer à</strong> choisit ensuite ce qui est traité : <strong>Voix et texte</strong> (par défaut), <strong>Voix uniquement</strong> ou <strong>Texte uniquement</strong>. Le texte désigne le Markdown saisi, le texte extrait de photos ou de scans et les autres captures contenant du texte ; choisissez <strong>Voix uniquement</strong> pour éviter que le Markdown rédigé soit réécrit. Interrupteur désactivé, les transcriptions vocales reçoivent quand même la structure déterministe de Liste de tâches et de Notes de réunion, et le texte capturé est livré tel quel. La requête traitée exacte est sauvegardée avant envoi ; les tentatives suivantes ne retraitent pas selon des réglages modifiés.</p>
 
         <h3 id="preset-metadata">Métaphysique</h3>
         <ul>

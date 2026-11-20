@@ -262,8 +262,8 @@
             <tbody>
               <tr><td>Dodaj media</td><td>Otwiera szkic, aparat, zdjęcie, zrzut i link.</td></tr>
               <tr><td>Dodaj pliki</td><td>Wybiera wiele plików z Plików i przygotowuje z wersją roboczą.</td></tr>
-              <tr><td>Skanowanie dokumentów</td><td>Zapisuje wiele stron, PDF, obrazy i OCR według możliwości.</td></tr>
-              <tr><td>Wyciąg tekst</td><td>Daje zapis stron i wybór zdjęć dziennika dla OCR.</td></tr>
+              <tr><td>Skanuj dokument</td><td>Zapisuje wiele stron, PDF, obrazy i OCR według możliwości.</td></tr>
+              <tr><td>Wyodrębnij tekst</td><td>Daje Sfotografuj strony dziennika i Wybierz zdjęcia dziennika dla przechwytywania opartego na OCR.</td></tr>
               <tr><td>Jedenaście</td><td>Cofa ostatnią operację edytora.</td></tr>
               <tr><td>Formatuj Markdown</td><td>Stosuje pogrubienie, kursywę, hashtag lub nagłówki 1–6.</td></tr>
               <tr><td>Markdown Linków</td><td>Wstawia <code>[link text](url)</code> i zaznacza edytowalną część.</td></tr>
@@ -312,8 +312,8 @@
           <li>Ustawienia → Trasy: twórz, zmieniaj nazwę, włączaj, wyłączaj, wybieraj ikony lub usuwaj własne trasy.</li>
           <li>Wyszukiwarka ikon grupuje symbole jako pisanie, głos, zadania, osobiste i praca.</li>
           <li>Wyłączone trasy są ukryte w zwykłym wyborze. Wbudowanej Default nie można usunąć.</li>
-          <li>Default ma symbol fali, monit <em>Zapisz pomysł, zadanie, link, plik, skan lub nagranie.</em>, <code>type: capture</code> metadane, obróbkę „Uporządkowany tekst”, wyłączone przetwarzanie tekstu pisanego i wyłączony zapis audio.</li>
-          <li>Nowa własna trasa zaczyna jako <em>Własna trasa</em>, używa ikony suwaków i <em>Co chcesz zapisać?</em> i zaczyna z własną instrukcją, ale wyłączoną obróbką pisania/mieszanego.</li>
+          <li>Default ma symbol fali, monit <em>Zapisz pomysł, zadanie, link, plik, skan lub nagranie.</em>, <code>type: capture</code> metadane, obróbkę „Uporządkowany tekst” z wyłączonym <strong>Użyj Apple Intelligence</strong> oraz wyłączony zapis audio.</li>
+          <li>Nowa własna trasa zaczyna jako <em>Własna trasa</em>, używa ikony suwaków i <em>Co chcesz zapisać?</em> jako monit i zaczyna z wybraną opcją „Własna instrukcja”, ale <strong>Użyj Apple Intelligence</strong> jest wyłączone.</li>
         </ul>
 
         <h3 id="processing-modes">Tryby obróbki</h3>
@@ -324,13 +324,13 @@
               <tr><td>Zachowaj oryginał</td><td>Zachowuje tekst bez przepisywania AI.</td><td>Dostarcza oryginalny tekst.</td></tr>
               <tr><td>Uporządkowany tekst</td><td>Czyści wielkość liter i interpunkcję, zachowując sens i Markdown.</td><td>Oryginał, gdy lokalne wzbogacanie niedostępne.</td></tr>
               <tr><td>Lista zadań</td><td>Tworzy Markdown <code>- [ ]</code> punkty zadań.</td><td>Deterministyczny format listy wyboru.</td></tr>
-              <tr><td>Notatki ze spotkania</td><td>Tworzy <code>## Notes</code> sekcję i, jeśli jest, <code>## Action Items</code>.</td><td>Deterministyczna struktura notatki spotkania.</td></tr>
+              <tr><td>Notatki ze spotkania</td><td>Tworzy <code>## Notes</code> sekcję i, jeśli jest, <code>## Action Items</code>.</td><td>Deterministyczna struktura notatki spotkania dla transkrypcji głosowych; zapisany tekst jest dostarczany bez zmian.</td></tr>
               <tr><td>Własna instrukcja</td><td>Wykonuje instrukcję lokalnym Apple Intelligence, jeśli dostępne.</td><td>Oryginał, gdy instrukcja nie może działać lokalnie.</td></tr>
             </tbody>
           </table>
         </div>
         <p>Aby dodać nagłówki planu spotkania, uczestników i decyzji wokół wyniku trybu Notatki ze spotkania, <a href="/pl/blog/obsidian-meeting-notes-template/">wygeneruj szablon notatek ze spotkań dla Obsidian</a>.</p>
-        <p>Głos używa wybranego trybu trasy. <strong>Zastosuj do przechwytywania tekstu</strong> jest osobną, domyślnie wyłączoną zgodą na obróbkę pisanego Markdown, OCR i mieszanego tekstu. Bez niej brak nieoczekiwanego przepisywania autorskiego Markdown. Dokładne przetworzone żądanie zapisuje się przed dostawą, więc ponowienia nie przetwarzają według nowych ustawień.</p>
+        <p><strong>Użyj Apple Intelligence</strong>, domyślnie wyłączone, włącza tryb przetwarzania trasy. <strong>Zastosuj do</strong> określa następnie, co jest przetwarzane: <strong>Głos i tekst</strong> (domyślnie), <strong>Tylko głos</strong> lub <strong>Tylko tekst</strong>. Tekst oznacza wpisany Markdown, tekst wyodrębniony ze zdjęć lub skanów oraz inne zapisy zawierające tekst; wybierz <strong>Tylko głos</strong> – wtedy autorski Markdown nie zostanie przepisany. Przy wyłączonym przełączniku transkrypcje głosowe nadal otrzymują deterministyczną strukturę trybów „Lista zadań” i „Notatki ze spotkania”, a zapisany tekst jest dostarczany bez zmian. Dokładne przetworzone żądanie zapisuje się przed dostawą, więc ponowienia nie przetwarzają według nowych ustawień.</p>
 
         <h3 id="preset-metadata">Metadane</h3>
         <ul>
@@ -382,7 +382,7 @@
         <h3 id="placement-templates">Położenie, nagłówki i szablony</h3>
         <ul>
           <li><strong>Dno</strong> dopisuje; <strong>Top</strong> dodaje na początku; <strong>kierunek</strong> wstawia pod nagłówkiem poziomu 1–6.</li>
-          <li>Jeśli brakuje nagłówka, wybierz <strong>Pokaż błąd</strong> lub <strong>Tworzenie tytułów</strong>.</li>
+          <li>Jeśli brakuje nagłówka, wybierz <strong>Pokaż błąd</strong> lub <strong>Utwórz nagłówek</strong>.</li>
           <li>Użyj odczytywanego na bieżąco pliku szablonu Markdown ze skarbca, wielokrotnego szablonu wpisu lub własnego tekstu prefiksu i sufiksu.</li>
           <li>Format wpisu obsługuje <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>, i <code>{location}</code>.</li>
           <li>Domyślny podfolder załączników to <code>attachments</code>.</li>
@@ -715,7 +715,7 @@
           </details>
           <details>
             <summary>Błąd trasy nagłówka</summary>
-            <p>Edytuj miejsce docelowe trasy i potwierdź tekst oraz poziom nagłówka. Wybierz „Tworzenie tytułów”, jeśli dostawa ma utworzyć brakujący nagłówek zamiast się zatrzymać.</p>
+            <p>Edytuj miejsce docelowe trasy i potwierdź tekst oraz poziom nagłówka. Wybierz „Utwórz nagłówek”, jeśli dostawa ma utworzyć brakujący nagłówek zamiast się zatrzymać.</p>
           </details>
           <details>
             <summary>Nagranie zegarka w kolejce</summary>

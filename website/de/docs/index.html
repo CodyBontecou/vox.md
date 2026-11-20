@@ -312,8 +312,8 @@
           <li>Öffne Einstellungen → Routen, um eine eigene Route zu erstellen, umzubenennen, zu aktivieren, zu deaktivieren, mit einem Symbol zu versehen oder zu löschen.</li>
           <li>Die durchsuchbare Symbolauswahl gruppiert Symbole unter Schreiben, Sprache, Aufgaben, Persönlich und Arbeit.</li>
           <li>Deaktivierte Routen sind in normalen Auswahlmenüs verborgen. Die integrierte Route „Standard“ lässt sich nicht löschen.</li>
-          <li>Die integrierte Route „Standard“ verwendet das Wellenformsymbol und die Anweisung <em>Eine Idee, Aufgabe, einen Link, eine Datei, einen Scan oder eine Aufnahme erfassen.</em>, <code>type: capture</code> Metadaten, Verarbeitung „Überarbeiteter Text“, Verarbeitung von getipptem Text aus und Audiospeicherung aus.</li>
-          <li>Eine neue eigene Route beginnt als <em>Benutzerdefinierte Route</em>verwendet das Schieberegler-Symbol und <em>Was möchtest du erfassen?</em> Anweisung und startet mit ausgewählter Benutzerdefinierter Anweisung, aber ohne Verarbeitung von getipptem/gemischtem Text.</li>
+          <li>Die integrierte Route „Standard“ verwendet das Wellenformsymbol und die Anweisung <em>Eine Idee, Aufgabe, einen Link, eine Datei, einen Scan oder eine Aufnahme erfassen.</em>, <code>type: capture</code> Metadaten, Verarbeitung „Überarbeiteter Text“ mit <strong>Apple Intelligence verwenden</strong> aus und Audiospeicherung aus.</li>
+          <li>Eine neue eigene Route beginnt als <em>Benutzerdefinierte Route</em>verwendet das Schieberegler-Symbol und <em>Was möchtest du erfassen?</em> Anweisung und startet mit ausgewählter „Eigene Anweisung“, aber <strong>Apple Intelligence verwenden</strong> aus.</li>
         </ul>
 
         <h3 id="processing-modes">Verarbeitungsmodi</h3>
@@ -324,13 +324,13 @@
               <tr><td>Original behalten</td><td>Behält erfassten Text ohne KI-Umschreiben bei.</td><td>Der Originaltext wird zugestellt.</td></tr>
               <tr><td>Überarbeiteter Text</td><td>Bereinigt Groß- und Kleinschreibung und Zeichensetzung und erhält Bedeutung und Markdown.</td><td>Originaltext, wenn die Anreicherung auf dem Gerät nicht verfügbar ist.</td></tr>
               <tr><td>Todo-Checkliste</td><td>Erzeugt Markdown <code>- [ ]</code> Aufgabeneinträge.</td><td>Ein deterministischer Checklisten-Formatierer.</td></tr>
-              <tr><td>Besprechungsnotizen</td><td>Erzeugt einen <code>## Notes</code> Abschnitt und, falls vorhanden, <code>## Action Items</code>.</td><td>Deterministische Struktur für Meeting-Notizen.</td></tr>
+              <tr><td>Besprechungsnotizen</td><td>Erzeugt einen <code>## Notes</code> Abschnitt und, falls vorhanden, <code>## Action Items</code>.</td><td>Deterministische Struktur für Meeting-Notizen bei Sprachtranskripten; erfasster Text wird unverändert zugestellt.</td></tr>
               <tr><td>Benutzerdefinierte Anweisung</td><td>Folgt deiner Anweisung mit Apple Intelligence auf dem Gerät, falls verfügbar.</td><td>Originaltext, wenn die Anweisung nicht lokal ausgeführt werden kann.</td></tr>
             </tbody>
           </table>
         </div>
         <p>Um Überschriften für Tagesordnung, Teilnehmende und Entscheidungen rund um die Ausgabe von Besprechungsnotizen hinzuzufügen, <a href="/de/blog/obsidian-meeting-notes-template/">erstelle eine Obsidian-Vorlage für Besprechungsnotizen</a>.</p>
-        <p>Sprachtranskripte verwenden den gewählten Routenmodus. <strong>Auf Erfassungstext anwenden</strong> ist eine separate, standardmäßig ausgeschaltete Aktivierung für die Verarbeitung von getipptem Markdown, OCR und anderen texttragenden gemischten Erfassungen. Ausgeschaltet verhindert sie unerwartetes Umschreiben selbst verfassten Markdown. Die genaue verarbeitete Anfrage wird vor Zustellung gespeichert, sodass Wiederholungsversuche nicht mit geänderten Einstellungen erneut verarbeiten.</p>
+        <p><strong>Apple Intelligence verwenden</strong>, standardmäßig aus, schaltet den Verarbeitungsmodus der Route ein. <strong>Anwenden auf</strong> legt dann fest, was verarbeitet wird: <strong>Sprache &amp; Text</strong> (Standard), <strong>Nur Sprache</strong> oder <strong>Nur Text</strong>. Text meint getipptes Markdown, aus Fotos oder Scans extrahierten Text und andere texthaltige Erfassungen; wähle <strong>Nur Sprache</strong> aus, damit selbst verfasstes Markdown nicht umgeschrieben wird. Mit ausgeschaltetem Schalter erhalten Sprachtranskripte trotzdem die deterministische Struktur von „To-do-Checkliste“ und „Meeting-Notizen“, und erfasster Text wird unverändert zugestellt. Die genaue verarbeitete Anfrage wird vor der Zustellung gespeichert, sodass Wiederholungsversuche nicht mit geänderten Einstellungen erneut verarbeiten.</p>
 
         <h3 id="preset-metadata">Metadaten</h3>
         <ul>
