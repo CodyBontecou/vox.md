@@ -312,8 +312,8 @@
           <li>Özel rota oluşturmak, adlandırmak, etkinleştirmek, devre dışı bırakmak, simge seçmek veya silmek için Ayarlar → Rotalar&#x27;ı açın.</li>
           <li>Aranabilir simge seçicisi sembolleri Yazı, Ses, Görevler, Kişisel ve İş altında gruplar.</li>
           <li>Devre dışı rotalar normal seçicilerde gizlenir. Yerleşik Varsayılan rota silinemez.</li>
-          <li>Yerleşik Varsayılan rota dalga biçimi sembolünü ve şu istemi kullanır: <em>Bir fikir, görev, bağlantı, dosya, tarama veya kayıt yakalayın.</em>, <code>type: capture</code> meta veri, Akıcı Metin işleme, yazılı metin işleme kapalı ve ses kaydetme kapalı.</li>
-          <li>Yeni özel rota şu şekilde başlar: <em>Özel Rota</em>, kaydırıcı simgesini ve şunu kullanır: <em>Ne yakalamak istiyorsunuz?</em> istemini kullanır; Özel Talimat seçili, yazılı/karma metin işleme kapalı başlar.</li>
+          <li>Yerleşik Varsayılan rota dalga biçimi sembolünü ve şu istemi kullanır: <em>Bir fikir, görev, bağlantı, dosya, tarama veya kayıt yakalayın.</em>, <code>type: capture</code> meta veri, Metni Düzenle işleme, <strong>Apple Intelligence&#x27;ı Kullan</strong> kapalı ve ses kaydetme kapalı.</li>
+          <li>Yeni özel rota şu şekilde başlar: <em>Özel Rota</em>, kaydırıcı simgesini ve şunu kullanır: <em>Ne yakalamak istiyorsunuz?</em> istemini kullanır; Özel Talimat seçili ama <strong>Apple Intelligence&#x27;ı Kullan</strong> kapalı olarak başlar.</li>
         </ul>
 
         <h3 id="processing-modes">İşleme modları</h3>
@@ -324,13 +324,13 @@
               <tr><td>Orijinali Koru</td><td>Yakalanan metni yapay zekâyla yeniden yazmadan korur.</td><td>Orijinal metin teslim edilir.</td></tr>
               <tr><td>Metni Düzenle</td><td>Anlamı ve Markdown&#x27;ı koruyarak büyük/küçük harfleri ve noktalamayı düzeltir.</td><td>Cihazda zenginleştirme kullanılamadığında orijinal metin.</td></tr>
               <tr><td>Yapılacaklar Listesi</td><td>Markdown üretir <code>- [ ]</code> görev öğeleri.</td><td>Öngörülebilir kontrol listesi biçimlendiricisi.</td></tr>
-              <tr><td>Toplantı Notları</td><td>Şunu üretir: <code>## Notes</code> bölümü ve varsa <code>## Action Items</code>.</td><td>Öngörülebilir toplantı notu yapısı.</td></tr>
+              <tr><td>Toplantı Notları</td><td>Şunu üretir: <code>## Notes</code> bölümü ve varsa <code>## Action Items</code>.</td><td>Ses dökümleri için öngörülebilir toplantı notu yapısı; yakalanan metin değiştirilmeden teslim edilir.</td></tr>
               <tr><td>Özel Talimat</td><td>Kullanılabildiğinde cihazdaki Apple Intelligence ile talimatınızı uygular.</td><td>Talimat yerelde çalışamadığında orijinal metin.</td></tr>
             </tbody>
           </table>
         </div>
         <p>Toplantı Notları çıktısının çevresine gündem, katılımcı ve karar başlıkları eklemek için <a href="/tr/blog/obsidian-meeting-notes-template/">bir Obsidian toplantı notu şablonu oluşturun</a>.</p>
-        <p>Ses dökümleri seçili rota modunu kullanır. <strong>Yazı Kapatmak için Uygulama</strong> yazılı Markdown, OCR ve metin içeren diğer karma yakalamaları işlemeye izin veren, varsayılan olarak kapalı ayrı tercihtir. Kapalı bırakmak yazdığınız Markdown&#x27;ın beklenmedik şekilde yeniden yazılmasını engeller. İşlenmiş isteğin tam hali teslimattan önce kaydedilir; böylece yeniden denemeler değişen ayarlara göre işlemeyi tekrar çalıştırmaz.</p>
+        <p><strong>Apple Intelligence&#x27;ı Kullan</strong>, varsayılan olarak kapalıdır ve rotanın işleme modunu açar. <strong>Uygulama Kapsamı</strong> ardından neyin işleneceğini seçer: <strong>Ses ve Metin</strong> (varsayılan), <strong>Yalnızca Ses</strong> veya <strong>Yalnızca Metin</strong>. Metin; yazılmış Markdown, fotoğraf veya taramalardan çıkarılan metin ve metin içeren diğer yakalamalar demektir. <strong>Yalnızca Ses</strong> seçeneğini seçerseniz yazdığınız Markdown yeniden yazılmaz. Anahtar kapalıyken de ses dökümleri öngörülebilir Yapılacaklar Listesi ve Toplantı Notları yapısını alır, yakalanan metin ise değiştirilmeden teslim edilir. İşlenmiş isteğin tam hali teslimattan önce kaydedilir; böylece yeniden denemeler değişen ayarlara göre işlemeyi tekrar çalıştırmaz.</p>
 
         <h3 id="preset-metadata">Meta Veri</h3>
         <ul>

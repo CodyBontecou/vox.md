@@ -312,8 +312,8 @@
           <li>Mở Cài đặt → Lộ trình để tạo, đổi tên, bật, tắt, chọn biểu tượng hay xóa lộ trình riêng.</li>
           <li>Bộ chọn biểu tượng tìm được nhóm ký hiệu theo Viết, Giọng nói, Tác vụ, Cá nhân và Công việc.</li>
           <li>Lộ trình tắt ẩn khỏi bộ chọn thường. Lộ trình Default tích hợp không xóa được.</li>
-          <li>Lộ trình Default tích hợp dùng biểu tượng sóng, lời nhắc <em>Ghi lại ý tưởng, tác vụ, liên kết, tệp, bản quét hoặc bản ghi âm.</em>, <code>type: capture</code> làm siêu dữ liệu, xử lý Văn bản gọn, tắt xử lý gõ và tắt lưu âm thanh.</li>
-          <li>Lộ trình tùy chỉnh mới bắt đầu là <em>Lộ trình tùy chỉnh</em>, dùng biểu tượng thanh trượt và <em>Bạn muốn ghi gì?</em> làm lời nhắc, bắt đầu chọn Hướng dẫn tùy chỉnh nhưng tắt xử lý gõ và hỗn hợp.</li>
+          <li>Lộ trình Default tích hợp dùng biểu tượng sóng, lời nhắc <em>Ghi lại ý tưởng, tác vụ, liên kết, tệp, bản quét hoặc bản ghi âm.</em>, <code>type: capture</code> làm siêu dữ liệu, xử lý Văn bản gọn với <strong>Dùng Apple Intelligence</strong> tắt, và tắt lưu âm thanh.</li>
+          <li>Lộ trình tùy chỉnh mới bắt đầu là <em>Lộ trình tùy chỉnh</em>, dùng biểu tượng thanh trượt và <em>Bạn muốn ghi gì?</em> làm lời nhắc, bắt đầu với Hướng dẫn tùy chỉnh được chọn nhưng <strong>Dùng Apple Intelligence</strong> tắt.</li>
         </ul>
 
         <h3 id="processing-modes">Chế độ xử lý</h3>
@@ -324,13 +324,13 @@
               <tr><td>Giữ nguyên bản</td><td>Giữ văn bản ghi, không AI viết lại.</td><td>Gửi chữ gốc.</td></tr>
               <tr><td>Văn bản gọn</td><td>Sửa hoa thường, dấu câu, giữ nghĩa và Markdown.</td><td>Chữ gốc khi bổ sung trên máy không khả dụng.</td></tr>
               <tr><td>Danh sách việc cần làm</td><td>Tạo Markdown <code>- [ ]</code> mục tác vụ.</td><td>Bộ định dạng danh sách kiểm xác định.</td></tr>
-              <tr><td>Ghi chú cuộc họp</td><td>Tạo <code>## Notes</code> làm phần và, khi có, <code>## Action Items</code>.</td><td>Cấu trúc ghi chú cuộc họp xác định.</td></tr>
+              <tr><td>Ghi chú cuộc họp</td><td>Tạo <code>## Notes</code> làm phần và, khi có, <code>## Action Items</code>.</td><td>Cấu trúc ghi chú cuộc họp xác định cho bản chép giọng nói; văn bản ghi lại được gửi nguyên vẹn.</td></tr>
               <tr><td>Hướng dẫn tùy chỉnh</td><td>Theo chỉ dẫn bằng Apple Intelligence trên máy khi sẵn.</td><td>Văn bản gốc khi chỉ dẫn không chạy cục bộ được.</td></tr>
             </tbody>
           </table>
         </div>
         <p>Để thêm tiêu đề chương trình họp, người tham dự và quyết định quanh đầu ra Ghi chú cuộc họp, <a href="/vi/blog/obsidian-meeting-notes-template/">tạo mẫu ghi chú cuộc họp Obsidian</a>.</p>
-        <p>Bản chép giọng nói dùng chế độ lộ trình đã chọn. <strong>Ứng dụng Capture Text</strong> là tùy chọn bật riêng, mặc định tắt, cho phép xử lý Markdown gõ, OCR và các nội dung ghi nhanh hỗn hợp khác có chứa văn bản. Giữ tắt để tránh viết lại Markdown đã soạn ngoài ý muốn. Toàn bộ yêu cầu sau xử lý được lưu nguyên vẹn trước khi gửi, nên thử lại không chạy lại quá trình xử lý với những cài đặt đã thay đổi.</p>
+        <p><strong>Dùng Apple Intelligence</strong>, mặc định tắt, bật chế độ xử lý của lộ trình. <strong>Áp dụng cho</strong> sau đó chọn nội dung được xử lý: <strong>Giọng nói &amp; văn bản</strong> (mặc định), <strong>Chỉ giọng nói</strong> hoặc <strong>Chỉ văn bản</strong>. Văn bản nghĩa là Markdown gõ, chữ trích từ ảnh hoặc bản quét và các nội dung ghi nhanh khác có chứa văn bản; chọn <strong>Chỉ giọng nói</strong> để Markdown bạn đã soạn không bị viết lại. Khi tắt công tắc, bản chép giọng nói vẫn có cấu trúc xác định của Danh sách việc cần làm và Ghi chú cuộc họp, còn văn bản ghi lại được gửi nguyên vẹn. Toàn bộ yêu cầu sau xử lý được lưu nguyên vẹn trước khi gửi, nên thử lại không chạy lại quá trình xử lý với những cài đặt đã thay đổi.</p>
 
         <h3 id="preset-metadata">metadata</h3>
         <ul>

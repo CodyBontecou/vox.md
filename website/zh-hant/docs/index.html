@@ -312,8 +312,8 @@
           <li>打開設定 → 路線，建立、重命名、啟用、停用自訂路線，為其選擇圖示或刪除。</li>
           <li>可搜尋圖示選擇器將符號分為寫作、語音、任務、個人和工作類別。</li>
           <li>已停用的路線不在常規選擇器中顯示。內置預設路線不可刪除。</li>
-          <li>內置預設路線使用波形符號，提示為 <em>擷取想法、任務、連結、檔案、掃描件或錄音。</em>, <code>type: capture</code> 後設資料、整理行文處理，關閉鍵入文字處理，關閉音訊儲存。</li>
-          <li>新的自訂路線初始為 <em>自訂路線</em>，使用滑塊圖示和 <em>想擷取什麼？</em> 提示，初始選擇自訂指令，但關閉鍵入/混合文字處理。</li>
+          <li>內置預設路線使用波形符號，提示為 <em>擷取想法、任務、連結、檔案、掃描件或錄音。</em>, <code>type: capture</code> 後設資料、潤飾文字處理， <strong>使用 Apple Intelligence</strong> 關閉，音訊儲存關閉。</li>
+          <li>新的自訂路線初始為 <em>自訂路線</em>，使用滑塊圖示和 <em>想擷取什麼？</em> 提示，初始選擇自訂指示，但 <strong>使用 Apple Intelligence</strong> 處於關閉狀態。</li>
         </ul>
 
         <h3 id="processing-modes">處理模式</h3>
@@ -324,13 +324,13 @@
               <tr><td>保留原文</td><td>保留擷取文字，不進行 AI 改寫。</td><td>傳送原始文字。</td></tr>
               <tr><td>潤飾文字</td><td>整理大小寫和標點，同時保留含義與 Markdown。</td><td>裝置端增強不可用時保留原文。</td></tr>
               <tr><td>工作清單</td><td>生成 Markdown <code>- [ ]</code> 任務項。</td><td>確定性的清單格式器。</td></tr>
-              <tr><td>會議記錄</td><td>生成 <code>## Notes</code> 節，以及存在時的 <code>## Action Items</code>.</td><td>確定的會議筆記結構。</td></tr>
+              <tr><td>會議記錄</td><td>生成 <code>## Notes</code> 節，以及存在時的 <code>## Action Items</code>.</td><td>為語音轉錄提供確定的會議記錄結構；擷取的文字原樣傳送。</td></tr>
               <tr><td>自訂指示</td><td>可用時使用裝置端 Apple Intelligence 遵循你的指令。</td><td>指令無法在本地執行時保留原文。</td></tr>
             </tbody>
           </table>
         </div>
         <p>要在會議記錄輸出的前後加入議程、與會者和決策標題，請 <a href="/zh-hant/blog/obsidian-meeting-notes-template/">產生 Obsidian 會議記錄範本</a>.</p>
-        <p>語音轉錄使用所選路線模式。 <strong>應用於捕捉文本</strong> 是預設關閉、需單獨啟用的選項，允許處理鍵入的 Markdown、OCR 和其他帶文字的混合擷取。保持關閉可防止意外改寫已編寫的 Markdown。傳送前儲存確切的已處理請求，因此重試不會依據變化後的設定重新處理。</p>
+        <p><strong>使用 Apple Intelligence</strong>，預設關閉，開啟後會啟用路線的處理模式。 <strong>套用於</strong> 接著決定處理哪些內容： <strong>語音和文字</strong> （預設）、 <strong>僅語音</strong> 或 <strong>僅文字</strong>。文字指鍵入的 Markdown、從照片或掃描件擷取的文字，以及其他含文字的擷取；選擇 <strong>僅語音</strong> 可防止已編寫的 Markdown 被改寫。關閉此開關時，語音轉錄仍會取得工作清單和會議記錄的確定結構，擷取的文字則原樣傳送。傳送前儲存確切的已處理請求，因此重試不會依據變化後的設定重新處理。</p>
 
         <h3 id="preset-metadata">元素</h3>
         <ul>

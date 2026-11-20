@@ -312,8 +312,8 @@
           <li>Abre Ajustes → Rutas para crear, renombrar, activar, desactivar, elegir un icono o eliminar una ruta personalizada.</li>
           <li>El selector de iconos con búsqueda agrupa los símbolos en Escritura, Voz, Tareas, Personal y Trabajo.</li>
           <li>Las rutas desactivadas se ocultan de los selectores normales. La ruta predeterminada integrada no se puede eliminar.</li>
-          <li>La ruta predeterminada integrada usa el símbolo de forma de onda y el mensaje <em>Captura una idea, tarea, enlace, archivo, escaneo o grabación.</em>, <code>type: capture</code> como metadatos, procesamiento Prosa depurada, procesamiento de texto escrito desactivado y guardado de audio desactivado.</li>
-          <li>Una ruta personalizada nueva comienza como <em>Ruta personalizada</em>, usa el icono de reguladores y <em>¿Qué quieres capturar?</em> como mensaje, y empieza con Instrucción personalizada seleccionado pero con el procesamiento de texto escrito o mixto desactivado.</li>
+          <li>La ruta predeterminada integrada usa el símbolo de forma de onda y el mensaje <em>Captura una idea, tarea, enlace, archivo, escaneo o grabación.</em>, <code>type: capture</code> como metadatos, procesamiento Prosa depurada con <strong>Usar Apple Intelligence</strong> desactivado y guardado de audio desactivado.</li>
+          <li>Una ruta personalizada nueva comienza como <em>Ruta personalizada</em>, usa el icono de reguladores y <em>¿Qué quieres capturar?</em> como mensaje, y empieza con Instrucción personalizada seleccionado pero con <strong>Usar Apple Intelligence</strong> desactivado.</li>
         </ul>
 
         <h3 id="processing-modes">Modos de procesamiento</h3>
@@ -324,13 +324,13 @@
               <tr><td>Conservar original</td><td>Conserva el texto capturado sin reescritura por IA.</td><td>Se entrega el texto original.</td></tr>
               <tr><td>Prosa depurada</td><td>Corrige mayúsculas y puntuación conservando el significado y el Markdown.</td><td>Texto original cuando el enriquecimiento en el dispositivo no está disponible.</td></tr>
               <tr><td>Lista de tareas</td><td>Produce Markdown <code>- [ ]</code> elementos de tarea.</td><td>Un formateador determinista de listas de verificación.</td></tr>
-              <tr><td>Notas de reunión</td><td>Produce una <code>## Notes</code> como sección y, cuando esté presente, <code>## Action Items</code>.</td><td>Estructura determinista de notas de reunión.</td></tr>
+              <tr><td>Notas de reunión</td><td>Produce una <code>## Notes</code> como sección y, cuando esté presente, <code>## Action Items</code>.</td><td>Estructura determinista de notas de reunión para transcripciones de voz; el texto capturado se entrega sin cambios.</td></tr>
               <tr><td>Instrucción personalizada</td><td>Sigue tu instrucción con Apple Intelligence en el dispositivo cuando está disponible.</td><td>Texto original cuando la instrucción no puede ejecutarse localmente.</td></tr>
             </tbody>
           </table>
         </div>
         <p>Para añadir encabezados de orden del día, asistentes y decisiones alrededor de la salida de Notas de reunión, <a href="/es/blog/obsidian-meeting-notes-template/">genera una plantilla de notas de reunión para Obsidian</a>.</p>
-        <p>Las transcripciones de voz usan el modo de ruta seleccionado. <strong>Aplique para capturar texto</strong> es una activación voluntaria independiente, desactivada de forma predeterminada, que permite procesar Markdown escrito, OCR y otras capturas mixtas con texto. Dejarla desactivada evita reescrituras inesperadas del Markdown creado. La solicitud procesada exacta se guarda antes de la entrega, de modo que los reintentos no vuelven a procesarla con ajustes modificados.</p>
+        <p><strong>Usar Apple Intelligence</strong>, desactivado de forma predeterminada, activa el modo de procesamiento de la ruta. <strong>Aplicar a</strong> elige después qué se procesa: <strong>Voz y texto</strong> (predeterminado), <strong>Solo voz</strong> o <strong>Solo texto</strong>. Texto significa Markdown escrito, texto extraído de fotos o escaneos y otras capturas con texto; elige <strong>Solo voz</strong> para evitar que se reescriba el Markdown que has creado. Con el interruptor desactivado, las transcripciones de voz siguen recibiendo la estructura determinista de Lista de tareas y Notas de reunión, y el texto capturado se entrega sin cambios. La solicitud procesada exacta se guarda antes de la entrega, de modo que los reintentos no vuelven a procesarla con ajustes modificados.</p>
 
         <h3 id="preset-metadata">Metadatos</h3>
         <ul>
