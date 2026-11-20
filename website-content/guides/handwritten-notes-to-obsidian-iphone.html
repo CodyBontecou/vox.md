@@ -1,0 +1,110 @@
+<!--{
+  "slug": "handwritten-notes-to-obsidian-iphone",
+  "title": "Handwritten notes into Obsidian from iPhone",
+  "description": "Photograph paper notes on iPhone, run on-device text recognition, fix the text and file it in Obsidian as Markdown. Includes Scan Document for keeping the page.",
+  "subtitle": "Turn notebook pages into searchable, linkable Markdown in your vault, with the recognition done on your iPhone.",
+  "eyebrow": "iPhone · Extract Text · Scan Document",
+  "requirements": "iOS 17.6+ · writable vault folder",
+  "published": "2026-11-20",
+  "modified": "2026-11-20",
+  "image": "/screenshots/00-capture-light.png"
+}-->
+<div class="answer-box" id="short-answer"><div class="label">The short answer</div>
+        <p>To put paper notes into Obsidian as text on iPhone, photograph the pages with Vox.md’s Extract Text, review the on-device text recognition in the Capture draft, and send it to a Route that writes into your vault. Use Scan Document when you also want the page image or a PDF.</p>
+      </div>
+      <p><strong>Do you want to draw in Obsidian, or digitize paper?</strong> If you want to write with a stylus inside Obsidian, such as an Apple Pencil on iPad, community plugins such as <a href="https://obsidian.md/plugins?id=ink" target="_blank" rel="noopener">Ink</a> and <a href="https://obsidian.md/plugins?id=obsidian-excalidraw-plugin" target="_blank" rel="noopener">Excalidraw</a> are built for that: they store handwriting or drawings as ink files inside the vault. Check each plugin’s page for what it supports. This guide covers the other case: you write on paper and want the words as Markdown you can search and link.</p>
+      <nav class="toc" aria-label="In this guide"><div class="toc-title">In this guide</div><ol>
+        <li><a href="#two-meanings">Writing in Obsidian vs digitizing paper</a></li>
+        <li><a href="#before-you-start">Before you start</a></li>
+        <li><a href="#photograph-pages">Photograph the pages</a></li>
+        <li><a href="#review-ocr">Review the recognized text</a></li>
+        <li><a href="#keep-the-original">Keep the original page</a></li>
+        <li><a href="#route-it">Route it into the right note</a></li>
+        <li><a href="#photos-you-already-have">Photos you already have</a></li>
+        <li><a href="#privacy">Privacy</a></li>
+        <li><a href="#troubleshooting">Troubleshooting</a></li>
+      </ol></nav>
+
+      <h2 id="two-meanings">1. Writing in Obsidian vs digitizing paper</h2>
+      <p>Four approaches cover most needs. They produce different things in your vault.</p>
+      <div class="docs-table-wrap"><table>
+        <thead><tr><th>Approach</th><th>What you get</th><th>Good for</th></tr></thead>
+        <tbody>
+          <tr><td>Stylus plugins (Ink, Excalidraw)</td><td>An ink or drawing file</td><td>Writing or sketching by hand inside Obsidian</td></tr>
+          <tr><td>Apple Live Text copy and paste</td><td>Plain text you paste yourself</td><td>One-off snippets from a photo</td></tr>
+          <tr><td>Vox.md journal text extraction</td><td>Editable Markdown text, no page image</td><td>Paper notes you want to search and link</td></tr>
+          <tr><td>Vox.md Scan Document</td><td>Page images, a PDF and best-effort text</td><td>Pages you also want to keep as the original</td></tr>
+        </tbody>
+      </table></div>
+      <p>Apple describes the copy-and-paste route in <a href="https://support.apple.com/guide/iphone/use-live-text-iphcf0b71b0e/ios" target="_blank" rel="noopener">Use Live Text on iPhone</a>. Apple’s own Notes app can also <a href="https://support.apple.com/guide/iphone/scan-text-and-documents-iph653f28965/ios" target="_blank" rel="noopener">scan text and documents</a>, but the result stays in Notes until you move it. Vox.md sends the text straight to a file in your vault.</p>
+
+      <h2 id="before-you-start">2. Before you start</h2>
+      <ul>
+        <li><strong>A vault folder.</strong> In Settings, connect a Capture Preset to your vault or another Files folder. No Obsidian plugin or account is needed.</li>
+        <li><strong>A Route for handwritten notes.</strong> For example, a New Note path such as <code>Inbox/Handwritten</code>, or a Rolling Note that inserts under a <code>## Notebook</code> heading in your daily note. See the <a href="../append-to-obsidian-daily-note-iphone/">daily-note guide</a> for heading placement.</li>
+        <li><strong>Camera permission</strong> for Vox.md, which iOS asks for the first time you take a page photo.</li>
+      </ul>
+
+      <h2 id="photograph-pages">3. Photograph the pages</h2>
+      <ol>
+        <li>Open the Capture composer and pick the Route you set up.</li>
+        <li>In the Capture Bar, choose <strong>Extract Text</strong>, then <strong>Capture Journal Pages</strong>.</li>
+        <li>Press the shutter for each page. The camera only fires when you press it. You can capture up to 10 pages in one go.</li>
+        <li>Wait for the “Extracting text on this device” banner to finish.</li>
+      </ol>
+      <p>Photo tips: use even light, lay the page flat, keep the writing filling the frame, and take one page per shot.</p>
+      <p>Extract Text is not available while a voice capture or transcription is in progress. Finish that first.</p>
+
+      <h2 id="review-ocr">4. Review the recognized text</h2>
+      <p>The recognized text is added to the Capture draft as editable Markdown, so you can fix it before sending. Check names, dates, numbers and crossed-out words in particular.</p>
+      <p>Vox.md uses Apple’s Vision text recognition at the accurate level, with language correction and automatic language detection (see Apple’s <a href="https://developer.apple.com/documentation/vision/recognizing-text-in-images" target="_blank" rel="noopener">Recognizing Text in Images</a>). Handwriting recognition varies with legibility and language, so expect to edit.</p>
+      <p>Journal text extraction adds text only. It does not attach the page images.</p>
+
+      <h2 id="keep-the-original">5. Keep the original page</h2>
+      <p>Choose <strong>Scan Document</strong> instead when the page itself matters: signatures, diagrams, sketches, and legal or financial pages. It uses the system document scanner, keeps the page images, creates a PDF and adds best-effort on-device text. Review that text before sending, because it can contain mistakes.</p>
+      <p>The images and PDF are written as attachments next to your note. For attachment paths and what Obsidian can open, read <a href="../save-links-photos-obsidian-iphone/">save links, photos and scans to Obsidian</a> and Obsidian’s help on <a href="https://obsidian.md/help/file-formats" target="_blank" rel="noopener">accepted file formats</a>.</p>
+
+      <h2 id="route-it">6. Route it into the right note</h2>
+      <p>A Route decides where the text goes: a new note, a rolling daily or weekly note, or an existing note, at the top, the bottom or under a heading. Prefixes and templates can add <code>{date}</code> and timestamps. Three recipes follow; the Markdown shown is an illustration, and the exact output depends on your Route.</p>
+      <h3>One note per notebook session</h3>
+      <p>Use a New Note Route with a path like <code>Inbox/Handwritten/{date}-{hour}{minute}.md</code> and add <code>source: paper</code> as static metadata. A capture could produce:</p>
+      <pre class="guide-code"><code>---
+source: paper
+---
+Project kickoff, notebook p. 14
+- Ask Dana about the budget
+- Send draft by Friday</code></pre>
+      <h3>Append under a heading in the daily note</h3>
+      <p>Use a Rolling Note Route with the daily period, choose a heading, enter <code>Handwritten</code> at level two, and insert at the end of its section. Set the missing-heading behavior to Create Heading if you want Vox.md to add it. The note then gains:</p>
+      <pre class="guide-code"><code>## Handwritten
+- **09:42** Call the dentist
+- Idea: weekly review on Sunday</code></pre>
+      <h3>Meeting-pad notes into the meeting note</h3>
+      <p>Photograph the pad and send to an Existing Note Route, or a New Note path such as <code>Meetings/{date}-{hour}{minute}.md</code>. To give those notes agenda and decision headings, <a href="../obsidian-meeting-notes-template/">generate a meeting notes template</a>. For more structures, see <a href="../obsidian-capture-templates/">Obsidian capture templates</a>.</p>
+      <p>Optional processing: Clean Prose, Todo Checklist and Meeting Notes apply to recognized text only if the Route’s <strong>Apply to Capture Text</strong> option is on. It is off by default. Apple Intelligence processing needs compatible iOS 26 hardware; without it, Todo Checklist and Meeting Notes use built-in deterministic formatters. See <a href="../../docs/#presets">Capture Presets</a>.</p>
+
+      <h2 id="photos-you-already-have">7. Photos you already have</h2>
+      <p>If you already photographed a notebook, choose <strong>Extract Text</strong> then <strong>Choose Journal Photos</strong> and select the images from your library. The same recognition runs on them. There are two limits: up to 10 pages per capture, and no batch import of a whole library, so process a backlog in groups of 10. Straight, well-lit photos work best. See the <a href="../../docs/#quick-capture">capture reference</a> for input limits, and <a href="../obsidian-quick-capture-iphone/">choosing a capture method</a> if you are comparing options.</p>
+
+      <h2 id="privacy">8. Privacy</h2>
+      <p>Text recognition runs on your iPhone, and page content is not sent to Vox.md servers. Where the Markdown goes next depends on the folder provider you chose, such as iCloud Drive or another Files provider, which handles syncing. Details are in the <a href="../../privacy.html">privacy policy</a>.</p>
+
+      <h2 id="troubleshooting">9. Troubleshooting</h2>
+      <ul>
+        <li><strong>“No text was found in those journal images.”</strong> Try brighter, straighter photos with the writing filling the frame.</li>
+        <li><strong>Wrong or garbled words.</strong> Language detection is automatic and handwriting varies. Retake the page in better light, or correct the text in the draft.</li>
+        <li><strong>Extract Text is greyed out.</strong> A voice capture or transcription is in progress. Finish it first.</li>
+        <li><strong>The heading is missing in the note.</strong> Set the Route’s missing-heading behavior to Create Heading, or add the heading to the note yourself.</li>
+      </ul>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Turn tonight’s notebook page into Markdown</h2>
+        <p>No plugin or account is needed. Capture is free to try with 10 successful deliveries; unlimited use is a one-time purchase (see <a href="../../docs/#pricing-limits">free use and lifetime unlock</a>).</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Download Vox.md free</a></p>
+      </section>
+      <nav class="toc" aria-label="Related guides"><div class="toc-title">Continue your setup</div><ul>
+        <li><a href="../save-links-photos-obsidian-iphone/">Save links, photos and scans</a></li>
+        <li><a href="../append-to-obsidian-daily-note-iphone/">Append to a daily note</a></li>
+        <li><a href="../obsidian-capture-templates/">Inbox, journal and task templates</a></li>
+        <li><a href="../../docs/#quick-capture">Capture controls and supported inputs</a></li>
+      </ul></nav>
