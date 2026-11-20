@@ -221,7 +221,7 @@
       <ul>
         <li><strong>iPhone：</strong> 「自動」（在受支援的 iOS 26 裝置和語言上使用 Apple Speech）、Whisper 和 Parakeet 均可選擇。自動是 iOS 上的預設選項。</li>
         <li><strong>Mac：</strong> 模型畫面可下載、選擇和刪除 Whisper 或 Parakeet 模型，並更改轉錄語言。Whisper 在受支援的 Mac 上使用 Metal 加速。Whisper Base 是 Mac 上舊版的預設模型。</li>
-        <li><strong>鍵盤停頓自動停止（僅限 Parakeet）：</strong> 一個可選的約 1 MB 語音停頓偵測模型，可以在靜音後停止顯式選擇 Parakeet v2 或 v3 的鍵盤錄音。啟用 <strong>讓 Parakeet 在停頓後停止</strong> ，並選擇約 0.5、0.75、1、1.5 或 2 秒。自動和 Whisper 仍需手動停止。參見 <a href="/zh-hant/docs/#parakeet-autostop">Parakeet 鍵盤自動停止</a> 和 <a href="/zh-hant/blog/best-voice-to-text-keyboard-iphone/">語音鍵盤指南</a>.</li>
+        <li><strong>鍵盤停頓自動停止（僅限 Parakeet）：</strong> 可選的 ~1 MB 語音休息檢測器模型可在靜音後停止由 Parakeet v2 或 v3 明確啟動的鍵盤錄音。請在以下位置開啟暫停自動停止: <strong>設定 → 模型</strong> ，並選擇約 0.5、0.75、1、1.5 或 2 秒。自動和 Whisper 仍需手動停止。參見 <a href="/zh-hant/docs/#parakeet-autostop">Parakeet 鍵盤自動停止</a> 和 <a href="/zh-hant/blog/best-voice-to-text-keyboard-iphone/">語音鍵盤指南</a>.</li>
       </ul>
       <p>Mac 的模型畫面在以下位置介紹： <a href="/zh-hant/docs/#mac-history">Mac 歷史與模型</a>。如需錄製通話，請參閱 <a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/">將 Mac 會議錄入 Obsidian</a>.</p>
 
@@ -231,7 +231,7 @@
         <li>連網後，開啟 <strong>設定 → 模型</strong> ，下載你想比較的兩個候選模型，例如 Parakeet v3 和 Whisper Small。請排除不支援你所用語言的選項。</li>
         <li>創建或選擇一個 <strong>路線</strong> ，選用可寫入的 Markdown 資料夾，並使用新筆記目標，方便找到結果。使用保留原文處理，這樣筆記中只有辨識出的文字，不經 AI 改寫。</li>
         <li>在快速捕捉的語音控件中，選擇 <strong>加入草稿</strong>。添加到草稿會把每條轉錄完成的文本追加到同一份草稿中，而不是直接發送。</li>
-        <li>在以下位置選擇第一個模型： <strong>設定 → 模型</strong>，然後錄製該片段，或使用 <strong>音頻進口</strong> ，使用已有文件。最好只匯入一個文件，因為這樣兩個模型聽到的音訊完全相同。</li>
+        <li>在以下位置選擇第一個模型： <strong>設定 → 模型</strong>，然後錄製該片段，或使用 <strong>匯入音訊或影片</strong> ，使用已有文件。最好只匯入一個文件，因為這樣兩個模型聽到的音訊完全相同。</li>
         <li>在草稿中輸入一行簡短標簽，例如模型名稱。在以下位置選擇第二個模型： <strong>設定 → 模型</strong> ，再匯入同一段音訊。</li>
         <li>輕點 <strong>發送</strong> ，透過路線把兩份轉錄都遞送到同一篇 Markdown 筆記。（<strong>立即傳送</strong> 則會在每份轉錄完成時分別遞送，這樣你會得到兩篇筆記。）</li>
         <li>開啟筆記，對照音訊檢查：專有名詞、數字和日期、標點，以及任何遺漏或重復的短語。同時記下每次轉錄在你的裝置上花了多長時間。</li>

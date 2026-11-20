@@ -221,7 +221,7 @@
       <ul>
         <li><strong>iPhone:</strong> Automático (Apple Speech em um dispositivo e idioma compatíveis com iOS 26), Whisper e Parakeet estão disponíveis. Automático é o padrão no iOS.</li>
         <li><strong>Mac:</strong> a tela Modelos baixa, seleciona e exclui modelos Whisper ou Parakeet e altera o idioma de transcrição. O Whisper usa aceleração Metal em Macs compatíveis. O Whisper Base é o padrão antigo no Mac.</li>
-        <li><strong>Parada automática do teclado por pausa (somente Parakeet):</strong> um modelo opcional de Detecção de pausa de voz de ~1 MB pode interromper uma gravação explícita de teclado com Parakeet v2 ou v3 após o silêncio. Ative <strong>Pare Parakeet após pausa</strong> e escolha cerca de 0,5, 0,75, 1, 1,5 ou 2 segundos. Automático e Whisper continuam com parada manual. Veja <a href="/pt-br/docs/#parakeet-autostop">Parada automática Parakeet no teclado</a> e <a href="/pt-br/blog/best-voice-to-text-keyboard-iphone/">o guia do teclado vocal</a>.</li>
+        <li><strong>Parada automática do teclado por pausa (somente Parakeet):</strong> um modelo opcional de ~1 MB de Detecção de pausa de voz pode parar uma gravação explícita do teclado com Parakeet v2 ou v3 após o silêncio. Ative a parada automática por pausa em <strong>Ajustes → Modelos</strong> e escolha cerca de 0,5, 0,75, 1, 1,5 ou 2 segundos. Automático e Whisper continuam com parada manual. Veja <a href="/pt-br/docs/#parakeet-autostop">Parada automática Parakeet no teclado</a> e <a href="/pt-br/blog/best-voice-to-text-keyboard-iphone/">o guia do teclado vocal</a>.</li>
       </ul>
       <p>A tela de modelos do Mac é descrita em <a href="/pt-br/docs/#mac-history">Histórico e modelos Mac</a>. Para gravar chamadas, veja <a href="/pt-br/blog/transcribe-meetings-mac-obsidian/">Reuniões no Mac para o Obsidian</a>.</p>
 
@@ -231,9 +231,9 @@
         <li>Conectado à internet, abra <strong>Ajustes → Modelos</strong> e baixe os dois candidatos que você quer comparar, por exemplo Parakeet v3 e Whisper Small. Deixe de fora qualquer opção que não cubra o seu idioma.</li>
         <li>Crie ou selecione uma <strong>Rota</strong> com uma pasta Markdown gravável, e use um destino de Nova nota para que o resultado seja fácil de encontrar. Use o processamento Manter original para que a nota contenha o texto reconhecido sem reescrita por IA.</li>
         <li>Nos controles de voz da Rápida captura, escolha <strong>Adicionar ao rascunho</strong>. Adicionar ao rascunho acrescenta cada transcrição concluída a um único rascunho em vez de enviá-la.</li>
-        <li>Selecione o primeiro modelo em <strong>Ajustes → Modelos</strong>, depois grave o trecho ou use <strong>Importação de áudio</strong> com um arquivo existente. Importar um único arquivo é o melhor, porque assim os dois modelos ouvem exatamente o mesmo áudio.</li>
+        <li>Selecione o primeiro modelo em <strong>Ajustes → Modelos</strong>, depois grave o trecho ou use <strong>Importar áudio ou vídeo</strong> com um arquivo existente. Importar um único arquivo é o melhor, porque assim os dois modelos ouvem exatamente o mesmo áudio.</li>
         <li>Digite uma linha curta de identificação no rascunho, como o nome do modelo. Selecione o segundo modelo em <strong>Ajustes → Modelos</strong> e importe o mesmo trecho novamente.</li>
-        <li>Toque <strong>Envie</strong> para entregar as duas transcrições em uma única nota Markdown pela Route. (<strong>Enviar imediatamente</strong> entregaria cada transcrição assim que terminasse, resultando em duas notas.)</li>
+        <li>Toque <strong>Enviar</strong> para entregar as duas transcrições em uma única nota Markdown pela Route. (<strong>Enviar imediatamente</strong> entregaria cada transcrição assim que terminasse, resultando em duas notas.)</li>
         <li>Abra a nota e compare com o áudio: nomes próprios, números e datas, pontuação e trechos omitidos ou repetidos. Anote também quanto tempo cada transcrição levou no seu dispositivo.</li>
         <li>Exclua o modelo que você não vai usar em <strong>Ajustes → Modelos</strong> para liberar o armazenamento.</li>
       </ol>

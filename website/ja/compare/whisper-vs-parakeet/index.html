@@ -221,7 +221,7 @@
       <ul>
         <li><strong>iPhone:</strong> 自動(iOS 26 対応デバイスと対応言語では Apple Speech)、Whisper、Parakeet が利用できます。iOS では自動が既定です。</li>
         <li><strong>Mac:</strong> Models 画面では、Whisper または Parakeet モデルのダウンロード、選択、削除と、文字起こし言語の変更ができます。Whisper は対応する Mac で Metal アクセラレーションを使います。Whisper Base は従来の Mac の既定です。</li>
-        <li><strong>キーボードの一時停止による自動停止(Parakeet のみ):</strong> 任意の約 1 MB の Voice Pause Detection モデルにより、明示的な Parakeet v2 または v3 のキーボード録音を無音後に停止できます。有効にするには <strong>無音の後に Parakeet を停止する</strong> 約 0.5、0.75、1、1.5、2 秒から選びます。自動と Whisper は手動停止のままです。次をご覧ください: <a href="/ja/docs/#parakeet-autostop">Parakeet キーボードの自動停止</a> と <a href="/ja/blog/best-voice-to-text-keyboard-iphone/">音声キーボードガイド</a>.</li>
+        <li><strong>キーボードの一時停止による自動停止(Parakeet のみ):</strong> 約 ~1 MB のオプションの「声の停止検出」モデルを使うと、Parakeet v2 または v3 で明示的に開始したキーボード録音を、無音の後に停止できます。一時停止での自動停止は次の場所でオンにします: <strong>設定 → モデル</strong> 約 0.5、0.75、1、1.5、2 秒から選びます。自動と Whisper は手動停止のままです。次をご覧ください: <a href="/ja/docs/#parakeet-autostop">Parakeet キーボードの自動停止</a> と <a href="/ja/blog/best-voice-to-text-keyboard-iphone/">音声キーボードガイド</a>.</li>
       </ul>
       <p>Mac のモデル画面については次をご覧ください: <a href="/ja/docs/#mac-history">Mac の履歴とモデル</a>。通話の録音については次をご覧ください: <a href="/ja/blog/transcribe-meetings-mac-obsidian/">Mac の会議を Obsidian へ</a>.</p>
 
@@ -231,9 +231,9 @@
         <li>インターネットに接続した状態で、次を開きます: <strong>設定 → モデル</strong> で、比較したい 2 つの候補(たとえば Parakeet v3 と Whisper Small)をダウンロードします。ご自身の言語に対応していないオプションは除外してください。</li>
         <li>次を作成または選択してください: <strong>ルート</strong> 書き込み可能な Markdown フォルダを指定し、結果が見つけやすいよう新しいノートをターゲットにします。処理にはオリジナルを保持を使うと、AI による書き換えなしで認識されたテキストがノートに入ります。</li>
         <li>Quick Capture の音声コントロールで、次を選択します: <strong>下書きに追加</strong>。下書きに追加は、完了した文字起こしを送信せずに 1 つの下書きに追記します。</li>
-        <li>次で 1 つ目のモデルを選択します: <strong>設定 → モデル</strong>、その後クリップを録音するか、次を使います: <strong>オーディオ輸入</strong> 既存のファイルで。1 つのファイルをインポートするのが最適です。両方のモデルがまったく同じ音声を聞くことになるためです。</li>
+        <li>次で 1 つ目のモデルを選択します: <strong>設定 → モデル</strong>、その後クリップを録音するか、次を使います: <strong>オーディオまたはビデオを読み込む</strong> 既存のファイルで。1 つのファイルをインポートするのが最適です。両方のモデルがまったく同じ音声を聞くことになるためです。</li>
         <li>下書きに短いラベル行(モデル名など)を入力します。次で 2 つ目のモデルを選択してください: <strong>設定 → モデル</strong> そして同じクリップをもう一度インポートします。</li>
-        <li>タップする項目は、 <strong>送る</strong> ルートで両方の文字起こしを 1 つの Markdown ノートに配信します。(<strong>すぐに送信</strong> は、各文字起こしを完了した時点で個別に配信するため、ノートは 2 つになります。)</li>
+        <li>タップする項目は、 <strong>送信</strong> ルートで両方の文字起こしを 1 つの Markdown ノートに配信します。(<strong>すぐに送信</strong> は、各文字起こしを完了した時点で個別に配信するため、ノートは 2 つになります。)</li>
         <li>ノートを開き、音声と照らし合わせてください。固有名詞、数字、日付、句読点、抜けや重複したフレーズを確認します。また、お使いのデバイスで各文字起こしにかかった時間も記録してください。</li>
         <li>使わないモデルは次で削除してください: <strong>設定 → モデル</strong> ストレージを空けるために。</li>
       </ol>

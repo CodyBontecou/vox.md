@@ -221,7 +221,7 @@
       <ul>
         <li><strong>iPhone:</strong> 자동(iOS 26 지원 기기와 언어에서는 Apple Speech), Whisper, Parakeet을 사용할 수 있습니다. iOS에서는 자동이 기본값입니다.</li>
         <li><strong>Mac:</strong> 모델 화면에서 Whisper 또는 Parakeet 모델을 다운로드, 선택, 삭제하고 전사 언어를 변경할 수 있습니다. Whisper는 지원되는 Mac에서 Metal 가속을 사용합니다. Whisper Base는 이전 Mac 기본값입니다.</li>
-        <li><strong>키보드 일시 정지 자동 중지(Parakeet 전용):</strong> 선택 사항인 약 1 MB의 Voice Pause Detection 모델이 명시적인 Parakeet v2 또는 v3 키보드 녹음을 무음 후에 중지할 수 있습니다. 다음을 켜세요: <strong>멈춤 후 Parakeet 중지</strong> 그리고 약 0.5, 0.75, 1, 1.5, 2초 중에서 선택하세요. 자동과 Whisper는 수동 중지로 유지됩니다. 다음을 참고하세요: <a href="/ko/docs/#parakeet-autostop">Parakeet 키보드 자동 중지</a> 및 <a href="/ko/blog/best-voice-to-text-keyboard-iphone/">음성 키보드 가이드</a>.</li>
+        <li><strong>키보드 일시 정지 자동 중지(Parakeet 전용):</strong> 선택 사항인 ~1 MB 크기의 Voice Pause 검출 모델은 Parakeet v2 또는 v3로 직접 시작한 키보드 녹음을 무음 후에 중지할 수 있습니다. 일시 정지 자동 중지는 다음 위치에서 켜세요: <strong>설정 → 모델</strong> 그리고 약 0.5, 0.75, 1, 1.5, 2초 중에서 선택하세요. 자동과 Whisper는 수동 중지로 유지됩니다. 다음을 참고하세요: <a href="/ko/docs/#parakeet-autostop">Parakeet 키보드 자동 중지</a> 및 <a href="/ko/blog/best-voice-to-text-keyboard-iphone/">음성 키보드 가이드</a>.</li>
       </ul>
       <p>Mac 모델 화면은 다음에 설명되어 있습니다: <a href="/ko/docs/#mac-history">Mac 기록 및 모델</a>. 통화 녹음은 다음을 참고하세요: <a href="/ko/blog/transcribe-meetings-mac-obsidian/">Mac 회의를 Obsidian으로</a>.</p>
 
@@ -231,7 +231,7 @@
         <li>인터넷에 연결한 상태에서 다음을 여세요: <strong>설정 → 모델</strong> 를 열고 비교할 후보 두 개를 다운로드하세요. 예를 들면 Parakeet v3와 Whisper Small입니다. 내 언어를 지원하지 않는 옵션은 제외하세요.</li>
         <li>다음을 만들거나 선택하세요: <strong>루트</strong> 쓰기 가능한 Markdown 폴더를 지정하고, 결과를 쉽게 찾을 수 있도록 새 노트 대상을 사용하세요. 처리에는 원본 유지를 사용하면 AI 재작성 없이 인식된 텍스트가 노트에 담깁니다.</li>
         <li>Quick Capture의 음성 컨트롤에서 다음을 선택하세요: <strong>초안에 추가</strong>. 초안에 추가는 완료된 전사를 보내지 않고 하나의 초안에 계속 덧붙입니다.</li>
-        <li>다음에서 첫 번째 모델을 선택하세요: <strong>설정 → 모델</strong>, 그런 다음 클립을 녹음하거나 다음을 사용하세요: <strong>오디오 수입</strong> 기존 파일로. 두 모델이 동일한 오디오를 듣게 되므로 파일 하나를 가져오는 것이 가장 좋습니다.</li>
+        <li>다음에서 첫 번째 모델을 선택하세요: <strong>설정 → 모델</strong>, 그런 다음 클립을 녹음하거나 다음을 사용하세요: <strong>오디오 또는 비디오 가져오기</strong> 기존 파일로. 두 모델이 동일한 오디오를 듣게 되므로 파일 하나를 가져오는 것이 가장 좋습니다.</li>
         <li>초안에 모델 이름 같은 짧은 라벨 줄을 입력하세요. 다음에서 두 번째 모델을 선택하세요: <strong>설정 → 모델</strong> 그리고 같은 클립을 다시 가져오세요.</li>
         <li>탭하세요: <strong>보내기</strong> 를 사용해 두 전사를 하나의 Markdown 노트로 전달하세요. (<strong>즉시 전송</strong> 는 각 전사를 끝나는 대로 전달하므로 노트가 두 개 생깁니다.)</li>
         <li>노트를 열고 오디오와 비교하세요: 고유명사, 숫자와 날짜, 구두점, 빠지거나 반복된 구절. 또한 기기에서 각 전사에 걸린 시간도 기록하세요.</li>
