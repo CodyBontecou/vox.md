@@ -247,7 +247,7 @@
           <div><strong>照片与相机</strong><p>选择照片或截图，或拍摄新照片。图片会暂存，并嵌入投递的笔记。</p></div>
           <div><strong>文件</strong><p>选择多个文件项目。图片变为嵌入内容，音频保留为音频载荷，其他文件使用 Obsidian 风格链接。</p></div>
           <div><strong>文档扫描</strong><p>用 VisionKit 扫描页面。Vox.md 保留页面图像、创建 PDF，并尽力进行设备端 OCR。</p></div>
-          <div><strong>日志 OCR</strong><p>手动按快门采集最多 10 页日志，或选择日志照片。准确的 Vision OCR 使用自动语言检测。</p></div>
+          <div><strong>日志 OCR</strong><p>手动按快门采集最多 10 页日志，或选择日志照片。准确的 Vision OCR 使用自动语言检测。 <a href="/zh-hans/blog/handwritten-notes-to-obsidian-iphone/">把手写笔记导入 Obsidian</a> 将带你完整走一遍。</p></div>
           <div><strong>草图</strong><p>在白色 PencilKit 画布上用黑色画笔绘图。Vox.md 存储可编辑绘图数据和 PNG 预览。</p></div>
           <div><strong>目前位置操作</strong><p>请求一次位置，并在草稿中插入经过验证的 Google Maps Markdown 链接。此独立采集栏操作不更改任何按路由设置的位置控件。</p></div>
           <div><strong>语音与导入音频</strong><p>在编辑器中录音或导入音频/视频，本地转录，再将结果加入草稿或立即发送。</p></div>
@@ -262,8 +262,8 @@
             <tbody>
               <tr><td>添加媒体</td><td>打开草图、相机、照片、截图和网页链接选项。</td></tr>
               <tr><td>添加文件</td><td>从文件中选择多个文件，与草稿一同暂存。</td></tr>
-              <tr><td>扫描文件</td><td>采集多页扫描、PDF、页面图像，并尽力进行 OCR。</td></tr>
-              <tr><td>摘取文本</td><td>提供采集日志页面和选择日志照片，用于侧重 OCR 的采集。</td></tr>
+              <tr><td>扫描文稿</td><td>采集多页扫描、PDF、页面图像，并尽力进行 OCR。</td></tr>
+              <tr><td>提取文本</td><td>提供拍摄日记页面和选择日记照片，用于侧重 OCR 的采集。</td></tr>
               <tr><td>九 个</td><td>撤销上一次编辑器操作。</td></tr>
               <tr><td>格式 Markdown</td><td>应用粗体、斜体、井号标签，或标题 1 至标题 6。</td></tr>
               <tr><td>Markdown 链接</td><td>插入 <code>[link text](url)</code> 并选中可编辑部分。</td></tr>
@@ -382,7 +382,7 @@
         <h3 id="placement-templates">放置位置、标题和模板</h3>
         <ul>
           <li><strong>底部</strong> 追加； <strong>顶部</strong> 前置插入； <strong>头条</strong> 插入到所选的 1 至 6 级标题下。</li>
-          <li>如果缺少标题，请选择 <strong>显示错误</strong> 或 <strong>创建头条</strong>.</li>
+          <li>如果缺少标题，请选择 <strong>显示错误</strong> 或 <strong>创建标题</strong>.</li>
           <li>使用仓库中的实时 Markdown 模板文件、可复用条目模板，或自定义前后缀文本。</li>
           <li>条目格式支持 <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>，以及 <code>{location}</code>.</li>
           <li>默认附件子文件夹为 <code>attachments</code>.</li>

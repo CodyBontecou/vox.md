@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr" data-search-section="Seção" data-search-guide="Guia" data-search-empty="Sem resultados para “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notas manuscritas no Obsidian a partir do iPhone | Vox.md</title>
+  <meta name="description" content="Fotografe notas em papel no iPhone, execute o reconhecimento de texto no dispositivo, corrija o texto e salve-o no Obsidian como Markdown. Inclui Escanear documento para guardar a página.">
+  <link rel="canonical" href="https://vox.isolated.tech/pt-br/blog/handwritten-notes-to-obsidian-iphone/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Documentação Vox.md para modelos de linguagem">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Notas manuscritas no Obsidian a partir do iPhone">
+  <meta property="og:description" content="Fotografe notas em papel no iPhone, execute o reconhecimento de texto no dispositivo, corrija o texto e salve-o no Obsidian como Markdown. Inclui Escanear documento para guardar a página.">
+  <meta property="og:url" content="https://vox.isolated.tech/pt-br/blog/handwritten-notes-to-obsidian-iphone/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-20">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Notas manuscritas no Obsidian a partir do iPhone">
+  <meta name="twitter:description" content="Fotografe notas em papel no iPhone, execute o reconhecimento de texto no dispositivo, corrija o texto e salve-o no Obsidian como Markdown. Inclui Escanear documento para guardar a página.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Notas manuscritas no Obsidian a partir do iPhone",
+  "description": "Fotografe notas em papel no iPhone, execute o reconhecimento de texto no dispositivo, corrija o texto e salve-o no Obsidian como Markdown. Inclui Escanear documento para guardar a página.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-20",
+  "dateModified": "2026-11-20",
+  "mainEntityOfPage": "https://vox.isolated.tech/pt-br/blog/handwritten-notes-to-obsidian-iphone/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "pt-BR",
+  "name": "Notas manuscritas no Obsidian a partir do iPhone | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/pt-br/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Guias",
+      "item": "https://vox.isolated.tech/pt-br/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Notas manuscritas no Obsidian a partir do iPhone",
+      "item": "https://vox.isolated.tech/pt-br/blog/handwritten-notes-to-obsidian-iphone/"
+    }
+  ],
+  "inLanguage": "pt-BR",
+  "name": "Notas manuscritas no Obsidian a partir do iPhone | Vox.md",
+  "description": "Fotografe notas em papel no iPhone, execute o reconhecimento de texto no dispositivo, corrija o texto e salve-o no Obsidian como Markdown. Inclui Escanear documento para guardar a página."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/handwritten-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/handwritten-notes-to-obsidian-iphone/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Pule para o guia</a>
+<nav aria-label="Navegação principal">
+  <div class="nav-inner">
+    <a href="/pt-br/" class="logo" aria-label="início Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/pt-br/#how">Como funciona</a></li>
+      <li><a href="/pt-br/docs/">Documentação</a></li>
+      <li><a href="/pt-br/blog/">Guias</a></li>
+      <li><a href="/pt-br/compare/">Compare</a></li>
+      <li><a href="/pt-br/privacy.html">Privacidade</a></li>
+      <li><a href="/pt-br/terms.html">Termos</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_pt_br_544046a52c27">Baixe Vox.md</a>
+  <details class="language-switcher"><summary>Idioma</summary><ul><li><a href="/blog/handwritten-notes-to-obsidian-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/handwritten-notes-to-obsidian-iphone/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/handwritten-notes-to-obsidian-iphone/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/handwritten-notes-to-obsidian-iphone/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/handwritten-notes-to-obsidian-iphone/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/handwritten-notes-to-obsidian-iphone/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/handwritten-notes-to-obsidian-iphone/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/handwritten-notes-to-obsidian-iphone/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/handwritten-notes-to-obsidian-iphone/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/handwritten-notes-to-obsidian-iphone/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/handwritten-notes-to-obsidian-iphone/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/handwritten-notes-to-obsidian-iphone/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/handwritten-notes-to-obsidian-iphone/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/handwritten-notes-to-obsidian-iphone/" lang="pt-BR" hreflang="pt-BR" aria-current="page">Português (Brasil)</a></li><li><a href="/ru/blog/handwritten-notes-to-obsidian-iphone/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/handwritten-notes-to-obsidian-iphone/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/handwritten-notes-to-obsidian-iphone/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/handwritten-notes-to-obsidian-iphone/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/handwritten-notes-to-obsidian-iphone/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/handwritten-notes-to-obsidian-iphone/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/handwritten-notes-to-obsidian-iphone/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/handwritten-notes-to-obsidian-iphone/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/handwritten-notes-to-obsidian-iphone/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">iPhone · Extrair texto · Escanear documento</div>
+        <h1 class="hero-title">Notas manuscritas no Obsidian a partir do iPhone</h1>
+        <p class="hero-subtitle">Transforme páginas de caderno em Markdown pesquisável e linkável no seu vault, com o reconhecimento feito no seu iPhone.</p>
+      </div>
+      <aside class="meta-card" aria-label="Sobre este guia">
+        <dl>
+          <div><dt>Por</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Atualizado</dt><dd><time datetime="2026-11-20">20 de novembro de 2026</time></dd></div>
+          <div><dt>Requer</dt><dd>iOS 17.6+ · cofre gravável</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Notas manuscritas no Obsidian a partir do iPhone">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Resposta curta</div>
+        <p>Para colocar notas de papel no Obsidian como texto no iPhone, fotografe as páginas com o recurso Extrair texto do Vox.md, revise o reconhecimento de texto no dispositivo no rascunho do Capture e envie para um Route que grave no seu vault. Use Escanear documento quando também quiser a imagem da página ou um PDF.</p>
+      </div>
+      <p><strong>Você quer desenhar no Obsidian ou digitalizar papel?</strong> Se você quer escrever com uma caneta stylus dentro do Obsidian, como uma Apple Pencil no iPad, plugins da comunidade como <a href="https://obsidian.md/plugins?id=ink" target="_blank" rel="noopener">Ink (plugin)</a> e <a href="https://obsidian.md/plugins?id=obsidian-excalidraw-plugin" target="_blank" rel="noopener">Excalidraw (plugin)</a> foram feitos para isso: eles guardam escrita à mão ou desenhos como arquivos de tinta dentro do vault. Veja na página de cada plugin o que ele suporta. Este guia trata do outro caso: você escreve em papel e quer as palavras em Markdown, que dá para pesquisar e linkar.</p>
+      <nav class="toc" aria-label="Neste guia"><div class="toc-title">Neste guia</div><ol>
+        <li><a href="#two-meanings">Escrever no Obsidian ou digitalizar papel</a></li>
+        <li><a href="#before-you-start">Antes de começar</a></li>
+        <li><a href="#photograph-pages">Fotografe as páginas</a></li>
+        <li><a href="#review-ocr">Revise o texto reconhecido</a></li>
+        <li><a href="#keep-the-original">Mantenha a página original</a></li>
+        <li><a href="#route-it">Direcione para a nota certa</a></li>
+        <li><a href="#photos-you-already-have">Fotos que você já tem</a></li>
+        <li><a href="#privacy">Privacidade</a></li>
+        <li><a href="#troubleshooting">Solução de problemas</a></li>
+      </ol></nav>
+
+      <h2 id="two-meanings">1. Escrever no Obsidian ou digitalizar papel</h2>
+      <p>Quatro abordagens cobrem a maioria das necessidades. Elas produzem coisas diferentes no seu vault.</p>
+      <div class="docs-table-wrap"><table>
+        <thead><tr><th>Abordagem</th><th>O que você recebe</th><th>Bom para</th></tr></thead>
+        <tbody>
+          <tr><td>Plugins de caneta stylus (Ink, Excalidraw)</td><td>Um arquivo de tinta ou desenho</td><td>Escrever ou desenhar à mão dentro do Obsidian</td></tr>
+          <tr><td>Copiar e colar com Texto ao Vivo da Apple</td><td>Texto simples que você mesmo cola</td><td>Trechos avulsos a partir de uma foto</td></tr>
+          <tr><td>Extração de texto de diário do Vox.md</td><td>Texto Markdown editável, sem imagem da página</td><td>Notas em papel que você quer pesquisar e linkar</td></tr>
+          <tr><td>Vox.md Escanear documento</td><td>Imagens das páginas, um PDF e texto com o melhor esforço</td><td>Páginas que você também quer manter como original</td></tr>
+        </tbody>
+      </table></div>
+      <p>A Apple descreve o método de copiar e colar em <a href="https://support.apple.com/guide/iphone/use-live-text-iphcf0b71b0e/ios" target="_blank" rel="noopener">Use Texto ao Vivo no iPhone</a>. O app Notas da própria Apple também pode <a href="https://support.apple.com/guide/iphone/scan-text-and-documents-iph653f28965/ios" target="_blank" rel="noopener">digitalizar texto e documentos</a>, mas o resultado fica em Notas até você movê-lo. O Vox.md envia o texto direto para um arquivo no seu vault.</p>
+
+      <h2 id="before-you-start">2. Antes de começar</h2>
+      <ul>
+        <li><strong>Uma pasta do vault.</strong> Em Ajustes, conecte um Route ao seu vault ou a outra pasta do Arquivos. Não é preciso plugin do Obsidian nem conta.</li>
+        <li><strong>Uma Route para notas manuscritas.</strong> Por exemplo, um caminho New Note como <code>Inbox/Handwritten</code>, ou uma Rolling Notes que insere sob um <code>## Notebook</code> cabeçalho na sua nota diária. Veja <a href="/pt-br/blog/append-to-obsidian-daily-note-iphone/">guia notas diárias</a> para a posição do cabeçalho.</li>
+        <li><strong>Permissão da câmera</strong> para o Vox.md, que o iOS pede na primeira vez que você tira uma foto de página.</li>
+      </ul>
+
+      <h2 id="photograph-pages">3. Fotografe as páginas</h2>
+      <ol>
+        <li>Abra o compositor do Capture e escolha a Route que você configurou.</li>
+        <li>Na Barra de captura, escolha <strong>Extrair texto</strong>, depois <strong>Capturar páginas do diário</strong>.</li>
+        <li>Pressione o obturador para cada página. A câmera só dispara quando você pressiona. Você pode capturar até 10 páginas de uma vez.</li>
+        <li>Aguarde o banner de extração de texto no dispositivo terminar.</li>
+      </ol>
+      <p>Dicas de foto: use luz uniforme, deixe a página plana, mantenha a escrita preenchendo o quadro e tire uma página por foto.</p>
+      <p>Extrair texto não está disponível enquanto uma captura de voz ou transcrição está em andamento. Termine isso primeiro.</p>
+
+      <h2 id="review-ocr">4. Revise o texto reconhecido</h2>
+      <p>O texto reconhecido é adicionado ao rascunho do Capture como Markdown editável, para que você o corrija antes de enviar. Confira principalmente nomes, datas, números e palavras riscadas.</p>
+      <p>O Vox.md usa o reconhecimento de texto Vision da Apple no nível preciso, com correção de idioma e detecção automática de idioma (veja <a href="https://developer.apple.com/documentation/vision/recognizing-text-in-images" target="_blank" rel="noopener">Reconhecer texto em imagens</a>). O reconhecimento de escrita à mão varia conforme a legibilidade e o idioma, então espere ter que editar.</p>
+      <p>A extração de texto de diário adiciona apenas texto. Ela não anexa as imagens das páginas.</p>
+
+      <h2 id="keep-the-original">5. Mantenha a página original</h2>
+      <p>Escolha <strong>Escanear documento</strong> quando a própria página importa: assinaturas, diagramas, esboços e páginas jurídicas ou financeiras. Ele usa o scanner de documentos do sistema, mantém as imagens das páginas, cria um PDF e adiciona texto reconhecido no dispositivo, com o melhor esforço possível. Revise esse texto antes de enviar, pois ele pode conter erros.</p>
+      <p>As imagens e o PDF são gravados como anexos ao lado da sua nota. Para os caminhos dos anexos e o que o Obsidian consegue abrir, leia <a href="/pt-br/blog/save-links-photos-obsidian-iphone/">salvar links, fotos e digitalizações no Obsidian</a> e a ajuda do Obsidian sobre <a href="https://obsidian.md/help/file-formats" target="_blank" rel="noopener">formatos de arquivo aceitos</a>.</p>
+
+      <h2 id="route-it">6. Direcione para a nota certa</h2>
+      <p>Uma Route decide para onde o texto vai: uma nova nota, uma nota diária ou semanal contínua, ou uma nota existente, no topo, no fim ou sob um cabeçalho. Prefixos e modelos podem adicionar <code>{date}</code> e carimbos de data e hora. Três receitas a seguir; o Markdown mostrado é uma ilustração, e a saída exata depende da sua Route.</p>
+      <h3>Uma nota por sessão de caderno</h3>
+      <p>Use uma Route New Note com um caminho como <code>Inbox/Handwritten/{date}-{hour}{minute}.md</code> e adicione <code>source: paper</code> como metadados estáticos. Uma captura poderia produzir:</p>
+      <pre class="guide-code"><code>---
+source: paper
+---
+Project kickoff, notebook p. 14
+- Ask Dana about the budget
+- Send draft by Friday</code></pre>
+      <h3>Acrescentar sob um cabeçalho na nota diária</h3>
+      <p>Use uma Route Rolling Notes com o período diário, escolha um cabeçalho, digite <code>Handwritten</code> no nível dois, e insere no fim da seção. Defina o comportamento de título ausente como Criar cabeçalho se quiser que o Vox.md o adicione. A nota então ganha:</p>
+      <pre class="guide-code"><code>## Handwritten
+- **09:42** Call the dentist
+- Idea: weekly review on Sunday</code></pre>
+      <h3>Notas do bloco de reunião na nota da reunião</h3>
+      <p>Fotografe o bloco e envie para uma Route Existing Note, ou um caminho New Note como <code>Meetings/{date}-{hour}{minute}.md</code>. Para dar a essas notas cabeçalhos de pauta e decisões, <a href="/pt-br/blog/obsidian-meeting-notes-template/">gere um modelo de notas de reunião</a>. Para mais estruturas, veja <a href="/pt-br/blog/obsidian-capture-templates/">Modelos de captura para Obsidian</a>.</p>
+      <p>Processamento opcional: a opção do Route <strong>Usar Apple Intelligence</strong> fica desativada por padrão, e nada é executado até você ativá-la. Depois de ativada, o modo de processamento (Texto aprimorado, Lista de tarefas ou Notas da reunião) pode ser aplicado ao texto reconhecido, pois o texto extraído de fotos conta como texto. <strong>Aplicar a</strong> escolhe entre Voz e Texto (o padrão), Somente Voz e Somente Texto. O processamento do Apple Intelligence exige hardware compatível com iOS 26. Sem ele, Lista de tarefas recorre à formatação integrada, enquanto Notas da reunião deixa o texto reconhecido inalterado. Veja <a href="/pt-br/docs/#presets">Rotas e predefinições</a>.</p>
+
+      <h2 id="photos-you-already-have">7. Fotos que você já tem</h2>
+      <p>Se você já fotografou um caderno, escolha <strong>Extrair texto</strong> depois <strong>Escolher fotos do diário</strong> e selecione as imagens da sua biblioteca. O mesmo reconhecimento é aplicado a elas. Há dois limites: até 10 páginas por captura e nenhuma importação em lote de uma biblioteca inteira, então processe um acúmulo em grupos de 10. Fotos retas e bem iluminadas funcionam melhor. Veja <a href="/pt-br/docs/#quick-capture">referência de captura</a> para os limites de entrada, e <a href="/pt-br/blog/obsidian-quick-capture-iphone/">escolher um método de captura</a> se você estiver comparando opções.</p>
+
+      <h2 id="privacy">8. Privacidade</h2>
+      <p>O reconhecimento de texto roda no seu iPhone, e o conteúdo das páginas não é enviado aos servidores do Vox.md. Para onde o Markdown vai depois depende do provedor de pasta que você escolheu, como iCloud Drive ou outro provedor do app Arquivos, que cuida da sincronização. Os detalhes estão em <a href="/pt-br/privacy.html">política de privacidade</a>.</p>
+
+      <h2 id="troubleshooting">9. Solução de problemas</h2>
+      <ul>
+        <li><strong>“Nenhum texto foi encontrado nessas imagens de diário.”</strong> Tente fotos mais claras e mais retas, com a escrita preenchendo o quadro.</li>
+        <li><strong>Palavras erradas ou ilegíveis.</strong> A detecção de idioma é automática e a escrita à mão varia. Refotografe a página com mais luz ou corrija o texto no rascunho.</li>
+        <li><strong>Extrair texto está esmaecido.</strong> Uma captura de voz ou transcrição está em andamento. Termine-a primeiro.</li>
+        <li><strong>O cabeçalho está faltando na nota.</strong> Defina o comportamento do Route para título ausente como Criar cabeçalho ou adicione o título à nota você mesmo.</li>
+      </ul>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Transforme a página de caderno de hoje à noite em Markdown</h2>
+        <p>Não é preciso plugin nem conta. O Capture pode ser testado gratuitamente com 10 entregas bem-sucedidas; o uso ilimitado é uma compra única (veja <a href="/pt-br/docs/#pricing-limits">uso gratuito e desbloqueio vitalício</a>).</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_pt_br_544046a52c27">Baixe Vox.md grátis</a></p>
+      </section>
+      <nav class="toc" aria-label="Guias relacionados"><div class="toc-title">Continue a configuração</div><ul>
+        <li><a href="/pt-br/blog/save-links-photos-obsidian-iphone/">Salve links, fotos e digitalizações</a></li>
+        <li><a href="/pt-br/blog/append-to-obsidian-daily-note-iphone/">Acrescentar a uma nota diária</a></li>
+        <li><a href="/pt-br/blog/obsidian-capture-templates/">Modelos caixa, diário e tarefas</a></li>
+        <li><a href="/pt-br/docs/#quick-capture">Controles de captura e entradas aceitas</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/pt-br/">Início</a></li>
+        <li><a href="/pt-br/docs/">Documentação</a></li>
+        <li><a href="/pt-br/blog/">Guias</a></li>
+        <li><a href="/pt-br/compare/">Compare</a></li>
+        <li><a href="/pt-br/privacy.html">Privacidade</a></li>
+        <li><a href="/pt-br/terms.html">Termos</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Suporte</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_pt_br_544046a52c27">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Captura rápida para notas locais · Sem upload de conteúdo.</div>
+    </div>
+  <details class="language-switcher"><summary>Idioma</summary><ul><li><a href="/blog/handwritten-notes-to-obsidian-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/handwritten-notes-to-obsidian-iphone/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/handwritten-notes-to-obsidian-iphone/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/handwritten-notes-to-obsidian-iphone/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/handwritten-notes-to-obsidian-iphone/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/handwritten-notes-to-obsidian-iphone/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/handwritten-notes-to-obsidian-iphone/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/handwritten-notes-to-obsidian-iphone/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/handwritten-notes-to-obsidian-iphone/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/handwritten-notes-to-obsidian-iphone/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/handwritten-notes-to-obsidian-iphone/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/handwritten-notes-to-obsidian-iphone/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/handwritten-notes-to-obsidian-iphone/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/handwritten-notes-to-obsidian-iphone/" lang="pt-BR" hreflang="pt-BR" aria-current="page">Português (Brasil)</a></li><li><a href="/ru/blog/handwritten-notes-to-obsidian-iphone/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/handwritten-notes-to-obsidian-iphone/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/handwritten-notes-to-obsidian-iphone/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/handwritten-notes-to-obsidian-iphone/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/handwritten-notes-to-obsidian-iphone/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/handwritten-notes-to-obsidian-iphone/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/handwritten-notes-to-obsidian-iphone/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/handwritten-notes-to-obsidian-iphone/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/handwritten-notes-to-obsidian-iphone/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

@@ -247,7 +247,7 @@
           <div><strong>写真とカメラ</strong><p>写真やスクリーンショットを選ぶか、新しく撮影します。画像は取り込み準備され、配信先のノートに埋め込まれます。</p></div>
           <div><strong>ファイル</strong><p>Files から複数の項目を選択します。画像は埋め込みになり、音声は音声データのまま、その他のファイルは Obsidian 形式のリンクになります。</p></div>
           <div><strong>書類のスキャン</strong><p>VisionKit でページをスキャンします。Vox.md はページ画像を保持し、PDF を作成して、デバイス上で可能な範囲の OCR を行います。</p></div>
-          <div><strong>手帳の OCR</strong><p>手動シャッターで手帳を最大10ページ撮影するか、手帳の写真を選択します。高精度の Vision OCR は言語を自動検出します。</p></div>
+          <div><strong>手帳の OCR</strong><p>手動シャッターで手帳を最大10ページ撮影するか、手帳の写真を選択します。高精度の Vision OCR は言語を自動検出します。 <a href="/ja/blog/handwritten-notes-to-obsidian-iphone/">手書きノートを Obsidian へ</a> で手順を説明しています。</p></div>
           <div><strong>スケッチ一覧</strong><p>白い PencilKit キャンバスに黒いペンで描きます。Vox.md は、編集可能な描画データと PNG プレビューを保存します。</p></div>
           <div><strong>現在の位置アクション</strong><p>位置を1回取得し、検証済みの Google Maps 用 Markdown リンクをドラフトに挿入します。この独立したキャプチャバーアクションは、ルートごとの2つの位置設定をどちらも変更しません。</p></div>
           <div><strong>音声と読み込んだ音声</strong><p>入力画面で録音するか音声・動画を読み込み、ローカルで文字起こしして、結果をドラフトに追加するか、すぐに送信します。</p></div>
@@ -262,8 +262,8 @@
             <tbody>
               <tr><td>メディア追加</td><td>スケッチ、カメラ、写真、スクリーンショット、ウェブリンクの選択肢を開きます。</td></tr>
               <tr><td>ファイル追加</td><td>Files から複数のファイルを選択し、ドラフトとともに取り込み準備します。</td></tr>
-              <tr><td>スキャンドキュメント</td><td>複数ページのスキャン、PDF、ページ画像、可能な範囲の OCR を取得します。</td></tr>
-              <tr><td>テキスト抽出</td><td>OCR を中心にしたキャプチャ用に、手帳ページのキャプチャと手帳写真の選択を提供します。</td></tr>
+              <tr><td>書類をスキャン</td><td>複数ページのスキャン、PDF、ページ画像、可能な範囲の OCR を取得します。</td></tr>
+              <tr><td>テキストを抽出</td><td>OCR を中心にしたキャプチャ用に、ジャーナルのページを撮影とジャーナルの写真を選択を提供します。</td></tr>
               <tr><td>九</td><td>エディタでの直前の操作を取り消します。</td></tr>
               <tr><td>形式 Markdown</td><td>太字、斜体、ハッシュタグ、見出し1から見出し6を適用します。</td></tr>
               <tr><td>Markdown リンク</td><td>挿入する内容は、 <code>[link text](url)</code> し、編集可能な部分を選択します。</td></tr>
@@ -382,7 +382,7 @@
         <h3 id="placement-templates">挿入位置、見出し、テンプレート</h3>
         <ul>
           <li><strong>底</strong> で末尾に追加します。 <strong>TOP</strong> で先頭に追加します。 <strong>ヘッド</strong> は、レベル1から6までの指定した見出しの下に挿入します。</li>
-          <li>見出しがない場合は、次を選択します。 <strong>エラー表示</strong> または <strong>創出ヘッド</strong>.</li>
+          <li>見出しがない場合は、次を選択します。 <strong>エラー表示</strong> または <strong>見出しを作成</strong>.</li>
           <li>保管庫内の Markdown テンプレートファイル、再利用可能な入り口 寺、または独自の接頭辞・接尾辞を使います。</li>
           <li>エントリーの書式で使えるものは、 <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>、および <code>{location}</code>.</li>
           <li>既定の添付ファイル用サブフォルダは、 <code>attachments</code>.</li>
@@ -715,7 +715,7 @@
           </details>
           <details>
             <summary>見出しを指定したルートが失敗する</summary>
-            <p>ルートの保存先を編集し、見出しのテキストとレベルを確認します。見出しがないときに停止せず作成したい場合は、「創出ヘッド」を選んでください。</p>
+            <p>ルートの保存先を編集し、見出しのテキストとレベルを確認します。見出しがないときに停止せず作成したい場合は、「見出しを作成」を選んでください。</p>
           </details>
           <details>
             <summary>Watch の録音が待機中</summary>
