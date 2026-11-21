@@ -375,6 +375,11 @@ final class PersistentRecorder {
     /// composer for the same five-second window as a regular Capture send.
     private(set) var lastSentAudioUndoSnapshot: SentCaptureUndoSnapshot?
 
+    /// Changes when a voice note recorded in the app reached its destination
+    /// while the app was frontmost: a success the user saw, which the capture
+    /// screen may follow with the App Store review prompt.
+    private(set) var lastInAppVoiceNoteDeliveryID: UUID?
+
     /// Transfers cache cleanup to the visible Capture UI. If no UI consumes
     /// the event, the recorder expires it independently.
     @MainActor
@@ -3830,10 +3835,6 @@ final class PersistentRecorder {
                 }
                 if !text.isEmpty {
                     self.usageTracker.addUsage(seconds: duration, deliveryID: transcriptID)
-                    ReviewPromptManager.shared.recordSuccessfulTranscription(
-                        totalTranscriptionCount: self.transcriptStore.transcripts.count,
-                        transcriptDates: self.transcriptStore.transcripts.map(\.date)
-                    )
                 }
 
                 if let selectedFlow = audioDeliveryFlow {
@@ -4192,6 +4193,25 @@ final class PersistentRecorder {
 
         guard !resolvedText.isEmpty || deliversAudioWithoutTranscript else {
             throw PersistentRecordingJobError.noSpeechDetected
+        }
+        // App Store review prompt: count only voice notes that reached their
+        // destination (and keyboard dictation returned to the keyboard). Only
+        // an in-app recording finished while the app is frontmost offers the
+        // capture screen a moment to ask; keyboard, widget, Watch, Shortcut and
+        // Live Activity deliveries count but never ask, now or on a later launch.
+        let deliveredVoiceNote = deliveryResult == .delivered
+        let returnedKeyboardText = completionMode == .keyboardTranscription && !resolvedText.isEmpty
+        if deliveredVoiceNote || returnedKeyboardText {
+            let isInAppRecording: Bool = {
+                guard deliveredVoiceNote, case .runVox = completionMode else { return false }
+                return requestId.hasPrefix("inapp-") && originCaptureSource == .voice
+            }()
+            await MainActor.run {
+                ReviewPromptManager.shared.recordDeliveredCapture()
+                if isInAppRecording, UIApplication.shared.applicationState == .active {
+                    self.lastInAppVoiceNoteDeliveryID = UUID()
+                }
+            }
         }
         if deliveryResult?.offersSentUndo == true,
            let immediateSentUndoCandidate,
