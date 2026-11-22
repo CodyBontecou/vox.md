@@ -262,8 +262,8 @@
             <tbody>
               <tr><td>メディア追加</td><td>スケッチ、カメラ、写真、スクリーンショット、ウェブリンクの選択肢を開きます。</td></tr>
               <tr><td>ファイル追加</td><td>Files から複数のファイルを選択し、ドラフトとともに取り込み準備します。</td></tr>
-              <tr><td>スキャンドキュメント</td><td>複数ページのスキャン、PDF、ページ画像、可能な範囲の OCR を取得します。</td></tr>
-              <tr><td>テキスト抽出</td><td>OCR を中心にしたキャプチャ用に、手帳ページのキャプチャと手帳写真の選択を提供します。</td></tr>
+              <tr><td>書類をスキャン</td><td>複数ページのスキャン、PDF、ページ画像、可能な範囲の OCR を取得します。</td></tr>
+              <tr><td>テキストを抽出</td><td>OCR を中心にしたキャプチャ用に、手帳ページのキャプチャと手帳写真の選択を提供します。</td></tr>
               <tr><td>九</td><td>エディタでの直前の操作を取り消します。</td></tr>
               <tr><td>形式 Markdown</td><td>太字、斜体、ハッシュタグ、見出し1から見出し6を適用します。</td></tr>
               <tr><td>Markdown リンク</td><td>挿入する内容は、 <code>[link text](url)</code> し、編集可能な部分を選択します。</td></tr>
@@ -382,7 +382,7 @@
         <h3 id="placement-templates">挿入位置、見出し、テンプレート</h3>
         <ul>
           <li><strong>底</strong> で末尾に追加します。 <strong>TOP</strong> で先頭に追加します。 <strong>ヘッド</strong> は、レベル1から6までの指定した見出しの下に挿入します。</li>
-          <li>見出しがない場合は、次を選択します。 <strong>エラー表示</strong> または <strong>創出ヘッド</strong>.</li>
+          <li>見出しがない場合は、次を選択します。 <strong>エラー表示</strong> または <strong>見出しを作成</strong>.</li>
           <li>保管庫内の Markdown テンプレートファイル、再利用可能な入り口 寺、または独自の接頭辞・接尾辞を使います。</li>
           <li>エントリーの書式で使えるものは、 <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>、および <code>{location}</code>.</li>
           <li>既定の添付ファイル用サブフォルダは、 <code>attachments</code>.</li>
@@ -425,6 +425,8 @@
             </tbody>
           </table>
         </div>
+
+        <p>どのモデルをダウンロードするか迷いますか? <a href="/ja/compare/whisper-vs-parakeet/">Whisper と Parakeet を比較</a> 両方をご自身の音声でテストしてください。</p>
 
         <h3 id="automatic-model">「自動」の仕組み</h3>
         <ul>

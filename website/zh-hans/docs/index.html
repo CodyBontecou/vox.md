@@ -262,8 +262,8 @@
             <tbody>
               <tr><td>添加媒体</td><td>打开草图、相机、照片、截图和网页链接选项。</td></tr>
               <tr><td>添加文件</td><td>从文件中选择多个文件，与草稿一同暂存。</td></tr>
-              <tr><td>扫描文件</td><td>采集多页扫描、PDF、页面图像，并尽力进行 OCR。</td></tr>
-              <tr><td>摘取文本</td><td>提供采集日志页面和选择日志照片，用于侧重 OCR 的采集。</td></tr>
+              <tr><td>扫描文稿</td><td>采集多页扫描、PDF、页面图像，并尽力进行 OCR。</td></tr>
+              <tr><td>提取文本</td><td>提供采集日志页面和选择日志照片，用于侧重 OCR 的采集。</td></tr>
               <tr><td>九 个</td><td>撤销上一次编辑器操作。</td></tr>
               <tr><td>格式 Markdown</td><td>应用粗体、斜体、井号标签，或标题 1 至标题 6。</td></tr>
               <tr><td>Markdown 链接</td><td>插入 <code>[link text](url)</code> 并选中可编辑部分。</td></tr>
@@ -382,7 +382,7 @@
         <h3 id="placement-templates">放置位置、标题和模板</h3>
         <ul>
           <li><strong>底部</strong> 追加； <strong>顶部</strong> 前置插入； <strong>头条</strong> 插入到所选的 1 至 6 级标题下。</li>
-          <li>如果缺少标题，请选择 <strong>显示错误</strong> 或 <strong>创建头条</strong>.</li>
+          <li>如果缺少标题，请选择 <strong>显示错误</strong> 或 <strong>创建标题</strong>.</li>
           <li>使用仓库中的实时 Markdown 模板文件、可复用条目模板，或自定义前后缀文本。</li>
           <li>条目格式支持 <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>，以及 <code>{location}</code>.</li>
           <li>默认附件子文件夹为 <code>attachments</code>.</li>
@@ -425,6 +425,8 @@
             </tbody>
           </table>
         </div>
+
+        <p>不确定该下载哪个模型？ <a href="/zh-hans/compare/whisper-vs-parakeet/">比较 Whisper 和 Parakeet</a> ，并用你自己的音频测试两者。</p>
 
         <h3 id="automatic-model">自动模式如何工作</h3>
         <ul>
