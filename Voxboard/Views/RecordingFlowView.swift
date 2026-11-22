@@ -148,6 +148,10 @@ final class CapturePresetController {
                         throw persistenceError
                     }
                     TranscriptionIPC.writeStatus(RecordingStatus(requestId: reqId, phase: .done))
+                    ReviewPromptManager.shared.recordSuccessfulTranscription(
+                        totalTranscriptionCount: self.transcriptStore.transcripts.count,
+                        transcriptDates: self.transcriptStore.transcripts.map(\.date)
+                    )
                     self.phase = .done
                     if bgTask != .invalid { UIApplication.shared.endBackgroundTask(bgTask) }
                     return true

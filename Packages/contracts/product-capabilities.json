@@ -8320,14 +8320,14 @@
       ],
       "evidence": [
         {
-          "path": "Voxboard App Shared/ReviewPromptManager.swift",
-          "symbol": "reviewPrompt.deliveredCaptureCount.v2"
+          "path": "Voxboard/ReviewPromptManager.swift",
+          "symbol": "reviewPrompt.pendingPrompt.v1"
         }
       ],
       "id": "cap.store.review-prompt",
       "legacyParity": "legacy-only",
       "milestone": "M0/M1",
-      "outcome": "Delivered-capture counter, delivery-day history, and last review request date and version",
+      "outcome": "Successful-use counters, usage-day history, last attempt, and pending review prompt state",
       "platforms": [
         "iphone",
         "ipad",
@@ -9236,6 +9236,6 @@
   "schemaVersion": 1,
   "source": {
     "path": "docs/architecture/android-wear-m0-capabilities.json",
-    "sha256": "d55e319d2f5c00304e817c55f161d87e6ddbfd66886bde2e56d590d4a71c037d"
+    "sha256": "fa1681cf76dc1040ceebe790dbdd19a25d1610541e80f90000cc89cda0eaa5a4"
   }
 }

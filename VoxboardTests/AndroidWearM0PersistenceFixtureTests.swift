@@ -353,11 +353,12 @@ final class AndroidWearM0PersistenceFixtureTests: XCTestCase {
         defer { defaults.removePersistentDomain(forName: suiteName) }
         let now = Date(timeIntervalSince1970: 1_700_000_000)
         let manager = ReviewPromptManager(defaults: defaults, calendar: Calendar(identifier: .gregorian), now: { now })
-        for _ in 0..<3 { manager.recordDeliveredCapture() }
-        XCTAssertEqual(defaults.integer(forKey: ReviewPromptManager.Keys.deliveredCaptureCount), 3)
-        XCTAssertEqual(defaults.stringArray(forKey: ReviewPromptManager.Keys.deliveryDayIdentifiers)?.count, 1)
-        XCTAssertNil(defaults.object(forKey: ReviewPromptManager.Keys.legacyPendingPrompt))
-        XCTAssertEqual(defaults.double(forKey: ReviewPromptManager.Keys.lastRequestedAt), 0)
+        manager.recordAppUsageDay()
+        manager.recordSuccessfulCapture(totalCaptureCount: 3)
+        XCTAssertEqual(defaults.integer(forKey: ReviewPromptManager.Keys.successfulCaptureCount), 3)
+        XCTAssertEqual(defaults.stringArray(forKey: ReviewPromptManager.Keys.usageDayIdentifiers)?.count, 1)
+        XCTAssertTrue(defaults.bool(forKey: ReviewPromptManager.Keys.pendingPrompt))
+        XCTAssertEqual(defaults.double(forKey: ReviewPromptManager.Keys.lastPromptAttemptAt), 0)
     }
 
     func testCommittedSettingsSnapshotUsesProductionToolbarPersistence() throws {

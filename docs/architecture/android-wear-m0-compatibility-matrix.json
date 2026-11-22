@@ -2134,7 +2134,7 @@
       "id": "review-prompt-defaults",
       "capabilityID": "cap.store.review-prompt",
       "production": [
-        "Voxboard App Shared/ReviewPromptManager.swift:ReviewPromptManager"
+        "Voxboard/ReviewPromptManager.swift:ReviewPromptManager"
       ],
       "dimensions": {
         "old": {
@@ -2159,7 +2159,7 @@
           "evidence": [
             "VoxboardTests/ReviewPromptManagerTests.swift"
           ],
-          "rationale": "Production ReviewPromptManager falls back for wrong-type counters/dates and malformed delivery-day storage."
+          "rationale": "Production ReviewPromptManager falls back for wrong-type counters/dates/booleans and normalizes malformed usage-day storage."
         },
         "futureVersion": {
           "status": "notApplicable",

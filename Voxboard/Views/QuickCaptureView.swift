@@ -2,7 +2,6 @@ import AVFoundation
 import Combine
 import Photos
 import PhotosUI
-import StoreKit
 import SwiftUI
 import UIKit
 import UniformTypeIdentifiers
@@ -94,7 +93,6 @@ struct QuickCaptureView: View {
     @Environment(WatchRecordingPipeline.self) private var watchRecordingPipeline
     @Environment(\.defersCaptureInputFocusForReleaseNotes) private var defersCaptureInputFocusForReleaseNotes
     @Environment(\.scenePhase) private var scenePhase
-    @Environment(\.requestReview) private var requestReview
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.calendar) private var calendar
     @Environment(\.locale) private var locale
@@ -175,8 +173,6 @@ struct QuickCaptureView: View {
     @State private var isFindingLocation = false
     @State private var locationRequestTask: Task<Void, Never>?
     @State private var showsSentToast = false
-    /// Waits out a success toast before the App Store review prompt may ask.
-    @State private var reviewPromptTask: Task<Void, Never>?
     @State private var sentUndoSnapshot: SentCaptureUndoSnapshot?
     @State private var sentToastPresentationID: UUID?
     @State private var showsPresetSendConfirmation = false
@@ -805,6 +801,9 @@ struct QuickCaptureView: View {
                         }
                     }
                     usageTracker.reload()
+                    ReviewPromptManager.shared.recordSuccessfulCapture(
+                        totalCaptureCount: usageTracker.successfulCapturesUsed
+                    )
                     Task { await presentSentToast(for: receipt) }
                 }
                 .onChange(of: selectedPhotos) { _, items in
@@ -859,10 +858,6 @@ struct QuickCaptureView: View {
                             id: observedSnapshot.id
                           ) else { return }
                     Task { await presentSentToast(replacingWith: snapshot) }
-                }
-                .onChange(of: persistentRecorder.lastInAppVoiceNoteDeliveryID) { _, deliveryID in
-                    guard deliveryID != nil else { return }
-                    offerReviewPromptAfterSuccess()
                 }
                 .onChange(of: persistentRecorder.lastError) { _, message in
                     guard let message else { return }
@@ -975,14 +970,12 @@ struct QuickCaptureView: View {
                     ),
                     titleVisibility: .visible
                 ) {
-                    Button("Retry") {
-                        sendOfferingReviewPrompt { await viewModel.retryUnavailableLocation() }
-                    }
+                    Button("Retry") { Task { await viewModel.retryUnavailableLocation() } }
                     Button("Send Without Location") {
-                        sendOfferingReviewPrompt { await viewModel.sendWithoutUnavailableLocation(alwaysForPreset: false) }
+                        Task { await viewModel.sendWithoutUnavailableLocation(alwaysForPreset: false) }
                     }
                     Button("Always Send Without Location for This Route") {
-                        sendOfferingReviewPrompt { await viewModel.sendWithoutUnavailableLocation(alwaysForPreset: true) }
+                        Task { await viewModel.sendWithoutUnavailableLocation(alwaysForPreset: true) }
                     }
                     Button("Cancel", role: .cancel) {
                         discardSentUndoSnapshot()
@@ -2485,13 +2478,9 @@ struct QuickCaptureView: View {
         CaptureViewSection {
             Button {
                 Task {
-                    let previouslyClosedNote = viewModel.lastClosedNote
                     await viewModel.startNewNote()
                     if viewModel.needsCaptureUnlock {
                         presentPaywall(context: .captureLimit)
-                    } else if let closed = viewModel.lastClosedNote, closed != previouslyClosedNote {
-                        // Finishing a note is the Live Notes success moment.
-                        offerReviewPromptAfterSuccess()
                     }
                 }
             } label: {
@@ -2994,8 +2983,6 @@ struct QuickCaptureView: View {
     private func handleScenePhaseChange(_ phase: ScenePhase) {
         // A draft launch waiting for the composer must not outlive the visit.
         if phase == .background { widgetRecordLaunches.cancel() }
-        // A success moment belongs to the visit; leaving the app ends it.
-        if phase != .active { cancelReviewPrompt() }
         if phase == .active {
             reloadFlows()
             // Returning from Settings may have changed folder access.
@@ -3023,7 +3010,6 @@ struct QuickCaptureView: View {
     }
 
     private func handleCaptureDisappear() {
-        cancelReviewPrompt()
         microphonePermissionTask?.cancel()
         widgetRecordLaunches.cancel()
         locationRequestTask?.cancel()
@@ -3327,73 +3313,7 @@ struct QuickCaptureView: View {
                viewModel.locationDecision == nil {
                 discardSentUndoSnapshot(matching: snapshot.id)
             }
-            // A classic Send the user saw delivered. A Live Notes first save
-            // keeps the note open for editing, so it is not a moment to ask.
-            if viewModel.lastSentReceipt?.requestID == snapshot.requestID,
-               viewModel.liveNote == nil {
-                offerReviewPromptAfterSuccess()
-            }
         }
-    }
-
-    /// Runs a user-initiated send and, if it delivered, may follow it with
-    /// the App Store review prompt.
-    private func sendOfferingReviewPrompt(_ send: @escaping @MainActor () async -> Void) {
-        Task {
-            let previousReceipt = viewModel.lastSentReceipt
-            await send()
-            if let receipt = viewModel.lastSentReceipt, receipt != previousReceipt,
-               viewModel.liveNote == nil {
-                offerReviewPromptAfterSuccess()
-            }
-        }
-    }
-
-    // MARK: - App Store review prompt
-
-    /// Follows an in-app success the user saw (a Send, a finished note, a
-    /// delivered voice note) with the system review prompt when the policy
-    /// allows. Waits for the success toast to go; skips the moment if
-    /// anything else is on screen. Never queued for a later launch.
-    private func offerReviewPromptAfterSuccess() {
-        reviewPromptTask?.cancel()
-        reviewPromptTask = Task { @MainActor in
-            await ReviewPromptManager.shared.offerAfterVisibleSuccess(
-                isShowingSuccessFeedback: {
-                    showsSentToast || fileExportToast != nil || viewModel.lastClosedNote != nil
-                },
-                hasActiveAccess: {
-                    usageTracker.reload()
-                    return usageTracker.hasUnlocked
-                },
-                isPresentationClear: { reviewPromptPresentationIsClear },
-                requestReview: { requestReview() }
-            )
-        }
-    }
-
-    private func cancelReviewPrompt() {
-        reviewPromptTask?.cancel()
-        reviewPromptTask = nil
-    }
-
-    /// No sheet, alert, paywall, release notes, first-note celebration,
-    /// recording or half-written next capture.
-    private var reviewPromptPresentationIsClear: Bool {
-        scenePhase == .active
-            && ReviewPromptPresentation.keyWindowIsUncovered
-            && !defersCaptureInputFocusForReleaseNotes
-            && firstNoteReceipt == nil
-            && firstNoteDocument == nil
-            && !showsFirstNoteFolderPicker
-            && !showsPaywall
-            && viewModel.locationDecision == nil
-            && viewModel.inboxLocationDecision == nil
-            && !viewModel.isSubmitting
-            && !viewModel.draft.hasCaptureContent
-            && !persistentRecorder.isSegmentActive
-            && !persistentRecorder.isAppRecordingSegmentActive
-            && !persistentRecorder.isTranscribing
     }
 
     /// Restores the just-sent Capture into the composer as an editable draft.

@@ -39,13 +39,6 @@ final class QuickCaptureViewModel {
         // A delivery may have taken the file the preview named; re-resolve.
         didSet { previewPathGeneration &+= 1 }
     }
-    /// The latest Capture the user sent from this composer that reached its
-    /// destination. Unlike `lastReceipt`, inbox deliveries (Share Sheet,
-    /// widget, Shortcut) never set it, so it marks a success the user saw.
-    private(set) var lastSentReceipt: CaptureReceipt?
-    /// Counts delivered captures toward the App Store review prompt. Counting
-    /// never asks; the capture screen decides when to ask.
-    @ObservationIgnored private let reviewPrompts: ReviewPromptManager?
     /// Bumped after each delivery so the route label re-reads the vault.
     @ObservationIgnored private var previewPathGeneration = 0
     @ObservationIgnored private var availablePreviewPathCache: (key: AvailablePreviewPathKey, path: String)?
@@ -113,11 +106,9 @@ final class QuickCaptureViewModel {
         requestProcessor: CapturePresetRequestProcessor = CapturePresetRequestProcessor(),
         locationProvider: (any CaptureLocationOutcomeProviding)? = nil,
         urlDeliveryCoordinator: URLDeliveryCoordinator? = nil,
-        hasPaidCaptureAccess: @escaping @MainActor () -> Bool = { !UsageTracker.staticIsAtLimit },
-        reviewPrompts: ReviewPromptManager? = nil
+        hasPaidCaptureAccess: @escaping @MainActor () -> Bool = { !UsageTracker.staticIsAtLimit }
     ) {
         self.hasPaidCaptureAccess = hasPaidCaptureAccess
-        self.reviewPrompts = reviewPrompts ?? defaults.map { ReviewPromptManager(defaults: $0) }
         self.captureRootURL = captureRootURL
         self.defaults = defaults
         self.voxProfiles = CapturePresetProfileStore.enabledProfiles(defaults: defaults)
@@ -1889,8 +1880,6 @@ final class QuickCaptureViewModel {
                 return
             }
             lastReceipt = receipt
-            lastSentReceipt = receipt
-            reviewPrompts?.recordDeliveredCapture()
             needsCaptureUnlock = false
             try? await draftStore.removePreparedRequest(draftID: submittedDraftID)
             let library = try await libraryStore.load()
@@ -2217,9 +2206,6 @@ final class QuickCaptureViewModel {
             pipeline: pipeline,
             requestProcessor: requestProcessor
         )
-        // Share Sheet, widget and Shortcut captures delivered on foreground
-        // count toward the review prompt but never ask for one.
-        for _ in result.receipts { reviewPrompts?.recordDeliveredCapture() }
         if !result.quotaBlockedRequestIDs.isEmpty {
             needsCaptureUnlock = true
         }
@@ -2785,8 +2771,6 @@ final class QuickCaptureViewModel {
             )
             try await inbox.complete(requestID: request.id)
             lastReceipt = receipt
-            // Counts toward the review prompt; an inbox delivery never asks.
-            reviewPrompts?.recordDeliveredCapture()
             needsCaptureUnlock = false
             await recordHistory(
                 request: request,

@@ -90,7 +90,6 @@ struct VoxboardApp: App {
         _quickCaptureViewModel = State(initialValue: captureViewModel)
 
         #if DEBUG
-        ReviewPromptManager.shared.applyDebugSeedIfRequested()
         if let destination = RootDestination.localizationScreenshotDestination {
             _rootDestination = State(initialValue: destination)
         }
@@ -244,6 +243,9 @@ struct VoxboardApp: App {
                     // processing) are added under their notes once possible.
                     await persistentRecorder.processPendingRouteSummaries()
                 }
+                ReviewPromptManager.shared.recordAppUsageDay()
+                ReviewPromptManager.shared.requestPendingPromptIfPossible()
+
                 // Re-check listening state — if the user enabled auto-listen
                 // but the engine stopped (e.g. audio interruption), restart it.
                 if AppConstants.sharedDefaults?.bool(forKey: AppConstants.autoListenEnabledKey) == true,
@@ -294,6 +296,9 @@ struct VoxboardApp: App {
                 usageTracker.reload()
                 await quickCaptureViewModel.processPendingInbox()
             }
+            ReviewPromptManager.shared.recordAppUsageDay()
+            ReviewPromptManager.shared.requestPendingPromptIfPossible()
+
             // Auto-start listening if user previously enabled it
             if AppConstants.sharedDefaults?.bool(forKey: AppConstants.autoListenEnabledKey) == true {
                 persistentRecorder.startListening()

@@ -1,5 +1,4 @@
 import AppKit
-import StoreKit
 import SwiftUI
 import UniformTypeIdentifiers
 import VoxboardShared
@@ -53,7 +52,6 @@ struct MacCaptureWorkspaceView: View {
     @Environment(\.calendar) private var calendar
     @Environment(\.locale) private var locale
     @Environment(\.timeZone) private var timeZone
-    @Environment(\.requestReview) private var requestReview
 
     @State private var flows = CapturePresetStore.loadFlows()
     @State private var selectedInspectorTool: MacCaptureInspectorTool? = .route
@@ -74,8 +72,6 @@ struct MacCaptureWorkspaceView: View {
     }
     @State private var isDropTargeted = false
     @State private var showsSentToast = false
-    /// Waits out the Sent toast before the App Store review prompt may ask.
-    @State private var reviewPromptTask: Task<Void, Never>?
     @State private var lastRevealedReceiptURL: URL?
     @State private var showsAllShortcuts = false
     @State private var isFindingLocation = false
@@ -257,7 +253,6 @@ struct MacCaptureWorkspaceView: View {
             requestNewCapture()
         }
         .onDisappear {
-            cancelReviewPrompt()
             windowCoordinator.captureWorkspaceNotReady(token: windowToken)
             Task { await viewModel.saveDraftNow() }
         }
@@ -772,13 +767,13 @@ struct MacCaptureWorkspaceView: View {
     @ViewBuilder
     private var locationDecisionActions: some View {
         Button("Retry") {
-            sendOfferingReviewPrompt { await viewModel.retryUnavailableLocation() }
+            Task { await viewModel.retryUnavailableLocation() }
         }
         Button("Send Without Location") {
-            sendOfferingReviewPrompt { await viewModel.sendWithoutUnavailableLocation(alwaysForPreset: false) }
+            Task { await viewModel.sendWithoutUnavailableLocation(alwaysForPreset: false) }
         }
         Button("Always Send Without for Route") {
-            sendOfferingReviewPrompt { await viewModel.sendWithoutUnavailableLocation(alwaysForPreset: true) }
+            Task { await viewModel.sendWithoutUnavailableLocation(alwaysForPreset: true) }
         }
         Button("Cancel") {
             Task { await viewModel.cancelUnavailableLocation() }
@@ -1378,60 +1373,7 @@ struct MacCaptureWorkspaceView: View {
             showsPaywall = true
             return
         }
-        sendOfferingReviewPrompt { await viewModel.submit() }
-    }
-
-    // MARK: - App Store review prompt
-
-    /// Runs a Send from this workspace and, if it delivered, may follow it
-    /// with the App Store review prompt. The floating Quick Capture panel
-    /// closes on send and never asks.
-    private func sendOfferingReviewPrompt(_ send: @escaping @MainActor () async -> Void) {
-        Task {
-            let previousReceipt = viewModel.lastSentReceipt
-            await send()
-            guard let receipt = viewModel.lastSentReceipt, receipt != previousReceipt else { return }
-            offerReviewPromptAfterSuccess()
-        }
-    }
-
-    private func offerReviewPromptAfterSuccess() {
-        reviewPromptTask?.cancel()
-        reviewPromptTask = Task { @MainActor in
-            await ReviewPromptManager.shared.offerAfterVisibleSuccess(
-                isShowingSuccessFeedback: { showsSentToast },
-                hasActiveAccess: {
-                    usageTracker.reload()
-                    return usageTracker.hasUnlocked
-                },
-                isPresentationClear: { reviewPromptPresentationIsClear },
-                requestReview: { requestReview() }
-            )
-        }
-    }
-
-    private func cancelReviewPrompt() {
-        reviewPromptTask?.cancel()
-        reviewPromptTask = nil
-    }
-
-    /// The workspace window is frontmost with no sheet, popover, paywall,
-    /// first-note celebration, recording or half-written next capture.
-    private var reviewPromptPresentationIsClear: Bool {
-        ReviewPromptPresentation.keyWindowIsUncovered
-            && !MacQuickCapturePanelController.shared.isVisible
-            && !showsPaywall
-            && !showsInboxDiscardConfirmation
-            && !showsClearDraftConfirmation
-            && !showsAllShortcuts
-            && firstNoteReceipt == nil
-            && viewModel.locationDecision == nil
-            && viewModel.inboxLocationDecision == nil
-            && !viewModel.isSubmitting
-            && !viewModel.draft.hasCaptureContent
-            && !recorder.isRecording
-            && !recorder.isTranscribing
-            && !recorder.isExporting
+        Task { await viewModel.submit() }
     }
 
     private func startRecording() {

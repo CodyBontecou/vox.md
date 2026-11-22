@@ -8070,13 +8070,13 @@
       ],
       "evidence": [
         {
-          "path": "Voxboard App Shared/ReviewPromptManager.swift",
-          "symbol": "reviewPrompt.deliveredCaptureCount.v2"
+          "path": "Voxboard/ReviewPromptManager.swift",
+          "symbol": "reviewPrompt.pendingPrompt.v1"
         }
       ],
       "id": "cap.store.review-prompt",
       "milestone": "M0/M1",
-      "outcome": "Delivered-capture counter, delivery-day history, and last review request date and version",
+      "outcome": "Successful-use counters, usage-day history, last attempt, and pending review prompt state",
       "owner": "native",
       "parity": "legacy-only",
       "platforms": [
@@ -9234,16 +9234,7 @@
     },
     {
       "keys": {
-        "reviewPrompt.deliveredCaptureCount.v2": [
-          "cap.store.review-prompt"
-        ],
-        "reviewPrompt.deliveryDayIdentifiers.v2": [
-          "cap.store.review-prompt"
-        ],
         "reviewPrompt.lastPromptAttemptAt.v1": [
-          "cap.store.review-prompt"
-        ],
-        "reviewPrompt.lastRequestedVersion.v2": [
           "cap.store.review-prompt"
         ],
         "reviewPrompt.pendingPrompt.v1": [
@@ -9259,7 +9250,7 @@
           "cap.store.review-prompt"
         ]
       },
-      "path": "Voxboard App Shared/ReviewPromptManager.swift"
+      "path": "Voxboard/ReviewPromptManager.swift"
     },
     {
       "keys": {
