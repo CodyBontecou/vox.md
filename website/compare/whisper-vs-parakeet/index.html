@@ -209,7 +209,6 @@
         <li><strong>Parakeet v2 model card (NVIDIA):</strong> a mean word error rate of 6.05% on the Hugging Face Open ASR Leaderboard datasets, using greedy decoding without an external language model. The card says RTFx is about 3,380 at batch size 128 and “may vary depending on dataset audio duration and batch size.” It does not name the GPU for that figure.</li>
         <li><strong>Parakeet v3 model card (NVIDIA):</strong> a 6.34% average WER on the same leaderboard datasets, and averages of 11.97% (Fleurs), 7.83% (MLS) and 11.98% (CoVoST) for the multilingual sets.</li>
         <li><strong>Whisper repository (OpenAI):</strong> the <code>turbo</code> model is described as an optimized <code>large-v3</code> with faster transcription and minimal accuracy loss, at about 8x the speed of <code>large</code>, measured “transcribing English speech on a A100.”</li>
-        <li><strong>FluidAudio README:</strong> reports a real-time factor of about 190x for Parakeet v3 batch transcription on an M4 Pro.</li>
       </ul>
       <p>The <a href="https://huggingface.co/spaces/hf-audio/open_asr_leaderboard">Open ASR Leaderboard</a> lists more models and datasets; check it for current numbers, because it changes. Leaderboard datasets are not your recording. Results vary with the device, accent, background noise, microphone, audio length and the model size you pick. Speed multipliers measured on data-center GPUs say little about a phone. Treat any unsourced “X times faster” claim with caution.</p>
 

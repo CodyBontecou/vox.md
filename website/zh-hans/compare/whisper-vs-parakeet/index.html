@@ -209,7 +209,6 @@
         <li><strong>Parakeet v2 模型卡（NVIDIA）：</strong> 在 Hugging Face Open ASR Leaderboard 数据集上的平均词错误率为 6.05%，使用贪婪解码，未使用外部语言模型。模型卡称批大小为 128 时 RTFx 约为 3,380，并指出“可能随数据集音频时长和批大小而变化”。它没有说明该数值使用的 GPU。</li>
         <li><strong>Parakeet v3 模型卡（NVIDIA）：</strong> 在相同排行榜数据集上的平均 WER 为 6.34%，多语言数据集的平均值分别为 11.97%（Fleurs）、7.83%（MLS）和 11.98%（CoVoST）。</li>
         <li><strong>Whisper 代码库（OpenAI）：</strong> 该 <code>turbo</code> 模型被描述为经过优化的 <code>large-v3</code> ，转录更快且精度损失极小，速度约为 <code>large</code>，测量条件为“在 A100 上转录英语语音”。</li>
-        <li><strong>FluidAudio README：</strong> 报告称，在 M4 Pro 上批量转录 Parakeet v3 的实时因子约为 190 倍。</li>
       </ul>
       <p>该 <a href="https://huggingface.co/spaces/hf-audio/open_asr_leaderboard">Open ASR 排行榜</a> 列出了更多模型和数据集；数字会变化，请查看最新数值。排行榜数据集不是你的录音。结果会因设备、口音、背景噪音、麦克风、音频长度和所选模型大小而异。在数据中心 GPU 上测得的速度倍数，对手机几乎没有参考价值。对任何没有来源的“快 X 倍”说法都要谨慎对待。</p>
 

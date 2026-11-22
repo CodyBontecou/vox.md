@@ -209,7 +209,6 @@
         <li><strong>Parakeet v2 モデルカード (NVIDIA):</strong> Hugging Face Open ASR Leaderboard のデータセットで平均単語誤り率 6.05%(貪欲デコード、外部言語モデルなし)。モデルカードによると、RTFx はバッチサイズ 128 で約 3,380 で、「データセットの音声の長さやバッチサイズによって変わる場合があります」とのことです。この数値の GPU は明記されていません。</li>
         <li><strong>Parakeet v3 モデルカード (NVIDIA):</strong> 同じリーダーボードのデータセットで平均 WER 6.34%、多言語セットでは平均 11.97% (Fleurs)、7.83% (MLS)、11.98% (CoVoST)。</li>
         <li><strong>Whisper リポジトリ (OpenAI):</strong> 次の <code>turbo</code> モデルは、最適化された次のように説明されています: <code>large-v3</code> 文字起こしが高速で精度低下は最小限、速度は約 8 倍です。比較対象: <code>large</code>、「A100 での英語音声の文字起こし」で測定。</li>
-        <li><strong>FluidAudio の README:</strong> は、M4 Pro での Parakeet v3 のバッチ文字起こしで、リアルタイム係数が約 190 倍と報告しています。</li>
       </ul>
       <p>この <a href="https://huggingface.co/spaces/hf-audio/open_asr_leaderboard">Open ASR リーダーボード</a> はさらに多くのモデルとデータセットを掲載しています。内容は変わるため、最新の数値はそちらで確認してください。リーダーボードのデータセットはあなたの録音ではありません。結果は、デバイス、アクセント、背景ノイズ、マイク、音声の長さ、選ぶモデルサイズによって変わります。データセンターの GPU で測った速度倍率は、スマートフォンについてはほとんど参考になりません。出典のない「X 倍高速」という主張は慎重に扱ってください。</p>
 
