@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ta" dir="ltr" data-search-section="பிரிவு" data-search-guide="வழிகாட்டி" data-search-empty="“{query}” என்பதற்குப் பொருத்தங்கள் இல்லை">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mac-இல் ஒலிக் கோப்பை உள்ளூரிலேயே Markdown-ஆக உரைமாற்றம் செய்தல் | Vox.md</title>
+  <meta name="description" content="Mac-இல் குரல் குறிப்புகளும் குறிப்புகளும் இலவசமாக என்ன தருகின்றன என்று பாருங்கள்; பிறகு ஏற்கெனவே உள்ள ஒலி அல்லது வீடியோ கோப்பை Mac-க்கான Vox.md-இல் இறக்குமதி செய்து, உங்கள் Mac-இல் Whisper அல்லது Parakeet மூலம் உரைமாற்றம் செய்து, உங்களுக்குச் சொந்தமான Markdown குறிப்பாகச் சேமியுங்கள்.">
+  <link rel="canonical" href="https://vox.isolated.tech/ta/blog/transcribe-audio-file-mac/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="மொழி மாதிரிகளுக்கான Vox.md ஆவணங்கள்">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Mac-இல் ஒலிக் கோப்பை உள்ளூரிலேயே Markdown-ஆக உரைமாற்றம் செய்தல்">
+  <meta property="og:description" content="Mac-இல் குரல் குறிப்புகளும் குறிப்புகளும் இலவசமாக என்ன தருகின்றன என்று பாருங்கள்; பிறகு ஏற்கெனவே உள்ள ஒலி அல்லது வீடியோ கோப்பை Mac-க்கான Vox.md-இல் இறக்குமதி செய்து, உங்கள் Mac-இல் Whisper அல்லது Parakeet மூலம் உரைமாற்றம் செய்து, உங்களுக்குச் சொந்தமான Markdown குறிப்பாகச் சேமியுங்கள்.">
+  <meta property="og:url" content="https://vox.isolated.tech/ta/blog/transcribe-audio-file-mac/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-22">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mac-இல் ஒலிக் கோப்பை உள்ளூரிலேயே Markdown-ஆக உரைமாற்றம் செய்தல்">
+  <meta name="twitter:description" content="Mac-இல் குரல் குறிப்புகளும் குறிப்புகளும் இலவசமாக என்ன தருகின்றன என்று பாருங்கள்; பிறகு ஏற்கெனவே உள்ள ஒலி அல்லது வீடியோ கோப்பை Mac-க்கான Vox.md-இல் இறக்குமதி செய்து, உங்கள் Mac-இல் Whisper அல்லது Parakeet மூலம் உரைமாற்றம் செய்து, உங்களுக்குச் சொந்தமான Markdown குறிப்பாகச் சேமியுங்கள்.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Mac-இல் ஒலிக் கோப்பை உள்ளூரிலேயே Markdown-ஆக உரைமாற்றம் செய்தல்",
+  "description": "Mac-இல் குரல் குறிப்புகளும் குறிப்புகளும் இலவசமாக என்ன தருகின்றன என்று பாருங்கள்; பிறகு ஏற்கெனவே உள்ள ஒலி அல்லது வீடியோ கோப்பை Mac-க்கான Vox.md-இல் இறக்குமதி செய்து, உங்கள் Mac-இல் Whisper அல்லது Parakeet மூலம் உரைமாற்றம் செய்து, உங்களுக்குச் சொந்தமான Markdown குறிப்பாகச் சேமியுங்கள்.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-22",
+  "dateModified": "2026-11-22",
+  "mainEntityOfPage": "https://vox.isolated.tech/ta/blog/transcribe-audio-file-mac/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "ta",
+  "name": "Mac-இல் ஒலிக் கோப்பை உள்ளூரிலேயே Markdown-ஆக உரைமாற்றம் செய்தல் | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/ta/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "வழிகாட்டிகள்",
+      "item": "https://vox.isolated.tech/ta/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Mac-இல் ஒலிக் கோப்பை உள்ளூரிலேயே Markdown-ஆக உரைமாற்றம் செய்தல்",
+      "item": "https://vox.isolated.tech/ta/blog/transcribe-audio-file-mac/"
+    }
+  ],
+  "inLanguage": "ta",
+  "name": "Mac-இல் ஒலிக் கோப்பை உள்ளூரிலேயே Markdown-ஆக உரைமாற்றம் செய்தல் | Vox.md",
+  "description": "Mac-இல் குரல் குறிப்புகளும் குறிப்புகளும் இலவசமாக என்ன தருகின்றன என்று பாருங்கள்; பிறகு ஏற்கெனவே உள்ள ஒலி அல்லது வீடியோ கோப்பை Mac-க்கான Vox.md-இல் இறக்குமதி செய்து, உங்கள் Mac-இல் Whisper அல்லது Parakeet மூலம் உரைமாற்றம் செய்து, உங்களுக்குச் சொந்தமான Markdown குறிப்பாகச் சேமியுங்கள்."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-audio-file-mac/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">வழிகாட்டிக்குச் செல்லவும்</a>
+<nav aria-label="முதன்மை வழிசெலுத்தல்">
+  <div class="nav-inner">
+    <a href="/ta/" class="logo" aria-label="Vox.md முகப்பு">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/ta/#how">இயங்கும் விதம்</a></li>
+      <li><a href="/ta/docs/">ஆவணங்கள்</a></li>
+      <li><a href="/ta/blog/">வழிகாட்டிகள்</a></li>
+      <li><a href="/ta/compare/">ஒப்பிடவும்</a></li>
+      <li><a href="/ta/privacy.html">தனியுரிமை</a></li>
+      <li><a href="/ta/terms.html">விதிமுறைகள்</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_ta_5aaec3f62945">Vox.md பதிவிறக்கவும்</a>
+  <details class="language-switcher"><summary>மொழி</summary><ul><li><a href="/blog/transcribe-audio-file-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-audio-file-mac/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-audio-file-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-audio-file-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-audio-file-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-audio-file-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-audio-file-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-audio-file-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-audio-file-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-audio-file-mac/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-audio-file-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-audio-file-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-audio-file-mac/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-audio-file-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-audio-file-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-audio-file-mac/" lang="ta" hreflang="ta" aria-current="page">தமிழ்</a></li><li><a href="/th/blog/transcribe-audio-file-mac/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-audio-file-mac/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-audio-file-mac/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-audio-file-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-audio-file-mac/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-audio-file-mac/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-audio-file-mac/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Mac · ஒலிக் கோப்புகள் · உள்ளூர் உரைமாற்றம்</div>
+        <h1 class="hero-title">Mac-இல் ஒலிக் கோப்பை உள்ளூரிலேயே Markdown-ஆக உரைமாற்றம் செய்தல்</h1>
+        <p class="hero-subtitle">முதலில் இலவச உள்ளமைவு வழிகள்; பிறகு உங்களிடம் உள்ள கோப்பிலிருந்து Obsidian அல்லது எந்தக் கோப்புறையிலும் உள்ள Markdown குறிப்பு வரை ஓர் உள்ளூர் வழி.</p>
+      </div>
+      <aside class="meta-card" aria-label="இவ்வழிகாட்டி பற்றி">
+        <dl>
+          <div><dt>எழுதியவர்</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>புதுப்பிப்பு</dt><dd><time datetime="2026-11-22">22 நவம்பர் 2026</time></dd></div>
+          <div><dt>தேவை</dt><dd>Vox.md: macOS 14 அல்லது அதற்குப் பின் · பதிவிறக்கிய பேச்சு மாதிரி. Apple-இன் உள்ளமைவு உரைமாற்றம்: உங்கள் Mac, மொழிக்கான Apple ஆதரவுப் பக்கங்களைப் பாருங்கள்.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Mac-இல் ஒலிக் கோப்பை உள்ளூரிலேயே Markdown-ஆக உரைமாற்றம் செய்தல்">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">சுருக்கமான பதில்</div>
+        <p>Apple-இன் குரல் குறிப்புகள், குறிப்புகள் செயலிகள் Mac-இல் ஒலியை இலவசமாக உரைமாற்றம் செய்யும்; பலருக்கு அது போதும். ஏற்கெனவே உள்ள ஒலி அல்லது வீடியோ கோப்பை Markdown குறிப்பாக மாற்ற, Mac-க்கான Vox.md-ஐத் திறந்து தேர்ந்தெடுக்கவும் <strong>ஒலி இறக்குமதி…</strong> பட்டிப்பட்டையிலிருந்து (அல்லது பிடிப்புப் பணியிடத்தில் கோப்பை இறக்குமதி செய்து), உள்ளூர் Whisper அல்லது Parakeet மாதிரி அதை உரைமாற்றம் செய்யட்டும்; உரையை மதிப்பாய்வு செய்து, உங்கள் வழித்தடத்தின் குறிப்புக்கு அனுப்புங்கள்.</p>
+      </div>
+      <p>கீழுள்ள Apple விவரங்கள் Apple ஆதரவுப் பக்கங்களிலிருந்து எடுக்கப்பட்டவை <a href="https://support.apple.com/guide/voice-memos/vm4a03609f0d/mac">Mac-இல் குரல் குறிப்புகளில் உரைமாற்றத்தைப் பார்த்தல்</a> மற்றும் <a href="https://support.apple.com/guide/notes/apdb5106e334/mac">Mac-இல் குறிப்புகளில் ஒலியைப் பதிவுசெய்து உரைமாற்றம் செய்தல்</a>, நவம்பர் 22, 2026 அன்று படிக்கப்பட்டது. Apple-இன் பக்கங்கள் மாறலாம்; எனவே உங்கள் Mac-க்குச் சரிபார்க்கவும். Vox.md படிகள் இதைப் பின்பற்றுகின்றன: <a href="/ta/docs/#mac">Mac ஆவணங்கள்</a>.</p>
+      <nav class="toc" aria-label="இவ்வழிகாட்டியில்"><div class="toc-title">இவ்வழிகாட்டியில்</div><ol>
+        <li><a href="#built-in">உங்கள் Mac-இல் ஏற்கெனவே உள்ள இலவச வழிகள்</a></li>
+        <li><a href="#choose">எந்த முறை பொருந்தும்?</a></li>
+        <li><a href="#prepare">Mac-க்கான Vox.md-ஐத் தயார் செய்யுங்கள்</a></li>
+        <li><a href="#import">கோப்பை இறக்குமதி செய்து உரைமாற்றம் செய்யுங்கள்</a></li>
+        <li><a href="#verify">Markdown குறிப்பைச் சரிபாருங்கள்</a></li>
+        <li><a href="#privacy">உங்கள் Mac-இலிருந்து வெளியே செல்வது என்ன</a></li>
+        <li><a href="#troubleshooting">சிக்கல் தீர்த்தல்</a></li>
+        <li><a href="#related">தொடர்புடைய வழிகாட்டிகள்</a></li>
+      </ol></nav>
+
+      <h2 id="built-in">உங்கள் Mac-இல் ஏற்கெனவே உள்ள இலவச வழிகள்</h2>
+      <h3>குரல் குறிப்புகள்</h3>
+      <p>Apple-இன் குரல் குறிப்புகள் பக்கம், நீங்கள் இந்தப் பொத்தானைக் கிளிக் செய்யலாம் என்கிறது: <strong>உரைமாற்றம்</strong> பொத்தானைப் பதிவு செய்யும்போது கிளிக் செய்து உரையை நேரடியாகப் பாருங்கள், அல்லது முடிந்த பதிவைத் தேர்ந்து அதே பொத்தானைக் கிளிக் செய்யுங்கள். பதிவுப் பட்டியலில் தலைப்பிலோ உரைமாற்றத்திலோ உரையைத் தேடலாம்; உரைப்படி உரையைத் தேர்ந்து, Control-கிளிக் செய்து, தேர்ந்தெடுத்து நகலெடுக்கலாம்: <strong>நகலெடு</strong>. macOS 14 அல்லது முந்தையதில், அல்லது உரைமாற்றத்தை ஆதரிக்காத சாதனத்தில் உருவாக்கிய பதிவைத் திறந்தால் குரல் குறிப்புகள் அதைத் தானாக உரைமாற்றம் செய்யும் என்றும், ஒலி உரைமாற்றம் எல்லா நாடுகளிலும் பகுதிகளிலும் கிடைக்காது என்றும் Apple கூறுகிறது.</p>
+      <h3>குறிப்புகள்</h3>
+      <p>Apple-இன் குறிப்புகள் பக்கம், குறிப்பிற்குள் ஒலி பதிவுசெய்வதை விவரிக்கிறது: இணைப்பு பொத்தானைக் கிளிக் செய்து, தேர்ந்தெடுக்கவும் <strong>ஒலி பதிவு செய்</strong>, பதிவு செய்து, உரைமாற்றம் பொத்தானைக் கிளிக் செய்தால் உரைப்படியைப் பார்க்கலாம். அந்தப் பக்கத்தில் Apple பட்டியலிடும் சாதன மொழிக்கு, M1 அல்லது அதற்குப் பிந்தைய Mac கணினிகளில் ஒலி உரைமாற்றம் கிடைக்கும் என்று அது கூறுகிறது. உரைமாற்றம் பொத்தான் தோன்றவில்லை என்றால், உங்கள் Mac குறைந்தபட்சத் தேவைகளைப் பூர்த்தி செய்யவில்லை அல்லது ஆதரிக்கப்படும் மொழியைக் கண்டறியவில்லை என்று Apple கூறுகிறது.</p>
+      <h3>வரம்புகள்</h3>
+      <p>நீங்கள் நகலெடுக்கும் வரை உரை அந்தச் செயலிகளுக்குள்ளேயே இருக்கும். குறிப்புகளில் ஒலிப் பதிவை நீக்கினால் உரைமாற்றமும் நீக்கப்படும் என்று Apple கூறுகிறது. இரு செயலிகளும் எந்தக் கோப்பு வகைகளை இறக்குமதி செய்யும் என்பதை Apple-இன் பக்கங்களிலிருந்து உறுதிப்படுத்த முடியாது; எனவே உங்கள் பதிவுக்குச் சரிபார்க்கவும். இந்த வழிகாட்டி அதுபற்றி எதுவும் உறுதியளிக்கவில்லை.</p>
+      <p>கடைசி வழியாக, சிலர் ஒலியை இயக்கி உரைத் திருத்தியில் பேசி எழுதுகிறார்கள். அது ஒரு மாற்றுவழி, கோப்பு உரைமாற்றம் அல்ல; பார்க்க: <a href="/ta/blog/dictation-on-mac/">Mac-இல் குரல் உள்ளீடு</a> பேச்செழுத்து பற்றி.</p>
+
+      <h2 id="choose">எந்த முறை பொருந்தும்?</h2>
+      <p>Apple-இன் பக்கங்களிலோ Vox.md ஆவணங்களிலோ கூறப்பட்டவற்றை மட்டுமே அட்டவணை பட்டியலிடுகிறது. “ஆவணப்படுத்தப்படவில்லை” என்றால், நாங்கள் குறிப்பிடும் மூலம் அதைக் கூறவில்லை என்று பொருள். துல்லியம் அல்லது வேகம் பற்றிய எந்த உரிமைகோரலும் இதில் இல்லை.</p>
+      <p class="guide-table-hint">சிறிய திரையில் அட்டவணையைப் பக்கவாட்டில் நகர்த்தவும்.</p>
+      <div class="guide-comparison" role="region" aria-label="Mac ஒலி உரைமாற்ற வழிகளின் ஒப்பீடு; சிறிய திரைகளில் கிடைமட்டமாக உருட்டவும்" tabindex="0">
+        <table class="comparison">
+          <caption>Mac ஒலி உரைமாற்ற வழிகள், நவம்பர் 22, 2026 அன்று சரிபார்க்கப்பட்டது</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">குரல் குறிப்புகள்</th><th scope="col">குறிப்புகள்</th><th scope="col">Mac-க்கான Vox.md</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">உரை எங்கே சேமிக்கப்படுகிறது</th><td>குரல் குறிப்புகளுக்குள்; நீங்களே நகலெடுக்க வேண்டும்</td><td>குறிப்புக்குள், ஒலிப் பதிவுடன்</td><td>நீங்கள் தேர்ந்தெடுக்கும் கோப்புறை அல்லது vault-இல் ஒரு Markdown குறிப்பு</td></tr>
+            <tr><th scope="row">Mac-இல் இயங்குவது என்ன</th><td>ஆவணப்படுத்தப்படவில்லை</td><td>ஆவணப்படுத்தப்படவில்லை</td><td>நீங்கள் பதிவிறக்கும் Whisper அல்லது Parakeet மாதிரியுடன் உரைமாற்றம்</td></tr>
+            <tr><th scope="row">கோப்பு இறக்குமதி</th><td>ஆவணப்படுத்தப்படவில்லை</td><td>ஆவணப்படுத்தப்படவில்லை</td><td>ஒலி இறக்குமதி… ஒலி அல்லது வீடியோ கோப்புகளை ஏற்கும்</td></tr>
+            <tr><th scope="row">Markdown வெளியீடு</th><td>ஆவணப்படுத்தப்படவில்லை</td><td>ஆவணப்படுத்தப்படவில்லை</td><td>ஆம்</td></tr>
+            <tr><th scope="row">பேசுபவர் குறிகள்</th><td>ஆவணப்படுத்தப்படவில்லை</td><td>ஆவணப்படுத்தப்படவில்லை</td><td>விருப்பம்: Speakers அறிமுகங்கள் உடன்</td></tr>
+            <tr><th scope="row">செலவு</th><td>macOS-இன் பகுதி</td><td>macOS-இன் பகுதி</td><td>15 இலவச உரைமாற்ற நிமிடங்களும் 10 வெற்றிகரமான வழங்கல்களும், பிறகு ஒருமுறை செலுத்தும் ஆயுள்கால திறப்பு</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>உரை குரல் குறிப்புகள் அல்லது குறிப்புகளிலேயே இருந்தால் போதும் என்றால், அவற்றையே பயன்படுத்துங்கள். உங்களுக்குச் சொந்தமான எளிய கோப்பு, குறிப்பிட்ட உள்ளூர் மாதிரி, அல்லது உங்கள் vault-இல் உரை வேண்டுமானால் Vox.md பயன்படும்.</p>
+
+      <h2 id="prepare">Mac-க்கான Vox.md-ஐத் தயார் செய்யுங்கள்</h2>
+      <ol>
+        <li><strong>நிறுவுங்கள்.</strong> Mac-க்கான Vox.md-க்கு macOS 14 அல்லது அதற்குப் பின் தேவை. கீழுள்ள App Store இணைப்பிலிருந்து பெறுங்கள்.</li>
+        <li><strong>ஒரு மாதிரியைப் பதிவிறக்குங்கள்.</strong> திறந்த <strong>அமைப்புகள் → மாதிரிகள்</strong> ஒன்றைப் பதிவிறக்கவும்: Tiny (75 MB) முதல் Large v3 Turbo (1.6 GB) வரை Whisper, Parakeet v2 (சுமார் 800 MB, ஆங்கிலம்) அல்லது Parakeet v3 (சுமார் 800 MB, 25 மொழிகள்). அதே திரையில் உரைமாற்ற மொழியை அமைக்கவும். ஆதரிக்கப்படும் Mac-களில் Whisper, Metal முடுக்கத்தைப் பயன்படுத்தும். மாதிரிப் பதிவிறக்கம் மட்டுமே பிணையம் தேவைப்படும் ஒரே படி. பார்க்க: <a href="/ta/compare/whisper-vs-parakeet/">Whisper எதிர் Parakeet</a> தேர்ந்தெடுக்க. <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a> Whisper மாதிரிகளை இயக்கும்; <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> Parakeet-ஐ இயக்கும்.</li>
+        <li><strong>ஒரு வழித்தடத்தைத் தேர்ந்தெடுக்கவும் அல்லது உருவாக்கவும்.</strong> வழித்தடம் இலக்குக் கோப்புறை அல்லது vault-ஐயும் இலக்குக் குறிப்பையும் வைத்திருக்கும்: புதிய குறிப்பு, தொடர்ந்து சேரும் தினசரிக் குறிப்பு, அல்லது ஒரு தலைப்பின் கீழ் உள்ள ஏற்கெனவே இருக்கும் குறிப்பு. பார்க்க: <a href="/ta/docs/#presets">ஆவணத்தில் வழித்தடங்கள்</a>.</li>
+      </ol>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">Mac-க்கான Vox.md-ஐப் பெறுங்கள்.</h2>
+        <p>இலவச அளவு 15 நிமிட உரைமாற்றமும் 10 வெற்றிகரமான வழங்கல்களும்; ஒரு பதிவைச் சோதிக்க அது போதும்.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ta_5aaec3f62945">Mac-க்கான Vox.md-ஐப் பெறுங்கள்</a></p>
+      </section>
+
+      <h2 id="import">கோப்பை இறக்குமதி செய்து உரைமாற்றம் செய்யுங்கள்</h2>
+      <ol>
+        <li><strong>இறக்குமதி செய்யுங்கள்.</strong> Vox.md பட்டிப்பட்டையிலிருந்து தேர்ந்தெடுக்கவும் <strong>ஒலி இறக்குமதி…</strong>, அல்லது ஒலியை இறக்குமதி செய்யுங்கள் அல்லது பிடிப்புப் பணியிடத்தில் இழுத்து விடுங்கள். ஒலி மற்றும் வீடியோ கோப்புகள் ஏற்கப்படும் என்றும், அவை பதிவைப் போலவே அதே உள்ளூர் உரைமாற்றத்தின் வழியாகச் செல்லும் என்றும் ஆவணங்கள் கூறுகின்றன.</li>
+        <li><strong>வரைவில் சேர் அல்லது உடனடியாக அனுப்பு என்பதைத் தேர்ந்தெடுக்கவும்.</strong> உடன் <strong>உடனடியாக அனுப்பு</strong> முடிந்ததும் உரைப்படி வழங்கப்படும். இதனுடன் <strong>வரைவில் சேர்</strong> அதை முதலில் மதிப்பாய்வு செய்யலாம். பெயர்கள், எண்கள், தேதிகளை ஒலியுடன் ஒப்பிட்டுச் சரிபார்க்கவும்.</li>
+        <li><strong>விருப்பம்: Speakers அறிமுகங்கள்.</strong> இயக்கவும் <strong>Speakers அறிமுகங்கள்</strong> வழித்தடத்தில், பெயர் குறிப்பிடாத, இயன்றவரை சிறந்த பேசுபவர் குறிகளுக்காக. முதல் முறை தனி மாதிரியைத் தயார் செய்யும். இயங்க முடியாவிட்டால் எளிய உரைப்படி வைக்கப்பட்டு, காரணம் நூலகத்தில் காட்டப்படும்.</li>
+        <li><strong>விருப்பம்: செயலாக்க முறை.</strong> ஒரு வழித்தடம் மூலத்தை வைத்திரு, செம்மையான உரை, கூட்டக் குறிப்புகள், பணி சரிபார்ப்புப் பட்டியல் அல்லது தனிப்பயன் வழிமுறை ஆகியவற்றைப் பயன்படுத்தலாம். Apple Intelligence முறைகளுக்கு macOS 26-உடன் இணக்கமான வன்பொருள் தேவை. அது இல்லாவிட்டால், பணி சரிபார்ப்புப் பட்டியலும் கூட்டக் குறிப்புகளும் உள்ளமைவு வடிவமைப்பிகளைப் பயன்படுத்தும்; செம்மையான உரையும் தனிப்பயன் வழிமுறையும் அசல் உரையையே வைத்திருக்கும்.</li>
+        <li><strong>அனுப்புங்கள்.</strong> பிடிப்பை வழித்தடத்தின் குறிப்புக்கு அனுப்ப Command-Return அழுத்தவும்.</li>
+      </ol>
+
+      <h2 id="verify">Markdown குறிப்பைச் சரிபாருங்கள்</h2>
+      <p>தேர்வு <strong>கடைசி ஏற்றுமதி காட்டு</strong> பட்டிப்பட்டையிலிருந்து தேர்ந்தெடுக்கவும், அல்லது நூலகத்தில் அந்த உள்ளீட்டைக் கண்டுபிடித்து Finder-இல் காட்டவும்; பிறகு கோப்பை Obsidian-இல் திறக்கவும். உரை மட்டும் தேவைப்பட்டால், தேர்ந்தெடுக்கவும் <strong>கடைசி உரைப்படியை நகலெடு</strong>. பதிவிலிருந்து நிரப்ப வேண்டிய குறிப்பு அமைப்புக்குப் பார்க்க: <a href="/ta/blog/obsidian-meeting-notes-template/">கூட்டக் குறிப்புகள் வார்ப்புரு உருவாக்கி</a>.</p>
+
+      <h2 id="privacy">உங்கள் Mac-இலிருந்து வெளியே செல்வது என்ன</h2>
+      <p>உரைமாற்றம் Mac-இலேயே நடக்கும்; Vox.md பிடிப்பு உள்ளடக்கத்தை Vox.md சேவையகங்களுக்கு அனுப்பாது. மாதிரிப் பதிவிறக்கங்கள் Hugging Face அல்லது FluidAudio உள்கட்டமைப்பைத் தொடர்புகொள்ளும். இலக்குக் கோப்புறை iCloud அல்லது வேறு சேவை வழியாக ஒத்திசைந்தால், அந்தச் சேவை தன் விதிமுறைகளின்படி கோப்பைக் கையாளும். பார்க்க: <a href="/ta/privacy.html">தனியுரிமைக் கொள்கை</a>.</p>
+
+      <h2 id="troubleshooting">சிக்கல் தீர்த்தல்</h2>
+      <ul>
+        <li><strong>உரைப்படி இல்லை, அல்லது தவறான மொழி.</strong> அமைப்புகள் → மாதிரிகள் என்பதில் ஒரு மாதிரி பதிவிறக்கப்பட்டுத் தேர்ந்தெடுக்கப்பட்டுள்ளதா, மொழி அமைக்கப்பட்டுள்ளதா என்று சரிபார்க்கவும்.</li>
+        <li><strong>குறிப்பு எதுவும் தோன்றவில்லை.</strong> வழித்தடத்தின் இலக்குக் கோப்புறையையும், அதற்கு Vox.md-க்கு அணுகல் உள்ளதா என்பதையும் சரிபார்க்கவும்.</li>
+        <li><strong>நீளமான கோப்புக்குச் சிறிது நேரம் ஆகும்.</strong> நீளமான பதிவில் பெரிய மாதிரிகளுக்கு அதிக நேரம் ஆகும். முதலில் சிறிய மாதிரியை முயன்று, பிறகு ஒப்பிடுங்கள்.</li>
+        <li><strong>இலவச அளவு தீர்ந்துவிட்டது.</strong> இது 15 நிமிட உரைமாற்றத்தையும் 10 வெற்றிகரமான வழங்கல்களையும், பிறகு ஒருமுறை செலுத்தும் ஆயுள்கால திறப்பையும் உள்ளடக்கும். App Store விலையே இறுதியானது; பார்க்க: <a href="/ta/docs/#pricing-limits">இலவசப் பயன்பாடும் வாழ்நாள் திறப்பும்</a>.</li>
+      </ul>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">பதிவை உங்களுக்குச் சொந்தமான குறிப்பாக மாற்றுங்கள்.</h2>
+        <p>இலவச அளவில் முக்கியமற்ற ஒரு சிறிய கிளிப்புடன் தொடங்கி, பிறகு Markdown கோப்பைத் திறக்கவும்.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ta_5aaec3f62945">Mac-க்கான Vox.md-ஐப் பெறுங்கள்</a></p>
+      </section>
+      <nav class="toc" aria-label="தொடர்புடைய வழிகாட்டிகள்" id="related"><div class="toc-title">தொடரவும்</div><ul>
+        <li><a href="/ta/blog/transcribe-meetings-mac-obsidian/">அதற்குப் பதிலாக நேரடி அழைப்பைப் பதிவுசெய்யுங்கள்: Mac கூட்டங்கள் Obsidian-இல்</a></li>
+        <li><a href="/ta/blog/dictation-on-mac/">Mac-இல் பேச்செழுத்து</a></li>
+        <li><a href="/ta/compare/whisper-vs-parakeet/">Whisper எதிர் Parakeet</a></li>
+        <li><a href="/ta/blog/transcribe-voice-memos-iphone/">iPhone Voice Memos-ஐ Markdown உரையாக்கவும்</a></li>
+        <li><a href="/ta/blog/obsidian-meeting-notes-template/">Obsidian கூட்டக் குறிப்பு வார்ப்புரு ஜெனரேட்டர்</a></li>
+        <li><a href="/ta/docs/#mac">Mac ஆவணங்கள்</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ta/">முகப்பு</a></li>
+        <li><a href="/ta/docs/">ஆவணங்கள்</a></li>
+        <li><a href="/ta/blog/">வழிகாட்டிகள்</a></li>
+        <li><a href="/ta/compare/">ஒப்பிடவும்</a></li>
+        <li><a href="/ta/privacy.html">தனியுரிமை</a></li>
+        <li><a href="/ta/terms.html">விதிமுறைகள்</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">ஆதரவு</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ta_5aaec3f62945">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · உள்ளூர் குறிப்புகளுக்கு விரைவான பிடிப்பு · பதிவேற்றமில்லை.</div>
+    </div>
+  <details class="language-switcher"><summary>மொழி</summary><ul><li><a href="/blog/transcribe-audio-file-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-audio-file-mac/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-audio-file-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-audio-file-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-audio-file-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-audio-file-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-audio-file-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-audio-file-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-audio-file-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-audio-file-mac/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-audio-file-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-audio-file-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-audio-file-mac/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-audio-file-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-audio-file-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-audio-file-mac/" lang="ta" hreflang="ta" aria-current="page">தமிழ்</a></li><li><a href="/th/blog/transcribe-audio-file-mac/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-audio-file-mac/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-audio-file-mac/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-audio-file-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-audio-file-mac/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-audio-file-mac/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-audio-file-mac/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

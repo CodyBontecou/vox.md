@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="tr" dir="ltr" data-search-section="Bölüm" data-search-guide="Kılavuz" data-search-empty="“{query}” için sonuç yok">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mac&#x27;te bir ses dosyasının yerel olarak Markdown&#x27;a dökümü | Vox.md</title>
+  <meta name="description" content="Mac&#x27;teki Sesli Notlar ve Notlar&#x27;ın ücretsiz neler sunduğuna bakın, ardından mevcut bir ses veya video dosyasını Mac için Vox.md&#x27;ye aktarın, Mac&#x27;inizde Whisper veya Parakeet ile dökün ve sahip olduğunuz bir Markdown notu olarak kaydedin.">
+  <link rel="canonical" href="https://vox.isolated.tech/tr/blog/transcribe-audio-file-mac/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Dil modelleri için Vox.md belgeleri">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Mac&#x27;te bir ses dosyasının yerel olarak Markdown&#x27;a dökümünü çıkarma">
+  <meta property="og:description" content="Mac&#x27;teki Sesli Notlar ve Notlar&#x27;ın ücretsiz neler sunduğuna bakın, ardından mevcut bir ses veya video dosyasını Mac için Vox.md&#x27;ye aktarın, Mac&#x27;inizde Whisper veya Parakeet ile dökün ve sahip olduğunuz bir Markdown notu olarak kaydedin.">
+  <meta property="og:url" content="https://vox.isolated.tech/tr/blog/transcribe-audio-file-mac/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-22">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mac&#x27;te bir ses dosyasının yerel olarak Markdown&#x27;a dökümünü çıkarma">
+  <meta name="twitter:description" content="Mac&#x27;teki Sesli Notlar ve Notlar&#x27;ın ücretsiz neler sunduğuna bakın, ardından mevcut bir ses veya video dosyasını Mac için Vox.md&#x27;ye aktarın, Mac&#x27;inizde Whisper veya Parakeet ile dökün ve sahip olduğunuz bir Markdown notu olarak kaydedin.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Mac'te bir ses dosyasının yerel olarak Markdown'a dökümünü çıkarma",
+  "description": "Mac'teki Sesli Notlar ve Notlar'ın ücretsiz neler sunduğuna bakın, ardından mevcut bir ses veya video dosyasını Mac için Vox.md'ye aktarın, Mac'inizde Whisper veya Parakeet ile dökün ve sahip olduğunuz bir Markdown notu olarak kaydedin.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-22",
+  "dateModified": "2026-11-22",
+  "mainEntityOfPage": "https://vox.isolated.tech/tr/blog/transcribe-audio-file-mac/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "tr",
+  "name": "Mac'te bir ses dosyasının yerel olarak Markdown'a dökümü | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/tr/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Kılavuzlar",
+      "item": "https://vox.isolated.tech/tr/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Mac'te bir ses dosyasının yerel olarak Markdown'a dökümünü çıkarma",
+      "item": "https://vox.isolated.tech/tr/blog/transcribe-audio-file-mac/"
+    }
+  ],
+  "inLanguage": "tr",
+  "name": "Mac'te bir ses dosyasının yerel olarak Markdown'a dökümü | Vox.md",
+  "description": "Mac'teki Sesli Notlar ve Notlar'ın ücretsiz neler sunduğuna bakın, ardından mevcut bir ses veya video dosyasını Mac için Vox.md'ye aktarın, Mac'inizde Whisper veya Parakeet ile dökün ve sahip olduğunuz bir Markdown notu olarak kaydedin."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-audio-file-mac/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Kılavuza atla</a>
+<nav aria-label="Ana gezinme">
+  <div class="nav-inner">
+    <a href="/tr/" class="logo" aria-label="Vox.md ana sayfası">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/tr/#how">Nasıl Çalışır?</a></li>
+      <li><a href="/tr/docs/">Belgeler</a></li>
+      <li><a href="/tr/blog/">Kılavuzlar</a></li>
+      <li><a href="/tr/compare/">Karşılaştırın</a></li>
+      <li><a href="/tr/privacy.html">Gizlilik</a></li>
+      <li><a href="/tr/terms.html">Koşullar</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_tr_5aaec3f62945">Vox.md&#x27;yi indirin</a>
+  <details class="language-switcher"><summary>Dil</summary><ul><li><a href="/blog/transcribe-audio-file-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-audio-file-mac/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-audio-file-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-audio-file-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-audio-file-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-audio-file-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-audio-file-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-audio-file-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-audio-file-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-audio-file-mac/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-audio-file-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-audio-file-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-audio-file-mac/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-audio-file-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-audio-file-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-audio-file-mac/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-audio-file-mac/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-audio-file-mac/" lang="tr" hreflang="tr" aria-current="page">Türkçe</a></li><li><a href="/uk/blog/transcribe-audio-file-mac/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-audio-file-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-audio-file-mac/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-audio-file-mac/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-audio-file-mac/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Mac · Ses dosyaları · Yerel döküm</div>
+        <h1 class="hero-title">Mac&#x27;te bir ses dosyasının yerel olarak Markdown&#x27;a dökümünü çıkarma</h1>
+        <p class="hero-subtitle">Önce ücretsiz yerleşik seçenekler, ardından elinizdeki bir dosyadan Obsidian&#x27;daki veya herhangi bir klasördeki Markdown notuna giden yerel bir yol.</p>
+      </div>
+      <aside class="meta-card" aria-label="Bu kılavuz hakkında">
+        <dl>
+          <div><dt>Yazan</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Güncellendi</dt><dd><time datetime="2026-11-22">22 Kasım 2026</time></dd></div>
+          <div><dt>Gerektirir:</dt><dd>Vox.md: macOS 14 veya üzeri · indirilmiş konuşma modeli. Apple&#x27;ın yerleşik dökümü: Mac&#x27;iniz ve diliniz için Apple Destek sayfalarına bakın.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Mac&#x27;te bir ses dosyasının yerel olarak Markdown&#x27;a dökümünü çıkarma">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Kısa yanıt</div>
+        <p>Apple&#x27;ın Sesli Notlar ve Notlar uygulamaları Mac&#x27;te sesi ücretsiz dökebilir ve çoğu kişi için bu yeterlidir. Mevcut bir ses veya video dosyasını Markdown notuna dönüştürmek için Mac için Vox.md&#x27;yi açın ve şunu seçin: <strong>Ses İçe Aktar…</strong> menü çubuğundan seçin (veya dosyayı Yakalama çalışma alanında içe aktarın), yerel bir Whisper veya Parakeet modelinin dökümünü çıkarmasını bekleyin, metni gözden geçirin, ardından Rota&#x27;nızın notuna gönderin.</p>
+      </div>
+      <p>Aşağıdaki Apple ayrıntıları Apple Destek sayfalarından alınmıştır <a href="https://support.apple.com/guide/voice-memos/vm4a03609f0d/mac">Mac&#x27;te Sesli Notlar&#x27;da dökümü görüntüleme</a> ve <a href="https://support.apple.com/guide/notes/apdb5106e334/mac">Mac&#x27;te Notlar&#x27;da ses kaydetme ve dökme</a>, 22 Kasım 2026 tarihinde okundu. Apple&#x27;ın sayfaları değişebilir; bu yüzden Mac&#x27;iniz için kontrol edin. Vox.md adımları şu belgeyi izler: <a href="/tr/docs/#mac">Mac belgeleri</a>.</p>
+      <nav class="toc" aria-label="Bu kılavuzda"><div class="toc-title">Bu kılavuzda</div><ol>
+        <li><a href="#built-in">Mac&#x27;inizde zaten bulunan ücretsiz seçenekler</a></li>
+        <li><a href="#choose">Hangi yöntem uygun?</a></li>
+        <li><a href="#prepare">Mac için Vox.md&#x27;yi hazırlayın</a></li>
+        <li><a href="#import">Dosyayı içe aktarın ve dökün</a></li>
+        <li><a href="#verify">Markdown notunu kontrol edin</a></li>
+        <li><a href="#privacy">Mac&#x27;inizden ne çıkar</a></li>
+        <li><a href="#troubleshooting">Sorun Giderme</a></li>
+        <li><a href="#related">İlgili kılavuzlar</a></li>
+      </ol></nav>
+
+      <h2 id="built-in">Mac&#x27;inizde zaten bulunan ücretsiz seçenekler</h2>
+      <h3>Sesli Notlar</h3>
+      <p>Apple&#x27;ın Sesli Notlar sayfası şu düğmeye tıklayabileceğinizi söylüyor: <strong>Döküm</strong> düğmesine kayıt sırasında tıklayarak metni canlı görün ya da bitmiş bir kaydı seçip aynı düğmeye tıklayın. Kayıt listesinde başlıkta veya dökümde metin arayabilir, döküm metnini seçip Control tuşuyla tıklayarak ve şunu seçerek kopyalayabilirsiniz: <strong>Kopyala</strong>. Apple, macOS 14 veya öncesinde ya da döküm desteklemeyen bir cihazda yapılmış bir kaydı açarsanız Sesli Notlar&#x27;ın onu otomatik olarak dökeceğini ve ses dökümünün tüm ülke veya bölgelerde kullanılamadığını belirtiyor.</p>
+      <h3>Notlar</h3>
+      <p>Apple&#x27;ın Notlar sayfası bir not içine ses kaydetmeyi anlatır: Ek düğmesine tıklayın ve şunu seçin: <strong>Ses Kaydet</strong>, kayıt yapın ve dökümü görmek için Döküm düğmesine tıklayın. Ses dökümünün, o sayfada Apple&#x27;ın listelediği bir cihaz dili için M1 veya üzeri Mac bilgisayarlarda kullanılabildiği belirtiliyor. Döküm düğmesi görünmüyorsa Apple, Mac&#x27;inizin minimum gereksinimleri karşılamadığını veya desteklenen bir dili algılamadığını söylüyor.</p>
+      <h3>Sınırlar</h3>
+      <p>Metin, siz kopyalayana kadar bu uygulamaların içinde kalır. Apple, Notlar&#x27;da ses kaydını silmenin dökümü de sildiğini belirtiyor. Her iki uygulamanın hangi dosya türlerini içe aktarabildiğini Apple&#x27;ın sayfalarından doğrulayamıyoruz; bu yüzden kaydınız için kendiniz kontrol edin. Bu rehber bu konuda bir iddiada bulunmaz.</p>
+      <p>Son çare olarak bazı kişiler sesi çalıp bir metin düzenleyiciye dikte eder. Bu bir geçici çözümdür, dosya dökümü değildir; bkz. <a href="/tr/blog/dictation-on-mac/">Mac&#x27;te dikte</a> dikte etmenin kendisi için.</p>
+
+      <h2 id="choose">Hangi yöntem uygun?</h2>
+      <p>Tabloda yalnızca Apple&#x27;ın sayfalarında veya Vox.md belgelerinde belirtilenler yer alır. “Belgelenmemiş”, atıf yaptığımız kaynağın bunu belirtmediği anlamına gelir. Doğruluk veya hız iddiası içermez.</p>
+      <p class="guide-table-hint">Küçük ekranda tabloyu yana kaydırın.</p>
+      <div class="guide-comparison" role="region" aria-label="Mac ses dökümü seçeneklerinin karşılaştırması; küçük ekranlarda yatay kaydırın" tabindex="0">
+        <table class="comparison">
+          <caption>Mac ses dökümü seçenekleri, 22 Kasım 2026 tarihinde kontrol edildi</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">Sesli Notlar</th><th scope="col">Notlar</th><th scope="col">Mac için Vox.md</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Metnin kaydedildiği yer</th><td>Sesli Notlar içinde; metni siz kopyalarsınız</td><td>Notun içinde, ses kaydıyla birlikte</td><td>Seçtiğiniz bir klasörde veya vault&#x27;ta Markdown notu</td></tr>
+            <tr><th scope="row">Mac&#x27;te neler çalışır</th><td>Belgelenmemiş</td><td>Belgelenmemiş</td><td>İndirdiğiniz bir Whisper veya Parakeet modeliyle döküm</td></tr>
+            <tr><th scope="row">Dosya içe aktarma</th><td>Belgelenmemiş</td><td>Belgelenmemiş</td><td>Ses İçe Aktar… ses veya film dosyalarını kabul eder</td></tr>
+            <tr><th scope="row">Markdown çıktısı</th><td>Belgelenmemiş</td><td>Belgelenmemiş</td><td>Evet</td></tr>
+            <tr><th scope="row">Konuşmacı etiketleri</th><td>Belgelenmemiş</td><td>Belgelenmemiş</td><td>İsteğe bağlı, Konuşmacıları tanımlayın ile</td></tr>
+            <tr><th scope="row">Maliyet</th><td>macOS&#x27;in parçası</td><td>macOS&#x27;in parçası</td><td>15 ücretsiz döküm dakikası ve 10 başarılı teslimat, ardından tek seferlik ömür boyu kilit açma</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Metnin yalnızca Sesli Notlar veya Notlar içinde durması yeterliyse onları kullanın. Vox.md, sahip olduğunuz düz bir dosya, belirli bir yerel model ya da metnin vault&#x27;unuzda olmasını istediğinizde işe yarar.</p>
+
+      <h2 id="prepare">Mac için Vox.md&#x27;yi hazırlayın</h2>
+      <ol>
+        <li><strong>Kurun.</strong> Mac için Vox.md, macOS 14 veya üzerini gerektirir. Aşağıdaki App Store bağlantısından edinin.</li>
+        <li><strong>Bir model indirin.</strong> Aç <strong>Ayarlar → Modeller</strong> ve birini indirin: Tiny (75 MB) boyutundan Large v3 Turbo (1,6 GB) boyutuna kadar Whisper, Parakeet v2 (yaklaşık 800 MB, İngilizce) veya Parakeet v3 (yaklaşık 800 MB, 25 dil). Döküm dilini aynı ekranda ayarlayın. Whisper, desteklenen Mac&#x27;lerde Metal hızlandırması kullanır. Model indirme, ağ gerektiren tek adımdır. Bkz. <a href="/tr/compare/whisper-vs-parakeet/">Whisper ve Parakeet</a> seçmek için. <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a> Whisper modellerini çalıştırır ve <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> Parakeet&#x27;i çalıştırır.</li>
+        <li><strong>Bir Rota seçin veya oluşturun.</strong> Bir Rota hedef klasörü veya vault&#x27;u ve hedef notu tutar: yeni bir not, sürekli eklenen günlük bir not veya bir başlık altındaki mevcut bir not. Bkz. <a href="/tr/docs/#presets">belgelerde Rotalar</a>.</li>
+      </ol>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">Mac için Vox.md&#x27;yi edinin.</h2>
+        <p>Ücretsiz hak 15 dakika döküm ve 10 başarılı teslimattır; bir kaydı denemeye yeter.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_tr_5aaec3f62945">Mac için Vox.md&#x27;yi edinin</a></p>
+      </section>
+
+      <h2 id="import">Dosyayı içe aktarın ve dökün</h2>
+      <ol>
+        <li><strong>İçe aktarın.</strong> Vox.md menü çubuğundan şunu seçin: <strong>Ses İçe Aktar…</strong>veya sesi içe aktarın ya da Yakalama çalışma alanına sürükleyin. Belgelere göre ses ve film dosyaları kabul edilir ve bir kayıtla aynı yerel dökümden geçer.</li>
+        <li><strong>Taslağa Ekle veya Hemen Gönder&#x27;i seçin.</strong> Şununla: <strong>Hemen Gönder</strong> döküm bittiğinde teslim edilir. Şu seçenekle: <strong>Taslağa Ekle</strong> önce gözden geçirebilirsiniz. İsimleri, sayıları ve tarihleri ses kaydıyla karşılaştırın.</li>
+        <li><strong>İsteğe bağlı: Konuşmacıları tanımlayın.</strong> Açın: <strong>Konuşmacıları tanımlayın</strong> Rota üzerinde, anonim ve en iyi çabayla konuşmacı etiketleri için kullanılır. İlk seferde ayrı bir model hazırlar. Çalışamazsa düz döküm korunur ve neden Arşiv&#x27;de gösterilir.</li>
+        <li><strong>İsteğe bağlı: işleme modu.</strong> Bir Rota Orijinali Koru, Metni Düzenle, Toplantı Notları, Yapılacaklar Listesi veya Özel Talimat kullanabilir. Apple Intelligence modları macOS 26 uyumlu donanım gerektirir. Bu olmadan Yapılacaklar Listesi ve Toplantı Notları yerleşik biçimlendiricileri kullanır; Metni Düzenle ve Özel Talimat özgün metni korur.</li>
+        <li><strong>Gönderin.</strong> Kaydı Rota&#x27;nın notuna göndermek için Command-Return tuşlarına basın.</li>
+      </ol>
+
+      <h2 id="verify">Markdown notunu kontrol edin</h2>
+      <p>Seçin: <strong>Son Dışa Aktarımı Göster</strong> menü çubuğundan seçin veya girişi Arşiv&#x27;de bulup Finder&#x27;da gösterin, ardından dosyayı Obsidian&#x27;da açın. Yalnızca metne ihtiyacınız varsa şunu seçin: <strong>Son Dökümü Kopyala</strong>. Bir kayıttan doldurulacak not yapısı için şuna bakın: <a href="/tr/blog/obsidian-meeting-notes-template/">toplantı notları şablon oluşturucu</a>.</p>
+
+      <h2 id="privacy">Mac&#x27;inizden ne çıkar</h2>
+      <p>Döküm Mac&#x27;te çalışır ve Vox.md yakalama içeriğini Vox.md sunucularına göndermez. Model indirmeleri Hugging Face veya FluidAudio altyapısına bağlanır. Hedef klasör iCloud veya başka bir hizmetle eşitleniyorsa, o hizmet dosyayı kendi koşullarına göre işler. Bkz. <a href="/tr/privacy.html">gizlilik politikası</a>.</p>
+
+      <h2 id="troubleshooting">Sorun Giderme</h2>
+      <ul>
+        <li><strong>Döküm yok ya da dil yanlış.</strong> Ayarlar → Modeller bölümünde bir modelin indirilip seçildiğini ve dilin ayarlandığını kontrol edin.</li>
+        <li><strong>Hiçbir not görünmüyor.</strong> Rota&#x27;nın hedef klasörünü ve Vox.md&#x27;nin ona erişimi olup olmadığını kontrol edin.</li>
+        <li><strong>Uzun bir dosya biraz zaman alır.</strong> Büyük modeller uzun bir kayıtta daha fazla zaman alır. Önce daha küçük bir modeli deneyin, sonra karşılaştırın.</li>
+        <li><strong>Ücretsiz hak bitti.</strong> 15 dakika döküm ve 10 başarılı teslimatı kapsar, ardından tek seferlik ömür boyu kilit açma gelir. Geçerli fiyat App Store&#x27;daki fiyattır; bkz. <a href="/tr/docs/#pricing-limits">ücretsiz kullanım ve ömür boyu kilit açma</a>.</li>
+      </ul>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Bir kaydı sahip olduğunuz bir nota dönüştürün.</h2>
+        <p>Ücretsiz hakla kısa ve hassas olmayan bir klipten başlayın, ardından Markdown dosyasını açın.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_tr_5aaec3f62945">Mac için Vox.md&#x27;yi edinin</a></p>
+      </section>
+      <nav class="toc" aria-label="İlgili kılavuzlar" id="related"><div class="toc-title">Devam</div><ul>
+        <li><a href="/tr/blog/transcribe-meetings-mac-obsidian/">Bunun yerine canlı bir görüşmeyi kaydedin: Mac toplantıları Obsidian&#x27;a</a></li>
+        <li><a href="/tr/blog/dictation-on-mac/">Mac&#x27;te dikte etme</a></li>
+        <li><a href="/tr/compare/whisper-vs-parakeet/">Whisper ve Parakeet</a></li>
+        <li><a href="/tr/blog/transcribe-voice-memos-iphone/">iPhone Sesli Notlarını Markdown&#x27;a Dökün</a></li>
+        <li><a href="/tr/blog/obsidian-meeting-notes-template/">Obsidian toplantı notu şablonu oluşturucu</a></li>
+        <li><a href="/tr/docs/#mac">Mac belgeleri</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/tr/">Ana Sayfa</a></li>
+        <li><a href="/tr/docs/">Belgeler</a></li>
+        <li><a href="/tr/blog/">Kılavuzlar</a></li>
+        <li><a href="/tr/compare/">Karşılaştırın</a></li>
+        <li><a href="/tr/privacy.html">Gizlilik</a></li>
+        <li><a href="/tr/terms.html">Koşullar</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Destek</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_tr_5aaec3f62945">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Yerel notlar için hızlı yakalama · İçerik yükleme yok.</div>
+    </div>
+  <details class="language-switcher"><summary>Dil</summary><ul><li><a href="/blog/transcribe-audio-file-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-audio-file-mac/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-audio-file-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-audio-file-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-audio-file-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-audio-file-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-audio-file-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-audio-file-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-audio-file-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-audio-file-mac/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-audio-file-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-audio-file-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-audio-file-mac/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-audio-file-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-audio-file-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-audio-file-mac/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-audio-file-mac/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-audio-file-mac/" lang="tr" hreflang="tr" aria-current="page">Türkçe</a></li><li><a href="/uk/blog/transcribe-audio-file-mac/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-audio-file-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-audio-file-mac/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-audio-file-mac/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-audio-file-mac/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="vi" dir="ltr" data-search-section="Mục" data-search-guide="Hướng dẫn" data-search-empty="Không khớp “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chép lời tệp âm thanh trên Mac, cục bộ, sang Markdown | Vox.md</title>
+  <meta name="description" content="Xem Voice Memos và Notes trên Mac cung cấp miễn phí những gì, rồi nhập tệp âm thanh hoặc video có sẵn vào Vox.md cho Mac, chép lời ngay trên Mac bằng Whisper hoặc Parakeet, và lưu thành ghi chú Markdown do bạn sở hữu.">
+  <link rel="canonical" href="https://vox.isolated.tech/vi/blog/transcribe-audio-file-mac/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Tài liệu Vox.md về mô hình ngôn ngữ">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Chép lời tệp âm thanh trên Mac, cục bộ, sang Markdown">
+  <meta property="og:description" content="Xem Voice Memos và Notes trên Mac cung cấp miễn phí những gì, rồi nhập tệp âm thanh hoặc video có sẵn vào Vox.md cho Mac, chép lời ngay trên Mac bằng Whisper hoặc Parakeet, và lưu thành ghi chú Markdown do bạn sở hữu.">
+  <meta property="og:url" content="https://vox.isolated.tech/vi/blog/transcribe-audio-file-mac/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-22">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Chép lời tệp âm thanh trên Mac, cục bộ, sang Markdown">
+  <meta name="twitter:description" content="Xem Voice Memos và Notes trên Mac cung cấp miễn phí những gì, rồi nhập tệp âm thanh hoặc video có sẵn vào Vox.md cho Mac, chép lời ngay trên Mac bằng Whisper hoặc Parakeet, và lưu thành ghi chú Markdown do bạn sở hữu.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Chép lời tệp âm thanh trên Mac, cục bộ, sang Markdown",
+  "description": "Xem Voice Memos và Notes trên Mac cung cấp miễn phí những gì, rồi nhập tệp âm thanh hoặc video có sẵn vào Vox.md cho Mac, chép lời ngay trên Mac bằng Whisper hoặc Parakeet, và lưu thành ghi chú Markdown do bạn sở hữu.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-22",
+  "dateModified": "2026-11-22",
+  "mainEntityOfPage": "https://vox.isolated.tech/vi/blog/transcribe-audio-file-mac/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "vi",
+  "name": "Chép lời tệp âm thanh trên Mac, cục bộ, sang Markdown | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/vi/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Hướng dẫn",
+      "item": "https://vox.isolated.tech/vi/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Chép lời tệp âm thanh trên Mac, cục bộ, sang Markdown",
+      "item": "https://vox.isolated.tech/vi/blog/transcribe-audio-file-mac/"
+    }
+  ],
+  "inLanguage": "vi",
+  "name": "Chép lời tệp âm thanh trên Mac, cục bộ, sang Markdown | Vox.md",
+  "description": "Xem Voice Memos và Notes trên Mac cung cấp miễn phí những gì, rồi nhập tệp âm thanh hoặc video có sẵn vào Vox.md cho Mac, chép lời ngay trên Mac bằng Whisper hoặc Parakeet, và lưu thành ghi chú Markdown do bạn sở hữu."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-audio-file-mac/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Đến hướng dẫn</a>
+<nav aria-label="Điều hướng chính">
+  <div class="nav-inner">
+    <a href="/vi/" class="logo" aria-label="trang chủ Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/vi/#how">Cách hoạt động</a></li>
+      <li><a href="/vi/docs/">Tài liệu</a></li>
+      <li><a href="/vi/blog/">Hướng dẫn</a></li>
+      <li><a href="/vi/compare/">So sánh</a></li>
+      <li><a href="/vi/privacy.html">Quyền riêng tư</a></li>
+      <li><a href="/vi/terms.html">Điều khoản</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_vi_5aaec3f62945">Tải Vox.md</a>
+  <details class="language-switcher"><summary>Ngôn ngữ</summary><ul><li><a href="/blog/transcribe-audio-file-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-audio-file-mac/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-audio-file-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-audio-file-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-audio-file-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-audio-file-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-audio-file-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-audio-file-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-audio-file-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-audio-file-mac/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-audio-file-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-audio-file-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-audio-file-mac/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-audio-file-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-audio-file-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-audio-file-mac/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-audio-file-mac/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-audio-file-mac/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-audio-file-mac/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-audio-file-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-audio-file-mac/" lang="vi" hreflang="vi" aria-current="page">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-audio-file-mac/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-audio-file-mac/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Mac · Tệp âm thanh · Chép lời cục bộ</div>
+        <h1 class="hero-title">Chép lời tệp âm thanh trên Mac, cục bộ, sang Markdown</h1>
+        <p class="hero-subtitle">Trước hết là các lựa chọn tích hợp miễn phí, rồi đến đường đi cục bộ từ tệp bạn đã có đến ghi chú Markdown trong Obsidian hoặc thư mục bất kỳ.</p>
+      </div>
+      <aside class="meta-card" aria-label="Về hướng dẫn này">
+        <dl>
+          <div><dt>Bởi</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Cập nhật</dt><dd><time datetime="2026-11-22">22 tháng 11, 2026</time></dd></div>
+          <div><dt>Yêu cầu</dt><dd>Vox.md: macOS 14 trở lên · mô hình giọng nói đã tải. Chép lời tích hợp của Apple: xem các trang Apple Support cho Mac và ngôn ngữ của bạn.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Chép lời tệp âm thanh trên Mac, cục bộ, sang Markdown">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Trả lời ngắn</div>
+        <p>Voice Memos và Notes của Apple có thể chép lời âm thanh trên Mac miễn phí, và với nhiều người thế là đủ. Để biến một tệp âm thanh hoặc video có sẵn thành ghi chú Markdown, hãy mở Vox.md cho Mac, chọn <strong>Nhập âm thanh…</strong> từ thanh menu (hoặc nhập tệp trong không gian ghi nhanh), để mô hình Whisper hoặc Parakeet cục bộ chép lời, xem lại văn bản, rồi gửi vào ghi chú của Lộ trình.</p>
+      </div>
+      <p>Chi tiết về Apple dưới đây lấy từ các trang Apple Support <a href="https://support.apple.com/guide/voice-memos/vm4a03609f0d/mac">Xem bản chép lời trong Voice Memos trên Mac</a> và <a href="https://support.apple.com/guide/notes/apdb5106e334/mac">Ghi âm và chép lời âm thanh trong Notes trên Mac</a>, đọc ngày 22 tháng 11 năm 2026. Các trang của Apple có thể thay đổi, nên hãy kiểm tra theo Mac của bạn. Các bước Vox.md theo <a href="/vi/docs/#mac">Tài liệu Mac</a>.</p>
+      <nav class="toc" aria-label="Trong hướng dẫn này"><div class="toc-title">Trong hướng dẫn này</div><ol>
+        <li><a href="#built-in">Các lựa chọn miễn phí có sẵn trên Mac của bạn</a></li>
+        <li><a href="#choose">Cách nào phù hợp?</a></li>
+        <li><a href="#prepare">Chuẩn bị Vox.md cho Mac</a></li>
+        <li><a href="#import">Nhập và chép lời tệp</a></li>
+        <li><a href="#verify">Kiểm tra ghi chú Markdown</a></li>
+        <li><a href="#privacy">Những gì rời khỏi Mac của bạn</a></li>
+        <li><a href="#troubleshooting">Khắc phục lỗi</a></li>
+        <li><a href="#related">Hướng dẫn liên quan</a></li>
+      </ol></nav>
+
+      <h2 id="built-in">Các lựa chọn miễn phí có sẵn trên Mac của bạn</h2>
+      <h3>Ghi âm</h3>
+      <p>Trang Voice Memos của Apple nói bạn có thể nhấp nút <strong>Chép lời</strong> trong lúc ghi để xem văn bản trực tiếp, hoặc chọn một bản ghi đã xong rồi nhấp cùng nút đó. Bạn có thể tìm trong danh sách bản ghi theo văn bản ở tiêu đề hoặc bản chép lời, và sao chép văn bản chép lời bằng cách chọn nó, nhấp giữ Control rồi chọn <strong>Sao chép</strong>. Apple cho biết nếu bạn mở bản ghi tạo trong macOS 14 trở về trước, hoặc trên thiết bị không hỗ trợ chép lời, Voice Memos sẽ tự động chép lời, và chép lời âm thanh không có ở mọi quốc gia hay khu vực.</p>
+      <h3>Ghi chú</h3>
+      <p>Trang Notes của Apple mô tả cách ghi âm trong một ghi chú: nhấp nút Attachment, chọn <strong>Ghi âm</strong>, ghi âm, rồi nhấp nút Transcription để xem bản chép lời. Trang đó nói chép lời âm thanh có trên Mac dùng chip M1 trở lên, với ngôn ngữ thiết bị mà Apple liệt kê. Nếu nút Transcription không xuất hiện, Apple cho biết Mac của bạn không đáp ứng yêu cầu tối thiểu hoặc không nhận ra ngôn ngữ được hỗ trợ.</p>
+      <h3>Giới hạn</h3>
+      <p>Văn bản nằm trong các ứng dụng đó cho đến khi bạn sao chép ra. Trong Notes, Apple cho biết xóa bản ghi âm cũng xóa bản chép lời. Các trang của Apple không nêu ứng dụng nào nhập được loại tệp nào, nên hãy tự kiểm tra với bản ghi của bạn; hướng dẫn này không khẳng định gì về điều đó.</p>
+      <p>Cách cuối cùng, có người phát âm thanh rồi đọc chính tả vào trình soạn thảo văn bản. Đó là cách làm tạm, không phải chép lời tệp; xem <a href="/vi/blog/dictation-on-mac/">đọc chính tả trên Mac</a> về chính việc đọc chính tả.</p>
+
+      <h2 id="choose">Cách nào phù hợp?</h2>
+      <p>Bảng chỉ liệt kê những gì trang của Apple hoặc tài liệu Vox.md nêu. “Chưa có tài liệu” nghĩa là nguồn chúng tôi trích dẫn không đề cập. Bảng không đưa ra khẳng định nào về độ chính xác hay tốc độ.</p>
+      <p class="guide-table-hint">Trên màn hình nhỏ, hãy vuốt bảng sang ngang.</p>
+      <div class="guide-comparison" role="region" aria-label="So sánh các cách chép lời âm thanh trên Mac; cuộn ngang trên màn hình nhỏ" tabindex="0">
+        <table class="comparison">
+          <caption>Các cách chép lời âm thanh trên Mac, kiểm tra ngày 22 tháng 11 năm 2026</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">Ghi âm</th><th scope="col">Ghi chú</th><th scope="col">Vox.md cho Mac</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Nơi lưu văn bản</th><td>Bên trong Voice Memos; bạn tự sao chép ra</td><td>Bên trong ghi chú, cùng với bản ghi âm</td><td>Một ghi chú Markdown trong thư mục hoặc kho bạn chọn</td></tr>
+            <tr><th scope="row">Những gì chạy trên Mac</th><td>Chưa có tài liệu</td><td>Chưa có tài liệu</td><td>Chép lời, với mô hình Whisper hoặc Parakeet bạn tải xuống</td></tr>
+            <tr><th scope="row">Nhập tệp</th><td>Chưa có tài liệu</td><td>Chưa có tài liệu</td><td>Nhập âm thanh… chấp nhận tệp âm thanh hoặc video</td></tr>
+            <tr><th scope="row">Đầu ra Markdown</th><td>Chưa có tài liệu</td><td>Chưa có tài liệu</td><td>Có</td></tr>
+            <tr><th scope="row">Nhãn người nói</th><td>Chưa có tài liệu</td><td>Chưa có tài liệu</td><td>Tùy chọn, với Xác định người nói</td></tr>
+            <tr><th scope="row">Chi phí</th><td>Một phần của macOS</td><td>Một phần của macOS</td><td>15 phút chép lời miễn phí và 10 lần chuyển thành công, sau đó mở khóa trọn đời một lần</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Nếu văn bản chỉ cần nằm trong Voice Memos hoặc Notes thì cứ dùng chúng. Vox.md dành cho lúc bạn muốn một tệp thuần túy do bạn sở hữu, một mô hình cục bộ cụ thể, hoặc văn bản nằm trong kho của bạn.</p>
+
+      <h2 id="prepare">Chuẩn bị Vox.md cho Mac</h2>
+      <ol>
+        <li><strong>Cài đặt.</strong> Vox.md cho Mac cần macOS 14 trở lên. Tải từ liên kết App Store bên dưới.</li>
+        <li><strong>Tải mô hình.</strong> Mở <strong>Cài đặt → Mô hình</strong> và tải xuống một mô hình: Whisper từ Tiny (75 MB) đến Large v3 Turbo (1.6 GB), Parakeet v2 (khoảng 800 MB, tiếng Anh) hoặc Parakeet v3 (khoảng 800 MB, 25 ngôn ngữ). Đặt ngôn ngữ chép lời trên cùng màn hình. Whisper dùng tăng tốc Metal trên các máy Mac được hỗ trợ. Tải mô hình là bước duy nhất dùng mạng. Xem <a href="/vi/compare/whisper-vs-parakeet/">Whisper và Parakeet</a> để chọn. <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a> chạy các mô hình Whisper và <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> chạy Parakeet.</li>
+        <li><strong>Chọn hoặc tạo một Lộ trình.</strong> Một Lộ trình chứa thư mục hoặc kho đích và ghi chú đích: ghi chú mới, ghi chú ngày liên tục, hoặc ghi chú có sẵn dưới một tiêu đề. Xem <a href="/vi/docs/#presets">Lộ trình trong tài liệu</a>.</li>
+      </ol>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">Tải Vox.md cho Mac.</h2>
+        <p>Hạn mức miễn phí là 15 phút chép lời và 10 lần chuyển thành công, đủ để thử một bản ghi âm.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_5aaec3f62945">Tải Vox.md cho Mac</a></p>
+      </section>
+
+      <h2 id="import">Nhập và chép lời tệp</h2>
+      <ol>
+        <li><strong>Nhập.</strong> Từ thanh menu Vox.md, chọn <strong>Nhập âm thanh…</strong>, hoặc nhập hay kéo âm thanh vào không gian ghi nhanh. Tài liệu nói tệp âm thanh và video đều được chấp nhận, và chúng đi qua cùng quy trình chép lời cục bộ như bản ghi âm.</li>
+        <li><strong>Chọn Thêm vào bản nháp hoặc Gửi ngay.</strong> Với <strong>Gửi ngay</strong> bản chép lời được chuyển đi khi hoàn tất. Với <strong>Thêm vào bản nháp</strong> bạn có thể xem lại trước. Hãy đối chiếu tên, số và ngày với âm thanh.</li>
+        <li><strong>Tùy chọn: Xác định người nói.</strong> Bật <strong>Xác định Speakers</strong> trên Lộ trình để có nhãn người nói ẩn danh, theo khả năng tốt nhất. Lần đầu nó chuẩn bị một mô hình riêng. Nếu không chạy được, bản chép lời thuần được giữ lại và lý do hiển thị trong Thư viện.</li>
+        <li><strong>Tùy chọn: chế độ xử lý.</strong> Một Lộ trình có thể dùng Giữ nguyên bản, Văn bản gọn, Ghi chú cuộc họp, Danh sách việc cần làm hoặc Hướng dẫn tùy chỉnh. Các chế độ Apple Intelligence cần phần cứng tương thích với macOS 26. Nếu không có, Danh sách việc cần làm và Ghi chú cuộc họp dùng bộ định dạng tích hợp, còn Văn bản gọn và Hướng dẫn tùy chỉnh giữ nguyên văn bản gốc.</li>
+        <li><strong>Gửi.</strong> Nhấn Command-Return để gửi bản ghi nhanh vào ghi chú của Lộ trình.</li>
+      </ol>
+
+      <h2 id="verify">Kiểm tra ghi chú Markdown</h2>
+      <p>Chọn <strong>Hiện bản xuất gần nhất</strong> từ thanh menu, hoặc tìm mục trong Thư viện và hiện nó trong Finder, rồi mở tệp trong Obsidian. Nếu chỉ cần văn bản, hãy chọn <strong>Sao chép bản chép lời gần nhất</strong>. Về cấu trúc ghi chú để điền từ bản ghi âm, xem <a href="/vi/blog/obsidian-meeting-notes-template/">trình tạo mẫu ghi chú cuộc họp</a>.</p>
+
+      <h2 id="privacy">Những gì rời khỏi Mac của bạn</h2>
+      <p>Việc chép lời chạy trên Mac, và Vox.md không gửi nội dung ghi nhanh đến máy chủ Vox.md. Tải mô hình sẽ liên hệ hạ tầng Hugging Face hoặc FluidAudio. Nếu thư mục đích đồng bộ qua iCloud hoặc dịch vụ khác, dịch vụ đó xử lý tệp theo điều khoản riêng. Xem <a href="/vi/privacy.html">chính sách riêng tư</a>.</p>
+
+      <h2 id="troubleshooting">Khắc phục lỗi</h2>
+      <ul>
+        <li><strong>Không có bản chép lời, hoặc sai ngôn ngữ.</strong> Kiểm tra mô hình đã được tải và chọn, và ngôn ngữ đã được đặt, trong Cài đặt → Mô hình.</li>
+        <li><strong>Không thấy ghi chú nào.</strong> Kiểm tra thư mục đích của Lộ trình và Vox.md có quyền truy cập thư mục đó.</li>
+        <li><strong>Tệp dài cần nhiều thời gian.</strong> Mô hình lớn hơn mất nhiều thời gian hơn với bản ghi dài. Hãy thử mô hình nhỏ hơn trước, rồi so sánh.</li>
+        <li><strong>Đã dùng hết hạn mức miễn phí.</strong> Gói này gồm 15 phút chép lời và 10 lần chuyển thành công, sau đó mở khóa trọn đời một lần. Giá trên App Store là giá chính thức; xem <a href="/vi/docs/#pricing-limits">dùng miễn phí và mở khóa trọn đời</a>.</li>
+      </ul>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Biến bản ghi âm thành ghi chú do bạn sở hữu.</h2>
+        <p>Hãy bắt đầu với một đoạn ngắn, không nhạy cảm bằng hạn mức miễn phí, rồi mở tệp Markdown.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_5aaec3f62945">Tải Vox.md cho Mac</a></p>
+      </section>
+      <nav class="toc" aria-label="Hướng dẫn liên quan" id="related"><div class="toc-title">Tiếp tục</div><ul>
+        <li><a href="/vi/blog/transcribe-meetings-mac-obsidian/">Thay vào đó, ghi một cuộc gọi trực tiếp: cuộc họp trên Mac vào Obsidian</a></li>
+        <li><a href="/vi/blog/dictation-on-mac/">Đọc chính tả trên Mac</a></li>
+        <li><a href="/vi/compare/whisper-vs-parakeet/">Whisper và Parakeet</a></li>
+        <li><a href="/vi/blog/transcribe-voice-memos-iphone/">Chép Voice Memos iPhone thành Markdown</a></li>
+        <li><a href="/vi/blog/obsidian-meeting-notes-template/">Trình tạo mẫu ghi chú cuộc họp Obsidian</a></li>
+        <li><a href="/vi/docs/#mac">Tài liệu Mac</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/vi/">Trang chủ</a></li>
+        <li><a href="/vi/docs/">Tài liệu</a></li>
+        <li><a href="/vi/blog/">Hướng dẫn</a></li>
+        <li><a href="/vi/compare/">So sánh</a></li>
+        <li><a href="/vi/privacy.html">Quyền riêng tư</a></li>
+        <li><a href="/vi/terms.html">Điều khoản</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Hỗ trợ</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_5aaec3f62945">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Ghi nhanh cho ghi chú cục bộ · Không tải nội dung lên.</div>
+    </div>
+  <details class="language-switcher"><summary>Ngôn ngữ</summary><ul><li><a href="/blog/transcribe-audio-file-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-audio-file-mac/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-audio-file-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-audio-file-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-audio-file-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-audio-file-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-audio-file-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-audio-file-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-audio-file-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-audio-file-mac/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-audio-file-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-audio-file-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-audio-file-mac/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-audio-file-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-audio-file-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-audio-file-mac/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-audio-file-mac/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-audio-file-mac/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-audio-file-mac/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-audio-file-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-audio-file-mac/" lang="vi" hreflang="vi" aria-current="page">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-audio-file-mac/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-audio-file-mac/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
