@@ -115,6 +115,7 @@ struct VoxboardMacApp: App {
         _windowCoordinator = State(initialValue: windowCoordinator)
 
         #if DEBUG
+        ReviewPromptManager.shared.applyDebugSeedIfRequested()
         if ProcessInfo.processInfo.arguments.contains(Self.runtimeQueueValidationArgument) {
             // Allows isolated, noninteractive app-runtime validation with
             // VOXBOARD_SHARED_CONTAINER_OVERRIDE. No production launch path

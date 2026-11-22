@@ -54,6 +54,12 @@ enum CaptureInboxBackgroundDrain {
         // access returns and the foreground drain runs.
         guard !UsageTracker.staticIsAtLimit else { return true }
         let result = await CaptureInboxDeliveryService.drain(captureRootURL: captureRootURL)
+        if !result.receipts.isEmpty {
+            // Counted toward the review prompt; a background drain never asks.
+            await MainActor.run {
+                for _ in result.receipts { ReviewPromptManager.shared.recordDeliveredCapture() }
+            }
+        }
         return result.setupError == nil
     }
 }
