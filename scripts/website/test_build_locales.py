@@ -312,7 +312,7 @@ class RenderingTests(unittest.TestCase):
                 actual = [(a.get('hreflang'),a.get('href')) for a in entry.findall('{http://www.w3.org/1999/xhtml}link')]
                 self.assertEqual(sorted(actual),sorted(page.alternates))
                 self.assertIn(url,outputs[site/'llms.txt'])
-            self.assertEqual(len(submitted),621)
+            self.assertEqual(len(submitted),644)
             self.assertEqual(set(submitted),{url for url,(target,_) in canonical_pages.items() if target.name != '404.html'})
             self.assertEqual(len(submitted),len(set(submitted)))
 
