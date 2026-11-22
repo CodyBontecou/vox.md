@@ -1,0 +1,706 @@
+<!--{
+  "slug": "obsidian-properties-generator",
+  "title": "Obsidian note properties (YAML frontmatter) generator and checker",
+  "description": "Free in-browser tool for Obsidian note properties. Build valid YAML frontmatter for every property type, or paste existing frontmatter and get line-numbered fixes based on the Obsidian Help rules.",
+  "subtitle": "Generate properties in the format Obsidian expects, or check frontmatter you already have and see why a property does not show as the type you meant.",
+  "eyebrow": "Free tool",
+  "requirements": "Obsidian (any platform). Optional: Vox.md for iPhone, Apple Watch or Mac to add properties to captured notes.",
+  "published": "2026-11-22",
+  "modified": "2026-11-22",
+  "image": "/screenshots/01-route-heading-light.png"
+}-->
+<div class="answer-box" id="short-answer"><div class="label">The short answer</div>
+        <p>Obsidian note properties are YAML at the very top of a note, between two <code>---</code> lines. Each property is a <code>name: value</code> pair, a list has one <code>- value</code> line per item, and an internal link must be in quotes. This example is valid:</p>
+      </div>
+      <pre class="guide-code" id="default-properties"><code>---
+tags:
+  - journal
+  - idea
+aliases:
+  - Weekly review
+date: 2026-11-21
+project: "[[Vox.md launch]]"
+published: true
+---
+</code></pre>
+      <p>Need other properties, or want to know why one is not showing as the type you meant? The generator below writes the YAML, and the checker lists line-numbered problems with a fix. Both run entirely in this page: nothing you type is sent anywhere. The rules come from Obsidian Help, <a href="https://obsidian.md/help/properties" target="_blank" rel="noopener">Properties</a> and <a href="https://obsidian.md/help/tags" target="_blank" rel="noopener">Tags</a>.</p>
+      <nav class="toc" aria-label="In this guide"><div class="toc-title">In this guide</div><ol>
+        <li><a href="#generator">Generate properties</a></li>
+        <li><a href="#checker">Check frontmatter you already have</a></li>
+        <li><a href="#types">Property types and how each is written</a></li>
+        <li><a href="#rules">The rules that break properties most often</a></li>
+        <li><a href="#templates">Using properties in templates</a></li>
+        <li><a href="#vox">Add properties to notes you capture</a></li>
+        <li><a href="#faq">Questions</a></li>
+      </ol></nav>
+
+      <h2 id="generator">1. Generate properties</h2>
+      <p class="mt-nojs" id="pg-nojs">The generator and checker need JavaScript. Without it, the example above, the types table and the rules below still work as a reference.</p>
+      <form class="pg-tool" id="pg-tool" aria-label="Properties generator" hidden>
+        <div class="pg-bar">
+          <button type="button" class="btn-secondary" id="pg-add">Add property</button>
+          <button type="button" class="btn-secondary" data-default="tags">Add tags</button>
+          <button type="button" class="btn-secondary" data-default="aliases">Add aliases</button>
+          <button type="button" class="btn-secondary" data-default="cssclasses">Add cssclasses</button>
+        </div>
+        <ol class="pg-rows" id="pg-rows"></ol>
+        <fieldset class="mt-group">
+          <legend>Template plugin tokens</legend>
+          <label class="mt-option"><input type="radio" name="tokens" value="none" checked> <span>Write the dates I enter</span></label>
+          <label class="mt-option"><input type="radio" name="tokens" value="core"> <span>Core Templates: date fields become <code>{{date:YYYY-MM-DD}}</code></span></label>
+          <label class="mt-option"><input type="radio" name="tokens" value="templater"> <span>Templater: date fields become <code>&lt;% tp.date.now("YYYY-MM-DD") %&gt;</code></span></label>
+          <p class="mt-hint">With a token on, Date and Date &amp; time fields are filled in when the template is used. Other values are written as typed.</p>
+        </fieldset>
+      </form>
+      <div class="mt-output-head" id="pg-output-head" hidden>
+        <h3 id="pg-output-title">Your properties</h3>
+        <div class="mt-actions">
+          <button type="button" class="btn-primary" id="pg-copy">Copy</button>
+          <button type="button" class="btn-secondary" id="pg-download">Download .md</button>
+        </div>
+      </div>
+      <p class="mt-status" id="pg-status" role="status"></p>
+      <pre class="guide-code" id="pg-output" aria-labelledby="pg-output-title" aria-live="polite" tabindex="0" hidden><code id="pg-output-code"></code></pre>
+      <p class="mt-hint" id="pg-warnings" role="status" hidden></p>
+      <div class="mt-output-head" id="pg-route-head" hidden>
+        <h3 id="pg-route-title">For a Vox.md Route</h3>
+        <div class="mt-actions"><button type="button" class="btn-secondary" id="pg-route-copy">Copy as Vox.md Route metadata</button></div>
+      </div>
+      <pre class="guide-code" id="pg-route" aria-labelledby="pg-route-title" tabindex="0" hidden><code id="pg-route-code"></code></pre>
+
+      <h2 id="checker">2. Check frontmatter you already have</h2>
+      <p>Paste the top of a note, including the <code>---</code> lines. The checker reads the block line by line and lists each problem with the line number and a fix. It uses a fixed set of line rules, not a full YAML parser, so it can miss an error that a parser would find, and it only checks the rules listed here.</p>
+      <div class="pg-check" id="pg-check" hidden>
+        <label class="mt-field" for="pg-check-input">Frontmatter to check <textarea id="pg-check-input" rows="10" spellcheck="false" autocomplete="off" placeholder="---&#10;tags:&#10;  - journal&#10;---"></textarea></label>
+        <div class="mt-actions">
+          <button type="button" class="btn-primary" id="pg-check-run">Check frontmatter</button>
+          <button type="button" class="btn-secondary" id="pg-check-example">Paste a broken example</button>
+        </div>
+        <div id="pg-check-result" role="status" aria-live="polite" tabindex="-1"></div>
+      </div>
+      <p>The checker looks for: tabs used for indentation, a missing opening or closing <code>---</code>, internal links without quotes, tags with spaces, a <code>#</code> prefix, other characters tags cannot contain or only numbers, the deprecated names <code>tag</code>, <code>alias</code> and <code>cssclass</code>, nested objects, Markdown formatting in values, duplicate names, and a few values YAML itself reads differently from what you meant. Template tokens such as <code>{{date}}</code> and <code>&lt;% %&gt;</code> are skipped.</p>
+
+      <div hidden id="pg-messages">
+        <span data-message="name-label">Property name</span>
+        <span data-message="type-label">Type</span>
+        <span data-message="value-label">Value</span>
+        <span data-message="remove">Remove</span>
+        <span data-message="remove-label">Remove property {name}</span>
+        <span data-message="list-hint">One value per line</span>
+        <span data-message="tags-hint">One tag per line, with or without #</span>
+        <span data-message="checked">Checked</span>
+        <span data-message="token-set">Filled in by the template plugin</span>
+        <span data-message="type-text">Text</span>
+        <span data-message="type-list">List</span>
+        <span data-message="type-number">Number</span>
+        <span data-message="type-checkbox">Checkbox</span>
+        <span data-message="type-date">Date</span>
+        <span data-message="type-datetime">Date &amp; time</span>
+        <span data-message="type-tags">Tags</span>
+        <span data-message="copied">Copied to the clipboard.</span>
+        <span data-message="route-copied">Copied. Paste it into the Route’s Metadata field.</span>
+        <span data-message="copy-failed">Copying failed. Select the text and copy it yourself.</span>
+        <span data-message="downloaded">Downloaded properties.md.</span>
+        <span data-message="added">Added {name}.</span>
+        <span data-message="exists">{name} is already in the list.</span>
+        <span data-message="w-empty-name">A property with no name is left out.</span>
+        <span data-message="w-duplicate">{name} appears more than once. Keep one row for each property.</span>
+        <span data-message="w-number">{name} is not a number, so it is left empty.</span>
+        <span data-message="w-tag">The tag “{from}” was written as {to}, because tags cannot contain spaces or a # prefix, and need a non-numeric character.</span>
+        <span data-message="w-tag-empty">A tag that could not be made valid was left out: {from}</span>
+        <span data-message="w-datetime">{name} needs both a date and a time, so it is left empty.</span>
+        <span data-message="c-none">No problems found.</span>
+        <span data-message="c-empty">Paste some frontmatter to check.</span>
+        <span data-message="c-json">This looks like JSON. Obsidian reads it and saves it as YAML. The line rules here apply to YAML, so paste the YAML version to check it.</span>
+        <span data-message="c-count">Problems found: {n}</span>
+        <span data-message="c-line">Line {line}</span>
+        <span data-message="c-fix">Fix:</span>
+        <span data-message="m-no-open">The block does not start with a --- line. Properties sit between two --- lines at the top of the note.</span>
+        <span data-message="f-no-open">Add --- on its own line before the first property.</span>
+        <span data-message="m-no-close">There is no closing --- line after the properties.</span>
+        <span data-message="f-no-close">Add --- on its own line after the last property.</span>
+        <span data-message="m-tabs">This line is indented with a tab. YAML does not allow tabs for indentation.</span>
+        <span data-message="f-tabs">Replace each leading tab with spaces, for example two.</span>
+        <span data-message="m-not-pair">This line is not a name: value pair.</span>
+        <span data-message="f-not-pair">Write it as name: value, with a space after the colon.</span>
+        <span data-message="m-duplicate">The property {key} was already set on line {first}.</span>
+        <span data-message="f-duplicate">Keep one {key} line and merge the values into it.</span>
+        <span data-message="m-deprecated">{key} is a deprecated property name. It was deprecated in Obsidian 1.4, and support for it as a default property was dropped in 1.9.</span>
+        <span data-message="f-deprecated">Rename it to {fixed}.</span>
+        <span data-message="m-link-unquoted">An internal link in a property must be surrounded with quotes.</span>
+        <span data-message="f-link-unquoted">Write it as {fixed}</span>
+        <span data-message="m-tag-hash">Tags in properties are written without the # prefix.</span>
+        <span data-message="f-tag-hash">Write {fixed}</span>
+        <span data-message="m-tag-space">The tag {tag} contains a space. Tags can’t contain blank spaces.</span>
+        <span data-message="f-tag-space">Use a hyphen, for example {fixed}, or put each tag on its own line.</span>
+        <span data-message="m-tag-numeric">The tag {tag} has no non-numeric character. A tag must contain at least one.</span>
+        <span data-message="f-tag-numeric">Add a letter, for example {fixed}</span>
+        <span data-message="m-tag-chars">The tag {tag} has a character that tags cannot contain. Tags can use letters, numbers, underscore, hyphen and / for nesting.</span>
+        <span data-message="f-tag-chars">Remove or replace it, for example {fixed}</span>
+        <span data-message="m-nested">{key} holds a nested object. Properties do not support nested objects.</span>
+        <span data-message="f-nested">Flatten it into separate top-level properties, or edit it in source mode.</span>
+        <span data-message="m-markdown">The value contains Markdown formatting ({sample}). Properties do not render Markdown, by design.</span>
+        <span data-message="f-markdown">Remove the formatting characters and keep plain text.</span>
+        <span data-message="m-bad-colon">This unquoted value contains a colon followed by a space, which YAML reads as the start of another name.</span>
+        <span data-message="f-bad-colon">Put the value in quotes: {fixed}</span>
+        <span data-message="m-bad-start">This unquoted value starts with {char}, which YAML treats specially.</span>
+        <span data-message="f-bad-start">Put the value in quotes: {fixed}</span>
+        <span data-message="m-unclosed-quote">A quote is opened but not closed on this line.</span>
+        <span data-message="f-unclosed-quote">Add the closing quote.</span>
+        <span data-message="m-comment">In YAML, a space followed by # starts a comment, so the rest of the line is not part of the value.</span>
+        <span data-message="f-comment">If the # belongs to the value, put the value in quotes: {fixed}</span>
+        <span data-message="broken-example">Broken example loaded.</span>
+      </div>
+
+      <h2 id="types">3. Property types and how each is written</h2>
+      <p>Obsidian supports seven property types. Each is written in the YAML like this:</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th>Type</th><th>YAML example</th><th>Gotcha</th></tr></thead>
+          <tbody>
+            <tr><td>Text</td><td><code>title: Weekly review</code></td><td>Quote a value YAML would misread, such as one with <code>: </code> in it, or one that starts with <code>#</code>. Internal links must be in quotes.</td></tr>
+            <tr><td>List</td><td><code>topics:</code><br><code>&nbsp;&nbsp;- sleep</code><br><code>&nbsp;&nbsp;- focus</code></td><td>Each value is on its own line, preceded by a hyphen and a space.</td></tr>
+            <tr><td>Number</td><td><code>rating: 4</code></td><td>Write the number without quotes.</td></tr>
+            <tr><td>Checkbox</td><td><code>published: true</code></td><td>The value is <code>true</code> or <code>false</code>.</td></tr>
+            <tr><td>Date</td><td><code>date: 2026-11-21</code></td><td>The format is <code>YYYY-MM-DD</code>.</td></tr>
+            <tr><td>Date &amp; time</td><td><code>time: 2026-11-21T10:30:00</code></td><td>The format is <code>YYYY-MM-DDTHH:MM:SS</code>.</td></tr>
+            <tr><td>Tags</td><td><code>tags:</code><br><code>&nbsp;&nbsp;- recipe</code><br><code>&nbsp;&nbsp;- cooking</code></td><td>Written without <code>#</code>. No spaces, and at least one non-numeric character.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Obsidian also has three default properties: <code>tags</code>, <code>aliases</code> and <code>cssclasses</code>. The generator has a button for each.</p>
+
+      <h2 id="rules">4. The rules that break properties most often</h2>
+      <ul>
+        <li><strong>Put internal links in quotes.</strong> <code>project: "[[Vox.md launch]]"</code>, not <code>project: [[Vox.md launch]]</code>. This applies to text properties and to items in a list.</li>
+        <li><strong>One list item per line.</strong> Each item starts with a hyphen and a space, indented under the property name. Use spaces to indent, not tabs.</li>
+        <li><strong>Tags have their own rules.</strong> No <code>#</code> in the YAML, no spaces, and at least one non-numeric character: <code>1984</code> is not a valid tag but <code>y1984</code> is. Use <code>/</code> for nested tags such as <code>inbox/to-read</code>. See <a href="https://obsidian.md/help/tags" target="_blank" rel="noopener">Tags</a> in Obsidian Help.</li>
+        <li><strong>Write dates in the stored format.</strong> <code>2026-11-21</code> for a date and <code>2026-11-21T10:30:00</code> for a date and time.</li>
+        <li><strong>Use the current names.</strong> <code>tag</code>, <code>alias</code> and <code>cssclass</code> were deprecated in Obsidian 1.4 in favor of <code>tags</code>, <code>aliases</code> and <code>cssclasses</code>, and support for them as default properties was dropped in Obsidian 1.9.</li>
+        <li><strong>Do not nest.</strong> Properties do not support nested objects. Obsidian suggests source mode to view nested properties, so flatten them into top-level names such as <code>project_status</code>.</li>
+        <li><strong>Do not use Markdown.</strong> Bold, links and other formatting are not rendered in properties. Obsidian describes this as intentional, because properties are meant for small, atomic bits of information.</li>
+      </ul>
+
+      <h2 id="templates">5. Using properties in templates</h2>
+      <p>Turn on <strong>Template plugin tokens</strong> in the generator to write date fields as a token instead of a fixed date. The core Templates plugin uses <code>{{date:YYYY-MM-DD}}</code>; the Templater community plugin uses <code>&lt;% tp.date.now("YYYY-MM-DD") %&gt;</code> (see the Templater <a href="https://silentvoid13.github.io/Templater/" target="_blank" rel="noopener">documentation</a>). Date &amp; time fields use <code>YYYY-MM-DD[T]HH:mm:ss</code> in the token, with the <code>T</code> in square brackets so it is written as a letter.</p>
+      <p>Links need care here. Obsidian adds the quotes for a link you type in the Properties UI, but a template plugin writes text into the file as it is, so write the quotes yourself in the template: <code>project: "[[Vox.md launch]]"</code>.</p>
+      <p>For whole templates that use these properties, see the <a href="../obsidian-daily-note-template/">daily note template generator</a> and the <a href="../obsidian-meeting-notes-template/">meeting notes template generator</a>.</p>
+
+      <h2 id="vox">6. Add properties to notes you capture</h2>
+      <p>In a Vox.md Route, the Metadata field takes one <code>key: value</code> pair per line, such as <code>tags: [journal, idea]</code>. <strong>Note Frontmatter</strong> writes the metadata at document scope. <strong>Inline Entry Fields</strong> writes <code>key:: value</code> fields beside each entry in a rolling note. See <a href="../../docs/#preset-metadata">Metadata in the Routes reference</a>.</p>
+      <p>The generator’s <strong>Copy as Vox.md Route metadata</strong> button writes your properties in that shape, with lists as <code>[a, b]</code> and one property per line. Vox.md’s documentation describes the field as <code>key: value</code> lines; this page does not test how each property type is written, so open the first captured note in Obsidian and check it. Routes for a daily note and an inbox are covered in <a href="../append-to-obsidian-daily-note-iphone/">Append to an Obsidian daily note</a>, <a href="../obsidian-capture-templates/">capture templates</a> and <a href="../voice-notes-to-obsidian-iphone/">iPhone voice notes to Obsidian</a>.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Put these properties on every captured note.</h2>
+        <p>Want these properties on every note you capture from iPhone, Apple Watch or Mac? Paste them into a Vox.md Route’s Metadata and choose Note Frontmatter. The free tier includes 15 minutes of transcription and 10 successful Capture deliveries.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Get Vox.md on the App Store</a></p>
+      </section>
+
+      <h2 id="faq">7. Questions</h2>
+      <h3>Why does Obsidian not show my property as the type I meant?</h3>
+      <p>Obsidian reads properties as YAML, and a value that does not follow the rules for its type is not shown as that type. The usual causes are an unquoted link, a list not written one item per line, a date not in <code>YYYY-MM-DD</code>, and tags with spaces. Paste the block into the checker above to find the line.</p>
+      <h3>Do tags need a # in properties?</h3>
+      <p>No. In the YAML, tags are written as plain words, such as <code>- recipe</code>. The <code>#</code> is for tags in the body of a note.</p>
+      <h3>Can I nest properties?</h3>
+      <p>No. Properties do not support nested objects. Use flat names, or nested tags with <code>/</code> inside the <code>tags</code> list.</p>
+      <h3>Can I write properties as JSON?</h3>
+      <p>Obsidian can read a JSON block, but it reads and saves it as YAML. The checker above only applies its line rules to YAML.</p>
+
+      <nav class="toc" aria-label="Related guides" id="related"><div class="toc-title">Continue your setup</div><ul>
+        <li><a href="../obsidian-daily-note-template/">Obsidian daily note template generator</a></li>
+        <li><a href="../obsidian-meeting-notes-template/">Obsidian meeting notes template generator</a></li>
+        <li><a href="../obsidian-capture-templates/">Path and template recipes</a></li>
+        <li><a href="../append-to-obsidian-daily-note-iphone/">Append to an Obsidian daily note</a></li>
+        <li><a href="../voice-notes-to-obsidian-iphone/">Save iPhone voice notes to Obsidian</a></li>
+        <li><a href="../../docs/#preset-metadata">Route metadata reference</a></li>
+      </ul></nav>
+<style>
+.pg-tool:not([hidden]) { display: flex; flex-direction: column; gap: 16px; }
+.pg-bar { display: flex; flex-wrap: wrap; gap: 8px; }
+.pg-bar button, .pg-check .mt-actions button { font: inherit; font-size: 15px; min-height: 44px; padding: 0 16px; cursor: pointer; }
+.pg-rows { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.pg-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px 12px; padding: 14px 16px; background: var(--card); border: 1.5px solid var(--ink); border-radius: 16px; }
+.pg-row .mt-field { margin-top: 0; }
+.pg-row .pg-value, .pg-row .pg-remove-cell { grid-column: 1 / -1; }
+.pg-row input[type="text"], .pg-row input[type="number"], .pg-row input[type="date"], .pg-row input[type="datetime-local"], .pg-row select, .pg-row textarea, .pg-check textarea { font: inherit; font-family: var(--font-mono); font-size: 15px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; padding: 8px 10px; min-height: 40px; width: 100%; box-sizing: border-box; }
+.pg-row textarea, .pg-check textarea { resize: vertical; }
+.pg-row input:focus-visible, .pg-row select:focus-visible, .pg-row textarea:focus-visible, .pg-check textarea:focus-visible, #pg-check-result:focus-visible, #pg-route:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.pg-remove { font: inherit; font-size: 14px; min-height: 40px; padding: 0 14px; cursor: pointer; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; }
+.pg-remove:hover { background: var(--lime); }
+.pg-check:not([hidden]) { display: flex; flex-direction: column; gap: 12px; }
+.pg-check .mt-field { color: var(--ink); }
+.pg-problems { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.pg-problems li { padding: 12px 14px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow-wrap: anywhere; }
+.pg-problems .pg-line { display: block; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+.pg-problems .pg-fix { display: block; margin-top: 4px; }
+.pg-ok { font-weight: 600; color: var(--accent-text); }
+@media (min-width: 720px) { .pg-row { grid-template-columns: minmax(0, 1fr) 180px minmax(0, 2fr) auto; align-items: start; } .pg-row .pg-value, .pg-row .pg-remove-cell { grid-column: auto; } .pg-row .pg-remove-cell { align-self: end; } }
+</style>
+<script>
+/* Properties generator and checker. Runs locally: no network requests. */
+(function () {
+  var NUMERIC = /^[-+]?(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?$/;
+  var TOKEN = /^(\{\{[^{}]*\}\}|<%[\s\S]*%>)$/;
+  var TAG_BAD = /[^\p{L}\p{N}_\/-]/gu;
+  var DEFAULTS = { tags: 'tags', aliases: 'list', cssclasses: 'list' };
+  var TOKENS = {
+    core: { date: '{{date:YYYY-MM-DD}}', datetime: '{{date:YYYY-MM-DD[T]HH:mm:ss}}' },
+    templater: { date: '<% tp.date.now("YYYY-MM-DD") %>', datetime: '<% tp.date.now("YYYY-MM-DD[T]HH:mm:ss") %>' }
+  };
+
+  function quote(s) { return '"' + s.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"'; }
+  function stripLinkQuotes(s) {
+    var m = /^"(\[\[.*\]\])"$/.exec(s);
+    return m ? m[1] : s;
+  }
+  /* Does YAML need quotes to read this text value as the text you typed? */
+  function needsQuote(s) {
+    if (s === '') return false;
+    if (/^\[\[/.test(s)) return true;
+    if (/^[#\[\]{}*&!%@`'"|>?,]/.test(s)) return true;
+    if (/^[-:]( |$)/.test(s)) return true;
+    if (/:(\s|$)/.test(s) || /\s#/.test(s)) return true;
+    if (/^\s|\s$/.test(s)) return true;
+    if (/^(yes|no|true|false|null|on|off|y|n|~)$/i.test(s)) return true;
+    if (NUMERIC.test(s) || /^0x[0-9a-f]+$/i.test(s)) return true;
+    if (/^\d{4}-\d{2}-\d{2}/.test(s)) return true;
+    return false;
+  }
+  function textScalar(value, mode) {
+    var s = stripLinkQuotes(String(value).replace(/[\r\n]+/g, ' ').trim());
+    if (mode !== 'none' && TOKEN.test(s)) return s;
+    return needsQuote(s) ? quote(s) : s;
+  }
+  function keyScalar(name) {
+    var odd = /^[#\[\]{}*&!%@`'"|>?,]/.test(name) || /^[-:]( |$)/.test(name) || /:(\s|$)/.test(name) || /\s#/.test(name) || /^\s|\s$/.test(name);
+    return odd ? quote(name) : name;
+  }
+  /* Make a tag valid, or return '' if that is not possible. */
+  function cleanTag(value) {
+    var t = String(value).trim().replace(/^#+/, '').replace(/\s+/g, '-').replace(TAG_BAD, '').replace(/^\/+|\/+$/g, '');
+    return /[^\d\/_-]/.test(t) || /\p{L}/u.test(t) ? t : '';
+  }
+  function lines(value, splitCommas) {
+    return String(value || '').split(splitCommas ? /[\r\n,]+/ : /[\r\n]+/).map(function (s) { return s.trim(); }).filter(Boolean);
+  }
+  function dateTimeValue(v) {
+    var m = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})(?::(\d{2}))?/.exec(v || '');
+    return m ? m[1] + 'T' + m[2] + ':' + (m[3] || '00') : '';
+  }
+  function dateValue(v) { return /^\d{4}-\d{2}-\d{2}$/.test(v || '') ? v : ''; }
+
+  /* rows: [{name, type, value}]. type: text|list|number|checkbox|date|datetime|tags. mode: none|core|templater. */
+  function build(rows, mode) {
+    mode = mode || 'none';
+    var out = [];
+    rows.forEach(function (row) {
+      var name = String(row.name || '').trim();
+      if (!name) return;
+      var key = keyScalar(name) + ':';
+      var v = row.value;
+      switch (row.type) {
+        case 'list':
+        case 'tags':
+          var items = row.type === 'tags'
+            ? lines(v, true).map(cleanTag).filter(Boolean)
+            : lines(v).map(function (s) { return textScalar(s, mode); });
+          if (!items.length) { out.push(key + ' []'); break; }
+          out.push(key);
+          items.forEach(function (item) { out.push('  - ' + item); });
+          break;
+        case 'number': out.push(NUMERIC.test(String(v || '').trim()) ? key + ' ' + String(v).trim() : key); break;
+        case 'checkbox': out.push(key + ' ' + (v === 'true' || v === true ? 'true' : 'false')); break;
+        case 'date':
+          if (mode !== 'none') { out.push(key + ' ' + TOKENS[mode].date); break; }
+          out.push(dateValue(v) ? key + ' ' + dateValue(v) : key); break;
+        case 'datetime':
+          if (mode !== 'none') { out.push(key + ' ' + TOKENS[mode].datetime); break; }
+          out.push(dateTimeValue(v) ? key + ' ' + dateTimeValue(v) : key); break;
+        default: var t = textScalar(v || '', mode); out.push(t ? key + ' ' + t : key);
+      }
+    });
+    return out.length ? '---\n' + out.join('\n') + '\n---\n' : '';
+  }
+  /* Problems with the rows themselves. Each: {id, ...params}. */
+  function warnings(rows, mode) {
+    var found = [], seen = {};
+    rows.forEach(function (row) {
+      var name = String(row.name || '').trim();
+      if (!name) { if (found.every(function (w) { return w.id !== 'w-empty-name'; })) found.push({ id: 'w-empty-name' }); return; }
+      if (seen[name] && found.every(function (w) { return w.id !== 'w-duplicate' || w.name !== name; })) found.push({ id: 'w-duplicate', name: name });
+      seen[name] = true;
+      if (row.type === 'number' && String(row.value || '').trim() && !NUMERIC.test(String(row.value).trim())) found.push({ id: 'w-number', name: name });
+      if (row.type === 'datetime' && mode === 'none' && row.value && !dateTimeValue(row.value)) found.push({ id: 'w-datetime', name: name });
+      if (row.type === 'tags') lines(row.value, true).forEach(function (raw) {
+        var fixed = cleanTag(raw);
+        if (!fixed) found.push({ id: 'w-tag-empty', from: raw });
+        else if (fixed !== raw) found.push({ id: 'w-tag', from: raw, to: fixed });
+      });
+    });
+    return found;
+  }
+  function routeMetadata(rows) {
+    var out = [];
+    rows.forEach(function (row) {
+      var name = String(row.name || '').trim();
+      if (!name) return;
+      var v = row.value, text;
+      if (row.type === 'list' || row.type === 'tags') {
+        var items = row.type === 'tags' ? lines(v, true).map(cleanTag).filter(Boolean) : lines(v).map(function (s) { return textScalar(s, 'none'); });
+        items = items.map(function (s) { return /[,\[\]]/.test(s) && !/^"/.test(s) ? quote(s) : s; });
+        if (!items.length) return;
+        text = '[' + items.join(', ') + ']';
+      } else if (row.type === 'checkbox') text = v === 'true' || v === true ? 'true' : 'false';
+      else if (row.type === 'number') text = NUMERIC.test(String(v || '').trim()) ? String(v).trim() : '';
+      else if (row.type === 'date') text = dateValue(v);
+      else if (row.type === 'datetime') text = dateTimeValue(v);
+      else text = textScalar(v || '', 'none');
+      if (text) out.push(keyScalar(name) + ': ' + text);
+    });
+    return out.join('\n');
+  }
+
+  /* ---- Checker: fixed line rules, not a YAML parser. ---- */
+  var DEPRECATED = { tag: 'tags', alias: 'aliases', cssclass: 'cssclasses' };
+  var PAIR = /^("[^"]*"|'[^']*'|[^\s:#'"\-\[{][^:]*?|-[^\s:][^:]*?):(?:[ ]+(.*)|)$/;
+  var MAP_ITEM = /^[^\s"'\[{#][^:]*:(\s|$)/;
+  var MARKDOWN = [
+    [/\*\*[^*]+\*\*/, 'bold'], [/__[^_]+__/, 'bold'], [/~~[^~]+~~/, 'strikethrough'], [/==[^=]+==/, 'highlight'],
+    [/`[^`]+`/, 'code'], [/\[[^\[\]]+\]\([^)]*\)/, 'link'], [/(^|[^*\w])\*[^*\s][^*]*\*(?!\*)/, 'italic']
+  ];
+  function unquote(s) {
+    var m = /^"(.*)"$|^'(.*)'$/.exec(s);
+    return m ? (m[1] !== undefined ? m[1] : m[2]) : s;
+  }
+
+  function check(text) {
+    var all = String(text).replace(/\r\n?/g, '\n').split('\n');
+    var problems = [];
+    function add(line, rule, params) { problems.push({ line: line, rule: rule, params: params || {} }); }
+    var start = 0;
+    while (start < all.length && all[start].trim() === '') start++;
+    if (start >= all.length) return { empty: true, json: false, problems: [] };
+    if (all[start].trim().charAt(0) === '{' && !TOKEN.test(all[start].trim())) return { empty: false, json: true, problems: [] };
+    var opened = /^---\s*$/.test(all[start]);
+    var first = opened ? start + 1 : start;
+    var end = all.length;
+    for (var c = first; c < all.length; c++) if (/^(---|\.\.\.)\s*$/.test(all[c])) { end = c; break; }
+    if (!opened) add(start + 1, 'no-open');
+    else if (end === all.length) add(start + 1, 'no-close');
+
+    var seen = {}, current = null, block = false, flow = false, nested = {};
+    function quoted(s) { return quote(unquote(s)); }
+    function tagIssues(raw, n) {
+      var t = unquote(raw.trim());
+      if (!t) return;
+      if (t.charAt(0) === '#') { add(n, 'tag-hash', { tag: t, fixed: t.replace(/^#+/, '') }); return; }
+      if (/\s/.test(t)) { add(n, 'tag-space', { tag: t, fixed: t.replace(/\s+/g, '-') }); return; }
+      if (/^\d+$/.test(t)) { add(n, 'tag-numeric', { tag: t, fixed: 'y' + t }); return; }
+      if (TAG_BAD.test(t)) { TAG_BAD.lastIndex = 0; add(n, 'tag-chars', { tag: t, fixed: t.replace(TAG_BAD, '') }); }
+      TAG_BAD.lastIndex = 0;
+    }
+    function value(val, n, key, isItem) {
+      if (TOKEN.test(val)) return;
+      var q = /^"(.*)"$|^'(.*)'$/.exec(val);
+      if (!q && /^["']/.test(val)) { add(n, 'unclosed-quote'); return; }
+      var body = q ? (q[1] !== undefined ? q[1] : q[2]) : val;
+      var comment = false;
+      if (!q) {
+        var hash = val.search(/(^|\s)#/);
+        if (hash !== -1 && !(isItem === false && hash === 0 && !val)) {
+          if (hash === 0 || key === 'tags' || key === 'tag') {
+            if (key === 'tags' || key === 'tag') { tagIssues(val.slice(hash === 0 ? 0 : hash).trim(), n); return; }
+          } else { comment = true; body = val.slice(0, hash).trim(); }
+        }
+      }
+      if (key === 'tags' || key === 'tag') {
+        var parts;
+        if (!q && /^\[/.test(body)) parts = body.replace(/^\[|\]\s*$/g, '').split(',');
+        else parts = isItem || q ? [body] : body.split(',');
+        parts.forEach(function (p) { tagIssues(p, n); });
+        return;
+      }
+      if (!q) {
+        var noQuoted = body.replace(/"[^"]*"|'[^']*'/g, '');
+        if (/^\[\[/.test(body) || (/^\[/.test(body) && /\[\[/.test(noQuoted))) {
+          var fixed = body.replace(/\[\[[^\[\]]*\]\]/g, function (m) { return '"' + m + '"'; });
+          add(n, 'link-unquoted', { fixed: fixed });
+          return;
+        }
+        if (/^\{/.test(body)) { reportNested(n, key); return; }
+        if (!/^\[/.test(body)) {
+          if (/:(\s|$)/.test(body)) { add(n, 'bad-colon', { fixed: quote(body) }); return; }
+          if (/^[@%`*&!]/.test(body)) { add(n, 'bad-start', { char: body.charAt(0), fixed: quote(body) }); return; }
+        }
+        if (comment) { add(n, 'comment', { fixed: quote(val) }); }
+      }
+      var plain = body.replace(/\[\[.*?\]\]/g, '');
+      for (var i = 0; i < MARKDOWN.length; i++) {
+        var m = MARKDOWN[i][0].exec(plain);
+        if (m) { add(n, 'markdown', { sample: m[0].trim() }); break; }
+      }
+    }
+    function reportNested(n, key) {
+      if (nested[key]) return;
+      nested[key] = true;
+      add(n, 'nested', { key: key });
+    }
+
+    for (var i = first; i < end; i++) {
+      var raw = all[i], n = i + 1;
+      if (/^[ ]*\t/.test(raw)) add(n, 'tabs');
+      var line = raw.replace(/^[ \t]+/, function (m) { return m.replace(/\t/g, '  '); });
+      if (line.trim() === '' || /^\s*#/.test(line)) continue;
+      if (block) { if (/^\s/.test(line)) continue; block = false; }
+      if (flow) { if (line.indexOf(']') !== -1) flow = false; continue; }
+      var indent = line.match(/^ */)[0].length;
+      var body = line.trim();
+      if (/^-(\s|$)/.test(body)) {
+        if (!current) { add(n, 'not-pair'); continue; }
+        var item = body.replace(/^-\s*/, '');
+        if (item === '') continue;
+        if (MAP_ITEM.test(item) && !TOKEN.test(item)) { reportNested(n, current); continue; }
+        value(item, n, current, true);
+        continue;
+      }
+      if (indent > 0) {
+        if (current && MAP_ITEM.test(body)) reportNested(n, current);
+        continue;
+      }
+      var m = PAIR.exec(body);
+      if (!m) { add(n, 'not-pair'); continue; }
+      var key = unquote(m[1]), val = (m[2] || '').trim();
+      if (Object.prototype.hasOwnProperty.call(seen, key)) add(n, 'duplicate', { key: key, first: seen[key] });
+      else seen[key] = n;
+      current = key;
+      if (Object.prototype.hasOwnProperty.call(DEPRECATED, key)) add(n, 'deprecated', { key: key, fixed: DEPRECATED[key] });
+      if (val === '') continue;
+      if (/^[|>]/.test(val)) { block = true; continue; }
+      if (/^\[/.test(val) && !/\]\s*(#.*)?$/.test(val)) { flow = true; }
+      value(val, n, key, false);
+    }
+    problems.sort(function (a, b) { return a.line - b.line; });
+    return { empty: false, json: false, problems: problems };
+  }
+
+  var EXAMPLE_BROKEN = '---\ntags:\n\t- #journal\n  - my idea\n  - 2026\nalias: Weekly\nproject: [[Vox.md launch]]\ntitle: Plan: phase 1\nsummary: Done and **dusted**\nsettings:\n  theme: dark\ndate: 2026-11-21\ndate: 2026-11-22\n---\n';
+
+  if (typeof window !== 'undefined') {
+    window.voxProperties = { build: build, warnings: warnings, routeMetadata: routeMetadata, check: check, needsQuote: needsQuote, cleanTag: cleanTag };
+  }
+
+  var form = document.getElementById('pg-tool');
+  if (!form) return;
+  var rowsEl = document.getElementById('pg-rows');
+  var outHead = document.getElementById('pg-output-head');
+  var outPre = document.getElementById('pg-output');
+  var outCode = document.getElementById('pg-output-code');
+  var warnEl = document.getElementById('pg-warnings');
+  var routeHead = document.getElementById('pg-route-head');
+  var routePre = document.getElementById('pg-route');
+  var routeCode = document.getElementById('pg-route-code');
+  var status = document.getElementById('pg-status');
+  var rows = [{ name: 'tags', type: 'tags', value: 'journal\nidea' }, { name: 'date', type: 'date', value: '' }];
+  var TYPES = ['text', 'list', 'number', 'checkbox', 'date', 'datetime', 'tags'];
+  var uid = 0;
+
+  function message(name, fill) {
+    var el = document.querySelector('#pg-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : '';
+    if (fill) Object.keys(fill).forEach(function (k) { text = text.split('{' + k + '}').join(fill[k]); });
+    return text;
+  }
+  function say(text) { status.textContent = ''; window.setTimeout(function () { status.textContent = text; }, 30); }
+  function mode() { return form.elements.tokens.value; }
+  function el(tag, attrs, text) {
+    var e = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) { e.setAttribute(k, attrs[k]); });
+    if (text) e.textContent = text;
+    return e;
+  }
+  function labelled(text, control, id) {
+    var label = el('label', { 'class': 'mt-field', 'for': id });
+    label.appendChild(document.createTextNode(text + ' '));
+    control.id = id;
+    label.appendChild(control);
+    return label;
+  }
+
+  function renderValue(li, row) {
+    var cell = li.querySelector('.pg-value');
+    cell.textContent = '';
+    var id = 'pg-v' + li.getAttribute('data-uid');
+    var control, tokenOn = mode() !== 'none' && (row.type === 'date' || row.type === 'datetime');
+    var label = message('value-label');
+    if (tokenOn) {
+      var note = el('p', { 'class': 'mt-hint' }, message('token-set'));
+      cell.appendChild(note);
+      return;
+    }
+    switch (row.type) {
+      case 'list': case 'tags':
+        control = el('textarea', { rows: '3', spellcheck: 'false', placeholder: message(row.type === 'tags' ? 'tags-hint' : 'list-hint') });
+        break;
+      case 'number': control = el('input', { type: 'number', step: 'any' }); break;
+      case 'checkbox':
+        control = el('input', { type: 'checkbox' });
+        var wrap = el('label', { 'class': 'mt-option', 'for': id });
+        control.id = id;
+        control.checked = row.value === 'true';
+        control.addEventListener('change', function () { row.value = control.checked ? 'true' : 'false'; update(); });
+        wrap.appendChild(control);
+        wrap.appendChild(el('span', {}, message('checked')));
+        cell.appendChild(wrap);
+        return;
+      case 'date': control = el('input', { type: 'date' }); break;
+      case 'datetime': control = el('input', { type: 'datetime-local', step: '1' }); break;
+      default: control = el('input', { type: 'text', autocomplete: 'off', spellcheck: 'false' });
+    }
+    control.value = row.value || '';
+    control.addEventListener('input', function () { row.value = control.value; update(); });
+    cell.appendChild(labelled(label, control, id));
+  }
+  function renderRow(row) {
+    var li = el('li', { 'class': 'pg-row', 'data-uid': String(++uid) });
+    var nameInput = el('input', { type: 'text', autocomplete: 'off', spellcheck: 'false' });
+    nameInput.value = row.name;
+    nameInput.addEventListener('input', function () { row.name = nameInput.value; update(); });
+    li.appendChild(labelled(message('name-label'), nameInput, 'pg-n' + uid));
+    var select = el('select');
+    TYPES.forEach(function (t) { select.appendChild(el('option', { value: t }, message('type-' + t))); });
+    select.value = row.type;
+    select.addEventListener('change', function () {
+      row.type = select.value;
+      row.value = row.type === 'checkbox' ? 'false' : '';
+      renderValue(li, row);
+      update();
+    });
+    li.appendChild(labelled(message('type-label'), select, 'pg-t' + uid));
+    li.appendChild(el('div', { 'class': 'pg-value' }));
+    var removeCell = el('div', { 'class': 'pg-remove-cell' });
+    var remove = el('button', { type: 'button', 'class': 'pg-remove' }, message('remove'));
+    remove.setAttribute('aria-label', message('remove-label', { name: row.name || '' }));
+    remove.addEventListener('click', function () {
+      rows.splice(rows.indexOf(row), 1);
+      li.remove();
+      update();
+    });
+    nameInput.addEventListener('input', function () { remove.setAttribute('aria-label', message('remove-label', { name: row.name })); });
+    removeCell.appendChild(remove);
+    li.appendChild(removeCell);
+    rowsEl.appendChild(li);
+    renderValue(li, row);
+    li._row = row;
+    return li;
+  }
+  function addRow(row) {
+    rows.push(row);
+    var li = renderRow(row);
+    update();
+    return li;
+  }
+
+  function update() {
+    var text = build(rows, mode());
+    outCode.textContent = text;
+    var route = routeMetadata(rows);
+    routeCode.textContent = route;
+    var hasOutput = text !== '';
+    outHead.hidden = !hasOutput; outPre.hidden = !hasOutput;
+    routeHead.hidden = route === ''; routePre.hidden = route === '';
+    var notes = warnings(rows, mode()).map(function (w) { return message(w.id, w); });
+    warnEl.textContent = notes.join(' ');
+    warnEl.hidden = !notes.length;
+  }
+
+  rows.forEach(renderRow);
+  Array.prototype.forEach.call(form.querySelectorAll('[data-default]'), function (button) {
+    button.addEventListener('click', function () {
+      var name = button.getAttribute('data-default');
+      var existing = rows.filter(function (r) { return r.name === name; })[0];
+      if (existing) {
+        var found = Array.prototype.filter.call(rowsEl.children, function (li) { return li._row === existing; })[0];
+        if (found) found.querySelector('input').focus();
+        say(message('exists', { name: name }));
+        return;
+      }
+      var li = addRow({ name: name, type: DEFAULTS[name], value: '' });
+      li.querySelector('textarea').focus();
+      say(message('added', { name: name }));
+    });
+  });
+  document.getElementById('pg-add').addEventListener('click', function () {
+    var li = addRow({ name: '', type: 'text', value: '' });
+    li.querySelector('input').focus();
+  });
+  form.addEventListener('change', function (event) {
+    if (event.target.name !== 'tokens') return;
+    Array.prototype.forEach.call(rowsEl.children, function (li) { renderValue(li, li._row); });
+    update();
+  });
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+
+  function copy(node, okMessage) {
+    var text = node.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(node);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? okMessage : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message(okMessage)); }, fallback);
+    } else fallback();
+  }
+  document.getElementById('pg-copy').addEventListener('click', function () { copy(outCode, 'copied'); });
+  document.getElementById('pg-route-copy').addEventListener('click', function () { copy(routeCode, 'route-copied'); });
+  document.getElementById('pg-download').addEventListener('click', function () {
+    var blob = new Blob([outCode.textContent], { type: 'text/markdown;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = 'properties.md';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    say(message('downloaded'));
+  });
+
+  /* Checker */
+  var checkBox = document.getElementById('pg-check');
+  var checkInput = document.getElementById('pg-check-input');
+  var checkResult = document.getElementById('pg-check-result');
+  function runCheck() {
+    var result = check(checkInput.value);
+    checkResult.textContent = '';
+    if (result.empty) { checkResult.appendChild(el('p', {}, message('c-empty'))); return; }
+    if (result.json) { checkResult.appendChild(el('p', {}, message('c-json'))); return; }
+    if (!result.problems.length) { checkResult.appendChild(el('p', { 'class': 'pg-ok' }, message('c-none'))); return; }
+    checkResult.appendChild(el('p', { 'class': 'pg-ok' }, message('c-count', { n: result.problems.length })));
+    var list = el('ol', { 'class': 'pg-problems' });
+    result.problems.forEach(function (p) {
+      var li = el('li');
+      li.appendChild(el('span', { 'class': 'pg-line' }, message('c-line', { line: p.line })));
+      li.appendChild(document.createTextNode(message('m-' + p.rule, p.params)));
+      li.appendChild(el('span', { 'class': 'pg-fix' }, message('c-fix') + ' ' + message('f-' + p.rule, p.params)));
+      list.appendChild(li);
+    });
+    checkResult.appendChild(list);
+  }
+  document.getElementById('pg-check-run').addEventListener('click', runCheck);
+  document.getElementById('pg-check-example').addEventListener('click', function () {
+    checkInput.value = EXAMPLE_BROKEN;
+    runCheck();
+  });
+
+  document.getElementById('pg-nojs').hidden = true;
+  form.hidden = false;
+  checkBox.hidden = false;
+  update();
+})();
+</script>
