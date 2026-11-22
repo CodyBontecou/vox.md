@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="zh-Hans" dir="ltr" data-search-section="部分" data-search-guide="指南" data-search-empty="没有与“{query}”匹配的结果">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obsidian 每日笔记模板生成器 | Vox.md</title>
+  <meta name="description" content="在浏览器中为核心 Templates 或 Templater 构建 Obsidian 每日笔记模板，预览你的日期格式生成的文件名和文件夹，然后复制或下载为 .md。">
+  <link rel="canonical" href="https://vox.isolated.tech/zh-hans/blog/obsidian-daily-note-template/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="供语言模型使用的 Vox.md 文档">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Obsidian 每日笔记模板生成器">
+  <meta property="og:description" content="在浏览器中为核心 Templates 或 Templater 构建 Obsidian 每日笔记模板，预览你的日期格式生成的文件名和文件夹，然后复制或下载为 .md。">
+  <meta property="og:url" content="https://vox.isolated.tech/zh-hans/blog/obsidian-daily-note-template/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-11-22">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Obsidian 每日笔记模板生成器">
+  <meta name="twitter:description" content="在浏览器中为核心 Templates 或 Templater 构建 Obsidian 每日笔记模板，预览你的日期格式生成的文件名和文件夹，然后复制或下载为 .md。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Obsidian 每日笔记模板生成器",
+  "description": "在浏览器中为核心 Templates 或 Templater 构建 Obsidian 每日笔记模板，预览你的日期格式生成的文件名和文件夹，然后复制或下载为 .md。",
+  "image": "https://vox.isolated.tech/screenshots/01-route-heading-light.png",
+  "datePublished": "2026-11-22",
+  "dateModified": "2026-11-22",
+  "mainEntityOfPage": "https://vox.isolated.tech/zh-hans/blog/obsidian-daily-note-template/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "zh-Hans",
+  "name": "Obsidian 每日笔记模板生成器 | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/zh-hans/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "指南",
+      "item": "https://vox.isolated.tech/zh-hans/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Obsidian 每日笔记模板生成器",
+      "item": "https://vox.isolated.tech/zh-hans/blog/obsidian-daily-note-template/"
+    }
+  ],
+  "inLanguage": "zh-Hans",
+  "name": "Obsidian 每日笔记模板生成器 | Vox.md",
+  "description": "在浏览器中为核心 Templates 或 Templater 构建 Obsidian 每日笔记模板，预览你的日期格式生成的文件名和文件夹，然后复制或下载为 .md。"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/obsidian-daily-note-template/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳至指南</a>
+<nav aria-label="主导航">
+  <div class="nav-inner">
+    <a href="/zh-hans/" class="logo" aria-label="Vox.md 首页">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/zh-hans/#how">工作原理</a></li>
+      <li><a href="/zh-hans/docs/">文档</a></li>
+      <li><a href="/zh-hans/blog/">指南</a></li>
+      <li><a href="/zh-hans/compare/">比较</a></li>
+      <li><a href="/zh-hans/privacy.html">隐私</a></li>
+      <li><a href="/zh-hans/terms.html">条款</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_de230f3c515d">下载 Vox.md</a>
+  <details class="language-switcher"><summary>语言</summary><ul><li><a href="/blog/obsidian-daily-note-template/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-daily-note-template/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-daily-note-template/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-daily-note-template/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-daily-note-template/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-daily-note-template/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-daily-note-template/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-daily-note-template/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-daily-note-template/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-daily-note-template/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-daily-note-template/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-daily-note-template/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-daily-note-template/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-daily-note-template/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-daily-note-template/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-daily-note-template/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-daily-note-template/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-daily-note-template/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-daily-note-template/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-daily-note-template/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-daily-note-template/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-daily-note-template/" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-daily-note-template/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">免费工具</div>
+        <h1 class="hero-title">Obsidian 每日笔记模板生成器</h1>
+        <p class="hero-subtitle">选择属性和章节，设置日期格式和文件夹，然后复制以你所用插件语法写成的模板。</p>
+      </div>
+      <aside class="meta-card" aria-label="关于本指南">
+        <dl>
+          <div><dt>作者：</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>更新于</dt><dd><time datetime="2026-11-22">2026年11月22日</time></dd></div>
+          <div><dt>需要</dt><dd>Obsidian（任意平台）。可选：iPhone 或 Mac 版 Vox.md，用于从手机添加到今天的笔记。</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Obsidian 每日笔记模板生成器">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">简短回答</div>
+        <p>将此内容保存为 <code>Daily.md</code> 放在你的模板文件夹中，然后打开“设置 → 每日笔记”，并将 <strong>模板文件位置</strong> 设为该笔记。Obsidian 会在下次创建每日笔记时应用它。它使用核心 Templates 语法，因此日期和标题会在创建笔记时自动填入。</p>
+      </div>
+      <pre class="guide-code" id="default-template"><code>---
+date: {{date:YYYY-MM-DD}}
+weekday: {{date:dddd}}
+tags:
+  - daily
+---
+# {{title}}
+
+## Top 3
+- [ ]&#32;
+- [ ]&#32;
+- [ ]&#32;
+
+## Tasks
+- [ ]&#32;
+
+## Journal
+
+
+## Inbox
+-&#32;
+</code></pre>
+      <p>使用 Templater、其他日期格式或其他章节？下方的生成器会写出模板，并显示与之配套的每日笔记设置。它完全在本页运行：你的任何选择都不会被发送到别处。</p>
+      <nav class="toc" aria-label="本指南中"><div class="toc-title">本指南中</div><ol>
+        <li><a href="#generator">生成模板</a></li>
+        <li><a href="#settings">让每日笔记使用它</a></li>
+        <li><a href="#date-format">日期格式与文件夹</a></li>
+        <li><a href="#templater">核心 Templates 与 Templater</a></li>
+        <li><a href="#capture">用 iPhone 或 Mac 添加到今天的笔记</a></li>
+        <li><a href="#faq">常见问题</a></li>
+      </ol></nav>
+
+      <h2 id="generator">1. 生成模板</h2>
+      <p class="mt-nojs" id="mt-nojs">生成器需要 JavaScript。没有它时，上方的默认模板可以直接使用。</p>
+      <form class="mt-tool" id="mt-tool" aria-label="每日笔记模板生成器">
+        <fieldset class="mt-group">
+          <legend>模板系统</legend>
+          <label class="mt-option"><input type="radio" name="system" value="core" checked> <span>Obsidian 核心 Templates 插件</span></label>
+          <label class="mt-option"><input type="radio" name="system" value="templater"> <span>Templater 社区插件</span></label>
+          <label class="mt-option"><input type="radio" name="system" value="plain"> <span>纯 Markdown（不填入任何内容）</span></label>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>属性（YAML frontmatter）</legend>
+          <label class="mt-option"><input type="checkbox" name="prop" value="date" checked> <span>日期</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="weekday" checked> <span>星期</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="tags" checked> <span>标签</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="mood"> <span>心情（留空）</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="energy"> <span>精力（留空）</span></label>
+          <label class="mt-field" for="mt-tag">标签名 <input type="text" id="mt-tag" name="tag" value="daily" autocomplete="off" spellcheck="false"></label>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>章节</legend>
+          <p class="mt-hint" id="mt-order-hint">使用“上移”和“下移”按钮调整顺序。</p>
+          <ol class="mt-sections" id="mt-sections" aria-describedby="mt-order-hint">
+            <li data-section="focus"><label class="mt-option"><input type="checkbox" name="section" value="focus" checked> <span>前三件事 / 重点</span></label></li>
+            <li data-section="tasks"><label class="mt-option"><input type="checkbox" name="section" value="tasks" checked> <span>Tasks</span></label></li>
+            <li data-section="journal"><label class="mt-option"><input type="checkbox" name="section" value="journal" checked> <span>日记 / 笔记</span></label></li>
+            <li data-section="inbox"><label class="mt-option"><input type="checkbox" name="section" value="inbox" checked> <span>收件箱（用于采集）</span></label></li>
+            <li data-section="meetings"><label class="mt-option"><input type="checkbox" name="section" value="meetings"> <span>会议</span></label></li>
+            <li data-section="gratitude"><label class="mt-option"><input type="checkbox" name="section" value="gratitude"> <span>感恩</span></label></li>
+            <li data-section="log"><label class="mt-option"><input type="checkbox" name="section" value="log"> <span>记录 / 时间线</span></label></li>
+            <li data-section="review"><label class="mt-option"><input type="checkbox" name="section" value="review"> <span>每日复盘</span></label></li>
+          </ol>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>日期与链接</legend>
+          <label class="mt-option"><input type="checkbox" name="nav" value="nav"> <span>前一天和后一天链接</span></label>
+          <label class="mt-option"><input type="checkbox" name="titledate" value="titledate"> <span>从文件名读取日期</span></label>
+          <p class="mt-hint" data-system-note="core">前一天和后一天链接，以及从文件名读取日期，需要 Templater。核心 Templates 页面没有记载日期偏移，因此核心 Templates 下这些选项处于关闭状态。</p>
+          <p class="mt-hint" data-system-note="templater" hidden>使用 Templater 时，日期属性可以来自笔记的文件名，而不是你创建笔记的那一天。这两个选项都假定文件名与下方的日期格式一致。</p>
+          <p class="mt-hint" data-system-note="plain" hidden>纯 Markdown 没有变量，因此这些选项已关闭，日期属性留空，供你自行填写。</p>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>日期格式与文件夹</legend>
+          <label class="mt-field" for="mt-format">日期格式（Moment 标记） <input type="text" id="mt-format" name="dateformat" value="YYYY-MM-DD" autocomplete="off" spellcheck="false"></label>
+          <label class="mt-field" for="mt-folder">新文件位置（可选） <input type="text" id="mt-folder" name="folder" value="" placeholder="日记" autocomplete="off" spellcheck="false"></label>
+          <label class="mt-field" for="mt-preview-date">预览日期 <input type="date" id="mt-preview-date" name="previewdate"></label>
+        </fieldset>
+      </form>
+      <div class="mt-output-head">
+        <h3 id="mt-output-title">你的模板</h3>
+        <div class="mt-actions" id="mt-actions" hidden>
+          <button type="button" class="btn-primary" id="mt-copy">复制</button>
+          <button type="button" class="btn-secondary" id="mt-download">下载 .md</button>
+          <button type="button" class="btn-secondary" id="mt-reset">重置</button>
+        </div>
+      </div>
+      <p class="mt-status" id="mt-status" role="status"></p>
+      <pre class="guide-code" id="mt-output" aria-labelledby="mt-output-title" aria-live="polite" tabindex="0"><code id="mt-output-code">---
+date: {{date:YYYY-MM-DD}}
+weekday: {{date:dddd}}
+tags:
+  - daily
+---
+# {{title}}
+
+## Top 3
+- [ ]&#32;
+- [ ]&#32;
+- [ ]&#32;
+
+## Tasks
+- [ ]&#32;
+
+## Journal
+
+
+## Inbox
+-&#32;
+</code></pre>
+      <div class="mt-notes">
+        <p data-system-note="core"><strong>Core Templates 插件：</strong> <code>{{date}}</code> 和 <code>{{title}}</code> 会在应用模板时填入，使用的是你创建笔记的那一天。冒号后的日期格式使用 Moment.js 标记。</p>
+        <p data-system-note="templater" hidden><strong>Templater 插件：</strong> 该 <code>&lt;% %&gt;</code> 命令会在 Templater 处理笔记时运行。核心 Templates 插件不会运行它们，因此对于由每日笔记创建的笔记，请使用 Templater 自己的模板文件夹，或开启 Templater 的“新建文件时触发”。</p>
+        <p data-system-note="plain" hidden><strong>纯 Markdown：</strong> 仅包含标题和空属性。不会自动填写任何内容。</p>
+        <p class="mt-hint" id="mt-warning" role="status" hidden></p>
+      </div>
+      <dl class="mt-filenames">
+        <div><dt>每日笔记路径预览</dt><dd><code id="mt-path">2026-11-22.md</code></dd></div>
+        <div><dt>每日笔记 → 日期格式</dt><dd><code id="mt-out-format">YYYY-MM-DD</code></dd></div>
+        <div><dt>每日笔记 → 新文件位置</dt><dd id="mt-out-folder">此处未设置</dd></div>
+        <div><dt>每日笔记 → 模板文件位置</dt><dd>你保存模板所用的笔记，例如 <code>Templates/Daily</code></dd></div>
+        <div><dt>Vox.md 滚动笔记路径（每日周期）</dt><dd id="mt-out-vox"><code>{period}.md</code></dd></div>
+      </dl>
+      <p class="mt-hint" id="mt-vox-hint" hidden>你的日期格式不是简单的 <code>YYYY-MM-DD</code>。带每日周期的 Vox.md 滚动笔记会将 <code>{period}</code> 解析为类似 <code>2026-11-21</code>，因此其路径必须指向 Obsidian 创建的同一个文件。最简单的办法是保留 <code>YYYY-MM-DD</code> 文件名。否则，请在以下位置查看支持的路径标记： <a href="/zh-hans/docs/#presets">路线文档</a> 再使用其他格式。</p>
+      <div hidden id="mt-messages">
+        <span data-message="copied">模板已复制到剪贴板。</span>
+        <span data-message="copy-failed">复制失败。请选中模板后自行复制。</span>
+        <span data-message="downloaded">已下载 daily-template.md。</span>
+        <span data-message="reset">已将选择重置为默认模板。</span>
+        <span data-message="moved-up">已将{section}上移。</span>
+        <span data-message="moved-down">已将{section}下移。</span>
+        <span data-message="up">将{section}上移</span>
+        <span data-message="down">将{section}下移</span>
+        <span data-message="up-text">上移</span>
+        <span data-message="down-text">下移</span>
+        <span data-message="not-previewed">此处不预览：{tokens}。请在 Moment.js 格式文档中查看。</span>
+        <span data-message="bad-chars">这些字符在某些系统上不允许用于文件名：{chars}</span>
+        <span data-message="subfolders">日期格式中的斜杠会创建子文件夹。</span>
+        <span data-message="folder-none">此处未设置</span>
+        <span data-message="vox-differs">与 Obsidian 创建的不是同一个文件。请参阅下方说明。</span>
+      </div>
+
+      <h2 id="settings">2. 让每日笔记使用它</h2>
+      <p>将生成的文本保存为模板文件夹中的一篇笔记，例如 <code>Templates/Daily.md</code>。然后打开 <strong>设置 → 每日笔记</strong> 并在插件选项下设置三项内容：</p>
+      <ol>
+        <li><strong>日期格式</strong>：Obsidian 为每日笔记命名并构建其路径的方式。请复制预览上方显示的值。</li>
+        <li><strong>新文件位置</strong>：Obsidian 创建新每日笔记的文件夹，适用于想让它们与其他笔记分开存放的情况。</li>
+        <li><strong>模板文件位置</strong>：你刚保存的笔记。</li>
+      </ol>
+      <p>Obsidian 只会在你设置之后创建新的每日笔记时使用模板，因此已有笔记不会改变。要测试，请打开一个还没有笔记的日期。请参阅 <a href="https://obsidian.md/help/plugins/daily-notes" target="_blank" rel="noopener">每日笔记</a> （Obsidian 帮助）</p>
+      <p>位于 <code>---</code> 行之间的日期、星期和标签会成为笔记属性；请参阅 <a href="https://obsidian.md/help/properties" target="_blank" rel="noopener">属性</a>。心情和精力留空，方便你以文字填写。</p>
+
+      <h2 id="date-format">3. 日期格式与文件夹</h2>
+      <p>日期格式使用 <a href="https://momentjs.com/docs/#/displaying/format/" target="_blank" rel="noopener">Moment.js 格式令牌</a>。生成器以英文预览这些常用格式：</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th>令牌</th><th>含义</th><th>示例</th></tr></thead>
+          <tbody>
+            <tr><td><code>YYYY</code></td><td>四位数年份</td><td>2026</td></tr>
+            <tr><td><code>YY</code></td><td>两位数年份</td><td>26</td></tr>
+            <tr><td><code>MM</code></td><td>月份数字，两位数</td><td>11</td></tr>
+            <tr><td><code>M</code></td><td>月份数字</td><td>11</td></tr>
+            <tr><td><code>MMM</code></td><td>月份简称</td><td>11月</td></tr>
+            <tr><td><code>MMMM</code></td><td>月份全名</td><td>十一月</td></tr>
+            <tr><td><code>DD</code></td><td>每月的第几天，两位数</td><td>21</td></tr>
+            <tr><td><code>D</code></td><td>每月的第几天</td><td>21</td></tr>
+            <tr><td><code>ddd</code></td><td>星期简称</td><td>周六</td></tr>
+            <tr><td><code>dddd</code></td><td>星期全名</td><td>星期六</td></tr>
+            <tr><td><code>ww</code></td><td>一年中的第几周，两位数（英文周规则：每周从周日开始，第 1 周包含 1 月 1 日）</td><td>47</td></tr>
+            <tr><td><code>Q</code></td><td>季度</td><td>4</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>方括号中的文字，例如 <code>[Week]</code>会原样写出。其他任何 Moment 标记都不会预览；生成器会列出它们，Moment.js 文档中有相关说明。</p>
+      <p>日期格式中的斜杠会创建子文件夹。Obsidian 自己的示例是 <code>YYYY/MMMM/YYYY-MMM-DD</code>，生成的笔记例如 <code>2023/January/2023-Jan-01</code>：年份文件夹、月份文件夹，然后是文件名。如果你还设置了新文件位置，日期文件夹会放在其中，因此 <code>Journal</code> 配合 <code>YYYY/MM/YYYY-MM-DD</code> 得到 <code>Journal/2026/11/2026-11-21.md</code>.</p>
+      <p>预览中的日期和月份名称为英文。Obsidian 可能以你的语言显示它们，周数也可能遵循你所在地区的周规则。</p>
+
+      <h2 id="templater">4. 核心 Templates 与 Templater</h2>
+      <p><strong>核心 Templates</strong> 随 Obsidian 一同提供。它支持 <code>{{title}}</code>, <code>{{date}}</code> 和 <code>{{time}}</code>，以及冒号后的格式，例如 <code>{{date:YYYY-MM-DD}}</code>. <code>{{date}}</code> 是插入模板的日期，而不是从笔记名称读取的日期。 <a href="https://obsidian.md/help/plugins/templates" target="_blank" rel="noopener">Templates 帮助页面</a> 没有记载日期偏移，因此不会为核心 Templates 生成前一天和后一天链接。</p>
+      <p><strong>Templater 插件</strong> 是一个社区插件。其 <code>tp.date.now</code> 接受格式、以天为单位的可选偏移、可选的参考日期（例如笔记标题），以及用于解析该参考日期的格式。生成器的前一天和后一天链接使用这种形式：</p>
+      <pre class="guide-code"><code>[[&lt;% tp.date.now("YYYY-MM-DD", -1, tp.file.title, "YYYY-MM-DD") %&gt;]]
+[[&lt;% tp.date.now("YYYY-MM-DD", 1, tp.file.title, "YYYY-MM-DD") %&gt;]]</code></pre>
+      <p>由于它们读取文件名，因此即使你为另一天创建笔记，也会匹配该笔记的日期。最后一个参数中的格式必须与你的文件名格式一致。如果日期格式含有斜杠，生成器会使用最后一个斜杠之后的部分，也就是文件名。请参阅 Templater <a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html" target="_blank" rel="noopener">date 模块</a>.</p>
+
+      <h2 id="capture">5. 用 iPhone 或 Mac 添加到今天的笔记</h2>
+      <p>模板给笔记定下结构。Vox.md 可以在一天中向其中添加内容：说出或输入一个想法，它就会保存到当天的笔记中。语音在你的设备上转录。在采集预设中，选择 <strong>滚动笔记</strong> 配合 <strong>每日</strong> 周期，路径类似 <code>Journal/{period}.md</code>。在每日周期下， <code>{period}</code> 解析为日期，例如 <code>2026-11-21</code>.</p>
+      <p>选择 <strong>头条</strong> 位置，以及模板中的标题，例如 <code>## Inbox</code>，新条目会添加在其下方。如果缺少该标题，请选择 <strong>显示错误</strong> 或 <strong>创建头条</strong>。添加条目前缀，例如 <code>- </code> ，使每次采集成为一个列表项；生成器中的收件箱章节使用同样的项目符号。</p>
+      <p>Vox.md 向文件写入时不会应用你的 Obsidian 模板。如果你想使用模板，请先在 Obsidian 中打开今天的笔记，再发送采集内容。路径必须指向 Obsidian 使用的文件，因此请保持 <code>YYYY-MM-DD</code> 文件名，除非你已确认两者匹配。 <a href="/zh-hans/blog/append-to-obsidian-daily-note-iphone/">将文字和语音添加到 Obsidian 每日笔记</a> 介绍了完整设置，而 <a href="/zh-hans/docs/#presets">路线参考</a> 列出了这些选项。</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_de230f3c515d">用手机添加到今天的笔记</a></p>
+
+      <h2 id="faq">6. 常见问题</h2>
+      <h3>为什么我的模板没有生效？</h3>
+      <p>Obsidian 只会在创建新的每日笔记时使用模板，因此已有的笔记不会改变。请检查 <strong>模板文件位置</strong> 在“设置 → 每日笔记”中指向正确的笔记。如果模板中有 <code>&lt;% %&gt;</code> 命令仍以文本形式保留，它们是 Templater 命令：请对每日笔记文件夹使用 Templater 的文件夹模板，或生成核心 Templates 版本。</p>
+      <h3>为什么我的每日笔记在错误的文件夹里？</h3>
+      <p>两项设置决定路径： <strong>新文件位置</strong> 以及 <strong>日期格式</strong>。上方预览会同时显示两者。如果 <code>YYYY/MM/YYYY-MM-DD</code> 这样的格式生成了你不想要的年份和月份文件夹，请使用简单格式，只设置文件夹。</p>
+      <h3>可以使用 Dataview 吗？</h3>
+      <p>模板是纯 Markdown，因此粘贴之后你可以手动为任何插件添加代码块。生成器不会为你编写插件代码。</p>
+      <h3>生成器会把我的选择发送到任何地方吗？</h3>
+      <p>不会。模板由本页面中的脚本生成。它会把你上次的选择保存在浏览器的本地存储中，下次仍会保留；点按“重置”即可清除。</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">全天随时补充笔记。</h2>
+        <p>用语音或文字采集想法，Vox.md 会把它添加到当天的 Markdown 笔记中。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_de230f3c515d">用手机添加到今天的笔记</a></p>
+      </section>
+      <nav class="toc" aria-label="相关指南" id="related"><div class="toc-title">继续设置</div><ul>
+        <li><a href="/zh-hans/blog/append-to-obsidian-daily-note-iphone/">追加到 Obsidian 每日笔记</a></li>
+        <li><a href="/zh-hans/blog/obsidian-capture-templates/">路径与模板示例</a></li>
+        <li><a href="/zh-hans/blog/obsidian-meeting-notes-template/">Obsidian 会议记录模板生成器</a></li>
+        <li><a href="/zh-hans/blog/private-voice-journal-iphone/">在 iPhone 上保存私密语音日志</a></li>
+        <li><a href="/zh-hans/blog/voice-notes-to-obsidian-iphone/">将 iPhone 语音笔记保存到 Obsidian</a></li>
+        <li><a href="/zh-hans/docs/#presets">路线参考</a></li>
+      </ul></nav>
+<script>
+/* Daily note template generator. Runs locally: no network requests. */
+(function () {
+  var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  var TOKEN = /\[[^\]]*\]|Do|DDDD|DDD|Mo|Qo|wo|YYYY|YY|MMMM|MMM|MM|M|DD|D|dddd|ddd|ww|Q|[A-Za-z]+/g;
+
+  function pad(n, len) { var s = String(n); while (s.length < len) s = '0' + s; return s; }
+  function parseDate(value) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || '');
+    if (!m) return null;
+    var d = new Date(+m[1], +m[2] - 1, +m[3], 12);
+    return d.getFullYear() === +m[1] && d.getMonth() === +m[2] - 1 && d.getDate() === +m[3] ? d : null;
+  }
+  function isoDate(d) { return pad(d.getFullYear(), 4) + '-' + pad(d.getMonth() + 1, 2) + '-' + pad(d.getDate(), 2); }
+  /* English (US) week rules: weeks start on Sunday and week 1 contains January 1. */
+  function weekOfYear(d) {
+    var saturday = new Date(d.getFullYear(), d.getMonth(), d.getDate() + (6 - d.getDay()), 12);
+    var days = Math.round((Date.UTC(saturday.getFullYear(), saturday.getMonth(), saturday.getDate()) - Date.UTC(saturday.getFullYear(), 0, 1)) / 86400000);
+    return Math.floor(days / 7) + 1;
+  }
+  function formatMoment(format, d) {
+    var unsupported = [];
+    var text = format.replace(TOKEN, function (token) {
+      switch (token) {
+        case 'YYYY': return pad(d.getFullYear(), 4);
+        case 'YY': return pad(d.getFullYear() % 100, 2);
+        case 'MMMM': return MONTHS[d.getMonth()];
+        case 'MMM': return MONTHS[d.getMonth()].slice(0, 3);
+        case 'MM': return pad(d.getMonth() + 1, 2);
+        case 'M': return String(d.getMonth() + 1);
+        case 'DD': return pad(d.getDate(), 2);
+        case 'D': return String(d.getDate());
+        case 'dddd': return DAYS[d.getDay()];
+        case 'ddd': return DAYS[d.getDay()].slice(0, 3);
+        case 'ww': return pad(weekOfYear(d), 2);
+        case 'Q': return String(Math.floor(d.getMonth() / 3) + 1);
+      }
+      if (token.charAt(0) === '[' && token.charAt(token.length - 1) === ']') return token.slice(1, -1);
+      if (unsupported.indexOf(token) === -1) unsupported.push(token);
+      return token;
+    });
+    return { text: text, unsupported: unsupported };
+  }
+  function cleanFolder(value) { return value.trim().replace(/\\/g, '/').replace(/^\/+|\/+$/g, ''); }
+  function fileTitleFormat(format) { var parts = format.split('/'); return parts[parts.length - 1]; }
+  function previewPath(folder, format, d) {
+    var name = formatMoment(format, d).text;
+    var dir = cleanFolder(folder);
+    return (dir ? dir + '/' : '') + name + '.md';
+  }
+  function cleanTag(value) {
+    var tag = value.trim().replace(/^#+/, '').replace(/\s+/g, '-').replace(/[^\w\/-]/g, '');
+    return tag || 'daily';
+  }
+  function quote(value) { return value.replace(/\\/g, '\\\\').replace(/"/g, '\\"'); }
+
+  var HEADINGS = {
+    focus: ['## Top 3', '- [ ] \n- [ ] \n- [ ] '],
+    tasks: ['## Tasks', '- [ ] '],
+    journal: ['## Journal', ''],
+    inbox: ['## Inbox', '- '],
+    meetings: ['## Meetings', '- '],
+    gratitude: ['## Gratitude', '- '],
+    log: ['## Log', '- '],
+    review: ['## End-of-day review', '- Went well: \n- To change: \n- Tomorrow: ']
+  };
+
+  function build(state) {
+    var system = state.system;
+    var fromTitle = system === 'templater' && state.titledate;
+    var titleFormat = quote(fileTitleFormat(state.format || 'YYYY-MM-DD'));
+    function dateExpr(fmt) {
+      if (system === 'core') return '{{date:' + fmt + '}}';
+      if (system === 'plain') return '';
+      return fromTitle
+        ? '<% tp.date.now("' + fmt + '", 0, tp.file.title, "' + titleFormat + '") %>'
+        : '<% tp.date.now("' + fmt + '") %>';
+    }
+    var lines = [];
+    if (state.props.length) {
+      lines.push('---');
+      ['date', 'weekday', 'tags', 'mood', 'energy'].forEach(function (p) {
+        if (state.props.indexOf(p) === -1) return;
+        if (p === 'date') lines.push('date: ' + dateExpr('YYYY-MM-DD'));
+        if (p === 'weekday') lines.push('weekday: ' + dateExpr('dddd'));
+        if (p === 'tags') { lines.push('tags:'); lines.push('  - ' + cleanTag(state.tag)); }
+        if (p === 'mood') lines.push('mood: ');
+        if (p === 'energy') lines.push('energy: ');
+      });
+      lines.push('---');
+    }
+    lines.push(system === 'core' ? '# {{title}}' : system === 'templater' ? '# <% tp.file.title %>' : '# Daily note');
+    if (system === 'templater' && state.nav) {
+      var link = function (n) {
+        return '[[<% tp.date.now("' + titleFormat + '", ' + n + ', tp.file.title, "' + titleFormat + '") %>]]';
+      };
+      lines.push('');
+      lines.push('Previous: ' + link(-1) + ' | Next: ' + link(1));
+    }
+    state.order.forEach(function (id) {
+      if (state.sections.indexOf(id) === -1) return;
+      lines.push('');
+      lines.push(HEADINGS[id][0]);
+      lines.push(HEADINGS[id][1]);
+    });
+    while (lines.length && lines[lines.length - 1] === '') lines.pop();
+    return lines.join('\n') + '\n';
+  }
+
+  if (typeof window !== 'undefined') {
+    window.voxDailyTemplate = { formatMoment: formatMoment, previewPath: previewPath, build: build, weekOfYear: weekOfYear, parseDate: parseDate, fileTitleFormat: fileTitleFormat };
+  }
+
+  var form = document.getElementById('mt-tool');
+  if (!form) return;
+  var STORAGE_KEY = 'vox-daily-template-v1';
+  var list = document.getElementById('mt-sections');
+  var code = document.getElementById('mt-output-code');
+  var status = document.getElementById('mt-status');
+  var tagInput = document.getElementById('mt-tag');
+  var formatInput = document.getElementById('mt-format');
+  var folderInput = document.getElementById('mt-folder');
+  var previewInput = document.getElementById('mt-preview-date');
+  var navBox = form.elements.nav;
+  var titleBox = form.elements.titledate;
+  var defaultOrder = Array.prototype.map.call(list.children, function (li) { return li.getAttribute('data-section'); });
+  previewInput.value = isoDate(new Date());
+  var defaults = snapshot();
+
+  function message(name, fill) {
+    var el = document.querySelector('#mt-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : '';
+    if (fill) Object.keys(fill).forEach(function (key) { text = text.split('{' + key + '}').join(fill[key]); });
+    return text;
+  }
+  function sectionName(li) { return li.querySelector('label span').textContent; }
+  function checked(name) {
+    return Array.prototype.filter.call(form.elements[name], function (i) { return i.checked; }).map(function (i) { return i.value; });
+  }
+  function radio(name) { return checked(name)[0]; }
+
+  function snapshot() {
+    return {
+      system: radio('system'), props: checked('prop'), tag: tagInput.value,
+      sections: checked('section'), nav: navBox.checked, titledate: titleBox.checked,
+      format: formatInput.value, folder: folderInput.value,
+      order: Array.prototype.map.call(list.children, function (li) { return li.getAttribute('data-section'); })
+    };
+  }
+  function apply(state) {
+    Array.prototype.forEach.call(form.elements.system, function (i) { i.checked = i.value === state.system; });
+    Array.prototype.forEach.call(form.elements.prop, function (i) { i.checked = state.props.indexOf(i.value) !== -1; });
+    Array.prototype.forEach.call(form.elements.section, function (i) { i.checked = state.sections.indexOf(i.value) !== -1; });
+    navBox.checked = state.nav;
+    titleBox.checked = state.titledate;
+    tagInput.value = state.tag;
+    formatInput.value = state.format;
+    folderInput.value = state.folder;
+    state.order.forEach(function (id) {
+      var li = list.querySelector('[data-section="' + id + '"]');
+      if (li) list.appendChild(li);
+    });
+  }
+  function valid(state) {
+    return state && (state.system === 'core' || state.system === 'templater' || state.system === 'plain') &&
+      Array.isArray(state.props) && Array.isArray(state.sections) && typeof state.tag === 'string' &&
+      typeof state.format === 'string' && typeof state.folder === 'string' &&
+      typeof state.nav === 'boolean' && typeof state.titledate === 'boolean' &&
+      Array.isArray(state.order) && state.order.length === defaultOrder.length &&
+      defaultOrder.every(function (id) { return state.order.indexOf(id) !== -1; });
+  }
+  function save(state) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* storage unavailable */ }
+  }
+
+  function update(store) {
+    var state = snapshot();
+    var format = state.format.trim() || 'YYYY-MM-DD';
+    state.format = format;
+    var templater = state.system === 'templater';
+    navBox.disabled = !templater;
+    titleBox.disabled = !templater;
+    code.textContent = build(state);
+    Array.prototype.forEach.call(document.querySelectorAll('[data-system-note]'), function (p) {
+      p.hidden = p.getAttribute('data-system-note') !== state.system;
+    });
+
+    var day = parseDate(previewInput.value) || new Date();
+    var result = formatMoment(format, day);
+    document.getElementById('mt-path').textContent = previewPath(state.folder, format, day);
+    document.getElementById('mt-out-format').textContent = format;
+    var folder = cleanFolder(state.folder);
+    var folderCell = document.getElementById('mt-out-folder');
+    folderCell.textContent = '';
+    if (folder) {
+      var folderCode = document.createElement('code');
+      folderCode.textContent = folder;
+      folderCell.appendChild(folderCode);
+    } else {
+      folderCell.textContent = message('folder-none');
+    }
+    var plainFormat = format === 'YYYY-MM-DD';
+    var voxCell = document.getElementById('mt-out-vox');
+    voxCell.textContent = '';
+    if (plainFormat) {
+      var voxCode = document.createElement('code');
+      voxCode.textContent = (folder ? folder + '/' : '') + '{period}.md';
+      voxCell.appendChild(voxCode);
+    } else {
+      voxCell.textContent = message('vox-differs');
+    }
+    document.getElementById('mt-vox-hint').hidden = plainFormat;
+
+    var warnings = [];
+    if (result.unsupported.length) warnings.push(message('not-previewed', { tokens: result.unsupported.join(', ') }));
+    var bad = format.replace(/\[[^\]]*\]/g, '').match(/[\\:*?"<>|]/g);
+    if (bad) warnings.push(message('bad-chars', { chars: bad.filter(function (c, i) { return bad.indexOf(c) === i; }).join(' ') }));
+    if (format.indexOf('/') !== -1) warnings.push(message('subfolders'));
+    var warning = document.getElementById('mt-warning');
+    warning.textContent = warnings.join(' ');
+    warning.hidden = !warnings.length;
+
+    Array.prototype.forEach.call(list.children, function (li, index) {
+      var name = sectionName(li);
+      var up = li.querySelector('.mt-up');
+      var down = li.querySelector('.mt-down');
+      up.setAttribute('aria-label', message('up', { section: name }));
+      down.setAttribute('aria-label', message('down', { section: name }));
+      up.disabled = index === 0;
+      down.disabled = index === list.children.length - 1;
+    });
+    if (store) save(snapshot());
+  }
+  function say(text) {
+    status.textContent = '';
+    window.setTimeout(function () { status.textContent = text; }, 30);
+  }
+
+  Array.prototype.forEach.call(list.children, function (li) {
+    var controls = document.createElement('span');
+    controls.className = 'mt-move';
+    [['mt-up', 'up-text', -1], ['mt-down', 'down-text', 1]].forEach(function (spec) {
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'mt-move-button ' + spec[0];
+      button.textContent = message(spec[1]);
+      button.addEventListener('click', function () {
+        var sibling = spec[2] < 0 ? li.previousElementSibling : li.nextElementSibling;
+        if (!sibling) return;
+        list.insertBefore(li, spec[2] < 0 ? sibling : sibling.nextElementSibling);
+        update(true);
+        var target = button.disabled ? li.querySelector(spec[2] < 0 ? '.mt-down' : '.mt-up') : button;
+        target.focus();
+        say(message(spec[2] < 0 ? 'moved-up' : 'moved-down', { section: sectionName(li) }));
+      });
+      controls.appendChild(button);
+    });
+    li.appendChild(controls);
+  });
+
+  try {
+    var stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+    if (valid(stored)) apply(stored);
+  } catch (e) { /* ignore unreadable saved choices */ }
+
+  form.addEventListener('change', function () { update(true); });
+  form.addEventListener('input', function () { update(true); });
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+
+  document.getElementById('mt-copy').addEventListener('click', function () {
+    var text = code.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(code);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+  document.getElementById('mt-download').addEventListener('click', function () {
+    var blob = new Blob([code.textContent], { type: 'text/markdown;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = 'daily-template.md';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    say(message('downloaded'));
+  });
+  document.getElementById('mt-reset').addEventListener('click', function () {
+    apply(defaults);
+    previewInput.value = isoDate(new Date());
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* storage unavailable */ }
+    update(false);
+    say(message('reset'));
+  });
+
+  document.getElementById('mt-nojs').hidden = true;
+  document.getElementById('mt-actions').hidden = false;
+  form.classList.add('is-ready');
+  update(false);
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/zh-hans/">首页</a></li>
+        <li><a href="/zh-hans/docs/">文档</a></li>
+        <li><a href="/zh-hans/blog/">指南</a></li>
+        <li><a href="/zh-hans/compare/">比较</a></li>
+        <li><a href="/zh-hans/privacy.html">隐私</a></li>
+        <li><a href="/zh-hans/terms.html">条款</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">支持</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_de230f3c515d">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · 本地笔记快速采集 · 不上传内容。</div>
+    </div>
+  <details class="language-switcher"><summary>语言</summary><ul><li><a href="/blog/obsidian-daily-note-template/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-daily-note-template/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-daily-note-template/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-daily-note-template/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-daily-note-template/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-daily-note-template/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-daily-note-template/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-daily-note-template/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-daily-note-template/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-daily-note-template/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-daily-note-template/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-daily-note-template/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-daily-note-template/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-daily-note-template/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-daily-note-template/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-daily-note-template/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-daily-note-template/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-daily-note-template/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-daily-note-template/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-daily-note-template/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-daily-note-template/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-daily-note-template/" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-daily-note-template/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
