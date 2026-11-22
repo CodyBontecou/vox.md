@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="uk" dir="ltr" data-search-section="Розділ" data-search-guide="Посібник" data-search-empty="Немає збігів для «{query}»">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Розшифровка аудіофайлу на Mac локально в Markdown | Vox.md</title>
+  <meta name="description" content="Дізнайтеся, що безкоштовно пропонують «Диктофон» і «Нотатки» на Mac, а потім імпортуйте наявний аудіо- чи відеофайл у Vox.md для Mac, розшифруйте його на своєму Mac за допомогою Whisper або Parakeet і збережіть як нотатку Markdown, що належить вам.">
+  <link rel="canonical" href="https://vox.isolated.tech/uk/blog/transcribe-audio-file-mac/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Документація Vox.md для мовних моделей">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Розшифровка аудіофайлу на Mac локально в Markdown">
+  <meta property="og:description" content="Дізнайтеся, що безкоштовно пропонують «Диктофон» і «Нотатки» на Mac, а потім імпортуйте наявний аудіо- чи відеофайл у Vox.md для Mac, розшифруйте його на своєму Mac за допомогою Whisper або Parakeet і збережіть як нотатку Markdown, що належить вам.">
+  <meta property="og:url" content="https://vox.isolated.tech/uk/blog/transcribe-audio-file-mac/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-22">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Розшифровка аудіофайлу на Mac локально в Markdown">
+  <meta name="twitter:description" content="Дізнайтеся, що безкоштовно пропонують «Диктофон» і «Нотатки» на Mac, а потім імпортуйте наявний аудіо- чи відеофайл у Vox.md для Mac, розшифруйте його на своєму Mac за допомогою Whisper або Parakeet і збережіть як нотатку Markdown, що належить вам.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Розшифровка аудіофайлу на Mac локально в Markdown",
+  "description": "Дізнайтеся, що безкоштовно пропонують «Диктофон» і «Нотатки» на Mac, а потім імпортуйте наявний аудіо- чи відеофайл у Vox.md для Mac, розшифруйте його на своєму Mac за допомогою Whisper або Parakeet і збережіть як нотатку Markdown, що належить вам.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-22",
+  "dateModified": "2026-11-22",
+  "mainEntityOfPage": "https://vox.isolated.tech/uk/blog/transcribe-audio-file-mac/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "uk",
+  "name": "Розшифровка аудіофайлу на Mac локально в Markdown | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/uk/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Посібники",
+      "item": "https://vox.isolated.tech/uk/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Розшифровка аудіофайлу на Mac локально в Markdown",
+      "item": "https://vox.isolated.tech/uk/blog/transcribe-audio-file-mac/"
+    }
+  ],
+  "inLanguage": "uk",
+  "name": "Розшифровка аудіофайлу на Mac локально в Markdown | Vox.md",
+  "description": "Дізнайтеся, що безкоштовно пропонують «Диктофон» і «Нотатки» на Mac, а потім імпортуйте наявний аудіо- чи відеофайл у Vox.md для Mac, розшифруйте його на своєму Mac за допомогою Whisper або Parakeet і збережіть як нотатку Markdown, що належить вам."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-audio-file-mac/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Перейти до посібника</a>
+<nav aria-label="Основна навігація">
+  <div class="nav-inner">
+    <a href="/uk/" class="logo" aria-label="Головна Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/uk/#how">Як це працює</a></li>
+      <li><a href="/uk/docs/">Документація</a></li>
+      <li><a href="/uk/blog/">Посібники</a></li>
+      <li><a href="/uk/compare/">Порівняти</a></li>
+      <li><a href="/uk/privacy.html">Конфіденційність</a></li>
+      <li><a href="/uk/terms.html">Умови</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_uk_5aaec3f62945">Завантажити Vox.md</a>
+  <details class="language-switcher"><summary>Мова</summary><ul><li><a href="/blog/transcribe-audio-file-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-audio-file-mac/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-audio-file-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-audio-file-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-audio-file-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-audio-file-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-audio-file-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-audio-file-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-audio-file-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-audio-file-mac/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-audio-file-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-audio-file-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-audio-file-mac/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-audio-file-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-audio-file-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-audio-file-mac/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-audio-file-mac/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-audio-file-mac/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-audio-file-mac/" lang="uk" hreflang="uk" aria-current="page">Українська</a></li><li><a href="/ur/blog/transcribe-audio-file-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-audio-file-mac/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-audio-file-mac/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-audio-file-mac/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Mac · Аудіофайли · Локальна розшифровка</div>
+        <h1 class="hero-title">Розшифровка аудіофайлу на Mac локально в Markdown</h1>
+        <p class="hero-subtitle">Спершу безкоштовні вбудовані варіанти, потім локальний шлях від наявного файлу до нотатки Markdown в Obsidian чи будь-якій теці.</p>
+      </div>
+      <aside class="meta-card" aria-label="Про посібник">
+        <dl>
+          <div><dt>Автор:</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Оновлено</dt><dd><time datetime="2026-11-22">22 листопада 2026 р.</time></dd></div>
+          <div><dt>Потребує</dt><dd>Vox.md: macOS 14 або новіша · завантажена модель мовлення. Вбудована розшифровка Apple: див. сторінки підтримки Apple для вашого Mac і мови.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Розшифровка аудіофайлу на Mac локально в Markdown">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Коротка відповідь</div>
+        <p>«Диктофон» і «Нотатки» від Apple можуть безкоштовно розшифровувати аудіо на Mac, і для багатьох цього досить. Щоб перетворити наявний аудіо- чи відеофайл на нотатку Markdown, відкрийте Vox.md для Mac і виберіть <strong>Імпорт аудіо…</strong> у смузі меню (або імпортуйте файл у просторі захоплення), дайте локальній моделі Whisper чи Parakeet розшифрувати його, перегляньте текст і надішліть його до нотатки вашого Маршруту.</p>
+      </div>
+      <p>Подробиці про Apple нижче взято зі сторінок підтримки Apple <a href="https://support.apple.com/guide/voice-memos/vm4a03609f0d/mac">Перегляд розшифровки в «Диктофоні» на Mac</a> і <a href="https://support.apple.com/guide/notes/apdb5106e334/mac">Запис і розшифровка аудіо в «Нотатках» на Mac</a>, прочитано 22 листопада 2026 року. Сторінки Apple можуть змінюватися, тож перевірте їх для свого Mac. Кроки Vox.md відповідають <a href="/uk/docs/#mac">Документація для Mac</a>.</p>
+      <nav class="toc" aria-label="У посібнику"><div class="toc-title">У посібнику</div><ol>
+        <li><a href="#built-in">Безкоштовні можливості, що вже є на вашому Mac</a></li>
+        <li><a href="#choose">Який спосіб підходить?</a></li>
+        <li><a href="#prepare">Підготуйте Vox.md для Mac</a></li>
+        <li><a href="#import">Імпорт і розшифровка файлу</a></li>
+        <li><a href="#verify">Перевірте нотатку Markdown</a></li>
+        <li><a href="#privacy">Що залишає ваш Mac</a></li>
+        <li><a href="#troubleshooting">Усунення несправностей</a></li>
+        <li><a href="#related">Пов’язані посібники</a></li>
+      </ol></nav>
+
+      <h2 id="built-in">Безкоштовні можливості, що вже є на вашому Mac</h2>
+      <h3>Диктофон</h3>
+      <p>Сторінка Apple про «Диктофон» каже, що можна натиснути <strong>Розшифровка</strong> під час запису, щоб бачити текст наживо, або виберіть готовий запис і натисніть ту саму кнопку. Можна шукати в списку записів текст у назві чи розшифровці, а текст розшифровки копіювати, виділивши його, клацнувши з Control і вибравши <strong>Копіювати</strong>. Apple пише, що якщо відкрити запис, зроблений у macOS 14 або раніше чи на пристрої без підтримки розшифровки, «Диктофон» розшифрує його автоматично, а розшифровка аудіо доступна не в усіх країнах чи регіонах.</p>
+      <h3>Нотатки</h3>
+      <p>Сторінка Apple про «Нотатки» описує запис аудіо всередині нотатки: натисніть кнопку «Вкладення», виберіть <strong>Записати аудіо</strong>, запишіть і натисніть кнопку «Розшифровка», щоб побачити текст. Apple пише, що розшифровка аудіо доступна на Mac із M1 або новішим для мови пристрою, яку Apple перелічує на тій сторінці. Якщо кнопка «Розшифровка» не з’являється, Apple зазначає, що ваш Mac не відповідає мінімальним вимогам або не розпізнає підтримувану мову.</p>
+      <h3>Обмеження</h3>
+      <p>Текст залишається в цих застосунках, доки ви його не скопіюєте. Apple зазначає, що в «Нотатках» видалення аудіозапису видаляє й розшифровку. Які типи файлів може імпортувати кожен із застосунків, на сторінках Apple не вказано, тож перевірте це для свого запису; цей посібник нічого про це не стверджує.</p>
+      <p>Як останній засіб, дехто відтворює аудіо й диктує його в текстовий редактор. Це обхідний шлях, а не розшифровка файлу; див. <a href="/uk/blog/dictation-on-mac/">диктовка на Mac</a> про саме диктування.</p>
+
+      <h2 id="choose">Який спосіб підходить?</h2>
+      <p>У таблиці лише те, що зазначено на сторінках Apple чи в документації Vox.md. «Не задокументовано» означає, що цитоване джерело про це не говорить. Вона не робить тверджень про точність чи швидкість.</p>
+      <p class="guide-table-hint">На малому екрані гортайте таблицю вбік.</p>
+      <div class="guide-comparison" role="region" aria-label="Порівняння способів розшифровки аудіо на Mac; на малих екранах прокручуйте горизонтально" tabindex="0">
+        <table class="comparison">
+          <caption>Способи розшифровки аудіо на Mac, перевірено 22 листопада 2026 року</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">Диктофон</th><th scope="col">Нотатки</th><th scope="col">Vox.md для Mac</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Де зберігається текст</th><td>Усередині «Диктофона»; ви копіюєте звідти</td><td>Усередині нотатки, разом з аудіозаписом</td><td>Нотатка Markdown у вибраній вами теці чи сховищі</td></tr>
+            <tr><th scope="row">Що працює на Mac</th><td>Не задокументовано</td><td>Не задокументовано</td><td>Розшифровка за допомогою моделі Whisper або Parakeet, яку ви завантажуєте</td></tr>
+            <tr><th scope="row">Імпорт файлу</th><td>Не задокументовано</td><td>Не задокументовано</td><td>«Імпорт аудіо…» приймає аудіо- або відеофайли</td></tr>
+            <tr><th scope="row">Вивід у Markdown</th><td>Не задокументовано</td><td>Не задокументовано</td><td>Так</td></tr>
+            <tr><th scope="row">Мітки мовців</th><td>Не задокументовано</td><td>Не задокументовано</td><td>За бажанням, з «Визначення виступаючих»</td></tr>
+            <tr><th scope="row">Вартість</th><td>Частина macOS</td><td>Частина macOS</td><td>15 безкоштовних хвилин розшифровки та 10 успішних доставлень, далі одноразове довічне розблокування</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Якщо текст має жити лише в «Диктофоні» чи «Нотатках», користуйтеся ними. Vox.md потрібен, коли вам потрібен простий файл, який належить вам, конкретна локальна модель або текст у вашому сховищі.</p>
+
+      <h2 id="prepare">Підготуйте Vox.md для Mac</h2>
+      <ol>
+        <li><strong>Установіть.</strong> Vox.md для Mac потребує macOS 14 або новішої. Отримайте його за посиланням на App Store нижче.</li>
+        <li><strong>Завантажте модель.</strong> Відкриті <strong>Налаштування → Моделі</strong> і завантажте одну: Whisper від Tiny (75 MB) до Large v3 Turbo (1.6 GB), Parakeet v2 (близько 800 MB, англійська) або Parakeet v3 (близько 800 MB, 25 мов). На тому ж екрані задайте мову розшифровки. Whisper використовує прискорення Metal на підтримуваних Mac. Завантаження моделі — єдиний крок, що потребує мережі. Див. <a href="/uk/compare/whisper-vs-parakeet/">Whisper чи Parakeet</a> для вибору. <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a> запускає моделі Whisper, а <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> запускає Parakeet.</li>
+        <li><strong>Виберіть або створіть Маршрут.</strong> Маршрут містить теку чи сховище призначення й цільову нотатку: нову нотатку, періодичну щоденну нотатку або наявну нотатку під заголовком. Див. <a href="/uk/docs/#presets">маршрути в документації</a>.</li>
+      </ol>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">Отримайте Vox.md для Mac.</h2>
+        <p>Безкоштовний ліміт — 15 хвилин розшифровки та 10 успішних доставлень, достатньо, щоб випробувати один запис.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_uk_5aaec3f62945">Отримайте Vox.md для Mac</a></p>
+      </section>
+
+      <h2 id="import">Імпорт і розшифровка файлу</h2>
+      <ol>
+        <li><strong>Імпортуйте.</strong> У смузі меню Vox.md виберіть <strong>Імпорт аудіо…</strong>або імпортуйте чи перетягніть аудіо в простір захоплення. У документації сказано, що приймаються аудіо- та відеофайли, і вони проходять ту саму локальну розшифровку, що й запис.</li>
+        <li><strong>Виберіть «Додати до чернетки» або «Надіслати негайно».</strong> З <strong>Надіслати негайно</strong> розшифровка доставляється після завершення. З <strong>Додати до чернетки</strong> ви зможете спершу її переглянути. Звірте імена, числа й дати з аудіо.</li>
+        <li><strong>За бажанням: «Визначення виступаючих».</strong> Увімкніть <strong>Визначення виступаючих</strong> у Маршруті, щоб отримати анонімні мітки мовців за принципом найкращих зусиль. Уперше готується окрема модель. Якщо запуск не вдається, зберігається звичайна розшифровка, а причина відображається в Бібліотеці.</li>
+        <li><strong>За бажанням: режим обробки.</strong> Маршрут може використовувати «Зберегти оригінал», «Охайний текст», «Нотатки зустрічі», «Список завдань» або «Власна інструкція». Режими Apple Intelligence потребують сумісного обладнання з macOS 26. Без нього «Список завдань» і «Нотатки зустрічі» використовують вбудовані засоби форматування, а «Охайний текст» і «Власна інструкція» зберігають початковий текст.</li>
+        <li><strong>Надішліть.</strong> Натисніть Command-Return, щоб надіслати захоплення до нотатки Маршруту.</li>
+      </ol>
+
+      <h2 id="verify">Перевірте нотатку Markdown</h2>
+      <p>Вибирайте <strong>Показати останній експорт</strong> у смузі меню або знайдіть запис у Бібліотеці й покажіть його у Finder, а потім відкрийте файл в Obsidian. Якщо потрібен лише текст, виберіть <strong>Копіювати останній транскрипт</strong>. Структуру нотатки, яку заповнить запис, див. <a href="/uk/blog/obsidian-meeting-notes-template/">генератор шаблонів нотаток зустрічі</a>.</p>
+
+      <h2 id="privacy">Що залишає ваш Mac</h2>
+      <p>Розшифровка виконується на Mac, а Vox.md не надсилає вміст захоплення на сервери Vox.md. Завантаження моделей звертається до інфраструктури Hugging Face або FluidAudio. Якщо тека призначення синхронізується через iCloud чи іншу службу, ця служба обробляє файл за власними умовами. Див. <a href="/uk/privacy.html">політику конфіденційності</a>.</p>
+
+      <h2 id="troubleshooting">Усунення несправностей</h2>
+      <ul>
+        <li><strong>Немає розшифровки або мова неправильна.</strong> Перевірте, що модель завантажено й вибрано та що мову задано, в Налаштування → Моделі.</li>
+        <li><strong>Нотатка не з’являється.</strong> Перевірте теку призначення Маршруту і те, що Vox.md має до неї доступ.</li>
+        <li><strong>Довгий файл потребує часу.</strong> Більші моделі потребують більше часу на довгий запис. Спершу спробуйте меншу модель, потім порівняйте.</li>
+        <li><strong>Безкоштовний ліміт вичерпано.</strong> Він охоплює 15 хвилин розшифровки та 10 успішних доставлень, далі одноразове довічне розблокування. Остаточною є ціна в App Store; див. <a href="/uk/docs/#pricing-limits">безкоштовне використання й розблокування назавжди</a>.</li>
+      </ul>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Перетворіть запис на нотатку, що належить вам.</h2>
+        <p>Почніть із короткого неконфіденційного фрагмента на безкоштовному ліміті, потім відкрийте файл Markdown.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_uk_5aaec3f62945">Отримайте Vox.md для Mac</a></p>
+      </section>
+      <nav class="toc" aria-label="Пов’язані посібники" id="related"><div class="toc-title">Продовжити</div><ul>
+        <li><a href="/uk/blog/transcribe-meetings-mac-obsidian/">Натомість запишіть живий дзвінок: зустрічі на Mac в Obsidian</a></li>
+        <li><a href="/uk/blog/dictation-on-mac/">Диктування на Mac</a></li>
+        <li><a href="/uk/compare/whisper-vs-parakeet/">Whisper чи Parakeet</a></li>
+        <li><a href="/uk/blog/transcribe-voice-memos-iphone/">Розшифровуйте «Диктофон» iPhone у Markdown</a></li>
+        <li><a href="/uk/blog/obsidian-meeting-notes-template/">Генератор шаблонів нотаток зустрічей для Obsidian</a></li>
+        <li><a href="/uk/docs/#mac">Документація для Mac</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/uk/">Головна</a></li>
+        <li><a href="/uk/docs/">Документація</a></li>
+        <li><a href="/uk/blog/">Посібники</a></li>
+        <li><a href="/uk/compare/">Порівняти</a></li>
+        <li><a href="/uk/privacy.html">Конфіденційність</a></li>
+        <li><a href="/uk/terms.html">Умови</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Підтримка</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_uk_5aaec3f62945">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Швидке захоплення до локальних нотаток · Без надсилання вмісту на сервер.</div>
+    </div>
+  <details class="language-switcher"><summary>Мова</summary><ul><li><a href="/blog/transcribe-audio-file-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-audio-file-mac/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-audio-file-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-audio-file-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-audio-file-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-audio-file-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-audio-file-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-audio-file-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-audio-file-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-audio-file-mac/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-audio-file-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-audio-file-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-audio-file-mac/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-audio-file-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-audio-file-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-audio-file-mac/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-audio-file-mac/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-audio-file-mac/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-audio-file-mac/" lang="uk" hreflang="uk" aria-current="page">Українська</a></li><li><a href="/ur/blog/transcribe-audio-file-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-audio-file-mac/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-audio-file-mac/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-audio-file-mac/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

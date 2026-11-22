@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-search-section="القسم" data-search-guide="دليل" data-search-empty="لا نتائج لـ «{query}»">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تفريغ ملف صوتي على Mac محليًا إلى Markdown | Vox.md</title>
+  <meta name="description" content="اطّلع على ما تقدّمه المفكرة الصوتية والملاحظات على Mac مجانًا، ثم استورد ملفًا صوتيًا أو مرئيًا موجودًا إلى Vox.md لجهاز Mac، وفرّغه على جهازك باستخدام Whisper أو Parakeet، واحفظه كملاحظة Markdown تملكها.">
+  <link rel="canonical" href="https://vox.isolated.tech/ar/blog/transcribe-audio-file-mac/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="وثائق Vox.md للنماذج اللغوية">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="تفريغ ملف صوتي على Mac محليًا إلى Markdown">
+  <meta property="og:description" content="اطّلع على ما تقدّمه المفكرة الصوتية والملاحظات على Mac مجانًا، ثم استورد ملفًا صوتيًا أو مرئيًا موجودًا إلى Vox.md لجهاز Mac، وفرّغه على جهازك باستخدام Whisper أو Parakeet، واحفظه كملاحظة Markdown تملكها.">
+  <meta property="og:url" content="https://vox.isolated.tech/ar/blog/transcribe-audio-file-mac/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-22">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="تفريغ ملف صوتي على Mac محليًا إلى Markdown">
+  <meta name="twitter:description" content="اطّلع على ما تقدّمه المفكرة الصوتية والملاحظات على Mac مجانًا، ثم استورد ملفًا صوتيًا أو مرئيًا موجودًا إلى Vox.md لجهاز Mac، وفرّغه على جهازك باستخدام Whisper أو Parakeet، واحفظه كملاحظة Markdown تملكها.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "تفريغ ملف صوتي على Mac محليًا إلى Markdown",
+  "description": "اطّلع على ما تقدّمه المفكرة الصوتية والملاحظات على Mac مجانًا، ثم استورد ملفًا صوتيًا أو مرئيًا موجودًا إلى Vox.md لجهاز Mac، وفرّغه على جهازك باستخدام Whisper أو Parakeet، واحفظه كملاحظة Markdown تملكها.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-22",
+  "dateModified": "2026-11-22",
+  "mainEntityOfPage": "https://vox.isolated.tech/ar/blog/transcribe-audio-file-mac/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "ar",
+  "name": "تفريغ ملف صوتي على Mac محليًا إلى Markdown | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/ar/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "الأدلة",
+      "item": "https://vox.isolated.tech/ar/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "تفريغ ملف صوتي على Mac محليًا إلى Markdown",
+      "item": "https://vox.isolated.tech/ar/blog/transcribe-audio-file-mac/"
+    }
+  ],
+  "inLanguage": "ar",
+  "name": "تفريغ ملف صوتي على Mac محليًا إلى Markdown | Vox.md",
+  "description": "اطّلع على ما تقدّمه المفكرة الصوتية والملاحظات على Mac مجانًا، ثم استورد ملفًا صوتيًا أو مرئيًا موجودًا إلى Vox.md لجهاز Mac، وفرّغه على جهازك باستخدام Whisper أو Parakeet، واحفظه كملاحظة Markdown تملكها."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-audio-file-mac/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">تجاوز إلى الدليل</a>
+<nav aria-label="التنقل الرئيسي">
+  <div class="nav-inner">
+    <a href="/ar/" class="logo" aria-label="رئيسية Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/ar/#how">كيف يعمل</a></li>
+      <li><a href="/ar/docs/">الوثائق</a></li>
+      <li><a href="/ar/blog/">الأدلة</a></li>
+      <li><a href="/ar/compare/">قارن</a></li>
+      <li><a href="/ar/privacy.html">الخصوصية</a></li>
+      <li><a href="/ar/terms.html">الشروط</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_ar_5aaec3f62945">نزّل Vox.md</a>
+  <details class="language-switcher"><summary>اللغة</summary><ul><li><a href="/blog/transcribe-audio-file-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-audio-file-mac/" lang="ar" hreflang="ar" aria-current="page">العربية</a></li><li><a href="/bn/blog/transcribe-audio-file-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-audio-file-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-audio-file-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-audio-file-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-audio-file-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-audio-file-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-audio-file-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-audio-file-mac/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-audio-file-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-audio-file-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-audio-file-mac/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-audio-file-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-audio-file-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-audio-file-mac/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-audio-file-mac/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-audio-file-mac/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-audio-file-mac/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-audio-file-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-audio-file-mac/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-audio-file-mac/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-audio-file-mac/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Mac · ملفات صوتية · تفريغ محلي</div>
+        <h1 class="hero-title">تفريغ ملف صوتي على Mac محليًا إلى Markdown</h1>
+        <p class="hero-subtitle">خيارات مجانية مدمجة أولًا، ثم مسار محلي من ملف لديك بالفعل إلى ملاحظة Markdown في Obsidian أو أي مجلد.</p>
+      </div>
+      <aside class="meta-card" aria-label="حول هذا الدليل">
+        <dl>
+          <div><dt>بقلم</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>حُدّث</dt><dd><time datetime="2026-11-22">22 نوفمبر 2026</time></dd></div>
+          <div><dt>يتطلب</dt><dd>Vox.md: macOS 14 أو أحدث · نموذج كلام منزَّل. التفريغ المدمج من Apple: راجع صفحات دعم Apple لجهاز Mac ولغتك.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="تفريغ ملف صوتي على Mac محليًا إلى Markdown">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">الإجابة المختصرة</div>
+        <p>يمكن لتطبيقي المفكرة الصوتية والملاحظات من Apple تفريغ الصوت على Mac مجانًا، وهذا يكفي كثيرين. ولتحويل ملف صوتي أو مرئي موجود إلى ملاحظة Markdown، افتح Vox.md لجهاز Mac واختر <strong>استيراد صوت…</strong> من شريط القائمة (أو استورد الملف في مساحة الالتقاط)، ودع نموذج Whisper أو Parakeet المحلي يفرّغه، ثم راجع النص وأرسله إلى ملاحظة المسار.</p>
+      </div>
+      <p>تفاصيل Apple أدناه مأخوذة من صفحات دعم Apple <a href="https://support.apple.com/guide/voice-memos/vm4a03609f0d/mac">عرض نص التفريغ في المفكرة الصوتية على Mac</a> و <a href="https://support.apple.com/guide/notes/apdb5106e334/mac">تسجيل الصوت وتفريغه في الملاحظات على Mac</a>، قُرئت في 22 نوفمبر 2026. قد تتغير صفحات Apple، فتحقق منها لجهاز Mac لديك. وتتبع خطوات Vox.md <a href="/ar/docs/#mac">توثيق Mac</a>.</p>
+      <nav class="toc" aria-label="في هذا الدليل"><div class="toc-title">في هذا الدليل</div><ol>
+        <li><a href="#built-in">خيارات مجانية متوفرة بالفعل على جهاز Mac</a></li>
+        <li><a href="#choose">ما الطريقة المناسبة؟</a></li>
+        <li><a href="#prepare">جهّز Vox.md لجهاز Mac</a></li>
+        <li><a href="#import">استيراد الملف وتفريغه</a></li>
+        <li><a href="#verify">تحقق من ملاحظة Markdown</a></li>
+        <li><a href="#privacy">ما الذي يغادر جهاز Mac</a></li>
+        <li><a href="#troubleshooting">استكشاف الأخطاء وإصلاحها</a></li>
+        <li><a href="#related">أدلة ذات صلة</a></li>
+      </ol></nav>
+
+      <h2 id="built-in">خيارات مجانية متوفرة بالفعل على جهاز Mac</h2>
+      <h3>المفكرة الصوتية</h3>
+      <p>تذكر صفحة المفكرة الصوتية من Apple أنه يمكنك النقر على زر <strong>التفريغ</strong> أثناء التسجيل لرؤية النص مباشرةً، أو حدّد تسجيلًا منتهيًا وانقر الزر نفسه. ويمكنك البحث في قائمة التسجيلات عن نص في العنوان أو في التفريغ، ونسخ نص التفريغ بتحديده ثم النقر مع الضغط على Control واختيار <strong>نسخ</strong>. وتقول Apple إنك إذا فتحت تسجيلًا أُنشئ في macOS 14 أو أقدم، أو على جهاز لا يدعم التفريغ، فإن المفكرة الصوتية تفرّغه تلقائيًا، وإن تفريغ الصوت غير متاح في كل الدول أو المناطق.</p>
+      <h3>الملاحظات</h3>
+      <p>تصف صفحة الملاحظات من Apple تسجيل الصوت داخل ملاحظة: انقر زر المرفقات، ثم اختر <strong>تسجيل الصوت</strong>، ثم سجّل، ثم انقر زر التفريغ لعرض النص المفرَّغ. وتذكر الصفحة أن تفريغ الصوت متاح على أجهزة Mac المزودة بشريحة M1 أو أحدث، للغة جهاز تذكرها Apple في تلك الصفحة. وإذا لم يظهر زر التفريغ، تقول Apple إن جهاز Mac لا يستوفي الحد الأدنى من المتطلبات أو لا يتعرف على لغة مدعومة.</p>
+      <h3>القيود</h3>
+      <p>يبقى النص داخل هذين التطبيقين إلى أن تنسخه منهما. وتقول Apple إن حذف التسجيل الصوتي في الملاحظات يحذف النص المفرّغ أيضًا. أما أنواع الملفات التي يمكن لكل تطبيق استيرادها فلا يمكننا استخلاصها من صفحات Apple، فتحقق منها لتسجيلك؛ ولا يقدّم هذا الدليل أي ادعاء بشأنها.</p>
+      <p>كحل أخير، يشغّل بعض الناس الصوت ويُملونه إلى محرر نصوص. وهذا حل بديل وليس تفريغ ملف؛ راجع <a href="/ar/blog/dictation-on-mac/">الإملاء على Mac</a> للإملاء نفسه.</p>
+
+      <h2 id="choose">ما الطريقة المناسبة؟</h2>
+      <p>يعرض الجدول فقط ما تذكره صفحات Apple أو مستندات Vox.md. وتعني «غير موثّق» أن المصدر الذي نستشهد به لا يذكر ذلك. ولا يتضمن أي ادعاء بشأن الدقة أو السرعة.</p>
+      <p class="guide-table-hint">على الشاشة الصغيرة، مرّر الجدول جانبيًا.</p>
+      <div class="guide-comparison" role="region" aria-label="مقارنة بين خيارات تفريغ الصوت على Mac؛ مرّر أفقيًا على الشاشات الصغيرة" tabindex="0">
+        <table class="comparison">
+          <caption>خيارات تفريغ الصوت على Mac، جرى التحقق منها في 22 نوفمبر 2026</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">المفكرة الصوتية</th><th scope="col">الملاحظات</th><th scope="col">Vox.md لجهاز Mac</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">مكان حفظ النص</th><td>داخل المفكرة الصوتية؛ وتنسخه منها بنفسك</td><td>داخل الملاحظة، مع التسجيل الصوتي</td><td>ملاحظة Markdown في مجلد أو خزنة تختارها</td></tr>
+            <tr><th scope="row">ما الذي يعمل على جهاز Mac</th><td>غير موثّق</td><td>غير موثّق</td><td>التفريغ، بنموذج Whisper أو Parakeet تنزّله</td></tr>
+            <tr><th scope="row">استيراد الملفات</th><td>غير موثّق</td><td>غير موثّق</td><td>يقبل استيراد صوت… ملفات الصوت أو الفيديو</td></tr>
+            <tr><th scope="row">مخرجات Markdown</th><td>غير موثّق</td><td>غير موثّق</td><td>نعم</td></tr>
+            <tr><th scope="row">تسميات المتحدثين</th><td>غير موثّق</td><td>غير موثّق</td><td>اختياري، عبر تحديد الكاتبين</td></tr>
+            <tr><th scope="row">التكلفة</th><td>جزء من macOS</td><td>جزء من macOS</td><td>15 دقيقة تفريغ مجانية و10 عمليات تسليم ناجحة، ثم فتح دائم بدفعة واحدة</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>إذا كنت تحتاج إلى بقاء النص داخل المفكرة الصوتية أو الملاحظات فقط، فاستخدمهما. يناسبك Vox.md عندما تريد ملفًا نصيًا عاديًا تملكه، أو نموذجًا محليًا معينًا، أو النص داخل خزنتك.</p>
+
+      <h2 id="prepare">جهّز Vox.md لجهاز Mac</h2>
+      <ol>
+        <li><strong>التثبيت.</strong> يتطلب Vox.md لجهاز Mac نظام macOS 14 أو أحدث. احصل عليه من رابط App Store أدناه.</li>
+        <li><strong>نزّل نموذجًا.</strong> فتح <strong>الإعدادات ← النماذج</strong> ونزّل أحدها: Whisper من Tiny (75 ميغابايت) حتى Large v3 Turbo (1.6 غيغابايت)، أو Parakeet v2 (نحو 800 ميغابايت، للإنجليزية)، أو Parakeet v3 (نحو 800 ميغابايت، 25 لغة). اضبط لغة التفريغ في الشاشة نفسها. يستخدم Whisper تسريع Metal على أجهزة Mac المدعومة. تنزيل النموذج هو الخطوة الوحيدة التي تتطلب الشبكة. راجع <a href="/ar/compare/whisper-vs-parakeet/">Whisper مقابل Parakeet</a> للاختيار بينها. <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a> يشغّل نماذج Whisper، و <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> يشغّل Parakeet.</li>
+        <li><strong>اختر مسارًا أو أنشئ مسارًا.</strong> يحتفظ المسار بمجلد الوجهة أو الخزنة والملاحظة الهدف: ملاحظة جديدة، أو ملاحظة يومية متجددة، أو ملاحظة موجودة تحت عنوان. راجع <a href="/ar/docs/#presets">المسارات في المستندات</a>.</li>
+      </ol>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">احصل على Vox.md لجهاز Mac.</h2>
+        <p>الحصة المجانية هي 15 دقيقة تفريغ و10 عمليات تسليم ناجحة، وهي تكفي لتجربة تسجيل واحد.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ar_5aaec3f62945">احصل على Vox.md لجهاز Mac</a></p>
+      </section>
+
+      <h2 id="import">استيراد الملف وتفريغه</h2>
+      <ol>
+        <li><strong>الاستيراد.</strong> من شريط قائمة Vox.md اختر <strong>استيراد صوت…</strong>، أو استورد الصوت أو اسحبه إلى مساحة الالتقاط. تقول المستندات إن ملفات الصوت والفيديو مقبولة، وإنها تمر بالتفريغ المحلي نفسه الذي يمر به التسجيل.</li>
+        <li><strong>اختر إضافة إلى المسودة أو إرسال فورًا.</strong> مع <strong>إرسال فورًا</strong> يُسلَّم النص المفرَّغ عند انتهائه. أما مع <strong>إضافة إلى المسودة</strong> يمكنك مراجعته أولًا. قارن الأسماء والأرقام والتواريخ بالصوت.</li>
+        <li><strong>اختياري: تحديد الكاتبين.</strong> فعّل <strong>تحديد الكاتبين</strong> في المسار للحصول على تسميات متحدثين مجهولة الهوية بأفضل جهد ممكن. يجهّز نموذجًا منفصلًا في المرة الأولى. وإذا تعذّر تشغيله، يُحتفظ بالنص العادي ويظهر السبب في المكتبة.</li>
+        <li><strong>اختياري: وضع المعالجة.</strong> يمكن أن يستخدم المسار الاحتفاظ بالأصل أو نص مُنقّح أو ملاحظات الاجتماع أو قائمة مهام أو تعليمات مخصصة. تحتاج أوضاع Apple Intelligence إلى عتاد macOS 26 متوافق. وبدونه، تستخدم قائمة المهام وملاحظات الاجتماع منسّقات مدمجة، ويحتفظ نص مُنقّح وتعليمات مخصصة بالنص الأصلي.</li>
+        <li><strong>الإرسال.</strong> اضغط Command-Return لإرسال الالتقاط إلى ملاحظة المسار.</li>
+      </ol>
+
+      <h2 id="verify">تحقق من ملاحظة Markdown</h2>
+      <p>اختر <strong>إظهار آخر تصدير</strong> من شريط القائمة، أو ابحث عن الإدخال في المكتبة وأظهره في Finder، ثم افتح الملف في Obsidian. وإذا كنت تحتاج إلى النص فقط، فاختر <strong>نسخ آخر نص</strong>. وللحصول على بنية ملاحظة تملؤها من تسجيل، راجع <a href="/ar/blog/obsidian-meeting-notes-template/">مولّد قالب ملاحظات الاجتماعات</a>.</p>
+
+      <h2 id="privacy">ما الذي يغادر جهاز Mac</h2>
+      <p>يجري التفريغ على جهاز Mac، ولا يرسل Vox.md محتوى الالتقاط إلى خوادم Vox.md. أما تنزيلات النماذج فتتصل ببنية Hugging Face أو FluidAudio. وإذا كان المجلد الوجهة يُزامَن عبر iCloud أو خدمة أخرى، فإن تلك الخدمة تتعامل مع الملف وفق شروطها. راجع <a href="/ar/privacy.html">سياسة الخصوصية</a>.</p>
+
+      <h2 id="troubleshooting">استكشاف الأخطاء وإصلاحها</h2>
+      <ul>
+        <li><strong>لا يوجد نص مفرَّغ، أو اللغة خاطئة.</strong> تحقق من تنزيل نموذج وتحديده، ومن ضبط اللغة، في الإعدادات ← النماذج.</li>
+        <li><strong>لا تظهر أي ملاحظة.</strong> تحقق من مجلد وجهة المسار ومن أن Vox.md يملك صلاحية الوصول إليه.</li>
+        <li><strong>الملف الطويل يستغرق وقتًا.</strong> تستغرق النماذج الأكبر وقتًا أطول مع التسجيل الطويل. جرّب نموذجًا أصغر أولًا ثم قارن.</li>
+        <li><strong>انتهت الحصة المجانية.</strong> تغطي 15 دقيقة تفريغ و10 عمليات تسليم ناجحة، ثم فتحًا دائمًا بدفعة واحدة. سعر App Store هو المرجع؛ راجع <a href="/ar/docs/#pricing-limits">الاستخدام المجاني وفتح القفل مدى الحياة</a>.</li>
+      </ul>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">حوّل التسجيل إلى ملاحظة تملكها.</h2>
+        <p>ابدأ بمقطع قصير غير حساس ضمن الحصة المجانية، ثم افتح ملف Markdown.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ar_5aaec3f62945">احصل على Vox.md لجهاز Mac</a></p>
+      </section>
+      <nav class="toc" aria-label="أدلة ذات صلة" id="related"><div class="toc-title">متابعة</div><ul>
+        <li><a href="/ar/blog/transcribe-meetings-mac-obsidian/">سجّل مكالمة مباشرة بدلًا من ذلك: اجتماعات Mac إلى Obsidian</a></li>
+        <li><a href="/ar/blog/dictation-on-mac/">الإملاء على جهاز Mac</a></li>
+        <li><a href="/ar/compare/whisper-vs-parakeet/">Whisper مقابل Parakeet</a></li>
+        <li><a href="/ar/blog/transcribe-voice-memos-iphone/">فرّغ مذكرات iPhone الصوتية إلى Markdown</a></li>
+        <li><a href="/ar/blog/obsidian-meeting-notes-template/">مولّد قوالب ملاحظات الاجتماعات لـ Obsidian</a></li>
+        <li><a href="/ar/docs/#mac">توثيق Mac</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ar/">الرئيسية</a></li>
+        <li><a href="/ar/docs/">الوثائق</a></li>
+        <li><a href="/ar/blog/">الأدلة</a></li>
+        <li><a href="/ar/compare/">قارن</a></li>
+        <li><a href="/ar/privacy.html">الخصوصية</a></li>
+        <li><a href="/ar/terms.html">الشروط</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">الدعم</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ar_5aaec3f62945">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · التقاط سريع للملاحظات المحلية · لا رفع للمحتوى.</div>
+    </div>
+  <details class="language-switcher"><summary>اللغة</summary><ul><li><a href="/blog/transcribe-audio-file-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-audio-file-mac/" lang="ar" hreflang="ar" aria-current="page">العربية</a></li><li><a href="/bn/blog/transcribe-audio-file-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-audio-file-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-audio-file-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-audio-file-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-audio-file-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-audio-file-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-audio-file-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-audio-file-mac/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-audio-file-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-audio-file-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-audio-file-mac/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-audio-file-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-audio-file-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-audio-file-mac/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-audio-file-mac/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-audio-file-mac/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-audio-file-mac/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-audio-file-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-audio-file-mac/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-audio-file-mac/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-audio-file-mac/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

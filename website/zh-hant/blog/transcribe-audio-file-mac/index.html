@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" dir="ltr" data-search-section="段落" data-search-guide="指南" data-search-empty="沒有與“{query}”匹配的結果">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在 Mac 上本地轉錄音訊檔案為 Markdown | Vox.md</title>
+  <meta name="description" content="了解 Mac 上的語音備忘錄和備忘錄免費提供什麼，然後把現有的音訊或影片檔案匯入適用於 Mac 的 Vox.md，在 Mac 上用 Whisper 或 Parakeet 轉錄，並儲存為歸你所有的 Markdown 筆記。">
+  <link rel="canonical" href="https://vox.isolated.tech/zh-hant/blog/transcribe-audio-file-mac/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="供語言模型使用的 Vox.md 文件">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="在 Mac 上本地轉錄音訊檔案為 Markdown">
+  <meta property="og:description" content="了解 Mac 上的語音備忘錄和備忘錄免費提供什麼，然後把現有的音訊或影片檔案匯入適用於 Mac 的 Vox.md，在 Mac 上用 Whisper 或 Parakeet 轉錄，並儲存為歸你所有的 Markdown 筆記。">
+  <meta property="og:url" content="https://vox.isolated.tech/zh-hant/blog/transcribe-audio-file-mac/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-22">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="在 Mac 上本地轉錄音訊檔案為 Markdown">
+  <meta name="twitter:description" content="了解 Mac 上的語音備忘錄和備忘錄免費提供什麼，然後把現有的音訊或影片檔案匯入適用於 Mac 的 Vox.md，在 Mac 上用 Whisper 或 Parakeet 轉錄，並儲存為歸你所有的 Markdown 筆記。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "在 Mac 上本地轉錄音訊檔案為 Markdown",
+  "description": "了解 Mac 上的語音備忘錄和備忘錄免費提供什麼，然後把現有的音訊或影片檔案匯入適用於 Mac 的 Vox.md，在 Mac 上用 Whisper 或 Parakeet 轉錄，並儲存為歸你所有的 Markdown 筆記。",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-22",
+  "dateModified": "2026-11-22",
+  "mainEntityOfPage": "https://vox.isolated.tech/zh-hant/blog/transcribe-audio-file-mac/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "zh-Hant",
+  "name": "在 Mac 上本地轉錄音訊檔案為 Markdown | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/zh-hant/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "指南",
+      "item": "https://vox.isolated.tech/zh-hant/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "在 Mac 上本地轉錄音訊檔案為 Markdown",
+      "item": "https://vox.isolated.tech/zh-hant/blog/transcribe-audio-file-mac/"
+    }
+  ],
+  "inLanguage": "zh-Hant",
+  "name": "在 Mac 上本地轉錄音訊檔案為 Markdown | Vox.md",
+  "description": "了解 Mac 上的語音備忘錄和備忘錄免費提供什麼，然後把現有的音訊或影片檔案匯入適用於 Mac 的 Vox.md，在 Mac 上用 Whisper 或 Parakeet 轉錄，並儲存為歸你所有的 Markdown 筆記。"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-audio-file-mac/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳至指南</a>
+<nav aria-label="主導航">
+  <div class="nav-inner">
+    <a href="/zh-hant/" class="logo" aria-label="Vox.md 首頁">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/zh-hant/#how">工作原理</a></li>
+      <li><a href="/zh-hant/docs/">文件</a></li>
+      <li><a href="/zh-hant/blog/">指南</a></li>
+      <li><a href="/zh-hant/compare/">比較</a></li>
+      <li><a href="/zh-hant/privacy.html">隱私</a></li>
+      <li><a href="/zh-hant/terms.html">條款</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_5aaec3f62945">下載 Vox.md</a>
+  <details class="language-switcher"><summary>語言</summary><ul><li><a href="/blog/transcribe-audio-file-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-audio-file-mac/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-audio-file-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-audio-file-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-audio-file-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-audio-file-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-audio-file-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-audio-file-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-audio-file-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-audio-file-mac/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-audio-file-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-audio-file-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-audio-file-mac/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-audio-file-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-audio-file-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-audio-file-mac/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-audio-file-mac/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-audio-file-mac/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-audio-file-mac/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-audio-file-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-audio-file-mac/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-audio-file-mac/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-audio-file-mac/" lang="zh-Hant" hreflang="zh-Hant" aria-current="page">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Mac · 音訊檔案 · 本地轉錄</div>
+        <h1 class="hero-title">在 Mac 上本地轉錄音訊檔案為 Markdown</h1>
+        <p class="hero-subtitle">先看免費的內建選項，再看一條本地路徑：從你已有的檔案到 Obsidian 或任意資料夾中的 Markdown 筆記。</p>
+      </div>
+      <aside class="meta-card" aria-label="關於本指南">
+        <dl>
+          <div><dt>作者：</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>更新於</dt><dd><time datetime="2026-11-22">2026年11月22日</time></dd></div>
+          <div><dt>需要</dt><dd>Vox.md：macOS 14 或更新版本 · 已下載的語音模型。Apple 內建轉錄：請參閱 Apple 支援頁面，了解適用於你的 Mac 和語言的情況。</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="在 Mac 上本地轉錄音訊檔案為 Markdown">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">簡短回答</div>
+        <p>Apple 的語音備忘錄和備忘錄可以在 Mac 上免費轉錄音訊，對許多人來說這就夠了。要把現有的音訊或影片檔案變成 Markdown 筆記，請開啟適用於 Mac 的 Vox.md，選擇 <strong>匯入音訊…</strong> 從選單列（或在擷取工作區中匯入檔案），讓本地 Whisper 或 Parakeet 模型進行轉錄，檢查文字，然後傳送到路線的筆記。</p>
+      </div>
+      <p>以下 Apple 的詳情來自 Apple 支援頁面 <a href="https://support.apple.com/guide/voice-memos/vm4a03609f0d/mac">在 Mac 的語音備忘錄中檢視轉錄</a> 和 <a href="https://support.apple.com/guide/notes/apdb5106e334/mac">在 Mac 的備忘錄中錄製並轉錄音訊</a>，查閱於 2026 年 11 月 22 日。Apple 的頁面可能會變動，請針對你的 Mac 核對。Vox.md 的步驟依據 <a href="/zh-hant/docs/#mac">Mac 文件</a>.</p>
+      <nav class="toc" aria-label="本指南中"><div class="toc-title">本指南中</div><ol>
+        <li><a href="#built-in">Mac 上已有的免費選項</a></li>
+        <li><a href="#choose">哪種方式合適？</a></li>
+        <li><a href="#prepare">準備適用於 Mac 的 Vox.md</a></li>
+        <li><a href="#import">匯入並轉錄檔案</a></li>
+        <li><a href="#verify">檢查 Markdown 筆記</a></li>
+        <li><a href="#privacy">哪些內容會離開你的 Mac</a></li>
+        <li><a href="#troubleshooting">故障排查</a></li>
+        <li><a href="#related">相關指南</a></li>
+      </ol></nav>
+
+      <h2 id="built-in">Mac 上已有的免費選項</h2>
+      <h3>語音備忘錄</h3>
+      <p>Apple 的語音備忘錄頁面說，你可以按一下 <strong>轉錄</strong> 按鈕可在錄音時即時檢視文字，或選取已完成的錄音後按一下同一按鈕。你可以在錄音列表中搜尋標題或轉錄中的文字，也可以選取轉錄文字後按住 Control 並按一下，然後選擇 <strong>複製</strong>。Apple 表示，如果你開啟在 macOS 14 或更早版本中、或在不支援轉錄的裝置上製作的錄音，語音備忘錄會自動轉錄它；音訊轉錄並非在所有國家或地區都可用。</p>
+      <h3>筆記</h3>
+      <p>Apple 的備忘錄頁面介紹了在筆記中錄音：按一下「附件」按鈕，選擇 <strong>錄製音訊</strong>，錄音，然後按一下「轉錄」按鈕檢視轉錄文字。頁面說明，音訊轉錄適用於搭載 M1 或更新晶片的 Mac，並且裝置語言需在 Apple 該頁面列出的範圍內。如果沒有出現「轉錄」按鈕，Apple 表示你的 Mac 不符合最低要求，或未偵測到支援的語言。</p>
+      <h3>限制</h3>
+      <p>文字會留在這些 App 內，直到你把它複製出來。Apple 表示，在備忘錄中刪除音訊錄音也會刪除轉錄文字。兩款 App 能匯入哪些檔案類型，我們無法從 Apple 的頁面查證，請針對你的錄音自行檢查；本指南對此不作任何說明。</p>
+      <p>萬不得已時，有人會播放音訊並對著文字編輯器聽寫。這只是變通辦法，不是檔案轉錄；請參閱 <a href="/zh-hant/blog/dictation-on-mac/">Mac 聽寫</a> 了解聽寫本身。</p>
+
+      <h2 id="choose">哪種方式合適？</h2>
+      <p>表中只列出 Apple 頁面或 Vox.md 文件中明確寫明的內容。「未說明」表示我們引用的來源沒有提及。表中不包含任何準確度或速度方面的說法。</p>
+      <p class="guide-table-hint">在小螢幕上，請左右滑動表格。</p>
+      <div class="guide-comparison" role="region" aria-label="Mac 音訊轉錄方式比較；在小螢幕上請橫向捲動" tabindex="0">
+        <table class="comparison">
+          <caption>Mac 音訊轉錄方式，核對於 2026 年 11 月 22 日</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">語音備忘錄</th><th scope="col">筆記</th><th scope="col">適用於 Mac 的 Vox.md</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">文字儲存在哪裡</th><td>在語音備忘錄內；需自行複製出來</td><td>在筆記內，與音訊錄音在一起</td><td>你所選資料夾或儲存庫中的 Markdown 筆記</td></tr>
+            <tr><th scope="row">在 Mac 上執行的內容</th><td>未說明</td><td>未說明</td><td>轉錄，使用你下載的 Whisper 或 Parakeet 模型</td></tr>
+            <tr><th scope="row">檔案匯入</th><td>未說明</td><td>未說明</td><td>匯入音訊… 接受音訊或影片檔案</td></tr>
+            <tr><th scope="row">Markdown 輸出</th><td>未說明</td><td>未說明</td><td>是</td></tr>
+            <tr><th scope="row">說話人標籤</th><td>未說明</td><td>未說明</td><td>選用，搭配識別演講者</td></tr>
+            <tr><th scope="row">費用</th><td>macOS 的一部分</td><td>macOS 的一部分</td><td>15 分鐘免費轉錄和 10 次成功遞送，之後一次性買斷終身解鎖</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>如果文字只需留在語音備忘錄或備忘錄中，直接使用它們即可。當你想要一個歸你所有的純文字檔、指定的本地模型，或讓文字進入你的儲存庫時，才需要 Vox.md。</p>
+
+      <h2 id="prepare">準備適用於 Mac 的 Vox.md</h2>
+      <ol>
+        <li><strong>安裝。</strong> 適用於 Mac 的 Vox.md 需要 macOS 14 或更新版本。請透過下方的 App Store 連結取得。</li>
+        <li><strong>下載模型。</strong> 開放 <strong>設定 → 模型</strong> 並下載一個：Whisper 從 Tiny (75 MB) 到 Large v3 Turbo (1.6 GB)，Parakeet v2（約 800 MB，英語）或 Parakeet v3（約 800 MB，25 種語言）。在同一畫面上設定轉錄語言。Whisper 在支援的 Mac 上使用 Metal 加速。下載模型是唯一需要連網的步驟。請參閱 <a href="/zh-hant/compare/whisper-vs-parakeet/">Whisper 與 Parakeet</a> 來選擇。 <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a> 執行 Whisper 模型，而 <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> 執行 Parakeet。</li>
+        <li><strong>選擇或建立一條路線。</strong> 路線包含目標資料夾或儲存庫以及目標筆記：新筆記、滾動的每日筆記，或某個標題下的現有筆記。請參閱 <a href="/zh-hant/docs/#presets">文件中的路線</a>.</li>
+      </ol>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">取得適用於 Mac 的 Vox.md。</h2>
+        <p>免費額度為 15 分鐘轉錄和 10 次成功遞送，足夠試用一段錄音。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_5aaec3f62945">取得適用於 Mac 的 Vox.md</a></p>
+      </section>
+
+      <h2 id="import">匯入並轉錄檔案</h2>
+      <ol>
+        <li><strong>匯入。</strong> 在 Vox.md 選單列中選擇 <strong>匯入音訊…</strong>，或把音訊匯入或拖入擷取工作區。文件說明音訊和影片檔案均可接受，並且與錄音走相同的本地轉錄流程。</li>
+        <li><strong>選擇加入草稿或立即傳送。</strong> 使用 <strong>立即傳送</strong> 轉錄完成後會遞送。使用 <strong>加入草稿</strong> 你可以先檢查。請對照音訊核對姓名、數字和日期。</li>
+        <li><strong>選用：識別演講者。</strong> 開啟 <strong>識別演講者</strong> 在路線上取得匿名、盡力而為的說話人標籤。它首次會準備一個獨立的模型。如果無法執行，會保留純文字轉錄，原因顯示在資料庫中。</li>
+        <li><strong>選用：處理模式。</strong> 路線可以使用保留原文、潤飾文字、會議記錄、工作清單或自訂指示。Apple Intelligence 模式需要相容 macOS 26 的硬體。沒有時，工作清單和會議記錄使用內建格式化器，而潤飾文字和自訂指示會保留原始文字。</li>
+        <li><strong>傳送。</strong> 按 Command-Return，將擷取內容傳送到路線的筆記。</li>
+      </ol>
+
+      <h2 id="verify">檢查 Markdown 筆記</h2>
+      <p>選擇 <strong>顯示上次匯出</strong> 從選單列，或在資料庫中找到該項目並在 Finder 中顯示，然後在 Obsidian 中開啟檔案。如果只需要文字，請選擇 <strong>複製上次轉錄</strong>。如需一個可由錄音填入的筆記結構，請參閱 <a href="/zh-hant/blog/obsidian-meeting-notes-template/">會議記錄範本產生器</a>.</p>
+
+      <h2 id="privacy">哪些內容會離開你的 Mac</h2>
+      <p>轉錄在 Mac 上執行，Vox.md 不會把擷取內容傳送到 Vox.md 伺服器。下載模型會連線到 Hugging Face 或 FluidAudio 的基礎架構。如果目標資料夾透過 iCloud 或其他服務同步，該服務會依其自身條款處理檔案。請參閱 <a href="/zh-hant/privacy.html">隱私權政策</a>.</p>
+
+      <h2 id="troubleshooting">故障排查</h2>
+      <ul>
+        <li><strong>沒有轉錄，或語言不對。</strong> 在設定 → 模型中，檢查模型已下載並選取，且語言已設定。</li>
+        <li><strong>沒有出現筆記。</strong> 檢查路線的目標資料夾，並確認 Vox.md 有權存取它。</li>
+        <li><strong>較長的檔案需要一些時間。</strong> 較大的模型處理長錄音需要更多時間。先試較小的模型，再比較。</li>
+        <li><strong>免費額度已用完。</strong> 其中包含 15 分鐘轉錄和 10 次成功遞送，之後一次性買斷終身解鎖。以 App Store 價格為準；請參閱 <a href="/zh-hant/docs/#pricing-limits">免費使用與終身解鎖</a>.</li>
+      </ul>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">把錄音變成歸你所有的筆記。</h2>
+        <p>先用免費額度試一段簡短、不敏感的音訊，然後開啟 Markdown 檔案。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_5aaec3f62945">取得適用於 Mac 的 Vox.md</a></p>
+      </section>
+      <nav class="toc" aria-label="相關指南" id="related"><div class="toc-title">繼續</div><ul>
+        <li><a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/">改為錄製即時通話：把 Mac 會議記入 Obsidian</a></li>
+        <li><a href="/zh-hant/blog/dictation-on-mac/">在 Mac 上聽寫</a></li>
+        <li><a href="/zh-hant/compare/whisper-vs-parakeet/">Whisper 與 Parakeet</a></li>
+        <li><a href="/zh-hant/blog/transcribe-voice-memos-iphone/">將 iPhone 語音備忘錄轉錄為 Markdown</a></li>
+        <li><a href="/zh-hant/blog/obsidian-meeting-notes-template/">Obsidian 會議記錄範本產生器</a></li>
+        <li><a href="/zh-hant/docs/#mac">Mac 文件</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/zh-hant/">首頁</a></li>
+        <li><a href="/zh-hant/docs/">文件</a></li>
+        <li><a href="/zh-hant/blog/">指南</a></li>
+        <li><a href="/zh-hant/compare/">比較</a></li>
+        <li><a href="/zh-hant/privacy.html">隱私</a></li>
+        <li><a href="/zh-hant/terms.html">條款</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">支援</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_5aaec3f62945">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · 本地筆記快速擷取 · 不上傳內容。</div>
+    </div>
+  <details class="language-switcher"><summary>語言</summary><ul><li><a href="/blog/transcribe-audio-file-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-audio-file-mac/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-audio-file-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-audio-file-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-audio-file-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-audio-file-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-audio-file-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-audio-file-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-audio-file-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-audio-file-mac/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-audio-file-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-audio-file-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-audio-file-mac/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-audio-file-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-audio-file-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-audio-file-mac/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-audio-file-mac/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-audio-file-mac/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-audio-file-mac/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-audio-file-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-audio-file-mac/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-audio-file-mac/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-audio-file-mac/" lang="zh-Hant" hreflang="zh-Hant" aria-current="page">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
