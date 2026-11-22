@@ -1,0 +1,133 @@
+<!--{
+  "slug": "private-voice-journal-iphone",
+  "title": "Keep a private voice journal on iPhone (saved as Markdown)",
+  "description": "Compare ways to keep a voice journal on iPhone, then set up Vox.md to transcribe on device and add each entry to a dated Markdown file in Obsidian or a Files folder.",
+  "subtitle": "Speak your entry. It is transcribed on your iPhone and added to today's Markdown file, in a folder you choose.",
+  "eyebrow": "Voice journaling · On-device · Markdown",
+  "requirements": "iPhone (iOS 17.6+) · a Files or Obsidian folder",
+  "published": "2026-11-20",
+  "modified": "2026-11-20",
+  "image": "/screenshots/04-listening.png"
+}-->
+<div class="answer-box" id="short-answer"><div class="label">The short answer</div>
+        <p>Record your entry in Vox.md with a “Journal” Capture Preset. It transcribes on the iPhone and adds the text to today’s Markdown file (for example <code>Journal/2026-11-19.md</code>) in your Obsidian vault or a Files folder. Your words stay in a plain file you can open, search, back up, or move to another app.</p>
+      </div>
+      <p>The idea behind this guide: your journal should be a file you own. It compares four ways to keep a voice journal, then walks through a setup that takes about ten minutes.</p>
+      <nav class="toc" aria-label="In this guide"><div class="toc-title">In this guide</div><ol>
+        <li><a href="#choose">Four ways to keep a voice journal</a></li>
+        <li><a href="#why-markdown">Why a plain-file journal lasts</a></li>
+        <li><a href="#setup">Set up a Journal preset (once)</a></li>
+        <li><a href="#record">Record an entry</a></li>
+        <li><a href="#example">What a day looks like</a></li>
+        <li><a href="#privacy">What stays on the phone</a></li>
+        <li><a href="#offline">Journaling without a connection</a></li>
+        <li><a href="#habits">Make it a habit</a></li>
+        <li><a href="#faq">Questions</a></li>
+      </ol></nav>
+
+      <h2 id="choose">Four ways to keep a voice journal</h2>
+      <p>No approach is best for everyone. If Apple’s own apps already do what you need, use them.</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th>Approach</th><th>Where entries live</th><th>Transcript</th><th>Export and portability</th><th>Offline</th><th>Obsidian</th></tr></thead>
+          <tbody>
+            <tr><td>Apple Journal app</td><td>Inside Journal</td><td>Apple’s guide says you can record audio and have it transcribed in a journal entry, and adds the transcript to the entry; audio transcription is listed as English only, excluding Singapore and India locales</td><td>Entries live in the Journal app</td><td>Not covered on the cited Apple page</td><td>Not covered here; Obsidian reads files in a vault folder</td></tr>
+            <tr><td>Voice Memos</td><td>Audio recordings in Voice Memos</td><td>Apple lists transcription for iPhone 12 or later, in specific languages, and says it is not available in all countries or regions</td><td>You have audio files, not a dated journal; copy or export each one</td><td>Not covered on the cited Apple page</td><td>Copy the text across, or <a href="../transcribe-voice-memos-iphone/">turn memos into Markdown</a></td></tr>
+            <tr><td>AI journaling apps</td><td>Varies by app</td><td>Some rewrite or summarise your words with a cloud model</td><td>Varies by app</td><td>Varies by app</td><td>Varies by app</td></tr>
+            <tr><td>Vox.md</td><td>A Markdown file per day, in a folder you choose</td><td>On-device Apple Speech, or optional Whisper and Parakeet models</td><td>Plain <code>.md</code> files</td><td>Transcription runs on the device once a model is prepared</td><td>Writes into your vault folder</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Sources for the Apple rows: Apple Support on <a href="https://support.apple.com/guide/iphone/add-formatting-photos-and-more-iph492ee70a8/ios" target="_blank" rel="noopener">adding recordings and transcriptions in Journal</a> and on <a href="https://support.apple.com/guide/iphone/view-a-transcription-iph00953a982/ios" target="_blank" rel="noopener">viewing a Voice Memos transcription</a>. Availability depends on your iPhone, system version, language and region.</p>
+      <p>For AI journaling apps, this guide makes no claim about any particular product. Before you pick one, read its privacy policy and look for where the audio is processed, who can read the transcript, and whether you can export everything.</p>
+
+      <h2 id="why-markdown">Why a plain-file journal lasts</h2>
+      <ul>
+        <li><strong>Portable.</strong> A <code>.md</code> file opens in Obsidian, Files, a text editor, or whatever replaces them.</li>
+        <li><strong>Searchable.</strong> Use Obsidian’s search, or search the Files app, for a word across years of entries.</li>
+        <li><strong>Backed up your way.</strong> Your folder follows whatever sync you already use, such as <a href="https://support.apple.com/guide/iphone/set-up-icloud-drive-iphbbcf8827d/ios" target="_blank" rel="noopener">iCloud Drive</a>, Obsidian Sync or Git.</li>
+        <li><strong>No lock-in.</strong> If you stop using Vox.md, the files stay where they are.</li>
+      </ul>
+      <p>If you use Obsidian, its <a href="https://obsidian.md/help/plugins/daily-notes" target="_blank" rel="noopener">Daily notes plugin</a> opens a note named for today’s date. Match that filename convention and your voice entries land in the same note.</p>
+
+      <h2 id="setup">Set up a Journal preset (once)</h2>
+      <ol>
+        <li>Open <strong>Settings → Capture Presets</strong> in Vox.md and create a preset named <strong>Journal</strong>.</li>
+        <li>Connect its destination folder through Files: your Obsidian vault folder, or a plain <code>Journal</code> folder. It must be writable.</li>
+        <li>Choose <strong>Rolling Note</strong> with the <strong>Daily</strong> period, and set the path to <code>Journal/{period}.md</code>. <code>{period}</code> becomes the date, such as <code>2026-11-19</code>. To give those daily notes a template, use the <a href="../obsidian-daily-note-template/">Obsidian daily note template generator</a>.</li>
+        <li>Set placement to <strong>Heading</strong> with a level-two heading named <strong>Entries</strong>, inserted at the end of its section (or choose <strong>Bottom</strong>). Let Vox.md create the heading if it is missing.</li>
+        <li>In entry formatting, use a prefix that stamps the time, for example <code>- **{hour}:{minute}** </code>.</li>
+        <li>Set processing to <strong>Keep Original</strong>, so your words are not rewritten.</li>
+        <li>Optionally, change the preset’s prompt: the line shown in an empty composer. A one-line question works well.</li>
+      </ol>
+      <p>For path matching and heading placement in depth, see <a href="../append-to-obsidian-daily-note-iphone/">append to an Obsidian daily note</a>. For models and backends, see <a href="../voice-notes-to-obsidian-iphone/">iPhone voice notes to Obsidian</a>. For more entry prefixes, see <a href="../obsidian-capture-templates/">capture templates</a>.</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Download Vox.md free</a></p>
+      <p>Try 10 successful Capture deliveries and 15 transcription minutes free. Unlimited use is a one-time lifetime purchase; prices vary by region.</p>
+
+      <h2 id="record">Record an entry</h2>
+      <ol>
+        <li>Open Quick Capture and choose the <strong>Journal</strong> preset.</li>
+        <li>Choose <strong>Add to Draft</strong> in the voice controls, then record and stop.</li>
+        <li>Review the transcript in the draft and fix any recognition errors.</li>
+        <li>Tap <strong>Send</strong>.</li>
+      </ol>
+      <p>Open today’s file to confirm the entry. Once you trust the route, you can choose <strong>Send Immediately</strong> instead.</p>
+      <figure class="guide-figure">
+        <img src="../../screenshots/04-listening.png" alt="Vox.md recording a voice note on iPhone" width="1206" height="2622" loading="lazy" decoding="async">
+        <figcaption>Recording in Vox.md.</figcaption>
+      </figure>
+      <p>Quicker ways in include the Home Screen or Lock Screen widget, Control Center, Shortcuts, and Apple Watch. The <a href="../apple-watch-obsidian-voice-notes/">Apple Watch guide</a> covers journaling from your wrist; the paired iPhone still transcribes and writes the note.</p>
+
+      <h2 id="example">What a day looks like</h2>
+      <p>This is illustrative output for the settings above. Your times, words and existing note content will differ.</p>
+      <pre class="guide-code"><code># 2026-11-19
+
+## Entries
+- **08:10** Slept badly, but the morning walk helped. Want to finish the draft today.
+- **21:40** Finished the draft. Tomorrow: send it to Sam and take a day off.</code></pre>
+
+      <h2 id="privacy">What stays on the phone</h2>
+      <ul>
+        <li>Transcription is local. Vox.md does not upload audio for transcription.</li>
+        <li>Audio and drafts stay on the device.</li>
+        <li>The text goes only to the destination folder you configured. That folder’s own sync, such as iCloud Drive or Obsidian Sync, then controls where it goes next.</li>
+        <li>Optional Apple Intelligence cleanup also runs on the device. Leave <strong>Use Apple Intelligence</strong> off, with Keep Original, if you want verbatim entries.</li>
+        <li>History stores coarse metadata, not note text.</li>
+      </ul>
+      <p>Model downloads need a connection. Read more in the <a href="../../docs/">docs</a>.</p>
+
+      <h2 id="offline">Journaling without a connection</h2>
+      <p>Download a speech model while you are online, then test with a short entry in Airplane Mode before you rely on it. The <a href="../offline-transcription-iphone-markdown/">offline transcription guide</a> has the full check, including making sure the folder is available locally.</p>
+
+      <h2 id="habits">Make it a habit</h2>
+      <ul>
+        <li>Pick a regular time, such as after dinner, and record then.</li>
+        <li>Put a one-line prompt in the preset, so an empty composer asks you something.</li>
+        <li>Keep entries short. A minute is enough.</li>
+        <li>Use the same preset every time, so everything lands in one file per day.</li>
+        <li>Once a week, read the last seven files in Obsidian and note what you want to follow up.</li>
+      </ul>
+
+      <h2 id="faq">Questions</h2>
+      <h3>Is my voice journal private?</h3>
+      <p>Transcription runs on your iPhone and Vox.md does not upload audio for it. The finished text goes to the folder you chose, and that folder’s sync provider, if any, handles it under its own terms.</p>
+      <h3>Can I use it without Obsidian?</h3>
+      <p>Yes. Any folder you can pick in the Files app works, and the entries are plain Markdown.</p>
+      <h3>Does it cost anything?</h3>
+      <p>Try 10 successful Capture deliveries and 15 transcription minutes free. Unlimited use is a one-time lifetime purchase; prices vary by region.</p>
+      <h3>Can I journal from Apple Watch?</h3>
+      <p>Yes. Pick the Journal preset on the Watch and record; the recording transfers to your iPhone, which transcribes it and writes the entry. See the <a href="../apple-watch-obsidian-voice-notes/">Apple Watch guide</a>.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Your journal, as a file you own.</h2>
+        <p>Set up the preset once, then talk.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Download Vox.md free</a></p>
+        <p>Free allowances · no account required · one lifetime unlock</p>
+      </section>
+      <nav class="toc" aria-label="Related guides"><div class="toc-title">Continue your setup</div><ul>
+        <li><a href="../append-to-obsidian-daily-note-iphone/">Daily-note paths and heading placement</a></li>
+        <li><a href="../voice-notes-to-obsidian-iphone/">Record and transcribe on iPhone</a></li>
+        <li><a href="../transcribe-voice-memos-iphone/">Turn Voice Memos into Markdown</a></li>
+        <li><a href="../obsidian-capture-templates/">Journal entry templates</a></li>
+        <li><a href="../../docs/">Vox.md docs</a></li>
+      </ul></nav>

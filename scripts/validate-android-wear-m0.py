@@ -92,7 +92,7 @@ PERSISTED_KEY_SOURCE_PATHS = {
     "Voxboard App Shared/InspirationQuoteService.swift",
     "Voxboard Watch Shared/WatchPhoneBridge.swift",
     "Voxboard/PersistentRecorder.swift",
-    "Voxboard/ReviewPromptManager.swift",
+    "Voxboard App Shared/ReviewPromptManager.swift",
     "Voxboard/StoreManager.swift",
     "Voxboard/WatchRecordingController.swift",
 }
@@ -137,6 +137,8 @@ REQUIRED_SHARED_SCHEMES = {
 PERSISTED_KEY_NAME_RE = re.compile(
     r"(?:(?:public|private|fileprivate|internal|package|nonisolated|static)\s+)*"
     r"(?:let|var)\s+([A-Za-z_][A-Za-z0-9_]*(?:Key|DefaultsKey|storageKey|flowsKey|IDsKey|IdKey)"
+    r"|deliveredCaptureCount|deliveryDayIdentifiers|lastRequestedAt|lastRequestedVersion"
+    r"|legacySuccessfulCaptureCount|legacySuccessfulTranscriptionCount|legacyUsageDayIdentifiers|legacyPendingPrompt"
     r"|successfulTranscriptionCount|successfulCaptureCount|usageDayIdentifiers|lastPromptAttemptAt|pendingPrompt|confirmVoiceNoteBeforeAdding)"
     r"\s*(?::[^=\n]+)?=\s*\"([^\"]+)\""
 )

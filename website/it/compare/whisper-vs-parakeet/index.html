@@ -208,7 +208,7 @@
       <ul>
         <li><strong>Scheda del modello Parakeet v2 (NVIDIA):</strong> un tasso medio di errore sulle parole del 6,05% sui dataset dell’Hugging Face Open ASR Leaderboard, con decodifica greedy e senza modello linguistico esterno. La scheda indica un RTFx di circa 3.380 con batch size 128 e precisa che “può variare in base alla durata dell’audio del dataset e alla batch size”. Non indica la GPU usata per questo valore.</li>
         <li><strong>Scheda del modello Parakeet v3 (NVIDIA):</strong> una media WER del 6,34% sugli stessi dataset della classifica, e medie di 11,97% (Fleurs), 7,83% (MLS) e 11,98% (CoVoST) per i set multilingue.</li>
-        <li><strong>Repository di Whisper (OpenAI):</strong> la <code>turbo</code> è descritto come una versione ottimizzata <code>large-v3</code> con trascrizione più veloce e perdita minima di accuratezza, a circa 8 volte la velocità di <code>large</code>, misurato “trascrivendo parlato inglese su una A100”.</li>
+        <li><strong>Repository di Whisper (OpenAI):</strong> i comandi <code>turbo</code> è descritto come una versione ottimizzata <code>large-v3</code> con trascrizione più veloce e perdita minima di accuratezza, a circa 8 volte la velocità di <code>large</code>, misurato “trascrivendo parlato inglese su una A100”.</li>
       </ul>
       <p>La <a href="https://huggingface.co/spaces/hf-audio/open_asr_leaderboard">classifica Open ASR Leaderboard</a> elenca più modelli e dataset; consultala per i numeri aggiornati, perché cambia. I dataset della classifica non sono la tua registrazione. I risultati variano con dispositivo, accento, rumore di fondo, microfono, durata dell’audio e dimensione del modello scelto. I multipli di velocità misurati su GPU da data center dicono poco su un telefono. Diffida di ogni affermazione “X volte più veloce” senza fonte.</p>
 
@@ -232,7 +232,7 @@
         <li>Nei controlli vocali di Rapida cattura scegli <strong>Aggiungi alla bozza</strong>. Aggiungi alla bozza accoda ogni trascrizione completata a un’unica bozza invece di inviarla.</li>
         <li>Seleziona il primo modello in <strong>Impostazioni → Modelli</strong>, poi registra la clip o usa <strong>Importa audio o video</strong> con un file esistente. Conviene importare un solo file, perché così entrambi i modelli ascoltano lo stesso audio.</li>
         <li>Scrivi nella bozza una breve riga di etichetta, ad esempio il nome del modello. Seleziona il secondo modello in <strong>Impostazioni → Modelli</strong> e importa di nuovo la stessa clip.</li>
-        <li>Tocca <strong>Invia</strong> per consegnare entrambe le trascrizioni in un’unica nota Markdown tramite il Percorso. (<strong>Invia subito</strong> consegnerebbe invece ogni trascrizione appena finita, dandoti due note.)</li>
+        <li>Tocca <strong>inviare</strong> per consegnare entrambe le trascrizioni in un’unica nota Markdown tramite il Percorso. (<strong>Invia subito</strong> consegnerebbe invece ogni trascrizione appena finita, dandoti due note.)</li>
         <li>Apri la nota e confrontala con l’audio: nomi propri, numeri e date, punteggiatura ed eventuali frasi omesse o ripetute. Annota anche quanto ha impiegato ogni trascrizione sul tuo dispositivo.</li>
         <li>Elimina il modello che non userai in <strong>Impostazioni → Modelli</strong> per liberare spazio.</li>
       </ol>

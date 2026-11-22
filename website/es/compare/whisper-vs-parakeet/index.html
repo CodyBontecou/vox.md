@@ -208,7 +208,7 @@
       <ul>
         <li><strong>Ficha del modelo Parakeet v2 (NVIDIA):</strong> una tasa media de error de palabras del 6.05% en los conjuntos de datos del Hugging Face Open ASR Leaderboard, con decodificación voraz y sin modelo de lenguaje externo. La ficha indica un RTFx de unos 3,380 con un tamaño de lote de 128 y que «puede variar según la duración del audio del conjunto de datos y el tamaño del lote». No nombra la GPU de esa cifra.</li>
         <li><strong>Ficha del modelo Parakeet v3 (NVIDIA):</strong> un WER medio del 6.34% en los mismos conjuntos de datos del leaderboard, y medias del 11.97% (Fleurs), 7.83% (MLS) y 11.98% (CoVoST) para los conjuntos multilingües.</li>
-        <li><strong>Repositorio de Whisper (OpenAI):</strong> el <code>turbo</code> El modelo se describe como una versión optimizada <code>large-v3</code> con una transcripción más rápida y una pérdida mínima de precisión, a unas 8 veces la velocidad de <code>large</code>, medido «transcribiendo voz en inglés en una A100».</li>
+        <li><strong>Repositorio de Whisper (OpenAI):</strong> el período <code>turbo</code> El modelo se describe como una versión optimizada <code>large-v3</code> con una transcripción más rápida y una pérdida mínima de precisión, a unas 8 veces la velocidad de <code>large</code>, medido «transcribiendo voz en inglés en una A100».</li>
       </ul>
       <p>La <a href="https://huggingface.co/spaces/hf-audio/open_asr_leaderboard">clasificación Open ASR Leaderboard</a> enumera más modelos y conjuntos de datos; consúltalo para ver las cifras actuales, porque cambian. Los conjuntos de datos del leaderboard no son tu grabación. Los resultados varían según el dispositivo, el acento, el ruido de fondo, el micrófono, la duración del audio y el tamaño del modelo que elijas. Los multiplicadores de velocidad medidos en GPU de centros de datos dicen poco sobre un teléfono. Trata con cautela cualquier afirmación sin fuente del tipo «X veces más rápido».</p>
 
@@ -232,7 +232,7 @@
         <li>En los controles de voz de Captura rápida, elige <strong>Añadir al borrador</strong>. Añadir al borrador agrega cada transcripción terminada a un único borrador en lugar de enviarla.</li>
         <li>Selecciona el primer modelo en <strong>Ajustes → Modelos</strong>, y luego graba el clip o usa <strong>Importar audio o video</strong> con un archivo existente. Lo mejor es importar un solo archivo, porque así ambos modelos oyen audio idéntico.</li>
         <li>Escribe una línea de etiqueta corta en el borrador, como el nombre del modelo. Selecciona el segundo modelo en <strong>Ajustes → Modelos</strong> e importa el mismo clip otra vez.</li>
-        <li>Toca <strong>Enviar</strong> para entregar ambas transcripciones a una nota de Markdown mediante la Ruta. (<strong>Enviar inmediatamente</strong> entregaría cada transcripción al terminar, con lo que obtendrías dos notas.)</li>
+        <li>Toca <strong>Envío</strong> para entregar ambas transcripciones a una nota de Markdown mediante la Ruta. (<strong>Enviar inmediatamente</strong> entregaría cada transcripción al terminar, con lo que obtendrías dos notas.)</li>
         <li>Abre la nota y compárala con el audio: nombres propios, números y fechas, puntuación y frases omitidas o repetidas. Anota también cuánto tardó cada transcripción en tu dispositivo.</li>
         <li>Elimina el modelo que no vayas a usar en <strong>Ajustes → Modelos</strong> para liberar almacenamiento.</li>
       </ol>
