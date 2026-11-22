@@ -247,7 +247,7 @@
           <div><strong>사진 및 카메라</strong><p>사진이나 스크린샷을 고르거나 새 사진을 찍으세요. 이미지는 준비된 뒤 전송 노트에 임베드됩니다.</p></div>
           <div><strong>파일</strong><p>파일 항목을 여러 개 선택하세요. 이미지는 임베드, 오디오는 오디오 데이터로 남고 다른 파일은 Obsidian 스타일 링크를 사용합니다.</p></div>
           <div><strong>문서 스캔</strong><p>VisionKit으로 페이지를 스캔하세요. Vox.md는 페이지 이미지를 보관하고 PDF를 만들며 가능한 범위에서 기기 내 OCR을 수행합니다.</p></div>
-          <div><strong>일지 OCR</strong><p>수동 셔터로 최대 10페이지 일지를 캡처하거나 사진을 고르세요. 정밀 Vision OCR은 자동 언어 감지를 사용합니다.</p></div>
+          <div><strong>일지 OCR</strong><p>수동 셔터로 저널 페이지를 최대 10장 촬영하거나 저널 사진을 선택하세요. 정확한 Vision OCR은 언어를 자동으로 감지합니다. 참고: <a href="/ko/blog/handwritten-notes-to-obsidian-iphone/">손글씨 노트를 Obsidian으로</a>.</p></div>
           <div><strong>스케치</strong><p>흰색 PencilKit 캔버스에 검정 펜으로 그리세요. Vox.md는 편집 가능한 그림 데이터와 PNG 미리보기를 저장합니다.</p></div>
           <div><strong>현재 위치 작업</strong><p>위치를 한 번 요청하고 검증된 Google Maps Markdown 링크를 초안에 삽입합니다. 독립적인 캡처 바 작업은 루트별 위치 컨트롤을 바꾸지 않습니다.</p></div>
           <div><strong>음성 및 가져온 오디오</strong><p>작성 화면에서 녹음하거나 오디오/비디오를 가져와 로컬 전사한 뒤 초안에 추가하거나 즉시 보내세요.</p></div>
@@ -262,7 +262,7 @@
             <tbody>
               <tr><td>미디어 추가</td><td>스케치, 카메라, 사진, 스크린샷, 웹 링크 선택지를 엽니다.</td></tr>
               <tr><td>파일 추가</td><td>파일 앱에서 여러 파일을 선택해 초안과 함께 준비합니다.</td></tr>
-              <tr><td>스캔 문서</td><td>여러 페이지 스캔, PDF, 페이지 이미지, 가능한 범위의 OCR을 캡처합니다.</td></tr>
+              <tr><td>문서 스캔</td><td>여러 페이지 스캔, PDF, 페이지 이미지, 가능한 범위의 OCR을 캡처합니다.</td></tr>
               <tr><td>텍스트 추출</td><td>OCR 중심 캡처에 일지 페이지 캡처와 일지 사진 선택을 제공합니다.</td></tr>
               <tr><td>9개</td><td>마지막 편집 작업을 실행 취소합니다.</td></tr>
               <tr><td>형식 Markdown</td><td>굵게, 기울임, 해시태그, 제목 1~6을 적용합니다.</td></tr>
@@ -382,7 +382,7 @@
         <h3 id="placement-templates">배치, 제목, 템플릿</h3>
         <ul>
           <li><strong>아래</strong> 뒤에 추가; <strong>TOP</strong> 앞에 추가합니다; <strong>이</strong> 로 선택한 1~6단계 제목 아래에 삽입합니다.</li>
-          <li>제목이 없다면 다음을 선택하세요: <strong>실수 표시</strong> 또는 <strong>이를 만들기</strong>.</li>
+          <li>제목이 없다면 다음을 선택하세요: <strong>실수 표시</strong> 또는 <strong>제목 만들기</strong>.</li>
           <li>보관함의 실시간 Markdown 템플릿 파일, 재사용 항목 템플릿, 사용자 설정 접두사와 접미사를 사용하세요.</li>
           <li>항목 서식은 다음을 지원합니다: <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>, 그리고 <code>{location}</code>.</li>
           <li>기본 첨부 하위 폴더: <code>attachments</code>.</li>
