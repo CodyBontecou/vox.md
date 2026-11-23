@@ -4833,6 +4833,48 @@
       "version": "1.0.0-beta1"
     },
     {
+      "bom-ref": "pkg:maven/com.google.android.play/core-common@2.0.4",
+      "group": "com.google.android.play",
+      "name": "core-common",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.android.play/core-common@2.0.4",
+      "type": "library",
+      "version": "2.0.4"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.android.play/review-ktx@2.0.2",
+      "group": "com.google.android.play",
+      "name": "review-ktx",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.android.play/review-ktx@2.0.2",
+      "type": "library",
+      "version": "2.0.2"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.android.play/review@2.0.2",
+      "group": "com.google.android.play",
+      "name": "review",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.android.play/review@2.0.2",
+      "type": "library",
+      "version": "2.0.2"
+    },
+    {
       "bom-ref": "pkg:maven/com.google.firebase/firebase-annotations@16.0.0",
       "group": "com.google.firebase",
       "name": "firebase-annotations",
@@ -5139,6 +5181,20 @@
       "purl": "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-common@2.4.10",
       "type": "library",
       "version": "2.4.10"
+    },
+    {
+      "bom-ref": "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk7@1.8.0",
+      "group": "org.jetbrains.kotlin",
+      "name": "kotlin-stdlib-jdk7",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk7@1.8.0",
+      "type": "library",
+      "version": "1.8.0"
     },
     {
       "bom-ref": "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.4.10",

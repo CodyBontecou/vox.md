@@ -29,3 +29,7 @@
 
 # AudioCapture's foreground service instantiates the phone notification styling by name.
 -keep class md.vox.android.PhoneRecordingNotificationExtender { public <init>(); public *; }
+
+# Play review-ktx 2.x references this compile-time-only Play services annotation, which
+# is not on the classpath. R8 suggested this rule in missing_rules.txt.
+-dontwarn com.google.android.gms.common.annotation.NoNullnessRewrite
