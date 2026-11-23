@@ -1,0 +1,136 @@
+<!--{
+  "slug": "otter-ai-alternative",
+  "title": "On-device Otter.ai alternative for Mac and iPhone",
+  "description": "Looking for an Otter.ai alternative with no bot in the call? Compare cloud meeting assistants with on-device transcription on Mac and iPhone that saves Markdown to your own folder, and learn when to stay with Otter.",
+  "subtitle": "Compare the cloud bot approach with on-device capture, see where Vox.md fits, and where Otter is the better choice.",
+  "eyebrow": "Mac · iPhone · Meetings · Comparison",
+  "requirements": "macOS 14+ or iOS 17.6+ · downloaded speech model",
+  "published": "2026-11-23",
+  "modified": "2026-11-23",
+  "image": "/screenshots/00-capture-light.png",
+  "section": "compare",
+  "fact_label": "Scope"
+}-->
+<div class="answer-box" id="short-answer"><div class="label">The short answer</div>
+        <p>If you want meeting and voice transcription that runs on your Apple device, joins no call, and saves Markdown to your own folder or Obsidian vault, Vox.md is one option. If you need a shared team workspace, a web portal, Android or Windows, stay with Otter or another cloud tool.</p>
+      </div>
+      <p>This comparison is published by Vox.md, which is a competing product. Statements about Otter are limited to what Otter’s own <a href="https://otter.ai/pricing" target="_blank" rel="noopener">pricing page</a> and <a href="https://help.otter.ai/" target="_blank" rel="noopener">help center</a> say, as read on November 23, 2026, and we give no Otter prices or limits here because they change. Statements about Vox.md follow the <a href="../../docs/">Vox.md docs</a>. We ran no accuracy or speed tests.</p>
+      <nav class="toc" aria-label="In this comparison"><div class="toc-title">In this comparison</div><ol>
+        <li><a href="#how-otter-works">How Otter works, in brief</a></li>
+        <li><a href="#why-switch">Common reasons people look for an alternative</a></li>
+        <li><a href="#approaches">Three kinds of alternative</a></li>
+        <li><a href="#vox-md">Vox.md as an on-device option</a></li>
+        <li><a href="#side-by-side">Otter and Vox.md side by side</a></li>
+        <li><a href="#stay-with-otter">When to stay with Otter</a></li>
+        <li><a href="#try-it">Try it on one meeting</a></li>
+        <li><a href="#consent">Recording etiquette and consent</a></li>
+        <li><a href="#faq">Questions</a></li>
+      </ol></nav>
+
+      <h2 id="how-otter-works">How Otter works, in brief</h2>
+      <p>Otter’s help center describes its meeting assistant, called Otter Notetaker (earlier named OtterPilot), as joining Zoom, Microsoft Teams and Google Meet meetings. After you connect a calendar it can join events that have a meeting link, or you can paste a meeting link to add it. It cannot join anonymously: it appears in the meeting as a guest participant, and the host may need to admit it. See <a href="https://help.otter.ai/hc/en-us/articles/4425393298327-OtterPilot-Overview" target="_blank" rel="noopener">Otter Notetaker overview</a> and <a href="https://help.otter.ai/hc/en-us/articles/13676219922711-Manually-add-Otter-Notetaker-to-a-meeting" target="_blank" rel="noopener">Manually add Otter Notetaker to a meeting</a>.</p>
+      <p>Otter’s <a href="https://otter.ai/pricing" target="_blank" rel="noopener">pricing page</a> lists several plan tiers (Basic, Pro, Business and Enterprise at the time of writing). It sets out, for each plan, monthly transcription minutes, the maximum length of one conversation and the number of concurrent meetings. These limits differ by plan and can change, so check Otter’s pricing page for current limits before you decide. The same page lists Otter apps for Mac, Windows, iOS and Android, a Chrome extension and web recording.</p>
+
+      <h2 id="why-switch">Common reasons people look for an alternative</h2>
+      <p>These are reasons a reader might have, not statistics about Otter’s users:</p>
+      <ul>
+        <li><strong>A visible bot in the call.</strong> Some people do not want an extra participant on a sensitive or informal call.</li>
+        <li><strong>Plan limits.</strong> Monthly minutes and per-conversation length differ by plan, and a heavy month or a long session may not fit the plan you are on.</li>
+        <li><strong>Where audio is processed.</strong> Some people prefer that recordings stay on their own computer or phone.</li>
+        <li><strong>Notes as plain files.</strong> Some want a Markdown file in a folder or Obsidian vault rather than a transcript inside a vendor’s app.</li>
+      </ul>
+      <p>If none of these apply to you, you may not need to switch.</p>
+
+      <h2 id="approaches">Three kinds of alternative</h2>
+      <p>Tools differ and change, so this table describes approaches rather than named products.</p>
+      <p class="guide-table-hint">On a small screen, swipe the table sideways.</p>
+      <div class="guide-comparison" role="region" aria-label="Meeting transcription approaches; scroll horizontally on small screens" tabindex="0">
+        <table class="comparison">
+          <caption>General approaches, reviewed November 23, 2026</caption>
+          <thead><tr><th scope="col">Question</th><th scope="col">Cloud meeting bot</th><th scope="col">Bot-free recorder that still uses the cloud</th><th scope="col">Fully on-device transcription</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Who joins the call</th><td>A bot joins as a participant</td><td>Nobody; an app on your computer records</td><td>Nobody; an app on your device records</td></tr>
+            <tr><th scope="row">Where audio is processed</th><td>The vendor’s servers</td><td>Usually the vendor’s servers; check the vendor</td><td>On your device</td></tr>
+            <tr><th scope="row">Where notes live</th><td>Usually the vendor’s workspace</td><td>Usually the vendor’s workspace</td><td>Files on your device or in a folder you choose</td></tr>
+            <tr><th scope="row">Platforms</th><td>Often web plus several operating systems</td><td>Varies by vendor</td><td>Limited to the operating systems the app supports</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>No approach is better in general. Pick by who should be in the call, where the audio may go, and where you want the notes.</p>
+
+      <h2 id="vox-md">Vox.md as an on-device option</h2>
+      <p><strong>On a Mac,</strong> switch the input mode to <strong>Meeting</strong>. Vox.md uses Apple’s <a href="https://developer.apple.com/documentation/screencapturekit" target="_blank" rel="noopener">ScreenCaptureKit framework</a> to record exactly one app’s audio and your microphone as two separate tracks, then transcribes both on your Mac with Whisper (through <a href="https://github.com/ggml-org/whisper.cpp" target="_blank" rel="noopener">whisper.cpp</a>) or Parakeet (through <a href="https://github.com/FluidInference/FluidAudio" target="_blank" rel="noopener">FluidAudio</a>). Your microphone is labelled <strong>You</strong>. Optional <strong>Identify Speakers</strong> adds anonymous, best-effort labels for several remote voices. No bot joins the call and no account is needed. macOS asks for screen and system audio recording access, which Apple explains in <a href="https://support.apple.com/guide/mac-help/control-access-screen-system-audio-recording-mchld6aa7d23/mac" target="_blank" rel="noopener">Control access to screen and system audio recording on Mac</a>. Details are in the <a href="../../docs/#mac-meeting">Mac meeting capture docs</a> and the <a href="../../blog/transcribe-meetings-mac-obsidian/">step-by-step meetings guide</a>.</p>
+      <p><strong>On iPhone,</strong> you can record in person or import audio and video, transcribe on the device, and optionally add speaker labels. See <a href="../../blog/voice-notes-to-obsidian-iphone/">iPhone voice notes to Obsidian</a> and <a href="../../blog/transcribe-audio-file-mac/">transcribing an audio file on Mac</a>.</p>
+      <p>Notes are standard Markdown files, saved to an Obsidian vault or a Files folder you choose through a Route. The <strong>Meeting Notes</strong> mode writes a <code>## Notes</code> section and, when the text contains action items, a <code>## Action Items</code> checklist. It uses Apple Intelligence where available and a deterministic formatter otherwise. For headings such as agenda and decisions, <a href="../../blog/obsidian-meeting-notes-template/">generate a meeting notes template</a>.</p>
+      <p>Pricing: the free download includes 15 minutes of transcription and 10 successful deliveries; unlimited use is a one-time lifetime purchase with no subscription. See <a href="../../docs/#pricing-limits">free use and lifetime unlock</a>, and the App Store for localized prices.</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Download Vox.md free</a></p>
+      <p>The free download includes 15 transcription minutes. Unlimited use is a one-time purchase.</p>
+
+      <h2 id="side-by-side">Otter and Vox.md side by side</h2>
+      <p>Where Otter’s cell says to check, we could not confirm the detail on the otter.ai pages cited here, so we make no claim.</p>
+      <p class="guide-table-hint">On a small screen, swipe the table sideways.</p>
+      <div class="guide-comparison" role="region" aria-label="Otter and Vox.md comparison; scroll horizontally on small screens" tabindex="0">
+        <table class="comparison">
+          <caption>Otter and Vox.md, reviewed November 23, 2026</caption>
+          <thead><tr><th scope="col">Question</th><th scope="col">With Otter</th><th scope="col">With Vox.md</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Joins the call as a participant</th><td>Otter Notetaker joins Zoom, Microsoft Teams and Google Meet as a visible guest (<a href="https://help.otter.ai/hc/en-us/articles/4425393298327-OtterPilot-Overview" target="_blank" rel="noopener">help center</a>)</td><td>No. It records one app’s audio and your microphone (<a href="../../docs/#mac-meeting">docs</a>)</td></tr>
+            <tr><th scope="row">Where transcription runs</th><td>Check Otter’s own privacy and security documentation</td><td>On your Mac or iPhone, after a model download (<a href="../../docs/#models">docs</a>)</td></tr>
+            <tr><th scope="row">Where notes are stored, and format</th><td>Viewed in the Otter apps and web recording (<a href="https://otter.ai/pricing" target="_blank" rel="noopener">pricing page</a>)</td><td>Markdown files in a vault or folder you choose (<a href="../../docs/#history-settings">docs</a>)</td></tr>
+            <tr><th scope="row">Speaker labels</th><td>Check Otter’s help center</td><td>Mic track labelled You; optional anonymous, best-effort speaker labels (<a href="../../docs/#mac-meeting">docs</a>)</td></tr>
+            <tr><th scope="row">Team sharing and web access</th><td>The pricing page lists Business and Enterprise plans and web recording (<a href="https://otter.ai/pricing" target="_blank" rel="noopener">pricing page</a>)</td><td>No shared workspace, web portal or live shared transcript</td></tr>
+            <tr><th scope="row">Platforms</th><td>Mac, Windows, iOS, Android, Chrome extension and web (<a href="https://otter.ai/pricing" target="_blank" rel="noopener">pricing page</a>)</td><td>iOS and iPadOS 17.6+, macOS 14+, watchOS 10+ (<a href="../../docs/">docs</a>)</td></tr>
+            <tr><th scope="row">Pricing model</th><td>Plan tiers with per-plan minutes and conversation length (<a href="https://otter.ai/pricing" target="_blank" rel="noopener">see current pricing</a>)</td><td>15 free transcription minutes and 10 free deliveries, then a one-time lifetime purchase (<a href="../../docs/#pricing-limits">docs</a>)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Vox.md limits to know: meeting capture cannot be paused and records one app at a time; speaker labels are anonymous and best-effort; accuracy depends on the model and the audio. <a href="../whisper-vs-parakeet/">Whisper vs Parakeet</a> helps you choose a model.</p>
+
+      <h2 id="stay-with-otter">When to stay with Otter</h2>
+      <ul>
+        <li><strong>You need Windows or Android.</strong> Vox.md runs only on Apple devices; Otter lists Windows and Android apps on its pricing page.</li>
+        <li><strong>You need a web portal or a team workspace.</strong> Vox.md has no shared workspace, web portal or live collaborative transcript. Its notes are files you share yourself.</li>
+        <li><strong>You want an assistant to attend meetings you are not at.</strong> A notetaker that joins from your calendar is something Vox.md does not do, because it records from your own Mac.</li>
+        <li><strong>Your meetings already work well in Otter</strong> and you are comfortable with how its plan handles minutes and length.</li>
+      </ul>
+
+      <h2 id="try-it">Try it on one meeting</h2>
+      <ol>
+        <li>Download Vox.md on your Mac from the App Store.</li>
+        <li>Open the Models screen and download a Whisper or Parakeet model. This is the one time it needs a connection. See <a href="../whisper-vs-parakeet/">Whisper vs Parakeet</a>.</li>
+        <li>Create a <em>Meetings</em> Route that writes to a folder in your vault, with the Meeting Notes mode if you want a Notes section and action items.</li>
+        <li>Record a short test call after everyone on it agrees, with the input mode set to <strong>Meeting</strong> and the call app chosen.</li>
+        <li>Open the Markdown note and check the labels and wording against what was said.</li>
+      </ol>
+      <p>The full walkthrough is <a href="../../blog/transcribe-meetings-mac-obsidian/">Transcribe Mac meetings locally into Obsidian</a>. If you only have caption files from Zoom or Teams, <a href="../../blog/srt-vtt-to-text-markdown/">convert SRT or VTT to Markdown</a> in your browser.</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Download Vox.md free</a></p>
+      <p>The free download includes 15 transcription minutes. Unlimited use is a one-time purchase.</p>
+
+      <h2 id="consent">Recording etiquette and consent</h2>
+      <p>Recording laws and workplace policies differ by place. Tell the other participants you are recording and transcribing, and get their consent first. This is not legal advice. See <a href="../../blog/transcribe-meetings-mac-obsidian/#consent">Tell people you are recording</a>.</p>
+
+      <h2 id="faq">Questions</h2>
+      <h3>Does it work offline after the model download?</h3>
+      <p>Yes. Recording and transcription run on the device. Downloading a Whisper or Parakeet model needs a connection once, and the speaker model is also a one-time download. Saving to a cloud-synced folder syncs under that service’s terms.</p>
+      <h3>Does it join Zoom?</h3>
+      <p>No. Nothing joins the call. On a Mac, Vox.md records the audio of the app you choose, such as Zoom, plus your microphone.</p>
+      <h3>Can I import an existing Otter export or audio file?</h3>
+      <p>You can import audio or video files for local transcription. The docs do not describe importing Otter exports, so we make no claim about them. For caption files, the <a href="../../blog/srt-vtt-to-text-markdown/">SRT and VTT converter</a> runs in your browser.</p>
+      <h3>Does it run on Windows?</h3>
+      <p>No. Vox.md is for Apple devices only: iOS and iPadOS 17.6+, macOS 14+ and watchOS 10+.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Transcribe one meeting<br>on your own Mac.</h2>
+        <p>Try a short consented test call, then check the Markdown note in your folder.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Download Vox.md free</a></p>
+        <p>15 free transcription minutes · no account required · one-time purchase for unlimited use</p>
+      </section>
+      <nav class="toc" aria-label="Related guides" id="related"><div class="toc-title">Continue</div><ul>
+        <li><a href="../../docs/">Vox.md docs</a></li>
+        <li><a href="../../blog/transcribe-meetings-mac-obsidian/">Transcribe Mac meetings locally into Obsidian</a></li>
+        <li><a href="../../blog/transcribe-audio-file-mac/">Transcribe an audio file on Mac</a></li>
+        <li><a href="../../blog/voice-notes-to-obsidian-iphone/">Save iPhone voice notes to Obsidian</a></li>
+        <li><a href="../../blog/obsidian-meeting-notes-template/">Obsidian meeting notes template generator</a></li>
+        <li><a href="../whisper-vs-parakeet/">Whisper vs Parakeet</a></li>
+        <li><a href="../../blog/srt-vtt-to-text-markdown/">SRT and VTT to Markdown</a></li>
+      </ul></nav>
