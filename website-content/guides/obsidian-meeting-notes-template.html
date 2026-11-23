@@ -163,6 +163,7 @@ path includes Meetings
         <li><strong>Choose the mode.</strong> Set the Route’s processing mode to <strong>Meeting Notes</strong>. It produces a <code>## Notes</code> section and, when the transcript contains action items, a <code>## Action Items</code> checklist. It uses Apple Intelligence on compatible hardware with macOS 26 or iOS 26; otherwise a deterministic formatter builds the structure.</li>
       </ol>
       <p>Meeting Notes does not fill in an agenda, attendees or decisions for you. If you want those headings above the notes, choose <strong>Plain Markdown</strong> in the generator, untick Notes and Action Items, and save the result in your vault. Then select that file as the Route’s vault template. Vox.md fills its single-brace tokens in the template and writes the processed transcript below it. Check the first note before you rely on the layout; the <a href="../../docs/#presets">Routes documentation</a> covers destinations and templates.</p>
+      <p>If the meeting was on Zoom or Teams and you downloaded its transcript as an .srt or .vtt file, convert it to Markdown with speaker turns using the <a href="../srt-vtt-to-text-markdown/">SRT and VTT converter</a>, then paste it under the <code>## Transcript</code> heading of this template.</p>
       <p>Tell everyone in the meeting that you are recording and transcribing, and get their consent first. Rules differ by place and workplace; see <a href="../transcribe-meetings-mac-obsidian/#consent">tell people you are recording</a>.</p>
 
       <h2 id="faq">6. Questions</h2>

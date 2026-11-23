@@ -306,6 +306,7 @@ path includes Meetings
         <li><strong>选择模式。</strong> 将路线的处理模式设为 <strong>会议记录</strong>。它会生成 <code>## Notes</code> 部分，并在转录文本包含待办事项时生成 <code>## Action Items</code> 清单。在搭载 macOS 26 或 iOS 26 的兼容硬件上，它使用 Apple Intelligence；否则由确定性的格式器构建结构。</li>
       </ol>
       <p>会议记录不会替你填写议程、参会者或决策。如果你想在笔记上方保留这些标题，请在生成器中选择 <strong>纯 Markdown</strong> ，取消勾选“笔记”和“待办事项”，然后将结果保存到你的仓库。接着把该文件选为路线的仓库模板。Vox.md 会填充模板中的单花括号令牌，并把处理后的转录文本写在模板下方。在依赖这一布局之前，请先检查第一条笔记； <a href="/zh-hans/docs/#presets">路线文档</a> 介绍了目标位置和模板。</p>
+      <p>如果会议在 Zoom 或 Teams 上进行,并且你已将其转录稿下载为 .srt 或 .vtt 文件,请将其转换为 Markdown(含发言人轮次),使用 <a href="/zh-hans/blog/srt-vtt-to-text-markdown/">SRT 和 VTT 转换器</a>,然后将其粘贴到 <code>## Transcript</code> 此模板的标题。</p>
       <p>告诉会议中的每个人你正在录音和转录，并事先征得他们的同意。规则因地区和工作场所而异；参阅 <a href="/zh-hans/blog/transcribe-meetings-mac-obsidian/#consent">告知他人你正在录音</a>.</p>
 
       <h2 id="faq">6. 常见问题</h2>
