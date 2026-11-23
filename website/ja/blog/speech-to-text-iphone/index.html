@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr" data-search-section="セクション" data-search-guide="ガイド記事" data-search-empty="「{query}」に一致する結果はありません">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iPhone で音声からテキストへの変換を使う方法（プライベートなローカルの選択肢つき） | Vox.md</title>
+  <meta name="description" content="iPhone の設定で音声入力をオンにし、音声コマンドと30秒の自動停止を確認し、オンデバイス処理について Apple の説明を確かめたうえで、Whisper または Parakeet を使い Markdown ノートに保存する Vox.md キーボードやルートと比べます。">
+  <link rel="canonical" href="https://vox.isolated.tech/ja/blog/speech-to-text-iphone/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="言語モデル向けの Vox.md ドキュメント">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="iPhone で音声からテキストへの変換を使う方法（プライベートなローカルの選択肢つき）">
+  <meta property="og:description" content="iPhone の設定で音声入力をオンにし、音声コマンドと30秒の自動停止を確認し、オンデバイス処理について Apple の説明を確かめたうえで、Whisper または Parakeet を使い Markdown ノートに保存する Vox.md キーボードやルートと比べます。">
+  <meta property="og:url" content="https://vox.isolated.tech/ja/blog/speech-to-text-iphone/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-23">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="iPhone で音声からテキストへの変換を使う方法（プライベートなローカルの選択肢つき）">
+  <meta name="twitter:description" content="iPhone の設定で音声入力をオンにし、音声コマンドと30秒の自動停止を確認し、オンデバイス処理について Apple の説明を確かめたうえで、Whisper または Parakeet を使い Markdown ノートに保存する Vox.md キーボードやルートと比べます。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "iPhone で音声からテキストへの変換を使う方法（プライベートなローカルの選択肢つき）",
+  "description": "iPhone の設定で音声入力をオンにし、音声コマンドと30秒の自動停止を確認し、オンデバイス処理について Apple の説明を確かめたうえで、Whisper または Parakeet を使い Markdown ノートに保存する Vox.md キーボードやルートと比べます。",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-23",
+  "dateModified": "2026-11-23",
+  "mainEntityOfPage": "https://vox.isolated.tech/ja/blog/speech-to-text-iphone/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "ja",
+  "name": "iPhone で音声からテキストへの変換を使う方法（プライベートなローカルの選択肢つき） | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/ja/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "ガイド",
+      "item": "https://vox.isolated.tech/ja/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "iPhone で音声からテキストへの変換を使う方法（プライベートなローカルの選択肢つき）",
+      "item": "https://vox.isolated.tech/ja/blog/speech-to-text-iphone/"
+    }
+  ],
+  "inLanguage": "ja",
+  "name": "iPhone で音声からテキストへの変換を使う方法（プライベートなローカルの選択肢つき） | Vox.md",
+  "description": "iPhone の設定で音声入力をオンにし、音声コマンドと30秒の自動停止を確認し、オンデバイス処理について Apple の説明を確かめたうえで、Whisper または Parakeet を使い Markdown ノートに保存する Vox.md キーボードやルートと比べます。"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/speech-to-text-iphone/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/speech-to-text-iphone/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">ガイド本文へ</a>
+<nav aria-label="メインナビゲーション">
+  <div class="nav-inner">
+    <a href="/ja/" class="logo" aria-label="Vox.md ホーム">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/ja/#how">動作の仕組み</a></li>
+      <li><a href="/ja/docs/">ドキュメント</a></li>
+      <li><a href="/ja/blog/">ガイド</a></li>
+      <li><a href="/ja/compare/">比較する</a></li>
+      <li><a href="/ja/privacy.html">プライバシー</a></li>
+      <li><a href="/ja/terms.html">利用規約</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_ja_9b6a0975c35f">Vox.md をダウンロード</a>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/blog/speech-to-text-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/speech-to-text-iphone/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/speech-to-text-iphone/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/speech-to-text-iphone/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/speech-to-text-iphone/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/speech-to-text-iphone/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/speech-to-text-iphone/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/speech-to-text-iphone/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/speech-to-text-iphone/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/speech-to-text-iphone/" lang="ja" hreflang="ja" aria-current="page">日本語</a></li><li><a href="/ko/blog/speech-to-text-iphone/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/speech-to-text-iphone/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/speech-to-text-iphone/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/speech-to-text-iphone/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/speech-to-text-iphone/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/speech-to-text-iphone/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/speech-to-text-iphone/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/speech-to-text-iphone/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/speech-to-text-iphone/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/speech-to-text-iphone/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/speech-to-text-iphone/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/speech-to-text-iphone/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/speech-to-text-iphone/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">iPhone · 音声からテキストへ · ローカル文字起こし</div>
+        <h1 class="hero-title">iPhone で音声からテキストへの変換を使う方法（プライベートなローカルの選択肢つき）</h1>
+        <p class="hero-subtitle">音声でのテキスト入力をオンにし、動作しないときの対処をして、ローカルモデルと Markdown ノートのどちらが合うか判断します。</p>
+      </div>
+      <aside class="meta-card" aria-label="このガイドについて">
+        <dl>
+          <div><dt>作成者</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>更新日</dt><dd><time datetime="2026-11-23">2026年11月23日</time></dd></div>
+          <div><dt>必要条件</dt><dd>Vox.md: iOS/iPadOS 17.6 以降。自動の Apple Speech には、対応する iOS 26 デバイスと言語が必要です。Apple の音声入力の利用可否は、デバイス、iOS のバージョン、言語によって異なります。</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="iPhone で音声からテキストへの変換を使う方法（プライベートなローカルの選択肢つき）">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">短く答えると</div>
+        <p>設定 &gt; 一般 &gt; キーボードに進み、音声入力を有効にするをオンにしてから、任意のテキスト欄でマイク（音声入力）キーをタップします。ローカルの Whisper または Parakeet モデルを選びたい場合や、音声を Markdown ノートに入れたい場合は、Vox.md キーボードか Vox.md ルートを使います。</p>
+      </div>
+      <p>以下の Apple の手順は、Apple サポートのページに基づいています: <a href="https://support.apple.com/guide/iphone/dictate-text-iph2c0651d2/ios">iPhone でテキストを音声入力する</a>（2026年11月23日に確認。iOS 27 版のページ）。メニュー名は iOS のバージョンによって異なる場合があるので、お使いのバージョンのページを確認してください。Vox.md の手順は次に従います <a href="/ja/docs/#keyboard">キーボード</a> と <a href="/ja/docs/#models">モデル</a> のドキュメントを参照してください。Mac をお使いですか? 次を参照してください <a href="/ja/blog/dictation-on-mac/">Mac の音声入力</a>.</p>
+      <nav class="toc" aria-label="このガイドの内容"><div class="toc-title">このガイドの内容</div><ol>
+        <li><a href="#turn-on-dictation">iPhone で音声からテキストへの変換をオンにする方法</a></li>
+        <li><a href="#commands">句読点、絵文字、改行</a></li>
+        <li><a href="#on-device">iPhone の音声入力はオフラインで使えますか?</a></li>
+        <li><a href="#which-to-use">Apple の音声入力、Vox.md キーボード、または Vox.md ルート</a></li>
+        <li><a href="#vox-keyboard">Vox.md キーボードで、どのアプリでもローカルモデルを使う</a></li>
+        <li><a href="#dictate-to-notes">音声からテキストへ、Obsidian や Markdown ファイルに直接</a></li>
+        <li><a href="#privacy">iPhone に残るもの</a></li>
+        <li><a href="#troubleshooting">iPhone の音声入力が動作しない</a></li>
+        <li><a href="#faq">よくある質問</a></li>
+      </ol></nav>
+
+      <h2 id="turn-on-dictation">iPhone で音声からテキストへの変換をオンにする方法</h2>
+      <ol>
+        <li>次を開く <strong>設定</strong> アプリで、タップします <strong>一般</strong>。次にタップします <strong>キーボード</strong>.</li>
+        <li>オンにする項目は、 <strong>音声入力を有効にする</strong>。プロンプトが表示されたら、タップします <strong>音声入力を有効にする</strong> もう一度。</li>
+        <li>テキスト欄で、テキストを入れたい位置をタップして挿入位置を置きます。</li>
+        <li>マイク（<strong>音声入力</strong>）キーをタップします。画面上のキーボード、またはキーが表示される任意のテキスト欄にあります。挿入位置の近くにマイクのインジケータが表示されたら、話し始めます。</li>
+        <li><strong>停止:</strong> マイクキーをもう一度タップするか、「音声入力を停止」と言うか、30秒間黙っていると、音声入力は自動的に停止します。</li>
+      </ol>
+      <p>音声入力をオフにするには、設定 &gt; 一般 &gt; キーボードに戻り、次をオフにします <strong>音声入力を有効にする</strong>。Apple によると、音声入力中もキーボードは開いたままなので、タッチと音声を切り替えられます。別の言語のキーボードを使っている場合は、その言語でも音声入力できると Apple は説明しています。また、音声入力を使うとモバイルデータ通信料がかかる場合があるとも説明しています。</p>
+
+      <h2 id="commands">句読点、絵文字、改行</h2>
+      <ul>
+        <li><strong>句読点:</strong> 記号の名前を言います。例:「エクスクラメーションマーク」。</li>
+        <li><strong>絵文字:</strong> 絵文字の名前を言います。例:「ハート絵文字」「笑顔の絵文字」。</li>
+        <li><strong>改行:</strong> 「改行」または「改段落」と言います。</li>
+        <li><strong>スペル:</strong> 「Steven S-T-E-P-H-E-N を招待しよう」のように言います。</li>
+        <li><strong>編集:</strong> 「選択」または「削除」に続けて変更したい語句を言います。コマンドを元に戻す、やり直すには「取り消し」「やり直し」と言います。</li>
+      </ul>
+      <p>対応言語では、音声入力中にカンマ、ピリオド、疑問符が自動的に挿入されると Apple は説明しています。これをオフにするには、設定 &gt; 一般 &gt; キーボードに進み、次をオフにします <strong>自動句読点</strong>。Apple は一覧全体を次に掲載しています <a href="https://support.apple.com/guide/iphone/commands-for-dictating-text-iph3bf19d7b9/27/ios/27">iPhone でテキストを音声入力するためのコマンド</a>.</p>
+
+      <h2 id="on-device">iPhone の音声入力はオフラインで使えますか?</h2>
+      <p>Apple は次のように説明しています。「音声入力は多くの言語で iPhone 上で処理され、インターネット接続は不要です。検索欄で音声入力すると、検索を処理するために、音声入力したテキストが検索エンジンに送信される場合があります。」また、音声入力はすべての言語や国・地域で利用できるとは限らず、機能が異なる場合があるとも説明しています。次を確認してください <a href="https://www.apple.com/ios/feature-availability/#dictation">iOS と iPadOS の機能の提供状況</a> お使いの言語のページ。</p>
+      <p>Apple のページには、iOS 27 の Apple Intelligence では、音声入力がオンデバイスモデルを使ってスペル、句読点、大文字小文字を改善すると書かれています。これは iPhone 17 Pro、iPhone 17 Pro Max、iPhone Air 以降の英語で利用でき、iOS 27 以降の Apple Intelligence は、Apple Intelligence に対応した iPhone 15 Pro、iPhone 15 Pro Max、iPhone 16 モデル以降で利用できると述べています。Apple Intelligence はすべての言語や地域で利用できるわけではなく、使用制限が適用される場合があります。</p>
+
+      <h2 id="which-to-use">Apple の音声入力、Vox.md キーボード、または Vox.md ルート</h2>
+      <p>Apple の音声入力は標準搭載で、多くの人には十分です。音声モデルを選びたい場合や、音声を Markdown として保存したい場合は、代替手段を検討してください。この表は、記載されている3つの構成を比較したもので、精度や速度については何も主張していません。</p>
+      <p class="guide-table-hint">小さな画面では、表を横にスワイプしてください。</p>
+      <div class="guide-comparison" role="region" aria-label="iPhone の音声からテキストへの変換の選択肢の比較。小さい画面では横にスクロールしてください" tabindex="0">
+        <table class="comparison">
+          <caption>iPhone の音声からテキストへの変換の選択肢（2026年11月23日確認）</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">Apple の音声入力</th><th scope="col">Vox.md キーボード</th><th scope="col">Vox.md ルート</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">テキストの行き先</th><td>いま入力中のテキストフィールドへ</td><td>標準の iOS キーボードを受け付けるアプリで、今いるテキスト欄に</td><td>Route の設定に従い、ノートまたは Markdown ファイル</td></tr>
+            <tr><th scope="row">音声が処理される場所</th><td>Apple によると、多くの言語で iPhone 上。検索欄ではテキストが検索エンジンに送信される場合があります</td><td>iPhone 上</td><td>iPhone 上</td></tr>
+            <tr><th scope="row">モデルの選択</th><td>Apple のページには記載なし</td><td>自動、またはダウンロードした Whisper か Parakeet モデル</td><td>自動、またはダウンロードした Whisper か Parakeet モデル</td></tr>
+            <tr><th scope="row">リアルタイム、または停止後</th><td>Apple のページでは扱われていません。お使いの iPhone で試してください</td><td>自動: 確定したテキストが話している間に挿入されます。Whisper または Parakeet: 停止した後に文字起こしが挿入されます</td><td>録音が文字起こしされ、配信された後</td></tr>
+            <tr><th scope="row">フルアクセスが必要</th><td>いいえ</td><td>はい、「フルアクセスを許可」</td><td>キーボードは不要</td></tr>
+            <tr><th scope="row">費用</th><td>iOS の一部</td><td>15分の無料文字起こし、その後は1回限りの永久ライセンス</td><td>15 分の無料文字起こしと 10 回の Capture 配信の成功まで。その後は買い切りの生涯アンロック</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>自動は、対応する iOS 26 デバイスと言語で Apple のオンデバイス音声認識を使います。サブスクリプションはありません。</p>
+
+      <h2 id="vox-keyboard">Vox.md キーボードで、どのアプリでもローカルモデルを使う</h2>
+      <ol>
+        <li><strong>文字起こしを準備します。</strong> Vox.md では、対応デバイスでは自動のままにするか、次の場所で Whisper または Parakeet をダウンロードして選択します <strong>設定 &gt; モデル</strong>.</li>
+        <li><strong>キーボードを追加。</strong> iOS の設定で、一般 &gt; キーボード &gt; キーボード &gt; 新しいキーボードを追加に進み、次を選びます <strong>Vox.md</strong>.</li>
+        <li><strong>「フルアクセスを許可」をオンにします。</strong> Vox.md はこれをオンデバイスのアプリとキーボードの手順、共有状態、任意の触覚フィードバックに使い、キー入力、音声入力したテキスト、文字起こし、マイク音声を Vox.md のサーバーにアップロードしません。次を参照してください <a href="/ja/docs/#keyboard-setup">キーボード設定のドキュメント</a>.</li>
+        <li><strong>切り替えて音声入力します。</strong> テキスト欄で地球儀キーを使って Vox.md を選び、マイクをタップします。</li>
+      </ol>
+      <p>手順の全体は次を参照してください <a href="/ja/blog/best-voice-to-text-keyboard-iphone/">iPhone 音声入力キーボードのガイド</a>。モデルを選ぶには、次を読んでください <a href="/ja/compare/whisper-vs-parakeet/">Whisper と Parakeet の比較</a>.</p>
+
+      <h2 id="dictate-to-notes">音声からテキストへ、Obsidian や Markdown ファイルに直接</h2>
+      <p>言葉を別のアプリではなくノートに残したいときに選びます。Vox.md で録音すると、ルートが文字起こしをデイリーノート、見出しの下、または新しいノートに届けます。まずは次から始めます <a href="/ja/blog/voice-notes-to-obsidian-iphone/">Obsidian へのボイスメモ</a>。そのあと次を参照してください <a href="/ja/blog/append-to-obsidian-daily-note-iphone/">デイリーノートへの追記</a> または <a href="/ja/blog/private-voice-journal-iphone/">プライベートな音声日記</a>。長い録音や既存の音声については、次を参照してください <a href="/ja/blog/transcribe-voice-memos-iphone/">ボイスメモの文字起こし</a> と <a href="/ja/blog/offline-transcription-iphone-markdown/">Markdown へのオフライン文字起こし</a>。無料枠には 10 回の Capture 配信の成功が含まれます。</p>
+
+      <h2 id="privacy">iPhone に残るもの</h2>
+      <p>Vox.md はキャプチャの内容を Vox.md のサーバーに送信しません。文字起こしは iPhone 上で実行されます。ネットワークを使うのは、自分で開始するモデルのダウンロードだけで、Hugging Face または FluidAudio のインフラを使います。ノートが iCloud などで同期されるフォルダに保存される場合、そのファイルはそのサービスの規約に従って扱われます。次を参照してください <a href="/ja/privacy.html">プライバシーポリシー</a>。Vox.md が使うのは次のものです: <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a> (Whisper 用)と <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> (Parakeet 用)。</p>
+
+      <h2 id="troubleshooting">iPhone の音声入力が動作しない</h2>
+      <h3>Apple の音声入力の確認事項</h3>
+      <p>これらの出典 <a href="https://support.apple.com/guide/iphone/dictate-text-iph2c0651d2/ios">iPhone でテキストを音声入力する</a>:</p>
+      <ul>
+        <li>マイクキーが表示されない場合は、設定 &gt; 一般 &gt; キーボードに進み、次をオンにします <strong>音声入力を有効にする</strong>。プロンプトが表示されたら、音声入力を有効にするをタップします。</li>
+        <li>音声入力は、すべての言語や地域で利用できるとは限りません。Apple の次のページを参照してください <a href="https://www.apple.com/ios/feature-availability/#dictation">機能の提供状況のページ</a>.</li>
+        <li>30秒間無音が続くと、音声入力は自動的に停止します。マイクキーをタップすると再開できます。</li>
+        <li>検索欄では、音声入力したテキストが検索エンジンに送信される場合があります。</li>
+      </ul>
+      <h3>Vox.md の確認事項</h3>
+      <ul>
+        <li><strong>キーボードに「フルアクセスを有効にする」と表示される。</strong> iOS の設定 &gt; 一般 &gt; キーボード &gt; キーボード &gt; Vox.md を開いて「フルアクセスを許可」をオンにし、アプリに一度戻ります。</li>
+        <li><strong>キーボードに「Vox.md を開く」と表示される。</strong> リスニングが動作していない場合、キーボードは Vox.md を1回開いてリスニングを開始します。</li>
+        <li><strong>文字起こしが出ない。</strong> 設定 &gt; モデルで、モデルが完全にダウンロードされ、選択されていることを確認してください。</li>
+        <li><strong>自動が利用できない。</strong> 対応する iOS 26 デバイスと言語が必要です。代わりに Whisper または Parakeet モデルを選んでください。</li>
+      </ul>
+      <p>詳しくは次を参照 <a href="/ja/docs/#troubleshooting">Vox.md のトラブルシューティングドキュメント</a>.</p>
+
+      <h2 id="faq">よくある質問</h2>
+      <h3>iPhone の音声入力は無料ですか?</h3>
+      <p>Apple のページには料金の記載はありませんが、モバイルデータ通信料がかかる場合があると書かれています。Vox.md には15分間の文字起こしが含まれ、その後は買い切りの永久アンロックで、サブスクリプションはありません。</p>
+      <h3>オフラインで使えますか?</h3>
+      <p>Apple によると、音声入力は多くの言語で iPhone 上で処理され、インターネット接続は不要です。ただし、検索欄に音声入力したテキストは検索エンジンに送信される場合があります。モデルをダウンロードすると、Vox.md は iPhone 上で文字起こしします。</p>
+      <h3>時間制限はありますか?</h3>
+      <p>Apple によると、音声入力は30秒間無音が続くと自動的に停止します。Apple のページには最大の長さは記載されていません。</p>
+      <h3>Vox.md キーボードにフルアクセスが必要なのはなぜですか?</h3>
+      <p>現在のキーボードの手順では、共有の App Group の状態を使い、メインアプリと録音を連携させるために必要です。Vox.md は、キー入力、音声入力したテキスト、文字起こし、マイク音声を Vox.md のサーバーにアップロードしません。</p>
+      <h3>Obsidian に音声入力できますか?</h3>
+      <p>はい。Vox.md ルートを使って、Vault 内のノートに文字起こしを届けます。例 <a href="/ja/blog/voice-notes-to-obsidian-iphone/">ボイスメモのガイド</a>.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">ローカルモデルを選ぶか、ノートに音声入力できます。</h2>
+        <p>無料枠は 15 分の文字起こしと 10 回の Capture 配信の成功です。それ以降は、お住まいの地域の App Store 価格で表示される買い切りの生涯アンロックで、制限が解除されます。 <a href="/ja/docs/#keyboard-setup">キーボード設定のドキュメント</a>.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_9b6a0975c35f">Vox.md を無料でダウンロード</a></p>
+      </section>
+      <nav class="toc" aria-label="関連ガイド" id="related"><div class="toc-title">続ける</div><ul>
+        <li><a href="/ja/blog/best-voice-to-text-keyboard-iphone/">iPhone 向けの最高の音声入力キーボード</a></li>
+        <li><a href="/ja/blog/voice-notes-to-obsidian-iphone/">iPhone から Obsidian へのボイスメモ</a></li>
+        <li><a href="/ja/blog/append-to-obsidian-daily-note-iphone/">Obsidian のデイリーノートに追記</a></li>
+        <li><a href="/ja/blog/private-voice-journal-iphone/">プライベートな音声日記をつける</a></li>
+        <li><a href="/ja/blog/transcribe-voice-memos-iphone/">iPhone でボイスメモを文字起こしする</a></li>
+        <li><a href="/ja/blog/offline-transcription-iphone-markdown/">音声をオフラインで Markdown に文字起こしする</a></li>
+        <li><a href="/ja/blog/dictation-on-mac/">Mac での音声入力</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ja/">ホーム</a></li>
+        <li><a href="/ja/docs/">ドキュメント</a></li>
+        <li><a href="/ja/blog/">ガイド</a></li>
+        <li><a href="/ja/compare/">比較する</a></li>
+        <li><a href="/ja/privacy.html">プライバシー</a></li>
+        <li><a href="/ja/terms.html">利用規約</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">サポート</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_9b6a0975c35f">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · ローカルノートにクイックキャプチャ · コンテンツのアップロードなし。</div>
+    </div>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/blog/speech-to-text-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/speech-to-text-iphone/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/speech-to-text-iphone/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/speech-to-text-iphone/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/speech-to-text-iphone/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/speech-to-text-iphone/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/speech-to-text-iphone/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/speech-to-text-iphone/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/speech-to-text-iphone/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/speech-to-text-iphone/" lang="ja" hreflang="ja" aria-current="page">日本語</a></li><li><a href="/ko/blog/speech-to-text-iphone/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/speech-to-text-iphone/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/speech-to-text-iphone/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/speech-to-text-iphone/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/speech-to-text-iphone/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/speech-to-text-iphone/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/speech-to-text-iphone/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/speech-to-text-iphone/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/speech-to-text-iphone/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/speech-to-text-iphone/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/speech-to-text-iphone/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/speech-to-text-iphone/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/speech-to-text-iphone/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
