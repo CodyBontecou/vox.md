@@ -460,6 +460,10 @@ final class PersistentRecorder {
     private var keptAudioPreRollChannelCount = 1
     /// True when the current tap was installed with stereo built-in mic input.
     private var stereoInputActive = false
+    /// Session configuration chosen when listening started (standard, or a
+    /// High/Lossless recording's AirPods and Natural options). Re-applied at
+    /// each segment start so the re-assert doesn't drop those options.
+    private var activeSessionConfiguration = RecordingAudioSessionConfiguration.standard
     /// The stereo tap's scratch buffer, kept to report dual-mono frames.
     private var activeStereoScratch: StereoInterleaveScratch?
     /// Pre-roll plus headroom for the main-queue hop before the journal opens.
@@ -669,9 +673,10 @@ final class PersistentRecorder {
     /// `persistPreference: false` so the app returns to a fully idle audio session.
     ///
     /// `stereoEligible` is true only for a one-shot recording that can keep its
-    /// audio (not keyboard dictation or continuous dictation). Everything else,
-    /// including persistent keyboard listening, keeps today's mono input so
-    /// dictation transcripts are unchanged.
+    /// audio (not keyboard dictation or continuous dictation). Only those get
+    /// stereo, high-quality AirPods recording and Natural sound. Everything
+    /// else, including persistent keyboard listening, keeps today's mono input
+    /// so dictation transcripts are unchanged.
     @discardableResult
     func startListening(persistPreference: Bool = true, stereoEligible: Bool = false) -> Bool {
         guard !isListening else {
@@ -700,10 +705,16 @@ final class PersistentRecorder {
             quality: keptQuality,
             enabled: StereoRecordingPreference.load(from: AppConstants.sharedDefaults)
         )
+        let requestedSession = RecordingAudioSessionConfiguration(KeptAudioInputOptions.forRecording(
+            quality: keptQuality,
+            eligible: stereoEligible,
+            naturalEnabled: NaturalRecordingPreference.load(from: AppConstants.sharedDefaults)
+        ))
         var stereoOutcome = StereoRecordingInput.Outcome.notRequested
         do {
-            try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth, .mixWithOthers])
+            activeSessionConfiguration = try requestedSession.apply(to: session) { log.log($0) }
             try session.setActive(true)
+            log.log("[PersistentRecorder] Session input: \(activeSessionConfiguration.describe()), bluetoothHighQuality=\(RecordingAudioSessionConfiguration.highQualityBluetoothActive(on: session).map(String.init) ?? "n/a")")
             // Stereo from the built-in mics for High/Lossless. Falls back to
             // mono (never fails listening) on other inputs or devices.
             stereoOutcome = StereoRecordingInput.configure(session: session, requested: stereoRequested)
@@ -1078,6 +1089,10 @@ final class PersistentRecorder {
         }
         stereoInputActive = false
         activeStereoScratch = nil
+        if activeSessionConfiguration.prefersNoSystemAlertInterruptions {
+            try? session.setPrefersNoInterruptionsFromSystemAlerts(false)
+        }
+        activeSessionConfiguration = .standard
         try? session.setActive(false, options: .notifyOthersOnDeactivation)
 
         // Update IPC
@@ -1680,7 +1695,7 @@ final class PersistentRecorder {
         let session = AVAudioSession.sharedInstance()
         log.log("[PersistentRecorder] Session category=\(session.category.rawValue) isInputAvailable=\(session.isInputAvailable)")
         do {
-            try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth, .mixWithOthers])
+            activeSessionConfiguration = try activeSessionConfiguration.apply(to: session) { log.log($0) }
             try session.setActive(true)
             if stereoInputActive {
                 // Keep the stereo image matched to how the phone is held now.

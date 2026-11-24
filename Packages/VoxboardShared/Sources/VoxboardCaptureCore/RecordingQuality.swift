@@ -168,6 +168,62 @@ public enum StereoRecordingPreference {
     }
 }
 
+/// iPhone setting that records High and Lossless with less of iOS's built-in
+/// input processing (the `.measurement` session mode instead of `.default`),
+/// for music, nature and room sound. Off by default; stored next to
+/// `RecordingQuality` and never synced to Apple Watch.
+///
+/// The transcription stream comes from the same microphone input, so this is
+/// opt-in: quiet speech can come out quieter without the automatic gain.
+public enum NaturalRecordingPreference {
+    public static let defaultsKey = "recordingNatural"
+
+    public static func load(from defaults: UserDefaults?) -> Bool {
+        defaults?.bool(forKey: defaultsKey) ?? false
+    }
+
+    public static func save(_ enabled: Bool, to defaults: UserDefaults?) {
+        defaults?.set(enabled, forKey: defaultsKey)
+    }
+
+    /// True when a recording at `quality` should use the natural input mode.
+    public static func requestsNatural(quality: RecordingQuality, enabled: Bool) -> Bool {
+        enabled && quality.recordsSeparateKeptAudio
+    }
+}
+
+/// Microphone options for the iPhone audio session, decided when listening
+/// starts. Only a one-shot recording that can keep its audio (`eligible`) gets
+/// anything beyond the standard session; Keyboard Listening and dictation keep
+/// today's input so their transcripts don't change.
+public struct KeptAudioInputOptions: Equatable, Sendable {
+    /// Ask for full-bandwidth Bluetooth recording (iOS 26, supported AirPods),
+    /// with the hands-free profile as the fallback. Automatic for High and
+    /// Lossless: their whole point is a better saved file.
+    public var highQualityBluetooth: Bool
+    /// Use the `.measurement` session mode (see `NaturalRecordingPreference`).
+    public var naturalInput: Bool
+
+    public init(highQualityBluetooth: Bool = false, naturalInput: Bool = false) {
+        self.highQualityBluetooth = highQualityBluetooth
+        self.naturalInput = naturalInput
+    }
+
+    public static let standard = KeptAudioInputOptions()
+
+    public static func forRecording(
+        quality: RecordingQuality,
+        eligible: Bool,
+        naturalEnabled: Bool
+    ) -> KeptAudioInputOptions {
+        guard eligible, quality.recordsSeparateKeptAudio else { return .standard }
+        return KeptAudioInputOptions(
+            highQualityBluetooth: true,
+            naturalInput: NaturalRecordingPreference.requestsNatural(quality: quality, enabled: naturalEnabled)
+        )
+    }
+}
+
 /// Keeps High/Lossless from filling a device (Apple Watch above all), where a
 /// long take waits on disk until it reaches iPhone. Before recording, the
 /// requested quality must leave room for `reservedRecordingMinutes` of audio
