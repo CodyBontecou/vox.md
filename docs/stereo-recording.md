@@ -11,8 +11,19 @@ dictation and Keyboard Listening stay mono.
   patterns include `.stereo` (front, then back, then any), sets it as the
   preferred data source with the stereo pattern, and sets the input
   orientation from the interface orientation (again at each take start).
-- Only when the current input route is the built-in mic. Wired, USB,
-  Bluetooth/AirPods and CarPlay inputs are never overridden.
+- From the built-in mics even when AirPods or a headset are connected
+  (changed 2026-11-24: with AirPods connected, a Spatial take used to record
+  mono from the AirPods mic without saying so). A Stereo or Spatial session
+  uses `.allowBluetoothA2DP` instead of `.allowBluetooth`, so AirPods keep
+  playing audio but are never the input, and high-quality Bluetooth
+  recording is off. A wired headset mic is replaced with `setPreferredInput`
+  (`StereoRecordingInput.preferBuiltInMicrophone`), released when listening
+  stops. USB, line-in and CarPlay mics are someone's deliberate choice and
+  are left alone; the take records mono from them.
+- A take that can't record the chosen layout says so in the recording dock:
+  "Recording in mono: Stereo and Spatial Audio need the iPhone's built-in
+  microphones." or, when Spatial falls back, "Recording in stereo: Spatial
+  Audio couldn't start." (`PersistentRecorder.channelLayoutNotice`).
 - Only for a one-shot recording that can keep its audio
   (`PersistentRecorder.oneShotMayKeepAudio`). Keyboard dictation, continuous
   dictation and Keyboard Listening keep the mono input their transcripts have
@@ -27,9 +38,9 @@ dictation and Keyboard Listening stay mono.
   turns stereo off. A two-channel interface that was not set up for stereo
   (USB, line in) stays mono, and a node that still delivers one channel logs
   `Stereo input reported 1 ch; keeping mono`.
-- The stereo data source is undone when listening stops, so it never carries
-  over to Keyboard Listening or another app. It is never pinned with
-  `setPreferredInput`, so AirPods or a headset connected later still win.
+- The stereo data source and any built-in mic preference are undone when
+  listening stops, so they never carry over to Keyboard Listening, dictation
+  or another app (those still record from AirPods).
 - The live 16 kHz stream mixes channels only for a stereo take. Other
   multichannel inputs (USB, line in) keep their first-channel conversion.
   The mix is an average: a source centred between the mics gives the same
@@ -71,8 +82,9 @@ Run before release on an iPhone XS or later, built-in mics, no headset:
 3. Pull the kept file (Files, or Xcode → Devices → app container) and run
    `afinfo <file>.m4a`. Expect `2 ch, 48000 Hz` and AAC (High) or ALAC
    (Lossless). Playback should pan left/right.
-4. Connect AirPods (or a wired/USB mic), record again: expect `1 ch` and a
-   saved recording. Disconnect them and record again: expect `2 ch`.
+4. Connect AirPods and record again: expect `2 ch` (built-in mics, the log
+   reads `Session input: … builtInMic`) while AirPods keep playing audio.
+   With a USB mic: expect `1 ch`, a saved recording and the mono notice.
 5. A/B transcript check: record the same short speech (same position, front
    of the phone) once with Stereo off and once with Stereo on; the two
    transcripts should match. The unit tests only prove that a centred source
@@ -112,9 +124,12 @@ mid-take, and nothing on the simulator could prove coexistence.
 - The stereo output, averaged to 16 kHz mono, feeds the same circular buffer
   and journal the engine tap feeds, so pre-roll, live transcription, voice
   auto-stop and crash recovery of the 16 kHz journal work as before.
-- Start-up is checked, not assumed: the recorder waits up to 0.75 s for a
-  4-channel FOA buffer and a 2-channel stereo buffer. Anything else (iOS
-  before 26, no FOA mic, AirPods/wired/USB route, session error, no buffers)
+- Start-up is checked, not assumed: the recorder waits up to 2.5 s for a
+  4-channel FOA buffer and a 2-channel stereo buffer (~0.2 s without a
+  headset; 0.76 s on iPhone 17 Pro with AirPods as the A2DP output, which
+  missed the original 0.75 s limit). The log reads `[SpatialAudio] First
+  buffers after N s`. Anything else (iOS before 26, no FOA mic, USB route,
+  session error, no buffers)
   stops capture and falls back to the engine with Stereo requested, which
   itself falls back to mono. The log says why
   (`Spatial Audio capture unavailable (…); falling back to Stereo`).
@@ -170,8 +185,9 @@ Nothing here could run on the simulator. On a supported iPhone with iOS 26+:
    listen for spatial rendering. If FOA never starts, retry with
    `-VoxSpatialAutoConfiguresSession YES`.
 4. Transcript A/B against a Stereo take of the same speech.
-5. Connect AirPods and record: expect the Stereo→mono fallback and a saved
-   `.m4a`.
+5. Connect AirPods and record: expect Spatial capture from the built-in mics
+   and a saved `.mp4`, with AirPods still the output
+   (`.argent/e2e/spatial-audio-airpods-device.yaml`).
 6. Lossless + Spatial: expect an ALAC stereo track.
 7. Background the app mid-take and lock the phone: confirm capture keeps
    running (audio background mode) or that the take lands in recovery.

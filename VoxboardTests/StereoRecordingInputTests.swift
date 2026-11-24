@@ -41,6 +41,37 @@ final class StereoRecordingInputTests: XCTestCase {
         XCTAssertFalse(StereoRecordingInput.routeAllowsStereo([]))
     }
 
+    func testStereoAndSpatialTakeTheInputBackFromHeadsetsOnly() {
+        // AirPods (HFP/LE) and wired headsets: switch to the built-in mics.
+        XCTAssertTrue(StereoRecordingInput.shouldPreferBuiltInMicrophone([.bluetoothHFP]))
+        XCTAssertTrue(StereoRecordingInput.shouldPreferBuiltInMicrophone([.bluetoothLE]))
+        XCTAssertTrue(StereoRecordingInput.shouldPreferBuiltInMicrophone([.headsetMic]))
+        // Already built-in: nothing to do.
+        XCTAssertFalse(StereoRecordingInput.shouldPreferBuiltInMicrophone([.builtInMic]))
+        // A chosen external microphone stays (the take records mono from it).
+        XCTAssertFalse(StereoRecordingInput.shouldPreferBuiltInMicrophone([.usbAudio]))
+        XCTAssertFalse(StereoRecordingInput.shouldPreferBuiltInMicrophone([.lineIn]))
+        XCTAssertFalse(StereoRecordingInput.shouldPreferBuiltInMicrophone([.carAudio]))
+        XCTAssertFalse(StereoRecordingInput.shouldPreferBuiltInMicrophone([]))
+    }
+
+    func testATakeThatCantRecordItsLayoutSaysSo() {
+        typealias Recorder = PersistentRecorder
+        // Mono asked for, or the layout recorded as asked: nothing to say.
+        XCTAssertNil(Recorder.channelLayoutNotice(layoutRequested: false, spatialFellBack: false, keptChannelCount: 1))
+        XCTAssertNil(Recorder.channelLayoutNotice(layoutRequested: true, spatialFellBack: false, keptChannelCount: 2))
+        // Stereo or Spatial asked for, recording mono (a USB mic, no stereo pattern).
+        XCTAssertEqual(
+            Recorder.channelLayoutNotice(layoutRequested: true, spatialFellBack: true, keptChannelCount: 1),
+            String(localized: "Recording in mono: Stereo and Spatial Audio need the iPhone's built-in microphones.")
+        )
+        // Spatial asked for on a device that supports it, recording Stereo.
+        XCTAssertEqual(
+            Recorder.channelLayoutNotice(layoutRequested: true, spatialFellBack: true, keptChannelCount: 2),
+            String(localized: "Recording in stereo: Spatial Audio couldn't start.")
+        )
+    }
+
     func testInputOrientationFollowsTheInterface() {
         XCTAssertEqual(StereoRecordingInput.stereoOrientation(for: .portrait), .portrait)
         XCTAssertEqual(StereoRecordingInput.stereoOrientation(for: .portraitUpsideDown), .portraitUpsideDown)

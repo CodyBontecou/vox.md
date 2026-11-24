@@ -307,6 +307,9 @@ final class PersistentRecorder {
     /// unsupported backends intentionally have no exact fraction.
     var transcriptionProgress: TranscriptionProgress?
     var lastError: String?
+    /// Set by `startListening` when a Stereo or Spatial Audio take can't
+    /// record the layout that was chosen; shown when the take starts.
+    private var pendingInputNotice: String?
     /// The backend-preparation failure that `startListening` reports in the
     /// background. It concerns transcribing *this* recording, so discarding
     /// the recording also clears it instead of surfacing a stale
@@ -704,6 +707,7 @@ final class PersistentRecorder {
             return false
         }
 
+        pendingInputNotice = nil
         let keptQuality = RecordingQuality.load(from: AppConstants.sharedDefaults)
         let stereoRequested = stereoEligible && StereoRecordingPreference.requestsStereo(
             quality: keptQuality,
@@ -720,6 +724,12 @@ final class PersistentRecorder {
             activeSessionConfiguration = try requestedSession.apply(to: session) { log.log($0) }
             try session.setActive(true)
             log.log("[PersistentRecorder] Session input: \(activeSessionConfiguration.describe()), bluetoothHighQuality=\(RecordingAudioSessionConfiguration.highQualityBluetoothActive(on: session).map(String.init) ?? "n/a")")
+            // Stereo and Spatial Audio record from the built-in mics, also
+            // with AirPods or a headset connected (they keep playing audio).
+            if activeSessionConfiguration.prefersBuiltInMicrophone,
+               let change = StereoRecordingInput.preferBuiltInMicrophone(session: session) {
+                log.log("[PersistentRecorder] Built-in microphone: \(change)")
+            }
             // Stereo from the built-in mics for High/Lossless. Falls back to
             // mono (never fails listening) on other inputs or devices.
             stereoOutcome = StereoRecordingInput.configure(session: session, requested: stereoRequested)
@@ -737,11 +747,17 @@ final class PersistentRecorder {
         // Spatial Audio (#133): only for a one-shot take that keeps its audio.
         // It records through AVCaptureSession instead of the engine; if it
         // can't start, the take records Stereo from the engine instead.
+        var spatialFellBack = false
+        var layoutRequested = stereoRequested
         if stereoEligible, keptQuality.supportsStereo,
            RecordingChannelLayout.load(from: AppConstants.sharedDefaults) == .spatial {
             if startSpatialListening() {
                 return completeListeningStart(persistPreference: persistPreference)
             }
+            layoutRequested = true
+            // Only a device that can record Spatial Audio says it fell back
+            // (a stored choice restored onto an older iPhone records Stereo).
+            spatialFellBack = SpatialAudioCaptureSupport.current == .supported
             stereoOutcome = StereoRecordingInput.configure(session: session, requested: true)
             log.log("[PersistentRecorder] Stereo input (Spatial Audio fallback): \(stereoOutcome)")
         }
@@ -761,6 +777,11 @@ final class PersistentRecorder {
         if stereoOutcome.isStereo, keptChannelCount == 1 {
             log.log("[PersistentRecorder] Stereo input reported \(hwFormat.channelCount) ch; keeping mono")
         }
+        pendingInputNotice = Self.channelLayoutNotice(
+            layoutRequested: layoutRequested,
+            spatialFellBack: spatialFellBack,
+            keptChannelCount: keptChannelCount
+        )
 
         // Create converter if needed (hardware format → 16kHz mono)
         let needsConversion = hwFormat.sampleRate != whisperSampleRate || hwFormat.channelCount != 1
@@ -876,6 +897,23 @@ final class PersistentRecorder {
 
         audioEngine = engine
         return completeListeningStart(persistPreference: persistPreference)
+    }
+
+    /// What to tell the person when a take won't record the chosen layout.
+    /// nil when it records what was asked for (or Mono was asked for).
+    static func channelLayoutNotice(
+        layoutRequested: Bool,
+        spatialFellBack: Bool,
+        keptChannelCount: Int
+    ) -> String? {
+        guard layoutRequested else { return nil }
+        if keptChannelCount < 2 {
+            return String(localized: "Recording in mono: Stereo and Spatial Audio need the iPhone's built-in microphones.")
+        }
+        if spatialFellBack {
+            return String(localized: "Recording in stereo: Spatial Audio couldn't start.")
+        }
+        return nil
     }
 
     /// Spatial Audio capture in place of the engine tap. False (and nothing
@@ -1161,6 +1199,7 @@ final class PersistentRecorder {
         if stereoInputActive || StereoRecordingInput.hasStereoSelection {
             StereoRecordingInput.configure(session: session, requested: false)
         }
+        StereoRecordingInput.releaseBuiltInMicrophone(session: session)
         stereoInputActive = false
         activeStereoScratch = nil
         if activeSessionConfiguration.prefersNoSystemAlertInterruptions {
@@ -1238,12 +1277,20 @@ final class PersistentRecorder {
 
         lastTranscriptionResult = nil
         lastError = nil
+        let inputNotice = pendingInputNotice
+        pendingInputNotice = nil
         startInAppSegment(
             flowId: requestedFlowId,
             completionMode: completionMode,
             origin: requestedOrigin,
             draftRequestID: draftRequestID
         )
+        // A Stereo/Spatial take that can't record its layout says so instead
+        // of quietly saving mono. Set after startInAppSegment, which clears
+        // lastError.
+        if isSegmentActive, lastError == nil, let inputNotice {
+            lastError = inputNotice
+        }
 
         if !isSegmentActive, startedTemporaryListening {
             stopListening()

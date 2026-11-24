@@ -10,6 +10,10 @@ import VoxboardShared
 ///   AirPods that support it. `.allowBluetooth` (HFP) stays set as the system's
 ///   fallback for every other headset.
 /// - the `.measurement` mode ("Natural sound"): less system input processing.
+/// - built-in microphone (Stereo and Spatial Audio): `.allowBluetoothA2DP`
+///   instead of `.allowBluetooth`, so AirPods and other Bluetooth headsets
+///   stay connected for playback but never become the input. The hands-free
+///   profile is what makes a headset the microphone.
 ///
 /// Applying never fails a recording: if the system rejects the requested
 /// configuration, the standard one is applied instead.
@@ -42,7 +46,11 @@ struct RecordingAudioSessionConfiguration: Equatable {
         if input.naturalInput {
             configuration.mode = .measurement
         }
-        if input.highQualityBluetooth, #available(iOS 26.0, *) {
+        if input.builtInMicrophone {
+            configuration.options.remove(.allowBluetooth)
+            configuration.options.insert(.allowBluetoothA2DP)
+        }
+        if input.highQualityBluetooth, !input.builtInMicrophone, #available(iOS 26.0, *) {
             configuration.options.insert(.bluetoothHighQualityRecording)
             configuration.prefersNoSystemAlertInterruptions = true
         }
@@ -50,6 +58,11 @@ struct RecordingAudioSessionConfiguration: Equatable {
     }
 
     var isStandard: Bool { self == Self.standard }
+
+    /// True when Bluetooth headsets are output only (Stereo, Spatial Audio).
+    var prefersBuiltInMicrophone: Bool {
+        options.contains(.allowBluetoothA2DP) && !options.contains(.allowBluetooth)
+    }
 
     /// Applies this configuration, or `standard` if the system refuses it.
     /// Returns the configuration that is now active. Throws only if the
@@ -73,6 +86,9 @@ struct RecordingAudioSessionConfiguration: Equatable {
 
     func describe() -> String {
         var parts = ["mode=\(mode.rawValue)"]
+        if prefersBuiltInMicrophone {
+            parts.append("builtInMic")
+        }
         if #available(iOS 26.0, *), options.contains(.bluetoothHighQualityRecording) {
             parts.append("bluetoothHighQuality")
         }

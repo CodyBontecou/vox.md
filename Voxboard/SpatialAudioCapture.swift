@@ -174,7 +174,9 @@ nonisolated final class SpatialAudioRecorder: NSObject, SpatialTakeRecording,
     }
 
     /// How long `start` waits for the first 4-channel and 2-channel buffers.
-    static let probeTimeout: TimeInterval = 0.75
+    /// Without a headset they arrive in ~0.2 s; with AirPods connected as the
+    /// output (A2DP) the route takes longer to settle.
+    static let probeTimeout: TimeInterval = 2.5
 
     private let session = AVCaptureSession()
     private let ambisonicsOutput = AVCaptureAudioDataOutput()
@@ -260,8 +262,12 @@ nonisolated final class SpatialAudioRecorder: NSObject, SpatialTakeRecording,
         guard session.isRunning else { throw SetupError.notRunning("startRunning returned") }
 
         // Spatial must really be flowing before the recorder commits to it.
+        let probeStarted = Date()
         _ = probeReady.wait(timeout: .now() + Self.probeTimeout)
         let (ambisonics, stereo) = probeLock.withLock { (firstAmbisonicsChannels, firstStereoChannels) }
+        KeyboardDebugLog.shared.log(
+            "[SpatialAudio] First buffers after \(String(format: "%.2f", Date().timeIntervalSince(probeStarted))) s (FOA \(ambisonics) ch, stereo \(stereo) ch), outputs=\(AVAudioSession.sharedInstance().currentRoute.outputs.map(\.portType.rawValue))"
+        )
         guard ambisonics == SpatialAudioRecordingFormat.ambisonicsChannelCount, stereo == 2 else {
             throw SetupError.noBuffers(ambisonics: ambisonics, stereo: stereo)
         }

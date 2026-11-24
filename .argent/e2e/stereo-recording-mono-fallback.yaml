@@ -1,6 +1,9 @@
 # Issue #118: with High + Stereo on, a recording whose input has no built-in
-# stereo microphones (the iOS simulator's mic, like an external, Bluetooth or
-# AirPods mic on a phone) falls back to mono and is still saved.
+# stereo microphones (the iOS simulator's mic, like a USB mic on a phone;
+# AirPods no longer count: Stereo records from the built-in mics with them
+# connected) falls back to mono and is still saved. On a phone the dock shows
+# "Recording in mono: …"; on the simulator the Apple Speech error takes that
+# slot.
 #
 # Prerequisites: iOS simulator (iPhone 18 Pro Max layout since #133) with a DEBUG build of Vox.md
 #   (bontecou.Voxboard) installed, Recording Quality = Speech and Mono at

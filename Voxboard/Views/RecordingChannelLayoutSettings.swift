@@ -152,7 +152,7 @@ struct RecordingChannelLayoutFooter: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Records High and Lossless in stereo with the iPhone's built-in microphones, for a more natural sound with music and nature. External, Bluetooth and AirPods microphones, and Apple Watch, record in mono.")
+            Text("Records High and Lossless in stereo with the iPhone's built-in microphones, for a more natural sound with music and nature. This works with AirPods connected too. USB microphones and Apple Watch record in mono.")
             if support == .unavailable {
                 Text("Spatial Audio needs an iPhone that can record it, on iOS 26 or later.")
                     .accessibilityIdentifier("recording_quality_spatial_unavailable")
