@@ -82,19 +82,96 @@ Run before release on an iPhone XS or later, built-in mics, no headset:
 7. Optional: rotate to landscape before a take; left/right should follow the
    screen.
 
-## Follow-up: Spatial Audio (not in this change)
+## Spatial Audio (#133)
 
-Spatial Audio capture (iOS 26 Audio Mix, WWDC25 session 251) needs more than
-this change's `AVAudioEngine` input tap. Expected work, to be confirmed
-against the session and its sample code:
+Settings → Recording Quality now offers **Mono / Stereo / Spatial Audio** for
+High and Lossless (stored as `recordingStereo` + `recordingSpatialAudio`, never
+synced to Apple Watch). Spatial Audio is listed only on an iPhone on iOS 26+
+whose built-in mic supports first-order ambisonics (FOA); elsewhere the row is
+hidden and the footer says why.
 
-- Capture: an `AVCaptureSession` audio input with the spatial (first-order
-  ambisonics) multichannel format on supported iPhones, instead of the shared
-  always-on engine that also feeds live transcription.
-- File: write the spatial audio track plus the stereo compatibility track
-  and its metadata (`AVAssetWriter`), rather than `AVAudioFile`.
-- Transcription: render a 16 kHz mono downmix from the spatial track (or use
-  the stereo compatibility track) so transcripts match.
-- Pre-roll and crash recovery would need the same treatment as the kept
-  file has here, and export/playback paths must keep the spatial track.
-- Settings: a third layout option shown only on devices that support it.
+### Capture path
+
+`AVAudioEngine` input taps can't deliver FOA, so a Spatial take records
+through an `AVCaptureSession` (`Voxboard/SpatialAudioCapture.swift`) **instead
+of** the engine. The two are never run together: FOA capture reconfigures the
+built-in mics, which would trip the engine's configuration-change handling
+mid-take, and nothing on the simulator could prove coexistence.
+
+- Only for a one-shot take that keeps its audio and starts listening fresh
+  (same rule as Stereo). Keyboard Listening, dictation and continuous
+  dictation stay on the mono engine.
+- The capture session uses the app's audio session and, by default, doesn't
+  reconfigure it (`automaticallyConfiguresApplicationAudioSession = false`),
+  so category, options and the per-take re-assert stay as they are. For a
+  device test, `-VoxSpatialAutoConfiguresSession YES` lets it configure the
+  session itself.
+- Two `AVCaptureAudioDataOutput`s on the mic input with
+  `multichannelAudioMode = .firstOrderAmbisonics`: FOA
+  (`HOA_ACN_SN3D | 4`) and stereo.
+- The stereo output, averaged to 16 kHz mono, feeds the same circular buffer
+  and journal the engine tap feeds, so pre-roll, live transcription, voice
+  auto-stop and crash recovery of the 16 kHz journal work as before.
+- Start-up is checked, not assumed: the recorder waits up to 0.75 s for a
+  4-channel FOA buffer and a 2-channel stereo buffer. Anything else (iOS
+  before 26, no FOA mic, AirPods/wired/USB route, session error, no buffers)
+  stops capture and falls back to the engine with Stereo requested, which
+  itself falls back to mono. The log says why
+  (`Spatial Audio capture unavailable (…); falling back to Stereo`).
+- If capture stops mid-take (call, another app, media services reset), the
+  take is cancelled with its 16 kHz journal kept for recovery, like an
+  audio-session interruption.
+- Pre-roll: the capture queue keeps ~4 s of deep-copied FOA/stereo buffers, so
+  the spatial file starts at the same instant as the journal's seed. A
+  one-shot take starts listening at take start, so there is little pre-roll
+  either way. Listening start is slower by the probe (up to ~0.75 s, usually
+  the first buffer interval).
+
+### File
+
+`kept_<request>_<uuid>.mp4` (`SpatialAudioFileWriter`, VoxboardShared):
+
+1. stereo compatibility track, first and disabled: AAC ≈ 128 kbps (High) or
+   ALAC (Lossless);
+2. FOA track, APAC (settings from the capture output's recommendation),
+   enabled, default of the alternate group shared with track 1;
+3. one timed-metadata sample from `AVCaptureSpatialAudioMetadataSampleGenerator`
+   (every FOA buffer analyzed), associated with the FOA track.
+
+Why `.mp4` and this order: `.m4a` can't hold APAC (AVAssetWriter rejects it),
+and iOS's AudioFile (AVAudioFile, AVAudioPlayer) can't open QuickTime `.mov`
+but opens `.mp4` and reads its first audio track. With stereo first, the app's
+existing duration checks, in-app players and 16 kHz conversion work on a
+spatial file unchanged (checked on the simulator), while AVFoundation players
+pick the enabled FOA track.
+
+- Transcription copy: `KeptAudioInspector.makeTranscriptionCopy` reads the
+  stereo track with AVAssetReader and averages it to 16 kHz mono.
+- Export to the vault copies the bytes and keeps `.mp4`
+  (`shouldPreserveEncoding`, `exportFileExtension`). Markdown embeds an `.mp4`
+  as a video-style player in the app (AVPlayer); in-app audio players play the
+  stereo track.
+- Recovery: a claimed `kept_….mp4` recovers as one job and gets the downmixed
+  copy (`isKeptMultichannelRecording`).
+- Pauses are cut out of the file (later buffers are shifted back).
+- Storage: spatial ≈ stereo size + 1.92 MB/min for the FOA track (High ≈ 3
+  MB/min, Lossless ≈ 8 MB/min); the storage guard uses the same numbers.
+
+### Device check (needs an iPhone 16/17 Pro or another FOA-capable iPhone)
+
+Nothing here could run on the simulator. On a supported iPhone with iOS 26+:
+
+1. Settings → Recording Quality → High → Spatial Audio. Keyboard Listening off.
+2. Record ~20 s from the app, walking around the phone while talking. Check the
+   log for `Spatial Audio capture started (FOA + stereo)` and, on stop,
+   `Take finished: saved, … metadata=true`.
+3. `afinfo` / `mediainfo` the kept `.mp4`: a 2-ch AAC track (disabled) and a
+   4-ch APAC track. Play it in Files and Photos/QuickTime with AirPods Pro and
+   listen for spatial rendering. If FOA never starts, retry with
+   `-VoxSpatialAutoConfiguresSession YES`.
+4. Transcript A/B against a Stereo take of the same speech.
+5. Connect AirPods and record: expect the Stereo→mono fallback and a saved
+   `.m4a`.
+6. Lossless + Spatial: expect an ALAC stereo track.
+7. Background the app mid-take and lock the phone: confirm capture keeps
+   running (audio background mode) or that the take lands in recovery.

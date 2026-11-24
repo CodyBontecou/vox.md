@@ -447,6 +447,10 @@ final class PersistentRecorder {
     /// Guarded by `segmentJournalLock`; nil for Speech, where the 16 kHz
     /// journal is the kept audio as before.
     private var keptAudioWriter: KeptAudioFileWriter?
+    /// Spatial Audio capture (#133), non-nil while a one-shot High/Lossless
+    /// take records through AVCaptureSession instead of the engine tap. It
+    /// feeds the same 16 kHz journal and writes its own kept `.mp4`.
+    private var spatialRecording: SpatialTakeRecording?
     /// Raw (hardware-rate, channel 0) microphone history so the kept file gets
     /// the same pre-roll as the 16 kHz journal. Guarded by `segmentJournalLock`.
     /// nil while Speech is selected. While idle the tap only copies samples
@@ -729,6 +733,18 @@ final class PersistentRecorder {
             return false
         }
 
+        // Spatial Audio (#133): only for a one-shot take that keeps its audio.
+        // It records through AVCaptureSession instead of the engine; if it
+        // can't start, the take records Stereo from the engine instead.
+        if stereoEligible, keptQuality.supportsStereo,
+           RecordingChannelLayout.load(from: AppConstants.sharedDefaults) == .spatial {
+            if startSpatialListening() {
+                return completeListeningStart(persistPreference: persistPreference)
+            }
+            stereoOutcome = StereoRecordingInput.configure(session: session, requested: true)
+            log.log("[PersistentRecorder] Stereo input (Spatial Audio fallback): \(stereoOutcome)")
+        }
+
         // Set up AVAudioEngine
         let engine = AVAudioEngine()
         let inputNode = engine.inputNode
@@ -858,6 +874,61 @@ final class PersistentRecorder {
         }
 
         audioEngine = engine
+        return completeListeningStart(persistPreference: persistPreference)
+    }
+
+    /// Spatial Audio capture in place of the engine tap. False (and nothing
+    /// left running) when it can't start; the reason is logged.
+    private func startSpatialListening() -> Bool {
+        let support = SpatialAudioCaptureSupport.current
+        guard support == .supported else {
+            log.log("[PersistentRecorder] Spatial Audio unavailable (\(support)); falling back to Stereo")
+            return false
+        }
+        circularBuffer.reset()
+        let started = SpatialAudioRecording.start(
+            preRollSeconds: keptAudioPreRollSeconds,
+            onTranscriptionSamples: { [weak self] samples in
+                guard let self, let base = samples.baseAddress else { return }
+                self.appendToSegmentJournal(samples)
+                self.writeAudioLevelIfNeeded(base, frameCount: samples.count)
+            },
+            onInterruption: { [weak self] reason in
+                self?.handleSpatialCaptureInterruption(reason)
+            }
+        )
+        switch started {
+        case .success(let recording):
+            spatialRecording = recording
+            // The engine's kept-audio path stays off for this session.
+            stereoInputActive = false
+            activeStereoScratch = nil
+            configureKeptAudioPreRoll(.speech, inputSampleRate: 0)
+            log.log("[PersistentRecorder] ✅ Spatial Audio capture started (FOA + stereo)")
+            return true
+        case .failure(let failure):
+            circularBuffer.reset()
+            log.log("[PersistentRecorder] Spatial Audio capture unavailable (\(failure)); falling back to Stereo")
+            return false
+        }
+    }
+
+    /// Capture stopped by itself mid-session (a call, another app taking the
+    /// mic, a media services reset). Same as an audio interruption: the take
+    /// keeps its 16 kHz journal for recovery.
+    private func handleSpatialCaptureInterruption(_ reason: String) {
+        guard spatialRecording != nil else { return }
+        log.log("[PersistentRecorder] ⚠️ Spatial Audio capture stopped: \(reason)")
+        if isSegmentActive {
+            cancelSegment(preserveAudioForRecovery: true)
+            lastError = String(localized: "Recording interrupted — please try again")
+        }
+        stopListening()
+    }
+
+    /// Marks listening as started and arms commands, heartbeats and
+    /// observers. Shared by the engine and Spatial Audio capture paths.
+    private func completeListeningStart(persistPreference: Bool) -> Bool {
         isListening = true
         lastError = nil
         listeningStartedAt = Date().timeIntervalSince1970
@@ -1076,6 +1147,8 @@ final class PersistentRecorder {
             engine.stop()
             audioEngine = nil
         }
+        spatialRecording?.stop()
+        spatialRecording = nil
 
         isListening = false
         stopListeningHeartbeat()
@@ -1328,6 +1401,7 @@ final class PersistentRecorder {
     /// noise captured during the pause is neither transcribed nor mistaken
     /// for end-of-speech.
     private func setLiveConsumersPaused(_ paused: Bool) {
+        spatialRecording?.setPaused(paused)
         let liveTask = liveTranscriptionSetupTask
         let autoStopTask = endOfSpeechSetupTask
         guard liveTask != nil || autoStopTask != nil else { return }
@@ -2943,6 +3017,11 @@ final class PersistentRecorder {
             .appendingPathExtension("wav")
         do {
             let writer = try IncrementalWAVWriter(url: url, sampleRate: whisperSampleRate)
+            var journalSeedCount = 0
+            defer {
+                // Outside the journal lock: the capture queue takes that lock.
+                beginSpatialTake(requestID: requestID, directory: directory, journalSeedCount: journalSeedCount)
+            }
             segmentJournalLock.withLock {
                 // Serialize pre-roll seeding with microphone appends. This also
                 // captures audio arriving while a continuous span was delivered.
@@ -2951,6 +3030,7 @@ final class PersistentRecorder {
                     from: circularBuffer, startIndex: segmentStartIndex,
                     endIndex: end, pausedRanges: segmentPausedRanges
                 ) ?? []
+                journalSeedCount = seed.count
                 segmentJournalWriteQueue.async {
                     do { try writer.append(samples: seed) }
                     catch { log.log("[PersistentRecorder] Could not seed recording journal: \(error)") }
@@ -3127,10 +3207,38 @@ final class PersistentRecorder {
         }
     }
 
+    /// Starts the Spatial Audio kept file for a take, on the same timeline
+    /// as the 16 kHz journal. Same eligibility and storage rules as
+    /// `makeKeptAudioWriter`; without it the journal is the take's audio.
+    private func beginSpatialTake(requestID: String, directory: URL, journalSeedCount: Int) {
+        guard let spatialRecording else { return }
+        let quality = RecordingQualityStorageGuard.effectiveQuality(
+            requested: RecordingQuality.load(from: AppConstants.sharedDefaults),
+            availableBytes: RecordingQualityStorageGuard.availableBytes(at: directory),
+            layout: .spatial
+        )
+        guard quality.recordsSeparateKeptAudio,
+              let mode = segmentCompletionMode,
+              mode != .keyboardTranscription,
+              continuousDictationSession == nil else { return }
+        let url = KeptAudioArtifacts.makeURL(
+            in: directory,
+            requestID: requestID,
+            fileExtension: SpatialAudioRecordingFormat.fileExtension
+        )
+        let started = spatialRecording.beginTake(
+            url: url,
+            quality: quality,
+            seedDuration: Double(journalSeedCount) / whisperSampleRate
+        )
+        log.log("[PersistentRecorder] Spatial Audio take \(started ? "recording" : "not started") (\(quality.rawValue))")
+    }
+
     /// Closes the kept recording. Returns nil when High/Lossless was not
     /// recording this segment. The file keeps its unrecoverable `kept_` name;
     /// the handoff intent saved next is what makes it recoverable.
     private func finalizeKeptAudio() -> URL? {
+        if let spatialRecording { return spatialRecording.finishTake() }
         let writer = segmentJournalLock.withLock { () -> KeptAudioFileWriter? in
             let writer = keptAudioWriter
             keptAudioWriter = nil
@@ -3146,6 +3254,7 @@ final class PersistentRecorder {
     }
 
     private func discardKeptAudio() {
+        spatialRecording?.discardTake()
         let writer = segmentJournalLock.withLock { () -> KeptAudioFileWriter? in
             let writer = keptAudioWriter
             keptAudioWriter = nil
@@ -3353,7 +3462,7 @@ final class PersistentRecorder {
         guard source == .iOSApp || source == .recovered else { return audioURL }
         let task = Task.detached(priority: .userInitiated) { () throws -> URL in
             guard KeptAudioInspector.needsTranscriptionCopy(audioURL),
-                  source == .iOSApp || KeptAudioInspector.isKeptStereoRecording(audioURL) else {
+                  source == .iOSApp || KeptAudioInspector.isKeptMultichannelRecording(audioURL) else {
                 return audioURL
             }
             let copyURL = FileManager.default.temporaryDirectory

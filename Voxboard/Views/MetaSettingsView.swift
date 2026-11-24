@@ -29,6 +29,7 @@ struct MetaSettingsView: View {
     @State private var recordingQuality = RecordingQuality.load(from: AppConstants.sharedDefaults)
     @State private var recordingStereo = StereoRecordingPreference.load(from: AppConstants.sharedDefaults)
     @State private var recordingNatural = NaturalRecordingPreference.load(from: AppConstants.sharedDefaults)
+    @State private var recordingLayout = RecordingChannelLayout.load(from: AppConstants.sharedDefaults)
     @State private var vault: VoxVault?
     @State private var isPickingVault = false
     @State private var vaultMessage: String?
@@ -227,6 +228,7 @@ struct MetaSettingsView: View {
                     recordingQuality = quality
                     recordingStereo = StereoRecordingPreference.load(from: AppConstants.sharedDefaults)
                     recordingNatural = NaturalRecordingPreference.load(from: AppConstants.sharedDefaults)
+                    recordingLayout = RecordingChannelLayout.load(from: AppConstants.sharedDefaults)
                     persistentRecorder.recordingQualityDidChange()
                     WatchRecordingController.shared.publishState()
                 }
@@ -237,6 +239,7 @@ struct MetaSettingsView: View {
     /// "High · ≈ 0.5 MB/min", "High · Stereo · ≈ 1 MB/min", or with Natural
     /// sound on, "High · Stereo · Natural · ≈ 1 MB/min".
     private var recordingQualitySummary: String {
+        if let spatial = recordingQuality.spatialSettingsSummary(storedLayout: recordingLayout, natural: recordingNatural) { return spatial }
         let storage = recordingQuality.localizedStoragePerMinute(stereo: recordingStereo)
         var name = recordingQuality.displayName
         if StereoRecordingPreference.requestsStereo(quality: recordingQuality, enabled: recordingStereo) {
