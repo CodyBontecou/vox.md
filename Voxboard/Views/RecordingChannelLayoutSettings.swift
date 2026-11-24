@@ -48,17 +48,14 @@ extension RecordingQuality {
     /// Settings summary row when Spatial Audio is chosen ("High · Spatial
     /// Audio · ≈ 3 MB/min"; "High · Stereo · …" where it falls back to
     /// Stereo); nil for the other choices, which keep the existing summary.
-    func spatialSettingsSummary(storedLayout: RecordingChannelLayout, natural: Bool = false) -> String? {
+    func spatialSettingsSummary(storedLayout: RecordingChannelLayout) -> String? {
         guard storedLayout == .spatial, supportsStereo else { return nil }
         let layout = RecordingChannelLayout.effective(
             quality: self,
             stored: storedLayout,
             support: SpatialAudioCaptureSupport.current
         )
-        var name = String(localized: "\(displayName) · \(layout.displayName)")
-        if NaturalRecordingPreference.requestsNatural(quality: self, enabled: natural) {
-            name = String(localized: "\(name) · \(String(localized: "Natural"))")
-        }
+        let name = String(localized: "\(displayName) · \(layout.displayName)")
         return String(localized: "\(name) · \(localizedStoragePerMinute(layout: layout))")
     }
 }

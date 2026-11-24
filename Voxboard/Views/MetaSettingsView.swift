@@ -237,15 +237,15 @@ struct MetaSettingsView: View {
     }
 
     /// "High · ≈ 0.5 MB/min", "High · Stereo · ≈ 1 MB/min", or with Natural
-    /// sound on, "High · Stereo · Natural · ≈ 1 MB/min".
+    /// sound on (Mono only), "High · Natural · ≈ 0.5 MB/min".
     private var recordingQualitySummary: String {
-        if let spatial = recordingQuality.spatialSettingsSummary(storedLayout: recordingLayout, natural: recordingNatural) { return spatial }
+        if let spatial = recordingQuality.spatialSettingsSummary(storedLayout: recordingLayout) { return spatial }
         let storage = recordingQuality.localizedStoragePerMinute(stereo: recordingStereo)
         var name = recordingQuality.displayName
         if StereoRecordingPreference.requestsStereo(quality: recordingQuality, enabled: recordingStereo) {
             name = String(localized: "\(name) · \(String(localized: "Stereo"))")
         }
-        if NaturalRecordingPreference.requestsNatural(quality: recordingQuality, enabled: recordingNatural) {
+        if NaturalRecordingPreference.requestsNatural(quality: recordingQuality, enabled: recordingNatural, layout: recordingLayout) {
             name = String(localized: "\(name) · \(String(localized: "Natural"))")
         }
         return String(localized: "\(name) · \(storage)")

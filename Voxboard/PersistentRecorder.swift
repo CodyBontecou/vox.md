@@ -712,7 +712,8 @@ final class PersistentRecorder {
         let requestedSession = RecordingAudioSessionConfiguration(KeptAudioInputOptions.forRecording(
             quality: keptQuality,
             eligible: stereoEligible,
-            naturalEnabled: NaturalRecordingPreference.load(from: AppConstants.sharedDefaults)
+            naturalEnabled: NaturalRecordingPreference.load(from: AppConstants.sharedDefaults),
+            layout: RecordingChannelLayout.load(from: AppConstants.sharedDefaults)
         ))
         var stereoOutcome = StereoRecordingInput.Outcome.notRequested
         do {

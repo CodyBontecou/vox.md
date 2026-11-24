@@ -380,6 +380,27 @@ final class RecordingQualityTests: XCTestCase {
         XCTAssertFalse(NaturalRecordingPreference.requestsNatural(quality: .high, enabled: false))
     }
 
+    func test_naturalOnlyAppliesToMonoBecauseMeasurementModeHasNoStereoPattern() {
+        // On iPhone 13 Pro Max (iOS 27.2) the `.measurement` mode offers no
+        // stereo polar pattern, so Natural would turn Stereo into mono.
+        // Stereo and Spatial Audio win and keep the standard mode.
+        XCTAssertTrue(NaturalRecordingPreference.requestsNatural(quality: .high, enabled: true, layout: .mono))
+        for layout in [RecordingChannelLayout.stereo, .spatial] {
+            for quality in [RecordingQuality.high, .lossless] {
+                XCTAssertFalse(NaturalRecordingPreference.requestsNatural(quality: quality, enabled: true, layout: layout))
+                XCTAssertEqual(
+                    KeptAudioInputOptions.forRecording(quality: quality, eligible: true, naturalEnabled: true, layout: layout),
+                    KeptAudioInputOptions(highQualityBluetooth: true, naturalInput: false),
+                    "\(quality) \(layout)"
+                )
+            }
+        }
+        XCTAssertEqual(
+            KeptAudioInputOptions.forRecording(quality: .lossless, eligible: true, naturalEnabled: true, layout: .mono),
+            KeptAudioInputOptions(highQualityBluetooth: true, naturalInput: true)
+        )
+    }
+
     func test_inputOptionsOnlyChangeForKeptAudioRecordings() {
         // Keyboard Listening, dictation and Speech keep the standard input.
         for quality in RecordingQuality.allCases {

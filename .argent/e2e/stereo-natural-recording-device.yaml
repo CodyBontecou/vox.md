@@ -1,0 +1,52 @@
+# A High recording with layout Stereo while Natural sound is also switched on
+# records in stereo: Natural is Mono-only, so the session keeps the default
+# mode. Before the fix, Natural's `.measurement` mode removed the stereo polar
+# pattern and the take was silently mono.
+#
+# The UI steps prove the take starts, runs and stops on a real iPhone. The
+# audio outcome is in Settings > View Debug Log, which this test can't read:
+#   expected "Session input: mode=AVAudioSessionModeDefault ..." and
+#   "Stereo input: stereo(dataSource: \"Front\", routeConfirmed: true)", then
+#   "Input format: 48000.0 Hz, 2 ch".
+#
+# Prerequisites: physical iPhone 13 Pro Max, cabled and unlocked, DEBUG build
+#   launched with -VoxScreenshotUnlocked and showing Settings; Recording
+#   Quality = High, layout Stereo, Natural sound on (set it under Mono, then
+#   choose Stereo); built-in microphone, no headset; Keyboard Listening off.
+# Side effects: adds a transcript (or a "No speech was detected" queued
+#   recording) to the current note in the Inbox route, and keeps its audio.
+# Selectors: ids, plus the fixed "Speak" label and the "Recording, 00:08"
+#   timer text used as the 8-second wait.
+version: 1
+requires:
+  platform: ios
+steps:
+  - tap:
+      id: signal.back
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_voice_recording
+      timeoutMs: 10000
+  - echo: Record about 8 seconds of room sound on the built-in microphone
+  - tap:
+      text: Speak
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Recording, 00:08
+      timeoutMs: 20000
+  - tap:
+      id: capture_recording_stop_send
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_record_new_note
+      timeoutMs: 20000
+executionPrerequisite: Vox.md DEBUG launched with -VoxScreenshotUnlocked and showing
+  Settings, on a cabled iPhone 13 Pro Max. Recording Quality = High, layout
+  Stereo, Natural sound on (set under Mono, then Stereo chosen). Built-in
+  microphone, no headset, Keyboard Listening off.

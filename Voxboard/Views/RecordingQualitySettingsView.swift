@@ -105,8 +105,11 @@ struct RecordingQualitySettingsView: View {
 
             if selection.recordsSeparateKeptAudio {
                 Section {
+                    // Stereo and Spatial Audio win over Natural sound: the
+                    // toggle shows off and is disabled, and the stored choice
+                    // comes back when Mono is chosen again.
                     Toggle(isOn: Binding(
-                        get: { natural },
+                        get: { natural && naturalApplies },
                         set: { enabled in
                             guard natural != enabled else { return }
                             natural = enabled
@@ -119,9 +122,18 @@ struct RecordingQualitySettingsView: View {
                             .foregroundStyle(Geist.text)
                     }
                     .tint(Geist.accent)
+                    .disabled(!naturalApplies)
                     .accessibilityIdentifier("recording_quality_natural")
 
-                    if natural, keyboardListeningOn {
+                    if !naturalApplies {
+                        Text("Natural sound records in mono. Stereo and Spatial Audio keep the iPhone's standard microphone processing.")
+                            .font(Geist.caption())
+                            .foregroundStyle(Geist.muted)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .accessibilityIdentifier("recording_quality_natural_mono_only")
+                    }
+
+                    if natural, naturalApplies, keyboardListeningOn {
                         Label {
                             Text("Keyboard Listening is on, so new recordings use the standard microphone settings. Turn it off to use Natural sound.")
                                 .font(Geist.caption())
@@ -179,6 +191,9 @@ struct RecordingQualitySettingsView: View {
     }
 
     private var effectiveLayout: RecordingChannelLayout { layout(for: selection) }
+
+    /// Natural sound only applies to Mono (see `NaturalRecordingPreference`).
+    private var naturalApplies: Bool { effectiveLayout == .mono }
 
     private func layout(for quality: RecordingQuality) -> RecordingChannelLayout {
         .effective(quality: quality, stored: layout, support: spatialSupport)

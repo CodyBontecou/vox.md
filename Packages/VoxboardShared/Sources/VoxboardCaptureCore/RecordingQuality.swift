@@ -186,9 +186,17 @@ public enum NaturalRecordingPreference {
         defaults?.set(enabled, forKey: defaultsKey)
     }
 
-    /// True when a recording at `quality` should use the natural input mode.
-    public static func requestsNatural(quality: RecordingQuality, enabled: Bool) -> Bool {
-        enabled && quality.recordsSeparateKeptAudio
+    /// True when a recording at `quality` in `layout` should use the natural
+    /// input mode. Mono only: in the `.measurement` mode iOS offers no stereo
+    /// polar pattern on the built-in microphones (seen on iPhone 13 Pro Max,
+    /// iOS 27.2), so Natural would silently turn Stereo into mono. Stereo and
+    /// Spatial Audio win and keep the standard mode.
+    public static func requestsNatural(
+        quality: RecordingQuality,
+        enabled: Bool,
+        layout: RecordingChannelLayout = .mono
+    ) -> Bool {
+        enabled && quality.recordsSeparateKeptAudio && layout == .mono
     }
 }
 
@@ -211,15 +219,22 @@ public struct KeptAudioInputOptions: Equatable, Sendable {
 
     public static let standard = KeptAudioInputOptions()
 
+    /// `layout` is the stored channel layout; anything but mono keeps the
+    /// standard mode (see `NaturalRecordingPreference.requestsNatural`).
     public static func forRecording(
         quality: RecordingQuality,
         eligible: Bool,
-        naturalEnabled: Bool
+        naturalEnabled: Bool,
+        layout: RecordingChannelLayout = .mono
     ) -> KeptAudioInputOptions {
         guard eligible, quality.recordsSeparateKeptAudio else { return .standard }
         return KeptAudioInputOptions(
             highQualityBluetooth: true,
-            naturalInput: NaturalRecordingPreference.requestsNatural(quality: quality, enabled: naturalEnabled)
+            naturalInput: NaturalRecordingPreference.requestsNatural(
+                quality: quality,
+                enabled: naturalEnabled,
+                layout: layout
+            )
         )
     }
 }
