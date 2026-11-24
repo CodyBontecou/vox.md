@@ -62,7 +62,10 @@ nonisolated enum SpatialAudioCaptureSupport: Equatable, Sendable {
     }
 
     private static func defaultMicrophoneSupportsAmbisonics() -> Bool {
-        guard let device = AVCaptureDevice.default(for: .audio),
+        // Spatial capture needs iOS 26 (checked by `evaluate` first); the API
+        // itself is iOS 18+, and the app deploys to 17.6.
+        guard #available(iOS 26.0, *),
+              let device = AVCaptureDevice.default(for: .audio),
               let input = try? AVCaptureDeviceInput(device: device) else { return false }
         return input.isMultichannelAudioModeSupported(.firstOrderAmbisonics)
     }
