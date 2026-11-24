@@ -1,0 +1,154 @@
+<!--{
+  "slug": "transcribe-interview",
+  "title": "How to transcribe an interview privately, with speaker labels",
+  "description": "A practical method for turning a recorded interview into a reviewable transcript: consent, recording, verbatim or clean, review, and optional anonymous speaker labels. Vox.md transcribes on your device and saves a Markdown note you own.",
+  "subtitle": "Consent, recording, transcription and a review pass, plus an on-device route so participant audio is not uploaded to a transcription service.",
+  "eyebrow": "Interviews · On-device · Speaker labels",
+  "requirements": "Vox.md: iOS or iPadOS 17.6+ or macOS 14+ · downloaded speech model for Whisper or Parakeet · writable destination folder",
+  "published": "2026-11-24",
+  "modified": "2026-11-24",
+  "image": "/screenshots/00-capture-light.png"
+}-->
+<div class="answer-box" id="short-answer"><div class="label">The short answer</div>
+        <p>Five steps: <strong>1) get consent</strong> and say how the audio will be processed and stored; <strong>2) record clearly</strong> with a test first; <strong>3) transcribe</strong>; <strong>4) review the text against the audio</strong>; <strong>5) label the speakers and save</strong>. You can do the whole thing on your own device with Vox.md on iPhone, iPad or Mac, so the recording is not uploaded to a transcription service. Speaker labels are optional, anonymous and best effort (“Speaker 1”, “Speaker 2”); you rename them by hand.</p>
+      </div>
+      <p>The method works with any tool. The Vox.md steps follow the <a href="../../docs/#models">models</a> and <a href="../../docs/#mac">Mac</a> documentation and the app’s shipped behavior. Outside sources are linked where they are used, and the example note is illustrative, not a real interview.</p>
+      <nav class="toc" aria-label="In this guide"><div class="toc-title">In this guide</div><ol>
+        <li><a href="#before-you-record">Before you record</a></li>
+        <li><a href="#verbatim-or-clean">Verbatim or clean?</a></li>
+        <li><a href="#options">Ways to transcribe</a></li>
+        <li><a href="#iphone">In person on iPhone or iPad</a></li>
+        <li><a href="#mac">On a Mac</a></li>
+        <li><a href="#review">The review pass</a></li>
+        <li><a href="#troubleshooting">Troubleshooting</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ol></nav>
+
+      <h2 id="before-you-record">Before you record</h2>
+      <p><strong>Consent and data handling.</strong> Tell the participant how the audio will be processed and stored, and get their agreement before you record. The Centre College <a href="https://library.centre.edu/oralhistories/standards">Oral History Guide</a> says interviewers should make sure narrators voluntarily consent, explain the purpose of the interview, and make clear their options, including restricting access or choosing anonymity. Check your ethics board or data policy too: many ask where participant audio is processed and stored, so decide your answer before the first interview.</p>
+      <p><strong>Recording setup.</strong> Harvard Library’s <a href="https://guides.library.harvard.edu/c.php?g=796889&amp;p=10476360">Recording &amp; Transcription</a> guide advises spending time on good audio capture first because it makes transcription easier. In practice:</p>
+      <ul>
+        <li>Use one microphone per speaker if you can, and sit close to each.</li>
+        <li>Pick a quiet room and switch off anything that rings or hums.</li>
+        <li>Record a short test and play it back before the real interview.</li>
+      </ul>
+
+      <h2 id="verbatim-or-clean">Verbatim or clean?</h2>
+      <p>Decide the style before you transcribe, and keep it the same across a project. The Centre College guide’s <a href="https://library.centre.edu/oralhistories/transcribing">Transcribing</a> page describes verbatim as word for word, including filler sounds, pauses, interruptions and laughter, and says historians prefer it because it captures the most nuance. “Clean verbatim” and “edited” are common names for lighter styles; the table shows how they usually differ. Which one you need is set by your project, publisher or ethics board.</p>
+      <p class="guide-table-hint">On a small screen, swipe the table sideways.</p>
+      <div class="guide-comparison" role="region" aria-label="Transcript styles comparison; scroll horizontally on small screens" tabindex="0">
+        <table class="comparison">
+          <caption>Common transcript styles</caption>
+          <thead><tr><th scope="col">Style</th><th scope="col">What it keeps</th><th scope="col">Typical fit</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Verbatim</th><td>Everything said: fillers, false starts, pauses, non-speech sounds</td><td>Oral history and research where wording and manner of speaking are data</td></tr>
+            <tr><th scope="row">Clean verbatim</th><td>The words said, with fillers and false starts removed</td><td>Most interview analysis and quotation where meaning matters more than delivery</td></tr>
+            <tr><th scope="row">Edited</th><td>Reworded for reading: grammar tidied, passages cut</td><td>Publication drafts, only with the speaker’s approval where your project requires it</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Automatic transcription does not make a style choice for you. You still apply it in the review pass.</p>
+
+      <h2 id="options">Ways to transcribe</h2>
+      <p>The table compares categories, not specific products, and states only what is documented. Apple’s Voice Memos details come from Apple Support’s <a href="https://support.apple.com/guide/voice-memos/vm4a03609f0d/mac">View a transcription in Voice Memos on Mac</a> and its <a href="https://support.apple.com/guide/iphone/view-a-transcription-iph00953a982/ios">iPhone page</a>; check them for your device, language and region.</p>
+      <p class="guide-table-hint">On a small screen, swipe the table sideways.</p>
+      <div class="guide-comparison" role="region" aria-label="Interview transcription options comparison; scroll horizontally on small screens" tabindex="0">
+        <table class="comparison">
+          <caption>Interview transcription options</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">Where audio is processed</th><th scope="col">Speaker labels</th><th scope="col">Output</th><th scope="col">Cost model</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">By hand</th><td>Your own computer</td><td>You type them</td><td>Any text file</td><td>Your time: the <a href="https://www.nps.gov/articles/000/oral-history-resources-interview-transcribing.htm">National Park Service</a> says about 6–8 hours per hour of recording</td></tr>
+            <tr><th scope="row">Cloud transcription services</th><td>The provider’s servers; check each provider’s terms</td><td>Varies by service</td><td>Varies by service</td><td>Varies by service</td></tr>
+            <tr><th scope="row">Apple Voice Memos transcripts</th><td>Not documented on the pages cited</td><td>Not documented on the pages cited</td><td>Text inside Voice Memos; you copy it out</td><td>Part of the operating system</td></tr>
+            <tr><th scope="row">Vox.md</th><td>On your iPhone, iPad or Mac</td><td>Opt-in, anonymous, best effort</td><td>A Markdown note in a folder you choose</td><td>15 free transcription minutes and 10 successful deliveries, then a one-time lifetime unlock</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>If you only need quick text inside Voice Memos, use it; see <a href="../transcribe-voice-memos-iphone/">transcribe Voice Memos to Markdown</a> for moving a recording into a note. Vox.md is for when you want the transcript as a plain file you own, a chosen local model, and optional speaker labels.</p>
+
+      <h2 id="iphone">In person on iPhone or iPad</h2>
+      <ol>
+        <li><strong>Choose a transcription model.</strong> Automatic prefers Apple Speech on a supported iOS 26 device and language. You can instead download Whisper (Tiny to Large v3 Turbo), Parakeet v2 (English) or Parakeet v3 (25 languages). Downloading a model is your choice and the only network step. <a href="../../compare/whisper-vs-parakeet/">Whisper vs Parakeet</a> helps you choose, and <a href="../offline-transcription-iphone-markdown/">offline transcription on iPhone</a> covers preparing it.</li>
+        <li><strong>Make an “Interviews” Route.</strong> In Settings → Routes, create a Route named Interviews. Choose a destination folder (an Obsidian vault or a Files folder) and <strong>New Note</strong>, so each capture becomes its own file. Optionally add static frontmatter, one <code>key: value</code> per line, such as <code>project: housing-study</code>. The <a href="../obsidian-properties-generator/">properties generator</a> builds valid frontmatter. Keep participant codes out of static metadata, since it applies to every note from the Route.</li>
+        <li><strong>Turn on Identify Speakers.</strong> It is an opt-in setting on each Route. The first time it is used it prepares a separate speaker model, so do that ahead of the interview, not in front of the participant. After that it runs locally. The open-source <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> library is used for local speaker processing.</li>
+        <li><strong>Do a 30-second test with two voices.</strong> Record a short exchange with someone, and check that the note arrives in the destination folder and shows two labels.</li>
+        <li><strong>Record, or import.</strong> Record from the Vox.md composer, or use the import control for an existing audio or video file. Choose <strong>Add to Draft</strong> if you want to read the text before it is delivered, or <strong>Send Immediately</strong> to deliver when transcription finishes.</li>
+        <li><strong>Review in Library.</strong> Library shows each capture and, if speaker identification could not run, the reason.</li>
+      </ol>
+      <p>With Identify Speakers on, each turn in the saved text gets its own label line, followed by that turn’s text on the next line, and turns are separated by a blank line:</p>
+<pre class="guide-code"><code>Speaker 1:
+Thanks for agreeing to talk with me today.
+
+Speaker 2:
+Happy to. Where would you like me to start?</code></pre>
+      <p>Labels are anonymous and best effort. Vox.md does not recognise people by name. It is also available for Apple Watch transcript delivery and in the Mac app.</p>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">Try it on one short recording.</h2>
+        <p>The free allowance is 15 minutes of transcription and 10 successful deliveries.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Get Vox.md</a></p>
+      </section>
+
+      <h2 id="mac">On a Mac</h2>
+      <ul>
+        <li><strong>An existing file.</strong> Use <strong>Import Audio…</strong> in Vox.md for Mac, which accepts audio and movie files. The steps are in <a href="../transcribe-audio-file-mac/">transcribe an audio file on Mac</a>. Turn on Identify Speakers on the Route for anonymous labels.</li>
+        <li><strong>A remote interview.</strong> Meeting capture records one app’s audio and your microphone as separate stems. You appear as “You” and the other side is labelled as a remote speaker; speaker identification can split several remote voices further. Setup is in <a href="../transcribe-meetings-mac-obsidian/">transcribe Mac meetings into Obsidian</a>. Tell remote participants you are recording, as in the consent step above.</li>
+        <li><strong>A caption file.</strong> If Zoom or Teams already gave you an .srt or .vtt file, the <a href="../srt-vtt-to-text-markdown/">SRT and VTT converter</a> turns it into text or Markdown in your browser.</li>
+      </ul>
+      <p>The Meeting Notes processing mode exists but restructures text into notes. For verbatim research transcripts, leave the Route on Keep Original.</p>
+
+      <h2 id="review">The review pass</h2>
+      <p>Automatic transcripts need checking. Harvard’s guide says, as with any automatically generated transcript, you need to revise it manually, and the Centre College guide says automated transcripts are not a replacement for a human’s work.</p>
+      <ol>
+        <li><strong>Listen again</strong> at normal or slower speed while reading, and fix names, terms, numbers and dates.</li>
+        <li><strong>Apply your style</strong> from the verbatim or clean choice above.</li>
+        <li><strong>Rename the speakers.</strong> Use find and replace to turn <code>Speaker 1</code> into your interviewer code and <code>Speaker 2</code> into the participant code, for example P03.</li>
+        <li><strong>Anonymise</strong> names, places and other identifying details as your consent and data plan require.</li>
+        <li><strong>Keep the original audio</strong> according to your data plan.</li>
+      </ol>
+      <p>A finished note might look like this (invented sample text):</p>
+<pre class="guide-code"><code>---
+participant: P03
+date: 2026-11-24
+consent: recorded
+---
+
+Interviewer:
+Thanks for agreeing to talk with me today.
+
+P03:
+Happy to. Where would you like me to start?</code></pre>
+
+      <h2 id="troubleshooting">Troubleshooting</h2>
+      <ul>
+        <li><strong>No speaker labels.</strong> The plain transcript is always kept, and Library shows why identification was skipped. Reasons include: no timing information in the transcript; timing that doesn’t cover the whole transcript; no distinct speakers detected; model storage unavailable; the model couldn’t be prepared; or processing failed. Check that Identify Speakers is on for the Route and that the speaker model was prepared.</li>
+        <li><strong>Speakers merged or split wrongly.</strong> Record closer to each voice, use separate microphones if you can, and correct the labels by hand.</li>
+        <li><strong>A long recording.</strong> Larger models take longer. Try a smaller model first, and keep the device charged.</li>
+        <li><strong>A language Parakeet v2 doesn’t cover.</strong> Parakeet v2 is English only. Use Parakeet v3 (25 languages) or Whisper; see <a href="../../docs/#models">Models</a>.</li>
+        <li><strong>Free allowance used up.</strong> It is 15 minutes of transcription and 10 successful deliveries, then a one-time lifetime unlock. The App Store price is authoritative.</li>
+      </ul>
+
+      <h2 id="faq">FAQ</h2>
+      <h3>Can I transcribe an interview offline?</h3>
+      <p>Yes, once a model is prepared. Model downloads and speaker-model preparation need a connection once; transcription then runs on the device. See <a href="../offline-transcription-iphone-markdown/">offline transcription on iPhone</a>.</p>
+      <h3>Does Vox.md upload my recording?</h3>
+      <p>No. Transcription and speaker labelling run on your device, and the file is written only to the folder you pick. If that folder syncs (iCloud Drive, for example), the sync provider holds the file under its own terms. See the <a href="../../privacy.html">privacy policy</a>.</p>
+      <h3>Can it tell who is speaking by name?</h3>
+      <p>No. Labels are anonymous (“Speaker 1”, “Speaker 2”) and best effort. You rename them yourself.</p>
+      <h3>How long does it take to transcribe an interview by hand?</h3>
+      <p>The National Park Service’s <a href="https://www.nps.gov/articles/000/oral-history-resources-interview-transcribing.htm">Interview Transcribing</a> page says on average 6–8 hours per hour of recorded interview.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Transcribe your next interview on your own device.</h2>
+        <p>Test with one short interview on the free 15 minutes of transcription, then open the Markdown file.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Get Vox.md</a></p>
+      </section>
+      <nav class="toc" aria-label="Related guides" id="related"><div class="toc-title">Continue</div><ul>
+        <li><a href="../transcribe-audio-file-mac/">Transcribe an audio file on Mac</a></li>
+        <li><a href="../transcribe-meetings-mac-obsidian/">Transcribe Mac meetings into Obsidian</a></li>
+        <li><a href="../transcribe-voice-memos-iphone/">Transcribe iPhone Voice Memos to Markdown</a></li>
+        <li><a href="../offline-transcription-iphone-markdown/">Offline transcription on iPhone</a></li>
+        <li><a href="../../compare/whisper-vs-parakeet/">Whisper vs Parakeet</a></li>
+        <li><a href="../obsidian-properties-generator/">Obsidian properties generator</a></li>
+        <li><a href="../srt-vtt-to-text-markdown/">SRT and VTT to text or Markdown</a></li>
+        <li><a href="../../docs/">Documentation</a></li>
+      </ul></nav>
