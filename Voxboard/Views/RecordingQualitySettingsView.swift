@@ -61,6 +61,7 @@ struct RecordingQualitySettingsView: View {
 
     @State private var selection = RecordingQuality.load(from: AppConstants.sharedDefaults)
     @State private var stereo = StereoRecordingPreference.load(from: AppConstants.sharedDefaults)
+    @State private var natural = NaturalRecordingPreference.load(from: AppConstants.sharedDefaults)
     /// Keyboard Listening keeps the always-on mono input, which new
     /// recordings reuse; warn when that overrides Stereo.
     @State private var keyboardListeningOn = AppConstants.sharedDefaults?
@@ -125,6 +126,48 @@ struct RecordingQualitySettingsView: View {
                         // reuse it are mono too.
                         Text("Keyboard dictation, and recordings made while Keyboard Listening is on, stay mono.")
                             .accessibilityIdentifier("recording_quality_stereo_keyboard_note")
+                    }
+                }
+                .listRowBackground(Geist.card)
+            }
+
+            if selection.recordsSeparateKeptAudio {
+                Section {
+                    Toggle(isOn: Binding(
+                        get: { natural },
+                        set: { enabled in
+                            guard natural != enabled else { return }
+                            natural = enabled
+                            NaturalRecordingPreference.save(enabled, to: AppConstants.sharedDefaults)
+                            onChange(selection)
+                        }
+                    )) {
+                        Text("Natural sound")
+                            .font(Geist.label(.body))
+                            .foregroundStyle(Geist.text)
+                    }
+                    .tint(Geist.accent)
+                    .accessibilityIdentifier("recording_quality_natural")
+
+                    if natural, keyboardListeningOn {
+                        Label {
+                            Text("Keyboard Listening is on, so new recordings use the standard microphone settings. Turn it off to use Natural sound.")
+                                .font(Geist.caption())
+                                .foregroundStyle(Geist.text)
+                                .fixedSize(horizontal: false, vertical: true)
+                        } icon: {
+                            Image(systemName: "exclamationmark.triangle")
+                                .foregroundStyle(Geist.muted)
+                        }
+                        .accessibilityIdentifier("recording_quality_natural_keyboard_listening_warning")
+                    }
+                } footer: {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Records High and Lossless with less of the iPhone's own input processing, for a more natural sound with music, nature and rooms. Quiet speech can come out quieter, and transcripts may change slightly.")
+                        // High-quality Bluetooth is automatic for High and
+                        // Lossless (RecordingAudioSessionConfiguration).
+                        Text("On iOS 26, AirPods that support it record High and Lossless in full Bluetooth quality instead of call quality.")
+                            .accessibilityIdentifier("recording_quality_airpods_note")
                     }
                 }
                 .listRowBackground(Geist.card)

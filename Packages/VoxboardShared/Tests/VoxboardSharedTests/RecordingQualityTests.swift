@@ -360,6 +360,51 @@ final class RecordingQualityTests: XCTestCase {
         XCTAssertEqual(KeptAudioInspector.format(of: url)?.formatID, kAudioFormatAppleLossless)
     }
 
+    // MARK: - Natural sound and high-quality AirPods
+
+    func test_naturalPreferenceDefaultsOffAndOnlyAppliesToHighAndLossless() throws {
+        let suite = "RecordingQualityTests-\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+
+        XCTAssertFalse(NaturalRecordingPreference.load(from: defaults))
+        XCTAssertFalse(NaturalRecordingPreference.load(from: nil))
+        NaturalRecordingPreference.save(true, to: defaults)
+        XCTAssertTrue(NaturalRecordingPreference.load(from: defaults))
+        XCTAssertNotEqual(NaturalRecordingPreference.defaultsKey, StereoRecordingPreference.defaultsKey)
+        XCTAssertNotEqual(NaturalRecordingPreference.defaultsKey, RecordingQuality.watchPayloadKey)
+
+        XCTAssertFalse(NaturalRecordingPreference.requestsNatural(quality: .speech, enabled: true))
+        XCTAssertTrue(NaturalRecordingPreference.requestsNatural(quality: .high, enabled: true))
+        XCTAssertTrue(NaturalRecordingPreference.requestsNatural(quality: .lossless, enabled: true))
+        XCTAssertFalse(NaturalRecordingPreference.requestsNatural(quality: .high, enabled: false))
+    }
+
+    func test_inputOptionsOnlyChangeForKeptAudioRecordings() {
+        // Keyboard Listening, dictation and Speech keep the standard input.
+        for quality in RecordingQuality.allCases {
+            XCTAssertEqual(
+                KeptAudioInputOptions.forRecording(quality: quality, eligible: false, naturalEnabled: true),
+                .standard
+            )
+        }
+        XCTAssertEqual(
+            KeptAudioInputOptions.forRecording(quality: .speech, eligible: true, naturalEnabled: true),
+            .standard
+        )
+
+        // High-quality Bluetooth is automatic for High and Lossless; Natural
+        // follows its setting.
+        XCTAssertEqual(
+            KeptAudioInputOptions.forRecording(quality: .high, eligible: true, naturalEnabled: false),
+            KeptAudioInputOptions(highQualityBluetooth: true, naturalInput: false)
+        )
+        XCTAssertEqual(
+            KeptAudioInputOptions.forRecording(quality: .lossless, eligible: true, naturalEnabled: true),
+            KeptAudioInputOptions(highQualityBluetooth: true, naturalInput: true)
+        )
+    }
+
     // MARK: - Stereo (#118)
 
     func test_stereoPreferenceDefaultsOffAndOnlyAppliesToHighAndLossless() throws {
