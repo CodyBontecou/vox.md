@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr" data-search-section="Abschnitt" data-search-guide="Anleitung" data-search-empty="Keine Treffer für „{query}“">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ein Interview privat transkribieren, mit Sprecherlabels | Vox.md</title>
+  <meta name="description" content="Eine praktische Methode, um ein aufgezeichnetes Interview in ein prüfbares Transkript zu verwandeln: Einwilligung, Aufnahme, wörtlich oder bereinigt, Prüfung und optionale anonyme Sprecherlabels. Vox.md transkribiert auf deinem Gerät und speichert eine Markdown-Notiz, die dir gehört.">
+  <link rel="canonical" href="https://vox.isolated.tech/de/blog/transcribe-interview/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Vox.md-Dokumentation für Sprachmodelle">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Ein Interview privat transkribieren, mit Sprecherlabels">
+  <meta property="og:description" content="Eine praktische Methode, um ein aufgezeichnetes Interview in ein prüfbares Transkript zu verwandeln: Einwilligung, Aufnahme, wörtlich oder bereinigt, Prüfung und optionale anonyme Sprecherlabels. Vox.md transkribiert auf deinem Gerät und speichert eine Markdown-Notiz, die dir gehört.">
+  <meta property="og:url" content="https://vox.isolated.tech/de/blog/transcribe-interview/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-24">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ein Interview privat transkribieren, mit Sprecherlabels">
+  <meta name="twitter:description" content="Eine praktische Methode, um ein aufgezeichnetes Interview in ein prüfbares Transkript zu verwandeln: Einwilligung, Aufnahme, wörtlich oder bereinigt, Prüfung und optionale anonyme Sprecherlabels. Vox.md transkribiert auf deinem Gerät und speichert eine Markdown-Notiz, die dir gehört.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Ein Interview privat transkribieren, mit Sprecherlabels",
+  "description": "Eine praktische Methode, um ein aufgezeichnetes Interview in ein prüfbares Transkript zu verwandeln: Einwilligung, Aufnahme, wörtlich oder bereinigt, Prüfung und optionale anonyme Sprecherlabels. Vox.md transkribiert auf deinem Gerät und speichert eine Markdown-Notiz, die dir gehört.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-24",
+  "dateModified": "2026-11-24",
+  "mainEntityOfPage": "https://vox.isolated.tech/de/blog/transcribe-interview/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "de",
+  "name": "Ein Interview privat transkribieren, mit Sprecherlabels | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/de/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Anleitungen",
+      "item": "https://vox.isolated.tech/de/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Ein Interview privat transkribieren, mit Sprecherlabels",
+      "item": "https://vox.isolated.tech/de/blog/transcribe-interview/"
+    }
+  ],
+  "inLanguage": "de",
+  "name": "Ein Interview privat transkribieren, mit Sprecherlabels | Vox.md",
+  "description": "Eine praktische Methode, um ein aufgezeichnetes Interview in ein prüfbares Transkript zu verwandeln: Einwilligung, Aufnahme, wörtlich oder bereinigt, Prüfung und optionale anonyme Sprecherlabels. Vox.md transkribiert auf deinem Gerät und speichert eine Markdown-Notiz, die dir gehört."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-interview/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-interview/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-interview/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-interview/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-interview/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-interview/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-interview/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-interview/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-interview/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-interview/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-interview/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-interview/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-interview/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-interview/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-interview/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-interview/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-interview/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-interview/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Zur Anleitung springen</a>
+<nav aria-label="Hauptnavigation">
+  <div class="nav-inner">
+    <a href="/de/" class="logo" aria-label="Vox.md-Startseite">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/de/#how">So funktioniert es</a></li>
+      <li><a href="/de/docs/">Dokumentation</a></li>
+      <li><a href="/de/blog/">Anleitungen</a></li>
+      <li><a href="/de/compare/">Vergleichen</a></li>
+      <li><a href="/de/privacy.html">Datenschutz</a></li>
+      <li><a href="/de/terms.html">Bedingungen</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_de_4113af33d28a">Vox.md laden</a>
+  <details class="language-switcher"><summary>Sprache</summary><ul><li><a href="/blog/transcribe-interview/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-interview/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-interview/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-interview/" lang="de" hreflang="de" aria-current="page">Deutsch</a></li><li><a href="/es/blog/transcribe-interview/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-interview/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-interview/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-interview/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-interview/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-interview/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-interview/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-interview/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-interview/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-interview/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-interview/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-interview/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-interview/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-interview/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-interview/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-interview/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-interview/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-interview/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-interview/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Interviews · Auf dem Gerät · Sprecherlabels</div>
+        <h1 class="hero-title">Ein Interview privat transkribieren, mit Sprecherlabels</h1>
+        <p class="hero-subtitle">Einwilligung, Aufnahme, Transkription und ein Prüfdurchgang, dazu eine Route auf dem Gerät, damit Audiodaten der Teilnehmenden nicht zu einem Transkriptionsdienst hochgeladen werden.</p>
+      </div>
+      <aside class="meta-card" aria-label="Über diese Anleitung">
+        <dl>
+          <div><dt>Von</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Aktualisiert</dt><dd><time datetime="2026-11-24">24. November 2026</time></dd></div>
+          <div><dt>Erfordert</dt><dd>Vox.md: iOS oder iPadOS 17.6+ oder macOS 14+ · heruntergeladenes Sprachmodell für Whisper oder Parakeet · beschreibbarer Zielordner</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Ein Interview privat transkribieren, mit Sprecherlabels">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Die kurze Antwort</div>
+        <p>Fünf Schritte: <strong>1) Einwilligung einholen</strong> und sage, wie die Audiodaten verarbeitet und gespeichert werden; <strong>2) deutlich aufnehmen</strong> zuerst mit einem Test; <strong>3) transkribieren</strong>; <strong>4) Text mit dem Audio abgleichen</strong>; <strong>5) Sprecher benennen und speichern</strong>. Du kannst alles auf deinem eigenen Gerät erledigen, mit Vox.md auf iPhone, iPad oder Mac, sodass die Aufnahme nicht zu einem Transkriptionsdienst hochgeladen wird. Sprecherlabels sind optional, anonym und nach bestem Bemühen vergeben („Sprecher 1“, „Sprecher 2“); du benennst sie von Hand um.</p>
+      </div>
+      <p>Die Methode funktioniert mit jedem Tool. Die Vox.md-Schritte folgen dem <a href="/de/docs/#models">Modelle</a> und <a href="/de/docs/#mac">Mac</a> -Dokumentation und dem ausgelieferten Verhalten der App. Externe Quellen sind dort verlinkt, wo sie verwendet werden, und die Beispielnotiz ist illustrativ, kein echtes Interview.</p>
+      <nav class="toc" aria-label="In dieser Anleitung"><div class="toc-title">In dieser Anleitung</div><ol>
+        <li><a href="#before-you-record">Vor der Aufnahme</a></li>
+        <li><a href="#verbatim-or-clean">Wörtlich oder bereinigt?</a></li>
+        <li><a href="#options">Wege zur Transkription</a></li>
+        <li><a href="#iphone">Persönlich auf dem iPhone oder iPad</a></li>
+        <li><a href="#mac">Auf dem Mac</a></li>
+        <li><a href="#review">Der Prüfdurchgang</a></li>
+        <li><a href="#troubleshooting">Fehlerbehebung</a></li>
+        <li><a href="#faq">Häufige Fragen</a></li>
+      </ol></nav>
+
+      <h2 id="before-you-record">Vor der Aufnahme</h2>
+      <p><strong>Einwilligung und Datenschutz.</strong> Sag der teilnehmenden Person, wie die Audiodaten verarbeitet und gespeichert werden, und hole ihr Einverständnis ein, bevor du aufnimmst. Der Leitfaden des Centre College <a href="https://library.centre.edu/oralhistories/standards">Leitfaden zur Oral History</a> sagt, Interviewende sollten sicherstellen, dass die Erzählenden freiwillig einwilligen, den Zweck des Interviews erklären und ihre Optionen klarmachen, einschließlich beschränktem Zugriff oder Anonymität. Prüfe auch die Vorgaben deiner Ethikkommission oder Datenrichtlinie: Viele fragen, wo die Audiodaten der Teilnehmenden verarbeitet und gespeichert werden, also lege deine Antwort vor dem ersten Interview fest.</p>
+      <p><strong>Aufnahmeaufbau.</strong> Der Leitfaden der Harvard Library <a href="https://guides.library.harvard.edu/c.php?g=796889&amp;p=10476360">Aufnahme und Transkription</a> -Leitfaden rät, zuerst Zeit in eine gute Audioaufnahme zu investieren, weil das die Transkription erleichtert. In der Praxis:</p>
+      <ul>
+        <li>Verwende wenn möglich ein Mikrofon pro Sprecher und sitze nah an jedem.</li>
+        <li>Wähle einen ruhigen Raum und schalte alles aus, was klingelt oder brummt.</li>
+        <li>Nimm vor dem eigentlichen Interview eine kurze Probe auf und höre sie dir an.</li>
+      </ul>
+
+      <h2 id="verbatim-or-clean">Wörtlich oder bereinigt?</h2>
+      <p>Lege den Stil fest, bevor du transkribierst, und behalte ihn im ganzen Projekt bei. Der Leitfaden des Centre College <a href="https://library.centre.edu/oralhistories/transcribing">Transkribieren</a> -Seite beschreibt wörtlich als Wort für Wort, einschließlich Fülllauten, Pausen, Unterbrechungen und Lachen, und sagt, Historiker bevorzugten es, weil es die meisten Nuancen festhält. „Bereinigt wörtlich“ und „bearbeitet“ sind gängige Bezeichnungen für leichtere Stile; die Tabelle zeigt, wie sie sich üblicherweise unterscheiden. Welchen Stil du brauchst, bestimmen dein Projekt, dein Verlag oder deine Ethikkommission.</p>
+      <p class="guide-table-hint">Wische die Tabelle auf einem kleinen Bildschirm zur Seite.</p>
+      <div class="guide-comparison" role="region" aria-label="Vergleich der Transkriptstile; auf kleinen Bildschirmen horizontal scrollen" tabindex="0">
+        <table class="comparison">
+          <caption>Gängige Transkriptstile</caption>
+          <thead><tr><th scope="col">Stil</th><th scope="col">Was erhalten bleibt</th><th scope="col">Typischer Einsatz</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Wörtlich</th><td>Alles Gesagte: Füllwörter, Fehlstarts, Pausen, Geräusche ohne Sprache</td><td>Oral History und Forschung, bei denen Wortlaut und Sprechweise Daten sind</td></tr>
+            <tr><th scope="row">Bereinigt wörtlich</th><td>Die gesprochenen Worte, ohne Füllwörter und Fehlstarts</td><td>Die meisten Interviewanalysen und Zitate, bei denen die Bedeutung wichtiger ist als die Sprechweise</td></tr>
+            <tr><th scope="row">Bearbeitet</th><td>Zum Lesen umformuliert: Grammatik geglättet, Passagen gekürzt</td><td>Veröffentlichungsentwürfe, nur mit Zustimmung der sprechenden Person, wo dein Projekt dies verlangt</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Die automatische Transkription trifft keine Stilentscheidung für dich. Du wendest ihn weiterhin im Prüfdurchgang an.</p>
+
+      <h2 id="options">Wege zur Transkription</h2>
+      <p>Die Tabelle vergleicht Kategorien, keine bestimmten Produkte, und nennt nur Dokumentiertes. Die Angaben zu Apples Sprachmemos stammen aus dem Apple-Support-Artikel <a href="https://support.apple.com/guide/voice-memos/vm4a03609f0d/mac">Eine Transkription in Sprachmemos auf dem Mac ansehen</a> und seinem <a href="https://support.apple.com/guide/iphone/view-a-transcription-iph00953a982/ios">iPhone-Seite</a>; prüfe sie für dein Gerät, deine Sprache und deine Region.</p>
+      <p class="guide-table-hint">Wische die Tabelle auf einem kleinen Bildschirm zur Seite.</p>
+      <div class="guide-comparison" role="region" aria-label="Vergleich der Optionen zur Interviewtranskription; auf kleinen Bildschirmen horizontal scrollen" tabindex="0">
+        <table class="comparison">
+          <caption>Optionen für die Interviewtranskription</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">Wo Audio verarbeitet wird</th><th scope="col">Sprecherbezeichnungen</th><th scope="col">Ausgabe</th><th scope="col">Kostenmodell</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Von Hand</th><td>Dein eigener Computer</td><td>Du tippst sie selbst</td><td>Jede Textdatei</td><td>Deine Zeit: Die <a href="https://www.nps.gov/articles/000/oral-history-resources-interview-transcribing.htm">US-Nationalparkverwaltung</a> nennt etwa 6–8 Stunden pro Stunde Aufnahme</td></tr>
+            <tr><th scope="row">Cloud-Transkriptionsdienste</th><td>Die Server des Anbieters; prüfe die Bedingungen jedes Anbieters</td><td>Je nach Dienst unterschiedlich</td><td>Je nach Dienst unterschiedlich</td><td>Je nach Dienst unterschiedlich</td></tr>
+            <tr><th scope="row">Apple-Sprachmemos-Transkripte</th><td>Auf den zitierten Seiten nicht dokumentiert</td><td>Auf den zitierten Seiten nicht dokumentiert</td><td>Text innerhalb von Sprachmemos; du kopierst ihn heraus</td><td>Teil des Betriebssystems</td></tr>
+            <tr><th scope="row">Vox.md</th><td>Auf deinem iPhone, iPad oder Mac</td><td>Optional, anonym, nach bestem Bemühen</td><td>Eine Markdown-Notiz in einem Ordner deiner Wahl</td><td>15 kostenlose Transkriptionsminuten und 10 erfolgreiche Zustellungen, danach eine einmalige lebenslange Freischaltung</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Wenn du nur schnell Text in Sprachmemos brauchst, nutze es; siehe <a href="/de/blog/transcribe-voice-memos-iphone/">Sprachmemos in Markdown transkribieren</a> um eine Aufnahme in eine Notiz zu bringen. Vox.md ist für den Fall, dass du das Transkript als einfache Datei möchtest, die dir gehört, mit einem Modell deiner Wahl auf dem Gerät und optionalen Sprecherlabels.</p>
+
+      <h2 id="iphone">Persönlich auf dem iPhone oder iPad</h2>
+      <ol>
+        <li><strong>Wähle ein Transkriptionsmodell.</strong> Automatisch bevorzugt Apple Speech auf einem unterstützten iOS-26-Gerät und in einer unterstützten Sprache. Du kannst stattdessen Whisper (Tiny bis Large v3 Turbo), Parakeet v2 (Englisch) oder Parakeet v3 (25 Sprachen) herunterladen. Das Herunterladen eines Modells ist deine Entscheidung und der einzige Netzwerkschritt. <a href="/de/compare/whisper-vs-parakeet/">Whisper vs. Parakeet</a> hilft dir bei der Wahl, und <a href="/de/blog/offline-transcription-iphone-markdown/">Offline-Transkription auf dem iPhone</a> beschreibt die Vorbereitung.</li>
+        <li><strong>Erstelle eine Route „Interviews“.</strong> Erstelle unter Einstellungen → Routen eine Route mit dem Namen Interviews. Wähle einen Zielordner (einen Obsidian-Vault oder einen Dateien-Ordner) und <strong>Neue Notiz</strong>, sodass jede Aufnahme zu einer eigenen Datei wird. Optional kannst du statisches Frontmatter hinzufügen, eines <code>key: value</code> pro Zeile, etwa <code>project: housing-study</code>. Die <a href="/de/blog/obsidian-properties-generator/">Properties-Generator</a> erstellt gültiges Frontmatter. Lass Teilnehmercodes aus den statischen Metadaten heraus, da diese für jede Notiz der Route gelten.</li>
+        <li><strong>Sprecher identifizieren aktivieren.</strong> Es ist eine optionale Einstellung für jede Route. Bei der ersten Nutzung bereitet es ein separates Sprechermodell vor, erledige das also vor dem Interview, nicht vor der teilnehmenden Person. Danach läuft es lokal. Die Open-Source- <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> -Bibliothek wird für die lokale Sprecherverarbeitung verwendet.</li>
+        <li><strong>Mache einen 30-Sekunden-Test mit zwei Stimmen.</strong> Nimm einen kurzen Austausch mit jemandem auf und prüfe, ob die Notiz im Zielordner ankommt und zwei Labels zeigt.</li>
+        <li><strong>Aufnehmen oder importieren.</strong> Nimm im Vox.md-Composer auf oder nutze die Importfunktion für eine vorhandene Audio- oder Videodatei. Wähle <strong>Zum Entwurf hinzufügen</strong> wenn du den Text lesen möchtest, bevor er zugestellt wird, oder <strong>Sofort senden</strong> damit sie nach Abschluss der Transkription zugestellt wird.</li>
+        <li><strong>In der Mediathek prüfen.</strong> Die Mediathek zeigt jede Aufnahme und, falls die Sprecheridentifizierung nicht laufen konnte, den Grund.</li>
+      </ol>
+      <p>Bei aktivierter Sprecheridentifizierung erhält jeder Redebeitrag im gespeicherten Text eine eigene Labelzeile, gefolgt vom Text dieses Beitrags in der nächsten Zeile; Beiträge werden durch eine Leerzeile getrennt:</p>
+<pre class="guide-code"><code>Speaker 1:
+Thanks for agreeing to talk with me today.
+
+Speaker 2:
+Happy to. Where would you like me to start?</code></pre>
+      <p>Labels sind anonym und nach bestem Bemühen vergeben. Vox.md erkennt Personen nicht anhand ihres Namens. Es ist auch für die Transkriptzustellung auf der Apple Watch und in der Mac-App verfügbar.</p>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">Probiere es mit einer kurzen Aufnahme aus.</h2>
+        <p>Das kostenlose Kontingent umfasst 15 Minuten Transkription und 10 erfolgreiche Zustellungen.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_de_4113af33d28a">Vox.md holen</a></p>
+      </section>
+
+      <h2 id="mac">Auf dem Mac</h2>
+      <ul>
+        <li><strong>Eine vorhandene Datei.</strong> Verwende <strong>Audio importieren…</strong> in Vox.md für Mac, das Audio- und Videodateien akzeptiert. Die Schritte stehen in <a href="/de/blog/transcribe-audio-file-mac/">Audiodatei auf dem Mac transkribieren</a>. Aktiviere Sprecher identifizieren in der Route für anonyme Labels.</li>
+        <li><strong>Ein Remote-Interview.</strong> Die Besprechungsaufnahme zeichnet das Audio einer App und dein Mikrofon als getrennte Spuren auf. Du erscheinst als „You“, und die Gegenseite wird als Remote-Sprecher bezeichnet; die Sprecheridentifizierung kann mehrere Remote-Stimmen weiter aufteilen. Die Einrichtung steht in <a href="/de/blog/transcribe-meetings-mac-obsidian/">Mac-Besprechungen in Obsidian transkribieren</a>. Sag Teilnehmenden aus der Ferne, dass du aufnimmst, wie im Schritt zur Einwilligung oben.</li>
+        <li><strong>Eine Untertiteldatei.</strong> Wenn Zoom oder Teams dir bereits eine .srt- oder .vtt-Datei geliefert hat, wandelt das Tool <a href="/de/blog/srt-vtt-to-text-markdown/">SRT- und VTT-Konverter</a> sie in deinem Browser in Text oder Markdown um.</li>
+      </ul>
+      <p>Der Verarbeitungsmodus Besprechungsnotizen existiert, strukturiert den Text aber zu Notizen um. Lass die Route für wörtliche Forschungstranskripte auf Original behalten.</p>
+
+      <h2 id="review">Der Prüfdurchgang</h2>
+      <p>Automatische Transkripte müssen geprüft werden. Der Leitfaden von Harvard sagt, dass man wie bei jedem automatisch erzeugten Transkript es manuell überarbeiten muss, und der Leitfaden des Centre College sagt, automatische Transkripte seien kein Ersatz für die Arbeit eines Menschen.</p>
+      <ol>
+        <li><strong>Noch einmal anhören</strong> in normaler oder langsamerer Geschwindigkeit beim Lesen und korrigiere Namen, Begriffe, Zahlen und Daten.</li>
+        <li><strong>Wende deinen Stil an</strong> aus der obigen Wahl zwischen wörtlich oder bereinigt.</li>
+        <li><strong>Sprecher umbenennen.</strong> Verwende Suchen und Ersetzen, um <code>Speaker 1</code> in deinen Interviewer-Code und <code>Speaker 2</code> in den Teilnehmercode um, zum Beispiel P03.</li>
+        <li><strong>Anonymisieren</strong> Namen, Orte und andere identifizierende Angaben, wie es deine Einwilligung und dein Datenplan verlangen.</li>
+        <li><strong>Original-Audio behalten</strong> gemäß deinem Datenplan.</li>
+      </ol>
+      <p>Eine fertige Notiz könnte so aussehen (erfundener Beispieltext):</p>
+<pre class="guide-code"><code>---
+participant: P03
+date: 2026-11-24
+consent: recorded
+---
+
+Interviewer:
+Thanks for agreeing to talk with me today.
+
+P03:
+Happy to. Where would you like me to start?</code></pre>
+
+      <h2 id="troubleshooting">Fehlerbehebung</h2>
+      <ul>
+        <li><strong>Keine Sprecherlabels.</strong> Das reine Transkript bleibt immer erhalten, und die Mediathek zeigt, warum die Identifizierung übersprungen wurde. Mögliche Gründe: keine Zeitinformationen im Transkript; Zeitangaben, die nicht das gesamte Transkript abdecken; keine unterscheidbaren Sprecher erkannt; Modellspeicher nicht verfügbar; das Modell konnte nicht vorbereitet werden; oder die Verarbeitung ist fehlgeschlagen. Prüfe, ob Sprecher identifizieren für die Route aktiviert ist und das Sprechermodell vorbereitet wurde.</li>
+        <li><strong>Sprecher falsch zusammengeführt oder getrennt.</strong> Nimm näher an jeder Stimme auf, verwende wenn möglich getrennte Mikrofone und korrigiere die Labels von Hand.</li>
+        <li><strong>Eine lange Aufnahme.</strong> Größere Modelle brauchen länger. Probiere zuerst ein kleineres Modell und lass das Gerät geladen.</li>
+        <li><strong>Eine Sprache, die Parakeet v2 nicht abdeckt.</strong> Parakeet v2 ist nur für Englisch. Verwende Parakeet v3 (25 Sprachen) oder Whisper; siehe <a href="/de/docs/#models">Modelle</a>.</li>
+        <li><strong>Kostenkontingent aufgebraucht.</strong> Es sind 15 Minuten Transkription und 10 erfolgreiche Zustellungen, danach eine einmalige Lifetime-Freischaltung. Maßgeblich ist der Preis im App Store.</li>
+      </ul>
+
+      <h2 id="faq">Häufige Fragen</h2>
+      <h3>Kann ich ein Interview offline transkribieren?</h3>
+      <p>Ja, sobald ein Modell vorbereitet ist. Modell-Downloads und die Vorbereitung des Sprechermodells brauchen einmalig eine Verbindung; danach läuft die Transkription auf dem Gerät. Siehe <a href="/de/blog/offline-transcription-iphone-markdown/">Offline-Transkription auf dem iPhone</a>.</p>
+      <h3>Lädt Vox.md meine Aufnahme hoch?</h3>
+      <p>Nein. Transkription und Sprecherlabels laufen auf deinem Gerät, und die Datei wird nur in den Ordner geschrieben, den du wählst. Wenn dieser Ordner synchronisiert wird (zum Beispiel iCloud Drive), hält der Synchronisierungsanbieter die Datei unter seinen eigenen Bedingungen. Siehe die <a href="/de/privacy.html">Datenschutzerklärung</a>.</p>
+      <h3>Kann es Sprecher namentlich erkennen?</h3>
+      <p>Nein. Labels sind anonym („Sprecher 1“, „Sprecher 2“) und nach bestem Bemühen vergeben. Du benennst sie selbst um.</p>
+      <h3>Wie lange dauert es, ein Interview von Hand zu transkribieren?</h3>
+      <p>Der Leitfaden des National Park Service <a href="https://www.nps.gov/articles/000/oral-history-resources-interview-transcribing.htm">Interviews transkribieren</a> -Seite nennt durchschnittlich 6–8 Stunden pro Stunde aufgezeichnetes Interview.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Transkribiere dein nächstes Interview auf deinem eigenen Gerät.</h2>
+        <p>Teste mit einem kurzen Interview im kostenlosen Kontingent von 15 Minuten Transkription und öffne dann die Markdown-Datei.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_de_4113af33d28a">Vox.md holen</a></p>
+      </section>
+      <nav class="toc" aria-label="Verwandte Anleitungen" id="related"><div class="toc-title">Weiter</div><ul>
+        <li><a href="/de/blog/transcribe-audio-file-mac/">Audiodatei auf dem Mac transkribieren</a></li>
+        <li><a href="/de/blog/transcribe-meetings-mac-obsidian/">Mac-Besprechungen in Obsidian transkribieren</a></li>
+        <li><a href="/de/blog/transcribe-voice-memos-iphone/">iPhone-Sprachmemos in Markdown transkribieren</a></li>
+        <li><a href="/de/blog/offline-transcription-iphone-markdown/">Offline-Transkription auf dem iPhone</a></li>
+        <li><a href="/de/compare/whisper-vs-parakeet/">Whisper vs. Parakeet</a></li>
+        <li><a href="/de/blog/obsidian-properties-generator/">Obsidian-Properties-Generator</a></li>
+        <li><a href="/de/blog/srt-vtt-to-text-markdown/">SRT und VTT in Text oder Markdown</a></li>
+        <li><a href="/de/docs/">Dokumentation</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/de/">Startseite</a></li>
+        <li><a href="/de/docs/">Dokumentation</a></li>
+        <li><a href="/de/blog/">Anleitungen</a></li>
+        <li><a href="/de/compare/">Vergleichen</a></li>
+        <li><a href="/de/privacy.html">Datenschutz</a></li>
+        <li><a href="/de/terms.html">Bedingungen</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Unterstützung</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_de_4113af33d28a">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Schnellerfassung für lokale Notizen · Keine Inhaltsuploads.</div>
+    </div>
+  <details class="language-switcher"><summary>Sprache</summary><ul><li><a href="/blog/transcribe-interview/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-interview/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-interview/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-interview/" lang="de" hreflang="de" aria-current="page">Deutsch</a></li><li><a href="/es/blog/transcribe-interview/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-interview/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-interview/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-interview/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-interview/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-interview/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-interview/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-interview/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-interview/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-interview/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-interview/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-interview/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-interview/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-interview/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-interview/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-interview/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-interview/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-interview/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-interview/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
