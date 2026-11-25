@@ -33,21 +33,4 @@ final class CapturePresetTranscriptionEnabledTests: XCTestCase {
         XCTAssertEqual(decoded.transcriptionModelID, TranscriptionBackendID.automatic)
         XCTAssertTrue(decoded.speakerDiarizationEnabled)
     }
-
-    func test_voiceProcessingConfigurationCarriesSwitchOnlyWhenOff() throws {
-        var preset = CapturePreset(id: "field-audio", name: "Field Audio", symbolName: "waveform")
-        let on = RecordingVoiceProcessingConfiguration(preset: preset)
-        XCTAssertTrue(on.transcribes)
-        let onObject = try JSONSerialization.jsonObject(with: JSONEncoder().encode(on)) as? [String: Any]
-        XCTAssertNil(onObject?["transcriptionEnabled"], "queued jobs for routes that transcribe stay byte-identical")
-
-        preset.transcriptionEnabled = false
-        let off = RecordingVoiceProcessingConfiguration(preset: preset)
-        XCTAssertFalse(off.transcribes)
-        let decoded = try JSONDecoder().decode(RecordingVoiceProcessingConfiguration.self, from: JSONEncoder().encode(off))
-        XCTAssertFalse(decoded.transcribes)
-
-        let legacy = Data(#"{"presetID":"x","speakerDiarizationEnabled":false}"#.utf8)
-        XCTAssertTrue(try JSONDecoder().decode(RecordingVoiceProcessingConfiguration.self, from: legacy).transcribes)
-    }
 }

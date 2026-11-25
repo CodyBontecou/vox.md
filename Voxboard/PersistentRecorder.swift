@@ -328,7 +328,7 @@ final class PersistentRecorder {
         Self.segmentTranscribes(
             completionMode: segmentCompletionMode,
             presetSnapshot: segmentPresetSnapshot,
-            voiceProcessingConfiguration: segmentVoiceProcessingConfiguration
+            draftRoute: Self.draftRoute(for: segmentVoiceProcessingConfiguration)
         )
     }
 
@@ -1857,7 +1857,7 @@ final class PersistentRecorder {
            !Self.segmentTranscribes(
                completionMode: segmentCompletionMode,
                presetSnapshot: segmentPresetSnapshot,
-               voiceProcessingConfiguration: segmentVoiceProcessingConfiguration
+               draftRoute: Self.draftRoute(for: segmentVoiceProcessingConfiguration)
            ) {
             return
         }
@@ -3368,16 +3368,22 @@ final class PersistentRecorder {
     nonisolated static func segmentTranscribes(
         completionMode: RecordingCompletionMode?,
         presetSnapshot: CapturePreset?,
-        voiceProcessingConfiguration: RecordingVoiceProcessingConfiguration? = nil
+        draftRoute: CapturePreset? = nil
     ) -> Bool {
         switch completionMode {
         case .runVox:
             return presetSnapshot?.transcriptionEnabled ?? true
         case .captureDraft(attachAudio: true):
-            return voiceProcessingConfiguration?.transcribes ?? true
+            return draftRoute?.transcriptionEnabled ?? true
         case .captureDraft(attachAudio: false), .keyboardTranscription, nil:
             return true
         }
+    }
+
+    /// The route a draft recording belongs to, from the voice policy the job
+    /// froze at record time. A draft's route can't change while it processes.
+    static func draftRoute(for configuration: RecordingVoiceProcessingConfiguration?) -> CapturePreset? {
+        configuration.flatMap { CapturePresetStore.flow(id: $0.presetID) }
     }
 
     /// The empty result an audio-only take is delivered with: no speech
@@ -3670,7 +3676,7 @@ final class PersistentRecorder {
         let skipsRecognition = deliversAudioWithoutTranscript && !Self.segmentTranscribes(
             completionMode: completionMode,
             presetSnapshot: selectedFlow,
-            voiceProcessingConfiguration: effectiveVoiceProcessingConfiguration
+            draftRoute: Self.draftRoute(for: effectiveVoiceProcessingConfiguration)
         )
         let result: OnDeviceTranscriptionResult
         do {

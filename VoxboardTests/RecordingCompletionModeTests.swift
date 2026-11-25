@@ -323,12 +323,11 @@ final class RouteTranscriptionSwitchTests: XCTestCase {
     }
 
     func test_dictationModesAlwaysTranscribe() {
-        let off = RecordingVoiceProcessingConfiguration(preset: preset(transcribing: false))
         for mode: RecordingCompletionMode in [.keyboardTranscription, .captureDraft(attachAudio: false)] {
             XCTAssertTrue(PersistentRecorder.segmentTranscribes(
                 completionMode: mode,
                 presetSnapshot: preset(transcribing: false),
-                voiceProcessingConfiguration: off
+                draftRoute: preset(transcribing: false)
             ), "\(mode)")
         }
     }
@@ -337,17 +336,17 @@ final class RouteTranscriptionSwitchTests: XCTestCase {
         XCTAssertFalse(PersistentRecorder.segmentTranscribes(
             completionMode: .captureDraft(attachAudio: true),
             presetSnapshot: nil,
-            voiceProcessingConfiguration: RecordingVoiceProcessingConfiguration(preset: preset(transcribing: false))
+            draftRoute: preset(transcribing: false)
         ))
         XCTAssertTrue(PersistentRecorder.segmentTranscribes(
             completionMode: .captureDraft(attachAudio: true),
             presetSnapshot: nil,
-            voiceProcessingConfiguration: RecordingVoiceProcessingConfiguration(preset: preset(transcribing: true))
+            draftRoute: preset(transcribing: true)
         ))
         XCTAssertTrue(PersistentRecorder.segmentTranscribes(
             completionMode: .captureDraft(attachAudio: true),
             presetSnapshot: nil,
-            voiceProcessingConfiguration: nil
+            draftRoute: nil
         ))
     }
 
