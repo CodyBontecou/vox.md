@@ -14,6 +14,10 @@
 #   capture hardware) with a DEBUG build of Vox.md; Recording Quality =
 #   Lossless, layout Mono; built-in microphone, no headset; Keyboard Listening
 #   off; English UI (summary checks match English text).
+# The note must show the take with the audio player
+#   (markdown_audio_embed_play), not an empty video box.
+#   Channel check (not readable here): the log's "[SpatialAudio] Signal check"
+#   and "Take channels" lines must say "FOA multichannel".
 # Side effects: adds a ~13 s .mp4 recording (no transcript in a quiet room) to
 #   the current note of the default route. Restores layout Mono at the end.
 # Selectors: ids, plus the fixed "Speak" label, the "Recording, 00:08" timer
@@ -92,6 +96,14 @@ steps:
     args:
       condition: visible
       selector:
+        text: .mp4
+      timeoutMs: 20000
+  - echo: The spatial .mp4 has no video track, so the note shows the audio player (PR #151)
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: markdown_audio_embed_play
         text: .mp4
       timeoutMs: 20000
   - echo: Restore Mono (the layout this test started from)

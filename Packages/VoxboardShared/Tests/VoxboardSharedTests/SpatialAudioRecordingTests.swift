@@ -378,7 +378,14 @@ final class SpatialAudioRecordingTests: XCTestCase {
     func test_spatialFileIsAudioOnlyMedia() throws {
         let url = try writeSpatialTake(.high, seconds: 0.5, metadata: FakeSpatialMetadata())
         XCTAssertTrue(MediaFileTracks.isAudioOnly(url))
-        XCTAssertFalse(MediaFileTracks.isAudioOnly(url.deletingLastPathComponent().appendingPathComponent("missing.mp4")))
+        let missing = url.deletingLastPathComponent().appendingPathComponent("missing.mp4")
+        XCTAssertFalse(MediaFileTracks.isAudioOnly(missing))
+        XCTAssertEqual(MediaFileTracks.contents(of: missing), .unreadable)
+        // A file still being copied into the vault (truncated) is unreadable,
+        // not video, so the note asks again instead of showing a video box.
+        let partial = url.deletingLastPathComponent().appendingPathComponent("partial-\(UUID().uuidString).mp4")
+        try Data(try Data(contentsOf: url).prefix(512)).write(to: partial)
+        XCTAssertEqual(MediaFileTracks.contents(of: partial), .unreadable)
     }
 
     // MARK: Channel activity (PR #151: FOA with only W, dual-mono stereo)

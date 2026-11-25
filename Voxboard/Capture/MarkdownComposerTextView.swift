@@ -624,18 +624,46 @@ final class MarkdownComposerUITextView: UITextView {
 
     /// A video embed whose file has only audio (a Spatial Audio `.mp4`)
     /// gets the audio player instead of an empty video box.
+    /// A take's embed line is written before its file finishes copying into
+    /// the vault, so a file that can't be read yet is checked again shortly.
     private func displayKind(for embed: MarkdownRichBlocks.Embed) -> MarkdownRichBlocks.EmbedKind {
         guard embed.kind == .video, let url = resolveEmbedURL?(embed.target) else { return embed.kind }
         let modified = (try? url.resourceValues(forKeys: [.contentModificationDateKey]))?
             .contentModificationDate?.timeIntervalSince1970
-        guard let modified else { return embed.kind } // not there (yet)
-        let key = "\(url.path)#\(modified)"
-        let audioOnly = audioOnlyMedia[key] ?? {
-            let answer = MediaFileTracks.isAudioOnly(url)
-            audioOnlyMedia[key] = answer
-            return answer
-        }()
-        return audioOnly ? .audio : .video
+        if let modified {
+            let key = "\(url.path)#\(modified)"
+            if let audioOnly = audioOnlyMedia[key] { return audioOnly ? .audio : .video }
+            switch MediaFileTracks.contents(of: url) {
+            case .audioOnly:
+                audioOnlyMedia[key] = true
+                return .audio
+            case .video:
+                audioOnlyMedia[key] = false
+                return .video
+            case .unreadable:
+                break
+            }
+        }
+        scheduleMediaRecheck(for: url.path)
+        return embed.kind
+    }
+
+    private var mediaRechecks: [String: Int] = [:]
+    private var mediaRecheckPending = false
+
+    /// Re-lays out the blocks every 0.5 s while a media file is unreadable,
+    /// for up to 30 s per file.
+    private func scheduleMediaRecheck(for path: String) {
+        let attempts = mediaRechecks[path, default: 0]
+        guard attempts < 60 else { return }
+        mediaRechecks[path] = attempts + 1
+        guard !mediaRecheckPending else { return }
+        mediaRecheckPending = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self else { return }
+            self.mediaRecheckPending = false
+            self.restyleMarkdown()
+        }
     }
 
     private func blockIsRevealed(_ range: NSRange) -> Bool {

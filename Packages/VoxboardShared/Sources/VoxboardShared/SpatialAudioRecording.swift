@@ -175,8 +175,21 @@ public enum MediaFileTracks {
     /// `.mp4`: it gets the audio player, not an empty video box (PR #151).
     /// False when it can't be read (missing, not downloaded yet).
     public static func isAudioOnly(_ url: URL) -> Bool {
+        contents(of: url) == .audioOnly
+    }
+
+    public enum Contents: Equatable, Sendable {
+        case audioOnly
+        case video
+        /// Missing, still being written, or not downloaded: ask again later.
+        case unreadable
+    }
+
+    public static func contents(of url: URL) -> Contents {
         let asset = AVURLAsset(url: url)
-        return !asset.tracks(withMediaType: .audio).isEmpty && asset.tracks(withMediaType: .video).isEmpty
+        guard asset.isReadable else { return .unreadable }
+        if !asset.tracks(withMediaType: .video).isEmpty { return .video }
+        return asset.tracks(withMediaType: .audio).isEmpty ? .unreadable : .audioOnly
     }
 }
 
