@@ -41,6 +41,61 @@ final class RecordingDraftDeliveryTests: XCTestCase {
         XCTAssertEqual(stagedFiles.count, 1)
     }
 
+    func testStagedRecordingUsesTheRouteAudioFilenameTemplate() async throws {
+        let fixture = try RecordingDraftFixture()
+        defer { fixture.cleanup() }
+        let suiteName = "RecordingDraftDeliveryTests-\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suiteName))
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let routes = CapturePresetStore.loadFlows(defaults: defaults).map { route in
+            var route = route
+            route.audioFilenameTemplate = "take-{id8}"
+            return route
+        }
+        CapturePresetStore.saveFlows(routes, defaults: defaults, widgetRefresh: .disabled)
+        let deliveryID = try XCTUnwrap(UUID(uuidString: "ABCDEF12-3456-7890-ABCD-EF1234567890"))
+        let viewModel = QuickCaptureViewModel(captureRootURL: fixture.rootURL, defaults: defaults)
+        await viewModel.load()
+
+        let staged = await viewModel.stageRecordedAudio(
+            at: try fixture.makeAudio(),
+            deliveryID: deliveryID
+        )
+
+        XCTAssertEqual(try XCTUnwrap(staged).originalFilename, "take-abcdef12.wav")
+        // A second take with the same rendered name gets the stager's
+        // collision suffix instead of replacing the first.
+        let second = await viewModel.stageRecordedAudio(
+            at: try fixture.makeAudio(),
+            deliveryID: try XCTUnwrap(UUID(uuidString: "ABCDEF12-0000-0000-0000-000000000000"))
+        )
+        XCTAssertNotEqual(try XCTUnwrap(second).originalFilename, "take-abcdef12.wav")
+    }
+
+    func testRecordedAudioFilenameFallsBackWithoutATemplate() throws {
+        let deliveryID = UUID()
+        let route = CapturePreset(id: "plain", name: "Plain", symbolName: "mic")
+
+        XCTAssertEqual(
+            QuickCaptureViewModel.recordedAudioFilename(
+                route: route,
+                deliveryID: deliveryID,
+                sourceFilename: "kept.m4a",
+                sourceExtension: "m4a"
+            ),
+            "Recording-\(deliveryID.uuidString.lowercased()).m4a"
+        )
+        XCTAssertEqual(
+            QuickCaptureViewModel.recordedAudioFilename(
+                route: nil,
+                deliveryID: deliveryID,
+                sourceFilename: "kept.m4a",
+                sourceExtension: "m4a"
+            ),
+            "Recording-\(deliveryID.uuidString.lowercased()).m4a"
+        )
+    }
+
     func testMissingReceiptAssetCannotReportFalseDeliverySuccess() async throws {
         let fixture = try RecordingDraftFixture()
         defer { fixture.cleanup() }

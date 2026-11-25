@@ -142,6 +142,38 @@ final class CapturePresetAudioFilenameTests: XCTestCase {
         ))
     }
 
+    func test_routeFilenameUsesTheRouteTemplateNameAndIdentity() throws {
+        let route = CapturePreset(
+            id: "daily",
+            name: "Daily Notes",
+            symbolName: "mic",
+            audioFilenameTemplate: "{preset}_{id8}_{original}"
+        )
+
+        XCTAssertEqual(
+            CapturePresetAudioFilename.preferredFilename(
+                for: route,
+                identifier: "ABCDEF12-3456-7890-ABCD-EF1234567890",
+                createdAt: Date(timeIntervalSince1970: 0),
+                originalFilename: "kept_take.mp4",
+                sourceExtension: "mp4"
+            ),
+            "Daily-Notes_abcdef12_kept_take.mp4"
+        )
+    }
+
+    func test_routeFilenameIsNilWithoutATemplate() {
+        let route = CapturePreset(id: "plain", name: "Plain", symbolName: "mic")
+
+        XCTAssertNil(CapturePresetAudioFilename.preferredFilename(
+            for: route,
+            identifier: UUID().uuidString,
+            createdAt: Date(),
+            originalFilename: "take.m4a",
+            sourceExtension: "m4a"
+        ))
+    }
+
     private func makeContext(timeZone: TimeZone) -> CapturePresetAudioFilenameContext {
         var calendar = Calendar(identifier: .gregorian)
         calendar.locale = Locale(identifier: "en_US_POSIX")

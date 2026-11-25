@@ -79,6 +79,30 @@ public enum CapturePresetAudioFilename {
         return pathExtension.isEmpty ? baseName : "\(baseName).\(pathExtension)"
     }
 
+    /// The filename a Route's Audio Filename Template gives one recording, or
+    /// nil when the Route has no template (callers keep their legacy name).
+    /// Every place that names Capture audio goes through here: the transcript
+    /// and recording exporters, and the composer when it stages a recording.
+    public static func preferredFilename(
+        for flow: CapturePreset,
+        identifier: String,
+        createdAt: Date,
+        originalFilename: String,
+        sourceExtension: String,
+        context: CapturePresetAudioFilenameContext? = nil
+    ) -> String? {
+        preferredFilename(
+            template: flow.audioFilenameTemplate,
+            context: context ?? CapturePresetAudioFilenameContext(
+                identifier: identifier,
+                createdAt: createdAt,
+                presetName: flow.visibleName ?? "",
+                originalFilename: originalFilename
+            ),
+            sourceExtension: sourceExtension
+        )
+    }
+
     static func renderedFilenameBase(
         template: String,
         context: CapturePresetAudioFilenameContext,

@@ -1118,8 +1118,12 @@ final class QuickCaptureViewModel {
             let contentType = UTType(filenameExtension: sourceExtension)?.identifier ?? UTType.audio.identifier
             let asset = try await stager.stageCopy(
                 from: sourceURL,
-                preferredFilename: deliveryID.map { "Recording-\($0.uuidString.lowercased()).\(sourceExtension)" }
-                    ?? "Recording-\(Self.captureFilenameTimestamp()).\(sourceExtension)",
+                preferredFilename: Self.recordedAudioFilename(
+                    route: recordedAudioRoute(),
+                    deliveryID: deliveryID,
+                    sourceFilename: sourceURL.lastPathComponent,
+                    sourceExtension: sourceExtension
+                ),
                 contentTypeIdentifier: contentType
             )
             stagedAsset = asset
@@ -2687,6 +2691,38 @@ final class QuickCaptureViewModel {
         default:
             return .fileWrite
         }
+    }
+
+    /// The Route this draft delivers to, for naming its recordings.
+    private func recordedAudioRoute() -> CapturePreset? {
+        guard let routeID = (draft.voxProfileSnapshot ?? selectedVoxProfile)?.id else { return nil }
+        return CapturePresetStore.loadFlows(defaults: defaults, persistMigrations: false)
+            .first { $0.id == routeID }
+    }
+
+    /// The staged name of a recording made from the composer: the Route's
+    /// Audio Filename Template when it has one (the same rendering the
+    /// exporters use), else `Recording-<delivery id>`. The stager and the
+    /// vault write resolve name collisions as they do for every other asset.
+    nonisolated static func recordedAudioFilename(
+        route: CapturePreset?,
+        deliveryID: UUID?,
+        sourceFilename: String,
+        sourceExtension: String,
+        now: Date = Date()
+    ) -> String {
+        if let route,
+           let templated = CapturePresetAudioFilename.preferredFilename(
+               for: route,
+               identifier: (deliveryID ?? UUID()).uuidString,
+               createdAt: now,
+               originalFilename: sourceFilename,
+               sourceExtension: sourceExtension
+           ) {
+            return templated
+        }
+        return deliveryID.map { "Recording-\($0.uuidString.lowercased()).\(sourceExtension)" }
+            ?? "Recording-\(captureFilenameTimestamp()).\(sourceExtension)"
     }
 
     nonisolated private static func captureFilenameTimestamp() -> String {
