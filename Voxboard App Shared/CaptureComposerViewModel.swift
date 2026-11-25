@@ -1118,8 +1118,13 @@ final class QuickCaptureViewModel {
             let contentType = UTType(filenameExtension: sourceExtension)?.identifier ?? UTType.audio.identifier
             let asset = try await stager.stageCopy(
                 from: sourceURL,
-                preferredFilename: deliveryID.map { "Recording-\($0.uuidString.lowercased()).\(sourceExtension)" }
-                    ?? "Recording-\(Self.captureFilenameTimestamp()).\(sourceExtension)",
+                preferredFilename: recordedAudioFilename(
+                    sourceURL: sourceURL,
+                    sourceExtension: sourceExtension,
+                    identifier: deliveryID,
+                    legacyFilename: deliveryID.map { "Recording-\($0.uuidString.lowercased()).\(sourceExtension)" }
+                        ?? "Recording-\(Self.captureFilenameTimestamp()).\(sourceExtension)"
+                ),
                 contentTypeIdentifier: contentType
             )
             stagedAsset = asset
@@ -1460,7 +1465,12 @@ final class QuickCaptureViewModel {
         var stagedAsset: CaptureAssetReference?
         do {
             try Task.checkCancellation()
-            let filename = "Recording-\(Self.captureFilenameTimestamp()).m4a"
+            let filename = recordedAudioFilename(
+                sourceURL: sourceURL,
+                sourceExtension: "m4a",
+                identifier: nil,
+                legacyFilename: "Recording-\(Self.captureFilenameTimestamp()).m4a"
+            )
             let asset = try await stager.stageCopy(
                 from: sourceURL,
                 preferredFilename: filename,
@@ -2687,6 +2697,34 @@ final class QuickCaptureViewModel {
         default:
             return .fileWrite
         }
+    }
+
+    /// Names composer-recorded audio with the delivering Route's Audio
+    /// Filename Template, rendered by the same `CapturePresetAudioFilename`
+    /// the exporters use. Routes without a template keep the legacy name.
+    /// Collisions are resolved by the stager and the capture pipeline.
+    private func recordedAudioFilename(
+        sourceURL: URL,
+        sourceExtension: String,
+        identifier: UUID?,
+        createdAt: Date = Date(),
+        legacyFilename: String
+    ) -> String {
+        guard let presetID = selectedVoxProfile?.id,
+              let preset = CapturePresetStore.loadFlows(defaults: defaults)
+                .first(where: { $0.id == presetID }) else {
+            return legacyFilename
+        }
+        return CapturePresetAudioFilename.preferredFilename(
+            template: preset.audioFilenameTemplate,
+            context: CapturePresetAudioFilenameContext(
+                identifier: (identifier ?? UUID()).uuidString,
+                createdAt: createdAt,
+                presetName: preset.visibleName ?? "",
+                originalFilename: sourceURL.lastPathComponent
+            ),
+            sourceExtension: sourceExtension
+        ) ?? legacyFilename
     }
 
     nonisolated private static func captureFilenameTimestamp() -> String {
