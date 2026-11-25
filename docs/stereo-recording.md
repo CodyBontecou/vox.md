@@ -113,11 +113,26 @@ mid-take, and nothing on the simulator could prove coexistence.
 - Only for a one-shot take that keeps its audio and starts listening fresh
   (same rule as Stereo). Keyboard Listening, dictation and continuous
   dictation stay on the mono engine.
-- The capture session uses the app's audio session and, by default, doesn't
-  reconfigure it (`automaticallyConfiguresApplicationAudioSession = false`),
-  so category, options and the per-take re-assert stay as they are. For a
-  device test, `-VoxSpatialAutoConfiguresSession YES` lets it configure the
-  session itself.
+- Session setup, tried in order (`SpatialAudioRecording.sessionSetupAttempts`):
+  1. The capture session configures the app's audio session itself
+     (`automaticallyConfiguresApplicationAudioSession = true`). That is what
+     selects the built-in mic array for FOA. The per-take re-assert then only
+     re-activates the session and leaves the category alone.
+  2. The app's own session, with the built-in mics' stereo polar pattern
+     selected first.
+  3. Engine Stereo (then mono) with the "Recording in stereo: Spatial Audio
+     couldn't start." notice.
+
+  3.0.5 used only the app's plain session, and the mics stayed in their
+  single-mic setup. RazorII's takes on an iPhone 17 Pro (PR #151) had FOA
+  with only W carrying signal (Y, Z, X all zero) and a dual-mono stereo
+  track. `-VoxSpatialAutoConfiguresSession YES|NO` tries only one setup.
+- Signal check: after the first 4-ch and 2-ch buffers, `start` listens up to
+  0.6 s (`SpatialChannelActivity`). If W has signal and Y, Z, X are more than
+  60 dB below it, that setup is refused and the next one is tried. A silent
+  room can't be judged and starts anyway. Every take logs
+  `[SpatialAudio] Take channels: FOA … stereo …` with per-channel peaks, so a
+  collapsed take shows in the log.
 - Two `AVCaptureAudioDataOutput`s on the mic input with
   `multichannelAudioMode = .firstOrderAmbisonics`: FOA
   (`HOA_ACN_SN3D | 4`) and stereo.
@@ -163,9 +178,10 @@ pick the enabled FOA track.
 - Transcription copy: `KeptAudioInspector.makeTranscriptionCopy` reads the
   stereo track with AVAssetReader and averages it to 16 kHz mono.
 - Export to the vault copies the bytes and keeps `.mp4`
-  (`shouldPreserveEncoding`, `exportFileExtension`). Markdown embeds an `.mp4`
-  as a video-style player in the app (AVPlayer); in-app audio players play the
-  stereo track.
+  (`shouldPreserveEncoding`, `exportFileExtension`). In a note, an `.mp4` or
+  `.mov` embed with no video track (`MediaFileTracks.isAudioOnly`) gets the
+  audio player, which plays the stereo track. Files with video keep the video
+  player.
 - Recovery: a claimed `kept_….mp4` recovers as one job and gets the downmixed
   copy (`isKeptMultichannelRecording`).
 - Pauses are cut out of the file (later buffers are shifted back).
@@ -182,8 +198,11 @@ Nothing here could run on the simulator. On a supported iPhone with iOS 26+:
    `Take finished: saved, … metadata=true`.
 3. `afinfo` / `mediainfo` the kept `.mp4`: a 2-ch AAC track (disabled) and a
    4-ch APAC track. Play it in Files and Photos/QuickTime with AirPods Pro and
-   listen for spatial rendering. If FOA never starts, retry with
-   `-VoxSpatialAutoConfiguresSession YES`.
+   listen for spatial rendering. Check the log's `Signal check` and
+   `Take channels` lines: FOA `multichannel`, with Y/Z/X peaks near W's. To
+   check a file, this prints `RMS level dB: -inf` when left and right are
+   identical:
+   `ffmpeg -i Recording.mp4 -map 0:0 -af "pan=mono|c0=c0-c1,astats=measure_perchannel=none" -f null - 2>&1 | grep "RMS level"`
 4. Transcript A/B against a Stereo take of the same speech.
 5. Connect AirPods and record: expect Spatial capture from the built-in mics
    and a saved `.mp4`, with AirPods still the output

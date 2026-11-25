@@ -375,6 +375,57 @@ final class SpatialAudioRecordingTests: XCTestCase {
         return try XCTUnwrap(result.url, "\(String(describing: writer.error))")
     }
 
+    func test_spatialFileIsAudioOnlyMedia() throws {
+        let url = try writeSpatialTake(.high, seconds: 0.5, metadata: FakeSpatialMetadata())
+        XCTAssertTrue(MediaFileTracks.isAudioOnly(url))
+        XCTAssertFalse(MediaFileTracks.isAudioOnly(url.deletingLastPathComponent().appendingPathComponent("missing.mp4")))
+    }
+
+    // MARK: Channel activity (PR #151: FOA with only W, dual-mono stereo)
+
+    private func activity(channels: Int, buffers: Int = 10, left: Float, right: Float) throws -> SpatialChannelActivity {
+        var activity = SpatialChannelActivity(channelCount: channels)
+        for index in 0..<buffers {
+            activity.add(try makeBuffer(channels: channels, start: Int64(index * 960), left: left, right: right))
+        }
+        return activity
+    }
+
+    func test_channelActivity_foaWithOnlyWIsCollapsed() throws {
+        let foa = try activity(channels: 4, left: 0.5, right: 0)
+        XCTAssertEqual(foa.verdict(minimumSignalFrames: 4_800), .collapsed)
+        XCTAssertTrue(foa.summary.contains("-inf"), foa.summary)
+    }
+
+    func test_channelActivity_foaWithDirectionalSignalIsMultichannel() throws {
+        let foa = try activity(channels: 4, left: 0.5, right: 0.1)
+        XCTAssertEqual(foa.verdict(minimumSignalFrames: 4_800), .multichannel)
+    }
+
+    func test_channelActivity_dualMonoStereoIsCollapsed() throws {
+        XCTAssertEqual(try activity(channels: 2, left: 0.4, right: 0.4).verdict(minimumSignalFrames: 4_800), .collapsed)
+        XCTAssertEqual(try activity(channels: 2, left: 0.4, right: 0.2).verdict(minimumSignalFrames: 4_800), .multichannel)
+    }
+
+    func test_channelActivity_silenceOrTooLittleAudioIsUndetermined() throws {
+        XCTAssertEqual(try activity(channels: 4, left: 0, right: 0).verdict(minimumSignalFrames: 4_800), .undetermined)
+        // 2 buffers = 1,920 frames with signal: not enough to judge.
+        XCTAssertEqual(try activity(channels: 4, buffers: 2, left: 0.5, right: 0).verdict(minimumSignalFrames: 4_800), .undetermined)
+    }
+
+    func test_channelActivity_quietBuffersDoNotCount() throws {
+        var foa = SpatialChannelActivity(channelCount: 4)
+        // Quiet start (W below the floor, directional louder) is ignored.
+        for index in 0..<10 {
+            foa.add(try makeBuffer(channels: 4, start: Int64(index * 960), left: 0.00001, right: 0.00005))
+        }
+        XCTAssertEqual(foa.signalFrames, 0)
+        for index in 10..<20 {
+            foa.add(try makeBuffer(channels: 4, start: Int64(index * 960), left: 0.5, right: 0))
+        }
+        XCTAssertEqual(foa.verdict(minimumSignalFrames: 4_800), .collapsed)
+    }
+
     /// 20 ms of interleaved Float32 at 48 kHz: a 440 Hz tone, channel 0 at
     /// `left`, every other channel at `right`.
     private func makeBuffer(

@@ -51,6 +51,7 @@ final class SpatialAudioCaptureTests: XCTestCase {
         var interruptions: [String] = []
         let result = SpatialAudioRecording.start(
             preRollSeconds: 4,
+            autoConfiguresSession: true,
             onTranscriptionSamples: { samples += $0.count },
             onInterruption: { interruptions.append($0) }
         )
@@ -59,6 +60,19 @@ final class SpatialAudioCaptureTests: XCTestCase {
         }
         XCTAssertFalse(failure.description.isEmpty)
         XCTAssertTrue(interruptions.isEmpty)
+    }
+
+    func testSessionSetupAttempts_captureSessionFirstThenAppSession() throws {
+        let suite = "SpatialAudioCaptureTests.\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+        // PR #151: the app's plain session gave FOA with only W, so the
+        // capture session's own setup is tried first.
+        XCTAssertEqual(SpatialAudioRecording.sessionSetupAttempts(defaults: defaults), [true, false])
+        defaults.set(false, forKey: SpatialAudioRecording.autoConfiguresSessionKey)
+        XCTAssertEqual(SpatialAudioRecording.sessionSetupAttempts(defaults: defaults), [false])
+        defaults.set(true, forKey: SpatialAudioRecording.autoConfiguresSessionKey)
+        XCTAssertEqual(SpatialAudioRecording.sessionSetupAttempts(defaults: defaults), [true])
     }
 
     func testSettingsShowTheEffectiveLayout() {

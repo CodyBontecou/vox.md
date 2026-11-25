@@ -94,17 +94,29 @@ enum SpatialAudioRecording {
         var description: String
     }
 
-    /// Debug knob for device testing: `-VoxSpatialAutoConfiguresSession YES`
-    /// lets the capture session configure the app's audio session itself.
-    /// Off by default so the recorder keeps owning the session (category,
-    /// options and the per-take re-assert stay as they are).
+    /// Device-testing override: `-VoxSpatialAutoConfiguresSession YES|NO`
+    /// tries only that session setup. Unset, both are tried in order.
     static let autoConfiguresSessionKey = "VoxSpatialAutoConfiguresSession"
+
+    /// Session setups to try, in order. `true`: the capture session sets up
+    /// the app's audio session itself, which is what picks the built-in mic
+    /// array for FOA (Apple's own setup; WWDC25 251). `false`: the app's
+    /// session with the stereo polar pattern applied first. With the app's
+    /// plain session the mics stay in their single-mic setup, and 3.0.5
+    /// recorded FOA with only W and dual-mono stereo (PR #151, RazorII).
+    static func sessionSetupAttempts(defaults: UserDefaults = .standard) -> [Bool] {
+        if defaults.object(forKey: autoConfiguresSessionKey) != nil {
+            return [defaults.bool(forKey: autoConfiguresSessionKey)]
+        }
+        return [true, false]
+    }
 
     /// Starts spatial capture. `onTranscriptionSamples` gets 16 kHz mono
     /// Float32 on the capture queue, like the engine tap's converted output.
     /// `onInterruption` runs on the main queue when capture stops on its own.
     static func start(
         preRollSeconds: TimeInterval,
+        autoConfiguresSession: Bool,
         onTranscriptionSamples: @escaping (UnsafeBufferPointer<Float>) -> Void,
         onInterruption: @escaping (String) -> Void
     ) -> Result<SpatialTakeRecording, StartFailure> {
@@ -123,9 +135,7 @@ enum SpatialAudioRecording {
             onInterruption: onInterruption
         )
         do {
-            try recorder.start(
-                autoConfiguresSession: UserDefaults.standard.bool(forKey: autoConfiguresSessionKey)
-            )
+            try recorder.start(autoConfiguresSession: autoConfiguresSession)
             return .success(recorder)
         } catch {
             recorder.stop()
@@ -163,6 +173,8 @@ nonisolated final class SpatialAudioRecorder: NSObject, SpatialTakeRecording,
         case cannotAdd(String)
         case notRunning(String)
         case noBuffers(ambisonics: Int, stereo: Int)
+        /// The mics delivered one signal in every channel (FOA with only W).
+        case collapsedToMono(String)
 
         var description: String {
             switch self {
@@ -172,6 +184,8 @@ nonisolated final class SpatialAudioRecorder: NSObject, SpatialTakeRecording,
             case .notRunning(let why): return "capture session not running: \(why)"
             case .noBuffers(let ambisonics, let stereo):
                 return "no FOA/stereo buffers in time (FOA \(ambisonics) ch, stereo \(stereo) ch)"
+            case .collapsedToMono(let summary):
+                return "FOA has only W (\(summary))"
             }
         }
     }
@@ -180,6 +194,11 @@ nonisolated final class SpatialAudioRecorder: NSObject, SpatialTakeRecording,
     /// Without a headset they arrive in ~0.2 s; with AirPods connected as the
     /// output (A2DP) the route takes longer to settle.
     static let probeTimeout: TimeInterval = 2.5
+    /// After the probe, how long `start` listens for whether FOA is really
+    /// four signals, and how much audio with signal it needs to say so.
+    /// In a silent room it can't tell and Spatial starts anyway.
+    static let verifyTimeout: TimeInterval = 0.6
+    static let verifySignalFrames = 9_600 // 0.2 s at 48 kHz
 
     private let session = AVCaptureSession()
     private let ambisonicsOutput = AVCaptureAudioDataOutput()
@@ -208,6 +227,14 @@ nonisolated final class SpatialAudioRecorder: NSObject, SpatialTakeRecording,
     private var firstAmbisonicsChannels = 0
     private var firstStereoChannels = 0
     private let probeReady = DispatchSemaphore(value: 0)
+    // Start-up signal check, guarded by `probeLock`.
+    private var verifying = false
+    private var verifyAmbisonics = SpatialChannelActivity(channelCount: SpatialAudioRecordingFormat.ambisonicsChannelCount)
+    private var verifyStereo = SpatialChannelActivity(channelCount: 2)
+    private let verifyReady = DispatchSemaphore(value: 0)
+    // Current take's channel activity, for the finish log (capture queue).
+    private var takeAmbisonics = SpatialChannelActivity(channelCount: SpatialAudioRecordingFormat.ambisonicsChannelCount)
+    private var takeStereo = SpatialChannelActivity(channelCount: 2)
     private var observers: [NSObjectProtocol] = []
 
     init(
@@ -274,6 +301,20 @@ nonisolated final class SpatialAudioRecorder: NSObject, SpatialTakeRecording,
         guard ambisonics == SpatialAudioRecordingFormat.ambisonicsChannelCount, stereo == 2 else {
             throw SetupError.noBuffers(ambisonics: ambisonics, stereo: stereo)
         }
+
+        // Four channels isn't enough: the mics must really deliver four
+        // signals. Refuse a capture whose Y, Z, X are silent while W isn't.
+        probeLock.withLock { verifying = true }
+        _ = verifyReady.wait(timeout: .now() + Self.verifyTimeout)
+        let (foa, pair) = probeLock.withLock { () -> (SpatialChannelActivity, SpatialChannelActivity) in
+            verifying = false
+            return (verifyAmbisonics, verifyStereo)
+        }
+        let verdict = foa.verdict(minimumSignalFrames: Self.verifySignalFrames)
+        KeyboardDebugLog.shared.log(
+            "[SpatialAudio] Signal check (\(autoConfiguresSession ? "capture session configures audio" : "app audio session")): FOA \(verdict) [\(foa.summary)], stereo \(pair.verdict(minimumSignalFrames: Self.verifySignalFrames)) [\(pair.summary)], inputs=\(AVAudioSession.sharedInstance().currentRoute.inputs.map(\.portType.rawValue))"
+        )
+        if verdict == .collapsed { throw SetupError.collapsedToMono(foa.summary) }
     }
 
     private func observeSession() {
@@ -300,6 +341,8 @@ nonisolated final class SpatialAudioRecorder: NSObject, SpatialTakeRecording,
         queue.sync {
             discardOnQueue()
             paused = false
+            takeAmbisonics = SpatialChannelActivity(channelCount: SpatialAudioRecordingFormat.ambisonicsChannelCount)
+            takeStereo = SpatialChannelActivity(channelCount: 2)
             guard let latest = ring.latestStereoEnd else {
                 // No audio yet: start at the first buffer that arrives.
                 pendingTake = (url, quality, 0)
@@ -324,6 +367,10 @@ nonisolated final class SpatialAudioRecorder: NSObject, SpatialTakeRecording,
             guard let writer else { return nil }
             self.writer = nil
             let result = writer.finish()
+            let foaVerdict = takeAmbisonics.verdict(minimumSignalFrames: Self.verifySignalFrames)
+            KeyboardDebugLog.shared.log(
+                "[SpatialAudio] \(foaVerdict == .collapsed ? "⚠️ " : "")Take channels: FOA \(foaVerdict) [\(takeAmbisonics.summary)], stereo \(takeStereo.verdict(minimumSignalFrames: Self.verifySignalFrames)) [\(takeStereo.summary)]"
+            )
             KeyboardDebugLog.shared.log(
                 "[SpatialAudio] Take finished: \(result.url == nil ? "no file" : "saved"), FOA frames=\(result.summary.ambisonicsFrames), stereo frames=\(result.summary.stereoFrames), dropped=\(result.summary.droppedBuffers), metadata=\(result.summary.wroteMetadata), analyzeFailures=\(result.summary.analyzeFailures)\(writer.error.map { ", error=\($0.localizedDescription)" } ?? "")"
             )
@@ -392,7 +439,13 @@ nonisolated final class SpatialAudioRecorder: NSObject, SpatialTakeRecording,
             _ = openWriter(url: pending.url, quality: pending.quality,
                            startTime: CMSampleBufferGetPresentationTimeStamp(sampleBuffer))
         }
-        if !paused { writer?.append(sampleBuffer, to: track) }
+        if !paused, let writer {
+            writer.append(sampleBuffer, to: track)
+            switch track {
+            case .ambisonics: takeAmbisonics.add(sampleBuffer)
+            case .stereo: takeStereo.add(sampleBuffer)
+            }
+        }
         if track == .stereo { feedTranscription(sampleBuffer) }
     }
 
@@ -414,6 +467,17 @@ nonisolated final class SpatialAudioRecorder: NSObject, SpatialTakeRecording,
             default: break
             }
             if firstAmbisonicsChannels != 0, firstStereoChannels != 0 { probeReady.signal() }
+        }
+        probeLock.withLock {
+            guard verifying else { return }
+            switch track {
+            case .ambisonics: verifyAmbisonics.add(sampleBuffer)
+            case .stereo: verifyStereo.add(sampleBuffer)
+            }
+            if verifyAmbisonics.verdict(minimumSignalFrames: Self.verifySignalFrames) != .undetermined {
+                verifying = false
+                verifyReady.signal()
+            }
         }
     }
 

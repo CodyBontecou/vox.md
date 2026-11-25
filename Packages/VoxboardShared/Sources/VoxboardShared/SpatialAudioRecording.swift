@@ -169,6 +169,122 @@ public enum SpatialAudioSampleBuffers {
     }
 }
 
+/// What a media file holds, for choosing how a note shows its embed.
+public enum MediaFileTracks {
+    /// True when the file has audio and no video, such as a Spatial Audio
+    /// `.mp4`: it gets the audio player, not an empty video box (PR #151).
+    /// False when it can't be read (missing, not downloaded yet).
+    public static func isAudioOnly(_ url: URL) -> Bool {
+        let asset = AVURLAsset(url: url)
+        return !asset.tracks(withMediaType: .audio).isEmpty && asset.tracks(withMediaType: .video).isEmpty
+    }
+}
+
+/// How much of a capture's channel layout is really there. RazorII's 3.0.5
+/// takes (PR #151) had FOA with only W carrying signal (Y, Z, X all zero) and
+/// a stereo track whose left and right were identical: the built-in mics were
+/// in their single-mic setup. This measures that, so the recorder can refuse
+/// such a capture before a take and log it after one.
+///
+/// FOA: collapsed when W has signal and the loudest of Y, Z, X is more than
+/// 60 dB below it (real FOA from the iPhone's mics has directional channels
+/// within ~20 dB of W). Stereo: collapsed when the loudest L−R difference is
+/// more than 60 dB below the loudest sample. Too little or silent audio is
+/// `undetermined`, never collapsed.
+public struct SpatialChannelActivity: Equatable, Sendable {
+    public enum Verdict: Equatable, Sendable {
+        case multichannel
+        case collapsed
+        case undetermined
+    }
+
+    /// Below this peak (≈ −80 dBFS) a buffer counts as silence.
+    public static let signalFloor: Float = 1e-4
+    /// −60 dB.
+    public static let collapseRatio: Float = 1e-3
+
+    public let channelCount: Int
+    /// Peak absolute sample per channel, over frames with signal.
+    public private(set) var peaks: [Float]
+    /// Peak |channel 0 − channel 1| (stereo).
+    public private(set) var peakDifference: Float = 0
+    /// Frames seen while channel 0 was above `signalFloor`.
+    public private(set) var signalFrames = 0
+    public private(set) var frames = 0
+
+    public init(channelCount: Int) {
+        self.channelCount = channelCount
+        peaks = Array(repeating: 0, count: max(0, channelCount))
+    }
+
+    /// Adds `frameCount` frames; `sample(frame, channel)` reads one sample.
+    public mutating func add(frameCount: Int, sample: (Int, Int) -> Float) {
+        guard channelCount > 0, frameCount > 0 else { return }
+        var bufferPeaks = Array(repeating: Float(0), count: channelCount)
+        var bufferDifference: Float = 0
+        for frame in 0..<frameCount {
+            for channel in 0..<channelCount {
+                bufferPeaks[channel] = max(bufferPeaks[channel], abs(sample(frame, channel)))
+            }
+            if channelCount >= 2 {
+                bufferDifference = max(bufferDifference, abs(sample(frame, 0) - sample(frame, 1)))
+            }
+        }
+        frames += frameCount
+        // Only buffers with signal count, so a quiet start can't look
+        // collapsed or spatial.
+        guard bufferPeaks[0] >= Self.signalFloor else { return }
+        signalFrames += frameCount
+        for channel in 0..<channelCount { peaks[channel] = max(peaks[channel], bufferPeaks[channel]) }
+        peakDifference = max(peakDifference, bufferDifference)
+    }
+
+    /// Adds an LPCM sample buffer (Float32 or Int16, interleaved or not).
+    public mutating func add(_ sampleBuffer: CMSampleBuffer) {
+        guard let pcm = SpatialAudioSampleBuffers.pcmBuffer(from: sampleBuffer),
+              Int(pcm.format.channelCount) == channelCount else { return }
+        let frameCount = Int(pcm.frameLength)
+        let interleaved = pcm.format.isInterleaved
+        let channelCount = channelCount
+        if let data = pcm.floatChannelData {
+            add(frameCount: frameCount) { frame, channel in
+                interleaved ? data[0][frame * channelCount + channel] : data[channel][frame]
+            }
+        } else if let data = pcm.int16ChannelData {
+            add(frameCount: frameCount) { frame, channel in
+                Float(interleaved ? data[0][frame * channelCount + channel] : data[channel][frame]) / 32_768
+            }
+        } else if let data = pcm.int32ChannelData {
+            add(frameCount: frameCount) { frame, channel in
+                Float(interleaved ? data[0][frame * channelCount + channel] : data[channel][frame]) / 2_147_483_648
+            }
+        }
+    }
+
+    /// Whether the channels carry separate signals, given at least
+    /// `minimumSignalFrames` frames with signal.
+    public func verdict(minimumSignalFrames: Int) -> Verdict {
+        guard channelCount >= 2, signalFrames >= minimumSignalFrames else { return .undetermined }
+        let reference = peaks.max() ?? 0
+        guard reference >= Self.signalFloor else { return .undetermined }
+        if channelCount == 2 {
+            return peakDifference <= reference * Self.collapseRatio ? .collapsed : .multichannel
+        }
+        let directional = peaks.dropFirst().max() ?? 0
+        return directional <= peaks[0] * Self.collapseRatio ? .collapsed : .multichannel
+    }
+
+    /// For logs: peak per channel in dBFS, plus L−R for stereo.
+    public var summary: String {
+        func db(_ value: Float) -> String {
+            value <= 0 ? "-inf" : String(format: "%.0f", 20 * log10(value))
+        }
+        var text = peaks.map(db).joined(separator: "/") + " dBFS"
+        if channelCount == 2 { text += ", L−R \(db(peakDifference)) dBFS" }
+        return text + " over \(signalFrames)/\(frames) frames"
+    }
+}
+
 /// Recent FOA and stereo capture buffers, so a spatial take gets the same
 /// pre-roll as the 16 kHz journal. Holds deep copies, bounded by duration.
 /// Thread-safe.
