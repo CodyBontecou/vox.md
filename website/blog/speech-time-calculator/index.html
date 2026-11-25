@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-search-section="Section" data-search-guide="Guide" data-search-empty="No matches for “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speech time calculator: words to minutes, and your real pace | Vox.md</title>
+  <meta name="description" content="Free in-browser speech time calculator. Turn a script into minutes, turn minutes into words, or measure your own words per minute from a rehearsal transcript. Ignores Markdown. Nothing is uploaded.">
+  <link rel="canonical" href="https://vox.isolated.tech/blog/speech-time-calculator/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Vox.md documentation for language models">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Speech time calculator: words to minutes, and your real pace">
+  <meta property="og:description" content="Free in-browser speech time calculator. Turn a script into minutes, turn minutes into words, or measure your own words per minute from a rehearsal transcript. Ignores Markdown. Nothing is uploaded.">
+  <meta property="og:url" content="https://vox.isolated.tech/blog/speech-time-calculator/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-25">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Speech time calculator: words to minutes, and your real pace">
+  <meta name="twitter:description" content="Free in-browser speech time calculator. Turn a script into minutes, turn minutes into words, or measure your own words per minute from a rehearsal transcript. Ignores Markdown. Nothing is uploaded.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Speech time calculator: words to minutes, and your real pace",
+  "description": "Free in-browser speech time calculator. Turn a script into minutes, turn minutes into words, or measure your own words per minute from a rehearsal transcript. Ignores Markdown. Nothing is uploaded.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-25",
+  "dateModified": "2026-11-25",
+  "mainEntityOfPage": "https://vox.isolated.tech/blog/speech-time-calculator/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "en",
+  "name": "Speech time calculator: words to minutes, and your real pace | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Guides",
+      "item": "https://vox.isolated.tech/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Speech time calculator: words to minutes, and your real pace",
+      "item": "https://vox.isolated.tech/blog/speech-time-calculator/"
+    }
+  ],
+  "inLanguage": "en",
+  "name": "Speech time calculator: words to minutes, and your real pace | Vox.md",
+  "description": "Free in-browser speech time calculator. Turn a script into minutes, turn minutes into words, or measure your own words per minute from a rehearsal transcript. Ignores Markdown. Nothing is uploaded."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/speech-time-calculator/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to guide</a>
+<nav aria-label="Primary navigation">
+  <div class="nav-inner">
+    <a href="/" class="logo" aria-label="Vox.md home">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/#how">How It Works</a></li>
+      <li><a href="/docs/">Docs</a></li>
+      <li><a href="/blog/">Guides</a></li>
+      <li><a href="/compare/">Compare</a></li>
+      <li><a href="/privacy.html">Privacy</a></li>
+      <li><a href="/terms.html">Terms</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="speech_time_calc">Download Vox.md</a>
+  <details class="language-switcher"><summary>Language</summary><ul><li><a href="/blog/speech-time-calculator/" lang="en" hreflang="en" aria-current="page">English</a></li><li><a href="/ar/blog/speech-time-calculator/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/speech-time-calculator/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/speech-time-calculator/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/speech-time-calculator/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/speech-time-calculator/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/speech-time-calculator/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/speech-time-calculator/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/speech-time-calculator/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/speech-time-calculator/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/speech-time-calculator/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/speech-time-calculator/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/speech-time-calculator/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/speech-time-calculator/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/speech-time-calculator/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/speech-time-calculator/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/speech-time-calculator/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/speech-time-calculator/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/speech-time-calculator/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/speech-time-calculator/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/speech-time-calculator/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/speech-time-calculator/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/speech-time-calculator/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Free tool</div>
+        <h1 class="hero-title">Speech time calculator: words to minutes, and your real pace</h1>
+        <p class="hero-subtitle">Paste a script and get its speaking time, find how many words fill 3, 5 or 10 minutes, or measure your real pace from a rehearsal transcript. Everything runs on this page; nothing is uploaded.</p>
+      </div>
+      <aside class="meta-card" aria-label="About this guide">
+        <dl>
+          <div><dt>By</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Updated</dt><dd><time datetime="2026-11-25">November 25, 2026</time></dd></div>
+          <div><dt>Requires</dt><dd>Any modern browser, including Safari on iPhone. Optional: Obsidian for the script, and Vox.md for iPhone, iPad or Mac to transcribe a rehearsal on the device.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Speech time calculator: words to minutes, and your real pace">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">The short answer</div>
+        <p>At a planning pace of 130–150 words per minute, 1,000 words take about 7 to 8 minutes (6:40 to 7:42), and a 5-minute speech needs about 650–750 words. Those two paces are this page’s presets, not a measured average. Rehearse once and measure your own pace for a real number.</p>
+      </div>
+      <p>The <a href="#calculator">calculator</a> below has three modes: script to time, time to words, and measure your real pace from a rehearsal transcript. The word counter reads Markdown the way a listener hears it, so headings, bullets, link addresses, <code>[[wikilinks]]</code> and frontmatter pasted from Obsidian do not inflate the count. It runs entirely in this page: your text is never uploaded, and the page makes no network requests.</p>
+      <nav class="toc" aria-label="In this guide"><div class="toc-title">In this guide</div><ol>
+        <li><a href="#calculator">The calculator: script to time, time to words, your real pace</a></li>
+        <li><a href="#quick-table">Quick conversion tables</a></li>
+        <li><a href="#typical-pace">Typical speaking rates, with sources</a></li>
+        <li><a href="#pauses-and-slides">Why real talks run longer than words ÷ WPM</a></li>
+        <li><a href="#measure-your-pace">Measure your pace from a rehearsal</a></li>
+        <li><a href="#vox-md">Rehearse and transcribe with Vox.md</a></li>
+        <li><a href="#faq">Questions</a></li>
+      </ol></nav>
+
+      <h2 id="calculator">1. The calculator</h2>
+      <p class="mt-nojs" id="st-nojs">The calculator needs JavaScript. Without it, the tables and sources below still work as a reference.</p>
+      <div class="st-tool" id="st-tool" hidden>
+
+        <section class="st-mode" aria-labelledby="st1-title">
+          <h3 id="st1-title">Script to time</h3>
+          <form id="st1-form" aria-labelledby="st1-title">
+            <fieldset class="mt-group">
+              <legend>Your script</legend>
+              <label class="mt-field" for="st1-script">Paste the script <textarea id="st1-script" rows="8" spellcheck="false" autocomplete="off" aria-describedby="st1-script-hint"></textarea></label>
+              <p class="mt-hint" id="st1-script-hint">Strip Markdown first? You do not need to. Headings, list markers, bold, links, link addresses, <code>[[wikilinks]]</code>, comments and YAML frontmatter are ignored, so text pasted from Obsidian counts correctly. Hyphenated words count once and numbers count as words.</p>
+              <label class="mt-field" for="st1-words">Or type a word count <input type="number" id="st1-words" inputmode="numeric" min="0" max="1000000" step="1" autocomplete="off" aria-describedby="st1-words-hint"></label>
+              <p class="mt-hint" id="st1-words-hint">Used only while the script box is empty.</p>
+              <div class="mt-actions">
+                <button type="button" class="btn-secondary" id="st1-example">Load example</button>
+                <button type="button" class="btn-secondary" id="st1-clear">Clear</button>
+              </div>
+            </fieldset>
+            <fieldset class="mt-group">
+              <legend>Pace</legend>
+              <div class="st-chips" role="group" aria-label="Pace presets" data-target="st1-wpm">
+                <button type="button" class="st-chip" data-wpm="100">Slow · 100</button>
+                <button type="button" class="st-chip" data-wpm="130">Conversational · 130</button>
+                <button type="button" class="st-chip" data-wpm="150">Conversational, brisk · 150</button>
+                <button type="button" class="st-chip" data-wpm="170">Fast · 170</button>
+              </div>
+              <label class="mt-field" for="st1-wpm">Custom pace, words per minute <input type="number" id="st1-wpm" inputmode="numeric" min="40" max="400" step="1" value="130" autocomplete="off" aria-describedby="st1-wpm-hint"></label>
+              <p class="mt-hint" id="st1-wpm-hint">Between 40 and 400. Unsure? <a href="#measure-your-pace">Measure your own pace</a>.</p>
+            </fieldset>
+            <fieldset class="mt-group">
+              <legend>Pauses (optional)</legend>
+              <label class="mt-field" for="st1-pp">Pause per paragraph, seconds <input type="number" id="st1-pp" inputmode="decimal" min="0" max="600" step="any" value="0" autocomplete="off"></label>
+              <label class="mt-field" for="st1-slides">Number of slides <input type="number" id="st1-slides" inputmode="numeric" min="0" max="500" step="1" value="0" autocomplete="off"></label>
+              <label class="mt-field" for="st1-ps">Pause per slide, seconds <input type="number" id="st1-ps" inputmode="decimal" min="0" max="600" step="any" value="0" autocomplete="off"></label>
+              <p class="mt-hint">A paragraph is a block of text separated by a blank line. Pauses are added on top of the speaking time. <a href="#pauses-and-slides">How to choose them</a>.</p>
+            </fieldset>
+          </form>
+          <p class="mt-hint" id="st1-msg" role="status"></p>
+          <div class="st-result" id="st1-result" hidden>
+            <div class="mt-output-head">
+              <h4 id="st1-result-title">Result</h4>
+              <div class="mt-actions"><button type="button" class="btn-primary" id="st1-copy">Copy results</button></div>
+            </div>
+            <p class="st-big" id="st1-total"></p>
+            <p id="st1-detail"></p>
+            <div class="docs-table-wrap">
+              <table class="docs-table" aria-labelledby="st1-result-title">
+                <thead><tr><th scope="col">Pace</th><th scope="col">Total time</th></tr></thead>
+                <tbody id="st1-table">
+                  <tr data-wpm="100"><th scope="row">100 WPM</th><td></td></tr>
+                  <tr data-wpm="130"><th scope="row">130 WPM</th><td></td></tr>
+                  <tr data-wpm="150"><th scope="row">150 WPM</th><td></td></tr>
+                  <tr data-wpm="170"><th scope="row">170 WPM</th><td></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p class="mt-status" id="st1-status" role="status"></p>
+        </section>
+
+        <section class="st-mode" aria-labelledby="st2-title">
+          <h3 id="st2-title">Time to words</h3>
+          <form id="st2-form" aria-labelledby="st2-title">
+            <fieldset class="mt-group">
+              <legend>Target length and pace</legend>
+              <div class="st-chips" role="group" aria-label="Target length presets" data-target="st2-minutes">
+                <button type="button" class="st-chip" data-wpm="3">3 min</button>
+                <button type="button" class="st-chip" data-wpm="5">5 min</button>
+                <button type="button" class="st-chip" data-wpm="10">10 min</button>
+                <button type="button" class="st-chip" data-wpm="20">20 min</button>
+              </div>
+              <label class="mt-field" for="st2-minutes">Target length, minutes <input type="number" id="st2-minutes" inputmode="decimal" min="0.5" max="600" step="any" value="5" autocomplete="off"></label>
+              <div class="st-chips" role="group" aria-label="Pace presets" data-target="st2-wpm">
+                <button type="button" class="st-chip" data-wpm="100">Slow · 100</button>
+                <button type="button" class="st-chip" data-wpm="130">Conversational · 130</button>
+                <button type="button" class="st-chip" data-wpm="150">Conversational, brisk · 150</button>
+                <button type="button" class="st-chip" data-wpm="170">Fast · 170</button>
+              </div>
+              <label class="mt-field" for="st2-wpm">Custom pace, words per minute <input type="number" id="st2-wpm" inputmode="numeric" min="40" max="400" step="1" value="130" autocomplete="off"></label>
+              <label class="mt-field" for="st2-reserve">Time kept for pauses and slide changes, seconds (optional) <input type="number" id="st2-reserve" inputmode="decimal" min="0" max="36000" step="any" value="0" autocomplete="off"></label>
+            </fieldset>
+          </form>
+          <p class="mt-hint" id="st2-msg" role="status"></p>
+          <div class="st-result" id="st2-result" hidden>
+            <div class="mt-output-head">
+              <h4 id="st2-result-title">Result</h4>
+              <div class="mt-actions"><button type="button" class="btn-primary" id="st2-copy">Copy results</button></div>
+            </div>
+            <p class="st-big" id="st2-total"></p>
+            <p id="st2-detail"></p>
+            <div class="docs-table-wrap">
+              <table class="docs-table" aria-labelledby="st2-result-title">
+                <thead><tr><th scope="col">Pace</th><th scope="col">Words to write</th></tr></thead>
+                <tbody id="st2-table">
+                  <tr data-wpm="100"><th scope="row">100 WPM</th><td></td></tr>
+                  <tr data-wpm="130"><th scope="row">130 WPM</th><td></td></tr>
+                  <tr data-wpm="150"><th scope="row">150 WPM</th><td></td></tr>
+                  <tr data-wpm="170"><th scope="row">170 WPM</th><td></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p class="mt-status" id="st2-status" role="status"></p>
+        </section>
+
+        <section class="st-mode" aria-labelledby="st3-title">
+          <h3 id="st3-title">Measure your real pace</h3>
+          <form id="st3-form" aria-labelledby="st3-title">
+            <fieldset class="mt-group">
+              <legend>Your rehearsal</legend>
+              <label class="mt-field" for="st3-transcript">Paste the transcript of your rehearsal <textarea id="st3-transcript" rows="8" spellcheck="false" autocomplete="off"></textarea></label>
+              <label class="mt-field" for="st3-duration">How long the recording ran, mm:ss <input type="text" id="st3-duration" inputmode="numeric" placeholder="4:35" autocomplete="off" aria-describedby="st3-duration-hint"></label>
+              <p class="mt-hint" id="st3-duration-hint">Minutes and seconds, such as 4:35. For a recording over an hour, use h:mm:ss, such as 1:04:35. Use the length of the whole recording, pauses included.</p>
+            </fieldset>
+            <fieldset class="mt-group">
+              <legend>Your script</legend>
+              <label class="mt-field" for="st3-script-words">Words in the script you will give <input type="number" id="st3-script-words" inputmode="numeric" min="0" max="1000000" step="1" autocomplete="off" aria-describedby="st3-script-hint"></label>
+              <p class="mt-hint" id="st3-script-hint">Optional. Type a count, or copy the count from the script in the first calculator.</p>
+              <div class="mt-actions">
+                <button type="button" class="btn-secondary" id="st3-use-count">Use the first calculator’s word count</button>
+                <button type="button" class="btn-secondary" id="st3-example">Load example</button>
+                <button type="button" class="btn-secondary" id="st3-clear">Clear</button>
+              </div>
+            </fieldset>
+          </form>
+          <p class="mt-hint" id="st3-msg" role="status"></p>
+          <div class="st-result" id="st3-result" hidden>
+            <div class="mt-output-head">
+              <h4 id="st3-result-title">Result</h4>
+              <div class="mt-actions"><button type="button" class="btn-primary" id="st3-copy">Copy results</button></div>
+            </div>
+            <p class="st-big" id="st3-total"></p>
+            <p id="st3-detail"></p>
+            <div class="docs-table-wrap">
+              <table class="docs-table" aria-labelledby="st3-result-title">
+                <thead><tr><th scope="col">Preset</th><th scope="col">Your pace compared</th></tr></thead>
+                <tbody id="st3-table">
+                  <tr data-wpm="100"><th scope="row">100 WPM</th><td></td></tr>
+                  <tr data-wpm="130"><th scope="row">130 WPM</th><td></td></tr>
+                  <tr data-wpm="150"><th scope="row">150 WPM</th><td></td></tr>
+                  <tr data-wpm="170"><th scope="row">170 WPM</th><td></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p id="st3-script"></p>
+          </div>
+          <p class="mt-status" id="st3-status" role="status"></p>
+        </section>
+
+        <div hidden id="st-messages">
+          <span data-message="waiting1">Paste a script or type a word count to see the time.</span>
+          <span data-message="bad-wpm">Choose a pace between 40 and 400 words per minute.</span>
+          <span data-message="bad-words">Enter a word count from 0 to 1,000,000.</span>
+          <span data-message="bad-pause">Pauses must be between 0 and 600 seconds.</span>
+          <span data-message="bad-slides">Enter a whole number of slides from 0 to 500.</span>
+          <span data-message="need-text">A pause per paragraph is counted from the paragraphs in a pasted script, so it is not added to a typed word count.</span>
+          <span data-message="using-text">The word count comes from your script. The typed count is ignored while the script box has text.</span>
+          <span data-message="r1-total">Total time at {wpm} WPM: {time}</span>
+          <span data-message="r1-detail">{words} words in {paragraphs} paragraphs. Speaking {speech}, pauses {pauses}.</span>
+          <span data-message="r1-detail-typed">{words} words. Speaking {speech}, pauses {pauses}.</span>
+          <span data-message="bad-minutes">Enter a target length between 0.5 and 600 minutes.</span>
+          <span data-message="bad-reserve">Time kept for pauses must be between 0 and 36,000 seconds.</span>
+          <span data-message="no-room">The time kept for pauses uses up the whole target length. Reduce it to leave time to speak.</span>
+          <span data-message="r2-total">About {words} words for {minutes} minutes at {wpm} WPM</span>
+          <span data-message="r2-detail">Across the presets, 100–170 WPM: {low}–{high} words. At 130–150 WPM: {a}–{b} words. Speaking time {speaking}, pauses {pauses}.</span>
+          <span data-message="bad-duration">Enter the recording length as minutes:seconds, such as 4:35, or hours:minutes:seconds, such as 1:04:35.</span>
+          <span data-message="zero-duration">The recording length cannot be 0. Enter how long the recording ran.</span>
+          <span data-message="no-transcript">Paste the transcript of your rehearsal to measure your pace.</span>
+          <span data-message="pace-out-of-range">That works out to {wpm} words per minute, outside the 40–400 range. Check that the transcript and the recording length belong together.</span>
+          <span data-message="r3-total">Your measured pace: {wpm} WPM</span>
+          <span data-message="r3-detail">{words} words in {time}.</span>
+          <span data-message="r3-faster">{pct}% faster</span>
+          <span data-message="r3-slower">{pct}% slower</span>
+          <span data-message="r3-same">about the same</span>
+          <span data-message="r3-script">Your script of {words} words at {wpm} WPM: {time}</span>
+          <span data-message="r3-pauses">Pauses are already inside the recording, so none were added.</span>
+          <span data-message="copied">Copied to the clipboard.</span>
+          <span data-message="copy-failed">Copying failed. Select the text and copy it yourself.</span>
+          <span data-message="loaded">Example loaded.</span>
+          <span data-message="cleared">Cleared.</span>
+          <span data-message="no-count">The first calculator has no word count yet.</span>
+          <span data-message="count-used">Word count copied from the first calculator.</span>
+        </div>
+      </div>
+
+      <h2 id="quick-table">2. Quick conversion tables</h2>
+      <p>These tables use the same formula as the calculator, with no pauses: seconds = words ÷ WPM × 60, rounded to the nearest second, and words = minutes × WPM, rounded to the nearest word. 130 and 150 WPM are planning presets, not averages; see <a href="#typical-pace">typical speaking rates</a> for sourced figures.</p>
+      <h3>Minutes to words</h3>
+      <div class="docs-table-wrap">
+        <table class="docs-table" id="table-minutes">
+          <thead><tr><th scope="col">Speech length</th><th scope="col">Words at 130 WPM</th><th scope="col">Words at 150 WPM</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">1 minute</th><td>130</td><td>150</td></tr>
+            <tr><th scope="row">2 minutes</th><td>260</td><td>300</td></tr>
+            <tr><th scope="row">3 minutes</th><td>390</td><td>450</td></tr>
+            <tr><th scope="row">5 minutes</th><td>650</td><td>750</td></tr>
+            <tr><th scope="row">7 minutes</th><td>910</td><td>1,050</td></tr>
+            <tr><th scope="row">10 minutes</th><td>1,300</td><td>1,500</td></tr>
+            <tr><th scope="row">15 minutes</th><td>1,950</td><td>2,250</td></tr>
+            <tr><th scope="row">20 minutes</th><td>2,600</td><td>3,000</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Words to minutes</h3>
+      <div class="docs-table-wrap">
+        <table class="docs-table" id="table-words">
+          <thead><tr><th scope="col">Word count</th><th scope="col">Time at 130 WPM</th><th scope="col">Time at 150 WPM</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">500 words</th><td>3:51</td><td>3:20</td></tr>
+            <tr><th scope="row">750 words</th><td>5:46</td><td>5:00</td></tr>
+            <tr><th scope="row">1,000 words</th><td>7:42</td><td>6:40</td></tr>
+            <tr><th scope="row">1,500 words</th><td>11:32</td><td>10:00</td></tr>
+            <tr><th scope="row">2,000 words</th><td>15:23</td><td>13:20</td></tr>
+            <tr><th scope="row">2,500 words</th><td>19:14</td><td>16:40</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Times are m:ss. They are speaking time only: add your pauses, or use the pause fields above.</p>
+
+      <h2 id="typical-pace">3. Typical speaking rates, with sources</h2>
+      <p>There is no single correct speaking rate, and a figure without a source is only a guess. These are the rates we could confirm in the sources themselves. Each describes a particular setting, so none of them is a target for your talk.</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th scope="col">Setting</th><th scope="col">Rate stated by the source</th><th scope="col">Source</th></tr></thead>
+          <tbody>
+            <tr><td>Telephone conversations between strangers on assigned topics (2,438 English Switchboard conversations): all words from both speakers divided by total elapsed time</td><td>196 WPM on average; individual conversations ranged from 111 to 291 WPM</td><td><a href="https://www.isca-archive.org/interspeech_2006/yuan06_interspeech.html" target="_blank" rel="noopener">Yuan, Liberman &amp; Cieri (2006), Interspeech</a></td></tr>
+            <tr><td>The same conversations, excluding silences and non-speech noise</td><td>236 WPM on average; conversations ranged from 158 to 312 WPM</td><td>Yuan, Liberman &amp; Cieri (2006)</td></tr>
+            <tr><td>Adults reading aloud, a meta-analysis of 77 studies with 5,965 participants</td><td>183 WPM on average (95% confidence interval 177–189)</td><td><a href="https://doi.org/10.1016/j.jml.2019.104047" target="_blank" rel="noopener">Brysbaert (2019), Journal of Memory and Language</a></td></tr>
+            <tr><td>Adults reading silently in English, a meta-analysis of 190 studies with 18,573 participants</td><td>238 WPM for non-fiction and 260 WPM for fiction, on average</td><td>Brysbaert (2019)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>What these figures do and do not tell you:</p>
+      <ul>
+        <li><strong>They are higher than this page’s presets.</strong> The 130 and 150 WPM presets are a planning rule for a talk with pauses and slide changes, which is our rule of thumb and not a finding. If you read your script aloud without stopping, expect something closer to the reading-aloud figure.</li>
+        <li><strong>Counting method changes the number.</strong> Yuan et al. get 196 WPM when they divide by all elapsed time and 236 WPM when they remove silences, from the same conversations. Your recording’s length includes your pauses, so the pace you measure in mode 3 does too.</li>
+        <li><strong>Pace varies by language, speaker and setting.</strong> Yuan et al. report that speaking rate changes with turn length, topic, whether the speakers know each other and the speaker’s age. Brysbaert reports lower reading rates for children, older adults and readers of English as a second language, and that rates in other languages can be predicted from how many words each language needs to convey the same message as English. Word counts are not comparable across languages.</li>
+        <li><strong>Reading aloud is not giving a talk.</strong> The studies behind the reading-aloud figure are reading studies, not presentations. We did not find a primary source that sets a target pace for a presentation, so none is given here.</li>
+      </ul>
+
+      <h2 id="pauses-and-slides">4. Why real talks run longer than words ÷ WPM</h2>
+      <p>Dividing words by a pace gives the time you spend speaking. A real talk also has time you spend not speaking: a breath between paragraphs, a beat while the slide changes, a laugh or a question from the audience, a sip of water. The calculator lets you add these on top.</p>
+      <ul>
+        <li><strong>Pause per paragraph.</strong> Seconds added for every blank-line separated block in a pasted script. A pause of 2 to 3 seconds is a reasonable place to start for a spoken talk.</li>
+        <li><strong>Slides and pause per slide.</strong> Seconds added for each slide change, for the moment it takes the audience to look at the new slide. Try 3 to 5 seconds, longer for a slide you want people to read.</li>
+        <li><strong>Time kept for pauses (time to words).</strong> One number in seconds that is taken off the target length before the words are worked out.</li>
+      </ul>
+      <p>These are planning rules of thumb from us, not statistics, and the right values depend on your style. A script of 1,000 words with 12 paragraphs and 10 slides, at 130 WPM with 3 seconds per paragraph and 4 per slide, is 7:42 of speech plus 36 seconds for paragraphs and 40 for slides (1:16 of pauses): 8:58 in total. The honest check is to rehearse once and time it, as below.</p>
+
+      <h2 id="measure-your-pace">5. Measure your pace from a rehearsal</h2>
+      <p>The honest way to estimate a talk is to rehearse it once, transcribe it and measure, rather than trust a generic 130 WPM. Your own pace can be well above or below any preset, and it changes with how well you know the material.</p>
+      <ol>
+        <li><strong>Record a rehearsal.</strong> Speak the talk the way you will give it, pauses included. On iPhone or iPad, Apple Support’s <a href="https://support.apple.com/guide/iphone/make-a-recording-iph4d2a39a3b/ios" target="_blank" rel="noopener">Make a recording in Voice Memos</a> explains how. On a Mac, see <a href="https://support.apple.com/guide/voice-memos/create-a-recording-vmaa4b813415/mac" target="_blank" rel="noopener">Create a recording in Voice Memos on Mac</a>. Note how long the recording ran: that length comes from your recorder.</li>
+        <li><strong>Get a transcript.</strong> Voice Memos can show a transcript where it is available: see Apple Support’s <a href="https://support.apple.com/guide/iphone/view-a-transcription-iph00953a982/ios" target="_blank" rel="noopener">View a transcription on iPhone</a>, and our guide to <a href="/blog/transcribe-voice-memos-iphone/">transcribing Voice Memos on iPhone</a>. You can also transcribe the recording with <a href="#vox-md">Vox.md</a>, on the device. For a Zoom or YouTube recording with captions, the <a href="/blog/srt-vtt-to-text-markdown/">SRT and VTT to text converter</a> turns the caption file into text.</li>
+        <li><strong>Paste and measure.</strong> Paste the transcript into mode 3 and enter the recording length. It divides the words in the transcript by the minutes, shows your measured WPM and how it compares with the presets, and works out the speaking time of your script at your pace.</li>
+      </ol>
+      <p>Check the transcript against what you actually said before you trust the number. Speech recognition makes mistakes, and a missed or added word shifts the count. Rehearse the whole talk, trim the dead air at the start and end of the recording if there is a lot of it, and measure again after you edit the script.</p>
+      <p>Pauses are already inside the recording, so the script time in mode 3 does not add any. If your rehearsal had no slides or audience, allow a little extra for the real thing.</p>
+
+      <h2 id="vox-md">6. Rehearse and transcribe with Vox.md</h2>
+      <p>Rehearse it once, out loud. Vox.md transcribes the recording on your iPhone, iPad or Mac and saves the Markdown into your vault, so you can measure your real pace here. Use it for a talk, a video script or a podcast intro. Transcription runs on the device with Apple Speech, Whisper or Parakeet; see the <a href="/docs/#models">models reference</a> for what each one needs. Saving the Markdown next to the script in your Obsidian vault lets you compare drafts as you rewrite.</p>
+      <p>The steps for bringing a recording in are in <a href="/blog/transcribe-voice-memos-iphone/">Transcribe Voice Memos on iPhone</a> and <a href="/blog/transcribe-audio-file-mac/">Transcribe an audio file on Mac</a>, and <a href="/blog/transcribe-interview/">Transcribe an interview privately</a> covers speaker labels. If you only need to dictate, see <a href="/blog/speech-to-text-iphone/">speech to text on iPhone</a> and <a href="/blog/dictation-on-mac/">dictation on Mac</a>. Vox.md gives you the transcript, not the length: the duration comes from the recorder, and you do the counting here.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Rehearse it once, out loud.</h2>
+        <p>Vox.md transcribes the recording on your iPhone, iPad or Mac and saves the Markdown into your vault, so you can measure your real pace here. The free allowance is 15 minutes of transcription and 10 successful Capture deliveries; unlimited use is a one-time lifetime unlock with no subscription.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="speech_time_calc">Download Vox.md</a> <a class="btn-secondary" href="/docs/">Read the docs</a></p>
+        <p>The calculator above works fully without the app.</p>
+      </section>
+
+      <h2 id="faq">7. Questions</h2>
+      <h3>How many words is a 3, 5 or 10-minute speech?</h3>
+      <p>At 130–150 WPM, a 3-minute speech is about 390–450 words, a 5-minute speech about 650–750 words and a 10-minute speech about 1,300–1,500 words. Across the slower and faster presets, 100–170 WPM, 5 minutes is 500–850 words. For comparison, the 183 WPM average that <a href="https://doi.org/10.1016/j.jml.2019.104047" target="_blank" rel="noopener">Brysbaert (2019)</a> found for reading aloud would be about 915 words in 5 minutes. Add pauses, and rehearse to find your own number.</p>
+      <h3>How long is a 1,000-word speech?</h3>
+      <p>At 130 WPM, 7:42, and at 150 WPM, 6:40, before any pauses. At 100 WPM it is 10:00 and at 170 WPM it is 5:53. At the 183 WPM reading-aloud average from Brysbaert (2019), it is 5:28. With 12 paragraphs and 10 slides, add the pauses from <a href="#pauses-and-slides">the section above</a>.</p>
+      <h3>What is a good speaking pace for a presentation?</h3>
+      <p>We did not find a primary source that sets a target pace for presentations. The sourced figures describe other settings: <a href="https://www.isca-archive.org/interspeech_2006/yuan06_interspeech.html" target="_blank" rel="noopener">Yuan, Liberman and Cieri (2006)</a> report 196 WPM across the elapsed time of telephone conversations, and Brysbaert (2019) reports 183 WPM for reading aloud. A slower planning pace such as 130–150 WPM leaves room for pauses and slide changes, but the reliable answer is your own pace from a rehearsal, as in <a href="#measure-your-pace">measure your pace</a>.</p>
+      <h3>Does reading aloud take longer than reading silently?</h3>
+      <p>Yes, on average. <a href="https://doi.org/10.1016/j.jml.2019.104047" target="_blank" rel="noopener">Brysbaert (2019)</a> estimates 183 WPM for reading aloud and 238 WPM for silent reading of English non-fiction (260 WPM for fiction). At those averages the same non-fiction text takes about 30% longer aloud (238 ÷ 183 ≈ 1.3). Individual readers vary, so measure yourself.</p>
+      <h3>Does the calculator upload my script?</h3>
+      <p>No. The words are counted by a script in this page, on your device, and the page makes no network requests. It does not save your text: closing or reloading the page clears it.</p>
+
+      <nav class="toc" aria-label="Related guides" id="related"><div class="toc-title">Continue your setup</div><ul>
+        <li><a href="/blog/speech-to-text-iphone/">Speech to text on iPhone</a></li>
+        <li><a href="/blog/dictation-on-mac/">Dictation on Mac</a></li>
+        <li><a href="/blog/transcribe-voice-memos-iphone/">Transcribe Voice Memos on iPhone</a></li>
+        <li><a href="/blog/transcribe-audio-file-mac/">Transcribe an audio file on Mac</a></li>
+        <li><a href="/blog/transcribe-interview/">Transcribe an interview privately</a></li>
+        <li><a href="/blog/srt-vtt-to-text-markdown/">SRT and VTT to text or Markdown converter</a></li>
+        <li><a href="/docs/#models">Models and transcription reference</a></li>
+      </ul></nav>
+<style>
+.st-tool:not([hidden]) { display: flex; flex-direction: column; gap: 40px; }
+.st-tool [hidden] { display: none; }
+.st-mode { display: flex; flex-direction: column; gap: 14px; }
+.st-mode h3 { margin: 0; }
+.st-mode form { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.st-tool .mt-field input, .st-tool .mt-field textarea { font: inherit; font-family: var(--font-mono); font-size: 16px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; padding: 8px 10px; width: 100%; box-sizing: border-box; min-height: 44px; }
+.st-tool .mt-field textarea { resize: vertical; min-height: 160px; }
+.st-tool input:focus-visible, .st-tool textarea:focus-visible, .st-chip:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.st-tool .mt-actions button { font: inherit; font-size: 15px; min-height: 44px; padding: 0 18px; cursor: pointer; }
+.st-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.st-chip { font: inherit; font-size: 14.5px; min-height: 44px; padding: 0 14px; cursor: pointer; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 999px; }
+.st-chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.st-result { display: flex; flex-direction: column; gap: 8px; padding: 14px 18px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; }
+.st-result[hidden] { display: none; }
+.st-result h4 { margin: 0; }
+.st-result p { margin: 0; overflow-wrap: anywhere; }
+.st-big { font-family: var(--font-mono); font-size: clamp(20px, 5vw, 28px); font-weight: 700; }
+.st-tool .mt-hint[role="status"] { min-height: 1.4em; }
+</style>
+<script>
+/* Speech time calculator. Runs locally: no network requests. */
+(function () {
+  var PRESETS = [100, 130, 150, 170];
+  var MIN_WPM = 40, MAX_WPM = 400;
+
+  function pad2(n) { return n < 10 ? '0' + n : String(n); }
+  /* Seconds to m:ss, or h:mm:ss from one hour. */
+  function fmt(total) {
+    total = Math.max(0, Math.round(total));
+    var h = Math.floor(total / 3600), m = Math.floor((total % 3600) / 60), s = total % 60;
+    return h ? h + ':' + pad2(m) + ':' + pad2(s) : m + ':' + pad2(s);
+  }
+  function num(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  function validWpm(w) { return typeof w === 'number' && isFinite(w) && w >= MIN_WPM && w <= MAX_WPM; }
+  function secondsFor(words, wpm) { return Math.round(words / wpm * 60); }
+  function wordsFor(minutes, wpm) { return Math.round(minutes * wpm); }
+
+  /* Strip Markdown and frontmatter, then count words the way a listener hears them. */
+  function clean(text) {
+    var s = String(text || '').replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
+    s = s.replace(/^---[ \t]*\n(?:[\s\S]*?\n)?(?:---|\.\.\.)[ \t]*(?:\n|$)/, '');
+    s = s.replace(/<!--[\s\S]*?-->/g, ' ').replace(/%%[\s\S]*?%%/g, ' ');
+    s = s.replace(/!\[\[[^\]]*\]\]/g, ' ').replace(/!\[[^\]]*\]\([^)]*\)/g, ' ');
+    s = s.replace(/\[\^[^\]]+\]/g, ' ');
+    s = s.replace(/\[\[([^\]]*)\]\]/g, function (all, inner) {
+      var bar = inner.lastIndexOf('|');
+      if (bar >= 0) return inner.slice(bar + 1);
+      var target = inner.split(/[#^]/)[0] || inner.replace(/^[#^]+/, '');
+      return target.slice(target.lastIndexOf('/') + 1);
+    });
+    s = s.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/\[([^\]]*)\]\[[^\]]*\]/g, '$1');
+    s = s.replace(/^[ \t]*\[[^\]]+\]:[ \t]*\S.*$/gm, ' ');
+    s = s.replace(/<\/?[A-Za-z][^>]*>/g, ' ');
+    s = s.replace(/https?:\/\/\S+|www\.\S+/g, ' ');
+    var lines = s.split('\n').map(function (line) {
+      if (/^[ \t]*(```|~~~)/.test(line)) return '';
+      if (/^[\s>*_=:|+-]*$/.test(line) && /[-=*_]{3}|\|/.test(line)) return '';
+      line = line.replace(/^[ \t]*(?:>[ \t]*)*/, '').replace(/^#{1,6}[ \t]+/, '');
+      for (;;) {
+        var next = line.replace(/^(?:[-*+]|\d+[.)])[ \t]+/, '').replace(/^\[[ xX]\][ \t]+/, '');
+        if (next === line) break;
+        line = next;
+      }
+      return line.replace(/\|/g, ' ');
+    });
+    s = lines.join('\n');
+    s = s.replace(/\\([\\`*_{}\[\]()#+.!|-])/g, '$1').replace(/[`*~=]+/g, ' ');
+    s = s.replace(/(^|[\s(])_+|_+(?=[\s).,;:!?]|$)/g, '$1 ').replace(/[—–]/g, ' ');
+    return s;
+  }
+  function countWords(text) {
+    var cleaned = clean(text);
+    var words = 0, paragraphs = 0;
+    cleaned.split(/\n[ \t]*\n/).forEach(function (block) {
+      var n = 0;
+      block.split(/\s+/).forEach(function (tok) { if (tok && /[\p{L}\p{N}]/u.test(tok)) n++; });
+      if (n) { words += n; paragraphs++; }
+    });
+    return { words: words, paragraphs: paragraphs };
+  }
+
+  /* Script to time. opts: words, paragraphs, wpm, pausePara, slides, pauseSlide (seconds). */
+  function scriptTime(o) {
+    if (!validWpm(o.wpm)) return { error: 'bad-wpm' };
+    var words = o.words || 0;
+    var pausePara = o.pausePara || 0, pauseSlide = o.pauseSlide || 0, slides = o.slides || 0;
+    var speech = secondsFor(words, o.wpm);
+    var pauses = Math.round((o.paragraphs || 0) * pausePara + slides * pauseSlide);
+    return { speech: speech, pauses: pauses, total: speech + pauses };
+  }
+  /* Time to words. */
+  function wordsForTime(o) {
+    if (!validWpm(o.wpm)) return { error: 'bad-wpm' };
+    var reserve = o.reserve || 0;
+    var speaking = o.minutes * 60 - reserve;
+    if (speaking <= 0) return { error: 'no-room' };
+    return { words: wordsFor(speaking / 60, o.wpm), speaking: speaking, reserve: reserve };
+  }
+  /* "4:35" or "1:04:35" to seconds, or null. */
+  function parseDuration(text) {
+    var t = String(text || '').trim(), m;
+    if ((m = /^(\d{1,4}):([0-5]\d)$/.exec(t))) return +m[1] * 60 + +m[2];
+    if ((m = /^(\d{1,3}):([0-5]\d):([0-5]\d)$/.exec(t))) return +m[1] * 3600 + +m[2] * 60 + +m[3];
+    return null;
+  }
+  /* Measured pace. Returns {wpm} rounded to a whole number, or {error}. */
+  function measure(words, seconds) {
+    if (!words) return { error: 'no-transcript' };
+    if (!seconds) return { error: 'zero-duration' };
+    var wpm = Math.round(words / (seconds / 60));
+    if (!validWpm(wpm)) return { error: 'pace-out-of-range', wpm: wpm };
+    return { wpm: wpm };
+  }
+  function compare(measured, preset) {
+    var pct = Math.round((measured / preset - 1) * 100);
+    return pct === 0 ? { kind: 'same' } : { kind: pct > 0 ? 'faster' : 'slower', pct: Math.abs(pct) };
+  }
+
+  if (typeof window !== 'undefined') {
+    window.voxSpeechTime = { clean: clean, countWords: countWords, scriptTime: scriptTime, wordsForTime: wordsForTime,
+      parseDuration: parseDuration, measure: measure, compare: compare, fmt: fmt, num: num, secondsFor: secondsFor, wordsFor: wordsFor, PRESETS: PRESETS };
+  }
+
+  var root = document.getElementById('st-tool');
+  if (!root) return;
+  var EXAMPLE = '---\ntitle: Opening talk\ntags: [speech]\n---\n# Opening remarks\n\n- First point, **well-known** idea\n- See [the guide](https:\/\/example.com\/guide) and [[Project plan|plan]]\n\nTotal: 2026 plans.';
+  var EXAMPLE3 = 'Good morning everyone and thank you for coming. Today I want to talk about three ideas that changed how our team plans its work, and I will keep each one short.';
+
+  function el(id) { return document.getElementById(id); }
+  function message(name, fill) {
+    var node = document.querySelector('#st-messages [data-message="' + name + '"]');
+    var text = node ? node.textContent : '';
+    if (fill) Object.keys(fill).forEach(function (key) { text = text.split('{' + key + '}').join(fill[key]); });
+    return text;
+  }
+  function value(id) { var v = el(id).value; return v === '' ? NaN : Number(v); }
+  function say(id, text) {
+    var node = el(id);
+    node.textContent = '';
+    window.setTimeout(function () { node.textContent = text; }, 30);
+  }
+  function setCells(tableId, fn) {
+    Array.prototype.forEach.call(el(tableId).querySelectorAll('tr'), function (row) {
+      row.querySelector('td').textContent = fn(+row.getAttribute('data-wpm'));
+    });
+  }
+  function show(prefix, ok, msg) {
+    el(prefix + '-result').hidden = !ok;
+    el(prefix + '-msg').textContent = msg || '';
+  }
+  function pressed(group) {
+    var target = el(group.getAttribute('data-target'));
+    Array.prototype.forEach.call(group.querySelectorAll('.st-chip'), function (chip) {
+      chip.setAttribute('aria-pressed', String(Number(target.value) === +chip.getAttribute('data-wpm') && target.value !== ''));
+    });
+  }
+  var copyText = { st1: '', st2: '', st3: '' };
+
+  function update1() {
+    var script = el('st1-script').value;
+    var hasText = /\S/.test(script);
+    var counted = hasText ? countWords(script) : null;
+    var typed = value('st1-words');
+    var notes = [];
+    var words;
+    if (hasText) {
+      words = counted.words;
+      if (el('st1-words').value !== '') notes.push(message('using-text'));
+    } else if (el('st1-words').value === '') {
+      return show('st1', false, message('waiting1'));
+    } else if (!(typed >= 0 && typed <= 1000000)) {
+      return show('st1', false, message('bad-words'));
+    } else {
+      words = Math.floor(typed);
+    }
+    var wpm = value('st1-wpm');
+    if (!validWpm(wpm)) return show('st1', false, message('bad-wpm'));
+    var pp = el('st1-pp').value === '' ? 0 : value('st1-pp');
+    var ps = el('st1-ps').value === '' ? 0 : value('st1-ps');
+    if (!(pp >= 0 && pp <= 600) || !(ps >= 0 && ps <= 600)) return show('st1', false, message('bad-pause'));
+    var slides = el('st1-slides').value === '' ? 0 : value('st1-slides');
+    if (!(slides >= 0 && slides <= 500) || slides !== Math.floor(slides)) return show('st1', false, message('bad-slides'));
+    if (!hasText && pp > 0) notes.push(message('need-text'));
+    if (!words) return show('st1', false, message('waiting1'));
+    var r = scriptTime({ words: words, paragraphs: hasText ? counted.paragraphs : 0, wpm: wpm, pausePara: pp, slides: slides, pauseSlide: ps });
+    var total = message('r1-total', { wpm: wpm, time: fmt(r.total) });
+    var detail = hasText
+      ? message('r1-detail', { words: num(words), paragraphs: num(counted.paragraphs), speech: fmt(r.speech), pauses: fmt(r.pauses) })
+      : message('r1-detail-typed', { words: num(words), speech: fmt(r.speech), pauses: fmt(r.pauses) });
+    el('st1-total').textContent = total;
+    el('st1-detail').textContent = detail;
+    var lines = [total, detail];
+    setCells('st1-table', function (p) {
+      var t = scriptTime({ words: words, paragraphs: hasText ? counted.paragraphs : 0, wpm: p, pausePara: pp, slides: slides, pauseSlide: ps });
+      lines.push(p + ' WPM: ' + fmt(t.total));
+      return fmt(t.total);
+    });
+    copyText.st1 = lines.join('\n');
+    show('st1', true, notes.join(' '));
+  }
+
+  function update2() {
+    var minutes = value('st2-minutes');
+    if (!(minutes >= 0.5 && minutes <= 600)) return show('st2', false, message('bad-minutes'));
+    var wpm = value('st2-wpm');
+    if (!validWpm(wpm)) return show('st2', false, message('bad-wpm'));
+    var reserve = el('st2-reserve').value === '' ? 0 : value('st2-reserve');
+    if (!(reserve >= 0 && reserve <= 36000)) return show('st2', false, message('bad-reserve'));
+    var r = wordsForTime({ minutes: minutes, wpm: wpm, reserve: reserve });
+    if (r.error) return show('st2', false, message(r.error));
+    function w(p) { return wordsForTime({ minutes: minutes, wpm: p, reserve: reserve }).words; }
+    var total = message('r2-total', { words: num(r.words), minutes: String(minutes), wpm: wpm });
+    var detail = message('r2-detail', { low: num(w(100)), high: num(w(170)), a: num(w(130)), b: num(w(150)), speaking: fmt(r.speaking), pauses: fmt(reserve) });
+    el('st2-total').textContent = total;
+    el('st2-detail').textContent = detail;
+    var lines = [total, detail];
+    setCells('st2-table', function (p) { lines.push(p + ' WPM: ' + num(w(p)) + ' words'); return num(w(p)); });
+    copyText.st2 = lines.join('\n');
+    show('st2', true, '');
+  }
+
+  function update3() {
+    var transcript = el('st3-transcript').value;
+    var durText = el('st3-duration').value;
+    if (!/\S/.test(transcript)) return show('st3', false, message('no-transcript'));
+    var seconds = parseDuration(durText);
+    if (!/\S/.test(durText) || seconds === null) return show('st3', false, message('bad-duration'));
+    var words = countWords(transcript).words;
+    var m = measure(words, seconds);
+    if (m.error) return show('st3', false, message(m.error, { wpm: m.wpm === undefined ? '' : num(m.wpm) }));
+    var total = message('r3-total', { wpm: m.wpm });
+    var detail = message('r3-detail', { words: num(words), time: fmt(seconds) });
+    el('st3-total').textContent = total;
+    el('st3-detail').textContent = detail;
+    var lines = [total, detail];
+    setCells('st3-table', function (p) {
+      var c = compare(m.wpm, p);
+      var text = message('r3-' + c.kind, { pct: c.pct });
+      lines.push(p + ' WPM: ' + text);
+      return text;
+    });
+    var scriptWords = el('st3-script-words').value === '' ? 0 : value('st3-script-words');
+    var scriptEl = el('st3-script');
+    if (scriptWords > 0 && scriptWords <= 1000000) {
+      var t = scriptTime({ words: Math.floor(scriptWords), wpm: m.wpm });
+      var line = message('r3-script', { words: num(Math.floor(scriptWords)), wpm: m.wpm, time: fmt(t.total) }) + ' ' + message('r3-pauses');
+      scriptEl.textContent = line;
+      scriptEl.hidden = false;
+      lines.push(line);
+    } else {
+      scriptEl.textContent = '';
+      scriptEl.hidden = true;
+    }
+    copyText.st3 = lines.join('\n');
+    show('st3', true, '');
+  }
+
+  function copy(key, statusId) {
+    var text = copyText[key];
+    function fallback() {
+      var area = document.createElement('textarea');
+      area.value = text;
+      area.setAttribute('readonly', '');
+      area.style.position = 'fixed';
+      area.style.opacity = '0';
+      document.body.appendChild(area);
+      area.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      document.body.removeChild(area);
+      say(statusId, message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(statusId, message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  }
+
+  var updaters = { st1: update1, st2: update2, st3: update3 };
+  function refresh() {
+    update1(); update2(); update3();
+    Array.prototype.forEach.call(root.querySelectorAll('.st-chips'), pressed);
+  }
+  ['st1', 'st2', 'st3'].forEach(function (key) {
+    var form = el(key + '-form');
+    form.addEventListener('input', refresh);
+    form.addEventListener('change', refresh);
+    form.addEventListener('submit', function (event) { event.preventDefault(); });
+    el(key + '-copy').addEventListener('click', function () { copy(key, key + '-status'); });
+  });
+  Array.prototype.forEach.call(root.querySelectorAll('.st-chip'), function (chip) {
+    chip.addEventListener('click', function () {
+      el(chip.parentNode.getAttribute('data-target')).value = chip.getAttribute('data-wpm');
+      refresh();
+    });
+  });
+  el('st1-example').addEventListener('click', function () { el('st1-script').value = EXAMPLE; refresh(); say('st1-status', message('loaded')); });
+  el('st1-clear').addEventListener('click', function () {
+    el('st1-script').value = ''; el('st1-words').value = ''; refresh(); el('st1-script').focus(); say('st1-status', message('cleared'));
+  });
+  el('st3-example').addEventListener('click', function () {
+    el('st3-transcript').value = EXAMPLE3; el('st3-duration').value = '0:12'; refresh(); say('st3-status', message('loaded'));
+  });
+  el('st3-clear').addEventListener('click', function () {
+    el('st3-transcript').value = ''; el('st3-duration').value = ''; el('st3-script-words').value = ''; refresh(); el('st3-transcript').focus(); say('st3-status', message('cleared'));
+  });
+  el('st3-use-count').addEventListener('click', function () {
+    var script = el('st1-script').value;
+    var words = /\S/.test(script) ? countWords(script).words : (el('st1-words').value === '' ? 0 : Math.floor(value('st1-words')));
+    if (!(words > 0)) { say('st3-status', message('no-count')); return; }
+    el('st3-script-words').value = words;
+    refresh();
+    say('st3-status', message('count-used'));
+  });
+
+  el('st-nojs').hidden = true;
+  root.hidden = false;
+  refresh();
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/docs/">Docs</a></li>
+        <li><a href="/blog/">Guides</a></li>
+        <li><a href="/compare/">Compare</a></li>
+        <li><a href="/privacy.html">Privacy</a></li>
+        <li><a href="/terms.html">Terms</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Support</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="speech_time_calc">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Quick capture for local notes · No content uploads.</div>
+    </div>
+  <details class="language-switcher"><summary>Language</summary><ul><li><a href="/blog/speech-time-calculator/" lang="en" hreflang="en" aria-current="page">English</a></li><li><a href="/ar/blog/speech-time-calculator/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/speech-time-calculator/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/speech-time-calculator/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/speech-time-calculator/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/speech-time-calculator/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/speech-time-calculator/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/speech-time-calculator/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/speech-time-calculator/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/speech-time-calculator/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/speech-time-calculator/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/speech-time-calculator/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/speech-time-calculator/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/speech-time-calculator/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/speech-time-calculator/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/speech-time-calculator/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/speech-time-calculator/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/speech-time-calculator/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/speech-time-calculator/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/speech-time-calculator/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/speech-time-calculator/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/speech-time-calculator/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/speech-time-calculator/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="bn" dir="ltr" data-search-section="অংশ" data-search-guide="গাইড" data-search-empty="“{query}”-এর কোনো ফল নেই">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>বক্তৃতার সময় ক্যালকুলেটর: শব্দ থেকে মিনিট, এবং আপনার আসল গতি | Vox.md</title>
+  <meta name="description" content="ব্রাউজারে চলা বিনামূল্যের বক্তৃতার সময় ক্যালকুলেটর। স্ক্রিপ্ট থেকে মিনিট, মিনিট থেকে শব্দ, অথবা মহড়ার ট্রান্সক্রিপ্ট থেকে আপনার নিজের প্রতি মিনিটের শব্দ মাপুন। Markdown উপেক্ষা করে। কিছুই আপলোড হয় না।">
+  <link rel="canonical" href="https://vox.isolated.tech/bn/blog/speech-time-calculator/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="ভাষা মডেলের জন্য Vox.md নথি">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="বক্তৃতার সময় ক্যালকুলেটর: শব্দ থেকে মিনিট, এবং আপনার আসল গতি">
+  <meta property="og:description" content="ব্রাউজারে চলা বিনামূল্যের বক্তৃতার সময় ক্যালকুলেটর। স্ক্রিপ্ট থেকে মিনিট, মিনিট থেকে শব্দ, অথবা মহড়ার ট্রান্সক্রিপ্ট থেকে আপনার নিজের প্রতি মিনিটের শব্দ মাপুন। Markdown উপেক্ষা করে। কিছুই আপলোড হয় না।">
+  <meta property="og:url" content="https://vox.isolated.tech/bn/blog/speech-time-calculator/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-25">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="বক্তৃতার সময় ক্যালকুলেটর: শব্দ থেকে মিনিট, এবং আপনার আসল গতি">
+  <meta name="twitter:description" content="ব্রাউজারে চলা বিনামূল্যের বক্তৃতার সময় ক্যালকুলেটর। স্ক্রিপ্ট থেকে মিনিট, মিনিট থেকে শব্দ, অথবা মহড়ার ট্রান্সক্রিপ্ট থেকে আপনার নিজের প্রতি মিনিটের শব্দ মাপুন। Markdown উপেক্ষা করে। কিছুই আপলোড হয় না।">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "বক্তৃতার সময় ক্যালকুলেটর: শব্দ থেকে মিনিট, এবং আপনার আসল গতি",
+  "description": "ব্রাউজারে চলা বিনামূল্যের বক্তৃতার সময় ক্যালকুলেটর। স্ক্রিপ্ট থেকে মিনিট, মিনিট থেকে শব্দ, অথবা মহড়ার ট্রান্সক্রিপ্ট থেকে আপনার নিজের প্রতি মিনিটের শব্দ মাপুন। Markdown উপেক্ষা করে। কিছুই আপলোড হয় না।",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-25",
+  "dateModified": "2026-11-25",
+  "mainEntityOfPage": "https://vox.isolated.tech/bn/blog/speech-time-calculator/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "bn",
+  "name": "বক্তৃতার সময় ক্যালকুলেটর: শব্দ থেকে মিনিট, এবং আপনার আসল গতি | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/bn/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "গাইড",
+      "item": "https://vox.isolated.tech/bn/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "বক্তৃতার সময় ক্যালকুলেটর: শব্দ থেকে মিনিট, এবং আপনার আসল গতি",
+      "item": "https://vox.isolated.tech/bn/blog/speech-time-calculator/"
+    }
+  ],
+  "inLanguage": "bn",
+  "name": "বক্তৃতার সময় ক্যালকুলেটর: শব্দ থেকে মিনিট, এবং আপনার আসল গতি | Vox.md",
+  "description": "ব্রাউজারে চলা বিনামূল্যের বক্তৃতার সময় ক্যালকুলেটর। স্ক্রিপ্ট থেকে মিনিট, মিনিট থেকে শব্দ, অথবা মহড়ার ট্রান্সক্রিপ্ট থেকে আপনার নিজের প্রতি মিনিটের শব্দ মাপুন। Markdown উপেক্ষা করে। কিছুই আপলোড হয় না।"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/speech-time-calculator/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">সরাসরি গাইডে যান</a>
+<nav aria-label="প্রধান নেভিগেশন">
+  <div class="nav-inner">
+    <a href="/bn/" class="logo" aria-label="Vox.md হোম">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/bn/#how">যেভাবে কাজ করে</a></li>
+      <li><a href="/bn/docs/">নথি</a></li>
+      <li><a href="/bn/blog/">গাইড</a></li>
+      <li><a href="/bn/compare/">তুলনা করুন</a></li>
+      <li><a href="/bn/privacy.html">গোপনীয়তা</a></li>
+      <li><a href="/bn/terms.html">শর্তাবলি</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_bn_ca19bbc9dfae">Vox.md ডাউনলোড করুন</a>
+  <details class="language-switcher"><summary>ভাষা</summary><ul><li><a href="/blog/speech-time-calculator/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/speech-time-calculator/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/speech-time-calculator/" lang="bn" hreflang="bn" aria-current="page">বাংলা</a></li><li><a href="/de/blog/speech-time-calculator/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/speech-time-calculator/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/speech-time-calculator/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/speech-time-calculator/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/speech-time-calculator/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/speech-time-calculator/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/speech-time-calculator/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/speech-time-calculator/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/speech-time-calculator/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/speech-time-calculator/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/speech-time-calculator/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/speech-time-calculator/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/speech-time-calculator/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/speech-time-calculator/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/speech-time-calculator/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/speech-time-calculator/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/speech-time-calculator/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/speech-time-calculator/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/speech-time-calculator/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/speech-time-calculator/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">বিনামূল্যের টুল</div>
+        <h1 class="hero-title">বক্তৃতার সময় ক্যালকুলেটর: শব্দ থেকে মিনিট, এবং আপনার আসল গতি</h1>
+        <p class="hero-subtitle">স্ক্রিপ্ট পেস্ট করে তার কথা বলার সময় জানুন, ৩, ৫ বা ১০ মিনিট ভরাতে কত শব্দ লাগে তা বের করুন, অথবা মহড়ার ট্রান্সক্রিপ্ট থেকে আপনার আসল গতি মাপুন। সবকিছু এই পৃষ্ঠায় চলে; কিছুই আপলোড হয় না।</p>
+      </div>
+      <aside class="meta-card" aria-label="এই গাইড সম্পর্কে">
+        <dl>
+          <div><dt>লিখেছেন</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>হালনাগাদ</dt><dd><time datetime="2026-11-25">২৫ নভেম্বর, ২০২৬</time></dd></div>
+          <div><dt>প্রয়োজন</dt><dd>যেকোনো আধুনিক ব্রাউজার, iPhone-এর Safari সহ। ঐচ্ছিক: স্ক্রিপ্টের জন্য Obsidian, এবং ডিভাইসে মহড়া ট্রান্সক্রাইব করতে iPhone, iPad বা Mac-এর জন্য Vox.md।</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="বক্তৃতার সময় ক্যালকুলেটর: শব্দ থেকে মিনিট, এবং আপনার আসল গতি">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">সংক্ষিপ্ত উত্তর</div>
+        <p>প্রতি মিনিটে ১৩০–১৫০ শব্দের পরিকল্পনা-গতিতে ১,০০০ শব্দে প্রায় ৭ থেকে ৮ মিনিট লাগে (৬:৪০ থেকে ৭:৪২), আর ৫ মিনিটের বক্তৃতায় প্রায় ৬৫০–৭৫০ শব্দ লাগে। এই দুটি গতি এই পৃষ্ঠার প্রিসেট, কোনো পরিমাপকৃত গড় নয়। বাস্তব সংখ্যার জন্য একবার মহড়া দিয়ে নিজের গতি মাপুন।</p>
+      </div>
+      <p>এই <a href="#calculator">ক্যালকুলেটরে</a> নিচে তিনটি মোড আছে: স্ক্রিপ্ট থেকে সময়, সময় থেকে শব্দ, এবং মহড়ার ট্রান্সক্রিপ্ট থেকে আপনার আসল গতি মাপা। শব্দ গণনাকারী Markdown সেভাবে পড়ে যেভাবে শ্রোতা শোনে, তাই শিরোনাম, বুলেট, লিংকের ঠিকানা, <code>[[wikilinks]]</code> এবং Obsidian থেকে পেস্ট করা frontmatter গণনা ফোলায় না। এটি পুরোপুরি এই পৃষ্ঠার ভেতরেই চলে: আপনার লেখা কখনো আপলোড হয় না, এবং পৃষ্ঠাটি কোনো নেটওয়ার্ক অনুরোধ করে না।</p>
+      <nav class="toc" aria-label="এই গাইডে"><div class="toc-title">এই গাইডে</div><ol>
+        <li><a href="#calculator">ক্যালকুলেটর: স্ক্রিপ্ট থেকে সময়, সময় থেকে শব্দ, আপনার আসল গতি</a></li>
+        <li><a href="#quick-table">দ্রুত রূপান্তর সারণি</a></li>
+        <li><a href="#typical-pace">সাধারণ বলার গতি, সূত্রসহ</a></li>
+        <li><a href="#pauses-and-slides">কেন আসল বক্তৃতা শব্দ ÷ WPM-এর চেয়ে বেশি লম্বা হয়</a></li>
+        <li><a href="#measure-your-pace">মহড়া থেকে আপনার গতি মাপুন</a></li>
+        <li><a href="#vox-md">Vox.md দিয়ে মহড়া দিন ও ট্রান্সক্রাইব করুন</a></li>
+        <li><a href="#faq">প্রশ্ন</a></li>
+      </ol></nav>
+
+      <h2 id="calculator">১. ক্যালকুলেটর</h2>
+      <p class="mt-nojs" id="st-nojs">ক্যালকুলেটরের জন্য JavaScript দরকার। এটি ছাড়াও নিচের সারণি ও সূত্রগুলো রেফারেন্স হিসেবে কাজ করে।</p>
+      <div class="st-tool" id="st-tool" hidden>
+
+        <section class="st-mode" aria-labelledby="st1-title">
+          <h3 id="st1-title">সময় মাপার স্ক্রিপ্ট</h3>
+          <form id="st1-form" aria-labelledby="st1-title">
+            <fieldset class="mt-group">
+              <legend>আপনার স্ক্রিপ্ট</legend>
+              <label class="mt-field" for="st1-script">স্ক্রিপ্ট পেস্ট করুন <textarea id="st1-script" rows="8" spellcheck="false" autocomplete="off" aria-describedby="st1-script-hint"></textarea></label>
+              <p class="mt-hint" id="st1-script-hint">আগে Markdown সরাবেন? দরকার নেই। শিরোনাম, তালিকার চিহ্ন, গাঢ় লেখা, লিংক, লিংকের ঠিকানা, <code>[[wikilinks]]</code>, মন্তব্য এবং YAML frontmatter উপেক্ষা করা হয়, তাই Obsidian থেকে পেস্ট করা লেখা ঠিকভাবে গোনা হয়। হাইফেনযুক্ত শব্দ একবার গোনা হয় এবং সংখ্যা শব্দ হিসেবে গোনা হয়।</p>
+              <label class="mt-field" for="st1-words">অথবা শব্দসংখ্যা টাইপ করুন <input type="number" id="st1-words" inputmode="numeric" min="0" max="1000000" step="1" autocomplete="off" aria-describedby="st1-words-hint"></label>
+              <p class="mt-hint" id="st1-words-hint">শুধু স্ক্রিপ্ট বাক্স খালি থাকলে ব্যবহৃত হয়।</p>
+              <div class="mt-actions">
+                <button type="button" class="btn-secondary" id="st1-example">উদাহরণ লোড করুন</button>
+                <button type="button" class="btn-secondary" id="st1-clear">মুছুন</button>
+              </div>
+            </fieldset>
+            <fieldset class="mt-group">
+              <legend>গতি</legend>
+              <div class="st-chips" role="group" aria-label="গতির প্রিসেট" data-target="st1-wpm">
+                <button type="button" class="st-chip" data-wpm="100">ধীর · ১০০</button>
+                <button type="button" class="st-chip" data-wpm="130">কথোপকথনমূলক · ১৩০</button>
+                <button type="button" class="st-chip" data-wpm="150">কথোপকথনমূলক, দ্রুত · ১৫০</button>
+                <button type="button" class="st-chip" data-wpm="170">দ্রুত · ১৭০</button>
+              </div>
+              <label class="mt-field" for="st1-wpm">নিজস্ব গতি, প্রতি মিনিটে শব্দ <input type="number" id="st1-wpm" inputmode="numeric" min="40" max="400" step="1" value="130" autocomplete="off" aria-describedby="st1-wpm-hint"></label>
+              <p class="mt-hint" id="st1-wpm-hint">৪০ থেকে ৪০০ এর মধ্যে। নিশ্চিত নন? <a href="#measure-your-pace">আপনার নিজের গতি মাপুন</a>.</p>
+            </fieldset>
+            <fieldset class="mt-group">
+              <legend>বিরতি (ঐচ্ছিক)</legend>
+              <label class="mt-field" for="st1-pp">প্রতি অনুচ্ছেদে বিরতি, সেকেন্ডে <input type="number" id="st1-pp" inputmode="decimal" min="0" max="600" step="any" value="0" autocomplete="off"></label>
+              <label class="mt-field" for="st1-slides">স্লাইডের সংখ্যা <input type="number" id="st1-slides" inputmode="numeric" min="0" max="500" step="1" value="0" autocomplete="off"></label>
+              <label class="mt-field" for="st1-ps">প্রতি স্লাইডে বিরতি, সেকেন্ডে <input type="number" id="st1-ps" inputmode="decimal" min="0" max="600" step="any" value="0" autocomplete="off"></label>
+              <p class="mt-hint">অনুচ্ছেদ হলো ফাঁকা লাইন দিয়ে আলাদা করা লেখার ব্লক। কথা বলার সময়ের ওপরে বিরতি যোগ হয়। <a href="#pauses-and-slides">কীভাবে বেছে নেবেন</a>.</p>
+            </fieldset>
+          </form>
+          <p class="mt-hint" id="st1-msg" role="status"></p>
+          <div class="st-result" id="st1-result" hidden>
+            <div class="mt-output-head">
+              <h4 id="st1-result-title">ফল</h4>
+              <div class="mt-actions"><button type="button" class="btn-primary" id="st1-copy">ফলাফল কপি করুন</button></div>
+            </div>
+            <p class="st-big" id="st1-total"></p>
+            <p id="st1-detail"></p>
+            <div class="docs-table-wrap">
+              <table class="docs-table" aria-labelledby="st1-result-title">
+                <thead><tr><th scope="col">গতি</th><th scope="col">মোট সময়</th></tr></thead>
+                <tbody id="st1-table">
+                  <tr data-wpm="100"><th scope="row">১০০ শব্দ/মিনিট</th><td></td></tr>
+                  <tr data-wpm="130"><th scope="row">১৩০ শব্দ/মিনিট</th><td></td></tr>
+                  <tr data-wpm="150"><th scope="row">১৫০ শব্দ/মিনিট</th><td></td></tr>
+                  <tr data-wpm="170"><th scope="row">১৭০ শব্দ/মিনিট</th><td></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p class="mt-status" id="st1-status" role="status"></p>
+        </section>
+
+        <section class="st-mode" aria-labelledby="st2-title">
+          <h3 id="st2-title">সময় থেকে শব্দ</h3>
+          <form id="st2-form" aria-labelledby="st2-title">
+            <fieldset class="mt-group">
+              <legend>লক্ষ্য দৈর্ঘ্য ও গতি</legend>
+              <div class="st-chips" role="group" aria-label="লক্ষ্য দৈর্ঘ্যের প্রিসেট" data-target="st2-minutes">
+                <button type="button" class="st-chip" data-wpm="3">৩ মি.</button>
+                <button type="button" class="st-chip" data-wpm="5">৫ মি.</button>
+                <button type="button" class="st-chip" data-wpm="10">১০ মি.</button>
+                <button type="button" class="st-chip" data-wpm="20">২০ মি.</button>
+              </div>
+              <label class="mt-field" for="st2-minutes">লক্ষ্য দৈর্ঘ্য, মিনিটে <input type="number" id="st2-minutes" inputmode="decimal" min="0.5" max="600" step="any" value="5" autocomplete="off"></label>
+              <div class="st-chips" role="group" aria-label="গতির প্রিসেট" data-target="st2-wpm">
+                <button type="button" class="st-chip" data-wpm="100">ধীর · ১০০</button>
+                <button type="button" class="st-chip" data-wpm="130">কথোপকথনমূলক · ১৩০</button>
+                <button type="button" class="st-chip" data-wpm="150">কথোপকথনমূলক, দ্রুত · ১৫০</button>
+                <button type="button" class="st-chip" data-wpm="170">দ্রুত · ১৭০</button>
+              </div>
+              <label class="mt-field" for="st2-wpm">নিজস্ব গতি, প্রতি মিনিটে শব্দ <input type="number" id="st2-wpm" inputmode="numeric" min="40" max="400" step="1" value="130" autocomplete="off"></label>
+              <label class="mt-field" for="st2-reserve">বিরতি ও স্লাইড বদলের জন্য রাখা সময়, সেকেন্ডে (ঐচ্ছিক) <input type="number" id="st2-reserve" inputmode="decimal" min="0" max="36000" step="any" value="0" autocomplete="off"></label>
+            </fieldset>
+          </form>
+          <p class="mt-hint" id="st2-msg" role="status"></p>
+          <div class="st-result" id="st2-result" hidden>
+            <div class="mt-output-head">
+              <h4 id="st2-result-title">ফল</h4>
+              <div class="mt-actions"><button type="button" class="btn-primary" id="st2-copy">ফলাফল কপি করুন</button></div>
+            </div>
+            <p class="st-big" id="st2-total"></p>
+            <p id="st2-detail"></p>
+            <div class="docs-table-wrap">
+              <table class="docs-table" aria-labelledby="st2-result-title">
+                <thead><tr><th scope="col">গতি</th><th scope="col">লেখার শব্দ</th></tr></thead>
+                <tbody id="st2-table">
+                  <tr data-wpm="100"><th scope="row">১০০ শব্দ/মিনিট</th><td></td></tr>
+                  <tr data-wpm="130"><th scope="row">১৩০ শব্দ/মিনিট</th><td></td></tr>
+                  <tr data-wpm="150"><th scope="row">১৫০ শব্দ/মিনিট</th><td></td></tr>
+                  <tr data-wpm="170"><th scope="row">১৭০ শব্দ/মিনিট</th><td></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p class="mt-status" id="st2-status" role="status"></p>
+        </section>
+
+        <section class="st-mode" aria-labelledby="st3-title">
+          <h3 id="st3-title">আপনার আসল গতি মাপুন</h3>
+          <form id="st3-form" aria-labelledby="st3-title">
+            <fieldset class="mt-group">
+              <legend>আপনার মহড়া</legend>
+              <label class="mt-field" for="st3-transcript">আপনার মহড়ার ট্রান্সক্রিপ্ট পেস্ট করুন <textarea id="st3-transcript" rows="8" spellcheck="false" autocomplete="off"></textarea></label>
+              <label class="mt-field" for="st3-duration">রেকর্ডিং কত সময় চলেছে, mm:ss <input type="text" id="st3-duration" inputmode="numeric" placeholder="4:35" autocomplete="off" aria-describedby="st3-duration-hint"></label>
+              <p class="mt-hint" id="st3-duration-hint">মিনিট ও সেকেন্ড, যেমন ৪:৩৫। এক ঘণ্টার বেশি রেকর্ডিংয়ের জন্য h:mm:ss ব্যবহার করুন, যেমন ১:০৪:৩৫। বিরতিসহ পুরো রেকর্ডিংয়ের দৈর্ঘ্য ব্যবহার করুন।</p>
+            </fieldset>
+            <fieldset class="mt-group">
+              <legend>আপনার স্ক্রিপ্ট</legend>
+              <label class="mt-field" for="st3-script-words">যে স্ক্রিপ্ট দেবেন তার শব্দ <input type="number" id="st3-script-words" inputmode="numeric" min="0" max="1000000" step="1" autocomplete="off" aria-describedby="st3-script-hint"></label>
+              <p class="mt-hint" id="st3-script-hint">ঐচ্ছিক। একটি সংখ্যা লিখুন, অথবা প্রথম ক্যালকুলেটরের স্ক্রিপ্ট থেকে সংখ্যাটি কপি করুন।</p>
+              <div class="mt-actions">
+                <button type="button" class="btn-secondary" id="st3-use-count">প্রথম ক্যালকুলেটরের শব্দসংখ্যা ব্যবহার করুন</button>
+                <button type="button" class="btn-secondary" id="st3-example">উদাহরণ লোড করুন</button>
+                <button type="button" class="btn-secondary" id="st3-clear">মুছুন</button>
+              </div>
+            </fieldset>
+          </form>
+          <p class="mt-hint" id="st3-msg" role="status"></p>
+          <div class="st-result" id="st3-result" hidden>
+            <div class="mt-output-head">
+              <h4 id="st3-result-title">ফল</h4>
+              <div class="mt-actions"><button type="button" class="btn-primary" id="st3-copy">ফলাফল কপি করুন</button></div>
+            </div>
+            <p class="st-big" id="st3-total"></p>
+            <p id="st3-detail"></p>
+            <div class="docs-table-wrap">
+              <table class="docs-table" aria-labelledby="st3-result-title">
+                <thead><tr><th scope="col">প্রিসেট</th><th scope="col">আপনার গতির তুলনা</th></tr></thead>
+                <tbody id="st3-table">
+                  <tr data-wpm="100"><th scope="row">১০০ শব্দ/মিনিট</th><td></td></tr>
+                  <tr data-wpm="130"><th scope="row">১৩০ শব্দ/মিনিট</th><td></td></tr>
+                  <tr data-wpm="150"><th scope="row">১৫০ শব্দ/মিনিট</th><td></td></tr>
+                  <tr data-wpm="170"><th scope="row">১৭০ শব্দ/মিনিট</th><td></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p id="st3-script"></p>
+          </div>
+          <p class="mt-status" id="st3-status" role="status"></p>
+        </section>
+
+        <div hidden id="st-messages">
+          <span data-message="waiting1">সময় দেখতে স্ক্রিপ্ট পেস্ট করুন বা শব্দসংখ্যা টাইপ করুন।</span>
+          <span data-message="bad-wpm">প্রতি মিনিটে ৪০ থেকে ৪০০ শব্দের মধ্যে একটি গতি বেছে নিন।</span>
+          <span data-message="bad-words">০ থেকে ১,০০০,০০০ এর মধ্যে শব্দসংখ্যা লিখুন।</span>
+          <span data-message="bad-pause">বিরতি ০ থেকে ৬০০ সেকেন্ডের মধ্যে হতে হবে।</span>
+          <span data-message="bad-slides">০ থেকে ৫০০ এর মধ্যে স্লাইডের একটি পূর্ণসংখ্যা লিখুন।</span>
+          <span data-message="need-text">প্রতি অনুচ্ছেদে বিরতি পেস্ট করা স্ক্রিপ্টের অনুচ্ছেদ থেকে গোনা হয়, তাই টাইপ করা শব্দসংখ্যায় তা যোগ হয় না।</span>
+          <span data-message="using-text">শব্দসংখ্যা আসে আপনার স্ক্রিপ্ট থেকে। স্ক্রিপ্ট বাক্সে লেখা থাকলে টাইপ করা সংখ্যা উপেক্ষা করা হয়।</span>
+          <span data-message="r1-total">{wpm} WPM-এ মোট সময়: {time}</span>
+          <span data-message="r1-detail">{paragraphs}টি অনুচ্ছেদে {words} শব্দ। কথা বলা {speech}, বিরতি {pauses}।</span>
+          <span data-message="r1-detail-typed">{words} শব্দ। কথা বলা {speech}, বিরতি {pauses}।</span>
+          <span data-message="bad-minutes">০.৫ থেকে ৬০০ মিনিটের মধ্যে একটি লক্ষ্য দৈর্ঘ্য লিখুন।</span>
+          <span data-message="bad-reserve">বিরতির জন্য রাখা সময় ০ থেকে ৩৬,০০০ সেকেন্ডের মধ্যে হতে হবে।</span>
+          <span data-message="no-room">বিরতির জন্য রাখা সময় পুরো লক্ষ্য দৈর্ঘ্য খরচ করে ফেলে। কথা বলার সময় রাখতে এটি কমান।</span>
+          <span data-message="r2-total">{wpm} WPM-এ {minutes} মিনিটের জন্য প্রায় {words} শব্দ</span>
+          <span data-message="r2-detail">প্রিসেট জুড়ে, ১০০–১৭০ WPM: {low}–{high} শব্দ। ১৩০–১৫০ WPM-এ: {a}–{b} শব্দ। কথা বলার সময় {speaking}, বিরতি {pauses}।</span>
+          <span data-message="bad-duration">রেকর্ডিংয়ের দৈর্ঘ্য মিনিট:সেকেন্ড হিসেবে লিখুন, যেমন ৪:৩৫, অথবা ঘণ্টা:মিনিট:সেকেন্ড, যেমন ১:০৪:৩৫।</span>
+          <span data-message="zero-duration">রেকর্ডিংয়ের দৈর্ঘ্য ০ হতে পারে না। রেকর্ডিং কত সময় চলেছে তা লিখুন।</span>
+          <span data-message="no-transcript">আপনার গতি মাপতে মহড়ার ট্রান্সক্রিপ্ট পেস্ট করুন।</span>
+          <span data-message="pace-out-of-range">এতে দাঁড়ায় প্রতি মিনিটে {wpm} শব্দ, যা ৪০–৪০০ পরিসরের বাইরে। ট্রান্সক্রিপ্ট ও রেকর্ডিংয়ের দৈর্ঘ্য একই রেকর্ডিংয়ের কি না যাচাই করুন।</span>
+          <span data-message="r3-total">আপনার মাপা গতি: {wpm} WPM</span>
+          <span data-message="r3-detail">{time}-এ {words} শব্দ।</span>
+          <span data-message="r3-faster">{pct}% দ্রুত</span>
+          <span data-message="r3-slower">{pct}% ধীর</span>
+          <span data-message="r3-same">প্রায় একই</span>
+          <span data-message="r3-script">{wpm} WPM-এ আপনার {words} শব্দের স্ক্রিপ্ট: {time}</span>
+          <span data-message="r3-pauses">বিরতি আগে থেকেই রেকর্ডিংয়ের ভেতরে আছে, তাই কিছু যোগ করা হয়নি।</span>
+          <span data-message="copied">ক্লিপবোর্ডে কপি হয়েছে।</span>
+          <span data-message="copy-failed">কপি করা যায়নি। টেক্সট নির্বাচন করে নিজে কপি করুন।</span>
+          <span data-message="loaded">উদাহরণ লোড হয়েছে।</span>
+          <span data-message="cleared">মুছে ফেলা হয়েছে।</span>
+          <span data-message="no-count">প্রথম ক্যালকুলেটরে এখনো কোনো শব্দসংখ্যা নেই।</span>
+          <span data-message="count-used">প্রথম ক্যালকুলেটর থেকে শব্দসংখ্যা কপি করা হয়েছে।</span>
+        </div>
+      </div>
+
+      <h2 id="quick-table">২. দ্রুত রূপান্তর সারণি</h2>
+      <p>এই সারণিগুলো ক্যালকুলেটরের একই সূত্র ব্যবহার করে, বিরতি ছাড়া: সেকেন্ড = শব্দ ÷ WPM × ৬০, নিকটতম সেকেন্ডে পূর্ণ করা, এবং শব্দ = মিনিট × WPM, নিকটতম শব্দে পূর্ণ করা। ১৩০ ও ১৫০ WPM পরিকল্পনার প্রিসেট, গড় নয়; দেখুন <a href="#typical-pace">সাধারণ বলার গতি</a> সূত্রসহ সংখ্যার জন্য।</p>
+      <h3>মিনিট থেকে শব্দ</h3>
+      <div class="docs-table-wrap">
+        <table class="docs-table" id="table-minutes">
+          <thead><tr><th scope="col">বক্তৃতার দৈর্ঘ্য</th><th scope="col">১৩০ WPM-এ শব্দ</th><th scope="col">১৫০ WPM-এ শব্দ</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">১ মিনিট</th><td>130</td><td>150</td></tr>
+            <tr><th scope="row">২ মিনিট</th><td>260</td><td>300</td></tr>
+            <tr><th scope="row">৩ মিনিট</th><td>390</td><td>450</td></tr>
+            <tr><th scope="row">৫ মিনিট</th><td>650</td><td>750</td></tr>
+            <tr><th scope="row">৭ মিনিট</th><td>910</td><td>1,050</td></tr>
+            <tr><th scope="row">১০ মিনিট</th><td>1,300</td><td>1,500</td></tr>
+            <tr><th scope="row">১৫ মিনিট</th><td>1,950</td><td>2,250</td></tr>
+            <tr><th scope="row">২০ মিনিট</th><td>2,600</td><td>3,000</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>শব্দ থেকে মিনিট</h3>
+      <div class="docs-table-wrap">
+        <table class="docs-table" id="table-words">
+          <thead><tr><th scope="col">শব্দসংখ্যা</th><th scope="col">১৩০ WPM-এ সময়</th><th scope="col">১৫০ WPM-এ সময়</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">৫০০ শব্দ</th><td>3:51</td><td>3:20</td></tr>
+            <tr><th scope="row">৭৫০ শব্দ</th><td>5:46</td><td>5:00</td></tr>
+            <tr><th scope="row">১,০০০ শব্দ</th><td>7:42</td><td>6:40</td></tr>
+            <tr><th scope="row">১,৫০০ শব্দ</th><td>11:32</td><td>10:00</td></tr>
+            <tr><th scope="row">২,০০০ শব্দ</th><td>15:23</td><td>13:20</td></tr>
+            <tr><th scope="row">২,৫০০ শব্দ</th><td>19:14</td><td>16:40</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>সময়গুলো m:ss ফরম্যাটে। এগুলো শুধু কথা বলার সময়: আপনার বিরতি যোগ করুন, অথবা ওপরের বিরতির ঘরগুলো ব্যবহার করুন।</p>
+
+      <h2 id="typical-pace">৩. সাধারণ বলার গতি, সূত্রসহ</h2>
+      <p>বলার কোনো একক সঠিক গতি নেই, আর সূত্রহীন সংখ্যা কেবল অনুমান। এগুলো সেই হার যা আমরা সূত্রগুলোতেই নিশ্চিত করতে পেরেছি। প্রতিটি একটি নির্দিষ্ট পরিস্থিতি বর্ণনা করে, তাই কোনোটিই আপনার বক্তৃতার লক্ষ্য নয়।</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th scope="col">সেটিং</th><th scope="col">সূত্রের উল্লিখিত হার</th><th scope="col">উৎস</th></tr></thead>
+          <tbody>
+            <tr><td>নির্ধারিত বিষয়ে অপরিচিতদের মধ্যে টেলিফোন কথোপকথন (২,৪৩৮টি ইংরেজি Switchboard কথোপকথন): উভয় বক্তার সব শব্দ মোট অতিবাহিত সময় দিয়ে ভাগ</td><td>গড়ে ১৯৬ WPM; আলাদা কথোপকথন ১১১ থেকে ২৯১ WPM পর্যন্ত ছিল</td><td><a href="https://www.isca-archive.org/interspeech_2006/yuan06_interspeech.html" target="_blank" rel="noopener">Yuan, Liberman ও Cieri (2006), Interspeech</a></td></tr>
+            <tr><td>একই কথোপকথন, নীরবতা ও কথা-বহির্ভূত শব্দ বাদে</td><td>গড়ে ২৩৬ WPM; কথোপকথন ১৫৮ থেকে ৩১২ WPM পর্যন্ত ছিল</td><td>Yuan, Liberman ও Cieri (2006)</td></tr>
+            <tr><td>প্রাপ্তবয়স্কদের জোরে পড়া, ৫,৯৬৫ জন অংশগ্রহণকারীসহ ৭৭টি গবেষণার মেটা-বিশ্লেষণ</td><td>গড়ে ১৮৩ WPM (৯৫% আস্থা ব্যবধান ১৭৭–১৮৯)</td><td><a href="https://doi.org/10.1016/j.jml.2019.104047" target="_blank" rel="noopener">Brysbaert (2019), জার্নাল Journal of Memory and Language</a></td></tr>
+            <tr><td>প্রাপ্তবয়স্কদের ইংরেজিতে নীরবে পড়া, ১৮,৫৭৩ জন অংশগ্রহণকারীসহ ১৯০টি গবেষণার মেটা-বিশ্লেষণ</td><td>গড়ে নন-ফিকশনের জন্য ২৩৮ WPM এবং ফিকশনের জন্য ২৬০ WPM</td><td>Brysbaert, 2019</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>এই সংখ্যাগুলো কী বলে আর কী বলে না:</p>
+      <ul>
+        <li><strong>এগুলো এই পৃষ্ঠার প্রিসেটের চেয়ে বেশি।</strong> ১৩০ ও ১৫০ WPM প্রিসেট হলো বিরতি ও স্লাইড বদলসহ বক্তৃতার জন্য একটি পরিকল্পনা-নিয়ম, যা আমাদের আন্দাজি নিয়ম, কোনো গবেষণালব্ধ ফল নয়। স্ক্রিপ্ট না থেমে জোরে পড়লে জোরে পড়ার সংখ্যার কাছাকাছি কিছু আশা করুন।</li>
+        <li><strong>গণনার পদ্ধতি সংখ্যাটি বদলে দেয়।</strong> Yuan ও সহলেখকেরা একই কথোপকথন থেকে পুরো অতিবাহিত সময় দিয়ে ভাগ করে ১৯৬ WPM এবং নীরবতা বাদ দিয়ে ২৩৬ WPM পান। আপনার রেকর্ডিংয়ের দৈর্ঘ্যে আপনার বিরতিও থাকে, তাই মোড ৩-এ আপনি যে গতি মাপেন তাতেও তা থাকে।</li>
+        <li><strong>ভাষা, বক্তা ও পরিস্থিতি অনুযায়ী গতি আলাদা হয়।</strong> Yuan ও সহলেখকেরা জানান, কথা বলার গতি বদলায় কথার পালার দৈর্ঘ্য, বিষয়, বক্তারা পরস্পরকে চেনেন কি না এবং বক্তার বয়স অনুযায়ী। Brysbaert জানান, শিশু, বয়স্ক এবং দ্বিতীয় ভাষা হিসেবে ইংরেজি পড়া পাঠকদের পড়ার গতি কম, এবং অন্যান্য ভাষার গতি অনুমান করা যায় ইংরেজির মতো একই বার্তা জানাতে প্রতিটি ভাষায় কত শব্দ লাগে তা থেকে। শব্দসংখ্যা ভাষাভেদে তুলনীয় নয়।</li>
+        <li><strong>জোরে পড়া আর বক্তৃতা দেওয়া এক নয়।</strong> জোরে পড়ার সংখ্যার পেছনের গবেষণাগুলো পড়ার গবেষণা, উপস্থাপনা নয়। উপস্থাপনার জন্য লক্ষ্য গতি নির্ধারণ করে এমন কোনো প্রাথমিক সূত্র আমরা পাইনি, তাই এখানে কোনোটি দেওয়া হয়নি।</li>
+      </ul>
+
+      <h2 id="pauses-and-slides">৪. কেন আসল বক্তৃতা শব্দ ÷ WPM-এর চেয়ে বেশি লম্বা হয়</h2>
+      <p>শব্দকে গতি দিয়ে ভাগ করলে কথা বলায় ব্যয় হওয়া সময় পাওয়া যায়। আসল বক্তৃতায় কথা না বলার সময়ও থাকে: অনুচ্ছেদের মাঝে শ্বাস, স্লাইড বদলের মুহূর্ত, শ্রোতাদের হাসি বা প্রশ্ন, এক চুমুক জল। ক্যালকুলেটরে এগুলো ওপরে যোগ করতে পারেন।</p>
+      <ul>
+        <li><strong>প্রতি অনুচ্ছেদে বিরতি।</strong> পেস্ট করা স্ক্রিপ্টে ফাঁকা লাইন দিয়ে আলাদা করা প্রতিটি ব্লকের জন্য যোগ করা সেকেন্ড। বলা বক্তৃতার জন্য ২ থেকে ৩ সেকেন্ডের বিরতি শুরু করার একটি যুক্তিসংগত জায়গা।</li>
+        <li><strong>স্লাইড ও প্রতি স্লাইডে বিরতি।</strong> প্রতিটি স্লাইড বদলে যোগ করা সেকেন্ড, শ্রোতার নতুন স্লাইডের দিকে তাকাতে যে সময় লাগে তার জন্য। ৩ থেকে ৫ সেকেন্ড চেষ্টা করুন, যে স্লাইড লোকজনকে পড়াতে চান তার জন্য আরও বেশি।</li>
+        <li><strong>বিরতির জন্য রাখা সময় (সময় থেকে শব্দ)।</strong> সেকেন্ডে একটি সংখ্যা, যা শব্দ হিসাব করার আগে লক্ষ্য দৈর্ঘ্য থেকে বাদ দেওয়া হয়।</li>
+      </ul>
+      <p>এগুলো আমাদের পরিকল্পনার আন্দাজি নিয়ম, পরিসংখ্যান নয়, এবং সঠিক মান আপনার ধরনের ওপর নির্ভর করে। ১২টি অনুচ্ছেদ ও ১০টি স্লাইডসহ ১,০০০ শব্দের স্ক্রিপ্ট, ১৩০ WPM-এ প্রতি অনুচ্ছেদে ৩ সেকেন্ড ও প্রতি স্লাইডে ৪ সেকেন্ড ধরলে, ৭:৪২ কথা বলা, সঙ্গে অনুচ্ছেদের জন্য ৩৬ সেকেন্ড ও স্লাইডের জন্য ৪০ সেকেন্ড (১:১৬ বিরতি): মোট ৮:৫৮। সৎ যাচাই হলো একবার মহড়া দিয়ে সময় মাপা, যেমন নিচে।</p>
+
+      <h2 id="measure-your-pace">৫. মহড়া থেকে আপনার গতি মাপুন</h2>
+      <p>বক্তৃতার সময় অনুমানের সৎ উপায় হলো একবার মহড়া দেওয়া, ট্রান্সক্রাইব করা এবং মাপা, কোনো সাধারণ ১৩০ WPM-এর ওপর ভরসা না করা। আপনার নিজের গতি যেকোনো প্রিসেটের চেয়ে অনেক বেশি বা কম হতে পারে, এবং বিষয়বস্তু কতটা ভালো জানেন তার ওপর তা বদলায়।</p>
+      <ol>
+        <li><strong>একটি মহড়া রেকর্ড করুন।</strong> বক্তৃতাটি যেভাবে দেবেন সেভাবেই বলুন, বিরতিসহ। iPhone বা iPad-এ Apple Support-এর <a href="https://support.apple.com/guide/iphone/make-a-recording-iph4d2a39a3b/ios" target="_blank" rel="noopener">Voice Memos-এ রেকর্ডিং করুন</a> -এ কীভাবে করতে হয় তা আছে। Mac-এ দেখুন <a href="https://support.apple.com/guide/voice-memos/create-a-recording-vmaa4b813415/mac" target="_blank" rel="noopener">Mac-এ Voice Memos-এ রেকর্ডিং তৈরি করুন</a>। রেকর্ডিং কত সময় চলেছিল তা লিখে রাখুন: সেই দৈর্ঘ্য আপনার রেকর্ডার থেকে আসে।</li>
+        <li><strong>একটি ট্রান্সক্রিপ্ট নিন।</strong> Voice Memos উপলব্ধ থাকলে ট্রান্সক্রিপ্ট দেখাতে পারে: দেখুন Apple Support-এর <a href="https://support.apple.com/guide/iphone/view-a-transcription-iph00953a982/ios" target="_blank" rel="noopener">iPhone-এ ট্রান্সক্রিপশন দেখুন</a>এবং আমাদের গাইড <a href="/bn/blog/transcribe-voice-memos-iphone/">iPhone-এ Voice Memos ট্রান্সক্রাইব করা</a>। আপনি এটি দিয়েও রেকর্ডিং ট্রান্সক্রাইব করতে পারেন <a href="#vox-md">Vox.md</a>, ডিভাইসেই। ক্যাপশনসহ Zoom বা YouTube রেকর্ডিংয়ের জন্য <a href="/bn/blog/srt-vtt-to-text-markdown/">SRT ও VTT থেকে টেক্সট কনভার্টার</a> ক্যাপশন ফাইলকে টেক্সটে রূপান্তর করে।</li>
+        <li><strong>পেস্ট করুন ও মাপুন।</strong> মোড ৩-এ ট্রান্সক্রিপ্ট পেস্ট করুন এবং রেকর্ডিংয়ের দৈর্ঘ্য লিখুন। এটি ট্রান্সক্রিপ্টের শব্দকে মিনিট দিয়ে ভাগ করে, আপনার মাপা WPM ও প্রিসেটের সঙ্গে তুলনা দেখায়, এবং আপনার গতিতে স্ক্রিপ্টের কথা বলার সময় হিসাব করে।</li>
+      </ol>
+      <p>সংখ্যাটির ওপর ভরসা করার আগে ট্রান্সক্রিপ্টটি আপনি যা সত্যিই বলেছেন তার সঙ্গে মিলিয়ে দেখুন। স্পিচ রিকগনিশন ভুল করে, আর একটি বাদ পড়া বা যোগ হওয়া শব্দ গণনা বদলে দেয়। পুরো বক্তৃতাটি মহড়া দিন, রেকর্ডিংয়ের শুরু ও শেষের ফাঁকা অংশ বেশি হলে ছেঁটে ফেলুন, এবং স্ক্রিপ্ট সম্পাদনার পর আবার মাপুন।</p>
+      <p>বিরতি আগে থেকেই রেকর্ডিংয়ের ভেতরে আছে, তাই মোড ৩-এ স্ক্রিপ্টের সময়ে কোনো বিরতি যোগ হয় না। আপনার মহড়ায় স্লাইড বা শ্রোতা না থাকলে আসল অনুষ্ঠানের জন্য একটু বাড়তি সময় রাখুন।</p>
+
+      <h2 id="vox-md">৬. Vox.md দিয়ে মহড়া দিন ও ট্রান্সক্রাইব করুন</h2>
+      <p>একবার জোরে মহড়া দিন। Vox.md আপনার iPhone, iPad বা Mac-এ রেকর্ডিং ট্রান্সক্রাইব করে এবং Markdown আপনার ভল্টে সংরক্ষণ করে, ফলে আপনি এখানে আপনার আসল গতি মাপতে পারেন। বক্তৃতা, ভিডিও স্ক্রিপ্ট বা পডকাস্টের ভূমিকার জন্য এটি ব্যবহার করুন। ট্রান্সক্রিপশন ডিভাইসেই Apple Speech, Whisper বা Parakeet দিয়ে চলে; দেখুন <a href="/bn/docs/#models">মডেল রেফারেন্স</a> দেখুন, প্রতিটির জন্য কী লাগে। স্ক্রিপ্টের পাশে আপনার Obsidian ভল্টে Markdown সংরক্ষণ করলে নতুন করে লেখার সময় খসড়াগুলো তুলনা করা যায়।</p>
+      <p>রেকর্ডিং আনার ধাপগুলো আছে <a href="/bn/blog/transcribe-voice-memos-iphone/">iPhone-এ Voice Memos ট্রান্সক্রাইব করুন</a> এবং <a href="/bn/blog/transcribe-audio-file-mac/">Mac-এ অডিও ফাইল প্রতিলিখন করুন</a>, এবং <a href="/bn/blog/transcribe-interview/">একটি সাক্ষাৎকার গোপনীয়ভাবে ট্রান্সক্রাইব করুন</a> -এ বক্তার লেবেলের কথা আছে। শুধু ডিক্টেট করতে চাইলে দেখুন <a href="/bn/blog/speech-to-text-iphone/">iPhone-এ স্পিচ টু টেক্সট</a> এবং <a href="/bn/blog/dictation-on-mac/">Mac-এ ডিকটেশন</a>। Vox.md আপনাকে ট্রান্সক্রিপ্ট দেয়, দৈর্ঘ্য নয়: সময়কাল আসে রেকর্ডার থেকে, আর গণনা আপনি এখানে করেন।</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">একবার জোরে মহড়া দিন।</h2>
+        <p>Vox.md আপনার iPhone, iPad বা Mac-এ রেকর্ডিং ট্রান্সক্রাইব করে এবং Markdown আপনার ভল্টে সংরক্ষণ করে, ফলে আপনি এখানে আপনার আসল গতি মাপতে পারেন। বিনামূল্যের কোটা ১৫ মিনিটের ট্রান্সক্রিপশন ও ১০টি সফল Capture ডেলিভারি; সীমাহীন ব্যবহার একবারের লাইফটাইম আনলক, কোনো সাবস্ক্রিপশন ছাড়া।</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_bn_ca19bbc9dfae">Vox.md ডাউনলোড করুন</a> <a class="btn-secondary" href="/bn/docs/">ডকুমেন্টেশন পড়ুন</a></p>
+        <p>ওপরের ক্যালকুলেটর অ্যাপ ছাড়াই পুরোপুরি কাজ করে।</p>
+      </section>
+
+      <h2 id="faq">৭. প্রশ্ন</h2>
+      <h3>৩, ৫ বা ১০ মিনিটের বক্তৃতায় কত শব্দ?</h3>
+      <p>১৩০–১৫০ WPM-এ ৩ মিনিটের বক্তৃতায় প্রায় ৩৯০–৪৫০ শব্দ, ৫ মিনিটের বক্তৃতায় প্রায় ৬৫০–৭৫০ শব্দ এবং ১০ মিনিটের বক্তৃতায় প্রায় ১,৩০০–১,৫০০ শব্দ। ধীর ও দ্রুত প্রিসেট জুড়ে, ১০০–১৭০ WPM-এ ৫ মিনিটে ৫০০–৮৫০ শব্দ। তুলনার জন্য, ১৮৩ WPM গড় <a href="https://doi.org/10.1016/j.jml.2019.104047" target="_blank" rel="noopener">Brysbaert, 2019</a> জোরে পড়ার জন্য যা পেয়েছে তাতে ৫ মিনিটে প্রায় ৯১৫ শব্দ হবে। বিরতি যোগ করুন, এবং নিজের সংখ্যা জানতে মহড়া দিন।</p>
+      <h3>১,০০০ শব্দের বক্তৃতা কত লম্বা?</h3>
+      <p>১৩০ WPM-এ ৭:৪২ এবং ১৫০ WPM-এ ৬:৪০, কোনো বিরতি ছাড়া। ১০০ WPM-এ ১০:০০ এবং ১৭০ WPM-এ ৫:৫৩। Brysbaert (2019)-এর জোরে পড়ার গড় ১৮৩ WPM-এ ৫:২৮। ১২টি অনুচ্ছেদ ও ১০টি স্লাইড থাকলে বিরতি যোগ করুন <a href="#pauses-and-slides">উপরের অংশ</a>.</p>
+      <h3>উপস্থাপনার জন্য ভালো বলার গতি কী?</h3>
+      <p>উপস্থাপনার জন্য লক্ষ্য গতি নির্ধারণ করে এমন কোনো প্রাথমিক সূত্র আমরা পাইনি। সূত্রসহ সংখ্যাগুলো অন্য পরিস্থিতি বর্ণনা করে: <a href="https://www.isca-archive.org/interspeech_2006/yuan06_interspeech.html" target="_blank" rel="noopener">Yuan, Liberman ও Cieri (2006)</a> টেলিফোন কথোপকথনের অতিবাহিত সময়ে ১৯৬ WPM জানায়, এবং Brysbaert (2019) জোরে পড়ার জন্য ১৮৩ WPM জানান। ১৩০–১৫০ WPM-এর মতো ধীর পরিকল্পনা-গতি বিরতি ও স্লাইড বদলের জন্য জায়গা রাখে, কিন্তু নির্ভরযোগ্য উত্তর হলো মহড়া থেকে পাওয়া আপনার নিজের গতি, যেমন <a href="#measure-your-pace">আপনার গতি মাপুন</a>.</p>
+      <h3>জোরে পড়তে কি নীরবে পড়ার চেয়ে বেশি সময় লাগে?</h3>
+      <p>হ্যাঁ, গড়ে। <a href="https://doi.org/10.1016/j.jml.2019.104047" target="_blank" rel="noopener">Brysbaert, 2019</a> ইংরেজি নন-ফিকশনের জন্য জোরে পড়ায় ১৮৩ WPM এবং নীরবে পড়ায় ২৩৮ WPM (ফিকশনের জন্য ২৬০ WPM) অনুমান করে। এই গড় ধরলে একই নন-ফিকশন লেখা জোরে পড়তে প্রায় ৩০% বেশি সময় লাগে (২৩৮ ÷ ১৮৩ ≈ ১.৩)। পাঠকভেদে ভিন্নতা আছে, তাই নিজে মেপে দেখুন।</p>
+      <h3>ক্যালকুলেটর কি আমার স্ক্রিপ্ট আপলোড করে?</h3>
+      <p>না। শব্দগুলো এই পৃষ্ঠার একটি স্ক্রিপ্ট আপনার ডিভাইসেই গোনে, এবং পৃষ্ঠাটি কোনো নেটওয়ার্ক অনুরোধ করে না। এটি আপনার লেখা সংরক্ষণ করে না: পৃষ্ঠা বন্ধ বা রিলোড করলে তা মুছে যায়।</p>
+
+      <nav class="toc" aria-label="সম্পর্কিত গাইড" id="related"><div class="toc-title">সেটআপ চালিয়ে যান</div><ul>
+        <li><a href="/bn/blog/speech-to-text-iphone/">iPhone-এ স্পিচ টু টেক্সট</a></li>
+        <li><a href="/bn/blog/dictation-on-mac/">Mac-এ ডিক্টেশন</a></li>
+        <li><a href="/bn/blog/transcribe-voice-memos-iphone/">iPhone-এ Voice Memos ট্রান্সক্রাইব করুন</a></li>
+        <li><a href="/bn/blog/transcribe-audio-file-mac/">Mac-এ অডিও ফাইল প্রতিলিখন করুন</a></li>
+        <li><a href="/bn/blog/transcribe-interview/">একটি সাক্ষাৎকার গোপনীয়ভাবে ট্রান্সক্রাইব করুন</a></li>
+        <li><a href="/bn/blog/srt-vtt-to-text-markdown/">SRT ও VTT থেকে টেক্সট বা Markdown কনভার্টার</a></li>
+        <li><a href="/bn/docs/#models">মডেল ও ট্রান্সক্রিপশন রেফারেন্স</a></li>
+      </ul></nav>
+<style>
+.st-tool:not([hidden]) { display: flex; flex-direction: column; gap: 40px; }
+.st-tool [hidden] { display: none; }
+.st-mode { display: flex; flex-direction: column; gap: 14px; }
+.st-mode h3 { margin: 0; }
+.st-mode form { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.st-tool .mt-field input, .st-tool .mt-field textarea { font: inherit; font-family: var(--font-mono); font-size: 16px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; padding: 8px 10px; width: 100%; box-sizing: border-box; min-height: 44px; }
+.st-tool .mt-field textarea { resize: vertical; min-height: 160px; }
+.st-tool input:focus-visible, .st-tool textarea:focus-visible, .st-chip:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.st-tool .mt-actions button { font: inherit; font-size: 15px; min-height: 44px; padding: 0 18px; cursor: pointer; }
+.st-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.st-chip { font: inherit; font-size: 14.5px; min-height: 44px; padding: 0 14px; cursor: pointer; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 999px; }
+.st-chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.st-result { display: flex; flex-direction: column; gap: 8px; padding: 14px 18px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; }
+.st-result[hidden] { display: none; }
+.st-result h4 { margin: 0; }
+.st-result p { margin: 0; overflow-wrap: anywhere; }
+.st-big { font-family: var(--font-mono); font-size: clamp(20px, 5vw, 28px); font-weight: 700; }
+.st-tool .mt-hint[role="status"] { min-height: 1.4em; }
+</style>
+<script>
+/* Speech time calculator. Runs locally: no network requests. */
+(function () {
+  var PRESETS = [100, 130, 150, 170];
+  var MIN_WPM = 40, MAX_WPM = 400;
+
+  function pad2(n) { return n < 10 ? '0' + n : String(n); }
+  /* Seconds to m:ss, or h:mm:ss from one hour. */
+  function fmt(total) {
+    total = Math.max(0, Math.round(total));
+    var h = Math.floor(total / 3600), m = Math.floor((total % 3600) / 60), s = total % 60;
+    return h ? h + ':' + pad2(m) + ':' + pad2(s) : m + ':' + pad2(s);
+  }
+  function num(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  function validWpm(w) { return typeof w === 'number' && isFinite(w) && w >= MIN_WPM && w <= MAX_WPM; }
+  function secondsFor(words, wpm) { return Math.round(words / wpm * 60); }
+  function wordsFor(minutes, wpm) { return Math.round(minutes * wpm); }
+
+  /* Strip Markdown and frontmatter, then count words the way a listener hears them. */
+  function clean(text) {
+    var s = String(text || '').replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
+    s = s.replace(/^---[ \t]*\n(?:[\s\S]*?\n)?(?:---|\.\.\.)[ \t]*(?:\n|$)/, '');
+    s = s.replace(/<!--[\s\S]*?-->/g, ' ').replace(/%%[\s\S]*?%%/g, ' ');
+    s = s.replace(/!\[\[[^\]]*\]\]/g, ' ').replace(/!\[[^\]]*\]\([^)]*\)/g, ' ');
+    s = s.replace(/\[\^[^\]]+\]/g, ' ');
+    s = s.replace(/\[\[([^\]]*)\]\]/g, function (all, inner) {
+      var bar = inner.lastIndexOf('|');
+      if (bar >= 0) return inner.slice(bar + 1);
+      var target = inner.split(/[#^]/)[0] || inner.replace(/^[#^]+/, '');
+      return target.slice(target.lastIndexOf('/') + 1);
+    });
+    s = s.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/\[([^\]]*)\]\[[^\]]*\]/g, '$1');
+    s = s.replace(/^[ \t]*\[[^\]]+\]:[ \t]*\S.*$/gm, ' ');
+    s = s.replace(/<\/?[A-Za-z][^>]*>/g, ' ');
+    s = s.replace(/https?:\/\/\S+|www\.\S+/g, ' ');
+    var lines = s.split('\n').map(function (line) {
+      if (/^[ \t]*(```|~~~)/.test(line)) return '';
+      if (/^[\s>*_=:|+-]*$/.test(line) && /[-=*_]{3}|\|/.test(line)) return '';
+      line = line.replace(/^[ \t]*(?:>[ \t]*)*/, '').replace(/^#{1,6}[ \t]+/, '');
+      for (;;) {
+        var next = line.replace(/^(?:[-*+]|\d+[.)])[ \t]+/, '').replace(/^\[[ xX]\][ \t]+/, '');
+        if (next === line) break;
+        line = next;
+      }
+      return line.replace(/\|/g, ' ');
+    });
+    s = lines.join('\n');
+    s = s.replace(/\\([\\`*_{}\[\]()#+.!|-])/g, '$1').replace(/[`*~=]+/g, ' ');
+    s = s.replace(/(^|[\s(])_+|_+(?=[\s).,;:!?]|$)/g, '$1 ').replace(/[—–]/g, ' ');
+    return s;
+  }
+  function countWords(text) {
+    var cleaned = clean(text);
+    var words = 0, paragraphs = 0;
+    cleaned.split(/\n[ \t]*\n/).forEach(function (block) {
+      var n = 0;
+      block.split(/\s+/).forEach(function (tok) { if (tok && /[\p{L}\p{N}]/u.test(tok)) n++; });
+      if (n) { words += n; paragraphs++; }
+    });
+    return { words: words, paragraphs: paragraphs };
+  }
+
+  /* Script to time. opts: words, paragraphs, wpm, pausePara, slides, pauseSlide (seconds). */
+  function scriptTime(o) {
+    if (!validWpm(o.wpm)) return { error: 'bad-wpm' };
+    var words = o.words || 0;
+    var pausePara = o.pausePara || 0, pauseSlide = o.pauseSlide || 0, slides = o.slides || 0;
+    var speech = secondsFor(words, o.wpm);
+    var pauses = Math.round((o.paragraphs || 0) * pausePara + slides * pauseSlide);
+    return { speech: speech, pauses: pauses, total: speech + pauses };
+  }
+  /* Time to words. */
+  function wordsForTime(o) {
+    if (!validWpm(o.wpm)) return { error: 'bad-wpm' };
+    var reserve = o.reserve || 0;
+    var speaking = o.minutes * 60 - reserve;
+    if (speaking <= 0) return { error: 'no-room' };
+    return { words: wordsFor(speaking / 60, o.wpm), speaking: speaking, reserve: reserve };
+  }
+  /* "4:35" or "1:04:35" to seconds, or null. */
+  function parseDuration(text) {
+    var t = String(text || '').trim(), m;
+    if ((m = /^(\d{1,4}):([0-5]\d)$/.exec(t))) return +m[1] * 60 + +m[2];
+    if ((m = /^(\d{1,3}):([0-5]\d):([0-5]\d)$/.exec(t))) return +m[1] * 3600 + +m[2] * 60 + +m[3];
+    return null;
+  }
+  /* Measured pace. Returns {wpm} rounded to a whole number, or {error}. */
+  function measure(words, seconds) {
+    if (!words) return { error: 'no-transcript' };
+    if (!seconds) return { error: 'zero-duration' };
+    var wpm = Math.round(words / (seconds / 60));
+    if (!validWpm(wpm)) return { error: 'pace-out-of-range', wpm: wpm };
+    return { wpm: wpm };
+  }
+  function compare(measured, preset) {
+    var pct = Math.round((measured / preset - 1) * 100);
+    return pct === 0 ? { kind: 'same' } : { kind: pct > 0 ? 'faster' : 'slower', pct: Math.abs(pct) };
+  }
+
+  if (typeof window !== 'undefined') {
+    window.voxSpeechTime = { clean: clean, countWords: countWords, scriptTime: scriptTime, wordsForTime: wordsForTime,
+      parseDuration: parseDuration, measure: measure, compare: compare, fmt: fmt, num: num, secondsFor: secondsFor, wordsFor: wordsFor, PRESETS: PRESETS };
+  }
+
+  var root = document.getElementById('st-tool');
+  if (!root) return;
+  var EXAMPLE = '---\ntitle: Opening talk\ntags: [speech]\n---\n# Opening remarks\n\n- First point, **well-known** idea\n- See [the guide](https:\/\/example.com\/guide) and [[Project plan|plan]]\n\nTotal: 2026 plans.';
+  var EXAMPLE3 = 'Good morning everyone and thank you for coming. Today I want to talk about three ideas that changed how our team plans its work, and I will keep each one short.';
+
+  function el(id) { return document.getElementById(id); }
+  function message(name, fill) {
+    var node = document.querySelector('#st-messages [data-message="' + name + '"]');
+    var text = node ? node.textContent : '';
+    if (fill) Object.keys(fill).forEach(function (key) { text = text.split('{' + key + '}').join(fill[key]); });
+    return text;
+  }
+  function value(id) { var v = el(id).value; return v === '' ? NaN : Number(v); }
+  function say(id, text) {
+    var node = el(id);
+    node.textContent = '';
+    window.setTimeout(function () { node.textContent = text; }, 30);
+  }
+  function setCells(tableId, fn) {
+    Array.prototype.forEach.call(el(tableId).querySelectorAll('tr'), function (row) {
+      row.querySelector('td').textContent = fn(+row.getAttribute('data-wpm'));
+    });
+  }
+  function show(prefix, ok, msg) {
+    el(prefix + '-result').hidden = !ok;
+    el(prefix + '-msg').textContent = msg || '';
+  }
+  function pressed(group) {
+    var target = el(group.getAttribute('data-target'));
+    Array.prototype.forEach.call(group.querySelectorAll('.st-chip'), function (chip) {
+      chip.setAttribute('aria-pressed', String(Number(target.value) === +chip.getAttribute('data-wpm') && target.value !== ''));
+    });
+  }
+  var copyText = { st1: '', st2: '', st3: '' };
+
+  function update1() {
+    var script = el('st1-script').value;
+    var hasText = /\S/.test(script);
+    var counted = hasText ? countWords(script) : null;
+    var typed = value('st1-words');
+    var notes = [];
+    var words;
+    if (hasText) {
+      words = counted.words;
+      if (el('st1-words').value !== '') notes.push(message('using-text'));
+    } else if (el('st1-words').value === '') {
+      return show('st1', false, message('waiting1'));
+    } else if (!(typed >= 0 && typed <= 1000000)) {
+      return show('st1', false, message('bad-words'));
+    } else {
+      words = Math.floor(typed);
+    }
+    var wpm = value('st1-wpm');
+    if (!validWpm(wpm)) return show('st1', false, message('bad-wpm'));
+    var pp = el('st1-pp').value === '' ? 0 : value('st1-pp');
+    var ps = el('st1-ps').value === '' ? 0 : value('st1-ps');
+    if (!(pp >= 0 && pp <= 600) || !(ps >= 0 && ps <= 600)) return show('st1', false, message('bad-pause'));
+    var slides = el('st1-slides').value === '' ? 0 : value('st1-slides');
+    if (!(slides >= 0 && slides <= 500) || slides !== Math.floor(slides)) return show('st1', false, message('bad-slides'));
+    if (!hasText && pp > 0) notes.push(message('need-text'));
+    if (!words) return show('st1', false, message('waiting1'));
+    var r = scriptTime({ words: words, paragraphs: hasText ? counted.paragraphs : 0, wpm: wpm, pausePara: pp, slides: slides, pauseSlide: ps });
+    var total = message('r1-total', { wpm: wpm, time: fmt(r.total) });
+    var detail = hasText
+      ? message('r1-detail', { words: num(words), paragraphs: num(counted.paragraphs), speech: fmt(r.speech), pauses: fmt(r.pauses) })
+      : message('r1-detail-typed', { words: num(words), speech: fmt(r.speech), pauses: fmt(r.pauses) });
+    el('st1-total').textContent = total;
+    el('st1-detail').textContent = detail;
+    var lines = [total, detail];
+    setCells('st1-table', function (p) {
+      var t = scriptTime({ words: words, paragraphs: hasText ? counted.paragraphs : 0, wpm: p, pausePara: pp, slides: slides, pauseSlide: ps });
+      lines.push(p + ' WPM: ' + fmt(t.total));
+      return fmt(t.total);
+    });
+    copyText.st1 = lines.join('\n');
+    show('st1', true, notes.join(' '));
+  }
+
+  function update2() {
+    var minutes = value('st2-minutes');
+    if (!(minutes >= 0.5 && minutes <= 600)) return show('st2', false, message('bad-minutes'));
+    var wpm = value('st2-wpm');
+    if (!validWpm(wpm)) return show('st2', false, message('bad-wpm'));
+    var reserve = el('st2-reserve').value === '' ? 0 : value('st2-reserve');
+    if (!(reserve >= 0 && reserve <= 36000)) return show('st2', false, message('bad-reserve'));
+    var r = wordsForTime({ minutes: minutes, wpm: wpm, reserve: reserve });
+    if (r.error) return show('st2', false, message(r.error));
+    function w(p) { return wordsForTime({ minutes: minutes, wpm: p, reserve: reserve }).words; }
+    var total = message('r2-total', { words: num(r.words), minutes: String(minutes), wpm: wpm });
+    var detail = message('r2-detail', { low: num(w(100)), high: num(w(170)), a: num(w(130)), b: num(w(150)), speaking: fmt(r.speaking), pauses: fmt(reserve) });
+    el('st2-total').textContent = total;
+    el('st2-detail').textContent = detail;
+    var lines = [total, detail];
+    setCells('st2-table', function (p) { lines.push(p + ' WPM: ' + num(w(p)) + ' words'); return num(w(p)); });
+    copyText.st2 = lines.join('\n');
+    show('st2', true, '');
+  }
+
+  function update3() {
+    var transcript = el('st3-transcript').value;
+    var durText = el('st3-duration').value;
+    if (!/\S/.test(transcript)) return show('st3', false, message('no-transcript'));
+    var seconds = parseDuration(durText);
+    if (!/\S/.test(durText) || seconds === null) return show('st3', false, message('bad-duration'));
+    var words = countWords(transcript).words;
+    var m = measure(words, seconds);
+    if (m.error) return show('st3', false, message(m.error, { wpm: m.wpm === undefined ? '' : num(m.wpm) }));
+    var total = message('r3-total', { wpm: m.wpm });
+    var detail = message('r3-detail', { words: num(words), time: fmt(seconds) });
+    el('st3-total').textContent = total;
+    el('st3-detail').textContent = detail;
+    var lines = [total, detail];
+    setCells('st3-table', function (p) {
+      var c = compare(m.wpm, p);
+      var text = message('r3-' + c.kind, { pct: c.pct });
+      lines.push(p + ' WPM: ' + text);
+      return text;
+    });
+    var scriptWords = el('st3-script-words').value === '' ? 0 : value('st3-script-words');
+    var scriptEl = el('st3-script');
+    if (scriptWords > 0 && scriptWords <= 1000000) {
+      var t = scriptTime({ words: Math.floor(scriptWords), wpm: m.wpm });
+      var line = message('r3-script', { words: num(Math.floor(scriptWords)), wpm: m.wpm, time: fmt(t.total) }) + ' ' + message('r3-pauses');
+      scriptEl.textContent = line;
+      scriptEl.hidden = false;
+      lines.push(line);
+    } else {
+      scriptEl.textContent = '';
+      scriptEl.hidden = true;
+    }
+    copyText.st3 = lines.join('\n');
+    show('st3', true, '');
+  }
+
+  function copy(key, statusId) {
+    var text = copyText[key];
+    function fallback() {
+      var area = document.createElement('textarea');
+      area.value = text;
+      area.setAttribute('readonly', '');
+      area.style.position = 'fixed';
+      area.style.opacity = '0';
+      document.body.appendChild(area);
+      area.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      document.body.removeChild(area);
+      say(statusId, message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(statusId, message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  }
+
+  var updaters = { st1: update1, st2: update2, st3: update3 };
+  function refresh() {
+    update1(); update2(); update3();
+    Array.prototype.forEach.call(root.querySelectorAll('.st-chips'), pressed);
+  }
+  ['st1', 'st2', 'st3'].forEach(function (key) {
+    var form = el(key + '-form');
+    form.addEventListener('input', refresh);
+    form.addEventListener('change', refresh);
+    form.addEventListener('submit', function (event) { event.preventDefault(); });
+    el(key + '-copy').addEventListener('click', function () { copy(key, key + '-status'); });
+  });
+  Array.prototype.forEach.call(root.querySelectorAll('.st-chip'), function (chip) {
+    chip.addEventListener('click', function () {
+      el(chip.parentNode.getAttribute('data-target')).value = chip.getAttribute('data-wpm');
+      refresh();
+    });
+  });
+  el('st1-example').addEventListener('click', function () { el('st1-script').value = EXAMPLE; refresh(); say('st1-status', message('loaded')); });
+  el('st1-clear').addEventListener('click', function () {
+    el('st1-script').value = ''; el('st1-words').value = ''; refresh(); el('st1-script').focus(); say('st1-status', message('cleared'));
+  });
+  el('st3-example').addEventListener('click', function () {
+    el('st3-transcript').value = EXAMPLE3; el('st3-duration').value = '0:12'; refresh(); say('st3-status', message('loaded'));
+  });
+  el('st3-clear').addEventListener('click', function () {
+    el('st3-transcript').value = ''; el('st3-duration').value = ''; el('st3-script-words').value = ''; refresh(); el('st3-transcript').focus(); say('st3-status', message('cleared'));
+  });
+  el('st3-use-count').addEventListener('click', function () {
+    var script = el('st1-script').value;
+    var words = /\S/.test(script) ? countWords(script).words : (el('st1-words').value === '' ? 0 : Math.floor(value('st1-words')));
+    if (!(words > 0)) { say('st3-status', message('no-count')); return; }
+    el('st3-script-words').value = words;
+    refresh();
+    say('st3-status', message('count-used'));
+  });
+
+  el('st-nojs').hidden = true;
+  root.hidden = false;
+  refresh();
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/bn/">হোম</a></li>
+        <li><a href="/bn/docs/">নথি</a></li>
+        <li><a href="/bn/blog/">গাইড</a></li>
+        <li><a href="/bn/compare/">তুলনা করুন</a></li>
+        <li><a href="/bn/privacy.html">গোপনীয়তা</a></li>
+        <li><a href="/bn/terms.html">শর্তাবলি</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">সহায়তা</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_bn_ca19bbc9dfae">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© ২০২৬ Vox.md · স্থানীয় নোটের দ্রুত ক্যাপচার · বিষয়বস্তু আপলোড নেই।</div>
+    </div>
+  <details class="language-switcher"><summary>ভাষা</summary><ul><li><a href="/blog/speech-time-calculator/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/speech-time-calculator/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/speech-time-calculator/" lang="bn" hreflang="bn" aria-current="page">বাংলা</a></li><li><a href="/de/blog/speech-time-calculator/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/speech-time-calculator/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/speech-time-calculator/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/speech-time-calculator/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/speech-time-calculator/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/speech-time-calculator/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/speech-time-calculator/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/speech-time-calculator/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/speech-time-calculator/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/speech-time-calculator/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/speech-time-calculator/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/speech-time-calculator/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/speech-time-calculator/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/speech-time-calculator/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/speech-time-calculator/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/speech-time-calculator/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/speech-time-calculator/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/speech-time-calculator/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/speech-time-calculator/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/speech-time-calculator/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
