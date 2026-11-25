@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr" data-search-section="セクション" data-search-guide="ガイド記事" data-search-empty="「{query}」に一致する結果はありません">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>インタビューをプライベートに文字起こしする方法(話者ラベル付き) | Vox.md</title>
+  <meta name="description" content="録音したインタビューを確認できる文字起こしにするための実践的な方法です。同意、録音、逐語または整えたテキスト、確認、任意の匿名話者ラベルを扱います。Vox.md はデバイス上で文字起こしを行い、自分で所有する Markdown ノートを保存します。">
+  <link rel="canonical" href="https://vox.isolated.tech/ja/blog/transcribe-interview/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="言語モデル向けの Vox.md ドキュメント">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="インタビューをプライベートに文字起こしする方法(話者ラベル付き)">
+  <meta property="og:description" content="録音したインタビューを確認できる文字起こしにするための実践的な方法です。同意、録音、逐語または整えたテキスト、確認、任意の匿名話者ラベルを扱います。Vox.md はデバイス上で文字起こしを行い、自分で所有する Markdown ノートを保存します。">
+  <meta property="og:url" content="https://vox.isolated.tech/ja/blog/transcribe-interview/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-24">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="インタビューをプライベートに文字起こしする方法(話者ラベル付き)">
+  <meta name="twitter:description" content="録音したインタビューを確認できる文字起こしにするための実践的な方法です。同意、録音、逐語または整えたテキスト、確認、任意の匿名話者ラベルを扱います。Vox.md はデバイス上で文字起こしを行い、自分で所有する Markdown ノートを保存します。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "インタビューをプライベートに文字起こしする方法(話者ラベル付き)",
+  "description": "録音したインタビューを確認できる文字起こしにするための実践的な方法です。同意、録音、逐語または整えたテキスト、確認、任意の匿名話者ラベルを扱います。Vox.md はデバイス上で文字起こしを行い、自分で所有する Markdown ノートを保存します。",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-24",
+  "dateModified": "2026-11-24",
+  "mainEntityOfPage": "https://vox.isolated.tech/ja/blog/transcribe-interview/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "ja",
+  "name": "インタビューをプライベートに文字起こしする方法(話者ラベル付き) | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/ja/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "ガイド",
+      "item": "https://vox.isolated.tech/ja/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "インタビューをプライベートに文字起こしする方法(話者ラベル付き)",
+      "item": "https://vox.isolated.tech/ja/blog/transcribe-interview/"
+    }
+  ],
+  "inLanguage": "ja",
+  "name": "インタビューをプライベートに文字起こしする方法(話者ラベル付き) | Vox.md",
+  "description": "録音したインタビューを確認できる文字起こしにするための実践的な方法です。同意、録音、逐語または整えたテキスト、確認、任意の匿名話者ラベルを扱います。Vox.md はデバイス上で文字起こしを行い、自分で所有する Markdown ノートを保存します。"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-interview/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-interview/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-interview/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-interview/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-interview/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-interview/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-interview/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-interview/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-interview/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-interview/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-interview/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-interview/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-interview/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-interview/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-interview/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-interview/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-interview/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-interview/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">ガイド本文へ</a>
+<nav aria-label="メインナビゲーション">
+  <div class="nav-inner">
+    <a href="/ja/" class="logo" aria-label="Vox.md ホーム">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/ja/#how">動作の仕組み</a></li>
+      <li><a href="/ja/docs/">ドキュメント</a></li>
+      <li><a href="/ja/blog/">ガイド</a></li>
+      <li><a href="/ja/compare/">比較する</a></li>
+      <li><a href="/ja/privacy.html">プライバシー</a></li>
+      <li><a href="/ja/terms.html">利用規約</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_ja_4113af33d28a">Vox.md をダウンロード</a>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/blog/transcribe-interview/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-interview/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-interview/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-interview/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-interview/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-interview/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-interview/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-interview/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-interview/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-interview/" lang="ja" hreflang="ja" aria-current="page">日本語</a></li><li><a href="/ko/blog/transcribe-interview/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-interview/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-interview/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-interview/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-interview/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-interview/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-interview/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-interview/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-interview/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-interview/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-interview/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-interview/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-interview/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">インタビュー · デバイス上 · 話者ラベル</div>
+        <h1 class="hero-title">インタビューをプライベートに文字起こしする方法(話者ラベル付き)</h1>
+        <p class="hero-subtitle">同意、録音、文字起こし、確認作業に加え、参加者の音声が文字起こしサービスにアップロードされないようにする端末上のルートも解説します。</p>
+      </div>
+      <aside class="meta-card" aria-label="このガイドについて">
+        <dl>
+          <div><dt>作成者</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>更新日</dt><dd><time datetime="2026-11-24">2026年11月24日</time></dd></div>
+          <div><dt>必要条件</dt><dd>Vox.md:iOS または iPadOS 17.6+ または macOS 14+ · Whisper または Parakeet 用にダウンロード済みの音声モデル · 書き込み可能な保存先フォルダ</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="インタビューをプライベートに文字起こしする方法(話者ラベル付き)">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">短く答えると</div>
+        <p>5 つのステップ: <strong>1) 同意を得る</strong> 音声がどのように処理・保存されるかを説明します。 <strong>2) はっきり録音する</strong> 先にテストをして確認します。 <strong>3) 文字起こしする</strong>; <strong>4) 音声と照らして文章を確認する</strong>; <strong>5) 話者にラベルを付けて保存する</strong>。iPhone、iPad、Mac の Vox.md なら、すべてを自分のデバイス上で行えるため、録音が文字起こしサービスにアップロードされることはありません。話者ラベルは任意で、匿名、ベストエフォートです(「Speaker 1」「Speaker 2」)。名前は手動で変更します。</p>
+      </div>
+      <p>この方法はどのツールでも使えます。Vox.md の手順は次の <a href="/ja/docs/#models">モデル</a> と <a href="/ja/docs/#mac">Mac</a> のドキュメントとアプリの実際の動作に基づいています。外部の情報源は使用箇所にリンクしており、サンプルのノートは説明用で、実際のインタビューではありません。</p>
+      <nav class="toc" aria-label="このガイドの内容"><div class="toc-title">このガイドの内容</div><ol>
+        <li><a href="#before-you-record">録音の前に</a></li>
+        <li><a href="#verbatim-or-clean">逐語か、整えるか?</a></li>
+        <li><a href="#options">文字起こしの方法</a></li>
+        <li><a href="#iphone">iPhone または iPad で対面</a></li>
+        <li><a href="#mac">Mac の場合</a></li>
+        <li><a href="#review">確認作業</a></li>
+        <li><a href="#troubleshooting">問題の解決</a></li>
+        <li><a href="#faq">よくある質問</a></li>
+      </ol></nav>
+
+      <h2 id="before-you-record">録音の前に</h2>
+      <p><strong>同意とデータの扱い。</strong> 録音の前に、音声がどのように処理・保存されるかを参加者に伝え、同意を得ます。Centre College の <a href="https://library.centre.edu/oralhistories/standards">オーラルヒストリー・ガイド</a> では、インタビュアーは語り手が自発的に同意していることを確認し、インタビューの目的を説明し、アクセスの制限や匿名の選択を含む選択肢を明確に伝えるべきだとしています。倫理委員会やデータポリシーも確認してください。参加者の音声をどこで処理・保存するかを尋ねられることが多いため、最初のインタビューの前に答えを決めておきましょう。</p>
+      <p><strong>録音の準備。</strong> Harvard Library の <a href="https://guides.library.harvard.edu/c.php?g=796889&amp;p=10476360">録音と文字起こし</a> ガイドは、良い音声を録ることに最初に時間をかけるよう勧めています。文字起こしが楽になるからです。実際には次のようにします。</p>
+      <ul>
+        <li>可能なら話者ごとに 1 本のマイクを使い、それぞれの近くに座ります。</li>
+        <li>静かな部屋を選び、鳴ったり唸ったりするものは切っておきましょう。</li>
+        <li>本番のインタビューの前に、短いテスト録音をして再生してみましょう。</li>
+      </ul>
+
+      <h2 id="verbatim-or-clean">逐語か、整えるか?</h2>
+      <p>文字起こしの前にスタイルを決め、プロジェクト全体で統一します。Centre College のガイドの <a href="https://library.centre.edu/oralhistories/transcribing">文字起こし</a> ページでは、逐語を、言い淀みの音、間、割り込み、笑い声も含めた一語一句そのままの記録と説明し、最もニュアンスを残せるため歴史学者が好むとしています。「整えた逐語」と「編集済み」は、より軽いスタイルの一般的な呼び名で、表に通常の違いをまとめています。どれが必要かは、プロジェクト、出版社、倫理委員会によって決まります。</p>
+      <p class="guide-table-hint">小さな画面では、表を横にスワイプしてください。</p>
+      <div class="guide-comparison" role="region" aria-label="文字起こしスタイルの比較。小さい画面では横にスクロールしてください" tabindex="0">
+        <table class="comparison">
+          <caption>一般的な文字起こしスタイル</caption>
+          <thead><tr><th scope="col">スタイル</th><th scope="col">残すもの</th><th scope="col">向いている用途</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">逐語</th><td>発言のすべて:言い淀み、言い直し、間、言葉以外の音</td><td>言葉遣いや話し方そのものがデータになるオーラルヒストリーや研究</td></tr>
+            <tr><th scope="row">整えた逐語</th><td>発言された言葉。言い淀みや言い直しは除く</td><td>話し方よりも意味が重要な、ほとんどのインタビュー分析と引用</td></tr>
+            <tr><th scope="row">編集済み</th><td>読みやすく言い換え:文法を整え、一部を削除</td><td>公開用の下書き。プロジェクトで必要な場合は、話者の承認を得た場合に限ります</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>自動文字起こしがスタイルを選んでくれるわけではありません。スタイルは確認作業で適用します。</p>
+
+      <h2 id="options">文字起こしの方法</h2>
+      <p>この表は特定の製品ではなくカテゴリーを比較し、文書化されている内容のみを記載しています。Apple のボイスメモに関する詳細は、Apple サポートの <a href="https://support.apple.com/guide/voice-memos/vm4a03609f0d/mac">Mac のボイスメモで文字起こしを表示する</a> と、その <a href="https://support.apple.com/guide/iphone/view-a-transcription-iph00953a982/ios">iPhone のページ</a>。お使いのデバイス、言語、地域で確認してください。</p>
+      <p class="guide-table-hint">小さな画面では、表を横にスワイプしてください。</p>
+      <div class="guide-comparison" role="region" aria-label="インタビュー文字起こしの選択肢の比較。小さい画面では横にスクロールしてください" tabindex="0">
+        <table class="comparison">
+          <caption>インタビュー文字起こしの選択肢</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">音声が処理される場所</th><th scope="col">話者ラベル</th><th scope="col">出力</th><th scope="col">費用モデル</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">手作業</th><td>自分のコンピュータ</td><td>手で入力する</td><td>任意のテキストファイル</td><td>あなたの時間: <a href="https://www.nps.gov/articles/000/oral-history-resources-interview-transcribing.htm">国立公園局</a> では、録音 1 時間あたり約 6〜8 時間とされています</td></tr>
+            <tr><th scope="row">クラウドの文字起こしサービス</th><td>プロバイダのサーバー。各プロバイダの規約を確認してください</td><td>サービスにより異なる</td><td>サービスにより異なる</td><td>サービスにより異なる</td></tr>
+            <tr><th scope="row">Apple のボイスメモの文字起こし</th><td>参照したページには記載なし</td><td>参照したページには記載なし</td><td>ボイスメモ内のテキスト。コピーして取り出します</td><td>オペレーティングシステムの一部</td></tr>
+            <tr><th scope="row">Vox.md</th><td>iPhone、iPad、Mac で</td><td>オプトイン、匿名、ベストエフォート</td><td>選んだフォルダ内の Markdown ノート</td><td>無料の文字起こし15分と配信成功10回、その後は買い切りの永続アンロック</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>ボイスメモ内の簡単なテキストだけで足りるなら、それを使ってください。詳しくは <a href="/ja/blog/transcribe-voice-memos-iphone/">ボイスメモを Markdown に文字起こし</a> は、録音をノートに移すためのものです。Vox.md は、文字起こしを自分で所有するプレーンなファイルとして、選んだローカルモデルと任意の話者ラベル付きで残したいときに向いています。</p>
+
+      <h2 id="iphone">iPhone または iPad で対面</h2>
+      <ol>
+        <li><strong>文字起こしモデルを選ぶ。</strong> 自動では、iOS 26 の対応デバイスと言語で Apple Speech が優先されます。代わりに Whisper(Tiny から Large v3 Turbo)、Parakeet v2(英語)、Parakeet v3(25 言語)をダウンロードすることもできます。モデルのダウンロードは任意で、ネットワークを使う唯一の手順です。 <a href="/ja/compare/whisper-vs-parakeet/">Whisper と Parakeet の比較</a> は選ぶ助けになります。また <a href="/ja/blog/offline-transcription-iphone-markdown/">iPhone でのオフライン文字起こし</a> で準備方法を説明しています。</li>
+        <li><strong>「Interviews」ルートを作る。</strong> 設定 → ルートで、Interviews という名前のルートを作成します。保存先フォルダ(Obsidian の保管庫または「ファイル」のフォルダ)を選び、 <strong>新しいノート</strong>。これにより、キャプチャごとに個別のファイルになります。必要に応じて、静的なフロントマターを追加し、1 <code>key: value</code> を 1 行ごとに、たとえば <code>project: housing-study</code>。この <a href="/ja/blog/obsidian-properties-generator/">プロパティジェネレーター</a> は有効なフロントマターを作成します。静的メタデータはルートのすべてのノートに適用されるため、参加者コードは入れないでください。</li>
+        <li><strong>スピーカーの識別をオンにする。</strong> ルートごとのオプトイン設定です。初めて使うときに別の話者モデルを準備するので、参加者の前ではなく、インタビューの前に済ませておきましょう。その後はローカルで実行されます。オープンソースの <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> ライブラリは、ローカルでの話者処理に使われます。</li>
+        <li><strong>2 人の声で 30 秒のテストをする。</strong> 誰かと短い会話を録音し、ノートが保存先フォルダに届いて、ラベルが 2 つ表示されることを確認します。</li>
+        <li><strong>録音するか、読み込む。</strong> Vox.md のコンポーザから録音するか、既存のオーディオまたはビデオファイルには読み込みコントロールを使います (<a href="/ja/blog/transcribe-video-to-text/">ビデオの読み込み方法</a>)。選択: <strong>下書きに追加</strong> 配信前にテキストを読みたい場合、または <strong>すぐに送信</strong> 文字起こしの完了時にテキストを配信します。</li>
+        <li><strong>ライブラリで確認します。</strong> ライブラリには各キャプチャが表示され、話者の識別が実行できなかった場合はその理由も表示されます。</li>
+      </ol>
+      <p>スピーカーの識別をオンにすると、保存されるテキストでは発言ごとに専用のラベル行が付き、その次の行にその発言のテキストが続き、発言どうしは空行で区切られます。</p>
+<pre class="guide-code"><code>Speaker 1:
+Thanks for agreeing to talk with me today.
+
+Speaker 2:
+Happy to. Where would you like me to start?</code></pre>
+      <p>ラベルは匿名で、ベストエフォートです。Vox.md は人物を名前で認識しません。Apple Watch での文字起こし配信や Mac アプリでも利用できます。</p>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">短い録音 1 つで試してみましょう。</h2>
+        <p>無料枠は、文字起こし 15 分と配信 10 回(成功分)です。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_4113af33d28a">Vox.md を入手</a></p>
+      </section>
+
+      <h2 id="mac">Mac の場合</h2>
+      <ul>
+        <li><strong>既存のファイル。</strong> 使用 <strong>オーディオを読み込む…</strong> Mac 版 Vox.md では、音声ファイルとムービーファイルを読み込めます。手順は <a href="/ja/blog/transcribe-audio-file-mac/">Mac で音声ファイルを文字起こしする</a>。匿名ラベルが必要な場合は、ルートでスピーカーの識別をオンにします。</li>
+        <li><strong>リモートのインタビュー。</strong> 会議キャプチャは、1 つのアプリの音声とあなたのマイクを別々のステムとして録音します。あなたは「You」と表示され、相手側はリモート話者としてラベル付けされます。話者の識別により、複数のリモートの声をさらに分けることもできます。設定方法は <a href="/ja/blog/transcribe-meetings-mac-obsidian/">Mac のミーティングを文字起こしして Obsidian へ</a>。上の同意の手順と同じように、リモートの参加者にも録音していることを伝えます。</li>
+        <li><strong>字幕ファイル。</strong> Zoom や Teams ですでに .srt または .vtt ファイルがある場合は、 <a href="/ja/blog/srt-vtt-to-text-markdown/">SRT/VTT コンバーター</a> は、ブラウザ上でテキストまたは Markdown に変換します。</li>
+      </ul>
+      <p>会議メモの処理モードもありますが、テキストをノート形式に再構成します。逐語の研究用文字起こしでは、ルートをオリジナルを保持のままにしてください。</p>
+
+      <h2 id="review">確認作業</h2>
+      <p>自動文字起こしは確認が必要です。Harvard のガイドは、自動生成された文字起こしは手動で修正する必要があると述べ、Centre College のガイドは、自動文字起こしは人の作業の代わりにはならないと述べています。</p>
+      <ol>
+        <li><strong>もう一度聞く</strong> 読みながら通常またはそれより遅い速度で再生し、名前、用語、数字、日付を修正します。</li>
+        <li><strong>スタイルを適用する</strong> 上で選んだ逐語か整えるかの方針に基づきます。</li>
+        <li><strong>話者の名前を変更する。</strong> 検索と置換を使って、 <code>Speaker 1</code> をインタビュアーのコードに、 <code>Speaker 2</code> を参加者コード(例:P03)に置き換えます。</li>
+        <li><strong>匿名化</strong> 名前、場所、その他の識別情報を、同意とデータ管理計画に応じて処理します。</li>
+        <li><strong>元の音声を保存する</strong> データ管理計画に従って処理します。</li>
+      </ol>
+      <p>完成したノートは次のようになります(架空のサンプルテキスト):</p>
+<pre class="guide-code"><code>---
+participant: P03
+date: 2026-11-24
+consent: recorded
+---
+
+Interviewer:
+Thanks for agreeing to talk with me today.
+
+P03:
+Happy to. Where would you like me to start?</code></pre>
+
+      <h2 id="troubleshooting">問題の解決</h2>
+      <ul>
+        <li><strong>話者ラベルなし。</strong> プレーンな文字起こしは常に保存され、識別がスキップされた理由はライブラリに表示されます。理由には、文字起こしにタイミング情報がない、タイミングが文字起こし全体をカバーしていない、異なる話者が検出されなかった、モデルの保存領域が使えない、モデルを準備できなかった、処理に失敗した、などがあります。ルートでスピーカーの識別がオンになっていること、話者モデルが準備されていることを確認してください。</li>
+        <li><strong>話者が誤って統合または分割される。</strong> それぞれの声にできるだけ近づいて録音し、可能なら別々のマイクを使い、ラベルは手動で修正します。</li>
+        <li><strong>長い録音。</strong> 大きなモデルほど時間がかかります。まず小さなモデルを試し、デバイスは充電したままにしてください。</li>
+        <li><strong>Parakeet v2 が対応していない言語。</strong> Parakeet v2 は英語のみです。Parakeet v3(25 言語)または Whisper を使ってください。詳しくは <a href="/ja/docs/#models">モデル</a>.</li>
+        <li><strong>無料枠を使い切った。</strong> 文字起こし 15 分と配信 10 回(成功分)で、その後は買い切りの永久ライセンスの解除です。価格は App Store の表示が正です。</li>
+      </ul>
+
+      <h2 id="faq">よくある質問</h2>
+      <h3>インタビューをオフラインで文字起こしできますか?</h3>
+      <p>はい、モデルを準備したあとなら可能です。モデルのダウンロードと話者モデルの準備には一度だけ接続が必要で、その後の文字起こしはデバイス上で実行されます。詳しくは <a href="/ja/blog/offline-transcription-iphone-markdown/">iPhone でのオフライン文字起こし</a>.</p>
+      <h3>Vox.md は録音をアップロードしますか?</h3>
+      <p>いいえ。文字起こしと話者のラベル付けはデバイス上で実行され、ファイルは選んだフォルダにのみ書き込まれます。そのフォルダが同期される場合(たとえば iCloud Drive)、同期プロバイダが独自の規約のもとでファイルを保持します。詳しくは <a href="/ja/privacy.html">プライバシーポリシー</a>.</p>
+      <h3>誰が話しているかを名前で判別できますか?</h3>
+      <p>いいえ。ラベルは匿名(「Speaker 1」「Speaker 2」)で、ベストエフォートです。名前は自分で変更します。</p>
+      <h3>インタビューを手作業で文字起こしするとどれくらいかかりますか?</h3>
+      <p>National Park Service の <a href="https://www.nps.gov/articles/000/oral-history-resources-interview-transcribing.htm">インタビューの文字起こし</a> ページでは、録音したインタビュー 1 時間あたり平均 6〜8 時間とされています。</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">次のインタビューは、自分のデバイスで文字起こししましょう。</h2>
+        <p>無料の文字起こし 15 分を使って短いインタビューで試し、Markdown ファイルを開いてみましょう。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_4113af33d28a">Vox.md を入手</a></p>
+      </section>
+      <nav class="toc" aria-label="関連ガイド" id="related"><div class="toc-title">続ける</div><ul>
+        <li><a href="/ja/blog/transcribe-audio-file-mac/">Mac で音声ファイルを文字起こしする</a></li>
+        <li><a href="/ja/blog/transcribe-meetings-mac-obsidian/">Mac のミーティングを文字起こしして Obsidian へ</a></li>
+        <li><a href="/ja/blog/transcribe-voice-memos-iphone/">iPhone のボイスメモを Markdown に文字起こし</a></li>
+        <li><a href="/ja/blog/offline-transcription-iphone-markdown/">iPhone でのオフライン文字起こし</a></li>
+        <li><a href="/ja/compare/whisper-vs-parakeet/">Whisper と Parakeet の比較</a></li>
+        <li><a href="/ja/blog/obsidian-properties-generator/">Obsidian プロパティジェネレーター</a></li>
+        <li><a href="/ja/blog/srt-vtt-to-text-markdown/">SRT と VTT をテキストまたは Markdown に</a></li>
+        <li><a href="/ja/docs/">ドキュメント一覧</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ja/">ホーム</a></li>
+        <li><a href="/ja/docs/">ドキュメント</a></li>
+        <li><a href="/ja/blog/">ガイド</a></li>
+        <li><a href="/ja/compare/">比較する</a></li>
+        <li><a href="/ja/privacy.html">プライバシー</a></li>
+        <li><a href="/ja/terms.html">利用規約</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">サポート</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_4113af33d28a">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · ローカルノートにクイックキャプチャ · コンテンツのアップロードなし。</div>
+    </div>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/blog/transcribe-interview/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-interview/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-interview/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-interview/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-interview/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-interview/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-interview/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-interview/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-interview/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-interview/" lang="ja" hreflang="ja" aria-current="page">日本語</a></li><li><a href="/ko/blog/transcribe-interview/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-interview/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-interview/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-interview/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-interview/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-interview/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-interview/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-interview/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-interview/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-interview/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-interview/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-interview/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-interview/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

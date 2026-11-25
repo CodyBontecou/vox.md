@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="uk" dir="ltr" data-search-section="Розділ" data-search-guide="Посібник" data-search-empty="Немає збігів для «{query}»">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Як приватно транскрибувати інтерв’ю з мітками виступаючих | Vox.md</title>
+  <meta name="description" content="Практичний метод перетворення записаного інтерв’ю на транскрипт для перегляду: згода, запис, дослівний чи очищений текст, перегляд і необов’язкові анонімні мітки виступаючих. Vox.md транскрибує на вашому пристрої й зберігає нотатку Markdown, що належить вам.">
+  <link rel="canonical" href="https://vox.isolated.tech/uk/blog/transcribe-interview/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Документація Vox.md для мовних моделей">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Як приватно транскрибувати інтерв’ю з мітками виступаючих">
+  <meta property="og:description" content="Практичний метод перетворення записаного інтерв’ю на транскрипт для перегляду: згода, запис, дослівний чи очищений текст, перегляд і необов’язкові анонімні мітки виступаючих. Vox.md транскрибує на вашому пристрої й зберігає нотатку Markdown, що належить вам.">
+  <meta property="og:url" content="https://vox.isolated.tech/uk/blog/transcribe-interview/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-24">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Як приватно транскрибувати інтерв’ю з мітками виступаючих">
+  <meta name="twitter:description" content="Практичний метод перетворення записаного інтерв’ю на транскрипт для перегляду: згода, запис, дослівний чи очищений текст, перегляд і необов’язкові анонімні мітки виступаючих. Vox.md транскрибує на вашому пристрої й зберігає нотатку Markdown, що належить вам.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Як приватно транскрибувати інтерв’ю з мітками виступаючих",
+  "description": "Практичний метод перетворення записаного інтерв’ю на транскрипт для перегляду: згода, запис, дослівний чи очищений текст, перегляд і необов’язкові анонімні мітки виступаючих. Vox.md транскрибує на вашому пристрої й зберігає нотатку Markdown, що належить вам.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-24",
+  "dateModified": "2026-11-24",
+  "mainEntityOfPage": "https://vox.isolated.tech/uk/blog/transcribe-interview/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "uk",
+  "name": "Як приватно транскрибувати інтерв’ю з мітками виступаючих | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/uk/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Посібники",
+      "item": "https://vox.isolated.tech/uk/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Як приватно транскрибувати інтерв’ю з мітками виступаючих",
+      "item": "https://vox.isolated.tech/uk/blog/transcribe-interview/"
+    }
+  ],
+  "inLanguage": "uk",
+  "name": "Як приватно транскрибувати інтерв’ю з мітками виступаючих | Vox.md",
+  "description": "Практичний метод перетворення записаного інтерв’ю на транскрипт для перегляду: згода, запис, дослівний чи очищений текст, перегляд і необов’язкові анонімні мітки виступаючих. Vox.md транскрибує на вашому пристрої й зберігає нотатку Markdown, що належить вам."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-interview/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-interview/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-interview/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-interview/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-interview/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-interview/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-interview/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-interview/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-interview/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-interview/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-interview/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-interview/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-interview/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-interview/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-interview/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-interview/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-interview/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-interview/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Перейти до посібника</a>
+<nav aria-label="Основна навігація">
+  <div class="nav-inner">
+    <a href="/uk/" class="logo" aria-label="Головна Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/uk/#how">Як це працює</a></li>
+      <li><a href="/uk/docs/">Документація</a></li>
+      <li><a href="/uk/blog/">Посібники</a></li>
+      <li><a href="/uk/compare/">Порівняти</a></li>
+      <li><a href="/uk/privacy.html">Конфіденційність</a></li>
+      <li><a href="/uk/terms.html">Умови</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_uk_4113af33d28a">Завантажити Vox.md</a>
+  <details class="language-switcher"><summary>Мова</summary><ul><li><a href="/blog/transcribe-interview/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-interview/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-interview/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-interview/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-interview/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-interview/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-interview/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-interview/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-interview/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-interview/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-interview/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-interview/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-interview/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-interview/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-interview/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-interview/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-interview/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-interview/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-interview/" lang="uk" hreflang="uk" aria-current="page">Українська</a></li><li><a href="/ur/blog/transcribe-interview/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-interview/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-interview/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-interview/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Інтерв’ю · На пристрої · Мітки виступаючих</div>
+        <h1 class="hero-title">Як приватно транскрибувати інтерв’ю з мітками виступаючих</h1>
+        <p class="hero-subtitle">Згода, запис, транскрипція й етап перегляду, а також маршрут на пристрої, щоб аудіо учасників не завантажувалося до сервісу транскрипції.</p>
+      </div>
+      <aside class="meta-card" aria-label="Про посібник">
+        <dl>
+          <div><dt>Автор:</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Оновлено</dt><dd><time datetime="2026-11-24">24 листопада 2026 р.</time></dd></div>
+          <div><dt>Потребує</dt><dd>Vox.md: iOS або iPadOS 17.6+ чи macOS 14+ · завантажена модель мовлення для Whisper або Parakeet · папка призначення з правом запису</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Як приватно транскрибувати інтерв’ю з мітками виступаючих">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Коротка відповідь</div>
+        <p>П’ять кроків: <strong>1) отримайте згоду</strong> і поясніть, як аудіо буде оброблятися та зберігатися; <strong>2) записуйте чітко</strong> спершу з пробою; <strong>3) транскрибуйте</strong>; <strong>4) перегляньте текст, звіряючи з аудіо</strong>; <strong>5) позначте виступаючих і збережіть</strong>. Усе це можна зробити на власному пристрої з Vox.md на iPhone, iPad або Mac, тож запис не завантажується до сервісу транскрипції. Мітки виступаючих необов’язкові, анонімні й працюють за принципом найкращих зусиль («Speaker 1», «Speaker 2»); ви перейменовуєте їх вручну.</p>
+      </div>
+      <p>Метод працює з будь-яким інструментом. Кроки Vox.md відповідають <a href="/uk/docs/#models">моделей</a> і <a href="/uk/docs/#mac">Mac</a> документації та фактичній поведінці застосунку. Зовнішні джерела наведено там, де їх використано, а приклад нотатки — ілюстративний, не справжнє інтерв’ю.</p>
+      <nav class="toc" aria-label="У посібнику"><div class="toc-title">У посібнику</div><ol>
+        <li><a href="#before-you-record">Перед записом</a></li>
+        <li><a href="#verbatim-or-clean">Дослівно чи очищено?</a></li>
+        <li><a href="#options">Способи транскрибування</a></li>
+        <li><a href="#iphone">Особисто на iPhone або iPad</a></li>
+        <li><a href="#mac">На Mac</a></li>
+        <li><a href="#review">Етап перегляду</a></li>
+        <li><a href="#troubleshooting">Усунення несправностей</a></li>
+        <li><a href="#faq">Поширені запитання</a></li>
+      </ol></nav>
+
+      <h2 id="before-you-record">Перед записом</h2>
+      <p><strong>Згода та поводження з даними.</strong> Повідомте учасника, як аудіо буде оброблятися та зберігатися, і отримайте його згоду перед записом. У посібнику Centre College <a href="https://library.centre.edu/oralhistories/standards">Посібник з усної історії</a> зазначає, що інтерв’юери мають переконатися, що оповідачі дали згоду добровільно, пояснити мету інтерв’ю та чітко описати їхні можливості, зокрема обмеження доступу чи анонімність. Перевірте також вимоги етичного комітету чи політику даних: багато хто питає, де обробляється й зберігається аудіо учасників, тож визначтеся з відповіддю до першого інтерв’ю.</p>
+      <p><strong>Налаштування запису.</strong> Бібліотеки Гарварду <a href="https://guides.library.harvard.edu/c.php?g=796889&amp;p=10476360">Запис і транскрипція</a> радить спершу приділити час якісному запису звуку, бо це полегшує транскрипцію. На практиці:</p>
+      <ul>
+        <li>Використовуйте по одному мікрофону на кожного мовця, якщо можете, і сидіть близько до кожного.</li>
+        <li>Виберіть тихе приміщення й вимкніть усе, що дзвонить або гуде.</li>
+        <li>Запишіть коротку пробу й відтворіть її перед справжнім інтерв’ю.</li>
+      </ul>
+
+      <h2 id="verbatim-or-clean">Дослівно чи очищено?</h2>
+      <p>Визначте стиль до транскрибування й тримайтеся його в усьому проєкті. У посібнику Centre College <a href="https://library.centre.edu/oralhistories/transcribing">Транскрибування</a> сторінка описує дослівний транскрипт як слово в слово, зокрема слова-паразити, паузи, перебивання та сміх, і зазначає, що історики віддають йому перевагу, бо він передає найбільше нюансів. «Очищений дослівний» і «відредагований» — поширені назви легших стилів; таблиця показує, як вони зазвичай відрізняються. Який саме вам потрібен, визначає ваш проєкт, видавець або етичний комітет.</p>
+      <p class="guide-table-hint">На малому екрані гортайте таблицю вбік.</p>
+      <div class="guide-comparison" role="region" aria-label="Порівняння стилів транскриптів; на малих екранах прокручуйте горизонтально" tabindex="0">
+        <table class="comparison">
+          <caption>Поширені стилі транскриптів</caption>
+          <thead><tr><th scope="col">Стиль</th><th scope="col">Що зберігається</th><th scope="col">Типове застосування</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Дослівно</th><td>Усе сказане: слова-паразити, обірвані фрази, паузи, невербальні звуки</td><td>Усна історія та дослідження, де формулювання й манера мовлення є даними</td></tr>
+            <tr><th scope="row">Очищений дослівний текст</th><td>Сказані слова, без слів-паразитів і обірваних фраз</td><td>Більшість аналізу та цитування інтерв’ю, де зміст важливіший за манеру мовлення</td></tr>
+            <tr><th scope="row">Відредагований</th><td>Переписано для читання: граматику виправлено, уривки вирізано</td><td>Чернетки для публікації — лише зі схвалення мовця, якщо цього вимагає ваш проєкт</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Автоматична транскрипція не вибирає стиль за вас. Ви все одно застосовуєте його на етапі перегляду.</p>
+
+      <h2 id="options">Способи транскрибування</h2>
+      <p>Таблиця порівнює категорії, а не конкретні продукти, і наводить лише задокументоване. Подробиці про Диктофон Apple взято з довідки підтримки Apple <a href="https://support.apple.com/guide/voice-memos/vm4a03609f0d/mac">Перегляд розшифровки в «Диктофоні» на Mac</a> та її <a href="https://support.apple.com/guide/iphone/view-a-transcription-iph00953a982/ios">сторінка iPhone</a>; перевірте їх для свого пристрою, мови та регіону.</p>
+      <p class="guide-table-hint">На малому екрані гортайте таблицю вбік.</p>
+      <div class="guide-comparison" role="region" aria-label="Порівняння варіантів транскрипції інтерв’ю; на малих екранах прокручуйте горизонтально" tabindex="0">
+        <table class="comparison">
+          <caption>Варіанти транскрипції інтерв’ю</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">Де обробляється звук</th><th scope="col">Мітки мовців</th><th scope="col">Вивід</th><th scope="col">Модель витрат</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Вручну</th><td>Ваш власний комп’ютер</td><td>Ви вводите їх самі</td><td>Будь-який текстовий файл</td><td>Ваш час: <a href="https://www.nps.gov/articles/000/oral-history-resources-interview-transcribing.htm">Служба національних парків США</a> стверджує, що на годину запису потрібно близько 6–8 годин</td></tr>
+            <tr><th scope="row">Хмарні сервіси транскрипції</th><td>Сервери постачальника; перевірте умови кожного постачальника</td><td>Залежить від сервісу</td><td>Залежить від сервісу</td><td>Залежить від сервісу</td></tr>
+            <tr><th scope="row">Транскрипти Диктофона Apple</th><td>Не описано на цитованих сторінках</td><td>Не описано на цитованих сторінках</td><td>Текст у Диктофоні; ви копіюєте його самі</td><td>Частина операційної системи</td></tr>
+            <tr><th scope="row">Vox.md</th><td>На вашому iPhone, iPad або Mac</td><td>За бажанням, анонімно, за принципом найкращих зусиль</td><td>Нотатка Markdown у вибраній вами папці</td><td>15 безкоштовних хвилин розшифровки та 10 успішних доставлень, далі одноразове довічне розблокування</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Якщо вам потрібен лише швидкий текст у Диктофоні, користуйтеся ним; див. <a href="/uk/blog/transcribe-voice-memos-iphone/">транскрибувати Диктофон у Markdown</a> для перенесення запису в нотатку. Vox.md потрібен, коли вам потрібен транскрипт як звичайний файл, що належить вам, вибрана локальна модель і необов’язкові мітки виступаючих.</p>
+
+      <h2 id="iphone">Особисто на iPhone або iPad</h2>
+      <ol>
+        <li><strong>Виберіть модель транскрипції.</strong> Автоматично надає перевагу Apple Speech на підтримуваному пристрої з iOS 26 і підтримуваній мові. Натомість можна завантажити Whisper (від Tiny до Large v3 Turbo), Parakeet v2 (англійська) або Parakeet v3 (25 мов). Завантаження моделі — на ваш вибір і єдиний крок, що потребує мережі. <a href="/uk/compare/whisper-vs-parakeet/">Whisper чи Parakeet</a> допоможе вибрати, а <a href="/uk/blog/offline-transcription-iphone-markdown/">офлайн-транскрипція на iPhone</a> описано підготовку.</li>
+        <li><strong>Створіть Маршрут «Interviews».</strong> У Налаштування → Маршрути створіть Маршрут з назвою Interviews. Виберіть папку призначення (сховище Obsidian або папку в Файлах) і <strong>Новий запис</strong>, щоб кожен запис ставав окремим файлом. За бажанням додайте статичний frontmatter, по одному <code>key: value</code> в рядку, наприклад <code>project: housing-study</code>. <a href="/uk/blog/obsidian-properties-generator/">генератор властивостей</a> створює коректний frontmatter. Не додавайте коди учасників до статичних метаданих, бо вони застосовуються до кожної нотатки з Маршруту.</li>
+        <li><strong>Увімкніть Визначення виступаючих.</strong> Це налаштування, що вмикається окремо для кожного Маршруту. Під час першого використання воно готує окрему модель виступаючих, тож робіть це до інтерв’ю, а не перед учасником. Після цього воно працює локально. Відкрита <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> використовується для локальної обробки виступаючих.</li>
+        <li><strong>Зробіть 30-секундну пробу з двома голосами.</strong> Запишіть коротку розмову з кимось і перевірте, що нотатка з’явилася в папці призначення та має дві мітки.</li>
+        <li><strong>Запишіть або імпортуйте.</strong> Записуйте у composer Vox.md або скористайтеся елементом імпорту для наявного аудіо- чи відеофайлу (<a href="/uk/blog/transcribe-video-to-text/">як імпортувати відео</a>). Виберіть <strong>Додати до чернетки</strong> якщо ви хочете прочитати текст до доставки, або <strong>Надіслати негайно</strong> щоб доставити, коли транскрипція завершиться.</li>
+        <li><strong>Перегляньте в Бібліотеці.</strong> Бібліотека показує кожен запис і, якщо визначення виступаючих не вдалося запустити, причину.</li>
+      </ol>
+      <p>Коли Визначення виступаючих увімкнено, кожна репліка в збереженому тексті отримує власний рядок мітки, а текст цієї репліки йде в наступному рядку; репліки розділені порожнім рядком:</p>
+<pre class="guide-code"><code>Speaker 1:
+Thanks for agreeing to talk with me today.
+
+Speaker 2:
+Happy to. Where would you like me to start?</code></pre>
+      <p>Мітки анонімні й працюють за принципом найкращих зусиль. Vox.md не розпізнає людей за іменами. Він також доступний для доставки транскриптів на Apple Watch і в застосунку для Mac.</p>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">Спробуйте на одному короткому записі.</h2>
+        <p>Безкоштовний ліміт — 15 хвилин транскрипції та 10 успішних доставок.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_uk_4113af33d28a">Завантажити Vox.md</a></p>
+      </section>
+
+      <h2 id="mac">На Mac</h2>
+      <ul>
+        <li><strong>Наявний файл.</strong> Використати <strong>Імпорт аудіо…</strong> у Vox.md для Mac, який приймає аудіо- та відеофайли. Кроки описано в <a href="/uk/blog/transcribe-audio-file-mac/">розшифровка аудіофайлу на Mac</a>. Увімкніть Визначення виступаючих у Маршруті для анонімних міток.</li>
+        <li><strong>Віддалене інтерв’ю.</strong> Захоплення зустрічі записує аудіо одного застосунку та ваш мікрофон окремими доріжками. Ви відображаєтеся як «You», а інша сторона позначається як віддалений мовець; визначення виступаючих може додатково розділити кілька віддалених голосів. Налаштування описано в <a href="/uk/blog/transcribe-meetings-mac-obsidian/">розшифровка зустрічей на Mac в Obsidian</a>. Повідомте віддалених учасників, що ведеться запис, як у кроці зі згодою вище.</li>
+        <li><strong>Файл субтитрів.</strong> Якщо Zoom або Teams уже дав вам файл .srt чи .vtt, <a href="/uk/blog/srt-vtt-to-text-markdown/">Конвертер SRT і VTT</a> перетворює його на текст або Markdown у вашому браузері.</li>
+      </ul>
+      <p>Режим обробки «Нотатки зустрічі» існує, але перебудовує текст у нотатки. Для дослівних дослідницьких транскриптів залиште Маршрут на «Зберегти оригінал».</p>
+
+      <h2 id="review">Етап перегляду</h2>
+      <p>Автоматичні транскрипти потребують перевірки. У посібнику Гарварду сказано, що, як і будь-який автоматично створений транскрипт, його потрібно виправити вручну, а в посібнику Centre College — що автоматичні транскрипти не замінюють роботу людини.</p>
+      <ol>
+        <li><strong>Послухайте ще раз</strong> у звичайному або повільнішому темпі під час читання й виправте імена, терміни, числа та дати.</li>
+        <li><strong>Застосуйте свій стиль</strong> із наведеного вище вибору дослівного чи очищеного стилю.</li>
+        <li><strong>Перейменуйте виступаючих.</strong> Скористайтеся пошуком і заміною, щоб перетворити <code>Speaker 1</code> у код інтерв’юера та <code>Speaker 2</code> у код учасника, наприклад P03.</li>
+        <li><strong>Знеособте</strong> імена, місця та інші дані, що ідентифікують, відповідно до вашої згоди й плану обробки даних.</li>
+        <li><strong>Зберігайте оригінальне аудіо</strong> відповідно до вашого плану обробки даних.</li>
+      </ol>
+      <p>Готова нотатка може виглядати так (вигаданий приклад тексту):</p>
+<pre class="guide-code"><code>---
+participant: P03
+date: 2026-11-24
+consent: recorded
+---
+
+Interviewer:
+Thanks for agreeing to talk with me today.
+
+P03:
+Happy to. Where would you like me to start?</code></pre>
+
+      <h2 id="troubleshooting">Усунення несправностей</h2>
+      <ul>
+        <li><strong>Без міток виступаючих.</strong> Простий транскрипт зберігається завжди, а Бібліотека показує, чому визначення пропущено. Причини: у транскрипті немає часових міток; часові мітки не охоплюють увесь транскрипт; не виявлено різних виступаючих; сховище моделі недоступне; модель не вдалося підготувати; або обробка не вдалася. Перевірте, що Визначення виступаючих увімкнено для Маршруту й що модель виступаючих підготовлено.</li>
+        <li><strong>Виступаючих хибно об’єднано або розділено.</strong> Записуйте ближче до кожного голосу, за можливості користуйтеся окремими мікрофонами й виправляйте мітки вручну.</li>
+        <li><strong>Довгий запис.</strong> Більші моделі працюють довше. Спершу спробуйте меншу модель і тримайте пристрій на зарядці.</li>
+        <li><strong>Мова, яку Parakeet v2 не підтримує.</strong> Parakeet v2 лише англійською. Скористайтеся Parakeet v3 (25 мов) або Whisper; див. <a href="/uk/docs/#models">Моделі</a>.</li>
+        <li><strong>Безкоштовний ліміт вичерпано.</strong> Це 15 хвилин транскрипції та 10 успішних доставок, а потім одноразове розблокування назавжди. Ціна в App Store є остаточною.</li>
+      </ul>
+
+      <h2 id="faq">Поширені запитання</h2>
+      <h3>Чи можу я транскрибувати інтерв’ю офлайн?</h3>
+      <p>Так, коли модель підготовлено. Завантаження моделей і підготовка моделі виступаючих потребують підключення один раз; потім транскрипція працює на пристрої. Див. <a href="/uk/blog/offline-transcription-iphone-markdown/">офлайн-транскрипція на iPhone</a>.</p>
+      <h3>Чи завантажує Vox.md мій запис?</h3>
+      <p>Ні. Транскрипція та позначення виступаючих виконуються на вашому пристрої, а файл записується лише в обрану вами папку. Якщо ця папка синхронізується (наприклад, iCloud Drive), постачальник синхронізації зберігає файл за своїми умовами. Див. <a href="/uk/privacy.html">політику конфіденційності</a>.</p>
+      <h3>Чи може він назвати виступаючого на ім’я?</h3>
+      <p>Ні. Мітки анонімні («Speaker 1», «Speaker 2») і працюють за принципом найкращих зусиль. Ви перейменовуєте їх самі.</p>
+      <h3>Скільки часу займає транскрибування інтерв’ю вручну?</h3>
+      <p>Служби національних парків США <a href="https://www.nps.gov/articles/000/oral-history-resources-interview-transcribing.htm">Транскрибування інтерв’ю</a> сторінка стверджує, що в середньому це 6–8 годин на годину записаного інтерв’ю.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Транскрибуйте наступне інтерв’ю на власному пристрої.</h2>
+        <p>Перевірте на одному короткому інтерв’ю в межах безкоштовних 15 хвилин транскрипції, а потім відкрийте файл Markdown.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_uk_4113af33d28a">Завантажити Vox.md</a></p>
+      </section>
+      <nav class="toc" aria-label="Пов’язані посібники" id="related"><div class="toc-title">Продовжити</div><ul>
+        <li><a href="/uk/blog/transcribe-audio-file-mac/">Розшифровка аудіофайлу на Mac</a></li>
+        <li><a href="/uk/blog/transcribe-meetings-mac-obsidian/">Розшифровка зустрічей на Mac в Obsidian</a></li>
+        <li><a href="/uk/blog/transcribe-voice-memos-iphone/">Розшифровуйте «Диктофон» iPhone у Markdown</a></li>
+        <li><a href="/uk/blog/offline-transcription-iphone-markdown/">Офлайн-транскрипція на iPhone</a></li>
+        <li><a href="/uk/compare/whisper-vs-parakeet/">Whisper чи Parakeet</a></li>
+        <li><a href="/uk/blog/obsidian-properties-generator/">Генератор властивостей Obsidian</a></li>
+        <li><a href="/uk/blog/srt-vtt-to-text-markdown/">SRT і VTT у текст або Markdown</a></li>
+        <li><a href="/uk/docs/">Документація</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/uk/">Головна</a></li>
+        <li><a href="/uk/docs/">Документація</a></li>
+        <li><a href="/uk/blog/">Посібники</a></li>
+        <li><a href="/uk/compare/">Порівняти</a></li>
+        <li><a href="/uk/privacy.html">Конфіденційність</a></li>
+        <li><a href="/uk/terms.html">Умови</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Підтримка</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_uk_4113af33d28a">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Швидке захоплення до локальних нотаток · Без надсилання вмісту на сервер.</div>
+    </div>
+  <details class="language-switcher"><summary>Мова</summary><ul><li><a href="/blog/transcribe-interview/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-interview/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-interview/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-interview/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-interview/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-interview/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-interview/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-interview/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-interview/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-interview/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-interview/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-interview/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-interview/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-interview/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-interview/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-interview/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-interview/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-interview/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-interview/" lang="uk" hreflang="uk" aria-current="page">Українська</a></li><li><a href="/ur/blog/transcribe-interview/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-interview/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-interview/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-interview/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

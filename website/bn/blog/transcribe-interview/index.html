@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="bn" dir="ltr" data-search-section="অংশ" data-search-guide="গাইড" data-search-empty="“{query}”-এর কোনো ফল নেই">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>কীভাবে একটি সাক্ষাৎকার গোপনীয়ভাবে ট্রান্সক্রাইব করবেন, বক্তার লেবেলসহ | Vox.md</title>
+  <meta name="description" content="রেকর্ড করা সাক্ষাৎকারকে পর্যালোচনাযোগ্য ট্রান্সক্রিপ্টে পরিণত করার একটি বাস্তবসম্মত পদ্ধতি: সম্মতি, রেকর্ডিং, হুবহু বা পরিচ্ছন্ন, পর্যালোচনা এবং ঐচ্ছিক বেনামি বক্তার লেবেল। Vox.md আপনার ডিভাইসেই ট্রান্সক্রাইব করে এবং আপনার মালিকানাধীন একটি Markdown নোট সংরক্ষণ করে।">
+  <link rel="canonical" href="https://vox.isolated.tech/bn/blog/transcribe-interview/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="ভাষা মডেলের জন্য Vox.md নথি">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="কীভাবে একটি সাক্ষাৎকার গোপনীয়ভাবে ট্রান্সক্রাইব করবেন, বক্তার লেবেলসহ">
+  <meta property="og:description" content="রেকর্ড করা সাক্ষাৎকারকে পর্যালোচনাযোগ্য ট্রান্সক্রিপ্টে পরিণত করার একটি বাস্তবসম্মত পদ্ধতি: সম্মতি, রেকর্ডিং, হুবহু বা পরিচ্ছন্ন, পর্যালোচনা এবং ঐচ্ছিক বেনামি বক্তার লেবেল। Vox.md আপনার ডিভাইসেই ট্রান্সক্রাইব করে এবং আপনার মালিকানাধীন একটি Markdown নোট সংরক্ষণ করে।">
+  <meta property="og:url" content="https://vox.isolated.tech/bn/blog/transcribe-interview/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-24">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="কীভাবে একটি সাক্ষাৎকার গোপনীয়ভাবে ট্রান্সক্রাইব করবেন, বক্তার লেবেলসহ">
+  <meta name="twitter:description" content="রেকর্ড করা সাক্ষাৎকারকে পর্যালোচনাযোগ্য ট্রান্সক্রিপ্টে পরিণত করার একটি বাস্তবসম্মত পদ্ধতি: সম্মতি, রেকর্ডিং, হুবহু বা পরিচ্ছন্ন, পর্যালোচনা এবং ঐচ্ছিক বেনামি বক্তার লেবেল। Vox.md আপনার ডিভাইসেই ট্রান্সক্রাইব করে এবং আপনার মালিকানাধীন একটি Markdown নোট সংরক্ষণ করে।">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "কীভাবে একটি সাক্ষাৎকার গোপনীয়ভাবে ট্রান্সক্রাইব করবেন, বক্তার লেবেলসহ",
+  "description": "রেকর্ড করা সাক্ষাৎকারকে পর্যালোচনাযোগ্য ট্রান্সক্রিপ্টে পরিণত করার একটি বাস্তবসম্মত পদ্ধতি: সম্মতি, রেকর্ডিং, হুবহু বা পরিচ্ছন্ন, পর্যালোচনা এবং ঐচ্ছিক বেনামি বক্তার লেবেল। Vox.md আপনার ডিভাইসেই ট্রান্সক্রাইব করে এবং আপনার মালিকানাধীন একটি Markdown নোট সংরক্ষণ করে।",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-24",
+  "dateModified": "2026-11-24",
+  "mainEntityOfPage": "https://vox.isolated.tech/bn/blog/transcribe-interview/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "bn",
+  "name": "কীভাবে একটি সাক্ষাৎকার গোপনীয়ভাবে ট্রান্সক্রাইব করবেন, বক্তার লেবেলসহ | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/bn/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "গাইড",
+      "item": "https://vox.isolated.tech/bn/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "কীভাবে একটি সাক্ষাৎকার গোপনীয়ভাবে ট্রান্সক্রাইব করবেন, বক্তার লেবেলসহ",
+      "item": "https://vox.isolated.tech/bn/blog/transcribe-interview/"
+    }
+  ],
+  "inLanguage": "bn",
+  "name": "কীভাবে একটি সাক্ষাৎকার গোপনীয়ভাবে ট্রান্সক্রাইব করবেন, বক্তার লেবেলসহ | Vox.md",
+  "description": "রেকর্ড করা সাক্ষাৎকারকে পর্যালোচনাযোগ্য ট্রান্সক্রিপ্টে পরিণত করার একটি বাস্তবসম্মত পদ্ধতি: সম্মতি, রেকর্ডিং, হুবহু বা পরিচ্ছন্ন, পর্যালোচনা এবং ঐচ্ছিক বেনামি বক্তার লেবেল। Vox.md আপনার ডিভাইসেই ট্রান্সক্রাইব করে এবং আপনার মালিকানাধীন একটি Markdown নোট সংরক্ষণ করে।"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-interview/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-interview/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-interview/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-interview/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-interview/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-interview/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-interview/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-interview/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-interview/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-interview/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-interview/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-interview/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-interview/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-interview/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-interview/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-interview/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-interview/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-interview/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">সরাসরি গাইডে যান</a>
+<nav aria-label="প্রধান নেভিগেশন">
+  <div class="nav-inner">
+    <a href="/bn/" class="logo" aria-label="Vox.md হোম">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/bn/#how">যেভাবে কাজ করে</a></li>
+      <li><a href="/bn/docs/">নথি</a></li>
+      <li><a href="/bn/blog/">গাইড</a></li>
+      <li><a href="/bn/compare/">তুলনা করুন</a></li>
+      <li><a href="/bn/privacy.html">গোপনীয়তা</a></li>
+      <li><a href="/bn/terms.html">শর্তাবলি</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_bn_4113af33d28a">Vox.md ডাউনলোড করুন</a>
+  <details class="language-switcher"><summary>ভাষা</summary><ul><li><a href="/blog/transcribe-interview/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-interview/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-interview/" lang="bn" hreflang="bn" aria-current="page">বাংলা</a></li><li><a href="/de/blog/transcribe-interview/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-interview/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-interview/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-interview/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-interview/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-interview/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-interview/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-interview/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-interview/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-interview/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-interview/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-interview/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-interview/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-interview/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-interview/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-interview/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-interview/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-interview/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-interview/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-interview/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">সাক্ষাৎকার · ডিভাইসে · বক্তার লেবেল</div>
+        <h1 class="hero-title">কীভাবে একটি সাক্ষাৎকার গোপনীয়ভাবে ট্রান্সক্রাইব করবেন, বক্তার লেবেলসহ</h1>
+        <p class="hero-subtitle">সম্মতি, রেকর্ডিং, ট্রান্সক্রিপশন ও পর্যালোচনার ধাপ, সঙ্গে ডিভাইসে চলা একটি রুট, যাতে অংশগ্রহণকারীর অডিও কোনো ট্রান্সক্রিপশন সেবায় আপলোড না হয়।</p>
+      </div>
+      <aside class="meta-card" aria-label="এই গাইড সম্পর্কে">
+        <dl>
+          <div><dt>লিখেছেন</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>হালনাগাদ</dt><dd><time datetime="2026-11-24">২৪ নভেম্বর, ২০২৬</time></dd></div>
+          <div><dt>প্রয়োজন</dt><dd>Vox.md: iOS বা iPadOS 17.6+ বা macOS 14+ · Whisper বা Parakeet-এর জন্য ডাউনলোড করা স্পিচ মডেল · লেখার উপযোগী গন্তব্য ফোল্ডার</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="কীভাবে একটি সাক্ষাৎকার গোপনীয়ভাবে ট্রান্সক্রাইব করবেন, বক্তার লেবেলসহ">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">সংক্ষিপ্ত উত্তর</div>
+        <p>পাঁচটি ধাপ: <strong>1) সম্মতি নিন</strong> এবং বলুন অডিও কীভাবে প্রক্রিয়া ও সংরক্ষণ করা হবে; <strong>2) পরিষ্কারভাবে রেকর্ড করুন</strong> আগে একটি পরীক্ষা দিয়ে; <strong>3) ট্রান্সক্রাইব করুন</strong>; <strong>4) অডিওর সঙ্গে মিলিয়ে লেখা পর্যালোচনা করুন</strong>; <strong>5) বক্তাদের লেবেল দিন ও সংরক্ষণ করুন</strong>। আপনি পুরোটাই নিজের ডিভাইসে iPhone, iPad বা Mac-এ Vox.md দিয়ে করতে পারেন, ফলে রেকর্ডিং কোনো ট্রান্সক্রিপশন সেবায় আপলোড হয় না। বক্তার লেবেল ঐচ্ছিক, বেনামি ও যথাসাধ্য (“বক্তা 1”, “বক্তা 2”); আপনি সেগুলোর নাম হাতে বদলান।</p>
+      </div>
+      <p>পদ্ধতিটি যেকোনো টুলে কাজ করে। Vox.md-এর ধাপগুলো অনুসরণ করে <a href="/bn/docs/#models">মডেল</a> এবং <a href="/bn/docs/#mac">Mac</a> নথি এবং অ্যাপের বাস্তব আচরণের ওপর ভিত্তি করে। বাইরের সূত্র যেখানে ব্যবহৃত হয়েছে সেখানে লিংক দেওয়া আছে, আর উদাহরণ নোটটি বোঝানোর জন্য, বাস্তব সাক্ষাৎকার নয়।</p>
+      <nav class="toc" aria-label="এই গাইডে"><div class="toc-title">এই গাইডে</div><ol>
+        <li><a href="#before-you-record">রেকর্ড করার আগে</a></li>
+        <li><a href="#verbatim-or-clean">হুবহু নাকি পরিচ্ছন্ন?</a></li>
+        <li><a href="#options">ট্রান্সক্রাইব করার উপায়</a></li>
+        <li><a href="#iphone">iPhone বা iPad-এ সামনাসামনি</a></li>
+        <li><a href="#mac">Mac-এ</a></li>
+        <li><a href="#review">পর্যালোচনার ধাপ</a></li>
+        <li><a href="#troubleshooting">সমস্যা সমাধান</a></li>
+        <li><a href="#faq">সাধারণ প্রশ্ন</a></li>
+      </ol></nav>
+
+      <h2 id="before-you-record">রেকর্ড করার আগে</h2>
+      <p><strong>সম্মতি ও ডেটা পরিচালনা।</strong> অংশগ্রহণকারীকে বলুন অডিও কীভাবে প্রক্রিয়া ও সংরক্ষণ করা হবে, এবং রেকর্ড করার আগে তাঁর সম্মতি নিন। Centre College-এর <a href="https://library.centre.edu/oralhistories/standards">মৌখিক ইতিহাস নির্দেশিকা</a> বলে সাক্ষাৎকারগ্রহীতাদের নিশ্চিত করা উচিত যে বক্তারা স্বেচ্ছায় সম্মতি দিয়েছেন, সাক্ষাৎকারের উদ্দেশ্য ব্যাখ্যা করা উচিত এবং তাঁদের বিকল্পগুলো স্পষ্ট করা উচিত, যার মধ্যে আছে প্রবেশাধিকার সীমিত করা বা বেনামি থাকা বেছে নেওয়া। আপনার নীতিশাস্ত্র বোর্ড বা ডেটা নীতিও দেখুন: অনেকেই জানতে চায় অংশগ্রহণকারীর অডিও কোথায় প্রক্রিয়া ও সংরক্ষণ করা হয়, তাই প্রথম সাক্ষাৎকারের আগেই আপনার উত্তর ঠিক করুন।</p>
+      <p><strong>রেকর্ডিং সেটআপ।</strong> Harvard Library-র <a href="https://guides.library.harvard.edu/c.php?g=796889&amp;p=10476360">রেকর্ডিং ও ট্রান্সক্রিপশন</a> নির্দেশিকা পরামর্শ দেয় আগে ভালো অডিও ধারণে সময় দিতে, কারণ এতে ট্রান্সক্রিপশন সহজ হয়। বাস্তবে:</p>
+      <ul>
+        <li>সম্ভব হলে প্রতিজন বক্তার জন্য একটি মাইক্রোফোন ব্যবহার করুন এবং প্রত্যেকের কাছে বসুন।</li>
+        <li>একটি শান্ত ঘর বেছে নিন এবং যা বাজে বা গুনগুন করে তা বন্ধ করুন।</li>
+        <li>আসল সাক্ষাৎকারের আগে একটি ছোট পরীক্ষা রেকর্ড করুন এবং চালিয়ে শুনুন।</li>
+      </ul>
+
+      <h2 id="verbatim-or-clean">হুবহু নাকি পরিচ্ছন্ন?</h2>
+      <p>ট্রান্সক্রাইব করার আগে স্টাইল ঠিক করুন এবং পুরো প্রকল্পে একই রাখুন। Centre College-এর নির্দেশিকার <a href="https://library.centre.edu/oralhistories/transcribing">ট্রান্সক্রাইব করা</a> পাতা হুবহুকে শব্দে শব্দে বলে বর্ণনা করে, ভরাট শব্দ, বিরতি, বাধা ও হাসিসহ, এবং বলে ইতিহাসবিদরা এটি পছন্দ করেন কারণ এতে সবচেয়ে বেশি সূক্ষ্মতা ধরা পড়ে। “পরিচ্ছন্ন হুবহু” ও “সম্পাদিত” হালকা স্টাইলের প্রচলিত নাম; টেবিলে দেখানো হয়েছে সাধারণত এগুলো কীভাবে আলাদা। কোনটি দরকার তা আপনার প্রকল্প, প্রকাশক বা নীতিশাস্ত্র বোর্ড ঠিক করে।</p>
+      <p class="guide-table-hint">ছোট স্ক্রিনে সারণিটি পাশে সোয়াইপ করুন।</p>
+      <div class="guide-comparison" role="region" aria-label="ট্রান্সক্রিপ্ট স্টাইলের তুলনা; ছোট স্ক্রিনে আড়াআড়ি স্ক্রল করুন" tabindex="0">
+        <table class="comparison">
+          <caption>প্রচলিত ট্রান্সক্রিপ্ট স্টাইল</caption>
+          <thead><tr><th scope="col">স্টাইল</th><th scope="col">যা রেখে দেয়</th><th scope="col">সাধারণ ব্যবহার</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">হুবহু</th><td>যা বলা হয়েছে সবকিছু: ভরাট শব্দ, ভুল শুরু, বিরতি, কথাহীন শব্দ</td><td>মৌখিক ইতিহাস ও গবেষণা, যেখানে শব্দচয়ন ও বলার ধরনই উপাত্ত</td></tr>
+            <tr><th scope="row">পরিচ্ছন্ন হুবহু</th><td>বলা কথাগুলো, ভরাট শব্দ ও ভুল শুরু বাদ দিয়ে</td><td>অধিকাংশ সাক্ষাৎকার বিশ্লেষণ ও উদ্ধৃতি, যেখানে বলার ধরনের চেয়ে অর্থ বেশি গুরুত্বপূর্ণ</td></tr>
+            <tr><th scope="row">সম্পাদিত</th><td>পড়ার জন্য নতুন করে লেখা: ব্যাকরণ গোছানো, অংশ বাদ দেওয়া</td><td>প্রকাশনার খসড়া, যেখানে আপনার প্রকল্প চায় সেখানে শুধু বক্তার অনুমোদন নিয়ে</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>স্বয়ংক্রিয় ট্রান্সক্রিপশন আপনার হয়ে স্টাইল ঠিক করে না। পর্যালোচনার ধাপে আপনাকেই তা প্রয়োগ করতে হয়।</p>
+
+      <h2 id="options">ট্রান্সক্রাইব করার উপায়</h2>
+      <p>টেবিলটি নির্দিষ্ট পণ্য নয়, বিভাগ তুলনা করে এবং শুধু নথিভুক্ত তথ্য বলে। Apple-এর ভয়েস মেমো সম্পর্কিত তথ্য Apple সাপোর্টের এই নিবন্ধ থেকে নেওয়া: <a href="https://support.apple.com/guide/voice-memos/vm4a03609f0d/mac">Mac-এ ভয়েস মেমোতে প্রতিলিখন দেখুন</a> এবং এর <a href="https://support.apple.com/guide/iphone/view-a-transcription-iph00953a982/ios">iPhone পাতা</a>; আপনার ডিভাইস, ভাষা ও অঞ্চলের জন্য যাচাই করুন।</p>
+      <p class="guide-table-hint">ছোট স্ক্রিনে সারণিটি পাশে সোয়াইপ করুন।</p>
+      <div class="guide-comparison" role="region" aria-label="সাক্ষাৎকার ট্রান্সক্রিপশন বিকল্পের তুলনা; ছোট স্ক্রিনে আড়াআড়ি স্ক্রল করুন" tabindex="0">
+        <table class="comparison">
+          <caption>সাক্ষাৎকার ট্রান্সক্রিপশনের বিকল্প</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">অডিও কোথায় প্রক্রিয়া হয়</th><th scope="col">বক্তার লেবেল</th><th scope="col">আউটপুট</th><th scope="col">খরচের মডেল</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">হাতে</th><td>আপনার নিজের কম্পিউটার</td><td>আপনি নিজে টাইপ করেন</td><td>যেকোনো টেক্সট ফাইল</td><td>আপনার সময়: <a href="https://www.nps.gov/articles/000/oral-history-resources-interview-transcribing.htm">ন্যাশনাল পার্ক সার্ভিস</a> বলে প্রতি ঘণ্টার রেকর্ডিংয়ে প্রায় ৬–৮ ঘণ্টা</td></tr>
+            <tr><th scope="row">ক্লাউড ট্রান্সক্রিপশন সেবা</th><td>প্রদানকারীর সার্ভার; প্রতিটি প্রদানকারীর শর্ত দেখুন</td><td>সেবাভেদে ভিন্ন</td><td>সেবাভেদে ভিন্ন</td><td>সেবাভেদে ভিন্ন</td></tr>
+            <tr><th scope="row">Apple ভয়েস মেমো ট্রান্সক্রিপ্ট</th><td>উল্লেখিত পাতাগুলোতে নথিভুক্ত নয়</td><td>উল্লেখিত পাতাগুলোতে নথিভুক্ত নয়</td><td>ভয়েস মেমোর ভেতরে লেখা; আপনি কপি করে বের করেন</td><td>অপারেটিং সিস্টেমের অংশ</td></tr>
+            <tr><th scope="row">Vox.md</th><td>আপনার iPhone, iPad বা Mac-এ</td><td>ঐচ্ছিক, বেনামি, যথাসাধ্য</td><td>আপনার বেছে নেওয়া ফোল্ডারে একটি Markdown নোট</td><td>১৫ মিনিট বিনামূল্যের প্রতিলিখন ও ১০টি সফল ডেলিভারি, তারপর এককালীন আজীবন আনলক</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>যদি শুধু ভয়েস মেমোর ভেতরে দ্রুত লেখা দরকার হয়, সেটিই ব্যবহার করুন; দেখুন <a href="/bn/blog/transcribe-voice-memos-iphone/">ভয়েস মেমো Markdown-এ ট্রান্সক্রাইব করুন</a> একটি রেকর্ডিং নোটে আনার জন্য। ট্রান্সক্রিপ্টটি আপনার মালিকানাধীন সাধারণ ফাইল হিসেবে, আপনার বেছে নেওয়া স্থানীয় মডেল ও ঐচ্ছিক বক্তার লেবেলসহ চাইলে Vox.md।</p>
+
+      <h2 id="iphone">iPhone বা iPad-এ সামনাসামনি</h2>
+      <ol>
+        <li><strong>একটি ট্রান্সক্রিপশন মডেল বেছে নিন।</strong> স্বয়ংক্রিয় বেছে নিলে সমর্থিত iOS 26 ডিভাইস ও ভাষায় Apple Speech অগ্রাধিকার পায়। বিকল্পভাবে আপনি Whisper (Tiny থেকে Large v3 Turbo), Parakeet v2 (ইংরেজি) বা Parakeet v3 (25টি ভাষা) ডাউনলোড করতে পারেন। মডেল ডাউনলোড করা আপনার সিদ্ধান্ত এবং এটিই একমাত্র নেটওয়ার্ক ধাপ। <a href="/bn/compare/whisper-vs-parakeet/">Whisper বনাম Parakeet</a> বেছে নিতে সাহায্য করে, এবং <a href="/bn/blog/offline-transcription-iphone-markdown/">iPhone-এ অফলাইন ট্রান্সক্রিপশন</a> এটি প্রস্তুত করার নিয়ম বর্ণনা করে।</li>
+        <li><strong>একটি “Interviews” রুট তৈরি করুন।</strong> সেটিংস → রুটগুলো-তে Interviews নামে একটি রুট তৈরি করুন। একটি গন্তব্য ফোল্ডার বেছে নিন (Obsidian ভল্ট বা ফাইলস-এর ফোল্ডার) এবং <strong>নতুন নোট</strong>, ফলে প্রতিটি ক্যাপচার নিজস্ব ফাইল হয়ে যায়। চাইলে স্থির frontmatter যোগ করুন, প্রতি লাইনে একটি করে <code>key: value</code> প্রতি লাইনে, যেমন <code>project: housing-study</code>. এটি <a href="/bn/blog/obsidian-properties-generator/">প্রপার্টি জেনারেটর</a> বৈধ frontmatter তৈরি করে। অংশগ্রহণকারীর কোড স্থির মেটাডেটায় রাখবেন না, কারণ তা রুটের প্রতিটি নোটে প্রযোজ্য হয়।</li>
+        <li><strong>বক্তারা চিহ্নিত চালু করুন।</strong> এটি প্রতিটি রুটে একটি ঐচ্ছিক সেটিং। প্রথমবার ব্যবহারে এটি একটি আলাদা বক্তা-মডেল প্রস্তুত করে, তাই এটি সাক্ষাৎকারের আগে করে নিন, অংশগ্রহণকারীর সামনে নয়। এরপর এটি স্থানীয়ভাবে চলে। ওপেন-সোর্স <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> লাইব্রেরি স্থানীয় বক্তা প্রক্রিয়াকরণে ব্যবহৃত হয়।</li>
+        <li><strong>দুটি কণ্ঠে ৩০ সেকেন্ডের একটি পরীক্ষা করুন।</strong> কারও সঙ্গে একটি ছোট কথোপকথন রেকর্ড করুন, এবং দেখুন নোটটি গন্তব্য ফোল্ডারে পৌঁছায় ও দুটি লেবেল দেখায়।</li>
+        <li><strong>রেকর্ড করুন বা ইমপোর্ট করুন।</strong> Vox.md কম্পোজার থেকে রেকর্ড করুন, অথবা বিদ্যমান অডিও বা ভিডিও ফাইলের জন্য ইমপোর্ট কন্ট্রোল ব্যবহার করুন (<a href="/bn/blog/transcribe-video-to-text/">কীভাবে ভিডিও ইমপোর্ট করবেন</a>)। বেছে নিন <strong>খসড়ায় যোগ করুন</strong> যদি পৌঁছানোর আগে লেখাটি পড়তে চান, অথবা <strong>এখনই পাঠান</strong> ট্রান্সক্রিপশন শেষ হলে পৌঁছে দেওয়ার জন্য।</li>
+        <li><strong>লাইব্রেরিতে পর্যালোচনা করুন।</strong> লাইব্রেরি প্রতিটি ক্যাপচার দেখায় এবং বক্তা শনাক্তকরণ চালানো না গেলে তার কারণও দেখায়।</li>
+      </ol>
+      <p>বক্তারা চিহ্নিত চালু থাকলে সংরক্ষিত লেখায় প্রতিটি পালা নিজস্ব লেবেল লাইন পায়, তার পরের লাইনে সেই পালার লেখা থাকে, এবং পালাগুলো একটি ফাঁকা লাইন দিয়ে আলাদা থাকে:</p>
+<pre class="guide-code"><code>Speaker 1:
+Thanks for agreeing to talk with me today.
+
+Speaker 2:
+Happy to. Where would you like me to start?</code></pre>
+      <p>লেবেলগুলো বেনামি এবং যথাসাধ্য। Vox.md নাম ধরে মানুষ চেনে না। এটি Apple Watch-এ ট্রান্সক্রিপ্ট পৌঁছানোর জন্য এবং Mac অ্যাপেও পাওয়া যায়।</p>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">একটি ছোট রেকর্ডিংয়ে চেষ্টা করে দেখুন।</h2>
+        <p>বিনামূল্যের সীমা ১৫ মিনিট ট্রান্সক্রিপশন এবং ১০টি সফল ডেলিভারি।</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_bn_4113af33d28a">Vox.md নিন</a></p>
+      </section>
+
+      <h2 id="mac">Mac-এ</h2>
+      <ul>
+        <li><strong>একটি বিদ্যমান ফাইল।</strong> ব্যবহার করুন <strong>অডিও ইমপোর্ট…</strong> Mac-এর Vox.md-তে, যা অডিও ও ভিডিও ফাইল নেয়। ধাপগুলো আছে <a href="/bn/blog/transcribe-audio-file-mac/">Mac-এ অডিও ফাইল প্রতিলিখন</a>। বেনামি লেবেলের জন্য রুটে বক্তারা চিহ্নিত চালু করুন।</li>
+        <li><strong>একটি দূরবর্তী সাক্ষাৎকার।</strong> মিটিং ক্যাপচার একটি অ্যাপের অডিও ও আপনার মাইক্রোফোন আলাদা স্টেম হিসেবে রেকর্ড করে। আপনি “You” হিসেবে দেখা দেন এবং অন্য পক্ষ দূরবর্তী বক্তা হিসেবে লেবেল পায়; বক্তা শনাক্তকরণ একাধিক দূরবর্তী কণ্ঠকে আরও ভাগ করতে পারে। সেটআপ আছে <a href="/bn/blog/transcribe-meetings-mac-obsidian/">Mac-এর মিটিং প্রতিলিখন করে Obsidian-এ রাখুন</a>। দূরবর্তী অংশগ্রহণকারীদের জানান যে আপনি রেকর্ড করছেন, ওপরের সম্মতির ধাপের মতো।</li>
+        <li><strong>একটি ক্যাপশন ফাইল।</strong> Zoom বা Teams যদি আপনাকে আগেই একটি .srt বা .vtt ফাইল দিয়ে থাকে, তাহলে <a href="/bn/blog/srt-vtt-to-text-markdown/">SRT ও VTT কনভার্টার</a> এটিকে আপনার ব্রাউজারে টেক্সট বা Markdown-এ রূপান্তর করে।</li>
+      </ul>
+      <p>মিটিং নোট প্রসেসিং মোড আছে, কিন্তু এটি লেখাকে নোট আকারে নতুন করে সাজায়। হুবহু গবেষণা ট্রান্সক্রিপ্টের জন্য রুটটি মূলটি রাখুন-এ রেখে দিন।</p>
+
+      <h2 id="review">পর্যালোচনার ধাপ</h2>
+      <p>স্বয়ংক্রিয় ট্রান্সক্রিপ্ট যাচাই করতে হয়। Harvard-এর নির্দেশিকা বলে, যেকোনো স্বয়ংক্রিয়ভাবে তৈরি ট্রান্সক্রিপ্টের মতো এটিও হাতে সংশোধন করতে হবে, আর Centre College-এর নির্দেশিকা বলে স্বয়ংক্রিয় ট্রান্সক্রিপ্ট মানুষের কাজের বিকল্প নয়।</p>
+      <ol>
+        <li><strong>আবার শুনুন</strong> পড়ার সময় স্বাভাবিক বা ধীর গতিতে, এবং নাম, পরিভাষা, সংখ্যা ও তারিখ ঠিক করুন।</li>
+        <li><strong>আপনার স্টাইল প্রয়োগ করুন</strong> ওপরের হুবহু বা পরিচ্ছন্ন বেছে নেওয়া অনুযায়ী।</li>
+        <li><strong>বক্তাদের নাম বদলান।</strong> খুঁজে বদলান ব্যবহার করে বদলে দিন <code>Speaker 1</code> আপনার সাক্ষাৎকারগ্রহীতার কোডে এবং <code>Speaker 2</code> অংশগ্রহণকারীর কোডে, যেমন P03।</li>
+        <li><strong>পরিচয় গোপন করুন</strong> নাম, স্থান ও অন্যান্য শনাক্তকারী তথ্য, আপনার সম্মতি ও ডেটা পরিকল্পনা যেমন চায়।</li>
+        <li><strong>মূল অডিও রেখে দিন</strong> আপনার ডেটা পরিকল্পনা অনুযায়ী।</li>
+      </ol>
+      <p>একটি সম্পূর্ণ নোট দেখতে এমন হতে পারে (বানানো নমুনা লেখা):</p>
+<pre class="guide-code"><code>---
+participant: P03
+date: 2026-11-24
+consent: recorded
+---
+
+Interviewer:
+Thanks for agreeing to talk with me today.
+
+P03:
+Happy to. Where would you like me to start?</code></pre>
+
+      <h2 id="troubleshooting">সমস্যা সমাধান</h2>
+      <ul>
+        <li><strong>বক্তার লেবেল নেই।</strong> সাধারণ ট্রান্সক্রিপ্ট সবসময় রাখা হয়, আর লাইব্রেরি দেখায় কেন শনাক্তকরণ বাদ গেছে। কারণগুলোর মধ্যে আছে: ট্রান্সক্রিপ্টে সময়ের তথ্য নেই; সময় পুরো ট্রান্সক্রিপ্ট ঢাকে না; আলাদা বক্তা শনাক্ত হয়নি; মডেল স্টোরেজ অনুপলব্ধ; মডেল প্রস্তুত করা যায়নি; অথবা প্রক্রিয়াকরণ ব্যর্থ হয়েছে। রুটে বক্তারা চিহ্নিত চালু আছে কি না এবং বক্তা-মডেল প্রস্তুত হয়েছে কি না দেখুন।</li>
+        <li><strong>বক্তারা ভুলভাবে মিশে গেছে বা ভাগ হয়েছে।</strong> প্রতিটি কণ্ঠের কাছে গিয়ে রেকর্ড করুন, সম্ভব হলে আলাদা মাইক্রোফোন ব্যবহার করুন এবং লেবেল হাতে ঠিক করুন।</li>
+        <li><strong>দীর্ঘ রেকর্ডিং।</strong> বড় মডেলে বেশি সময় লাগে। আগে ছোট মডেল চেষ্টা করুন এবং ডিভাইসে চার্জ রাখুন।</li>
+        <li><strong>Parakeet v2 যে ভাষা সমর্থন করে না।</strong> Parakeet v2 শুধু ইংরেজির জন্য। Parakeet v3 (25টি ভাষা) বা Whisper ব্যবহার করুন; দেখুন <a href="/bn/docs/#models">মডেল</a>.</li>
+        <li><strong>বিনামূল্যের সীমা শেষ।</strong> এটি ১৫ মিনিট ট্রান্সক্রিপশন ও ১০টি সফল ডেলিভারি, তারপর একবারের আজীবন আনলক। App Store-এর দামই চূড়ান্ত।</li>
+      </ul>
+
+      <h2 id="faq">সাধারণ প্রশ্ন</h2>
+      <h3>আমি কি অফলাইনে সাক্ষাৎকার ট্রান্সক্রাইব করতে পারি?</h3>
+      <p>হ্যাঁ, মডেল প্রস্তুত হওয়ার পর। মডেল ডাউনলোড ও বক্তা-মডেল প্রস্তুতির জন্য একবার সংযোগ লাগে; এরপর ট্রান্সক্রিপশন ডিভাইসেই চলে। দেখুন <a href="/bn/blog/offline-transcription-iphone-markdown/">iPhone-এ অফলাইন ট্রান্সক্রিপশন</a>.</p>
+      <h3>Vox.md কি আমার রেকর্ডিং আপলোড করে?</h3>
+      <p>না। ট্রান্সক্রিপশন ও বক্তার লেবেল দেওয়া আপনার ডিভাইসেই চলে, এবং ফাইল শুধু আপনার বেছে নেওয়া ফোল্ডারে লেখা হয়। সেই ফোল্ডার সিঙ্ক হলে (যেমন iCloud Drive), সিঙ্ক প্রদানকারী নিজস্ব শর্তে ফাইলটি রাখে। দেখুন <a href="/bn/privacy.html">গোপনীয়তা নীতি</a>.</p>
+      <h3>এটি কি নাম ধরে বলতে পারে কে কথা বলছে?</h3>
+      <p>না। লেবেলগুলো বেনামি (“বক্তা 1”, “বক্তা 2”) এবং যথাসাধ্য। নাম আপনি নিজেই বদলান।</p>
+      <h3>হাতে একটি সাক্ষাৎকার ট্রান্সক্রাইব করতে কত সময় লাগে?</h3>
+      <p>National Park Service-এর <a href="https://www.nps.gov/articles/000/oral-history-resources-interview-transcribing.htm">সাক্ষাৎকার ট্রান্সক্রাইব করা</a> পাতায় বলা আছে গড়ে প্রতি ঘণ্টার রেকর্ড করা সাক্ষাৎকারে ৬–৮ ঘণ্টা।</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">আপনার পরবর্তী সাক্ষাৎকার নিজের ডিভাইসেই ট্রান্সক্রাইব করুন।</h2>
+        <p>বিনামূল্যের ১৫ মিনিট ট্রান্সক্রিপশনে একটি ছোট সাক্ষাৎকার দিয়ে পরীক্ষা করুন, তারপর Markdown ফাইলটি খুলুন।</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_bn_4113af33d28a">Vox.md নিন</a></p>
+      </section>
+      <nav class="toc" aria-label="সম্পর্কিত গাইড" id="related"><div class="toc-title">চালিয়ে যান</div><ul>
+        <li><a href="/bn/blog/transcribe-audio-file-mac/">Mac-এ অডিও ফাইল প্রতিলিখন করুন</a></li>
+        <li><a href="/bn/blog/transcribe-meetings-mac-obsidian/">Mac-এর মিটিং প্রতিলিখন করে Obsidian-এ রাখুন</a></li>
+        <li><a href="/bn/blog/transcribe-voice-memos-iphone/">iPhone Voice Memos থেকে Markdown প্রতিলিখন করুন</a></li>
+        <li><a href="/bn/blog/offline-transcription-iphone-markdown/">iPhone-এ অফলাইন ট্রান্সক্রিপশন</a></li>
+        <li><a href="/bn/compare/whisper-vs-parakeet/">Whisper বনাম Parakeet</a></li>
+        <li><a href="/bn/blog/obsidian-properties-generator/">Obsidian প্রপার্টি জেনারেটর</a></li>
+        <li><a href="/bn/blog/srt-vtt-to-text-markdown/">SRT ও VTT থেকে টেক্সট বা Markdown</a></li>
+        <li><a href="/bn/docs/">নথি</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/bn/">হোম</a></li>
+        <li><a href="/bn/docs/">নথি</a></li>
+        <li><a href="/bn/blog/">গাইড</a></li>
+        <li><a href="/bn/compare/">তুলনা করুন</a></li>
+        <li><a href="/bn/privacy.html">গোপনীয়তা</a></li>
+        <li><a href="/bn/terms.html">শর্তাবলি</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">সহায়তা</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_bn_4113af33d28a">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© ২০২৬ Vox.md · স্থানীয় নোটের দ্রুত ক্যাপচার · বিষয়বস্তু আপলোড নেই।</div>
+    </div>
+  <details class="language-switcher"><summary>ভাষা</summary><ul><li><a href="/blog/transcribe-interview/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-interview/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-interview/" lang="bn" hreflang="bn" aria-current="page">বাংলা</a></li><li><a href="/de/blog/transcribe-interview/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-interview/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-interview/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-interview/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-interview/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-interview/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-interview/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-interview/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-interview/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-interview/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-interview/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-interview/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-interview/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-interview/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-interview/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-interview/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-interview/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-interview/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-interview/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-interview/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

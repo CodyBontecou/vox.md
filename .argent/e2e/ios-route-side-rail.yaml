@@ -1,0 +1,123 @@
+# Issue #160 (and #157, merged into it): the phone route rail. With
+# Settings > Capture Bar > Route Rail on Left or Right, a column of route tiles
+# sits on that edge just above the quick actions and Speak, so a route can be
+# picked one-handed. Tapping a tile switches the route like a header pill does.
+#
+# Prerequisites: iOS simulator (iPhone 18 Pro Max layout) with a DEBUG build of
+#   Vox.md (bontecou.Voxboard) installed. `-VoxAdaptiveSeedDemo` creates the
+#   local "Vox Notes" demo vault and the four starter routes, and ~2 s after
+#   launch selects Meeting Notes. The rail placement is passed as a launch
+#   argument (`-capture.routes.sideRail.v1 right|left`), which overrides the
+#   saved setting for that launch only.
+# Side effects: the demo seed appends its "Project sync" entry to today's
+#   Meetings note on every launch, and the run ends with Journal selected.
+#   Uninstall the app to reset.
+# Selectors: the rail's checks read its accessibility value ("Route <name>") on
+#   `capture_route_rail`. The runner's directive tree carries none of the
+#   capture controls (it reads the rail as plain "Route"), so every check stays
+#   a raw `tool: await-ui-element` step, as in capture-route-label-suffix.yaml.
+#   Taps are documented coordinates: tile ids embed per-install random route
+#   UUIDs, and the recorder could only derive a role-only `AXScrollArea` tap.
+#   Each tap is followed by a value check, so a mis-hit fails the run.
+version: 1
+requires:
+  platform: ios
+steps:
+  - echo: Launch Vox.md (DEBUG) with the seeded demo vault and the route rail on the
+      right. Wait for the seed to settle on Meeting Notes
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+          - -VoxScreenshotUnlocked
+          - -VoxAdaptiveSeedDemo
+          - -VoxAdaptiveNoAutofocus
+          - -capture.routes.sideRail.v1
+          - right
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_settings
+      timeoutMs: 20000
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: live_note_status
+      expectedText: Saved
+      textMatch: equals
+      timeoutMs: 20000
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: capture_route_rail
+      expectedText: Route Meeting Notes
+      textMatch: equals
+      timeoutMs: 15000
+  - echo: Rail on the right edge, Meeting Notes selected. Tap Inbox on the rail;
+      expect the rail value to read Inbox
+  # Coordinate tap (fallback, see header). Inbox tile on the right rail:
+  # frame (0.891,0.718,0.100,0.046) from `describe` on an iPhone 18 Pro Max.
+  - tap:
+      x: 0.941
+      y: 0.741
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: capture_route_rail
+      expectedText: Route Inbox
+      textMatch: equals
+      timeoutMs: 10000
+  - echo: Relaunch with the rail on the left. The seed reselects Meeting Notes; then
+      tap Journal on the left rail and expect the rail value to read Journal
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+          - -VoxScreenshotUnlocked
+          - -VoxAdaptiveSeedDemo
+          - -VoxAdaptiveNoAutofocus
+          - -capture.routes.sideRail.v1
+          - left
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_settings
+      timeoutMs: 20000
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: capture_route_rail
+      expectedText: Route Meeting Notes
+      textMatch: equals
+      timeoutMs: 15000
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: live_note_status
+      expectedText: Saved
+      textMatch: equals
+      timeoutMs: 20000
+  # Coordinate tap (fallback, see header). Journal tile on the left rail:
+  # frame (0.009,0.672,0.100,0.046) from `describe` on an iPhone 18 Pro Max.
+  - tap:
+      x: 0.059
+      y: 0.695
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: capture_route_rail
+      expectedText: Route Journal
+      textMatch: equals
+      timeoutMs: 10000

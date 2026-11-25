@@ -188,7 +188,7 @@
             <tr><th scope="row">Cosa viene eseguito sul Mac</th><td>Non documentato</td><td>Non documentato</td><td>Trascrizione, con un modello Whisper o Parakeet che scarichi</td></tr>
             <tr><th scope="row">Importazione di file</th><td>Non documentato</td><td>Non documentato</td><td>Importa audio… accetta file audio o video</td></tr>
             <tr><th scope="row">Output Markdown</th><td>Non documentato</td><td>Non documentato</td><td>Sì</td></tr>
-            <tr><th scope="row">Etichette dei relatori</th><td>Non documentato</td><td>Non documentato</td><td>Facoltativo, con Identificare gli oratori</td></tr>
+            <tr><th scope="row">Etichette dei relatori</th><td>Non documentato</td><td>Non documentato</td><td>Facoltativo, con Identificare gli oratori (vedi <a href="/it/blog/transcribe-interview/">trascrizione di interviste</a>)</td></tr>
             <tr><th scope="row">Costo</th><td>Parte di macOS</td><td>Parte di macOS</td><td>15 minuti di trascrizione gratuiti e 10 consegne riuscite, poi uno sblocco a vita con pagamento unico</td></tr>
           </tbody>
         </table>
@@ -210,7 +210,7 @@
 
       <h2 id="import">Importare e trascrivere il file</h2>
       <ol>
-        <li><strong>Importa.</strong> Dalla barra dei menu di Vox.md scegli <strong>Importa audio…</strong>, oppure importa o trascina l’audio nello spazio di acquisizione. La documentazione dice che i file audio e video sono accettati e vengono trascritti in locale come una registrazione.</li>
+        <li><strong>Importa.</strong> Dalla barra dei menu di Vox.md scegli <strong>Importa audio…</strong>, oppure importa o trascina l’audio nello spazio di acquisizione. La documentazione dice che i file audio e video sono accettati e seguono la stessa trascrizione locale di una registrazione. Per i file video in particolare, vedi <a href="/it/blog/transcribe-video-to-text/">trascrivere un video in testo</a>.</li>
         <li><strong>Scegli Aggiungi alla bozza o Invia subito.</strong> Con <strong>Invia subito</strong> la trascrizione viene consegnata al termine. Con <strong>Aggiungi alla bozza</strong> puoi controllarla prima. Verifica nomi, numeri e date confrontandoli con l’audio.</li>
         <li><strong>Facoltativo: Identificare gli oratori.</strong> Attiva <strong>Identificare gli oratori</strong> sul Percorso per ottenere etichette dei relatori anonime, nella migliore misura possibile. Al primo utilizzo prepara un modello separato. Se non può essere eseguito, viene conservata la trascrizione semplice e il motivo compare in Libreria.</li>
         <li><strong>Facoltativo: modalità di elaborazione.</strong> Un Percorso può usare Mantieni originale, Testo ripulito, Note riunione, Elenco attività o Istruzione personalizzata. Le modalità Apple Intelligence richiedono hardware compatibile con macOS 26. Senza, Elenco attività e Note riunione usano formattatori integrati, mentre Testo ripulito e Istruzione personalizzata mantengono il testo originale.</li>
@@ -219,6 +219,7 @@
 
       <h2 id="verify">Controllare la nota Markdown</h2>
       <p>Scegliere <strong>Mostra ultima esportazione</strong> dalla barra dei menu, oppure trova la voce in Libreria e mostrala nel Finder, poi apri il file in Obsidian. Se ti serve solo il testo, scegli <strong>Copy Last Transcript (copia l’ultima trascrizione)</strong>. Per una struttura di nota da compilare da una registrazione, vedi il <a href="/it/blog/obsidian-meeting-notes-template/">generatore di modelli per note di riunione</a>.</p>
+      <p>Se la registrazione è la prova di un discorso, incolla la trascrizione e la durata della registrazione nel <a href="/it/blog/speech-time-calculator/">calcolatore della durata di un discorso</a> per misurare le tue parole al minuto e il tempo di parlato del tuo copione al tuo ritmo.</p>
 
       <h2 id="privacy">Cosa lascia il tuo Mac</h2>
       <p>La trascrizione avviene sul Mac e Vox.md non invia il contenuto delle acquisizioni ai server di Vox.md. I download dei modelli contattano l’infrastruttura di Hugging Face o FluidAudio. Se la cartella di destinazione si sincronizza tramite iCloud o un altro servizio, quel servizio gestisce il file secondo le proprie condizioni. Vedi la <a href="/it/privacy.html">informativa sulla privacy</a>.</p>
@@ -242,6 +243,7 @@
         <li><a href="/it/compare/whisper-vs-parakeet/">Whisper o Parakeet</a></li>
         <li><a href="/it/blog/transcribe-voice-memos-iphone/">Trascrivi Memo Vocali iPhone in Markdown</a></li>
         <li><a href="/it/blog/obsidian-meeting-notes-template/">Generatore di modelli di note per riunioni in Obsidian</a></li>
+        <li><a href="/it/blog/transcribe-interview/">Trascrivere un’intervista in privato, con etichette degli interlocutori</a></li>
         <li><a href="/it/docs/#mac">Documentazione per Mac</a></li>
       </ul></nav>
     </div>

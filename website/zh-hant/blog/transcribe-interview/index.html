@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" dir="ltr" data-search-section="段落" data-search-guide="指南" data-search-empty="沒有與“{query}”匹配的結果">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>如何私密轉錄訪談並附上說話者標籤 | Vox.md</title>
+  <meta name="description" content="一套將訪談錄音變成可覆核轉錄稿的實用方法：知情同意、錄音、逐字或淨化、覆核，以及可選的匿名說話者標籤。Vox.md 在你的裝置上轉錄，並儲存歸你所有的 Markdown 筆記。">
+  <link rel="canonical" href="https://vox.isolated.tech/zh-hant/blog/transcribe-interview/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="供語言模型使用的 Vox.md 文件">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="如何私密轉錄訪談並附上說話者標籤">
+  <meta property="og:description" content="一套將訪談錄音變成可覆核轉錄稿的實用方法：知情同意、錄音、逐字或淨化、覆核，以及可選的匿名說話者標籤。Vox.md 在你的裝置上轉錄，並儲存歸你所有的 Markdown 筆記。">
+  <meta property="og:url" content="https://vox.isolated.tech/zh-hant/blog/transcribe-interview/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-24">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="如何私密轉錄訪談並附上說話者標籤">
+  <meta name="twitter:description" content="一套將訪談錄音變成可覆核轉錄稿的實用方法：知情同意、錄音、逐字或淨化、覆核，以及可選的匿名說話者標籤。Vox.md 在你的裝置上轉錄，並儲存歸你所有的 Markdown 筆記。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "如何私密轉錄訪談並附上說話者標籤",
+  "description": "一套將訪談錄音變成可覆核轉錄稿的實用方法：知情同意、錄音、逐字或淨化、覆核，以及可選的匿名說話者標籤。Vox.md 在你的裝置上轉錄，並儲存歸你所有的 Markdown 筆記。",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-24",
+  "dateModified": "2026-11-24",
+  "mainEntityOfPage": "https://vox.isolated.tech/zh-hant/blog/transcribe-interview/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "zh-Hant",
+  "name": "如何私密轉錄訪談並附上說話者標籤 | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/zh-hant/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "指南",
+      "item": "https://vox.isolated.tech/zh-hant/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "如何私密轉錄訪談並附上說話者標籤",
+      "item": "https://vox.isolated.tech/zh-hant/blog/transcribe-interview/"
+    }
+  ],
+  "inLanguage": "zh-Hant",
+  "name": "如何私密轉錄訪談並附上說話者標籤 | Vox.md",
+  "description": "一套將訪談錄音變成可覆核轉錄稿的實用方法：知情同意、錄音、逐字或淨化、覆核，以及可選的匿名說話者標籤。Vox.md 在你的裝置上轉錄，並儲存歸你所有的 Markdown 筆記。"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-interview/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-interview/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-interview/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-interview/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-interview/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-interview/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-interview/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-interview/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-interview/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-interview/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-interview/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-interview/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-interview/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-interview/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-interview/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-interview/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-interview/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-interview/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳至指南</a>
+<nav aria-label="主導航">
+  <div class="nav-inner">
+    <a href="/zh-hant/" class="logo" aria-label="Vox.md 首頁">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/zh-hant/#how">工作原理</a></li>
+      <li><a href="/zh-hant/docs/">文件</a></li>
+      <li><a href="/zh-hant/blog/">指南</a></li>
+      <li><a href="/zh-hant/compare/">比較</a></li>
+      <li><a href="/zh-hant/privacy.html">隱私</a></li>
+      <li><a href="/zh-hant/terms.html">條款</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_4113af33d28a">下載 Vox.md</a>
+  <details class="language-switcher"><summary>語言</summary><ul><li><a href="/blog/transcribe-interview/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-interview/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-interview/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-interview/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-interview/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-interview/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-interview/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-interview/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-interview/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-interview/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-interview/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-interview/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-interview/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-interview/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-interview/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-interview/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-interview/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-interview/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-interview/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-interview/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-interview/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-interview/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-interview/" lang="zh-Hant" hreflang="zh-Hant" aria-current="page">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">訪談 · 裝置端 · 說話者標籤</div>
+        <h1 class="hero-title">如何私密轉錄訪談並附上說話者標籤</h1>
+        <p class="hero-subtitle">知情同意、錄音、轉錄和覆核環節，外加裝置端路線，使參與者音訊不會上傳到轉錄服務。</p>
+      </div>
+      <aside class="meta-card" aria-label="關於本指南">
+        <dl>
+          <div><dt>作者：</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>更新於</dt><dd><time datetime="2026-11-24">2026年11月24日</time></dd></div>
+          <div><dt>需要</dt><dd>Vox.md：iOS 或 iPadOS 17.6+ 或 macOS 14+ · 已下載 Whisper 或 Parakeet 的語音模型 · 可寫入的目的地資料夾</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="如何私密轉錄訪談並附上說話者標籤">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">簡短回答</div>
+        <p>五個步驟： <strong>1）取得同意</strong> 並說明音訊將如何處理和儲存； <strong>2）清晰錄音</strong> 先做測試； <strong>3）轉錄</strong>; <strong>4）對照音訊核對文字</strong>; <strong>5）標註說話者並儲存</strong>。你可以用 iPhone、iPad 或 Mac 上的 Vox.md 在自己的裝置上完成整個流程，錄音不會上傳到轉錄服務。說話者標籤是可選的、匿名的，並且是盡力而為（「Speaker 1」「Speaker 2」）；你需要手動重新命名。</p>
+      </div>
+      <p>此方法適用於任何工具。Vox.md 的步驟遵循 <a href="/zh-hant/docs/#models">模型</a> 和 <a href="/zh-hant/docs/#mac">Mac</a> 文件以及 App 實際發布的行為。外部來源在使用處附有連結，範例筆記僅為說明，並非真實訪談。</p>
+      <nav class="toc" aria-label="本指南中"><div class="toc-title">本指南中</div><ol>
+        <li><a href="#before-you-record">錄音前</a></li>
+        <li><a href="#verbatim-or-clean">逐字還是淨化？</a></li>
+        <li><a href="#options">轉錄方式</a></li>
+        <li><a href="#iphone">在 iPhone 或 iPad 上面對面訪談</a></li>
+        <li><a href="#mac">在 Mac 上</a></li>
+        <li><a href="#review">覆核環節</a></li>
+        <li><a href="#troubleshooting">故障排查</a></li>
+        <li><a href="#faq">常見問題</a></li>
+      </ol></nav>
+
+      <h2 id="before-you-record">錄音前</h2>
+      <p><strong>知情同意與資料處理。</strong> 告訴參與者音訊將如何處理和儲存，並在錄音前取得他們的同意。Centre College 的 <a href="https://library.centre.edu/oralhistories/standards">口述歷史指南</a> 指出，訪談者應確保受訪者自願同意、說明訪談目的，並講清楚他們的選擇，包括限制存取或選擇匿名。也請查看你的倫理委員會或資料政策：許多機構會詢問參與者音訊在何處處理和儲存，所以請在第一次訪談前想好答案。</p>
+      <p><strong>錄音設定。</strong> 哈佛圖書館的 <a href="https://guides.library.harvard.edu/c.php?g=796889&amp;p=10476360">錄音與轉錄</a> 指南建議先花時間做好音訊擷取，因為這會讓轉錄更容易。實際做法：</p>
+      <ul>
+        <li>每位說話者盡量用一支麥克風，並坐在各自附近。</li>
+        <li>選一個安靜的房間，關掉會響或有嗡嗡聲的一切裝置。</li>
+        <li>正式訪談前，先錄一段簡短的測試並回放。</li>
+      </ul>
+
+      <h2 id="verbatim-or-clean">逐字還是淨化？</h2>
+      <p>轉錄前先決定風格，並在整個專案中保持一致。Centre College 指南的 <a href="https://library.centre.edu/oralhistories/transcribing">轉錄</a> 頁面將逐字稿描述為逐字記錄，包括贅詞、停頓、打斷和笑聲，並指出歷史學家更偏愛它，因為它能保留最多的細微差別。「淨化逐字稿」和「編輯版」是較輕風格的常見名稱；表格顯示了它們通常的差異。你需要哪一種，由你的專案、出版方或倫理委員會決定。</p>
+      <p class="guide-table-hint">在小螢幕上，請左右滑動表格。</p>
+      <div class="guide-comparison" role="region" aria-label="轉錄風格比較；在小螢幕上可橫向捲動" tabindex="0">
+        <table class="comparison">
+          <caption>常見的轉錄風格</caption>
+          <thead><tr><th scope="col">風格</th><th scope="col">保留什麼</th><th scope="col">典型適用情境</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">逐字稿</th><td>所說的一切：贅詞、口誤重說、停頓、非語音聲音</td><td>口述歷史和研究，其中措辭和說話方式本身就是資料</td></tr>
+            <tr><th scope="row">淨化逐字稿</th><td>所說的話，去除了贅詞和口誤重說</td><td>大多數訪談分析和引用情境，即意思比表達方式更重要的情況</td></tr>
+            <tr><th scope="row">編輯版</th><td>為便於閱讀而改寫：文法已整理，部分段落被刪減</td><td>出版草稿，僅在你的專案要求時，才經說話者核准後使用</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>自動轉錄不會替你選擇風格，你仍需在覆核環節套用它。</p>
+
+      <h2 id="options">轉錄方式</h2>
+      <p>該表比較的是類別而非特定產品，只陳述有文件記載的內容。Apple 語音備忘錄的詳細資訊來自 Apple 支援的 <a href="https://support.apple.com/guide/voice-memos/vm4a03609f0d/mac">在 Mac 的語音備忘錄中檢視轉錄</a> 及其 <a href="https://support.apple.com/guide/iphone/view-a-transcription-iph00953a982/ios">iPhone 頁面</a>；請依你的裝置、語言和地區進行確認。</p>
+      <p class="guide-table-hint">在小螢幕上，請左右滑動表格。</p>
+      <div class="guide-comparison" role="region" aria-label="訪談轉錄選項比較；在小螢幕上可橫向捲動" tabindex="0">
+        <table class="comparison">
+          <caption>訪談轉錄選項</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">音訊處理位置</th><th scope="col">說話人標籤</th><th scope="col">輸出</th><th scope="col">成本模式</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">手動</th><td>你自己的電腦</td><td>需要你自己輸入</td><td>任何文字檔案</td><td>你的時間： <a href="https://www.nps.gov/articles/000/oral-history-resources-interview-transcribing.htm">美國國家公園管理局</a> 指出每小時錄音約需 6–8 小時</td></tr>
+            <tr><th scope="row">雲端轉錄服務</th><td>服務供應商的伺服器；請查看各供應商的條款</td><td>依服務而異</td><td>依服務而異</td><td>依服務而異</td></tr>
+            <tr><th scope="row">Apple 語音備忘錄轉錄稿</th><td>所引頁面中未記載</td><td>所引頁面中未記載</td><td>語音備忘錄內的文字；需要你自行複製出來</td><td>作業系統的一部分</td></tr>
+            <tr><th scope="row">Vox.md</th><td>在你的 iPhone、iPad 或 Mac 上</td><td>需主動開啟，匿名，盡力而為</td><td>你所選資料夾中的 Markdown 筆記</td><td>15 分鐘免費轉錄和 10 次成功遞送，之後一次性買斷終身解鎖</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>如果你只需要在語音備忘錄內快速取得文字，就用它；參閱 <a href="/zh-hant/blog/transcribe-voice-memos-iphone/">將語音備忘錄轉錄為 Markdown</a> 用於把錄音移入筆記。當你想要一份歸你所有的純檔案轉錄稿、自選的本機模型以及可選的說話者標籤時，請使用 Vox.md。</p>
+
+      <h2 id="iphone">在 iPhone 或 iPad 上面對面訪談</h2>
+      <ol>
+        <li><strong>選擇轉錄模型。</strong> 「自動」會在支援的 iOS 26 裝置和語言上優先使用 Apple Speech。你也可以改為下載 Whisper（Tiny 到 Large v3 Turbo）、Parakeet v2（英文）或 Parakeet v3（25 種語言）。下載模型由你決定，也是唯一需要連網的步驟。 <a href="/zh-hant/compare/whisper-vs-parakeet/">Whisper 與 Parakeet</a> 可幫你選擇，而 <a href="/zh-hant/blog/offline-transcription-iphone-markdown/">iPhone 上的離線轉錄</a> 介紹了如何準備。</li>
+        <li><strong>建立「Interviews」路線。</strong> 在「設定 → 路線」中，建立一條名為 Interviews 的路線。選擇目的地資料夾（Obsidian 資料庫或「檔案」資料夾），並 <strong>新筆記</strong>，讓每次擷取都成為獨立的檔案。你也可以加入靜態 frontmatter，每行一個 <code>key: value</code> 每行一個，例如 <code>project: housing-study</code>。該 <a href="/zh-hant/blog/obsidian-properties-generator/">屬性產生器</a> 會產生有效的 frontmatter。請勿把參與者代碼放進靜態中繼資料，因為它會套用到該路線產生的每一則筆記。</li>
+        <li><strong>開啟「識別演講者」。</strong> 這是每條路線上的一項需主動開啟的設定。首次使用時，它會準備一個單獨的說話者模型，所以請在訪談前完成，而不要當著參與者的面進行。之後它在本機執行。開源的 <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> 程式庫用於本機說話者處理。</li>
+        <li><strong>用兩個聲音做一次 30 秒測試。</strong> 錄一段簡短的對話，檢查筆記是否已送達目的地資料夾，並顯示兩個標籤。</li>
+        <li><strong>錄音或匯入。</strong> 在 Vox.md 編輯器中錄音，或用匯入控制項選擇現有的音訊或影片檔案（<a href="/zh-hant/blog/transcribe-video-to-text/">如何匯入影片</a>）。選擇 <strong>加入草稿</strong> 如果你想在文字送達前先閱讀，或者 <strong>立即傳送</strong> 在轉錄完成時送達。</li>
+        <li><strong>在資料庫中覆核。</strong> 資料庫會顯示每次擷取；如果說話者識別無法執行，還會顯示原因。</li>
+      </ol>
+      <p>開啟「識別演講者」後，儲存的文字中每個發言輪次都有自己的標籤行，下一行是該輪次的文字，各輪次之間以空行分隔：</p>
+<pre class="guide-code"><code>Speaker 1:
+Thanks for agreeing to talk with me today.
+
+Speaker 2:
+Happy to. Where would you like me to start?</code></pre>
+      <p>標籤是匿名的，並且是盡力而為。Vox.md 不會依姓名辨識人物。它也可用於 Apple Watch 轉錄稿傳送，以及 Mac App。</p>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">先用一段簡短的錄音試試。</h2>
+        <p>免費額度為 15 分鐘轉錄和 10 次成功傳送。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_4113af33d28a">獲取 Vox.md</a></p>
+      </section>
+
+      <h2 id="mac">在 Mac 上</h2>
+      <ul>
+        <li><strong>既有的檔案。</strong> 使用 <strong>匯入音訊…</strong> 在 Mac 版 Vox.md 中，它接受音訊和影片檔案。步驟見 <a href="/zh-hant/blog/transcribe-audio-file-mac/">在 Mac 上轉錄音訊檔案</a>。在路線上開啟「識別演講者」即可取得匿名標籤。</li>
+        <li><strong>遠端訪談。</strong> 會議擷取會把某個 App 的音訊和你的麥克風錄成獨立的音軌。你顯示為「You」，對方則標為遠端說話者；說話者識別可以進一步區分多個遠端聲音。設定方式見 <a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/">將 Mac 會議轉錄到 Obsidian</a>。如同上方的知情同意步驟，告知遠端參與者你正在錄音。</li>
+        <li><strong>字幕檔案。</strong> 如果 Zoom 或 Teams 已經給了你 .srt 或 .vtt 檔案， <a href="/zh-hant/blog/srt-vtt-to-text-markdown/">SRT 和 VTT 轉換器</a> 會在瀏覽器中把它轉換成文字或 Markdown。</li>
+      </ul>
+      <p>會議記錄處理模式確實存在，但它會把文字重組為筆記。若要保留逐字的研究轉錄稿，請讓路線維持「保留原文」。</p>
+
+      <h2 id="review">覆核環節</h2>
+      <p>自動轉錄稿需要核對。哈佛的指南指出，與任何自動產生的轉錄稿一樣，你需要手動修訂；Centre College 的指南則指出，自動轉錄稿無法取代人的工作。</p>
+      <ol>
+        <li><strong>再聽一遍</strong> 閱讀時以正常或較慢的速度播放，並修正姓名、術語、數字和日期。</li>
+        <li><strong>套用你的風格</strong> ，依上方所選的逐字或淨化風格。</li>
+        <li><strong>重新命名說話者。</strong> 使用尋找和取代，將 <code>Speaker 1</code> 轉換成你的訪談者代碼，並 <code>Speaker 2</code> 轉換成參與者代碼，例如 P03。</li>
+        <li><strong>匿名化</strong> 姓名、地點和其他可識別細節，依你的知情同意和資料計畫要求處理。</li>
+        <li><strong>保留原始音訊</strong> 依照你的資料計畫處理。</li>
+      </ol>
+      <p>完成的筆記可能像這樣（虛構的範例文字）：</p>
+<pre class="guide-code"><code>---
+participant: P03
+date: 2026-11-24
+consent: recorded
+---
+
+Interviewer:
+Thanks for agreeing to talk with me today.
+
+P03:
+Happy to. Where would you like me to start?</code></pre>
+
+      <h2 id="troubleshooting">故障排查</h2>
+      <ul>
+        <li><strong>沒有說話者標籤。</strong> 純文字轉錄稿一律會保留，資料庫會顯示略過識別的原因。原因包括：轉錄稿中沒有時間資訊；時間資訊未涵蓋整份轉錄稿；未偵測到不同的說話者；模型儲存空間無法使用；模型無法準備；或處理失敗。請檢查該路線是否已開啟「識別演講者」，以及說話者模型是否已準備好。</li>
+        <li><strong>說話者被錯誤合併或拆分。</strong> 靠近每位說話者錄音，條件允許就使用各自獨立的麥克風，並手動修正標籤。</li>
+        <li><strong>很長的錄音。</strong> 較大的模型耗時較長。先試試較小的模型，並讓裝置保持充電。</li>
+        <li><strong>Parakeet v2 不支援的語言。</strong> Parakeet v2 僅支援英文。請使用 Parakeet v3（25 種語言）或 Whisper；參閱 <a href="/zh-hant/docs/#models">模特</a>.</li>
+        <li><strong>免費額度已用完。</strong> 免費額度是 15 分鐘轉錄和 10 次成功傳送，之後是一次性終身解鎖。價格以 App Store 為準。</li>
+      </ul>
+
+      <h2 id="faq">常見問題</h2>
+      <h3>我可以離線轉錄訪談嗎？</h3>
+      <p>可以，只要模型已準備好。下載模型和準備說話者模型需要連線一次；之後轉錄會在裝置上執行。請參閱 <a href="/zh-hant/blog/offline-transcription-iphone-markdown/">iPhone 上的離線轉錄</a>.</p>
+      <h3>Vox.md 會上傳我的錄音嗎？</h3>
+      <p>不會。轉錄和說話者標註都在你的裝置上執行，檔案只會寫入你選擇的資料夾。如果該資料夾會同步（例如 iCloud 雲碟），則同步服務供應商會依其自身條款保存該檔案。請參閱 <a href="/zh-hant/privacy.html">隱私權政策</a>.</p>
+      <h3>它能依姓名辨識說話者嗎？</h3>
+      <p>不能。標籤是匿名的（「Speaker 1」「Speaker 2」），並且是盡力而為。你需要自己重新命名。</p>
+      <h3>手動轉錄一次訪談需要多久？</h3>
+      <p>美國國家公園管理局的 <a href="https://www.nps.gov/articles/000/oral-history-resources-interview-transcribing.htm">訪談轉錄</a> 頁面指出，每小時訪談錄音平均需要 6–8 小時。</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">在你自己的裝置上轉錄下一次訪談。</h2>
+        <p>先用免費的 15 分鐘轉錄額度測試一段簡短訪談，然後開啟產生的 Markdown 檔案。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_4113af33d28a">獲取 Vox.md</a></p>
+      </section>
+      <nav class="toc" aria-label="相關指南" id="related"><div class="toc-title">繼續</div><ul>
+        <li><a href="/zh-hant/blog/transcribe-audio-file-mac/">在 Mac 上轉錄音訊檔案</a></li>
+        <li><a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/">將 Mac 會議轉錄到 Obsidian</a></li>
+        <li><a href="/zh-hant/blog/transcribe-voice-memos-iphone/">將 iPhone 語音備忘錄轉錄為 Markdown</a></li>
+        <li><a href="/zh-hant/blog/offline-transcription-iphone-markdown/">iPhone 上的離線轉錄</a></li>
+        <li><a href="/zh-hant/compare/whisper-vs-parakeet/">Whisper 與 Parakeet</a></li>
+        <li><a href="/zh-hant/blog/obsidian-properties-generator/">Obsidian 屬性產生器</a></li>
+        <li><a href="/zh-hant/blog/srt-vtt-to-text-markdown/">SRT 和 VTT 轉文字或 Markdown</a></li>
+        <li><a href="/zh-hant/docs/">文件</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/zh-hant/">首頁</a></li>
+        <li><a href="/zh-hant/docs/">文件</a></li>
+        <li><a href="/zh-hant/blog/">指南</a></li>
+        <li><a href="/zh-hant/compare/">比較</a></li>
+        <li><a href="/zh-hant/privacy.html">隱私</a></li>
+        <li><a href="/zh-hant/terms.html">條款</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">支援</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_4113af33d28a">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · 本地筆記快速擷取 · 不上傳內容。</div>
+    </div>
+  <details class="language-switcher"><summary>語言</summary><ul><li><a href="/blog/transcribe-interview/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-interview/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-interview/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-interview/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-interview/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-interview/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-interview/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-interview/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-interview/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-interview/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-interview/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-interview/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-interview/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-interview/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-interview/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-interview/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-interview/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-interview/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-interview/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-interview/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-interview/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-interview/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-interview/" lang="zh-Hant" hreflang="zh-Hant" aria-current="page">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

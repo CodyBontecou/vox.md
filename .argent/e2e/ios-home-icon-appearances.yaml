@@ -1,0 +1,140 @@
+# Vox.md home-screen icon appearances (iOS 18+/26 Customize sheet): captures the
+# Vox.md icon in Default, Dark, Tinted-light and Tinted-dark, then restores Default.
+#
+# Prerequisites: an iOS simulator (pool device "iPhone 18 Pro Max"), a build of Vox.md
+# installed and visible on the CURRENT home screen page in the top three rows (the
+# Customize sheet covers the lower half), no app in the foreground, icon style Default.
+# Side effects: toggles the SpringBoard icon style; the test restores Default at the
+# end (if it fails midway, reset it via long-press > Edit > Customize > Default).
+#
+# Coordinate exceptions: every gesture-tap/gesture-custom here targets SpringBoard
+# (home-screen long-press, Edit, Customize, the Default/Dark/Tinted tiles, the tinted
+# Light/Dark mode pills). The e2e runner cannot read SpringBoard's view tree
+# ("could not target an app"), so selector taps cannot resolve; each tap is gated by
+# a raw await-ui-element (ax-service tree, which can read SpringBoard) on the label it
+# targets or the state it produces. Frames are from describe on a 6.9" iPhone
+# (iPhone 18 Pro Max); other screen sizes need re-recording.
+# Screenshots are human evidence for the PR, not verdicts.
+version: 1
+requires:
+  platform: ios
+steps:
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: Vox.md
+  - echo: "Light: Vox.md icon on the home screen. Long-press empty wallpaper to open
+      the home screen menu"
+  - tool: gesture-custom
+    args:
+      events:
+        - type: Down
+          x: 0.5
+          y: 0.6
+        - type: Up
+          x: 0.5
+          y: 0.6
+          delayMs: 1200
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Edit
+        role: AXButton
+  - tool: gesture-tap
+    args:
+      x: 0.1965
+      y: 0.0345
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Customize
+        role: AXButton
+  - tool: gesture-tap
+    args:
+      x: 0.398
+      y: 0.141
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Tinted
+        role: AXButton
+  - tool: screenshot
+    args:
+      scale: 1
+  - echo: "Default captured. Select Dark: Vox.md should show bars + orange dot on
+      the system dark backdrop (no baked tile)"
+  - tool: gesture-tap
+    args:
+      x: 0.3895
+      y: 0.9215
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Always
+        role: AXButton
+  - tool: screenshot
+    args:
+      scale: 1
+    delayMs: 800
+  - echo: "Dark captured. Select Tinted: Vox.md should show a tinted glyph with a
+      distinct dot, not a muddy tile"
+  - tool: gesture-tap
+    args:
+      x: 0.8305
+      y: 0.8545
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Luma slider
+  - tool: screenshot
+    args:
+      scale: 1
+    delayMs: 800
+  - echo: Tinted (light) captured. Switch tinted mode to Dark
+  - tool: gesture-tap
+    args:
+      x: 0.5
+      y: 0.951
+  - tool: screenshot
+    args:
+      scale: 1
+    delayMs: 800
+  - echo: Tinted (dark) captured. Restore tinted Light, then Default, then close the
+      sheet
+  - tool: gesture-tap
+    args:
+      x: 0.336
+      y: 0.951
+  - tool: gesture-tap
+    args:
+      x: 0.1695
+      y: 0.6575
+    delayMs: 600
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        text: Luma slider
+  - tool: button
+    args:
+      button: home
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        text: Tinted
+        role: AXButton
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: Vox.md
+executionPrerequisite: iOS 26 simulator, Vox.md installed and visible on the
+  current home screen page (not in a folder), no app in the foreground, home
+  screen icon style currently Default/Light

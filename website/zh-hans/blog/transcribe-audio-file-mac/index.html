@@ -188,7 +188,7 @@
             <tr><th scope="row">在 Mac 上运行的内容</th><td>未说明</td><td>未说明</td><td>转录，使用你下载的 Whisper 或 Parakeet 模型</td></tr>
             <tr><th scope="row">文件导入</th><td>未说明</td><td>未说明</td><td>导入音频… 接受音频或影片文件</td></tr>
             <tr><th scope="row">Markdown 输出</th><td>未说明</td><td>未说明</td><td>是</td></tr>
-            <tr><th scope="row">说话人标签</th><td>未说明</td><td>未说明</td><td>可选，配合识别演讲者</td></tr>
+            <tr><th scope="row">说话人标签</th><td>未说明</td><td>未说明</td><td>可选，配合“识别演讲者”（参见 <a href="/zh-hans/blog/transcribe-interview/">访谈转写</a>)</td></tr>
             <tr><th scope="row">费用</th><td>macOS 的一部分</td><td>macOS 的一部分</td><td>15 分钟免费转录和 10 次成功投递，之后一次性买断终身解锁</td></tr>
           </tbody>
         </table>
@@ -210,7 +210,7 @@
 
       <h2 id="import">导入并转录文件</h2>
       <ol>
-        <li><strong>导入。</strong> 在 Vox.md 菜单栏中选择 <strong>导入音频…</strong>，或把音频导入或拖入采集工作区。文档说明音频和影片文件均可接受，并且与录音走相同的本地转录流程。</li>
+        <li><strong>导入。</strong> 在 Vox.md 菜单栏中选择 <strong>导入音频…</strong>，或把音频导入或拖入采集工作区。文档说明音频和影片文件均可接受，并且与录音使用相同的本地转写。关于视频文件，请参阅 <a href="/zh-hans/blog/transcribe-video-to-text/">把视频转写成文字</a>.</li>
         <li><strong>选择添加到草稿或立即发送。</strong> 使用 <strong>立即发送</strong> 转录完成后会投递。使用 <strong>添加到草稿</strong> 你可以先检查。请对照音频核对姓名、数字和日期。</li>
         <li><strong>可选：识别演讲者。</strong> 开启 <strong>识别演讲者</strong> 在路由上获得匿名、尽力而为的说话人标签。它首次会准备一个单独的模型。如果无法运行，会保留纯文本转录，原因显示在资料库中。</li>
         <li><strong>可选：处理模式。</strong> 路由可以使用保留原文、润色文本、会议记录、任务清单或自定义指令。Apple Intelligence 模式需要兼容 macOS 26 的硬件。没有时，任务清单和会议记录使用内置格式化器，而润色文本和自定义指令会保留原始文本。</li>
@@ -219,6 +219,7 @@
 
       <h2 id="verify">检查 Markdown 笔记</h2>
       <p>选择 <strong>显示上次导出</strong> 从菜单栏，或在资料库中找到该条目并在 Finder 中显示，然后在 Obsidian 中打开文件。如果只需要文本，请选择 <strong>复制上次转录</strong>。如需一个可由录音填充的笔记结构，请参阅 <a href="/zh-hans/blog/obsidian-meeting-notes-template/">会议记录模板生成器</a>.</p>
+      <p>如果录音是演讲的排练，请把转录文本和录音时长粘贴到 <a href="/zh-hans/blog/speech-time-calculator/">演讲时长计算器</a> 以测量你自己的每分钟词数，以及你的讲稿按你自己语速所需的说话时间。</p>
 
       <h2 id="privacy">哪些内容会离开你的 Mac</h2>
       <p>转录在 Mac 上运行，Vox.md 不会把采集内容发送到 Vox.md 服务器。下载模型会连接 Hugging Face 或 FluidAudio 的基础设施。如果目标文件夹通过 iCloud 或其他服务同步，该服务会按其自身条款处理文件。请参阅 <a href="/zh-hans/privacy.html">隐私政策</a>.</p>
@@ -242,6 +243,7 @@
         <li><a href="/zh-hans/compare/whisper-vs-parakeet/">Whisper 与 Parakeet</a></li>
         <li><a href="/zh-hans/blog/transcribe-voice-memos-iphone/">将 iPhone 语音备忘录转录为 Markdown</a></li>
         <li><a href="/zh-hans/blog/obsidian-meeting-notes-template/">Obsidian 会议记录模板生成器</a></li>
+        <li><a href="/zh-hans/blog/transcribe-interview/">私密转写访谈，并带说话人标签</a></li>
         <li><a href="/zh-hans/docs/#mac">Mac 文档</a></li>
       </ul></nav>
     </div>

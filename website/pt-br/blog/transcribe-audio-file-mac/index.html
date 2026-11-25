@@ -188,7 +188,7 @@
             <tr><th scope="row">O que roda no Mac</th><td>Não documentado</td><td>Não documentado</td><td>Transcrição, com um modelo Whisper ou Parakeet que você baixa</td></tr>
             <tr><th scope="row">Importação de arquivo</th><td>Não documentado</td><td>Não documentado</td><td>Importar áudio… aceita arquivos de áudio ou de vídeo</td></tr>
             <tr><th scope="row">Saída em Markdown</th><td>Não documentado</td><td>Não documentado</td><td>Sim</td></tr>
-            <tr><th scope="row">Rótulos de oradores</th><td>Não documentado</td><td>Não documentado</td><td>Opcional, com Identificar os oradores</td></tr>
+            <tr><th scope="row">Rótulos de oradores</th><td>Não documentado</td><td>Não documentado</td><td>Opcional, com Identificar os oradores (veja <a href="/pt-br/blog/transcribe-interview/">transcrição de entrevistas</a>)</td></tr>
             <tr><th scope="row">Custo</th><td>Parte do macOS</td><td>Parte do macOS</td><td>15 minutos de transcrição gratuitos e 10 entregas bem-sucedidas, depois um desbloqueio vitalício de pagamento único</td></tr>
           </tbody>
         </table>
@@ -210,7 +210,7 @@
 
       <h2 id="import">Importe e transcreva o arquivo</h2>
       <ol>
-        <li><strong>Importe.</strong> Na barra de menus do Vox.md, escolha <strong>Importar áudio…</strong>, ou importe ou arraste o áudio para o espaço de trabalho Captura. A documentação diz que arquivos de áudio e de vídeo são aceitos e passam pela mesma transcrição local de uma gravação.</li>
+        <li><strong>Importe.</strong> Na barra de menus do Vox.md, escolha <strong>Importar áudio…</strong>, ou importe ou arraste o áudio para o espaço de captura. A documentação diz que arquivos de áudio e de filme são aceitos e passam pela mesma transcrição local de uma gravação. Para arquivos de vídeo especificamente, veja <a href="/pt-br/blog/transcribe-video-to-text/">transcrever um vídeo em texto</a>.</li>
         <li><strong>Escolha Adicionar ao rascunho ou Enviar imediatamente.</strong> Com <strong>Enviar imediatamente</strong> a transcrição é entregue quando termina. Com <strong>Adicionar ao rascunho</strong> você pode revisá-la antes. Confira nomes, números e datas com o áudio.</li>
         <li><strong>Opcional: Identificar os oradores.</strong> Ative <strong>Identificar os oradores</strong> na Rota para rótulos de oradores anônimos, com o melhor esforço. Ele prepara um modelo separado na primeira vez. Se não puder ser executado, a transcrição simples é mantida e o motivo aparece na Biblioteca.</li>
         <li><strong>Opcional: modo de processamento.</strong> Uma Rota pode usar Manter original, Texto aprimorado, Notas da reunião, Lista de tarefas ou Instrução personalizada. Os modos do Apple Intelligence exigem hardware compatível com o macOS 26. Sem ele, Lista de tarefas e Notas da reunião usam formatadores integrados, e Texto aprimorado e Instrução personalizada mantêm o texto original.</li>
@@ -219,6 +219,7 @@
 
       <h2 id="verify">Confira a nota Markdown</h2>
       <p>Escolha <strong>Revelar exportação</strong> na barra de menus, ou encontre o item na Biblioteca e mostre-o no Finder; depois abra o arquivo no Obsidian. Se você só precisa do texto, escolha <strong>Copiar última transcrição</strong>. Para uma estrutura de nota a preencher a partir de uma gravação, veja o <a href="/pt-br/blog/obsidian-meeting-notes-template/">gerador de modelo de notas de reunião</a>.</p>
+      <p>Se a gravação for um ensaio de uma apresentação, cole a transcrição e a duração da gravação na <a href="/pt-br/blog/speech-time-calculator/">calculadora de tempo de fala</a> para medir suas palavras por minuto e o tempo de fala do seu roteiro no seu próprio ritmo.</p>
 
       <h2 id="privacy">O que sai do seu Mac</h2>
       <p>A transcrição é feita no Mac, e o Vox.md não envia o conteúdo das capturas para servidores do Vox.md. Os downloads de modelos contatam a infraestrutura do Hugging Face ou do FluidAudio. Se a pasta de destino for sincronizada pelo iCloud ou por outro serviço, esse serviço trata o arquivo conforme seus próprios termos. Veja a <a href="/pt-br/privacy.html">política de privacidade</a>.</p>
@@ -242,6 +243,7 @@
         <li><a href="/pt-br/compare/whisper-vs-parakeet/">Whisper x Parakeet</a></li>
         <li><a href="/pt-br/blog/transcribe-voice-memos-iphone/">Transcreva gravações iPhone para Markdown</a></li>
         <li><a href="/pt-br/blog/obsidian-meeting-notes-template/">Gerador de modelos de notas de reunião para o Obsidian</a></li>
+        <li><a href="/pt-br/blog/transcribe-interview/">Como transcrever uma entrevista em privado, com rótulos de falante</a></li>
         <li><a href="/pt-br/docs/#mac">Documentação do Mac</a></li>
       </ul></nav>
     </div>

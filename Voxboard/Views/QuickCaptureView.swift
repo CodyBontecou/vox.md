@@ -96,6 +96,7 @@ struct QuickCaptureView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.requestReview) private var requestReview
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.layoutDirection) private var layoutDirection
     @Environment(\.calendar) private var calendar
     @Environment(\.locale) private var locale
     @Environment(\.timeZone) private var timeZone
@@ -334,7 +335,64 @@ struct QuickCaptureView: View {
                         .accessibilityHidden(true)
                 }
             } else {
+                // Phone route rail (#160): overlaid so the editor frame and
+                // the controls below keep their layout.
                 composer
+                    .overlay(
+                        alignment: captureToolbarPreferences.routeRailPlacement
+                            .overlayAlignment(for: layoutDirection)
+                    ) {
+                        routeSideRail
+                    }
+            }
+        }
+    }
+
+    private var showsRouteSideRail: Bool {
+        layout == .compact
+            && captureToolbarPreferences.routeRailPlacement != .off
+            && !isLocalizationScreenshot
+    }
+
+    /// Keeps text clear of the rail: its 44pt column plus padding, minus the
+    /// editor's own 20pt gutter.
+    private var routeSideRailGutter: UIEdgeInsets {
+        guard showsRouteSideRail, enabledFlows.count > 1 else { return .zero }
+        let extra = CaptureRouteSideRail.hitTargetSide + 2 * Geist.Spacing.one - 16
+        switch captureToolbarPreferences.routeRailPlacement {
+        case .left: return UIEdgeInsets(top: 0, left: extra, bottom: 0, right: 0)
+        case .right: return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: extra)
+        case .off: return .zero
+        }
+    }
+
+    /// The rail gutter as SwiftUI insets for overlays drawn over the editor
+    /// (the empty-note quote). The gutter is a physical edge, so map it.
+    private var routeSideRailContentInsets: EdgeInsets {
+        let gutter = routeSideRailGutter
+        let isRTL = layoutDirection == .rightToLeft
+        return EdgeInsets(
+            top: 0,
+            leading: isRTL ? gutter.right : gutter.left,
+            bottom: 0,
+            trailing: isRTL ? gutter.left : gutter.right
+        )
+    }
+
+    private var routeSideRail: CaptureViewSection {
+        CaptureViewSection {
+            if showsRouteSideRail {
+                CaptureRouteSideRail(
+                    profiles: enabledFlows.map(\.captureProfile),
+                    selectedID: viewModel.draft.voxID ?? selectedFlow.id,
+                    isEnabled: viewModel.canSelectCapturePreset,
+                    select: { id in
+                        guard let flow = flows.first(where: { $0.id == id }) else { return }
+                        selectFlow(flow)
+                    }
+                )
+                .padding(.horizontal, Geist.Spacing.one)
+                .transition(.opacity)
             }
         }
     }
@@ -1995,6 +2053,7 @@ struct QuickCaptureView: View {
                 showsRawMarkdown: showsRawMarkdown,
                 resolveEmbedURL: { [viewModel] target in viewModel.liveNoteEmbedURL(target) },
                 topContentInset: composerTopInset,
+                sideGutter: routeSideRailGutter,
                 scrollActivityDidChange: { activity in
                     floatingChromeState = QuickCaptureFloatingChrome.State(
                         isScrolling: activity.isScrolling,
@@ -2055,6 +2114,7 @@ struct QuickCaptureView: View {
                 ) {
                     inspirationPlaceholder
                         .padding(.top, composerTopInset)
+                        .padding(routeSideRailContentInsets)
                         .task { await loadInspirationQuote() }
                 }
             }
@@ -2598,24 +2658,40 @@ struct QuickCaptureView: View {
         layout != .regularPane || commands == nil
     }
 
+    /// The rail sits just above the quick-action row, so a toast inserted
+    /// below that row would move the rail under the user's thumb (#160).
+    private var floatsClosedNoteToast: Bool {
+        showsRouteSideRail && layout == .compact
+    }
+
+    /// "<note> is in <route> · Reopen", shown for a few seconds after a
+    /// route switch closes the open note.
+    private var liveNoteClosedToast: CaptureViewSection {
+        CaptureViewSection {
+            if let closed = viewModel.lastClosedNote {
+                LiveNoteClosedToast(note: closed) {
+                    Task {
+                        await viewModel.reopenClosedNote()
+                        focusComposer()
+                    }
+                }
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .task(id: closed.id) {
+                    try? await Task.sleep(for: .seconds(6))
+                    if viewModel.lastClosedNote == closed {
+                        withAnimation { viewModel.lastClosedNote = nil }
+                    }
+                }
+            }
+        }
+    }
+
     /// Bottom bar: Attach (+) | wide ink Speak capsule | accent Send arrow.
     private var captureActionBar: CaptureViewSection {
         CaptureViewSection {
             VStack(spacing: Geist.Spacing.three) {
-                if let closed = viewModel.lastClosedNote {
-                    LiveNoteClosedToast(note: closed) {
-                        Task {
-                            await viewModel.reopenClosedNote()
-                            focusComposer()
-                        }
-                    }
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-                    .task(id: closed.id) {
-                        try? await Task.sleep(for: .seconds(6))
-                        if viewModel.lastClosedNote == closed {
-                            withAnimation { viewModel.lastClosedNote = nil }
-                        }
-                    }
+                if !floatsClosedNoteToast {
+                    liveNoteClosedToast
                 }
                 if !composerIsFocused, captureHintRowHasContent {
                     captureHintRow
@@ -2653,6 +2729,17 @@ struct QuickCaptureView: View {
             // With the keyboard up there is no home-indicator inset below
             // the bar, so give it more room above the keys.
             .padding(.bottom, composerIsFocused ? Geist.Spacing.four : Geist.Spacing.two)
+            // With the route rail on, the toast floats over the quick-action
+            // row instead of pushing it (and the rail) up for a few seconds.
+            .overlay(alignment: .top) {
+                if floatsClosedNoteToast {
+                    // A zero-height frame at the bar's top edge; the toast
+                    // hangs upward from it over the quick-action row.
+                    liveNoteClosedToast
+                        .padding(.horizontal, Geist.Spacing.four)
+                        .frame(height: 0, alignment: .bottom)
+                }
+            }
             // Strictly opt-in confirmation (default off) for Preset sends.
             // Attached to the bar so it also works when Send lives in the
             // route pane.

@@ -188,7 +188,7 @@
             <tr><th scope="row">Mac 上で実行されるもの</th><td>記載なし</td><td>記載なし</td><td>文字起こし。ダウンロードした Whisper または Parakeet モデルを使用</td></tr>
             <tr><th scope="row">ファイルの読み込み</th><td>記載なし</td><td>記載なし</td><td>「オーディオを読み込む…」は音声ファイルまたはムービーファイルに対応</td></tr>
             <tr><th scope="row">Markdown 出力</th><td>記載なし</td><td>記載なし</td><td>はい</td></tr>
-            <tr><th scope="row">話者ラベル</th><td>記載なし</td><td>記載なし</td><td>任意。「スピーカーの識別」を使用</td></tr>
+            <tr><th scope="row">話者ラベル</th><td>記載なし</td><td>記載なし</td><td>任意。スピーカーの識別を使用( <a href="/ja/blog/transcribe-interview/">インタビューの文字起こし</a>)</td></tr>
             <tr><th scope="row">費用</th><td>macOS の一部</td><td>macOS の一部</td><td>無料の文字起こし15分と配信成功10回、その後は買い切りの永続アンロック</td></tr>
           </tbody>
         </table>
@@ -210,7 +210,7 @@
 
       <h2 id="import">ファイルを読み込んで文字起こしする</h2>
       <ol>
-        <li><strong>読み込み。</strong> Vox.md のメニューバーから次を選びます: <strong>オーディオを読み込む…</strong>を選ぶか、音声を「キャプチャ」のワークスペースに読み込むかドラッグします。ドキュメントによると、音声ファイルとムービーファイルに対応し、録音と同じローカル文字起こしが行われます。</li>
+        <li><strong>読み込み。</strong> Vox.md のメニューバーから次を選びます: <strong>オーディオを読み込む…</strong>、またはオーディオをキャプチャのワークスペースに読み込むかドラッグします。ドキュメントによると、オーディオとムービーのファイルが使え、録音と同じローカル文字起こしを通ります。ビデオファイルについては、次を参照してください: <a href="/ja/blog/transcribe-video-to-text/">ビデオをテキストに文字起こしする</a>.</li>
         <li><strong>「下書きに追加」または「すぐに送信」を選びます。</strong> 次を使って、 <strong>すぐに送信</strong> 文字起こしは完了時に配信されます。 <strong>下書きに追加</strong> 先に内容を確認できます。名前、数字、日付は音声と照らして確認してください。</li>
         <li><strong>任意:スピーカーの識別。</strong> オンにする項目は、 <strong>スピーカーの識別</strong> をルートで使うと、匿名でベストエフォートの話者ラベルが付きます。初回は別のモデルを準備します。実行できない場合は、プレーンな文字起こしが保持され、理由がライブラリに表示されます。</li>
         <li><strong>任意:処理モード。</strong> ルートでは、「オリジナルを保持」、「文章を整える」、「会議メモ」、「タスクチェックリスト」、「カスタム指示」を使えます。Apple Intelligence のモードには、macOS 26 対応のハードウェアが必要です。対応していない場合、「タスクチェックリスト」と「会議メモ」は内蔵フォーマッタを使い、「文章を整える」と「カスタム指示」は元のテキストのままになります。</li>
@@ -219,6 +219,7 @@
 
       <h2 id="verify">Markdown ノートを確認する</h2>
       <p>選択 <strong>最後の書き出しを表示</strong> をメニューバーから選ぶか、ライブラリで該当の項目を見つけて Finder で表示し、Obsidian でファイルを開きます。テキストだけが必要な場合は、 <strong>最後の文字起こしをコピー</strong>。録音から埋めるノートの構成については、次をご覧ください: <a href="/ja/blog/obsidian-meeting-notes-template/">会議メモテンプレートジェネレーター</a>.</p>
+      <p>録音が話のリハーサルなら、文字起こしと録音の長さを次に貼り付けます: <a href="/ja/blog/speech-time-calculator/">スピーチ時間計算ツール</a> に貼り付けると、1分あたりの語数と、ご自身のペースでの原稿の話す時間がわかります。</p>
 
       <h2 id="privacy">Mac から外に出るもの</h2>
       <p>文字起こしは Mac 上で実行され、Vox.md はキャプチャの内容を Vox.md のサーバーに送信しません。モデルのダウンロードでは Hugging Face または FluidAudio のインフラに接続します。保存先フォルダが iCloud などのサービスで同期される場合、そのファイルは当該サービスの規約に従って扱われます。 <a href="/ja/privacy.html">プライバシーポリシー</a>.</p>
@@ -242,6 +243,7 @@
         <li><a href="/ja/compare/whisper-vs-parakeet/">Whisper と Parakeet の比較</a></li>
         <li><a href="/ja/blog/transcribe-voice-memos-iphone/">iPhone のボイスメモを Markdown に文字起こし</a></li>
         <li><a href="/ja/blog/obsidian-meeting-notes-template/">Obsidian 議事録テンプレートジェネレーター</a></li>
+        <li><a href="/ja/blog/transcribe-interview/">インタビューをプライベートに文字起こしする(話者ラベル付き)</a></li>
         <li><a href="/ja/docs/#mac">Mac のドキュメント</a></li>
       </ul></nav>
     </div>

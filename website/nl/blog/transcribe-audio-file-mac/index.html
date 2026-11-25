@@ -188,7 +188,7 @@
             <tr><th scope="row">Wat er op de Mac draait</th><td>Niet gedocumenteerd</td><td>Niet gedocumenteerd</td><td>Transcriptie, met een Whisper- of Parakeet-model dat je downloadt</td></tr>
             <tr><th scope="row">Bestandsimport</th><td>Niet gedocumenteerd</td><td>Niet gedocumenteerd</td><td>Audio importeren… accepteert audio- of filmbestanden</td></tr>
             <tr><th scope="row">Markdown-uitvoer</th><td>Niet gedocumenteerd</td><td>Niet gedocumenteerd</td><td>Ja</td></tr>
-            <tr><th scope="row">Sprekerlabels</th><td>Niet gedocumenteerd</td><td>Niet gedocumenteerd</td><td>Optioneel, met Identificatie van sprekers</td></tr>
+            <tr><th scope="row">Sprekerlabels</th><td>Niet gedocumenteerd</td><td>Niet gedocumenteerd</td><td>Optioneel, met Identificatie van sprekers (zie <a href="/nl/blog/transcribe-interview/">interviewtranscriptie</a>)</td></tr>
             <tr><th scope="row">Kosten</th><td>Onderdeel van macOS</td><td>Onderdeel van macOS</td><td>15 gratis transcriptieminuten en 10 geslaagde leveringen, daarna een eenmalige levenslange ontgrendeling</td></tr>
           </tbody>
         </table>
@@ -210,7 +210,7 @@
 
       <h2 id="import">Het bestand importeren en transcriberen</h2>
       <ol>
-        <li><strong>Importeren.</strong> Kies in de menubalk van Vox.md <strong>Audio importeren…</strong>, of importeer of sleep de audio naar de Vastlegwerkruimte. De documentatie zegt dat audio- en filmbestanden worden geaccepteerd en dat ze dezelfde lokale transcriptie doorlopen als een opname.</li>
+        <li><strong>Importeren.</strong> Kies in de menubalk van Vox.md <strong>Audio importeren…</strong>, of importeer of sleep de audio naar de Vastlegwerkruimte. In de documentatie staat dat audio- en filmbestanden worden geaccepteerd en dezelfde lokale transcriptie doorlopen als een opname. Zie voor videobestanden <a href="/nl/blog/transcribe-video-to-text/">een video naar tekst transcriberen</a>.</li>
         <li><strong>Kies Aan concept toevoegen of Direct verzenden.</strong> Met <strong>Direct verzenden</strong> wordt het transcript geleverd zodra het klaar is. Met <strong>Aan concept toevoegen</strong> kun je die eerst controleren. Vergelijk namen, getallen en datums met de audio.</li>
         <li><strong>Optioneel: Identificatie van sprekers.</strong> Schakel in <strong>Identificatie van sprekers</strong> op de Route voor anonieme sprekerlabels naar beste vermogen. De eerste keer bereidt het een apart model voor. Als het niet kan draaien, blijft het gewone transcript behouden en wordt de reden getoond in de Bibliotheek.</li>
         <li><strong>Optioneel: verwerkingsmodus.</strong> Een Route kan Origineel behouden, Heldere tekst, Vergadernotities, Takenlijst of Aangepaste instructie gebruiken. Apple Intelligence-modi vereisen compatibele hardware met macOS 26. Zonder gebruiken Takenlijst en Vergadernotities ingebouwde formatteerders, en behouden Heldere tekst en Aangepaste instructie de originele tekst.</li>
@@ -219,6 +219,7 @@
 
       <h2 id="verify">De Markdown-notitie controleren</h2>
       <p>Kies <strong>Laatste export tonen</strong> in de menubalk, of zoek het item in de Bibliotheek en toon het in Finder, en open het bestand dan in Obsidian. Als je alleen de tekst nodig hebt, kies dan <strong>Laatste transcript kopiëren</strong>. Voor een notitiestructuur die je vanuit een opname vult, zie de <a href="/nl/blog/obsidian-meeting-notes-template/">generator voor sjablonen voor vergadernotities</a>.</p>
+      <p>Als de opname een oefening van een toespraak is, plak dan het transcript en de lengte van de opname in de <a href="/nl/blog/speech-time-calculator/">toespraaktijdcalculator</a> om je woorden per minuut te meten, en de spreektijd van je script in je eigen tempo.</p>
 
       <h2 id="privacy">Wat je Mac verlaat</h2>
       <p>Transcriptie draait op de Mac en Vox.md stuurt geen opname-inhoud naar Vox.md-servers. Modeldownloads maken contact met de infrastructuur van Hugging Face of FluidAudio. Als de doelmap synchroniseert via iCloud of een andere dienst, verwerkt die dienst het bestand onder zijn eigen voorwaarden. Zie de <a href="/nl/privacy.html">privacybeleid</a>.</p>
@@ -242,6 +243,7 @@
         <li><a href="/nl/compare/whisper-vs-parakeet/">Whisper versus Parakeet</a></li>
         <li><a href="/nl/blog/transcribe-voice-memos-iphone/">iPhone-memo&#x27;s naar Markdown transcriberen</a></li>
         <li><a href="/nl/blog/obsidian-meeting-notes-template/">Generator voor Obsidian-sjablonen voor vergadernotities</a></li>
+        <li><a href="/nl/blog/transcribe-interview/">Een interview privé transcriberen, met sprekerlabels</a></li>
         <li><a href="/nl/docs/#mac">Mac-documentatie</a></li>
       </ul></nav>
     </div>
