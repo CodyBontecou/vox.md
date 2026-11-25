@@ -1,0 +1,383 @@
+# Issue #163 device QA: the route "Transcribe Recordings" switch on a real
+# iPhone, through the Speak button's default Add to Draft mode.
+#
+# Contract
+#   1. Baseline: on the QA route the switch is on and the model picker shows.
+#   2. Control take (switch on): a ~7 s take of ambient speech finishes as a
+#      normal draft (transcript; no voice clip).
+#   3. Switch off: explanation line shows, model picker hides.
+#   4. Switch-off take: the same kind of take attaches a voice clip
+#      ("Play voice clip", "on-device") and leaves the note text empty
+#      (quick_capture_text equals "Capture note").
+#   5. Persistence: reopening the editor still shows the switch off.
+#   6. Restore: clip removed, switch back on, Default route selected.
+#
+# Prerequisites: a cabled, unlocked iPhone 17 Pro (iOS 27.2) with a DEBUG build
+#   of this branch; a route named "Custom Route" (id custom-cbb3f0e9-…, created
+#   on that phone for QA) whose destination is Vox/QA/transcription-switch-
+#   {period}.md, Apple Intelligence off, Save audio off; Add to Draft as the
+#   recording mode; speech audible to the phone (a TV was used). The route id is
+#   specific to that phone: on another device, create a QA route and update it.
+# Side effects: each run appends the control take's transcript of whatever was
+#   audible to the QA note. The switch-off clip is removed before leaving the
+#   route, and the run ends on the Default route with the switch back on.
+# Selectors: ids throughout. The switch knob is a coordinate tap: the recorder
+#   could only derive its bare value text ("1"/"0"), which is not unique.
+version: 1
+requires:
+  platform: ios
+steps:
+  - echo: Launch Vox.md (DEBUG) on the iPhone. Expect the capture screen
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+          - -VoxAdaptiveNoAutofocus
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_settings
+      timeoutMs: 60000
+  - await: { idle: true }
+  - echo: Select the QA route (Custom Route) on the rail. Expect its QA note path
+  - tap:
+      id: capture_route_rail_custom-cbb3f0e9-eee9-42e5-860d-1f890c064076
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: transcription-switch-
+      timeoutMs: 10000
+  - echo: "Baseline: open the QA route's Voice Processing and prove Transcribe
+      Recordings is on"
+  - tap:
+      id: capture_settings
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: settings_routes
+      timeoutMs: 10000
+  - await: { idle: true }
+  - tap:
+      id: settings_routes
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_preset_edit_custom-cbb3f0e9-eee9-42e5-860d-1f890c064076
+      timeoutMs: 10000
+  - await: { idle: true }
+  - tap:
+      id: capture_preset_edit_custom-cbb3f0e9-eee9-42e5-860d-1f890c064076
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: route_step_1
+      timeoutMs: 10000
+  - await: { idle: true }
+  - tap:
+      id: route_step_1
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: route_transcription_enabled
+      expectedText: "1"
+      timeoutMs: 10000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: route_transcription_model
+      timeoutMs: 5000
+  - tap:
+      id: capture_preset_editor_done
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_preset_add
+      timeoutMs: 10000
+  - await: { idle: true }
+  - tap:
+      id: chevron.left
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: settings_routes
+      timeoutMs: 10000
+  - await: { idle: true }
+  - tap:
+      id: signal.back
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_new_note
+      timeoutMs: 10000
+  - await: { idle: true }
+  - echo: "Control take (switch on): start a blank note, record about 7 s of TV
+      audio, stop. Expect the take to finish with no audio attachment"
+  - tap:
+      id: capture_new_note
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: quick_capture_text
+      expectedText: Capture note
+      textMatch: equals
+      timeoutMs: 10000
+  - tap:
+      text: Speak
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Recording, 00:07
+      timeoutMs: 15000
+  - tap:
+      id: capture_recording_stop_send
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: capture_live_recording_dock
+      timeoutMs: 30000
+  - echo: Turn Transcribe Recordings off on the QA route. Expect the audio-only note
+      and no model picker
+  - tap:
+      id: capture_settings
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: settings_routes
+      timeoutMs: 10000
+  - await: { idle: true }
+  - tap:
+      id: settings_routes
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_preset_edit_custom-cbb3f0e9-eee9-42e5-860d-1f890c064076
+      timeoutMs: 10000
+  - await: { idle: true }
+  - tap:
+      id: capture_preset_edit_custom-cbb3f0e9-eee9-42e5-860d-1f890c064076
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: route_step_1
+      timeoutMs: 10000
+  - await: { idle: true }
+  - tap:
+      id: route_step_1
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: route_transcription_model
+      timeoutMs: 10000
+  # Coordinate tap (fallback): the switch knob inside route_transcription_enabled
+  # frame (0.040,0.140,0.920,0.059) on an iPhone 17 Pro; the recorder could only
+  # derive the knob's bare value text ("1"), which is not unique.
+  - tap:
+      x: 0.837
+      y: 0.169
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: route_transcription_enabled
+      expectedText: "0"
+      timeoutMs: 5000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: route_transcription_off_note
+      timeoutMs: 5000
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: route_transcription_model
+      timeoutMs: 5000
+  - tap:
+      id: capture_preset_editor_done
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_preset_add
+      timeoutMs: 10000
+  - await: { idle: true }
+  - tap:
+      id: chevron.left
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: settings_routes
+      timeoutMs: 10000
+  - await: { idle: true }
+  - tap:
+      id: signal.back
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_new_note
+      timeoutMs: 10000
+  - await: { idle: true }
+  - echo: "Switch-off take: start a blank note, record about 7 s of TV audio, stop.
+      Expect an audio attachment and no transcript"
+  - tap:
+      id: capture_new_note
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: quick_capture_text
+      expectedText: Capture note
+      textMatch: equals
+      timeoutMs: 10000
+  - tap:
+      text: Speak
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Recording, 00:07
+      timeoutMs: 15000
+  - tap:
+      id: capture_recording_stop_send
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Play voice clip
+      timeoutMs: 30000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: on-device
+      timeoutMs: 5000
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: quick_capture_text
+      expectedText: Capture note
+      textMatch: equals
+      timeoutMs: 5000
+  - echo: "Cleanup: remove the switch-off take's clip from the draft before leaving
+      the QA route. Expect the clip gone"
+  - tap:
+      id: xmark
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        text: Play voice clip
+      timeoutMs: 10000
+  - echo: "Restore: turn Transcribe Recordings back on for the QA route; the off
+      state must have persisted"
+  - tap:
+      id: capture_settings
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: settings_routes
+      timeoutMs: 10000
+  - await: { idle: true }
+  - tap:
+      id: settings_routes
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_preset_edit_custom-cbb3f0e9-eee9-42e5-860d-1f890c064076
+      timeoutMs: 10000
+  - await: { idle: true }
+  - tap:
+      id: capture_preset_edit_custom-cbb3f0e9-eee9-42e5-860d-1f890c064076
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: route_step_1
+      timeoutMs: 10000
+  - await: { idle: true }
+  - tap:
+      id: route_step_1
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: route_transcription_off_note
+      timeoutMs: 10000
+  # Coordinate tap (fallback, see header): the switch knob.
+  - tap:
+      x: 0.837
+      y: 0.169
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: route_transcription_enabled
+      expectedText: "1"
+      timeoutMs: 5000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: route_transcription_model
+      timeoutMs: 5000
+  - tap:
+      id: capture_preset_editor_done
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_preset_add
+      timeoutMs: 10000
+  - await: { idle: true }
+  - tap:
+      id: chevron.left
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: settings_routes
+      timeoutMs: 10000
+  - await: { idle: true }
+  - tap:
+      id: signal.back
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_route_rail_general
+      timeoutMs: 10000
+  - await: { idle: true }
+  - tap:
+      id: capture_route_rail_general
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: capture_route_rail
+      expectedText: Default
+      timeoutMs: 10000
