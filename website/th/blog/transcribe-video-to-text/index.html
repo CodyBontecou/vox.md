@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="th" dir="ltr" data-search-section="ส่วน" data-search-guide="คู่มือ" data-search-empty="ไม่พบ “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ถอดเสียงวิดีโอเป็นข้อความบน iPhone หรือ Mac โดยไม่ต้องอัปโหลด | Vox.md</title>
+  <meta name="description" content="เปลี่ยน MP4 หรือ MOV ที่คุณมีอยู่แล้วให้เป็นโน้ต Markdown บน iPhone, iPad หรือ Mac นำเข้าวิดีโอไปยัง Vox.md ถอดเสียงบนอุปกรณ์ด้วย Apple Speech, Whisper หรือ Parakeet ตรวจทานข้อความ แล้วส่ง">
+  <link rel="canonical" href="https://vox.isolated.tech/th/blog/transcribe-video-to-text/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="เอกสาร Vox.md สำหรับโมเดลภาษา">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="ถอดเสียงวิดีโอเป็นข้อความบน iPhone หรือ Mac โดยไม่ต้องอัปโหลด">
+  <meta property="og:description" content="เปลี่ยน MP4 หรือ MOV ที่คุณมีอยู่แล้วให้เป็นโน้ต Markdown บน iPhone, iPad หรือ Mac นำเข้าวิดีโอไปยัง Vox.md ถอดเสียงบนอุปกรณ์ด้วย Apple Speech, Whisper หรือ Parakeet ตรวจทานข้อความ แล้วส่ง">
+  <meta property="og:url" content="https://vox.isolated.tech/th/blog/transcribe-video-to-text/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-25">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ถอดเสียงวิดีโอเป็นข้อความบน iPhone หรือ Mac โดยไม่ต้องอัปโหลด">
+  <meta name="twitter:description" content="เปลี่ยน MP4 หรือ MOV ที่คุณมีอยู่แล้วให้เป็นโน้ต Markdown บน iPhone, iPad หรือ Mac นำเข้าวิดีโอไปยัง Vox.md ถอดเสียงบนอุปกรณ์ด้วย Apple Speech, Whisper หรือ Parakeet ตรวจทานข้อความ แล้วส่ง">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "ถอดเสียงวิดีโอเป็นข้อความบน iPhone หรือ Mac โดยไม่ต้องอัปโหลด",
+  "description": "เปลี่ยน MP4 หรือ MOV ที่คุณมีอยู่แล้วให้เป็นโน้ต Markdown บน iPhone, iPad หรือ Mac นำเข้าวิดีโอไปยัง Vox.md ถอดเสียงบนอุปกรณ์ด้วย Apple Speech, Whisper หรือ Parakeet ตรวจทานข้อความ แล้วส่ง",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-25",
+  "dateModified": "2026-11-25",
+  "mainEntityOfPage": "https://vox.isolated.tech/th/blog/transcribe-video-to-text/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "th",
+  "name": "ถอดเสียงวิดีโอเป็นข้อความบน iPhone หรือ Mac โดยไม่ต้องอัปโหลด | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/th/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "คู่มือ",
+      "item": "https://vox.isolated.tech/th/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "ถอดเสียงวิดีโอเป็นข้อความบน iPhone หรือ Mac โดยไม่ต้องอัปโหลด",
+      "item": "https://vox.isolated.tech/th/blog/transcribe-video-to-text/"
+    }
+  ],
+  "inLanguage": "th",
+  "name": "ถอดเสียงวิดีโอเป็นข้อความบน iPhone หรือ Mac โดยไม่ต้องอัปโหลด | Vox.md",
+  "description": "เปลี่ยน MP4 หรือ MOV ที่คุณมีอยู่แล้วให้เป็นโน้ต Markdown บน iPhone, iPad หรือ Mac นำเข้าวิดีโอไปยัง Vox.md ถอดเสียงบนอุปกรณ์ด้วย Apple Speech, Whisper หรือ Parakeet ตรวจทานข้อความ แล้วส่ง"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-video-to-text/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">ข้ามไปคู่มือ</a>
+<nav aria-label="การนำทางหลัก">
+  <div class="nav-inner">
+    <a href="/th/" class="logo" aria-label="หน้าแรก Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/th/#how">วิธีทำงาน</a></li>
+      <li><a href="/th/docs/">เอกสาร</a></li>
+      <li><a href="/th/blog/">คู่มือ</a></li>
+      <li><a href="/th/compare/">เปรียบเทียบ</a></li>
+      <li><a href="/th/privacy.html">ความเป็นส่วนตัว</a></li>
+      <li><a href="/th/terms.html">ข้อกำหนด</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_th_3e033cb53350">ดาวน์โหลด Vox.md</a>
+  <details class="language-switcher"><summary>ภาษา</summary><ul><li><a href="/blog/transcribe-video-to-text/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-video-to-text/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-video-to-text/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-video-to-text/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-video-to-text/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-video-to-text/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-video-to-text/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-video-to-text/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-video-to-text/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-video-to-text/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-video-to-text/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-video-to-text/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-video-to-text/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-video-to-text/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-video-to-text/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-video-to-text/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-video-to-text/" lang="th" hreflang="th" aria-current="page">ไทย</a></li><li><a href="/tr/blog/transcribe-video-to-text/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-video-to-text/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-video-to-text/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-video-to-text/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-video-to-text/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-video-to-text/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">วิดีโอเป็นข้อความ · iPhone · iPad · Mac</div>
+        <h1 class="hero-title">ถอดเสียงวิดีโอเป็นข้อความบน iPhone หรือ Mac โดยไม่ต้องอัปโหลด</h1>
+        <p class="hero-subtitle">วิดีโออยู่ในโทรศัพท์หรือ Mac ของคุณอยู่แล้ว จึงถอดเสียงที่นั่นได้เลย ไม่ต้องอัปโหลด และผลลัพธ์คือโน้ต Markdown ที่เป็นของคุณ ไม่ใช่ช่องข้อความให้คัดลอก</p>
+      </div>
+      <aside class="meta-card" aria-label="เกี่ยวกับคู่มือนี้">
+        <dl>
+          <div><dt>โดย</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>ปรับปรุง</dt><dd><time datetime="2026-11-25">25 พฤศจิกายน 2026</time></dd></div>
+          <div><dt>ต้องใช้</dt><dd>Vox.md: iOS หรือ iPadOS 17.6+ หรือ macOS 14+ · โมเดลเสียงที่ดาวน์โหลดแล้ว เว้นแต่จะใช้ Apple Speech ได้ · เส้นทางที่มีโฟลเดอร์ปลายทาง</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="ถอดเสียงวิดีโอเป็นข้อความบน iPhone หรือ Mac โดยไม่ต้องอัปโหลด">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">คำตอบสั้น ๆ</div>
+        <p><strong>iPhone หรือ iPad:</strong> วางวิดีโอไว้ในไฟล์ เปิด Vox.md แล้วแตะ <strong>นำเข้าเสียงหรือวิดีโอ</strong> ในตัวควบคุมเสียง เลือกไฟล์ ตรวจทานข้อความ แล้วแตะส่ง <strong>Mac:</strong> เลือก <strong>นำเข้าเสียง…</strong> ในแถบเมนู หรือนำเข้าไฟล์จากพื้นที่จดบันทึก ไม่ว่าวิธีใด วิดีโอจะถูกถอดเสียงบนอุปกรณ์ของคุณด้วย Apple Speech (อัตโนมัติ บนอุปกรณ์ iOS 26 ที่รองรับ), Whisper หรือ Parakeet แล้วบันทึกเป็นโน้ต Markdown</p>
+      </div>
+      <p><strong>สิ่งที่ทำไม่ได้</strong> Vox.md ไม่รับลิงก์ YouTube, TikTok หรือวิดีโออื่น และไม่สร้างคำบรรยาย SRT หรือ VTT หากคุณมีไฟล์คำบรรยายอยู่แล้วและต้องการเพียงข้อความที่สะอาด ให้ใช้ <a href="/th/blog/srt-vtt-to-text-markdown/">ตัวแปลง SRT และ VTT</a> ขั้นตอนใน Vox.md ทำตาม <a href="/th/docs/#quick-capture">การจับภาพอย่างรวดเร็ว</a> และ <a href="/th/docs/#mac">Mac</a> เอกสารและพฤติกรรมของแอป</p>
+      <nav class="toc" aria-label="ในคู่มือนี้"><div class="toc-title">ในคู่มือนี้</div><ol>
+        <li><a href="#need">สิ่งที่ต้องมี</a></li>
+        <li><a href="#iphone">บน iPhone หรือ iPad</a></li>
+        <li><a href="#mac">บน Mac</a></li>
+        <li><a href="#models">เลือกโมเดลสำหรับภาษาของวิดีโอ</a></li>
+        <li><a href="#speakers">มีผู้พูดมากกว่าหนึ่งคนไหม</a></li>
+        <li><a href="#output">โน้ตหน้าตาเป็นอย่างไร</a></li>
+        <li><a href="#limits">เมื่อนี่ไม่ใช่เครื่องมือที่เหมาะ</a></li>
+        <li><a href="#troubleshooting">แก้ปัญหา</a></li>
+        <li><a href="#faq">คำถามที่พบบ่อย</a></li>
+      </ol></nav>
+
+      <h2 id="need">สิ่งที่ต้องมี</h2>
+      <ul>
+        <li><strong>วิดีโอที่คุณมีสิทธิ์ถอดเสียง</strong> เช่น การบันทึกหน้าจอ วิดีโอจากโทรศัพท์ การบรรยายหรือการพูดที่คุณบันทึกไว้ หรือการบันทึก Zoom หรือ Teams ที่ส่งออกและเป็นของคุณ</li>
+        <li><strong>ไฟล์ MP4 หรือ MOV</strong> นี่คือรูปแบบที่คู่มือนี้ครอบคลุม</li>
+        <li><strong>เส้นทางที่มีปลายทาง</strong>: คลัง Obsidian หรือโฟลเดอร์ในไฟล์ ดู <a href="/th/docs/#presets">เส้นทาง</a> ในเอกสาร</li>
+        <li><strong>ระบบถอดเสียงที่พร้อมใช้งาน</strong> โหมดอัตโนมัติใช้ Apple Speech บนอุปกรณ์ iOS 26 และภาษาที่รองรับ มิฉะนั้นให้ดาวน์โหลด Whisper หรือ Parakeet ดู <a href="/th/docs/#models">รูปแบบ</a>.</li>
+        <li><strong>สิทธิ์ใช้ฟรี</strong> แพ็กเกจฟรีรวมการถอดเสียง 15 นาทีและการส่ง Capture สำเร็จ 10 ครั้ง การปลดล็อกตลอดชีพแบบจ่ายครั้งเดียวจะเอาข้อจำกัดออก ดู <a href="/th/docs/#pricing-limits">การใช้งานฟรีและการปลดล็อกตลอดชีพ</a>; ราคาบน App Store คือราคาที่ถูกต้อง</li>
+      </ul>
+
+      <h2 id="iphone">บน iPhone หรือ iPad</h2>
+      <h3>1. นำวิดีโอไปไว้ในไฟล์</h3>
+      <p>หากวิดีโออยู่ในรูปภาพ ให้แชร์ไปยังไฟล์ก่อน คู่มือผู้ใช้ iPhone ของ Apple ครอบคลุม <a href="https://support.apple.com/guide/iphone/share-photos-and-videos-iphf28f17237/ios">การแชร์รูปภาพและวิดีโอ</a> และ <a href="https://support.apple.com/guide/iphone/files-basics-iphe9d46e90f/ios">แอปไฟล์</a>; ในแผ่นแชร์ ให้หาการทำงานบันทึกไปยังไฟล์ แล้วเลือกโฟลเดอร์</p>
+      <p><strong>สำคัญ:</strong> แชร์วิดีโอจากรูปภาพไปยังส่วนขยายการแชร์ของ Vox.md โดยตรง (<strong>บันทึกไปยัง Vox.md</strong>) จะแนบวิดีโอเข้ากับการบันทึกเป็นไฟล์ ซึ่งไม่ <strong>ไม่</strong> ถอดเสียง หากต้องการถอดเสียงวิดีโอ คุณต้องใช้ตัวควบคุมในแอป <strong>นำเข้าเสียงหรือวิดีโอ</strong> ซึ่งจะเปิดตัวเลือกไฟล์ของแอปไฟล์</p>
+      <h3>2. นำเข้าและถอดเสียง</h3>
+      <ol>
+        <li>เปิดการจับภาพอย่างรวดเร็วของ Vox.md แล้วเลือกเส้นทางที่ต้องการ</li>
+        <li>ในตัวควบคุมเสียง ให้เลือก <strong>เพิ่มไปยังฉบับร่าง</strong> เพื่อตรวจทานข้อความก่อนส่ง หรือ <strong>ส่งทันที</strong> เพื่อส่งเมื่อถอดเสียงเสร็จ</li>
+        <li>แตะ <strong>นำเข้าเสียงหรือวิดีโอ</strong> แล้วเลือกไฟล์ในตัวเลือกไฟล์</li>
+        <li>รอจนถอดเสียงเสร็จ แล้วตรวจชื่อ ตัวเลข และคำศัพท์เทียบกับวิดีโอ</li>
+        <li>แตะ ส่ง</li>
+      </ol>
+      <p><strong>ไฟล์ขนาดใหญ่</strong> ก่อนเริ่ม ให้ดาวน์โหลดวิดีโอไว้ในอุปกรณ์ ไม่ใช่มีอยู่แค่ใน iCloud <a href="/th/blog/offline-transcription-iphone-markdown/#offline-check">การตรวจสอบแหล่งที่นำเข้าในคู่มือออฟไลน์</a> อธิบายวิธีตรวจสอบว่าไฟล์เปิดได้</p>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">ลองกับวิดีโอสั้น ๆ หนึ่งรายการ</h2>
+        <p>สิทธิ์ใช้ฟรีคือการถอดเสียง 15 นาที เพียงพอสำหรับคลิปสั้น ๆ</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_th_3e033cb53350">รับ Vox.md</a></p>
+      </section>
+
+      <h2 id="mac">บน Mac</h2>
+      <p>เลือก <strong>นำเข้าเสียง…</strong> จากแถบเมนูของ Vox.md หรือนำเข้าไฟล์จากพื้นที่จดบันทึก ตัวเลือกไฟล์รับไฟล์เสียงและไฟล์ภาพยนตร์ ขั้นตอนหลังจากนั้นเหมือนกับใน <a href="/th/blog/transcribe-audio-file-mac/">ถอดเสียงไฟล์เสียงบน Mac</a> จึงไม่ได้กล่าวซ้ำที่นี่</p>
+      <p><strong>ตัวเลือก: เก็บเฉพาะเสียงประกอบ</strong> ใน QuickTime Player <strong>ไฟล์ → ส่งออกเป็น → เสียงเท่านั้น</strong> จะสร้างไฟล์เสียง ของ Apple <a href="https://support.apple.com/guide/quicktime-player/export-movies-qtp20e395859/mac">คู่มือผู้ใช้ QuickTime Player</a> อธิบายตัวเลือกการส่งออก คุณไม่จำเป็นต้องทำขั้นตอนนี้เพื่อนำเข้าวิดีโอไปยัง Vox.md</p>
+
+      <h2 id="models">เลือกโมเดลสำหรับภาษาของวิดีโอ</h2>
+      <p><strong>อัตโนมัติ / Apple Speech</strong> บนอุปกรณ์ iOS 26 และภาษาที่รองรับ โหมดอัตโนมัติจะเลือก Apple Speech ก่อน และจะย้อนไปใช้เฉพาะโมเดลในเครื่องที่คุณดาวน์โหลดไว้อย่างชัดเจนเท่านั้น</p>
+      <p><strong>Whisper</strong> ขนาดมีตั้งแต่ Tiny (75 MB) ถึง Large v3 Turbo (1.6 GB) โมเดลที่ใหญ่กว่าใช้พื้นที่เก็บข้อมูลและการประมวลผลมากกว่า <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a> เป็นรันไทม์โอเพนซอร์สสำหรับโมเดล Whisper</p>
+      <p><strong>Parakeet</strong> Parakeet v2 (ประมาณ 800 MB) เป็นภาษาอังกฤษ Parakeet v3 (ประมาณ 800 MB) รองรับ 25 ภาษา ทำงานผ่าน <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a>.</p>
+      <p>หากต้องการเลือกระหว่างสองแบบ ให้อ่าน <a href="/th/compare/whisper-vs-parakeet/">Whisper เทียบกับ Parakeet</a> แล้วทดสอบกับคลิปสั้น ๆ จากวิดีโอของคุณเอง ดูรายละเอียดใน <a href="/th/docs/#models">เอกสารเกี่ยวกับโมเดล</a>.</p>
+
+      <h2 id="speakers">มีผู้พูดมากกว่าหนึ่งคนไหม</h2>
+      <p>เปิด <strong>การระบุผู้พูด</strong> ในเส้นทาง เป็นตัวเลือกเสริม ใช้ได้กับการนำเข้าที่รองรับ และเพิ่มป้ายแบบไม่ระบุตัวตนตามความสามารถ เช่น “Speaker 1” และ “Speaker 2” ซึ่งคุณเปลี่ยนชื่อเองได้ หากการติดป้ายล้มเหลว ระบบจะเก็บข้อความถอดเสียงธรรมดาไว้ และคลังจะแสดงสาเหตุ ดู <a href="/th/blog/transcribe-interview/">ถอดเสียงสัมภาษณ์แบบเป็นส่วนตัว</a>.</p>
+
+      <h2 id="output">โน้ตหน้าตาเป็นอย่างไร</h2>
+      <p>รูปแบบของโน้ตมาจากเส้นทางของคุณ: หัวข้อ คำนำหน้าหรือเวลา แล้วจึงเป็นข้อความถอดเสียง ตัวอย่างประกอบ (ข้อความที่แต่งขึ้น):</p>
+<pre class="guide-code"><code>## Video transcript
+10:42 AM 2026-11-25
+
+Welcome to the walkthrough. First we open the settings screen.</code></pre>
+      <p>เส้นทางสามารถใช้ เก็บต้นฉบับ, ปรับข้อความให้อ่านง่าย, บันทึกการประชุม, รายการสิ่งที่ต้องทำ หรือคำสั่งกำหนดเอง โหมด Apple Intelligence ต้องใช้ฮาร์ดแวร์ที่รองรับ หากไม่มี รายการสิ่งที่ต้องทำและบันทึกการประชุมจะใช้ตัวจัดรูปแบบในตัว ส่วนปรับข้อความให้อ่านง่ายจะคงข้อความเดิมไว้ หากคุณซ้อมพูดผ่านวิดีโอ ให้วางข้อความถอดเสียงลงใน <a href="/th/blog/speech-time-calculator/">เครื่องคำนวณเวลาพูด</a> เพื่อตรวจสอบความเร็วในการพูดของคุณ</p>
+
+      <h2 id="limits">เมื่อนี่ไม่ใช่เครื่องมือที่เหมาะ</h2>
+      <ul>
+        <li><strong>ไม่รับลิงก์</strong> Vox.md ไม่รับลิงก์ YouTube, TikTok หรือวิดีโออื่น คุณต้องมีตัวไฟล์</li>
+        <li><strong>ไม่มีคำบรรยาย</strong> แอปบันทึกข้อความ ไม่ใช่ไฟล์ SRT หรือ VTT ที่มีเวลากำกับ หากต้องการล้างไฟล์คำบรรยายที่คุณมีอยู่แล้ว ให้ใช้ <a href="/th/blog/srt-vtt-to-text-markdown/">ตัวแปลง SRT และ VTT</a>.</li>
+        <li><strong>สิทธิ์</strong> ถอดเสียงเฉพาะวิดีโอที่คุณเป็นเจ้าของหรือมีสิทธิ์ใช้ และขอความยินยอมจากผู้ที่ถูกบันทึก</li>
+      </ul>
+
+      <h2 id="troubleshooting">แก้ปัญหา</h2>
+      <ul>
+        <li><strong>ปุ่มนำเข้าเป็นสีเทาหรือถูกปฏิเสธ</strong> ให้บันทึกปัจจุบันเสร็จก่อน เพราะนำเข้าได้ครั้งละหนึ่งรายการ หากสิทธิ์ใช้ฟรีหมดแล้ว ต้องปลดล็อกตลอดชีพ</li>
+        <li><strong>ไฟล์เปิดไม่ได้</strong> ตรวจสอบว่าดาวน์โหลดไว้ในอุปกรณ์แล้ว ไม่ใช่มีอยู่แค่ใน iCloud</li>
+        <li><strong>ไม่มีข้อความถอดเสียง</strong> ตรวจสอบว่าดาวน์โหลดโมเดลครบแล้วและเลือกไว้</li>
+        <li><strong>ภาษาไม่ถูกต้อง</strong> ตั้งค่าภาษาถอดเสียง หรือเลือก Parakeet v3 หรือ Whisper หากเลือก Parakeet v2 (ภาษาอังกฤษ) ไว้</li>
+      </ul>
+      <p>วิธีแก้เพิ่มเติม: <a href="/th/docs/#troubleshooting">การแก้ปัญหาในเอกสาร</a>.</p>
+
+      <h2 id="faq">คำถามที่พบบ่อย</h2>
+      <h3>ใช้ฟรีไหม</h3>
+      <p>แพ็กเกจฟรีรวมการถอดเสียง 15 นาทีและการส่งสำเร็จ 10 ครั้ง การปลดล็อกตลอดชีพแบบจ่ายครั้งเดียวจะเอาข้อจำกัดออก</p>
+      <h3>วิดีโอถูกอัปโหลดไหม</h3>
+      <p>ไม่ เนื้อหา Capture ไม่ถูกส่งไปยังเซิร์ฟเวอร์ของ Vox.md และการถอดเสียงทำงานบนอุปกรณ์ของคุณ การดาวน์โหลดโมเดลจะติดต่อ Hugging Face ดู <a href="/th/privacy.html">นโยบายความเป็นส่วนตัว</a>.</p>
+      <h3>ถอดเสียงวิดีโอ YouTube ได้ไหม</h3>
+      <p>ไม่ได้ Vox.md ไม่รับลิงก์</p>
+      <h3>สร้างคำบรรยายไหม</h3>
+      <p>ไม่ได้ แอปสร้างโน้ต Markdown ไม่ใช่ไฟล์ SRT หรือ VTT</p>
+      <h3>รองรับรูปแบบใดบ้าง</h3>
+      <p>คู่มือนี้ครอบคลุม MP4 และ MOV</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">เปลี่ยนวิดีโอให้เป็นโน้ตที่เป็นของคุณ</h2>
+        <p>เริ่มจากคลิปสั้น ๆ ที่คุณมีสิทธิ์ใช้ แล้วเปิดไฟล์ Markdown</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_th_3e033cb53350">รับ Vox.md</a></p>
+      </section>
+      <nav class="toc" aria-label="คู่มือที่เกี่ยวข้อง" id="related"><div class="toc-title">ดำเนินการต่อ</div><ul>
+        <li><a href="/th/blog/transcribe-audio-file-mac/">ถอดเสียงไฟล์เสียงบน Mac</a></li>
+        <li><a href="/th/blog/offline-transcription-iphone-markdown/">การถอดเสียงแบบออฟไลน์บน iPhone</a></li>
+        <li><a href="/th/blog/transcribe-interview/">ถอดเสียงสัมภาษณ์แบบส่วนตัว</a></li>
+        <li><a href="/th/blog/transcribe-voice-memos-iphone/">ถอดเสียง Voice Memos บน iPhone เป็น Markdown</a></li>
+        <li><a href="/th/blog/srt-vtt-to-text-markdown/">SRT และ VTT เป็นข้อความหรือ Markdown</a></li>
+        <li><a href="/th/compare/whisper-vs-parakeet/">Whisper เทียบกับ Parakeet</a></li>
+        <li><a href="/th/blog/speech-time-calculator/">เครื่องคำนวณเวลาพูด</a></li>
+        <li><a href="/th/docs/#models">เอกสารโมเดล</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/th/">หน้าแรก</a></li>
+        <li><a href="/th/docs/">เอกสาร</a></li>
+        <li><a href="/th/blog/">คู่มือ</a></li>
+        <li><a href="/th/compare/">เปรียบเทียบ</a></li>
+        <li><a href="/th/privacy.html">ความเป็นส่วนตัว</a></li>
+        <li><a href="/th/terms.html">ข้อกำหนด</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">ช่วยเหลือ</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_th_3e033cb53350">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · จดด่วนสำหรับโน้ตในเครื่อง · ไม่อัปโหลดเนื้อหา</div>
+    </div>
+  <details class="language-switcher"><summary>ภาษา</summary><ul><li><a href="/blog/transcribe-video-to-text/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-video-to-text/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-video-to-text/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-video-to-text/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-video-to-text/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-video-to-text/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-video-to-text/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-video-to-text/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-video-to-text/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-video-to-text/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-video-to-text/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-video-to-text/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-video-to-text/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-video-to-text/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-video-to-text/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-video-to-text/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-video-to-text/" lang="th" hreflang="th" aria-current="page">ไทย</a></li><li><a href="/tr/blog/transcribe-video-to-text/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-video-to-text/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-video-to-text/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-video-to-text/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-video-to-text/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-video-to-text/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

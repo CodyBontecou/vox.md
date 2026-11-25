@@ -1,0 +1,119 @@
+<!--{
+  "slug": "transcribe-video-to-text",
+  "title": "Transcribe a video to text on iPhone or Mac, without uploading it",
+  "description": "Turn an MP4 or MOV you already own into a Markdown note on your iPhone, iPad or Mac. Import the video into Vox.md, transcribe it on the device with Apple Speech, Whisper or Parakeet, review the text, then send it.",
+  "subtitle": "The video is already on your phone or Mac, so transcribe it there. No upload, and the result is a Markdown note you own, not a text box to copy from.",
+  "eyebrow": "Video to text · iPhone · iPad · Mac",
+  "requirements": "Vox.md: iOS or iPadOS 17.6+ or macOS 14+ · a downloaded speech model unless Apple Speech is available · a Route with a destination folder",
+  "published": "2026-11-25",
+  "modified": "2026-11-25",
+  "image": "/screenshots/00-capture-light.png"
+}-->
+<div class="answer-box" id="short-answer"><div class="label">The short answer</div>
+        <p><strong>iPhone or iPad:</strong> put the video in Files, open Vox.md, tap <strong>Import audio or video</strong> in the voice controls, choose the file, review the text, then Send. <strong>Mac:</strong> choose <strong>Import Audio…</strong> in the menu bar, or import the file from the Capture workspace. Either way the video is transcribed on your device with Apple Speech (Automatic, on supported iOS 26 devices), Whisper or Parakeet, and saved as a Markdown note.</p>
+      </div>
+      <p><strong>What this does not do.</strong> Vox.md does not take YouTube, TikTok or other video links, and it does not create SRT or VTT subtitles. If you already have a caption file and only want clean text, use the <a href="../srt-vtt-to-text-markdown/">SRT and VTT converter</a>. The Vox.md steps follow the <a href="../../docs/#quick-capture">Quick Capture</a> and <a href="../../docs/#mac">Mac</a> documentation and the app’s behavior.</p>
+      <nav class="toc" aria-label="In this guide"><div class="toc-title">In this guide</div><ol>
+        <li><a href="#need">What you need</a></li>
+        <li><a href="#iphone">On iPhone or iPad</a></li>
+        <li><a href="#mac">On Mac</a></li>
+        <li><a href="#models">Pick a model for the video’s language</a></li>
+        <li><a href="#speakers">More than one speaker?</a></li>
+        <li><a href="#output">What the note looks like</a></li>
+        <li><a href="#limits">When this isn’t the right tool</a></li>
+        <li><a href="#troubleshooting">Troubleshooting</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ol></nav>
+
+      <h2 id="need">What you need</h2>
+      <ul>
+        <li><strong>A video you have the right to transcribe</strong>, such as a screen recording, a phone video, a lecture or talk you recorded, or an exported Zoom or Teams recording you own.</li>
+        <li><strong>An MP4 or MOV file.</strong> These are the formats this guide covers.</li>
+        <li><strong>A Route with a destination</strong>: an Obsidian vault or a Files folder. See <a href="../../docs/#presets">Routes</a> in the docs.</li>
+        <li><strong>A transcription backend that is ready.</strong> Automatic uses Apple Speech on a supported iOS 26 device and language; otherwise download Whisper or Parakeet. See <a href="../../docs/#models">Models</a>.</li>
+        <li><strong>Free allowance.</strong> The free tier includes 15 minutes of transcription and 10 successful Capture deliveries; a one-time lifetime unlock removes the limit. See <a href="../../docs/#pricing-limits">free use and lifetime unlock</a>; the App Store price is authoritative.</li>
+      </ul>
+
+      <h2 id="iphone">On iPhone or iPad</h2>
+      <h3>1. Get the video into Files</h3>
+      <p>If the video is in Photos, share it to Files first. Apple’s iPhone User Guide covers <a href="https://support.apple.com/guide/iphone/share-photos-and-videos-iphf28f17237/ios">sharing photos and videos</a> and the <a href="https://support.apple.com/guide/iphone/files-basics-iphe9d46e90f/ios">Files app</a>; in the share sheet, look for the Save to Files action and choose a folder.</p>
+      <p><strong>Important:</strong> sharing a video from Photos straight to the Vox.md share extension (<strong>Capture to Vox.md</strong>) attaches it to the capture as a file. It does <strong>not</strong> transcribe it. To transcribe a video you need the in-app <strong>Import audio or video</strong> control, which opens the Files picker.</p>
+      <h3>2. Import and transcribe</h3>
+      <ol>
+        <li>Open Vox.md’s Quick Capture and pick the Route you want.</li>
+        <li>In the voice controls, choose <strong>Add to Draft</strong> to review the text before it is delivered, or <strong>Send Immediately</strong> to deliver it when transcription finishes.</li>
+        <li>Tap <strong>Import audio or video</strong> and choose the file in the Files picker.</li>
+        <li>Wait for transcription to finish, then check names, numbers and terms against the video.</li>
+        <li>Tap Send.</li>
+      </ol>
+      <p><strong>Large files.</strong> Keep the video downloaded on the device, not just in iCloud, before you start. The <a href="../offline-transcription-iphone-markdown/#offline-check">offline guide’s imported-source check</a> explains how to confirm the file opens.</p>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">Try it on one short video.</h2>
+        <p>The free allowance is 15 minutes of transcription, enough for a short clip.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Get Vox.md</a></p>
+      </section>
+
+      <h2 id="mac">On Mac</h2>
+      <p>Choose <strong>Import Audio…</strong> from the Vox.md menu bar, or import the file from the Capture workspace. The file picker accepts audio and movie files. The steps after that are the same as in <a href="../transcribe-audio-file-mac/">transcribe an audio file on Mac</a>, so they are not repeated here.</p>
+      <p><strong>Optional: keep only the soundtrack.</strong> In QuickTime Player, <strong>File → Export As → Audio Only</strong> makes an audio file. Apple’s <a href="https://support.apple.com/guide/quicktime-player/export-movies-qtp20e395859/mac">QuickTime Player User Guide</a> describes the export options. You do not need this step to import a video into Vox.md.</p>
+
+      <h2 id="models">Pick a model for the video’s language</h2>
+      <p><strong>Automatic / Apple Speech.</strong> On a supported iOS 26 device and language, Automatic prefers Apple Speech. It falls back only to a local model you explicitly downloaded.</p>
+      <p><strong>Whisper.</strong> Sizes run from Tiny (75 MB) to Large v3 Turbo (1.6 GB). Larger models take more storage and processing. <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a> is the open-source runtime for Whisper models.</p>
+      <p><strong>Parakeet.</strong> Parakeet v2 (about 800 MB) is English. Parakeet v3 (about 800 MB) supports 25 languages. They run through <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a>.</p>
+      <p>To choose between them, read <a href="../../compare/whisper-vs-parakeet/">Whisper vs Parakeet</a> and test on a short clip of your own video. Details are in the <a href="../../docs/#models">models documentation</a>.</p>
+
+      <h2 id="speakers">More than one speaker?</h2>
+      <p>Turn on <strong>Identify Speakers</strong> on the Route. It is opt-in, works on supported imports, and adds anonymous best-effort labels such as “Speaker 1” and “Speaker 2” that you rename by hand. If labelling fails, the plain transcript is kept and Library shows why. See <a href="../transcribe-interview/">transcribe an interview privately</a>.</p>
+
+      <h2 id="output">What the note looks like</h2>
+      <p>The note’s layout comes from your Route: a heading, a prefix or timestamp, then the transcript. An illustrative example (invented text):</p>
+<pre class="guide-code"><code>## Video transcript
+10:42 AM 2026-11-25
+
+Welcome to the walkthrough. First we open the settings screen.</code></pre>
+      <p>A Route can use Keep Original, Clean Prose, Meeting Notes, Todo Checklist or Custom Instruction. Apple Intelligence modes need compatible hardware. Without it, Todo Checklist and Meeting Notes use built-in formatters, and Clean Prose keeps the original text. If you rehearse a talk on video, paste the transcript into the <a href="../speech-time-calculator/">speech time calculator</a> to check your pace.</p>
+
+      <h2 id="limits">When this isn’t the right tool</h2>
+      <ul>
+        <li><strong>No links.</strong> Vox.md does not take YouTube, TikTok or other video links. You need the file itself.</li>
+        <li><strong>No subtitles.</strong> It saves text, not timed SRT or VTT files. To clean up caption files you already have, use the <a href="../srt-vtt-to-text-markdown/">SRT and VTT converter</a>.</li>
+        <li><strong>Permission.</strong> Only transcribe videos you own or have permission to use, and get consent from the people recorded.</li>
+      </ul>
+
+      <h2 id="troubleshooting">Troubleshooting</h2>
+      <ul>
+        <li><strong>Import is greyed out or refused.</strong> Finish the current recording first; only one import runs at a time. If the free allowance is used up, the lifetime unlock is needed.</li>
+        <li><strong>The file won’t open.</strong> Make sure it is downloaded to the device, not only in iCloud.</li>
+        <li><strong>No transcript.</strong> Check that the model is fully downloaded and selected.</li>
+        <li><strong>Wrong language.</strong> Set the transcription language, or pick Parakeet v3 or Whisper if Parakeet v2 (English) was selected.</li>
+      </ul>
+      <p>More fixes: <a href="../../docs/#troubleshooting">documentation troubleshooting</a>.</p>
+
+      <h2 id="faq">FAQ</h2>
+      <h3>Is it free?</h3>
+      <p>The free tier includes 15 minutes of transcription and 10 successful deliveries. A one-time lifetime unlock removes the limit.</p>
+      <h3>Does the video get uploaded?</h3>
+      <p>No. Capture content is not sent to Vox.md servers, and transcription runs on your device. Model downloads contact Hugging Face. See the <a href="../../privacy.html">privacy policy</a>.</p>
+      <h3>Can I transcribe a YouTube video?</h3>
+      <p>No. Vox.md does not accept links.</p>
+      <h3>Does it make subtitles?</h3>
+      <p>No. It creates a Markdown note, not SRT or VTT files.</p>
+      <h3>Which formats?</h3>
+      <p>This guide covers MP4 and MOV.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Turn a video into a note you own.</h2>
+        <p>Start with a short clip you have permission to use, then open the Markdown file.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Get Vox.md</a></p>
+      </section>
+      <nav class="toc" aria-label="Related guides" id="related"><div class="toc-title">Continue</div><ul>
+        <li><a href="../transcribe-audio-file-mac/">Transcribe an audio file on Mac</a></li>
+        <li><a href="../offline-transcription-iphone-markdown/">Offline transcription on iPhone</a></li>
+        <li><a href="../transcribe-interview/">Transcribe an interview privately</a></li>
+        <li><a href="../transcribe-voice-memos-iphone/">Transcribe iPhone Voice Memos to Markdown</a></li>
+        <li><a href="../srt-vtt-to-text-markdown/">SRT and VTT to text or Markdown</a></li>
+        <li><a href="../../compare/whisper-vs-parakeet/">Whisper vs Parakeet</a></li>
+        <li><a href="../speech-time-calculator/">Speech time calculator</a></li>
+        <li><a href="../../docs/#models">Models documentation</a></li>
+      </ul></nav>
