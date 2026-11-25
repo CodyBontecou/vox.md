@@ -1842,6 +1842,14 @@ final class PersistentRecorder {
               command.modelId == TranscriptionBackendID.automatic else {
             return
         }
+        // A route with transcription off records audio only: no live preview.
+        if publishesToCapture,
+           !Self.segmentTranscribes(
+               completionMode: segmentCompletionMode,
+               presetSnapshot: segmentPresetSnapshot
+           ) {
+            return
+        }
 
         let service = transcriptionService
         let buffer = circularBuffer
@@ -3259,6 +3267,16 @@ final class PersistentRecorder {
             flowSnapshot = nil
         }
 
+        if !Self.segmentTranscribes(completionMode: completionMode, presetSnapshot: flowSnapshot),
+           let flowSnapshot {
+            return try await deliverRecordingWithoutTranscript(
+                job,
+                audioURL: audioURL,
+                flow: flowSnapshot,
+                requestId: requestId
+            )
+        }
+
         isTranscribing = true
         transcribingCompletionMode = completionMode
         // Queue deliveries (including imports/retries) already contain their
@@ -3339,6 +3357,64 @@ final class PersistentRecorder {
             lastError = "\(error.localizedDescription) The recording was preserved in the queue."
             throw error
         }
+    }
+
+    /// Whether a recording made in `completionMode` runs speech-to-text.
+    /// Only recordings the route delivers itself honour the route's
+    /// "Transcribe Recordings" switch; keyboard and note dictation produce
+    /// text, so they always transcribe.
+    nonisolated static func segmentTranscribes(
+        completionMode: RecordingCompletionMode?,
+        presetSnapshot: CapturePreset?
+    ) -> Bool {
+        guard case .runVox = completionMode, let presetSnapshot else { return true }
+        return presetSnapshot.transcriptionEnabled
+    }
+
+    /// Delivers a queued recording from a route with transcription off: the
+    /// audio goes to the route's destination with no speech-to-text, through
+    /// the same exporter Apple Watch uses for recordings without a transcript.
+    private func deliverRecordingWithoutTranscript(
+        _ job: RecordingJob,
+        audioURL: URL,
+        flow: CapturePreset,
+        requestId: String
+    ) async throws -> RecordingJobExecutionResult {
+        guard let destinationID = await ConfiguredTranscriptCaptureDestinationExporter
+            .resolvedDestinationID(flow: flow) else {
+            lastError = String(localized: "Set a destination for \(flow.accessibilityName) on iPhone, then retry.")
+            throw ConfiguredTranscriptCaptureError.destinationMissing(flow.captureDestinationID ?? UUID())
+        }
+        log.log("[PersistentRecorder] Route \(flow.id) has transcription off; saving audio only for \(requestId.prefix(8))")
+        do {
+            _ = try await ConfiguredTranscriptCaptureDestinationExporter.exportRecording(
+                requestID: job.id,
+                createdAt: job.createdAt,
+                flow: flow,
+                destinationID: destinationID,
+                audioSourceURL: audioURL,
+                preferredFilename: job.originalFilename,
+                locationOutcome: job.locationOutcome,
+                source: job.captureSource ?? (job.source == .importedAudio ? .fileImport : .app)
+            )
+        } catch is CancellationError {
+            throw CancellationError()
+        } catch {
+            lastError = "\(error.localizedDescription) The recording was preserved in the queue."
+            throw error
+        }
+        if let statsURL = AppConstants.activityStatsURL {
+            _ = try? ActivityStatsStore(fileURL: statsURL).record(RecordingActivityEvent(
+                id: job.id,
+                date: job.createdAt,
+                duration: job.duration
+            ))
+        }
+        finishLiveActivityAfterTranscription()
+        if shouldAutoStopListeningAfterCurrentRecording, !isSegmentActive {
+            stopListening()
+        }
+        return RecordingJobExecutionResult()
     }
 
     /// The 16 kHz file the transcription engine reads for a queued job.
