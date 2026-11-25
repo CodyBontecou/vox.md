@@ -1,0 +1,156 @@
+# Issue #163: per-route "Transcribe Recordings" switch. Opens a route's Voice
+# Processing step, checks the switch is on by default with the model picker
+# shown, turns it off, and checks the audio-only explanation appears and the
+# model picker goes away.
+#
+# Prerequisites: iOS simulator (iPhone 18 Pro Max layout) with a DEBUG build of
+#   Vox.md (bontecou.Voxboard) installed. `-VoxAdaptiveSeedDemo` creates the
+#   local "Vox Notes" demo vault and the four starter routes (Meeting Notes,
+#   Inbox, Journal, Tasks).
+# Side effects: none on the route; the run turns the switch back on at the end,
+#   which also needs the demo Inbox route to start with transcription on (a run
+#   stopped midway leaves it off: uninstall the app to reset). The demo seed
+#   appends its "Project sync" entry to today's Meetings note on launch.
+# Selectors: every check is a raw `tool: await-ui-element` step. The runner's
+#   directive tree carries none of these SwiftUI controls (same as
+#   ios-route-side-rail.yaml and capture-route-label-suffix.yaml), so `await:`
+#   conversions would fail. Taps are documented coordinates: the Settings button
+#   sits under the full-screen composer field (the recorder derived that field
+#   instead), route rows use per-install random UUID ids, and the route step
+#   cards and the switch resolve only to role-only selectors. Each tap is
+#   followed by an identity or value check, so a mis-hit fails the run.
+version: 1
+requires:
+  platform: ios
+steps:
+  - echo: Launch Vox.md (DEBUG) with the seeded demo vault. Expect the capture screen
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+          - -VoxScreenshotUnlocked
+          - -VoxAdaptiveSeedDemo
+          - -VoxAdaptiveNoAutofocus
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_settings
+      timeoutMs: 20000
+  - await: { idle: true }
+  - echo: Capture screen. Open Settings. Expect the settings screen
+  # Coordinate tap (fallback, see header). `capture_settings` frame
+  # (0.855,0.073,0.100,0.046) from `describe` on an iPhone 18 Pro Max.
+  - tap:
+      x: 0.905
+      y: 0.096
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: settings_routes
+      timeoutMs: 10000
+  - await: { idle: true }
+  - echo: Settings open. Open Routes. Expect the route list
+  # Coordinate tap (fallback, see header). `settings_routes` frame
+  # (0.036,0.295,0.927,0.063).
+  - tap:
+      x: 0.5
+      y: 0.326
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_preset_add
+      timeoutMs: 10000
+  - await: { idle: true }
+  - echo: Route list open. Open the Inbox route editor
+  # Coordinate tap (fallback, see header). Inbox row frame
+  # (0.000,0.400,1.000,0.119); its id embeds a random route UUID.
+  - tap:
+      x: 0.5
+      y: 0.459
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: route_step_1
+      timeoutMs: 10000
+  - await: { idle: true }
+  - echo: Inbox route editor open. Tap the Capture step. Expect the Transcribe
+      Recordings switch, on, with the model picker shown
+  # Coordinate tap (fallback, see header). `route_step_1` frame
+  # (0.136,0.269,0.818,0.076).
+  - tap:
+      x: 0.545
+      y: 0.307
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: route_transcription_model
+      timeoutMs: 10000
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: route_transcription_enabled
+      expectedText: Transcribe Recordings 1
+      textMatch: equals
+      timeoutMs: 5000
+  - echo: Transcribe Recordings is on by default. Turn it off. Expect the
+      audio-only explanation and no model picker
+  # Coordinate tap (fallback, see header). The switch knob inside
+  # `route_transcription_enabled` frame (0.045,0.128,0.909,0.054); tapping the
+  # row label does not toggle it.
+  - tap:
+      x: 0.875
+      y: 0.155
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: route_transcription_enabled
+      expectedText: Transcribe Recordings 0
+      textMatch: equals
+      timeoutMs: 5000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: route_transcription_off_note
+      timeoutMs: 5000
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: route_transcription_model
+      timeoutMs: 5000
+  - echo: Turn Transcribe Recordings back on to leave the demo route as found.
+      Expect the model picker back and the note gone
+  # Coordinate tap (fallback, see header): the same switch knob.
+  - tap:
+      x: 0.875
+      y: 0.155
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: route_transcription_enabled
+      expectedText: Transcribe Recordings 1
+      textMatch: equals
+      timeoutMs: 5000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: route_transcription_model
+      timeoutMs: 5000
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: route_transcription_off_note
+      timeoutMs: 5000

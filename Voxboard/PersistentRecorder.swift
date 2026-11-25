@@ -322,6 +322,16 @@ final class PersistentRecorder {
             && segmentCompletionMode != .keyboardTranscription
     }
 
+    /// Whether the running take will be transcribed. False on a route with
+    /// "Transcribe Recordings" off, so the composer can say it records audio only.
+    var activeSegmentTranscribes: Bool {
+        Self.segmentTranscribes(
+            completionMode: segmentCompletionMode,
+            presetSnapshot: segmentPresetSnapshot,
+            draftRoute: Self.draftRoute(for: segmentVoiceProcessingConfiguration)
+        )
+    }
+
     var isAppRecordingTranscribing: Bool {
         isTranscribing
             && transcribingCommandOrigin != .keyboardExtension
@@ -1842,6 +1852,15 @@ final class PersistentRecorder {
               command.modelId == TranscriptionBackendID.automatic else {
             return
         }
+        // A route with transcription off records audio only: no live preview.
+        if publishesToCapture,
+           !Self.segmentTranscribes(
+               completionMode: segmentCompletionMode,
+               presetSnapshot: segmentPresetSnapshot,
+               draftRoute: Self.draftRoute(for: segmentVoiceProcessingConfiguration)
+           ) {
+            return
+        }
 
         let service = transcriptionService
         let buffer = circularBuffer
@@ -3341,6 +3360,44 @@ final class PersistentRecorder {
         }
     }
 
+    /// Whether a recording made in `completionMode` runs speech-to-text.
+    /// The route's "Transcribe Recordings" switch applies to recordings that
+    /// keep their audio: route delivery and Add to Draft with the recording
+    /// attached. Keyboard dictation and text-only drafts would produce
+    /// nothing without a transcript, so they always transcribe.
+    nonisolated static func segmentTranscribes(
+        completionMode: RecordingCompletionMode?,
+        presetSnapshot: CapturePreset?,
+        draftRoute: CapturePreset? = nil
+    ) -> Bool {
+        switch completionMode {
+        case .runVox:
+            return presetSnapshot?.transcriptionEnabled ?? true
+        case .captureDraft(attachAudio: true):
+            return draftRoute?.transcriptionEnabled ?? true
+        case .captureDraft(attachAudio: false), .keyboardTranscription, nil:
+            return true
+        }
+    }
+
+    /// The route a draft recording belongs to, from the voice policy the job
+    /// froze at record time. A draft's route can't change while it processes.
+    static func draftRoute(for configuration: RecordingVoiceProcessingConfiguration?) -> CapturePreset? {
+        configuration.flatMap { CapturePresetStore.flow(id: $0.presetID) }
+    }
+
+    /// The empty result an audio-only take is delivered with: no speech
+    /// found, or a route with "Transcribe Recordings" off.
+    nonisolated static func audioOnlyResult(modelId: String, language: String) -> OnDeviceTranscriptionResult {
+        OnDeviceTranscriptionResult(
+            text: "",
+            backendID: modelId,
+            backendName: "Audio recording",
+            backendKind: .appleSpeech,
+            language: language
+        )
+    }
+
     /// The 16 kHz file the transcription engine reads for a queued job.
     /// Returns `audioURL` itself unless it is a High/Lossless app recording,
     /// or a stereo one recovered after a crash. Those get a 16 kHz mono copy
@@ -3614,13 +3671,23 @@ final class PersistentRecorder {
 
         let deliversAudioWithoutTranscript = completionMode == .captureDraft(attachAudio: true)
             || selectedFlow != nil
+        // Route with "Transcribe Recordings" off: deliver exactly like a take
+        // with no speech, through the same audio-only path and with no usage.
+        let skipsRecognition = deliversAudioWithoutTranscript && !Self.segmentTranscribes(
+            completionMode: completionMode,
+            presetSnapshot: selectedFlow,
+            draftRoute: Self.draftRoute(for: effectiveVoiceProcessingConfiguration)
+        )
         let result: OnDeviceTranscriptionResult
         do {
             // Live Apple Speech returns text optimized for immediate insertion.
             // An opted-in speaker pass needs batch timestamps, so prefer batch
             // recognition but retain the valid live text if that optional pass
             // fails before diarization can begin.
-            if let resolvedResult {
+            if skipsRecognition {
+                log.log("[PersistentRecorder] Route transcription is off; saving audio only for \(requestId.prefix(8))")
+                result = Self.audioOnlyResult(modelId: modelId, language: language)
+            } else if let resolvedResult {
                 if identifiesSpeakers {
                     do {
                         result = try await transcriptionService.transcribeResult(
@@ -3661,13 +3728,7 @@ final class PersistentRecorder {
             // No speech is a valid audio-only recording. Reuse the configured
             // delivery/checkpoint path so its audio still reaches Files (or
             // the draft) and export failures remain retryable.
-            result = OnDeviceTranscriptionResult(
-                text: "",
-                backendID: modelId,
-                backendName: "Audio recording",
-                backendKind: .appleSpeech,
-                language: language
-            )
+            result = Self.audioOnlyResult(modelId: modelId, language: language)
         } catch {
             log.log("[PersistentRecorder] ❌ Transcription failed: \(error.localizedDescription)")
             if case .captureDraft(let attachAudio) = completionMode,
