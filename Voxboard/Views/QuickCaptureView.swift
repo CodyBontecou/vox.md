@@ -2134,7 +2134,8 @@ struct QuickCaptureView: View {
         InspirationQuotePresentation.recordingStatus(
             forDraftText: viewModel.draft.text,
             isRecording: persistentRecorder.isAppRecordingSegmentActive,
-            isPaused: persistentRecorder.isSegmentPaused
+            isPaused: persistentRecorder.isSegmentPaused,
+            transcribes: persistentRecorder.activeSegmentTranscribes
         )
     }
 

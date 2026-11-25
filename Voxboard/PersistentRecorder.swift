@@ -322,6 +322,16 @@ final class PersistentRecorder {
             && segmentCompletionMode != .keyboardTranscription
     }
 
+    /// Whether the running take will be transcribed. False on a route with
+    /// "Transcribe Recordings" off, so the composer can say it records audio only.
+    var activeSegmentTranscribes: Bool {
+        Self.segmentTranscribes(
+            completionMode: segmentCompletionMode,
+            presetSnapshot: segmentPresetSnapshot,
+            voiceProcessingConfiguration: segmentVoiceProcessingConfiguration
+        )
+    }
+
     var isAppRecordingTranscribing: Bool {
         isTranscribing
             && transcribingCommandOrigin != .keyboardExtension
