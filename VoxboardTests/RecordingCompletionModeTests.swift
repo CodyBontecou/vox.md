@@ -323,12 +323,46 @@ final class RouteTranscriptionSwitchTests: XCTestCase {
     }
 
     func test_dictationModesAlwaysTranscribe() {
-        for mode: RecordingCompletionMode in [.keyboardTranscription, .captureDraft(attachAudio: true), .captureDraft(attachAudio: false)] {
+        let off = RecordingVoiceProcessingConfiguration(preset: preset(transcribing: false))
+        for mode: RecordingCompletionMode in [.keyboardTranscription, .captureDraft(attachAudio: false)] {
             XCTAssertTrue(PersistentRecorder.segmentTranscribes(
                 completionMode: mode,
-                presetSnapshot: preset(transcribing: false)
+                presetSnapshot: preset(transcribing: false),
+                voiceProcessingConfiguration: off
             ), "\(mode)")
         }
+    }
+
+    func test_draftWithAttachedAudioFollowsRouteSwitch() {
+        XCTAssertFalse(PersistentRecorder.segmentTranscribes(
+            completionMode: .captureDraft(attachAudio: true),
+            presetSnapshot: nil,
+            voiceProcessingConfiguration: RecordingVoiceProcessingConfiguration(preset: preset(transcribing: false))
+        ))
+        XCTAssertTrue(PersistentRecorder.segmentTranscribes(
+            completionMode: .captureDraft(attachAudio: true),
+            presetSnapshot: nil,
+            voiceProcessingConfiguration: RecordingVoiceProcessingConfiguration(preset: preset(transcribing: true))
+        ))
+        XCTAssertTrue(PersistentRecorder.segmentTranscribes(
+            completionMode: .captureDraft(attachAudio: true),
+            presetSnapshot: nil,
+            voiceProcessingConfiguration: nil
+        ))
+    }
+
+    func test_draftKeepsAudioWhenRouteTranscriptionIsOff() {
+        XCTAssertTrue(QuickCaptureView.draftRecordingAttachesAudio(
+            presetAudioSaveMode: .off, presetTranscribes: false, override: nil))
+        XCTAssertFalse(QuickCaptureView.draftRecordingAttachesAudio(
+            presetAudioSaveMode: .off, presetTranscribes: true, override: nil))
+        // An explicit per-take choice still wins.
+        XCTAssertFalse(QuickCaptureView.draftRecordingAttachesAudio(
+            presetAudioSaveMode: .off, presetTranscribes: false, override: false))
+    }
+
+    func test_audioOnlyResultIsEmpty() {
+        XCTAssertEqual(PersistentRecorder.audioOnlyResult(modelId: "m", language: "en").text, "")
     }
 
     func test_missingSnapshotOrModeTranscribes() {

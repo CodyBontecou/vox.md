@@ -4,18 +4,27 @@ import Foundation
 public struct RecordingVoiceProcessingConfiguration: Codable, Equatable, Sendable {
     public let presetID: String
     public let speakerDiarizationEnabled: Bool
+    /// The route's "Transcribe Recordings" switch, frozen with the job. Nil
+    /// means on (and keeps existing queued payloads byte-identical); only
+    /// `false` is ever written.
+    public let transcriptionEnabled: Bool?
 
-    public init(presetID: String, speakerDiarizationEnabled: Bool) {
+    public init(presetID: String, speakerDiarizationEnabled: Bool, transcriptionEnabled: Bool? = nil) {
         self.presetID = presetID
         self.speakerDiarizationEnabled = speakerDiarizationEnabled
+        self.transcriptionEnabled = transcriptionEnabled == false ? false : nil
     }
 
     public init(preset: CapturePreset) {
         self.init(
             presetID: preset.id,
-            speakerDiarizationEnabled: preset.speakerDiarizationEnabled
+            speakerDiarizationEnabled: preset.speakerDiarizationEnabled,
+            transcriptionEnabled: preset.transcriptionEnabled
         )
     }
+
+    /// Whether recordings under this policy run speech-to-text.
+    public var transcribes: Bool { transcriptionEnabled != false }
 }
 
 public enum SpeakerDiarizationSkipReason: String, Codable, Equatable, Sendable {

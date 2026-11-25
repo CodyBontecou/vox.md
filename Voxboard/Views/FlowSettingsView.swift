@@ -1259,7 +1259,7 @@ struct CapturePresetEditorView: View {
                 .id("step-capture")
 
             if !flow.transcriptionEnabled {
-                Label("Recordings save only the audio file to this route’s destination. Keyboard and note dictation still transcribe.", systemImage: "waveform")
+                Label("Recordings keep only the audio, with no transcript. Keyboard dictation still transcribes.", systemImage: "waveform")
                     .font(Geist.caption())
                     .foregroundStyle(Geist.muted)
                     .accessibilityIdentifier("route_transcription_off_note")

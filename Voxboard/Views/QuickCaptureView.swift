@@ -3934,6 +3934,7 @@ struct QuickCaptureView: View {
     private var attachRecordingAudio: Bool {
         Self.draftRecordingAttachesAudio(
             presetAudioSaveMode: selectedFlow.audioSaveMode,
+            presetTranscribes: selectedFlow.transcriptionEnabled,
             override: attachRecordingAudioOverride
         )
     }
@@ -3948,11 +3949,14 @@ struct QuickCaptureView: View {
     /// Draft ("Add to Draft") recordings used to drop audio unless the Audio
     /// switch was turned on by hand each time, ignoring a preset set to save
     /// and embed it. The preset now decides; the switch only overrides.
+    /// A route with "Transcribe Recordings" off keeps the audio, since an
+    /// audio-only take is the only thing it can produce.
     static nonisolated func draftRecordingAttachesAudio(
         presetAudioSaveMode: CapturePresetAudioSaveMode,
+        presetTranscribes: Bool = true,
         override: Bool?
     ) -> Bool {
-        override ?? (presetAudioSaveMode != .off)
+        override ?? (presetAudioSaveMode != .off || !presetTranscribes)
     }
 
     private var selectedRecordingCompletionMode: RecordingCompletionMode {
