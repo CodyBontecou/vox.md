@@ -13,6 +13,44 @@ enum CapturePreferenceKeys {
     static let defaultRecordingResultMode = "capture.voice.defaultResult.v1"
     /// Explicit hour cycle for the Capture Bar's Insert Timestamp action.
     static let timestampFormat = "capture.toolbar.timestampFormat.v1"
+    /// Phone route side rail (#160): `off`, `left` or `right`.
+    static let routeSideRail = "capture.routes.sideRail.v1"
+    /// Pre-3.0 rail keys, read once to restore the rail for users who had it open.
+    static let legacyPresetQuickAccessRailExpanded = "capture.presets.quickAccess.railExpanded.v1"
+    static let legacyPresetQuickAccessRailSide = "capture.presets.quickAccess.railSide.v1"
+}
+
+/// Where the phone capture screen shows its vertical route rail: a thumb-reach
+/// column of routes beside the record controls, on top of the header pills.
+/// Expressed as physical screen edges; `overlayAlignment` maps them around RTL.
+enum CaptureRouteRailPlacement: String, CaseIterable, Hashable, Identifiable {
+    case off
+    case left
+    case right
+
+    var id: String { rawValue }
+
+    /// An explicit choice wins. Without one, users who had the pre-3.0 rail
+    /// expanded get it back on the edge they chose; everyone else keeps the
+    /// current layout.
+    static func resolve(from defaults: UserDefaults) -> Self {
+        if let stored = defaults.string(forKey: CapturePreferenceKeys.routeSideRail).flatMap(Self.init(rawValue:)) {
+            return stored
+        }
+        guard defaults.bool(forKey: CapturePreferenceKeys.legacyPresetQuickAccessRailExpanded) else { return .off }
+        return defaults.string(forKey: CapturePreferenceKeys.legacyPresetQuickAccessRailSide)
+            .flatMap(Self.init(rawValue:))
+            .flatMap { $0 == .off ? nil : $0 } ?? .left
+    }
+
+    func overlayAlignment(for layoutDirection: LayoutDirection) -> Alignment {
+        switch (self, layoutDirection) {
+        case (.left, .rightToLeft), (.right, .leftToRight):
+            return .bottomTrailing
+        default:
+            return .bottomLeading
+        }
+    }
 }
 
 /// The quick actions users can place in the capture bar. The catalog (raw
@@ -174,6 +212,7 @@ final class CaptureToolbarPreferences {
     private(set) var hiddenActions: Set<CaptureToolbarAction>
     private(set) var confirmsVoiceNotesBeforeAdding: Bool
     private(set) var timestampFormat: CaptureTimestampFormat
+    private(set) var routeRailPlacement: CaptureRouteRailPlacement
     /// Ordered pins for routes the user customized. Routes absent here use
     /// `visibleActions`.
     private(set) var routePins: [String: [CaptureToolbarAction]]
@@ -213,6 +252,7 @@ final class CaptureToolbarPreferences {
         timestampFormat = defaults.string(forKey: CapturePreferenceKeys.timestampFormat)
             .flatMap(CaptureTimestampFormat.init(rawValue:))
             ?? .default
+        routeRailPlacement = CaptureRouteRailPlacement.resolve(from: defaults)
         let sharedPins = CaptureQuickActionPins.load(from: resolvedPinDefaults)
         routePins = sharedPins.routePins
         syncsQuickActionsAcrossSurfaces = sharedPins.syncsAcrossSurfaces
@@ -391,6 +431,11 @@ final class CaptureToolbarPreferences {
         defaults.set(shouldConfirm, forKey: CapturePreferenceKeys.confirmVoiceNoteBeforeAdding)
     }
 
+    func setRouteRailPlacement(_ placement: CaptureRouteRailPlacement) {
+        routeRailPlacement = placement
+        defaults.set(placement.rawValue, forKey: CapturePreferenceKeys.routeSideRail)
+    }
+
     func setTimestampFormat(_ format: CaptureTimestampFormat) {
         timestampFormat = format
         defaults.set(format.rawValue, forKey: CapturePreferenceKeys.timestampFormat)
@@ -486,6 +531,20 @@ struct CaptureToolbarSettingsView: View {
             }
 
             Section {
+                Picker("Route Rail", selection: routeRailPlacementBinding) {
+                    Text("Off").tag(CaptureRouteRailPlacement.off)
+                    Text("Left").tag(CaptureRouteRailPlacement.left)
+                    Text("Right").tag(CaptureRouteRailPlacement.right)
+                }
+                .pickerStyle(.segmented)
+                .accessibilityIdentifier("capture_route_rail_placement")
+            } header: {
+                Text("Route Rail")
+            } footer: {
+                Text("On iPhone, show your routes in a column just above Speak so you can switch with one thumb. The route bar at the top stays.")
+            }
+
+            Section {
                 Picker("Timestamp Format", selection: timestampFormatRawValueBinding) {
                     ForEach(CaptureTimestampFormat.allCases) { format in
                         Text(verbatim: format.rawValue).tag(format.rawValue)
@@ -556,6 +615,13 @@ struct CaptureToolbarSettingsView: View {
         Binding(
             get: { preferences.confirmsVoiceNotesBeforeAdding },
             set: { preferences.setConfirmsVoiceNotesBeforeAdding($0) }
+        )
+    }
+
+    private var routeRailPlacementBinding: Binding<CaptureRouteRailPlacement> {
+        Binding(
+            get: { preferences.routeRailPlacement },
+            set: { preferences.setRouteRailPlacement($0) }
         )
     }
 
