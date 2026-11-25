@@ -126,7 +126,9 @@ struct WatchRecorderView: View {
         .preferredColorScheme(.dark)
         .task {
             #if DEBUG
-            if localRecorder.configureLocalizationScreenshotIfNeeded() { return }
+            // Store screenshots: seed the demo routes first so the route list and chips have content.
+            bridge.applyDemoRoutesIfRequested()
+            if localRecorder.configureLocalizationScreenshotIfNeeded(using: bridge) { return }
             #endif
             bridge.activate()
             #if DEBUG
