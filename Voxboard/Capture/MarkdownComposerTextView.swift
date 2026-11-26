@@ -151,9 +151,27 @@ struct MarkdownComposerTextView: UIViewRepresentable {
     /// Room for chrome that floats over the top of the editor (the iPhone
     /// capture header): the text starts below it and scrolls up beneath it.
     var topContentInset: CGFloat = 0
+    /// Extra room on a physical side edge (left/right only) for controls that
+    /// float over the editor, like the phone route rail, so text and task
+    /// boxes never sit beneath them.
+    var sideGutter: UIEdgeInsets = .zero
     /// The writer's own scrolling: `isScrolling` covers dragging and the
     /// fling after it; `isBelowTop` is true once text sits under the inset.
     var scrollActivityDidChange: ((MarkdownComposerScrollActivity) -> Void)? = nil
+
+    static let baseSideInset: CGFloat = 20
+
+    /// Only the side insets change; the top keeps any room the text view
+    /// added itself (a leading dropped quote).
+    private func applySideGutter(to textView: UITextView) {
+        let left = Self.baseSideInset + sideGutter.left
+        let right = Self.baseSideInset + sideGutter.right
+        var inset = textView.textContainerInset
+        guard inset.left != left || inset.right != right else { return }
+        inset.left = left
+        inset.right = right
+        textView.textContainerInset = inset
+    }
 
     func makeCoordinator() -> Coordinator {
         Coordinator(parent: self)
@@ -178,7 +196,12 @@ struct MarkdownComposerTextView: UIViewRepresentable {
         // Signal composer: 17pt Geist body on the ground, generous side gutter.
         textView.font = MarkdownComposerStyler.baseFont
         textView.adjustsFontForContentSizeCategory = true
-        textView.textContainerInset = UIEdgeInsets(top: 12, left: 20, bottom: 24, right: 20)
+        textView.textContainerInset = UIEdgeInsets(
+            top: 12,
+            left: Self.baseSideInset + sideGutter.left,
+            bottom: 24,
+            right: Self.baseSideInset + sideGutter.right
+        )
         textView.keyboardDismissMode = .interactive
         textView.applyTopContentInset(topContentInset)
         textView.smartQuotesType = .no
@@ -218,6 +241,7 @@ struct MarkdownComposerTextView: UIViewRepresentable {
         (textView as? MarkdownComposerUITextView)?.showsRawMarkdown = showsRawMarkdown
         (textView as? MarkdownComposerUITextView)?.resolveEmbedURL = resolveEmbedURL
         textView.applyTopContentInset(topContentInset)
+        applySideGutter(to: textView)
 
         let textChanged = textView.text != text
         if textChanged {

@@ -29,6 +29,21 @@ final class InspirationQuotePresentationTests: XCTestCase {
         ))
     }
 
+    func testRecordingStatusSaysAudioOnlyWhenTheRouteDoesNotTranscribe() {
+        XCTAssertEqual(
+            InspirationQuotePresentation.recordingStatus(
+                forDraftText: "", isRecording: true, isPaused: false, transcribes: false
+            ),
+            String(localized: "Recording audio only")
+        )
+        XCTAssertEqual(
+            InspirationQuotePresentation.recordingStatus(
+                forDraftText: "", isRecording: true, isPaused: true, transcribes: false
+            ),
+            String(localized: "Paused")
+        )
+    }
+
     func testRecordingStatusHoldsTheTranscriptLineUntilWordsArrive() {
         XCTAssertEqual(
             InspirationQuotePresentation.recordingStatus(forDraftText: "", isRecording: true, isPaused: false),
