@@ -1,0 +1,84 @@
+# Device QA for PR #175 on the owner's iPhone 17 Pro (physical device): the
+# header route pills collapse to the selected route when the route rail is on.
+# The Speak options menu is covered by qa-composer-rail-and-speak-menu (sim):
+# it needs a note with content, and this test must not write into the owner's
+# notes.
+#
+# Prerequisites: physical iPhone with a DEBUG build of Vox.md, 2+ enabled
+#   routes, unlocked with Vox.md able to run UI automation. Uses the owner's
+#   real vault read-only: no seed, no typing, no recording.
+# Rail placement is a per-launch argument (`-capture.routes.sideRail.v1`), so
+#   the saved setting is untouched; the last launch drops it to restore the
+#   owner's own setting.
+# Side effects: none beyond relaunching the app.
+version: 1
+requires:
+  platform: ios
+steps:
+  - echo: Rail off - header lists the selected route and the others
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+          - -capture.routes.sideRail.v1
+          - off
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_route_pill_selected
+      timeoutMs: 20000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_route_pill_other
+      timeoutMs: 5000
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: capture_route_rail
+      timeoutMs: 3000
+  - echo: Rail on the right - header keeps only the selected route
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+          - -capture.routes.sideRail.v1
+          - right
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_route_rail
+      timeoutMs: 20000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_route_pill_selected
+      timeoutMs: 5000
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: capture_route_pill_other
+      timeoutMs: 5000
+  - echo: Relaunch without the override to restore the owner's own rail setting
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_voice_recording
+      timeoutMs: 20000
