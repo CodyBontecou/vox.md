@@ -275,7 +275,7 @@ import md.vox.android.capturedomain.CapturePreset
 import md.vox.android.capturedomain.LiveNotePlan
 import md.vox.android.capturedomain.LiveNoteStatus
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.outlined.NoteAdd
+import androidx.compose.material.icons.outlined.EditNote
 import md.vox.android.capturedomain.CapturePresetCollection
 import md.vox.android.capturedomain.CaptureEntryTemplate
 import md.vox.android.capturedomain.resolvingEntryTemplate
@@ -2256,7 +2256,8 @@ internal fun CaptureBottomControls(
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                 ) {
                     val ink = c.accentText.copy(alpha = if (canStartNew) 1f else 0.45f)
-                    Icon(Icons.AutoMirrored.Outlined.NoteAdd, contentDescription = null, tint = ink, modifier = Modifier.size(20.dp))
+                    // Pencil on lines (iOS square.and.pencil), distinct from Speak's record-new-note icon.
+                    Icon(Icons.Outlined.EditNote, contentDescription = null, tint = ink, modifier = Modifier.size(20.dp))
                     Text(newNoteLabel, style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold), color = ink, maxLines = 1)
                 }
                 return@Row
