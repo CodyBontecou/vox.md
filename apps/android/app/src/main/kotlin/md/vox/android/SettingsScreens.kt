@@ -446,6 +446,8 @@ internal fun SettingsScreen(
                 SettingsActionRow(voxUiText("Join Our Discord")) { openDiscord(context) }
                 SignalRowDivider()
                 SettingsActionRow(voxUiText("Send Feedback")) { sendFeedback(context) }
+                SignalRowDivider()
+                SettingsActionRow(voxUiText("Rate Vox.md on Google Play")) { PlayReviews.openListing(context) }
             }
             SettingsSignalGroup(voxUiText("Debug")) {
                 SettingsNavigationRow(

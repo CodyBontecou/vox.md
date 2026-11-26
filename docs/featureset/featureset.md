@@ -436,3 +436,4 @@ Implementation and outstanding acceptance: [November capture parity](../android-
 | F-AP-52 | Draft preview | Android/shared core | experimental | docs:none |
 | F-AP-53 | Preset rail side | Android/shared core | experimental | docs:none |
 | F-AP-54 | Timestamp formats | Android/shared core | experimental | docs:none |
+| F-AP-55 | Google Play review prompt and Rate row | Android | experimental | docs:none |

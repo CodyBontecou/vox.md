@@ -139,6 +139,7 @@ dependencies {
     implementation(libs.work.runtime.ktx)
     implementation(libs.play.services.wearable)
     implementation(libs.play.billing)
+    implementation(libs.play.review.ktx)
     implementation(libs.mlkit.document.scanner)
     implementation(libs.mlkit.text.recognition)
     implementation(libs.mlkit.image.labeling)

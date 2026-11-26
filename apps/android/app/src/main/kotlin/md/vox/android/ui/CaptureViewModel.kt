@@ -82,6 +82,11 @@ internal data class CaptureUiState(
     val liveNoteOpenedFromFiles: Boolean = false,
     /** Recent "changed in another app" reloads, for the Activity timeline (this process only). */
     val liveNoteEvents: List<LiveNoteEvent> = emptyList(),
+    /**
+     * Bumped after an in-app success the person saw on the capture screen (a delivered Send or
+     * voice note, or "New note" closing a written note). The screen may then offer Play's rating card.
+     */
+    val reviewMoment: Long = 0L,
 )
 
 internal data class LiveNoteEditorUpdate(
@@ -924,6 +929,8 @@ internal class CaptureViewModel private constructor(
                 liveNoteEditor = nextEditor("", null),
                 liveNoteReleased = release.takeIf { showToast && (it.binding != null || it.relativePath != null) },
                 liveNoteOpenedFromFiles = false,
+                // Closing a note that reached its file is the Live Notes success moment.
+                reviewMoment = if (showToast && release.binding != null) state.reviewMoment + 1 else state.reviewMoment,
             )
         }
         persistLiveNote()
@@ -1100,6 +1107,10 @@ internal class CaptureViewModel private constructor(
         }
     }
 
+    /** Fresh capture activity (every source) for the review prompt; the last known stats if it can't be read. */
+    suspend fun reviewActivityStats(): ActivityStats =
+        runCatching { repository.activityStats() }.getOrNull() ?: mutableState.value.activityStats
+
     fun clearNotice() {
         mutableState.update { it.copy(notice = null) }
     }
@@ -1131,6 +1142,7 @@ internal class CaptureViewModel private constructor(
                     history = history,
                     notice = deliveredCaptureNotice(result.processingOutcome),
                     acceptedRequestID = acceptedRequestID.takeUnless { liveSession },
+                    reviewMoment = if (acceptNewCapture) state.reviewMoment + 1 else state.reviewMoment,
                 )
                 CaptureSubmitResult.DestinationRequired -> state.copy(
                     isSending = false,

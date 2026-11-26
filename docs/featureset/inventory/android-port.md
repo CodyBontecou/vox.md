@@ -534,3 +534,11 @@ All below are **planned** unless noted. Parity classification from plan §9; mil
 - Constraints: Release device and human acceptance remain planned.
 - Evidence: `apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CapturePresentation.kt`; `docs/android-composer-parity-2026-11-01.md`
 - Status: experimental
+
+### F-AP-55 Google Play review prompt and Rate row
+- Surface: Play in-app review card after an in-app success on the capture screen; Settings → Feedback → "Rate Vox.md on Google Play"
+- Summary: Same rules as iOS F-IC-23 (`ReviewPromptManager`): ≥5 delivered captures (activity ledger, every source) on ≥2 distinct local days, active access (subscription, trial or lifetime; never read-only), at most once per app version and never within 90 days. Moments are a delivered Send or voice note and "New note" closing a written note. The moment waits 2 s and for the Snackbar or New-note toast to leave (≤8 s), then asks only if the activity is resumed with window focus, Capture is on screen, nothing is recording or half-written, and the app was installed by Google Play.
+- Details: The ledger reports only its last seven days, so the delivery days it shows are kept in `vox_review_prompt` preferences (latest 14). The request time and version are recorded right before Play's flow launches (`reviewPrompt.lastPromptAttemptAt.v1`, `reviewPrompt.lastRequestedVersion.v2`, the iOS key names). The Rate row opens `market://details?id=md.vox.android`, falling back to the web listing.
+- Constraints: Play's quota decides whether the card shows and never reports it; FakeReviewManager tests prove only the wiring. A Play-installed (internal track) check remains a release gate.
+- Evidence: `apps/android/app/src/main/kotlin/md/vox/android/ReviewPrompt.kt`; `apps/android/app/src/test/kotlin/md/vox/android/ReviewPromptPolicyTest.kt`; `apps/android/app/src/androidTest/kotlin/md/vox/android/PlayReviewFlowInstrumentationTest.kt`
+- Status: experimental

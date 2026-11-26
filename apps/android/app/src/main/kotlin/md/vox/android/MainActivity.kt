@@ -718,6 +718,38 @@ internal fun VoxNavigation(
 
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentTopLevel = VoxTopLevelDestination.forRoute(backStackEntry?.destination?.route)
+    val latestRecordingStatus by rememberUpdatedState(recordingStatus)
+    val reviewPromptStore = remember(context) { PreferencesReviewPromptStore(context) }
+    // Play rating card after an in-app success the person saw (iOS ReviewPromptManager rules).
+    // A newer success restarts the wait; a blocked moment is skipped, never queued.
+    LaunchedEffect(state.reviewMoment) {
+        if (state.reviewMoment == 0L) return@LaunchedEffect
+        val activity = context.findActivity() ?: return@LaunchedEffect
+        offerReviewAfterVisibleSuccess(
+            store = reviewPromptStore,
+            appVersion = PlayReviews.appVersion(context),
+            deliveryCounts = {
+                val stats = model.reviewActivityStats()
+                stats.captureCount to reviewPromptStore.recordDeliveryDays(stats.lastSevenDays)
+            },
+            hasActiveAccess = { billingState.hasUnlimitedAccess && !billingState.hasSubscriptionAccessEnded },
+            isShowingSuccessFeedback = {
+                snackbarHost.currentSnackbarData != null || latestState.liveNoteReleased != null
+            },
+            isPresentationClear = {
+                val current = latestState
+                PlayReviews.activityIsUncovered(activity) &&
+                    backStackEntry?.destination?.route == Destination.Capture.route &&
+                    !latestRecordingStatus.isActive &&
+                    !billingState.trialReminderPromptPending &&
+                    !current.isSending &&
+                    // No half-written next capture.
+                    !current.liveNote.isStarted && !current.liveNote.isWriting &&
+                    current.draft.text.isBlank() && current.draft.url == null && current.draft.attachments.isEmpty()
+            },
+            flow = { PlayReviewFlow(activity).prepare() },
+        )
+    }
     val usesNavigationRail = currentVoxWindowWidthClass() != VoxWindowWidthClass.COMPACT
     val showsTopLevelChrome = currentTopLevel != null && !recordingStatus.isActive
     // Phones follow iOS: no tab bar. Capture is home; its header pushes Files, Activity and
