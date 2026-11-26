@@ -46,6 +46,52 @@ final class CaptureComposerAudioFilenameTemplateTests: XCTestCase {
         XCTAssertEqual(asset.relativePath, "2026-11-26-103400.m4a")
     }
 
+    /// Review of #176: pausing and resuming a note-screen take restarts the
+    /// recorder's elapsed-time clock, but must not move the take's start. A
+    /// take started at 10:34:00 and resumed later is still named 103400.
+    func test_pauseAndResumeKeepRecordingStartForFilename() async throws {
+        let fixture = try await makeFixture(template: "{timestamp}")
+        var components = DateComponents()
+        components.year = 2026
+        components.month = 11
+        components.day = 26
+        components.hour = 10
+        components.minute = 34
+        components.second = 0
+        let startedAt = try XCTUnwrap(Calendar(identifier: .gregorian).date(from: components))
+        let recorder = PersistentRecorder(
+            transcriptStore: TranscriptStore(),
+            usageTracker: UsageTracker(defaults: try XCTUnwrap(UserDefaults(suiteName: "PauseResume-\(UUID().uuidString)"))),
+            transcriptionService: AppTranscriptionServices.shared,
+            captureDraftEventHandler: { _ in false }
+        )
+        recorder.isSegmentActive = true
+        recorder.recordingTakeStartedAt = startedAt.timeIntervalSince1970
+        defer { recorder.isSegmentActive = false }
+
+        recorder.pauseInAppSegment()
+        XCTAssertTrue(recorder.isSegmentPaused)
+        recorder.resumeInAppSegment()
+        XCTAssertFalse(recorder.isSegmentPaused)
+
+        XCTAssertEqual(recorder.recordingTakeStartDate, startedAt)
+        let delivered = await CaptureDraftRecordingEventDelivery.deliver(
+            .audio(
+                try fixture.makeAudio(),
+                draftRequestID: nil,
+                deliveryID: UUID(),
+                recordingStartedAt: recorder.recordingTakeStartDate
+            ),
+            to: fixture.model
+        )
+        XCTAssertTrue(delivered, fixture.model.errorMessage ?? "staging failed")
+        let names = fixture.model.draft.additionalPayloads.compactMap { payload -> String? in
+            guard case .audio(let asset, _) = payload else { return nil }
+            return asset.relativePath
+        }
+        XCTAssertEqual(names, ["2026-11-26-103400.m4a"])
+    }
+
     /// The recorder's draft event carries the start time to the staged name.
     func test_recordedAudioEventNamesFileByRecordingStart() async throws {
         let fixture = try await makeFixture(template: "take-{timestamp}")

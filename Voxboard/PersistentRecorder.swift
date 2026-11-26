@@ -486,10 +486,16 @@ final class PersistentRecorder {
     /// Pre-roll plus headroom for the main-queue hop before the journal opens.
     private var keptAudioPreRollSeconds: Double { preRollSeconds + 2 }
     private var segmentStartedAt: TimeInterval = 0
+    /// Wall-clock moment the current take began. Unlike `segmentStartedAt`,
+    /// which restarts on every resume to drive the elapsed timer, pause and
+    /// resume never touch this: it is the single source of every app
+    /// recording's `{timestamp}` audio filename token.
+    var recordingTakeStartedAt: TimeInterval = 0
 
-    /// The recording-start clock as a date, or nil when no take has started.
-    /// Every audio filename built for an app recording reads its `{timestamp}`
-    /// from this, never from when the file is staged or exported.
+    /// The take's start as a date, or nil when no take has started.
+    var recordingTakeStartDate: Date? { Self.recordingStartDate(recordingTakeStartedAt) }
+
+    /// Converts a recording-start clock to a date; nil when unset.
     nonisolated static func recordingStartDate(_ startedAt: TimeInterval?) -> Date? {
         guard let startedAt, startedAt > 0 else { return nil }
         return Date(timeIntervalSince1970: startedAt)
@@ -1668,6 +1674,7 @@ final class PersistentRecorder {
             }
             self.segmentOrigin = command.origin
             self.segmentStartedAt = startedAt
+            self.recordingTakeStartedAt = startedAt
             self.isSegmentActive = true
             self.segmentDuration = 0
             self.isSegmentPaused = false
@@ -1766,6 +1773,7 @@ final class PersistentRecorder {
             lastTranscriptionResult = nil
         }
         segmentStartedAt = Date().timeIntervalSince1970
+        recordingTakeStartedAt = segmentStartedAt
         isSegmentActive = true
         segmentDuration = 0
         isSegmentPaused = false
@@ -2217,6 +2225,8 @@ final class PersistentRecorder {
         segmentPauseStartIndex = nil
         segmentElapsedBeforePause = 0
         segmentStartedAt = Date().timeIntervalSince1970
+        // Each committed dictation span is its own file, named by its start.
+        recordingTakeStartedAt = segmentStartedAt
         startSegmentJournal(requestID: command.requestId)
         startLiveTranscriptionIfSupported(
             command: command,
@@ -2252,7 +2262,7 @@ final class PersistentRecorder {
         let language = segmentLanguage ?? "auto"
         let duration = TimeInterval(samples.count) / whisperSampleRate
         // Read before rearm resets the clock for the next span.
-        let recordingStartedAt = Self.recordingStartDate(segmentStartedAt)
+        let recordingStartedAt = recordingTakeStartDate
         let originLocationTask = beginOriginLocationResolution(
             requestID: deliveryRequestId,
             completionMode: completionMode,
@@ -2605,7 +2615,7 @@ final class PersistentRecorder {
                 )
             }
             let jobID = captureSessionID ?? UUID()
-            let recordingStartedAt = Self.recordingStartDate(segmentStartedAt)
+            let recordingStartedAt = recordingTakeStartDate
             let delivery: RecordingJobDelivery = {
                 if case .runVox = completionMode, let presetSnapshot {
                     return .preset(presetSnapshot)
@@ -2721,6 +2731,7 @@ final class PersistentRecorder {
         // the Live Activity visible in a lightweight processing state.
         isTranscribing = true
         let recordingStartedAt = segmentStartedAt
+        let takeStartedAt = recordingTakeStartedAt
         let transcriptionStartedAt = Date().timeIntervalSince1970
         TranscriptionIPC.writeStatus(RecordingStatus(
             requestId: requestId,
@@ -2810,7 +2821,7 @@ final class PersistentRecorder {
                         sourceAudioURL: wavURL,
                         resolvedResult: liveResult,
                         usesLiveDelivery: usesLiveDelivery,
-                        recordingStartedAt: recordingStartedAt,
+                        recordingStartedAt: takeStartedAt,
                         transcriptionStartedAt: transcriptionStartedAt,
                         originLocationTask: originLocationTask,
                         presetSnapshot: presetSnapshot,
