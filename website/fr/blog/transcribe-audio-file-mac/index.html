@@ -167,6 +167,8 @@
         <li><a href="#related">Guides associés</a></li>
       </ol></nav>
 
+      <p>Vous devez encore faire l’enregistrement ? Voir <a href="/fr/blog/record-audio-on-mac/">comment enregistrer de l’audio sur un Mac</a>.</p>
+
       <h2 id="built-in">Les options gratuites déjà présentes sur votre Mac</h2>
       <h3>Dictaphone</h3>
       <p>La page d’Apple sur Dictaphone indique que vous pouvez cliquer sur le bouton <strong>Transcription</strong> pendant l’enregistrement pour voir le texte en direct, ou sélectionner un enregistrement terminé et cliquer sur le même bouton. Vous pouvez rechercher dans la liste des enregistrements du texte présent dans un titre ou dans la transcription, et copier le texte de la transcription en le sélectionnant, en cliquant avec la touche Contrôle et en choisissant <strong>Copier</strong>. Apple indique que si vous ouvrez un enregistrement réalisé sous macOS 14 ou antérieur, ou sur un appareil qui ne prend pas en charge la transcription, Dictaphone le transcrit automatiquement, et que la transcription audio n’est pas disponible dans tous les pays ou régions.</p>
@@ -188,7 +190,7 @@
             <tr><th scope="row">Ce qui s’exécute sur le Mac</th><td>Non documenté</td><td>Non documenté</td><td>Transcription, avec un modèle Whisper ou Parakeet que vous téléchargez</td></tr>
             <tr><th scope="row">Importation de fichiers</th><td>Non documenté</td><td>Non documenté</td><td>Importer de l’audio… accepte les fichiers audio ou vidéo</td></tr>
             <tr><th scope="row">Sortie Markdown</th><td>Non documenté</td><td>Non documenté</td><td>Oui</td></tr>
-            <tr><th scope="row">Étiquettes d’intervenants</th><td>Non documenté</td><td>Non documenté</td><td>Facultatif, avec Identifier les intervenants</td></tr>
+            <tr><th scope="row">Étiquettes d’intervenants</th><td>Non documenté</td><td>Non documenté</td><td>Facultatif, avec Identifier les intervenants (voir <a href="/fr/blog/transcribe-interview/">transcription d’entretien</a>)</td></tr>
             <tr><th scope="row">Coût</th><td>Intégrée à macOS</td><td>Intégrée à macOS</td><td>15 minutes de transcription gratuites et 10 livraisons réussies, puis un déblocage à vie en paiement unique</td></tr>
           </tbody>
         </table>
@@ -210,7 +212,7 @@
 
       <h2 id="import">Importer et transcrire le fichier</h2>
       <ol>
-        <li><strong>Importez.</strong> Dans la barre des menus de Vox.md, choisissez <strong>Importer de l’audio…</strong>, ou importez ou glissez l’audio dans l’espace de capture. La documentation indique que les fichiers audio et vidéo sont acceptés et passent par la même transcription locale qu’un enregistrement.</li>
+        <li><strong>Importez.</strong> Dans la barre des menus de Vox.md, choisissez <strong>Importer de l’audio…</strong>, ou importez ou glissez l’audio dans l’espace de capture. La documentation indique que les fichiers audio et vidéo sont acceptés et qu’ils passent par la même transcription locale qu’un enregistrement. Pour les fichiers vidéo en particulier, voir <a href="/fr/blog/transcribe-video-to-text/">transcrire une vidéo en texte</a>.</li>
         <li><strong>Choisissez Ajouter au brouillon ou Envoyer immédiatement.</strong> Avec <strong>Envoyer immédiatement</strong> la transcription est livrée dès qu’elle est terminée. Avec <strong>Ajouter au brouillon</strong> vous pouvez d’abord le relire. Vérifiez les noms, les chiffres et les dates avec l’audio.</li>
         <li><strong>Facultatif : Identifier les intervenants.</strong> Activez <strong>Identifier les intervenants</strong> sur le Parcours pour obtenir des étiquettes d’intervenants anonymes, au mieux. La première fois, un modèle distinct est préparé. S’il ne peut pas s’exécuter, la transcription simple est conservée et la raison s’affiche dans Bibliothèque.</li>
         <li><strong>Facultatif : mode de traitement.</strong> Un Parcours peut utiliser Conserver l’original, Texte épuré, Notes de réunion, Liste de tâches ou Instruction personnalisée. Les modes Apple Intelligence nécessitent un matériel compatible avec macOS 26. Sans lui, Liste de tâches et Notes de réunion utilisent des formateurs intégrés, et Texte épuré et Instruction personnalisée conservent le texte d’origine.</li>
@@ -219,6 +221,7 @@
 
       <h2 id="verify">Vérifier la note Markdown</h2>
       <p>Choisir <strong>Montrer le dernier export</strong> dans la barre des menus, ou trouvez l’entrée dans Bibliothèque et affichez-la dans le Finder, puis ouvrez le fichier dans Obsidian. Si vous n’avez besoin que du texte, choisissez <strong>Copy Last Transcript (copier la dernière transcription)</strong>. Pour une structure de note à remplir à partir d’un enregistrement, voir le <a href="/fr/blog/obsidian-meeting-notes-template/">générateur de modèle de notes de réunion</a>.</p>
+      <p>Si l’enregistrement est une répétition d’un exposé, collez la transcription et la durée de l’enregistrement dans le <a href="/fr/blog/speech-time-calculator/">calculateur de durée de discours</a> pour mesurer vos mots par minute et la durée de parole de votre script à votre propre rythme.</p>
 
       <h2 id="privacy">Ce qui quitte votre Mac</h2>
       <p>La transcription s’exécute sur le Mac, et Vox.md n’envoie pas le contenu des captures aux serveurs de Vox.md. Les téléchargements de modèles contactent l’infrastructure de Hugging Face ou de FluidAudio. Si le dossier de destination se synchronise via iCloud ou un autre service, ce service traite le fichier selon ses propres conditions. Voir la <a href="/fr/privacy.html">politique de confidentialité</a>.</p>
@@ -242,6 +245,7 @@
         <li><a href="/fr/compare/whisper-vs-parakeet/">Whisper ou Parakeet</a></li>
         <li><a href="/fr/blog/transcribe-voice-memos-iphone/">Transcrire les mémos Dictaphone iPhone en Markdown</a></li>
         <li><a href="/fr/blog/obsidian-meeting-notes-template/">Générateur de modèles de notes de réunion Obsidian</a></li>
+        <li><a href="/fr/blog/transcribe-interview/">Transcrire un entretien en privé, avec des étiquettes d’intervenants</a></li>
         <li><a href="/fr/docs/#mac">Documentation Mac</a></li>
       </ul></nav>
     </div>

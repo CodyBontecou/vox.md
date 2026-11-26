@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="tr" dir="ltr" data-search-section="Bölüm" data-search-guide="Kılavuz" data-search-empty="“{query}” için sonuç yok">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown onay listesi oluşturucu: her listeyi bitiş tarihli görevlere dönüştürün | Vox.md</title>
+  <meta name="description" content="Yapıştırılan bir listeyi Obsidian veya GitHub için Markdown görev listesine dönüştüren, Tasks, Dataview veya Reminder biçiminde isteğe bağlı bitiş tarihleri sunan ücretsiz tarayıcı aracı. Hiçbir şey yüklenmez.">
+  <link rel="canonical" href="https://vox.isolated.tech/tr/blog/markdown-checklist-maker/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Dil modelleri için Vox.md belgeleri">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Markdown onay listesi oluşturucu: her listeyi bitiş tarihli görevlere dönüştürün">
+  <meta property="og:description" content="Yapıştırılan bir listeyi Obsidian veya GitHub için Markdown görev listesine dönüştüren, Tasks, Dataview veya Reminder biçiminde isteğe bağlı bitiş tarihleri sunan ücretsiz tarayıcı aracı. Hiçbir şey yüklenmez.">
+  <meta property="og:url" content="https://vox.isolated.tech/tr/blog/markdown-checklist-maker/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-11-24">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Markdown onay listesi oluşturucu: her listeyi bitiş tarihli görevlere dönüştürün">
+  <meta name="twitter:description" content="Yapıştırılan bir listeyi Obsidian veya GitHub için Markdown görev listesine dönüştüren, Tasks, Dataview veya Reminder biçiminde isteğe bağlı bitiş tarihleri sunan ücretsiz tarayıcı aracı. Hiçbir şey yüklenmez.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Markdown onay listesi oluşturucu: her listeyi bitiş tarihli görevlere dönüştürün",
+  "description": "Yapıştırılan bir listeyi Obsidian veya GitHub için Markdown görev listesine dönüştüren, Tasks, Dataview veya Reminder biçiminde isteğe bağlı bitiş tarihleri sunan ücretsiz tarayıcı aracı. Hiçbir şey yüklenmez.",
+  "image": "https://vox.isolated.tech/screenshots/01-route-heading-light.png",
+  "datePublished": "2026-11-24",
+  "dateModified": "2026-11-24",
+  "mainEntityOfPage": "https://vox.isolated.tech/tr/blog/markdown-checklist-maker/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "tr",
+  "name": "Markdown onay listesi oluşturucu: her listeyi bitiş tarihli görevlere dönüştürün | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/tr/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Kılavuzlar",
+      "item": "https://vox.isolated.tech/tr/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Markdown onay listesi oluşturucu: her listeyi bitiş tarihli görevlere dönüştürün",
+      "item": "https://vox.isolated.tech/tr/blog/markdown-checklist-maker/"
+    }
+  ],
+  "inLanguage": "tr",
+  "name": "Markdown onay listesi oluşturucu: her listeyi bitiş tarihli görevlere dönüştürün | Vox.md",
+  "description": "Yapıştırılan bir listeyi Obsidian veya GitHub için Markdown görev listesine dönüştüren, Tasks, Dataview veya Reminder biçiminde isteğe bağlı bitiş tarihleri sunan ücretsiz tarayıcı aracı. Hiçbir şey yüklenmez."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/markdown-checklist-maker/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Kılavuza atla</a>
+<nav aria-label="Ana gezinme">
+  <div class="nav-inner">
+    <a href="/tr/" class="logo" aria-label="Vox.md ana sayfası">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/tr/#how">Nasıl Çalışır?</a></li>
+      <li><a href="/tr/docs/">Belgeler</a></li>
+      <li><a href="/tr/blog/">Kılavuzlar</a></li>
+      <li><a href="/tr/compare/">Karşılaştırın</a></li>
+      <li><a href="/tr/privacy.html">Gizlilik</a></li>
+      <li><a href="/tr/terms.html">Koşullar</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_tr_7d9ef8e50226">Vox.md&#x27;yi indirin</a>
+  <details class="language-switcher"><summary>Dil</summary><ul><li><a href="/blog/markdown-checklist-maker/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/markdown-checklist-maker/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/markdown-checklist-maker/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/markdown-checklist-maker/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/markdown-checklist-maker/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/markdown-checklist-maker/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/markdown-checklist-maker/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/markdown-checklist-maker/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/markdown-checklist-maker/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/markdown-checklist-maker/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/markdown-checklist-maker/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/markdown-checklist-maker/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/markdown-checklist-maker/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/markdown-checklist-maker/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/markdown-checklist-maker/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/markdown-checklist-maker/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/markdown-checklist-maker/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/markdown-checklist-maker/" lang="tr" hreflang="tr" aria-current="page">Türkçe</a></li><li><a href="/uk/blog/markdown-checklist-maker/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/markdown-checklist-maker/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/markdown-checklist-maker/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/markdown-checklist-maker/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/markdown-checklist-maker/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Ücretsiz araç</div>
+        <h1 class="hero-title">Markdown onay listesi oluşturucu: her listeyi bitiş tarihli görevlere dönüştürün</h1>
+        <p class="hero-subtitle">Düz satırları, maddeleri, numaralı öğeleri veya mevcut bir görev listesini yapıştırın; iç içe yapı korunmuş, isteğe bağlı bitiş tarihli ve tamamlananların sayısını gösteren geçerli - [ ] görevlerini kopyalayın.</p>
+      </div>
+      <aside class="meta-card" aria-label="Bu kılavuz hakkında">
+        <dl>
+          <div><dt>Yazan</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Güncellendi</dt><dd><time datetime="2026-11-24">24 Kasım 2026</time></dd></div>
+          <div><dt>Gerektirir:</dt><dd>iPhone&#x27;daki Safari dahil herhangi bir modern tarayıcı. İsteğe bağlı: onay listeleri için Obsidian ve görevleri sesle yakalamak için iPhone veya Mac için Vox.md.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Markdown onay listesi oluşturucu: her listeyi bitiş tarihli görevlere dönüştürün">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Kısa yanıt</div>
+        <p>Bir Markdown görevi bir tire, bir boşluk, köşeli parantezler, bir boşluk ve metinden oluşur. Şöyle yazın: <code>- [ ] task</code> açık bir görev için ve <code>- [x] done</code> tamamlanmış bir görev için. Bir listenin tamamını göreve dönüştürmek için şuraya yapıştırın: <a href="#tool">onay listesi oluşturucu</a> aşağıda.</p>
+      </div>
+      <pre class="guide-code" id="default-checklist"><code>- [ ] buy milk
+	- [ ] oat
+- [ ] call Sam
+- [x] send invoice
+</code></pre>
+      <p>Oluşturucu mevcut madde işaretlerini, numaraları ve onay kutularını kaldırır, böylece hiçbir şey ikilenmez; girintiyi iç içe yapı olarak korur ve Obsidian eklentinizin okuduğu biçimde bir bitiş tarihi ekleyebilir. Tamamen bu sayfada çalışır: liste hiçbir zaman yüklenmez ve sayfa hiçbir ağ isteği yapmaz.</p>
+      <nav class="toc" aria-label="Bu kılavuzda"><div class="toc-title">Bu kılavuzda</div><ol>
+        <li><a href="#tool">Onay listenizi oluşturun</a></li>
+        <li><a href="#syntax">Markdown onay listesi söz dizimi</a></li>
+        <li><a href="#obsidian">Obsidian&#x27;da onay listeleri</a></li>
+        <li><a href="#due-dates">Bitiş tarihleri: Tasks, Dataview ve Reminder</a></li>
+        <li><a href="#github">GitHub ve Obsidian arasındaki farklar</a></li>
+        <li><a href="#capture">Vox.md ile görevleri sesle veya metinle yakalayın</a></li>
+        <li><a href="#faq">Sorular</a></li>
+      </ol></nav>
+
+      <h2 id="tool">1. Onay listenizi oluşturun</h2>
+      <p class="mt-nojs" id="cl-nojs">Onay listesi oluşturucu JavaScript gerektirir. O olmadan da aşağıdaki söz dizimi bir başvuru olarak işe yarar.</p>
+      <form class="cl-tool" id="cl-tool" aria-label="Markdown onay listesi oluşturucu" hidden>
+        <fieldset class="mt-group">
+          <legend>Listeniz</legend>
+          <label class="mt-field" for="cl-input">Satırları, maddeleri, numaralı öğeleri veya görevleri yapıştırın <textarea id="cl-input" rows="9" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></label>
+          <div class="mt-actions">
+            <button type="button" class="btn-secondary" id="cl-example">Örnek yükle</button>
+            <button type="button" class="btn-secondary" id="cl-clear">Temizle</button>
+          </div>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>Ne yapılsın</legend>
+          <label class="mt-option"><input type="radio" name="mode" value="make" checked> <span>Onay listesi oluşturun</span></label>
+          <label class="mt-option"><input type="radio" name="mode" value="strip"> <span>Onay kutularını kaldır</span></label>
+          <label class="mt-option" data-show="make"><input type="checkbox" name="resetall"> <span>Her görevi [ ] durumuna sıfırla</span></label>
+          <label class="mt-field" data-show="strip" for="cl-strip-to">Görevleri şuna dönüştür: <select id="cl-strip-to" name="stripto">
+            <option value="bullets" selected>Düz maddeler (- metin)</option>
+            <option value="plain">Düz satırlar (madde işareti yok, iç içe yapı yok)</option>
+          </select></label>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>İç içe yerleşim</legend>
+          <label class="mt-field" for="cl-unit">Listenizde seviye başına boşluk <select id="cl-unit" name="unit">
+            <option value="auto" selected>Listemden algıla</option>
+            <option value="2">2 boşluk</option>
+            <option value="4">4 boşluk</option>
+          </select></label>
+          <label class="mt-field" for="cl-indent">Sonucu şununla girintileyin: <select id="cl-indent" name="indent">
+            <option value="tab" selected>Seviye başına bir sekme</option>
+            <option value="2">Seviye başına 2 boşluk</option>
+            <option value="4">Seviye başına 4 boşluk</option>
+          </select></label>
+          <p class="mt-hint">Listenizdeki bir sekme her zaman bir seviye sayılır. Başlıklar başlık olarak kalır.</p>
+        </fieldset>
+        <fieldset class="mt-group" data-show="make">
+          <legend>Her görev için bitiş tarihi</legend>
+          <label class="mt-field" for="cl-due">Biçim <select id="cl-due" name="due">
+            <option value="none" selected>Yok</option>
+            <option value="tasks-due">Tasks eklentisi: bitiş (📅 2026-11-25)</option>
+            <option value="tasks-scheduled">Tasks eklentisi: planlanan (⏳ 2026-11-25)</option>
+            <option value="tasks-start">Tasks eklentisi: başlangıç (🛫 2026-11-25)</option>
+            <option value="dataview">Dataview satır içi alanı ([due:: 2026-11-25])</option>
+            <option value="reminder">Reminder eklentisi / Vox.md ((@2026-11-25))</option>
+            <option value="reminder-time">Saatli Reminder eklentisi ((@2026-11-25 09:30))</option>
+          </select></label>
+          <label class="mt-field" for="cl-date">Tarih <input type="date" id="cl-date" name="date"></label>
+          <label class="mt-field" id="cl-time-field" for="cl-time" hidden>Saat <input type="time" id="cl-time" name="time" value="09:00"></label>
+        </fieldset>
+      </form>
+      <p class="mt-status" id="cl-progress" role="status"></p>
+      <div class="mt-output-head" id="cl-output-head" hidden>
+        <h3 id="cl-output-title">Onay listeniz</h3>
+        <div class="mt-actions">
+          <button type="button" class="btn-primary" id="cl-copy">Kopyala</button>
+        </div>
+      </div>
+      <p class="mt-status" id="cl-status" role="status"></p>
+      <p class="mt-hint" id="cl-warning" role="status" hidden></p>
+      <pre class="guide-code cl-output" id="cl-output" aria-labelledby="cl-output-title" tabindex="0" hidden><code id="cl-output-code"></code></pre>
+      <h3 id="cl-preview-title" hidden>Önizleme</h3>
+      <div class="cl-preview" id="cl-preview" role="group" aria-labelledby="cl-preview-title" hidden></div>
+      <div hidden id="cl-messages">
+        <span data-message="waiting">Sonucu görmek için bir liste yapıştırın.</span>
+        <span data-message="progress">{done} / {total} tamamlandı</span>
+        <span data-message="no-tasks">Bu listede görev yok.</span>
+        <span data-message="copied">Panoya kopyalandı.</span>
+        <span data-message="copy-failed">Kopyalanamadı. Metni seçip kendiniz kopyalayın.</span>
+        <span data-message="loaded">Örnek yüklendi.</span>
+        <span data-message="cleared">Temizlendi.</span>
+        <span data-message="title-make">Onay listeniz</span>
+        <span data-message="title-strip">Onay kutusuz listeniz</span>
+        <span data-message="bad-date">Bitiş tarihi eklemek için geçerli bir tarih seçin. Tarih eklenmedi.</span>
+        <span data-message="bad-time">09:30 gibi bir saat girin. Tarih saat olmadan eklendi.</span>
+        <span data-message="skipped">Bu tür bir tarihi zaten taşıyan görevlere dokunulmadı.</span>
+        <span data-message="paren">GitHub&#x27;da parantezle başlayan bir görev açıklamasının önüne ters eğik çizgi gerekir.</span>
+      </div>
+
+      <h2 id="syntax">2. Markdown onay listesi söz dizimi</h2>
+      <pre class="guide-code"><code>- [ ] unchecked task
+- [x] checked task
+- [ ] parent task
+	- [ ] nested task</code></pre>
+      <p>Her görev bir liste öğesidir: bir tire ve bir boşluk, ardından <code>[ ]</code> yazın; köşeli parantezlerin arasında bir boşluk, sonra metin olsun. <a href="https://obsidian.md/help/syntax" target="_blank" rel="noopener">Obsidian Help sayfası</a> ve <a href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#task-lists" target="_blank" rel="noopener">GitHub Docs sayfası</a> ikisi de bunu bir tire ve bir boşluk, ardından şu şekilde tanımlar: <code>[ ]</code>. Bir görevi tamamlandı olarak işaretlemek için GitHub Docs şunu kullanmanızı söyler: <code>[x]</code>.</p>
+      <p>Boşluklar önemlidir. <a href="https://github.github.com/gfm/#task-list-items-extension-" target="_blank" rel="noopener">GitHub Flavored Markdown belirtimi</a> bir sol köşeli parantez, bir boşluk karakteri ya da <code>x</code>ve bir sağ köşeli parantez olarak tanımlar; ardından gelen metinden önce de boşluk karakteri ister. Yani <code>[]</code> içi boş olan ya da <code>- [ ]text</code> yazmak, yani köşeli parantezden sonra boşluk bırakmamak, tanıma uymaz. Satırı liste öğesi yapan şey tire ve ardından gelen boşluktur.</p>
+      <p>Görev listeleri çekirdek Markdown&#x27;ın parçası değildir. Aynı belirtim bunları CommonMark&#x27;a bir eklenti olarak işaretler ve girişinde, özgün CommonMark belirtiminde bulunmayan özelliklerin eklenti olarak işaretlendiğini söyler. Eklentiyi uygulamayan bir oluşturucu köşeli parantezleri düz metin olarak gösterir; bir onay kutusunun sayfada şöyle görünmesinin olağan nedeni budur: <code>[ ]</code> sayfada.</p>
+
+      <h2 id="obsidian">3. Obsidian&#x27;da onay listeleri</h2>
+      <p>Obsidian Help&#x27;in <a href="https://obsidian.md/help/syntax" target="_blank" rel="noopener">temel biçimlendirme söz dizimi</a> sayfası görev listelerini ele alır:</p>
+      <ul>
+        <li>Bir görev bir tire ve bir boşlukla başlar, ardından şu gelir: <code>[ ]</code>.</li>
+        <li>Görevi tamamlandı olarak işaretlemek için köşeli parantezlerin içinde herhangi bir karakter kullanabilirsiniz; yani <code>[x]</code>, <code>[-]</code> ve <code>[?]</code> hepsi sayılır.</li>
+        <li>Bir görev listesini liste öğelerini girintileyerek iç içe yerleştirirsiniz. <code>Tab</code> veya <code>Shift+Tab</code> seçili öğeleri girintilemek veya girintisini kaldırmak için.</li>
+        <li>Okuma görünümünde bir görevin onay kutusunu seçerek görevi işaretleyip kaldırabilirsiniz.</li>
+      </ul>
+      <p>Help sayfası, herhangi bir karakterin görevi tamamladığını belgeler. Her karakter için farklı bir görünüm tanımlamaz. Eğer <code>[-]</code> veya <code>[?]</code> şundan farklı görünüyorsa: <code>[x]</code> kasanızda farklı görünüyorsa, bu Markdown&#x27;dan değil, yüklediğiniz bir temadan veya CSS parçacığından gelir.</p>
+      <p>Oluşturucudaki ilerleme satırı da aynı şekilde sayar: köşeli parantezlerin içindeki boşluk dışındaki her karakter tamamlanmış anlamına gelir; yani <code>[x]</code>, <code>[X]</code>, <code>[-]</code> ve <code>[?]</code> tamamlanmıştır, <code>[ ]</code> açıktır. “done:” veya “x ” ile başlayan satırlar sıradan metindir; araç bunların tamamlanmış bir görev anlamına geldiğini tahmin etmez.</p>
+
+      <h2 id="due-dates">4. Bitiş tarihleri: Tasks, Dataview ve Reminder</h2>
+      <p>Obsidian&#x27;ın görev listesi söz diziminde kendine ait bir bitiş tarihi yoktur: Help sayfası böyle bir şey belgelemez. Üç eklenti, görev metnine yazılan bir tarihi okur ve her biri kendi biçimini kullanır. Oluşturucu tarihi hepsinde ISO <code>YYYY-MM-DD</code> biçiminde yazar. Eklenti olmadan tarih yalnızca metindir.</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th>Biçim</th><th>Okuyan</th><th>Örnek satır</th></tr></thead>
+          <tbody>
+            <tr><td>Bitiş: <code>📅 YYYY-MM-DD</code></td><td><a href="https://publish.obsidian.md/tasks/Getting+Started/Dates" target="_blank" rel="noopener">Tasks eklentisi</a>; bu sayfa tarihin şu biçimde olması gerektiğini söyler: <code>YYYY-MM-DD</code> biçimi</td><td><code>- [ ] send invoice 📅 2026-11-25</code></td></tr>
+            <tr><td>Planlanan: <code>⏳ YYYY-MM-DD</code></td><td>Tasks eklentisi</td><td><code>- [ ] send invoice ⏳ 2026-11-25</code></td></tr>
+            <tr><td>Başlangıç: <code>🛫 YYYY-MM-DD</code></td><td>Tasks eklentisi</td><td><code>- [ ] send invoice 🛫 2026-11-25</code></td></tr>
+            <tr><td>Satır içi alan: <code>[due:: YYYY-MM-DD]</code></td><td><a href="https://blacksmithgu.github.io/obsidian-dataview/annotation/metadata-tasks/" target="_blank" rel="noopener">Dataview belgeleri</a>; bir görevde yazılı alanları okur, örneğin <code>[completion:: 2021-08-15]</code></td><td><code>- [ ] send invoice [due:: 2026-11-25]</code></td></tr>
+            <tr><td>Hatırlatıcı: <code>(@YYYY-MM-DD)</code> veya <code>(@YYYY-MM-DD HH:mm)</code></td><td><a href="https://github.com/uphy/obsidian-reminder" target="_blank" rel="noopener">obsidian-reminder eklentisi</a>; README&#x27;si şunları gösterir: <code>(@2021-08-14)</code> ve <code>(@2021-08-14 09:37)</code> işaretlenmemiş görevlerde</td><td><code>- [ ] send invoice (@2026-11-25 09:30)</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Kullandığınız tek eklentiyi seçin. Dataview sayfası tarihler için kendi emoji kısayollarını da listeler ve desteklediği tek kısayolların bunlar olduğunu söyler; oluşturucu bunun yerine Dataview&#x27;in köşeli parantez biçimini yazar. Reminder README&#x27;si, zaten işaretlediğiniz görevlerdeki hatırlatıcılar için bildirim almayacağınızı söyler.</p>
+
+      <h2 id="github">5. GitHub ve Obsidian arasındaki farklar</h2>
+      <p>GitHub Docs şunu tanımlar: <code>[ ]</code> açık bir görev için ve <code>[x]</code> yazın. GFM belirtimi işaretçiyi boşluk veya şu harf olarak tanımlar: <code>x</code> arasına yazın. Obsidian herhangi bir karakteri kabul eder. Yani şöyle bir görev: <code>- [-] skipped</code> veya <code>- [?] unsure</code> Obsidian&#x27;da tamamlanmış sayılır, ancak belirtimin işaretçi tanımının dışındadır ve belirtimi izleyen bir oluşturucu bunu düz metin olarak gösterebilir. Dosya GitHub&#x27;da da okunuyorsa şunları kullanın: <code>[ ]</code> ve <code>[x]</code> için.</p>
+      <p>GitHub Docs bir kural daha ekler: bir görev açıklaması parantezle başlıyorsa, şu örnekteki gibi önüne ters eğik çizgi koyun: <code>- [ ] \(Optional) Open a followup issue</code>. Oluşturucu ters eğik çizgiyi sizin için eklemez; bir görev parantezle başlarsa uyarır.</p>
+
+      <h2 id="capture">6. iPhone ve Mac&#x27;te Vox.md ile görevleri sesle veya metinle yakalayın</h2>
+      <p>Vox.md&#x27;nin Todo Checklist işleme modu, bir yakalamadan Markdown <code>- [ ]</code> görev maddeleri üretir ve yedek yöntemi belirlenimci bir onay listesi biçimlendiricisidir. Ses, cihazınızda yazıya dökülür. Capture Bar&#x27;da <strong>Kontrol listesi</strong> şu öneki uygular: <code>- [ ]</code> önekini ve <strong>İki tarih belirleyin</strong> ekler <code>(@yyyy-MM-dd)</code> ya da saatli bir biçim. Şuraya bakın: <a href="/tr/docs/#quick-capture">Hızlı yakalama</a> ve <a href="/tr/docs/#presets">Route&#x27;lar ve işleme modları</a> belgelerine.</p>
+      <p>Bir Route, öğeleri günlük notunuza şöyle bir başlığın altına ekleyebilir: <code>## Tasks</code>; <a href="/tr/blog/append-to-obsidian-daily-note-iphone/">Obsidian günlük notuna ekleyin</a> kurulumu adım adım anlatır, ve <a href="/tr/blog/obsidian-daily-note-template/">günlük not şablonu oluşturucusu</a> notun yapısını yazar. Bir toplantıdaki eylem maddeleri için şuna bakın: <a href="/tr/blog/obsidian-meeting-notes-template/">toplantı notu şablonuna</a>; görev listesi öneki tarifi için şuna bakın: <a href="/tr/blog/obsidian-capture-templates/">yakalama şablonları</a>.</p>
+      <p>Vox.md şunu yazar: <code>(@yyyy-MM-dd)</code> biçimini yazar. Tasks eklentisinin emoji tarihlerini veya Dataview alanlarını yazmaz. Bunlardan birini kullanıyorsanız, yakalanan görevleri yukarıdaki oluşturucuya yapıştırıp o biçimi seçin ya da tarihi sonradan düzenleyin. Bir notun üstündeki özellikleri oluşturmak için şunu kullanın: <a href="/tr/blog/obsidian-properties-generator/">özellik oluşturucu</a>.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">iPhone, iPad veya Mac&#x27;te görevleri sesle yakalayın.</h2>
+        <p>Vox.md söylediklerinizi cihaz üzerinde bir Markdown onay listesine dönüştürür ve Obsidian notunuza ekler. Ücretsiz hak 15 dakika yazıya dökme ve 10 başarılı Capture teslimatıdır; sınırsız kullanım abonelik olmadan tek seferlik ömür boyu bir kilit açmadır.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_tr_7d9ef8e50226">Görevleri sesle yakalayın</a></p>
+        <p>Yukarıdaki onay listesi oluşturucu uygulama olmadan da tam olarak çalışır.</p>
+      </section>
+
+      <h2 id="faq">7. Sorular</h2>
+      <h3>Onay kutum neden [ ] metni olarak görünüyor?</h3>
+      <p>Oluşturucu görev listelerini çizmiyor. Görev listeleri CommonMark&#x27;a bir eklentidir; bu yüzden onu desteklemeyen bir oluşturucu köşeli parantezleri olduğu gibi gösterir. Satırın bir tire ve boşlukla başladığını, köşeli parantezlerin arasında bir boşluk veya <code>x</code> olduğunu ve kapanış parantezinden sonra bir boşluk geldiğini kontrol edin. Obsidian&#x27;da bir kod bloğundaki veya tablo hücresindeki görev, liste öğesi gibi onay kutusu olarak çizilmeyebilir.</p>
+      <h3>Görevleri nasıl iç içe yerleştiririm?</h3>
+      <p>Alt görevi girintileyin. Obsidian&#x27;da şuna basın: <code>Tab</code> seçili öğeleri girintilemek için ve <code>Shift+Tab</code> girintiyi kaldırmak için. Oluşturucu, listenizdeki 2 veya 4 boşluğu seviye başına bir sekmeye, isterseniz de 2 veya 4 boşluğa dönüştürür.</p>
+      <h3>Bir kutuyu x dışında bir karakterle nasıl işaretlerim?</h3>
+      <p>Obsidian Help, köşeli parantezlerin içindeki herhangi bir karakterin görevi tamamlandı olarak işaretlediğini söyler; yani <code>- [-] task</code> ve <code>- [?] task</code> tamamlanmıştır ve <code>[x]</code>.</p>
+      <h3>Tasks eklentisinin okuduğu bir bitiş tarihini nasıl eklerim?</h3>
+      <p>Şunu koyun: <code>📅</code> ve bir <code>YYYY-MM-DD</code> tarihini görevin sonuna ekleyin, örneğin <code>- [ ] send invoice 📅 2026-11-25</code>. Her göreve eklemek için yukarıdan “Tasks eklentisi: bitiş” seçeneğini seçin. Şunu kullanın: <code>⏳</code> planlanan tarih için ve <code>🛫</code> başlangıç tarihi için.</p>
+      <h3>Oluşturucu listemi yüklüyor mu?</h3>
+      <p>Hayır. Liste, bu sayfadaki bir betikle cihazınızda dönüştürülür ve sayfa hiçbir ağ isteği yapmaz. Listenizi kaydetmez: sayfayı kapatmak veya yenilemek onu siler.</p>
+
+      <nav class="toc" aria-label="İlgili kılavuzlar" id="related"><div class="toc-title">Kuruluma devam edin</div><ul>
+        <li><a href="/tr/blog/append-to-obsidian-daily-note-iphone/">Obsidian günlük notuna ekleyin</a></li>
+        <li><a href="/tr/blog/obsidian-daily-note-template/">Obsidian günlük not şablonu oluşturucu</a></li>
+        <li><a href="/tr/blog/obsidian-meeting-notes-template/">Obsidian toplantı notu şablonu oluşturucu</a></li>
+        <li><a href="/tr/blog/obsidian-capture-templates/">Yol ve şablon tarifleri</a></li>
+        <li><a href="/tr/blog/obsidian-properties-generator/">Obsidian özellikleri oluşturucu ve denetleyici</a></li>
+        <li><a href="/tr/docs/#quick-capture">Quick Capture başvurusu</a></li>
+        <li><a href="/tr/docs/#presets">Rotalar başvurusu</a></li>
+      </ul></nav>
+<style>
+.cl-tool:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.cl-tool [hidden] { display: none; }
+.mt-output-head[hidden], .cl-output[hidden], #cl-preview-title[hidden] { display: none; }
+.cl-tool .mt-field input, .cl-tool .mt-field textarea, .cl-tool .mt-field select { font: inherit; font-family: var(--font-mono); font-size: 16px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; padding: 8px 10px; width: 100%; box-sizing: border-box; min-height: 44px; }
+.cl-tool .mt-field textarea { resize: vertical; min-height: 160px; }
+.cl-tool input:focus-visible, .cl-tool textarea:focus-visible, .cl-tool select:focus-visible, .cl-output:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.cl-tool .mt-option { min-height: 44px; }
+.cl-tool .mt-option input { width: 22px; height: 22px; }
+.mt-actions button { font: inherit; font-size: 15px; min-height: 44px; padding: 0 18px; cursor: pointer; }
+.cl-output { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 28rem; overflow: auto; tab-size: 4; }
+.cl-preview { padding: 14px 18px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; display: flex; flex-direction: column; gap: 4px; overflow-wrap: anywhere; }
+.cl-preview[hidden] { display: none; }
+.cl-row { display: flex; align-items: flex-start; gap: 10px; }
+.cl-row input { width: 18px; height: 18px; margin: 3px 0 0; flex: none; accent-color: var(--accent); }
+.cl-row.is-heading { font-weight: 700; margin-top: 6px; }
+</style>
+<script>
+/* Markdown checklist maker. Runs locally: no network requests. */
+(function () {
+  var HEADING = /^#{1,6}(?:\s|$)/;
+  var RULE = /^(?:-{3,}|\*{3,}|_{3,})$/;
+  var DONE_ITEM = /^\s*(?:[-*+]|\d+[.)])\s+\[(.)\](?:\s|$)/;
+  var DUE = {
+    'tasks-due': { mark: '📅', has: /📅/ },
+    'tasks-scheduled': { mark: '⏳', has: /⏳/ },
+    'tasks-start': { mark: '🛫', has: /🛫/ },
+    'dataview': { has: /\[due::/ },
+    'reminder': { has: /\(@\d{4}-\d{2}-\d{2}/ },
+    'reminder-time': { has: /\(@\d{4}-\d{2}-\d{2}/ }
+  };
+
+  function pad(n, len) { var s = String(n); while (s.length < len) s = '0' + s; return s; }
+  function isoDate(d) { return pad(d.getFullYear(), 4) + '-' + pad(d.getMonth() + 1, 2) + '-' + pad(d.getDate(), 2); }
+  function validDate(value) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || '');
+    if (!m) return false;
+    var d = new Date(+m[1], +m[2] - 1, +m[3], 12);
+    return d.getFullYear() === +m[1] && d.getMonth() === +m[2] - 1 && d.getDate() === +m[3];
+  }
+  function validTime(value) { return /^([01]\d|2[0-3]):[0-5]\d$/.test(value || ''); }
+  function isDone(mark) { return mark !== null && /\S/.test(mark); }
+
+  /* Remove bullets, numbers and checkboxes from the start of a line. */
+  function peel(s) {
+    var state = null, m;
+    for (;;) {
+      m = /^(?:[-*+]|\d+[.)])(?:\s+|$)/.exec(s);
+      if (m) { s = s.slice(m[0].length); continue; }
+      m = /^\[(.)\](?:\s+|$)/.exec(s);
+      if (m) { if (state === null) state = m[1]; s = s.slice(m[0].length); continue; }
+      break;
+    }
+    return { state: state, text: s.trim() };
+  }
+
+  function progress(text) {
+    var done = 0, total = 0;
+    String(text || '').replace(/\r\n?/g, '\n').split('\n').forEach(function (line) {
+      var m = DONE_ITEM.exec(line);
+      if (!m) return;
+      total++;
+      if (/\S/.test(m[1])) done++;
+    });
+    return { done: done, total: total };
+  }
+
+  function dateText(opts, warnings) {
+    var kind = opts.due || 'none';
+    if (kind === 'none' || !DUE[kind]) return null;
+    if (!validDate(opts.date)) { warnings.push('bad-date'); return null; }
+    if (kind === 'dataview') return '[due:: ' + opts.date + ']';
+    if (kind === 'reminder') return '(@' + opts.date + ')';
+    if (kind === 'reminder-time') {
+      if (validTime(opts.time)) return '(@' + opts.date + ' ' + opts.time + ')';
+      warnings.push('bad-time');
+      return '(@' + opts.date + ')';
+    }
+    return DUE[kind].mark + ' ' + opts.date;
+  }
+
+  /* Convert pasted text. Returns {output, items, progress, warnings}. */
+  function run(input, opts) {
+    opts = opts || {};
+    var strip = opts.mode === 'strip';
+    var lines = String(input || '').replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n').split('\n');
+    var parsed = [];
+    var minSpaces = 0;
+    lines.forEach(function (raw) {
+      if (!raw.trim()) return;
+      var lead = /^[ \t]*/.exec(raw)[0];
+      var rest = raw.slice(lead.length).replace(/\s+$/, '');
+      if (HEADING.test(rest)) { parsed.push({ heading: true, text: rest }); return; }
+      if (RULE.test(rest)) return;
+      var p = peel(rest);
+      if (!p.text) return;
+      var tabs = lead.replace(/ /g, '').length;
+      var spaces = lead.length - tabs;
+      if (spaces && (!minSpaces || spaces < minSpaces)) minSpaces = spaces;
+      parsed.push({ heading: false, tabs: tabs, spaces: spaces, state: p.state, text: p.text });
+    });
+    var unit = opts.unit === '2' ? 2 : opts.unit === '4' ? 4 : (minSpaces || 2);
+    var step = opts.indent === '2' ? '  ' : opts.indent === '4' ? '    ' : '\t';
+    var warnings = [];
+    var suffix = strip ? null : dateText(opts, warnings);
+    var dueKind = opts.due || 'none';
+    var prev = -1, skipped = false, paren = false;
+    var items = [];
+    parsed.forEach(function (p) {
+      if (p.heading) { items.push({ kind: 'heading', level: 0, mark: null, text: p.text }); prev = -1; return; }
+      var level = p.tabs + (p.spaces ? Math.max(1, Math.floor(p.spaces / unit)) : 0);
+      level = Math.min(level, prev + 1);
+      prev = level;
+      var text = p.text;
+      if (suffix) {
+        if (DUE[dueKind].has.test(text)) skipped = true; else text += ' ' + suffix;
+      }
+      var mark = null;
+      if (!strip) mark = opts.reset || p.state === null || !/\S/.test(p.state) ? ' ' : p.state;
+      if (!strip && /^\(/.test(p.text)) paren = true;
+      items.push({ kind: 'item', level: level, mark: mark, text: text, had: p.state });
+    });
+    if (skipped) warnings.push('skipped');
+    if (paren) warnings.push('paren');
+    var output = items.map(function (it) {
+      if (it.kind === 'heading') return it.text;
+      var indent = new Array(it.level + 1).join(step);
+      if (strip) return opts.stripto === 'plain' ? it.text : indent + '- ' + it.text;
+      return indent + '- [' + it.mark + '] ' + it.text;
+    }).join('\n');
+    var done = 0, total = 0;
+    items.forEach(function (it) {
+      if (it.kind !== 'item') return;
+      var mark = strip ? it.had : it.mark;
+      if (mark === null || mark === undefined) return;
+      total++;
+      if (isDone(mark)) done++;
+    });
+    return { output: output, items: items, progress: { done: done, total: total }, warnings: warnings };
+  }
+
+  if (typeof window !== 'undefined') {
+    window.voxChecklist = { run: run, progress: progress, isoDate: isoDate };
+  }
+
+  var form = document.getElementById('cl-tool');
+  if (!form) return;
+  var input = document.getElementById('cl-input');
+  var code = document.getElementById('cl-output-code');
+  var pre = document.getElementById('cl-output');
+  var head = document.getElementById('cl-output-head');
+  var title = document.getElementById('cl-output-title');
+  var preview = document.getElementById('cl-preview');
+  var previewTitle = document.getElementById('cl-preview-title');
+  var progressEl = document.getElementById('cl-progress');
+  var status = document.getElementById('cl-status');
+  var warning = document.getElementById('cl-warning');
+  var dateInput = document.getElementById('cl-date');
+  var timeField = document.getElementById('cl-time-field');
+  var EXAMPLE = '- buy milk\n  - oat\n  - bread\n1. call Sam\n* [x] send invoice\n\n## Later\nbook flights\n- [ ] renew passport';
+
+  function message(name, fill) {
+    var el = document.querySelector('#cl-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : '';
+    if (fill) Object.keys(fill).forEach(function (key) { text = text.split('{' + key + '}').join(fill[key]); });
+    return text;
+  }
+  function say(text) {
+    status.textContent = '';
+    window.setTimeout(function () { status.textContent = text; }, 30);
+  }
+  function options() {
+    return {
+      mode: form.elements.mode.value, reset: form.elements.resetall.checked, stripto: form.elements.stripto.value,
+      unit: form.elements.unit.value, indent: form.elements.indent.value,
+      due: form.elements.due.value, date: dateInput.value, time: form.elements.time.value
+    };
+  }
+
+  function renderPreview(result, strip) {
+    preview.textContent = '';
+    result.items.forEach(function (it) {
+      var row = document.createElement('div');
+      row.className = 'cl-row' + (it.kind === 'heading' ? ' is-heading' : '');
+      if (!(strip && form.elements.stripto.value === 'plain')) row.style.paddingInlineStart = (it.level * 1.6) + 'em';
+      if (it.kind === 'item' && !strip) {
+        var box = document.createElement('input');
+        box.type = 'checkbox';
+        box.disabled = true;
+        box.checked = isDone(it.mark);
+        box.setAttribute('aria-label', isDone(it.mark) ? '[' + it.mark + ']' : '[ ]');
+        row.appendChild(box);
+      } else if (it.kind === 'item' && form.elements.stripto.value === 'bullets') {
+        var dot = document.createElement('span');
+        dot.setAttribute('aria-hidden', 'true');
+        dot.textContent = '•';
+        row.appendChild(dot);
+      }
+      var label = document.createElement('span');
+      label.textContent = it.kind === 'heading' ? it.text.replace(/^#{1,6}\s*/, '') : it.text;
+      row.appendChild(label);
+      preview.appendChild(row);
+    });
+  }
+
+  function update() {
+    var opts = options();
+    var strip = opts.mode === 'strip';
+    Array.prototype.forEach.call(form.querySelectorAll('[data-show]'), function (el) {
+      el.hidden = el.getAttribute('data-show') !== opts.mode;
+    });
+    timeField.hidden = strip || opts.due !== 'reminder-time';
+    var empty = !input.value.trim();
+    var result = run(input.value, opts);
+    code.textContent = result.output;
+    title.textContent = message(strip ? 'title-strip' : 'title-make');
+    var has = !empty && result.items.length > 0;
+    head.hidden = pre.hidden = preview.hidden = previewTitle.hidden = !has;
+    if (has) renderPreview(result, strip);
+    if (!has) progressEl.textContent = message('waiting');
+    else if (!result.progress.total) progressEl.textContent = message('no-tasks');
+    else progressEl.textContent = message('progress', { done: result.progress.done, total: result.progress.total });
+    warning.textContent = result.warnings.map(function (w) { return message(w); }).join(' ');
+    warning.hidden = !result.warnings.length;
+  }
+
+  dateInput.value = isoDate(new Date());
+  form.addEventListener('input', update);
+  form.addEventListener('change', update);
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+  document.getElementById('cl-example').addEventListener('click', function () {
+    input.value = EXAMPLE;
+    update();
+    say(message('loaded'));
+  });
+  document.getElementById('cl-clear').addEventListener('click', function () {
+    input.value = '';
+    update();
+    input.focus();
+    say(message('cleared'));
+  });
+  document.getElementById('cl-copy').addEventListener('click', function () {
+    var text = code.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(code);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+
+  document.getElementById('cl-nojs').hidden = true;
+  form.hidden = false;
+  update();
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/tr/">Ana Sayfa</a></li>
+        <li><a href="/tr/docs/">Belgeler</a></li>
+        <li><a href="/tr/blog/">Kılavuzlar</a></li>
+        <li><a href="/tr/compare/">Karşılaştırın</a></li>
+        <li><a href="/tr/privacy.html">Gizlilik</a></li>
+        <li><a href="/tr/terms.html">Koşullar</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Destek</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_tr_7d9ef8e50226">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Yerel notlar için hızlı yakalama · İçerik yükleme yok.</div>
+    </div>
+  <details class="language-switcher"><summary>Dil</summary><ul><li><a href="/blog/markdown-checklist-maker/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/markdown-checklist-maker/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/markdown-checklist-maker/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/markdown-checklist-maker/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/markdown-checklist-maker/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/markdown-checklist-maker/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/markdown-checklist-maker/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/markdown-checklist-maker/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/markdown-checklist-maker/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/markdown-checklist-maker/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/markdown-checklist-maker/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/markdown-checklist-maker/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/markdown-checklist-maker/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/markdown-checklist-maker/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/markdown-checklist-maker/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/markdown-checklist-maker/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/markdown-checklist-maker/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/markdown-checklist-maker/" lang="tr" hreflang="tr" aria-current="page">Türkçe</a></li><li><a href="/uk/blog/markdown-checklist-maker/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/markdown-checklist-maker/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/markdown-checklist-maker/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/markdown-checklist-maker/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/markdown-checklist-maker/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

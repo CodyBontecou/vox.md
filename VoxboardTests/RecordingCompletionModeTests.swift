@@ -298,3 +298,74 @@ final class DraftRecordingAudioDefaultTests: XCTestCase {
             presetAudioSaveMode: .off, override: true))
     }
 }
+
+/// Route switch "Transcribe Recordings" (#163): only route deliveries skip
+/// speech-to-text; dictation modes always produce text.
+final class RouteTranscriptionSwitchTests: XCTestCase {
+    private func preset(transcribing: Bool) -> CapturePreset {
+        var preset = CapturePreset(id: "field-audio", name: "Field Audio", symbolName: "waveform")
+        preset.transcriptionEnabled = transcribing
+        return preset
+    }
+
+    func test_routeWithTranscriptionOffSkipsTranscription() {
+        XCTAssertFalse(PersistentRecorder.segmentTranscribes(
+            completionMode: .runVox(flowID: "field-audio"),
+            presetSnapshot: preset(transcribing: false)
+        ))
+    }
+
+    func test_routeWithTranscriptionOnTranscribes() {
+        XCTAssertTrue(PersistentRecorder.segmentTranscribes(
+            completionMode: .runVox(flowID: "field-audio"),
+            presetSnapshot: preset(transcribing: true)
+        ))
+    }
+
+    func test_dictationModesAlwaysTranscribe() {
+        for mode: RecordingCompletionMode in [.keyboardTranscription, .captureDraft(attachAudio: false)] {
+            XCTAssertTrue(PersistentRecorder.segmentTranscribes(
+                completionMode: mode,
+                presetSnapshot: preset(transcribing: false),
+                draftRoute: preset(transcribing: false)
+            ), "\(mode)")
+        }
+    }
+
+    func test_draftWithAttachedAudioFollowsRouteSwitch() {
+        XCTAssertFalse(PersistentRecorder.segmentTranscribes(
+            completionMode: .captureDraft(attachAudio: true),
+            presetSnapshot: nil,
+            draftRoute: preset(transcribing: false)
+        ))
+        XCTAssertTrue(PersistentRecorder.segmentTranscribes(
+            completionMode: .captureDraft(attachAudio: true),
+            presetSnapshot: nil,
+            draftRoute: preset(transcribing: true)
+        ))
+        XCTAssertTrue(PersistentRecorder.segmentTranscribes(
+            completionMode: .captureDraft(attachAudio: true),
+            presetSnapshot: nil,
+            draftRoute: nil
+        ))
+    }
+
+    func test_draftKeepsAudioWhenRouteTranscriptionIsOff() {
+        XCTAssertTrue(QuickCaptureView.draftRecordingAttachesAudio(
+            presetAudioSaveMode: .off, presetTranscribes: false, override: nil))
+        XCTAssertFalse(QuickCaptureView.draftRecordingAttachesAudio(
+            presetAudioSaveMode: .off, presetTranscribes: true, override: nil))
+        // An explicit per-take choice still wins.
+        XCTAssertFalse(QuickCaptureView.draftRecordingAttachesAudio(
+            presetAudioSaveMode: .off, presetTranscribes: false, override: false))
+    }
+
+    func test_audioOnlyResultIsEmpty() {
+        XCTAssertEqual(PersistentRecorder.audioOnlyResult(modelId: "m", language: "en").text, "")
+    }
+
+    func test_missingSnapshotOrModeTranscribes() {
+        XCTAssertTrue(PersistentRecorder.segmentTranscribes(completionMode: .runVox(flowID: "x"), presetSnapshot: nil))
+        XCTAssertTrue(PersistentRecorder.segmentTranscribes(completionMode: nil, presetSnapshot: preset(transcribing: false)))
+    }
+}

@@ -167,6 +167,8 @@
         <li><a href="#related">Panduan terkait</a></li>
       </ol></nav>
 
+      <p>Masih perlu membuat rekaman? Lihat <a href="/id/blog/record-audio-on-mac/">cara merekam audio di Mac</a>.</p>
+
       <h2 id="built-in">Opsi gratis yang sudah ada di Mac Anda</h2>
       <h3>Memo Suara</h3>
       <p>Halaman Memo Suara Apple menyebutkan Anda dapat mengklik tombol <strong>Transkripsi</strong> saat merekam untuk melihat teks secara langsung, atau pilih rekaman yang sudah selesai lalu klik tombol yang sama. Anda dapat mencari teks di judul atau transkripsi pada daftar rekaman, dan menyalin teks transkrip dengan memilihnya, mengklik sambil menekan Control, lalu memilih <strong>Salin</strong>. Apple menyatakan bahwa jika Anda membuka rekaman yang dibuat di macOS 14 atau lebih lama, atau di perangkat yang tidak mendukung transkripsi, Memo Suara akan mentranskripsikannya secara otomatis, dan bahwa transkripsi audio tidak tersedia di semua negara atau wilayah.</p>
@@ -188,7 +190,7 @@
             <tr><th scope="row">Apa yang berjalan di Mac</th><td>Tidak didokumentasikan</td><td>Tidak didokumentasikan</td><td>Transkripsi, dengan model Whisper atau Parakeet yang Anda unduh</td></tr>
             <tr><th scope="row">Impor file</th><td>Tidak didokumentasikan</td><td>Tidak didokumentasikan</td><td>Impor Audio… menerima file audio atau film</td></tr>
             <tr><th scope="row">Keluaran Markdown</th><td>Tidak didokumentasikan</td><td>Tidak didokumentasikan</td><td>Ya</td></tr>
-            <tr><th scope="row">Label pembicara</th><td>Tidak didokumentasikan</td><td>Tidak didokumentasikan</td><td>Opsional, dengan Identifikasi Pembicara</td></tr>
+            <tr><th scope="row">Label pembicara</th><td>Tidak didokumentasikan</td><td>Tidak didokumentasikan</td><td>Opsional, dengan Identifikasi Pembicara (lihat <a href="/id/blog/transcribe-interview/">transkripsi wawancara</a>)</td></tr>
             <tr><th scope="row">Biaya</th><td>Bagian dari macOS</td><td>Bagian dari macOS</td><td>15 menit transkripsi gratis dan 10 pengiriman berhasil, lalu pembukaan seumur hidup sekali bayar</td></tr>
           </tbody>
         </table>
@@ -210,7 +212,7 @@
 
       <h2 id="import">Impor dan transkripsikan file</h2>
       <ol>
-        <li><strong>Impor.</strong> Dari bilah menu Vox.md pilih <strong>Impor Audio…</strong>, atau impor atau seret audio ke ruang kerja tangkapan. Dokumentasi menyebutkan file audio dan film diterima, dan diproses dengan transkripsi lokal yang sama seperti rekaman.</li>
+        <li><strong>Impor.</strong> Dari bilah menu Vox.md pilih <strong>Impor Audio…</strong>, atau impor atau seret audio ke ruang kerja Tangkapan. Dokumentasi menyebut file audio dan film diterima, dan diproses dengan transkripsi lokal yang sama seperti rekaman. Khusus untuk file video, lihat <a href="/id/blog/transcribe-video-to-text/">mentranskripsi video ke teks</a>.</li>
         <li><strong>Pilih Tambahkan ke Draf atau Kirim Sekarang.</strong> Dengan <strong>Kirim Sekarang</strong> transkrip dikirim setelah selesai. Dengan <strong>Tambahkan ke Draf</strong> Anda bisa memeriksanya terlebih dahulu. Cocokkan nama, angka, dan tanggal dengan audionya.</li>
         <li><strong>Opsional: Identifikasi Pembicara.</strong> Aktifkan <strong>Identifikasi Pembicara</strong> pada Rute untuk label pembicara anonim berdasarkan upaya terbaik. Model terpisah disiapkan saat pertama kali. Jika tidak dapat berjalan, transkrip biasa tetap disimpan dan alasannya ditampilkan di Pustaka.</li>
         <li><strong>Opsional: mode pemrosesan.</strong> Rute dapat menggunakan Pertahankan Asli, Prosa Rapi, Catatan Rapat, Daftar Tugas, atau Instruksi Khusus. Mode Apple Intelligence memerlukan perangkat keras yang kompatibel dengan macOS 26. Tanpanya, Daftar Tugas dan Catatan Rapat memakai pemformat bawaan, sedangkan Prosa Rapi dan Instruksi Khusus mempertahankan teks asli.</li>
@@ -219,6 +221,7 @@
 
       <h2 id="verify">Periksa catatan Markdown</h2>
       <p>Pilih <strong>Tampilkan Ekspor Terakhir</strong> dari bilah menu, atau temukan entrinya di Pustaka dan tampilkan di Finder, lalu buka file di Obsidian. Jika Anda hanya butuh teksnya, pilih <strong>Copy Last Transcript (salin transkrip terakhir)</strong>. Untuk struktur catatan yang diisi dari rekaman, lihat <a href="/id/blog/obsidian-meeting-notes-template/">generator template catatan rapat</a>.</p>
+      <p>Jika rekaman adalah latihan pidato, tempel transkrip dan panjang rekaman ke <a href="/id/blog/speech-time-calculator/">kalkulator durasi pidato</a> untuk mengukur kata per menit Anda dan durasi bicara naskah Anda pada kecepatan Anda sendiri.</p>
 
       <h2 id="privacy">Apa yang keluar dari Mac Anda</h2>
       <p>Transkripsi berjalan di Mac, dan Vox.md tidak mengirim isi tangkapan ke server Vox.md. Pengunduhan model menghubungi infrastruktur Hugging Face atau FluidAudio. Jika folder tujuan disinkronkan lewat iCloud atau layanan lain, layanan itu menangani file tersebut sesuai ketentuannya sendiri. Lihat <a href="/id/privacy.html">kebijakan privasi</a>.</p>
@@ -242,6 +245,7 @@
         <li><a href="/id/compare/whisper-vs-parakeet/">Whisper atau Parakeet</a></li>
         <li><a href="/id/blog/transcribe-voice-memos-iphone/">Transkripsikan Voice Memos iPhone ke Markdown</a></li>
         <li><a href="/id/blog/obsidian-meeting-notes-template/">Generator templat catatan rapat Obsidian</a></li>
+        <li><a href="/id/blog/transcribe-interview/">Transkripsikan wawancara secara privat, dengan label pembicara</a></li>
         <li><a href="/id/docs/#mac">Dokumentasi Mac</a></li>
       </ul></nav>
     </div>

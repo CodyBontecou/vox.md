@@ -167,6 +167,8 @@
         <li><a href="#related">Verwandte Anleitungen</a></li>
       </ol></nav>
 
+      <p>Du musst die Aufnahme noch machen? Siehe <a href="/de/blog/record-audio-on-mac/">Audio am Mac aufnehmen</a>.</p>
+
       <h2 id="built-in">Kostenlose Optionen, die Ihr Mac schon mitbringt</h2>
       <h3>Sprachmemos</h3>
       <p>Auf Apples Seite zu Sprachmemos steht, dass Sie auf die Taste <strong>Transkription</strong> während der Aufnahme klicken können, um den Text live zu sehen, oder eine fertige Aufnahme auswählen und dieselbe Taste anklicken. Sie können in der Aufnahmeliste nach Text in einem Titel oder in der Transkription suchen und Transkripttext kopieren, indem Sie ihn auswählen, bei gedrückter Control-Taste klicken und wählen <strong>Kopieren</strong>. Laut Apple transkribiert Sprachmemos eine Aufnahme automatisch, wenn Sie eine mit macOS 14 oder früher oder auf einem Gerät ohne Transkriptionsunterstützung erstellte Aufnahme öffnen. Außerdem ist die Audiotranskription nicht in allen Ländern oder Regionen verfügbar.</p>
@@ -188,7 +190,7 @@
             <tr><th scope="row">Was auf dem Mac läuft</th><td>Nicht dokumentiert</td><td>Nicht dokumentiert</td><td>Transkription mit einem Whisper- oder Parakeet-Modell, das Sie herunterladen</td></tr>
             <tr><th scope="row">Dateiimport</th><td>Nicht dokumentiert</td><td>Nicht dokumentiert</td><td>Audio importieren… akzeptiert Audio- oder Filmdateien</td></tr>
             <tr><th scope="row">Markdown-Ausgabe</th><td>Nicht dokumentiert</td><td>Nicht dokumentiert</td><td>Ja</td></tr>
-            <tr><th scope="row">Sprecherbezeichnungen</th><td>Nicht dokumentiert</td><td>Nicht dokumentiert</td><td>Optional, mit „Sprecher identifizieren“</td></tr>
+            <tr><th scope="row">Sprecherbezeichnungen</th><td>Nicht dokumentiert</td><td>Nicht dokumentiert</td><td>Optional, mit Sprecher identifizieren (siehe <a href="/de/blog/transcribe-interview/">Interviewtranskription</a>)</td></tr>
             <tr><th scope="row">Kosten</th><td>Teil von macOS</td><td>Teil von macOS</td><td>15 kostenlose Transkriptionsminuten und 10 erfolgreiche Zustellungen, danach eine einmalige lebenslange Freischaltung</td></tr>
           </tbody>
         </table>
@@ -210,7 +212,7 @@
 
       <h2 id="import">Datei importieren und transkribieren</h2>
       <ol>
-        <li><strong>Importieren.</strong> Wählen Sie in der Vox.md-Menüleiste <strong>Audio importieren…</strong>, oder importieren Sie das Audio in den Erfassungsarbeitsbereich oder ziehen Sie es dorthin. Laut Dokumentation werden Audio- und Filmdateien akzeptiert und durchlaufen dieselbe lokale Transkription wie eine Aufnahme.</li>
+        <li><strong>Importieren.</strong> Wählen Sie in der Vox.md-Menüleiste <strong>Audio importieren…</strong>, oder importieren Sie das Audio bzw. ziehen Sie es in den Erfassungsarbeitsbereich. Laut Dokumentation werden Audio- und Filmdateien akzeptiert und lokal genauso transkribiert wie eine Aufnahme. Für Videodateien siehe <a href="/de/blog/transcribe-video-to-text/">ein Video in Text umwandeln</a>.</li>
         <li><strong>Wählen Sie „Zum Entwurf hinzufügen“ oder „Sofort senden“.</strong> Mit <strong>Sofort senden</strong> wird das Transkript zugestellt, sobald es fertig ist. Mit <strong>Zum Entwurf hinzufügen</strong> können Sie ihn zuerst prüfen. Vergleichen Sie Namen, Zahlen und Daten mit dem Audio.</li>
         <li><strong>Optional: Sprecher identifizieren.</strong> Aktiviere <strong>Sprecher identifizieren</strong> in der Route ein, um anonyme Sprecherbezeichnungen nach bestem Bemühen zu erhalten. Beim ersten Mal wird ein separates Modell vorbereitet. Kann es nicht ausgeführt werden, bleibt das einfache Transkript erhalten, und der Grund erscheint in der Mediathek.</li>
         <li><strong>Optional: Verarbeitungsmodus.</strong> Eine Route kann Original behalten, Überarbeiteter Text, Besprechungsnotizen, Todo-Checkliste oder Benutzerdefinierte Anweisung verwenden. Die Modi von Apple Intelligence benötigen kompatible Hardware mit macOS 26. Ohne sie verwenden Todo-Checkliste und Besprechungsnotizen integrierte Formatierer, und Überarbeiteter Text und Benutzerdefinierte Anweisung behalten den Originaltext.</li>
@@ -219,6 +221,7 @@
 
       <h2 id="verify">Markdown-Notiz prüfen</h2>
       <p>Wähle <strong>Letzten Export anzeigen</strong> in der Menüleiste, oder suchen Sie den Eintrag in der Mediathek und zeigen Sie ihn im Finder an; öffnen Sie dann die Datei in Obsidian. Wenn Sie nur den Text brauchen, wählen Sie <strong>Letztes Transkript kopieren</strong>. Eine Notizstruktur, die Sie aus einer Aufnahme füllen können, finden Sie im <a href="/de/blog/obsidian-meeting-notes-template/">Generator für Besprechungsnotizen-Vorlagen</a>.</p>
+      <p>Wenn die Aufnahme eine Probe eines Vortrags ist, füge das Transkript und die Aufnahmelänge in den <a href="/de/blog/speech-time-calculator/">Redezeit-Rechner</a> , um deine Wörter pro Minute und die Sprechzeit deines Skripts in deinem eigenen Tempo zu messen.</p>
 
       <h2 id="privacy">Was Ihren Mac verlässt</h2>
       <p>Die Transkription läuft auf dem Mac, und Vox.md sendet keine Erfassungsinhalte an Vox.md-Server. Modell-Downloads kontaktieren die Infrastruktur von Hugging Face oder FluidAudio. Wenn der Zielordner über iCloud oder einen anderen Dienst synchronisiert wird, verarbeitet dieser Dienst die Datei nach seinen eigenen Bedingungen. Siehe die <a href="/de/privacy.html">Datenschutzerklärung</a>.</p>
@@ -242,6 +245,7 @@
         <li><a href="/de/compare/whisper-vs-parakeet/">Whisper vs. Parakeet</a></li>
         <li><a href="/de/blog/transcribe-voice-memos-iphone/">iPhone-Sprachmemos in Markdown transkribieren</a></li>
         <li><a href="/de/blog/obsidian-meeting-notes-template/">Generator für Obsidian-Vorlagen für Besprechungsnotizen</a></li>
+        <li><a href="/de/blog/transcribe-interview/">Ein Interview privat transkribieren, mit Sprecherlabels</a></li>
         <li><a href="/de/docs/#mac">Mac-Dokumentation</a></li>
       </ul></nav>
     </div>

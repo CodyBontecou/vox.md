@@ -174,6 +174,7 @@
         <li><strong>Accès à l’enregistrement de l’écran et de l’audio du système.</strong> La capture de réunion utilise le <a href="https://developer.apple.com/documentation/screencapturekit" target="_blank" rel="noopener">framework ScreenCaptureKit</a> d’Apple pour enregistrer l’audio de l’app choisie. Si macOS le demande, autorisez-le. Vous pouvez vérifier les deux autorisations dans Réglages Système → Confidentialité et sécurité ; Apple explique ce réglage dans <a href="https://support.apple.com/guide/mac-help/control-access-screen-system-audio-recording-mchld6aa7d23/mac" target="_blank" rel="noopener">Contrôler l’accès à l’enregistrement de l’écran et de l’audio du système sur Mac</a>.</li>
         <li><strong>Un modèle Whisper ou Parakeet téléchargé.</strong> Ouvrez l’écran Modèles sur Mac, téléchargez un modèle et définissez la langue de transcription. La <a href="/fr/docs/#models">référence des modèles</a> répertorie les tailles et les langues, et <a href="/fr/compare/whisper-vs-parakeet/">Whisper ou Parakeet</a> vous aide à choisir. Whisper s’exécute via <a href="https://github.com/ggml-org/whisper.cpp" target="_blank" rel="noopener">whisper.cpp</a> et Parakeet via <a href="https://github.com/FluidInference/FluidAudio" target="_blank" rel="noopener">FluidAudio</a>.</li>
         <li><strong>Un dossier accessible en écriture</strong>, comme votre coffre Obsidian ou un dossier <code>Meetings</code> qu’il contient.</li>
+        <li>Vous avez juste besoin d’un simple enregistrement ? Voir <a href="/fr/blog/record-audio-on-mac/">comment enregistrer de l’audio sur un Mac</a>.</li>
       </ul>
       <p>Le traitement facultatif par Apple Intelligence, que le mode Notes de réunion utilise pour restructurer la transcription, nécessite un Mac compatible sous macOS 26. Sans lui, Vox.md utilise à la place un formateur déterministe, et le parcours fonctionne donc quand même.</p>
 
@@ -261,6 +262,7 @@ I’ll take the screenshots by Friday.</code></pre>
         <p>15 minutes de transcription gratuites · aucun compte requis · un déblocage à vie</p>
       </section>
       <nav class="toc" aria-label="Guides associés" id="related"><div class="toc-title">Poursuivre la configuration</div><ul>
+        <li><a href="/fr/blog/transcribe-interview/">Vous enregistrez un entretien en tête-à-tête ? Méthode, consentement et relecture</a></li>
         <li><a href="/fr/docs/#mac-meeting">Référence de la capture de réunions sur Mac</a></li>
         <li><a href="/fr/docs/#models">Modèles vocaux et langues</a></li>
         <li><a href="/fr/blog/obsidian-capture-templates/">Recettes de chemins et de modèles</a></li>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ta" dir="ltr" data-search-section="பிரிவு" data-search-guide="வழிகாட்டி" data-search-empty="“{query}” என்பதற்குப் பொருத்தங்கள் இல்லை">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iPhone அல்லது Mac-இல் வீடியோவைப் பதிவேற்றாமல் உரையாக்குங்கள் | Vox.md</title>
+  <meta name="description" content="உங்களிடம் ஏற்கனவே உள்ள MP4 அல்லது MOV-ஐ iPhone, iPad அல்லது Mac-இல் Markdown குறிப்பாக மாற்றுங்கள். வீடியோவை Vox.md-இல் இறக்குமதி செய்து, சாதனத்திலேயே Apple Speech, Whisper அல்லது Parakeet மூலம் உரையாக்கி, உரையை மதிப்பாய்வு செய்து அனுப்புங்கள்.">
+  <link rel="canonical" href="https://vox.isolated.tech/ta/blog/transcribe-video-to-text/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="மொழி மாதிரிகளுக்கான Vox.md ஆவணங்கள்">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="iPhone அல்லது Mac-இல் வீடியோவைப் பதிவேற்றாமல் உரையாக்குங்கள்">
+  <meta property="og:description" content="உங்களிடம் ஏற்கனவே உள்ள MP4 அல்லது MOV-ஐ iPhone, iPad அல்லது Mac-இல் Markdown குறிப்பாக மாற்றுங்கள். வீடியோவை Vox.md-இல் இறக்குமதி செய்து, சாதனத்திலேயே Apple Speech, Whisper அல்லது Parakeet மூலம் உரையாக்கி, உரையை மதிப்பாய்வு செய்து அனுப்புங்கள்.">
+  <meta property="og:url" content="https://vox.isolated.tech/ta/blog/transcribe-video-to-text/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-25">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="iPhone அல்லது Mac-இல் வீடியோவைப் பதிவேற்றாமல் உரையாக்குங்கள்">
+  <meta name="twitter:description" content="உங்களிடம் ஏற்கனவே உள்ள MP4 அல்லது MOV-ஐ iPhone, iPad அல்லது Mac-இல் Markdown குறிப்பாக மாற்றுங்கள். வீடியோவை Vox.md-இல் இறக்குமதி செய்து, சாதனத்திலேயே Apple Speech, Whisper அல்லது Parakeet மூலம் உரையாக்கி, உரையை மதிப்பாய்வு செய்து அனுப்புங்கள்.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "iPhone அல்லது Mac-இல் வீடியோவைப் பதிவேற்றாமல் உரையாக்குங்கள்",
+  "description": "உங்களிடம் ஏற்கனவே உள்ள MP4 அல்லது MOV-ஐ iPhone, iPad அல்லது Mac-இல் Markdown குறிப்பாக மாற்றுங்கள். வீடியோவை Vox.md-இல் இறக்குமதி செய்து, சாதனத்திலேயே Apple Speech, Whisper அல்லது Parakeet மூலம் உரையாக்கி, உரையை மதிப்பாய்வு செய்து அனுப்புங்கள்.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-25",
+  "dateModified": "2026-11-25",
+  "mainEntityOfPage": "https://vox.isolated.tech/ta/blog/transcribe-video-to-text/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "ta",
+  "name": "iPhone அல்லது Mac-இல் வீடியோவைப் பதிவேற்றாமல் உரையாக்குங்கள் | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/ta/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "வழிகாட்டிகள்",
+      "item": "https://vox.isolated.tech/ta/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "iPhone அல்லது Mac-இல் வீடியோவைப் பதிவேற்றாமல் உரையாக்குங்கள்",
+      "item": "https://vox.isolated.tech/ta/blog/transcribe-video-to-text/"
+    }
+  ],
+  "inLanguage": "ta",
+  "name": "iPhone அல்லது Mac-இல் வீடியோவைப் பதிவேற்றாமல் உரையாக்குங்கள் | Vox.md",
+  "description": "உங்களிடம் ஏற்கனவே உள்ள MP4 அல்லது MOV-ஐ iPhone, iPad அல்லது Mac-இல் Markdown குறிப்பாக மாற்றுங்கள். வீடியோவை Vox.md-இல் இறக்குமதி செய்து, சாதனத்திலேயே Apple Speech, Whisper அல்லது Parakeet மூலம் உரையாக்கி, உரையை மதிப்பாய்வு செய்து அனுப்புங்கள்."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-video-to-text/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">வழிகாட்டிக்குச் செல்லவும்</a>
+<nav aria-label="முதன்மை வழிசெலுத்தல்">
+  <div class="nav-inner">
+    <a href="/ta/" class="logo" aria-label="Vox.md முகப்பு">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/ta/#how">இயங்கும் விதம்</a></li>
+      <li><a href="/ta/docs/">ஆவணங்கள்</a></li>
+      <li><a href="/ta/blog/">வழிகாட்டிகள்</a></li>
+      <li><a href="/ta/compare/">ஒப்பிடவும்</a></li>
+      <li><a href="/ta/privacy.html">தனியுரிமை</a></li>
+      <li><a href="/ta/terms.html">விதிமுறைகள்</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_ta_3e033cb53350">Vox.md பதிவிறக்கவும்</a>
+  <details class="language-switcher"><summary>மொழி</summary><ul><li><a href="/blog/transcribe-video-to-text/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-video-to-text/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-video-to-text/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-video-to-text/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-video-to-text/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-video-to-text/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-video-to-text/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-video-to-text/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-video-to-text/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-video-to-text/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-video-to-text/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-video-to-text/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-video-to-text/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-video-to-text/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-video-to-text/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-video-to-text/" lang="ta" hreflang="ta" aria-current="page">தமிழ்</a></li><li><a href="/th/blog/transcribe-video-to-text/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-video-to-text/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-video-to-text/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-video-to-text/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-video-to-text/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-video-to-text/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-video-to-text/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">வீடியோ உரையாக · iPhone · iPad · Mac</div>
+        <h1 class="hero-title">iPhone அல்லது Mac-இல் வீடியோவைப் பதிவேற்றாமல் உரையாக்குங்கள்</h1>
+        <p class="hero-subtitle">வீடியோ ஏற்கனவே உங்கள் தொலைபேசியில் அல்லது Mac-இல் உள்ளது, எனவே அங்கேயே உரையாக்குங்கள். பதிவேற்றம் இல்லை; முடிவு நகலெடுக்கும் உரைப்பெட்டி அல்ல, உங்களுக்குச் சொந்தமான Markdown குறிப்பு.</p>
+      </div>
+      <aside class="meta-card" aria-label="இவ்வழிகாட்டி பற்றி">
+        <dl>
+          <div><dt>எழுதியவர்</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>புதுப்பிப்பு</dt><dd><time datetime="2026-11-25">2026 நவம்பர் 25</time></dd></div>
+          <div><dt>தேவை</dt><dd>Vox.md: iOS அல்லது iPadOS 17.6+ அல்லது macOS 14+ · Apple Speech கிடைக்காவிட்டால் பதிவிறக்கிய பேச்சு மாதிரி · இலக்கு கோப்புறையுடன் ஒரு வழித்தடம்</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="iPhone அல்லது Mac-இல் வீடியோவைப் பதிவேற்றாமல் உரையாக்குங்கள்">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">சுருக்கமான பதில்</div>
+        <p><strong>iPhone அல்லது iPad:</strong> வீடியோவை கோப்புகளில் வைத்து, Vox.md-ஐத் திறந்து, தட்டவும்: <strong>ஒலி அல்லது வீடியோவை இறக்குமதி செய்</strong> குரல் கட்டுப்பாடுகளில் கோப்பைத் தேர்ந்தெடுத்து, உரையை மதிப்பாய்வு செய்து, பின் அனுப்பு என்பதைத் தட்டவும். <strong>Mac:</strong> தேர்ந்தெடுக்கவும் <strong>ஒலி இறக்குமதி…</strong> மெனு பட்டியில், அல்லது Capture பணியிடத்திலிருந்து கோப்பை இறக்குமதி செய்யவும். எப்படியிருந்தாலும் வீடியோ உங்கள் சாதனத்தில் Apple Speech (தானியங்கி, ஆதரிக்கப்படும் iOS 26 சாதனங்களில), Whisper அல்லது Parakeet மூலம் உரையாக்கப்பட்டு Markdown குறிப்பாகச் சேமிக்கப்படும்.</p>
+      </div>
+      <p><strong>இது செய்யாதவை.</strong> Vox.md YouTube, TikTok அல்லது பிற வீடியோ இணைப்புகளை ஏற்காது, SRT அல்லது VTT வசனங்களையும் உருவாக்காது. உங்களிடம் ஏற்கனவே வசனக் கோப்பு இருந்து சுத்தமான உரை மட்டும் வேண்டுமெனில், இதைப் பயன்படுத்தவும்: <a href="/ta/blog/srt-vtt-to-text-markdown/">SRT மற்றும் VTT மாற்றி</a>. Vox.md படிகள் இதைப் பின்பற்றுகின்றன: <a href="/ta/docs/#quick-capture">விரைவான Capture</a> மற்றும் <a href="/ta/docs/#mac">Mac</a> ஆவணங்களும் செயலியின் நடத்தையும்.</p>
+      <nav class="toc" aria-label="இவ்வழிகாட்டியில்"><div class="toc-title">இவ்வழிகாட்டியில்</div><ol>
+        <li><a href="#need">உங்களுக்குத் தேவையானவை</a></li>
+        <li><a href="#iphone">iPhone அல்லது iPad-இல்</a></li>
+        <li><a href="#mac">Mac-இல்</a></li>
+        <li><a href="#models">வீடியோவின் மொழிக்கான மாதிரியைத் தேர்ந்தெடுக்கவும்</a></li>
+        <li><a href="#speakers">ஒன்றுக்கு மேற்பட்ட பேச்சாளர்களா?</a></li>
+        <li><a href="#output">குறிப்பு எப்படி இருக்கும்</a></li>
+        <li><a href="#limits">இது சரியான கருவி அல்லாத சூழல்கள்</a></li>
+        <li><a href="#troubleshooting">சிக்கல் தீர்த்தல்</a></li>
+        <li><a href="#faq">அடிக்கடி கேட்கப்படும் கேள்விகள்</a></li>
+      </ol></nav>
+
+      <h2 id="need">உங்களுக்குத் தேவையானவை</h2>
+      <ul>
+        <li><strong>உரையாக்க உங்களுக்கு உரிமை உள்ள வீடியோ</strong>, எடுத்துக்காட்டாக திரைப் பதிவு, தொலைபேசி வீடியோ, நீங்கள் பதிவு செய்த விரிவுரை அல்லது உரை, அல்லது உங்களுக்குச் சொந்தமான ஏற்றுமதி செய்யப்பட்ட Zoom அல்லது Teams பதிவு.</li>
+        <li><strong>ஒரு MP4 அல்லது MOV கோப்பு.</strong> இந்த வழிகாட்டி உள்ளடக்கும் வடிவங்கள் இவை.</li>
+        <li><strong>இலக்குடன் ஒரு வழித்தடம்</strong>: ஒரு Obsidian vault அல்லது கோப்புகள் கோப்புறை. பார்க்கவும்: <a href="/ta/docs/#presets">வழித்தடங்கள்</a> ஆவணங்களில்.</li>
+        <li><strong>தயாராக உள்ள உரையாக்கப் பின்புலம்.</strong> தானியங்கி முறை ஆதரிக்கப்படும் iOS 26 சாதனம் மற்றும் மொழியில் Apple Speech-ஐப் பயன்படுத்தும்; இல்லையெனில் Whisper அல்லது Parakeet-ஐப் பதிவிறக்கவும். பார்க்கவும்: <a href="/ta/docs/#models">மாதிரிகள்</a>.</li>
+        <li><strong>இலவச அளவு.</strong> இலவச அடுக்கில் 15 நிமிட உரையாக்கமும் 10 வெற்றிகரமான Capture விநியோகங்களும் அடங்கும்; ஒருமுறை செலுத்தும் வாழ்நாள் திறப்பு வரம்பை நீக்குகிறது. பார்க்கவும்: <a href="/ta/docs/#pricing-limits">இலவசப் பயன்பாடும் வாழ்நாள் திறப்பும்</a>; App Store விலையே இறுதியானது.</li>
+      </ul>
+
+      <h2 id="iphone">iPhone அல்லது iPad-இல்</h2>
+      <h3>1. வீடியோவை கோப்புகளில் சேர்க்கவும்</h3>
+      <p>வீடியோ புகைப்படங்களில் இருந்தால் முதலில் கோப்புகளுக்குப் பகிருங்கள். Apple-இன் iPhone பயனர் வழிகாட்டி இதை விளக்குகிறது: <a href="https://support.apple.com/guide/iphone/share-photos-and-videos-iphf28f17237/ios">புகைப்படங்கள் மற்றும் வீடியோக்களைப் பகிர்தல்</a> மேலும் <a href="https://support.apple.com/guide/iphone/files-basics-iphe9d46e90f/ios">கோப்புகள் செயலி</a>; பகிர்வுத் தாளில் கோப்புகளில் சேமி செயலைக் கண்டு ஒரு கோப்புறையைத் தேர்ந்தெடுக்கவும்.</p>
+      <p><strong>முக்கியம்:</strong> புகைப்படங்களிலிருந்து வீடியோவை நேரடியாக Vox.md பகிர்வு நீட்டிப்புக்குப் பகிர்தல் (<strong>Vox.md-க்குப் பிடிக்கவும்</strong>) அதை Capture-இல் கோப்பாக இணைக்கும். இது <strong>இல்லை</strong> உரையாக்குங்கள். வீடியோவை உரையாக்க, செயலியிலுள்ள இந்தக் கட்டுப்பாடு தேவை: <strong>ஒலி அல்லது வீடியோவை இறக்குமதி செய்</strong> கட்டுப்பாடு, இது கோப்புகள் தேர்வியைத் திறக்கும்.</p>
+      <h3>2. இறக்குமதி செய்து உரையாக்குங்கள்</h3>
+      <ol>
+        <li>Vox.md-இன் விரைவான Capture-ஐத் திறந்து விரும்பும் வழித்தடத்தைத் தேர்ந்தெடுக்கவும்.</li>
+        <li>குரல் கட்டுப்பாடுகளில் தேர்ந்தெடுக்கவும்: <strong>வரைவில் சேர்</strong> வழங்கும் முன் உரையை மதிப்பாய்வு செய்ய, அல்லது <strong>உடனடியாக அனுப்பு</strong> உரையாக்கம் முடிந்ததும் அதை வழங்க.</li>
+        <li>தட்டவும் <strong>ஒலி அல்லது வீடியோவை இறக்குமதி செய்</strong> மற்றும் கோப்புகள் தேர்வியில் கோப்பைத் தேர்ந்தெடுக்கவும்.</li>
+        <li>உரையாக்கம் முடியும் வரை காத்திருந்து, பெயர்கள், எண்கள், சொற்களை வீடியோவுடன் ஒப்பிட்டுச் சரிபாருங்கள்.</li>
+        <li>அனுப்பு தட்டவும்.</li>
+      </ol>
+      <p><strong>பெரிய கோப்புகள்.</strong> தொடங்கும் முன் வீடியோ iCloud-இல் மட்டும் இல்லாமல் சாதனத்தில் பதிவிறக்கப்பட்டிருக்க வேண்டும். <a href="/ta/blog/offline-transcription-iphone-markdown/#offline-check">ஆஃப்லைன் வழிகாட்டியின் இறக்குமதி மூலச் சரிபார்ப்பு</a> கோப்பு திறக்கிறதா என உறுதிசெய்வது எப்படி என விளக்குகிறது.</p>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">ஒரு சிறிய வீடியோவில் முயற்சி செய்யுங்கள்.</h2>
+        <p>இலவச அளவு 15 நிமிட உரையாக்கம், சிறிய கிளிப்புக்குப் போதுமானது.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ta_3e033cb53350">Vox.md பெறவும்</a></p>
+      </section>
+
+      <h2 id="mac">Mac-இல்</h2>
+      <p>தேர்வு <strong>ஒலி இறக்குமதி…</strong> Vox.md மெனு பட்டியிலிருந்து, அல்லது Capture பணியிடத்திலிருந்து கோப்பை இறக்குமதி செய்யவும். கோப்பு தேர்வி ஒலி மற்றும் திரைப்படக் கோப்புகளை ஏற்கும். அதன் பிறகான படிகள் இதில் உள்ளவையே: <a href="/ta/blog/transcribe-audio-file-mac/">Mac-இல் ஒலிக் கோப்பை உரைமாற்றம் செய்தல்</a>, எனவே அவை இங்கே மீண்டும் கூறப்படவில்லை.</p>
+      <p><strong>விருப்பம்: ஒலிப்பதிவை மட்டும் வைத்துக்கொள்ளுங்கள்.</strong> QuickTime Player-இல், <strong>கோப்பு → இவ்வாறு ஏற்றுமதி → ஒலி மட்டும்</strong> ஒலிக் கோப்பை உருவாக்கும். Apple-இன் <a href="https://support.apple.com/guide/quicktime-player/export-movies-qtp20e395859/mac">QuickTime Player பயனர் வழிகாட்டி</a> ஏற்றுமதி விருப்பங்களை விவரிக்கிறது. Vox.md-இல் வீடியோவை இறக்குமதி செய்ய இந்தப் படி தேவையில்லை.</p>
+
+      <h2 id="models">வீடியோவின் மொழிக்கான மாதிரியைத் தேர்ந்தெடுக்கவும்</h2>
+      <p><strong>தானியங்கி / Apple Speech.</strong> ஆதரிக்கப்படும் iOS 26 சாதனம் மற்றும் மொழியில் தானியங்கி முறை Apple Speech-ஐ விரும்பும். நீங்கள் வெளிப்படையாகப் பதிவிறக்கிய உள்ளூர் மாதிரிக்கு மட்டுமே அது திரும்பும்.</p>
+      <p><strong>Whisper.</strong> அளவுகள் Tiny (75 MB) முதல் Large v3 Turbo (1.6 GB) வரை உள்ளன. பெரிய மாதிரிகள் அதிக சேமிப்பிடத்தையும் செயலாக்கத்தையும் எடுக்கும். <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a> என்பது Whisper மாதிரிகளுக்கான திறந்த மூல இயக்கநேரம்.</p>
+      <p><strong>Parakeet.</strong> Parakeet v2 (சுமார் 800 MB) ஆங்கிலத்திற்கானது. Parakeet v3 (சுமார் 800 MB) 25 மொழிகளை ஆதரிக்கும். அவை இதன் வழியாக இயங்கும்: <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a>.</p>
+      <p>இவற்றில் தேர்வு செய்ய, படிக்கவும்: <a href="/ta/compare/whisper-vs-parakeet/">Whisper எதிர் Parakeet</a> மேலும் உங்கள் சொந்த வீடியோவின் சிறிய கிளிப்பில் சோதியுங்கள். விவரங்கள் இதில் உள்ளன: <a href="/ta/docs/#models">மாதிரிகள் ஆவணம்</a>.</p>
+
+      <h2 id="speakers">ஒன்றுக்கு மேற்பட்ட பேச்சாளர்களா?</h2>
+      <p>இயக்கவும் <strong>Speakers அறிமுகங்கள்</strong> வழித்தடத்தில். இது விருப்பத்தேர்வு, ஆதரிக்கப்படும் இறக்குமதிகளில் வேலை செய்யும்; “Speaker 1”, “Speaker 2” போன்ற பெயர் குறிப்பிடாத, இயன்றவரை லேபிள்களைச் சேர்க்கும், அவற்றை நீங்களே மறுபெயரிடலாம். லேபிளிடல் தோல்வியடைந்தால் சாதாரண உரைப்பதிவு வைக்கப்படும், நூலகம் காரணத்தைக் காட்டும். பார்க்கவும்: <a href="/ta/blog/transcribe-interview/">நேர்காணலை தனிப்பட்ட முறையில் உரையாக்குங்கள்</a>.</p>
+
+      <h2 id="output">குறிப்பு எப்படி இருக்கும்</h2>
+      <p>குறிப்பின் அமைப்பு உங்கள் வழித்தடத்திலிருந்து வருகிறது: ஒரு தலைப்பு, ஒரு முன்னொட்டு அல்லது நேரமுத்திரை, பின்னர் உரைப்பதிவு. விளக்கத்திற்கான எடுத்துக்காட்டு (கற்பனை உரை):</p>
+<pre class="guide-code"><code>## Video transcript
+10:42 AM 2026-11-25
+
+Welcome to the walkthrough. First we open the settings screen.</code></pre>
+      <p>ஒரு வழித்தடம் மூலத்தை வைத்திரு, செம்மையான உரை, கூட்டக் குறிப்புகள், பணி சரிபார்ப்புப் பட்டியல் அல்லது தனிப்பயன் வழிமுறை ஆகியவற்றைப் பயன்படுத்தலாம். Apple Intelligence முறைகளுக்குப் பொருந்தும் வன்பொருள் தேவை. அது இல்லாவிட்டால், பணி சரிபார்ப்புப் பட்டியலும் கூட்டக் குறிப்புகளும் உள்ளமைந்த வடிவமைப்பிகளைப் பயன்படுத்தும்; செம்மையான உரை அசல் உரையையே வைத்திருக்கும். வீடியோவில் உரையைப் பயிற்சி செய்தால், உரைப்பதிவை இதில் ஒட்டவும்: <a href="/ta/blog/speech-time-calculator/">பேச்சு நேரக் கணிப்பான்</a> உங்கள் வேகத்தைச் சரிபார்க்க.</p>
+
+      <h2 id="limits">இது சரியான கருவி அல்லாத சூழல்கள்</h2>
+      <ul>
+        <li><strong>இணைப்புகள் இல்லை.</strong> Vox.md YouTube, TikTok அல்லது பிற வீடியோ இணைப்புகளை ஏற்காது. உங்களுக்குக் கோப்பே தேவை.</li>
+        <li><strong>வசனங்கள் இல்லை.</strong> இது உரையைச் சேமிக்கும், நேரக்குறியுடன் கூடிய SRT அல்லது VTT கோப்புகளை அல்ல. உங்களிடம் உள்ள வசனக் கோப்புகளைச் சுத்தம் செய்ய, இதைப் பயன்படுத்தவும்: <a href="/ta/blog/srt-vtt-to-text-markdown/">SRT மற்றும் VTT மாற்றி</a>.</li>
+        <li><strong>அனுமதி.</strong> உங்களுக்குச் சொந்தமான அல்லது பயன்படுத்த அனுமதி உள்ள வீடியோக்களை மட்டுமே உரையாக்குங்கள்; பதிவு செய்யப்பட்டவர்களிடம் ஒப்புதல் பெறுங்கள்.</li>
+      </ul>
+
+      <h2 id="troubleshooting">சிக்கல் தீர்த்தல்</h2>
+      <ul>
+        <li><strong>இறக்குமதி சாம்பல் நிறத்தில் உள்ளது அல்லது மறுக்கப்படுகிறது.</strong> முதலில் தற்போதைய பதிவை முடிக்கவும். இலவச அளவு தீர்ந்திருந்தால் வாழ்நாள் திறப்பு தேவை.</li>
+        <li><strong>கோப்பு திறக்கவில்லை.</strong> அது சாதனத்தில் பதிவிறக்கப்பட்டுள்ளதா, iCloud-இல் மட்டும் இல்லையா என உறுதிசெய்யவும்.</li>
+        <li><strong>உரைப்படி இல்லை.</strong> மாதிரி முழுமையாகப் பதிவிறக்கப்பட்டு தேர்ந்தெடுக்கப்பட்டுள்ளதா எனச் சரிபார்க்கவும்.</li>
+        <li><strong>தவறான மொழி.</strong> உரையாக்க மொழியை அமைக்கவும், அல்லது Parakeet v2 (ஆங்கிலம்) தேர்ந்தெடுக்கப்பட்டிருந்தால் Parakeet v3 அல்லது Whisper-ஐத் தேர்ந்தெடுக்கவும்.</li>
+      </ul>
+      <p>மேலும் தீர்வுகள்: <a href="/ta/docs/#troubleshooting">ஆவணங்களின் சிக்கல் தீர்த்தல்</a>.</p>
+
+      <h2 id="faq">அடிக்கடி கேட்கப்படும் கேள்விகள்</h2>
+      <h3>இது இலவசமா?</h3>
+      <p>இலவச அடுக்கில் 15 நிமிட உரையாக்கமும் 10 வெற்றிகரமான விநியோகங்களும் அடங்கும். ஒருமுறை செலுத்தும் வாழ்நாள் திறப்பு வரம்பை நீக்குகிறது.</p>
+      <h3>வீடியோ பதிவேற்றப்படுமா?</h3>
+      <p>இல்லை. Capture உள்ளடக்கம் Vox.md சேவையகங்களுக்கு அனுப்பப்படாது; உரையாக்கம் உங்கள் சாதனத்திலேயே நடக்கும். மாதிரிப் பதிவிறக்கங்கள் Hugging Face-ஐத் தொடர்புகொள்ளும். பார்க்கவும்: <a href="/ta/privacy.html">தனியுரிமைக் கொள்கை</a>.</p>
+      <h3>YouTube வீடியோவை உரையாக்க முடியுமா?</h3>
+      <p>இல்லை. Vox.md இணைப்புகளை ஏற்காது.</p>
+      <h3>வசனங்களை உருவாக்குமா?</h3>
+      <p>இல்லை. இது ஒரு Markdown குறிப்பை உருவாக்கும், SRT அல்லது VTT கோப்புகளை அல்ல.</p>
+      <h3>எந்த வடிவங்கள்?</h3>
+      <p>இந்த வழிகாட்டி MP4 மற்றும் MOV-ஐ உள்ளடக்குகிறது.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">வீடியோவை உங்களுக்குச் சொந்தமான குறிப்பாக மாற்றுங்கள்.</h2>
+        <p>நீங்கள் பயன்படுத்த அனுமதி உள்ள ஒரு சிறிய கிளிப்புடன் தொடங்கி, பின் Markdown கோப்பைத் திறக்கவும்.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ta_3e033cb53350">Vox.md பெறவும்</a></p>
+      </section>
+      <nav class="toc" aria-label="தொடர்புடைய வழிகாட்டிகள்" id="related"><div class="toc-title">தொடரவும்</div><ul>
+        <li><a href="/ta/blog/transcribe-audio-file-mac/">Mac-இல் ஒலிக் கோப்பை உரைமாற்றம் செய்யுங்கள்</a></li>
+        <li><a href="/ta/blog/offline-transcription-iphone-markdown/">iPhone-இல் இணையமின்றி எழுத்தாக்கம்</a></li>
+        <li><a href="/ta/blog/transcribe-interview/">நேர்காணலைத் தனிப்பட்ட முறையில் படியெடுங்கள்</a></li>
+        <li><a href="/ta/blog/transcribe-voice-memos-iphone/">iPhone Voice Memos-ஐ Markdown உரையாக்கவும்</a></li>
+        <li><a href="/ta/blog/srt-vtt-to-text-markdown/">SRT மற்றும் VTT-ஐ உரை அல்லது Markdown ஆக</a></li>
+        <li><a href="/ta/compare/whisper-vs-parakeet/">Whisper எதிர் Parakeet</a></li>
+        <li><a href="/ta/blog/speech-time-calculator/">பேச்சு நேரக் கணிப்பான்</a></li>
+        <li><a href="/ta/docs/#models">மாதிரிகள் ஆவணங்கள்</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ta/">முகப்பு</a></li>
+        <li><a href="/ta/docs/">ஆவணங்கள்</a></li>
+        <li><a href="/ta/blog/">வழிகாட்டிகள்</a></li>
+        <li><a href="/ta/compare/">ஒப்பிடவும்</a></li>
+        <li><a href="/ta/privacy.html">தனியுரிமை</a></li>
+        <li><a href="/ta/terms.html">விதிமுறைகள்</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">ஆதரவு</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ta_3e033cb53350">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · உள்ளூர் குறிப்புகளுக்கு விரைவான பிடிப்பு · பதிவேற்றமில்லை.</div>
+    </div>
+  <details class="language-switcher"><summary>மொழி</summary><ul><li><a href="/blog/transcribe-video-to-text/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-video-to-text/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-video-to-text/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-video-to-text/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-video-to-text/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-video-to-text/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-video-to-text/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-video-to-text/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-video-to-text/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-video-to-text/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-video-to-text/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-video-to-text/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-video-to-text/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-video-to-text/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-video-to-text/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-video-to-text/" lang="ta" hreflang="ta" aria-current="page">தமிழ்</a></li><li><a href="/th/blog/transcribe-video-to-text/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-video-to-text/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-video-to-text/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-video-to-text/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-video-to-text/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-video-to-text/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-video-to-text/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

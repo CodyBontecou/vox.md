@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="vi" dir="ltr" data-search-section="Mục" data-search-guide="Hướng dẫn" data-search-empty="Không khớp “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Công cụ tính thời gian phát biểu: từ số từ sang phút, và tốc độ thực của bạn | Vox.md</title>
+  <meta name="description" content="Công cụ tính thời gian phát biểu miễn phí chạy trong trình duyệt. Đổi kịch bản thành số phút, đổi số phút thành số từ, hoặc đo số từ mỗi phút của chính bạn từ bản chép lời buổi tập. Bỏ qua Markdown. Không có gì được tải lên.">
+  <link rel="canonical" href="https://vox.isolated.tech/vi/blog/speech-time-calculator/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Tài liệu Vox.md về mô hình ngôn ngữ">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Công cụ tính thời gian phát biểu: từ số từ sang phút, và tốc độ thực của bạn">
+  <meta property="og:description" content="Công cụ tính thời gian phát biểu miễn phí chạy trong trình duyệt. Đổi kịch bản thành số phút, đổi số phút thành số từ, hoặc đo số từ mỗi phút của chính bạn từ bản chép lời buổi tập. Bỏ qua Markdown. Không có gì được tải lên.">
+  <meta property="og:url" content="https://vox.isolated.tech/vi/blog/speech-time-calculator/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-25">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Công cụ tính thời gian phát biểu: từ số từ sang phút, và tốc độ thực của bạn">
+  <meta name="twitter:description" content="Công cụ tính thời gian phát biểu miễn phí chạy trong trình duyệt. Đổi kịch bản thành số phút, đổi số phút thành số từ, hoặc đo số từ mỗi phút của chính bạn từ bản chép lời buổi tập. Bỏ qua Markdown. Không có gì được tải lên.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Công cụ tính thời gian phát biểu: từ số từ sang phút, và tốc độ thực của bạn",
+  "description": "Công cụ tính thời gian phát biểu miễn phí chạy trong trình duyệt. Đổi kịch bản thành số phút, đổi số phút thành số từ, hoặc đo số từ mỗi phút của chính bạn từ bản chép lời buổi tập. Bỏ qua Markdown. Không có gì được tải lên.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-25",
+  "dateModified": "2026-11-25",
+  "mainEntityOfPage": "https://vox.isolated.tech/vi/blog/speech-time-calculator/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "vi",
+  "name": "Công cụ tính thời gian phát biểu: từ số từ sang phút, và tốc độ thực của bạn | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/vi/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Hướng dẫn",
+      "item": "https://vox.isolated.tech/vi/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Công cụ tính thời gian phát biểu: từ số từ sang phút, và tốc độ thực của bạn",
+      "item": "https://vox.isolated.tech/vi/blog/speech-time-calculator/"
+    }
+  ],
+  "inLanguage": "vi",
+  "name": "Công cụ tính thời gian phát biểu: từ số từ sang phút, và tốc độ thực của bạn | Vox.md",
+  "description": "Công cụ tính thời gian phát biểu miễn phí chạy trong trình duyệt. Đổi kịch bản thành số phút, đổi số phút thành số từ, hoặc đo số từ mỗi phút của chính bạn từ bản chép lời buổi tập. Bỏ qua Markdown. Không có gì được tải lên."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/speech-time-calculator/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/speech-time-calculator/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Đến hướng dẫn</a>
+<nav aria-label="Điều hướng chính">
+  <div class="nav-inner">
+    <a href="/vi/" class="logo" aria-label="trang chủ Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/vi/#how">Cách hoạt động</a></li>
+      <li><a href="/vi/docs/">Tài liệu</a></li>
+      <li><a href="/vi/blog/">Hướng dẫn</a></li>
+      <li><a href="/vi/compare/">So sánh</a></li>
+      <li><a href="/vi/privacy.html">Quyền riêng tư</a></li>
+      <li><a href="/vi/terms.html">Điều khoản</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_vi_ca19bbc9dfae">Tải Vox.md</a>
+  <details class="language-switcher"><summary>Ngôn ngữ</summary><ul><li><a href="/blog/speech-time-calculator/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/speech-time-calculator/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/speech-time-calculator/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/speech-time-calculator/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/speech-time-calculator/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/speech-time-calculator/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/speech-time-calculator/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/speech-time-calculator/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/speech-time-calculator/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/speech-time-calculator/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/speech-time-calculator/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/speech-time-calculator/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/speech-time-calculator/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/speech-time-calculator/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/speech-time-calculator/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/speech-time-calculator/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/speech-time-calculator/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/speech-time-calculator/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/speech-time-calculator/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/speech-time-calculator/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/speech-time-calculator/" lang="vi" hreflang="vi" aria-current="page">Tiếng Việt</a></li><li><a href="/zh-hans/blog/speech-time-calculator/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/speech-time-calculator/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Công cụ miễn phí</div>
+        <h1 class="hero-title">Công cụ tính thời gian phát biểu: từ số từ sang phút, và tốc độ thực của bạn</h1>
+        <p class="hero-subtitle">Dán kịch bản để biết thời gian nói, tìm xem bao nhiêu từ lấp đầy 3, 5 hoặc 10 phút, hoặc đo tốc độ thực của bạn từ bản chép lời buổi tập. Mọi thứ chạy trên trang này; không có gì được tải lên.</p>
+      </div>
+      <aside class="meta-card" aria-label="Về hướng dẫn này">
+        <dl>
+          <div><dt>Bởi</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Cập nhật</dt><dd><time datetime="2026-11-25">25 tháng 11, 2026</time></dd></div>
+          <div><dt>Yêu cầu</dt><dd>Mọi trình duyệt hiện đại, kể cả Safari trên iPhone. Tùy chọn: Obsidian cho kịch bản, và Vox.md cho iPhone, iPad hoặc Mac để chép lời bản tập ngay trên thiết bị.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Công cụ tính thời gian phát biểu: từ số từ sang phút, và tốc độ thực của bạn">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Trả lời ngắn</div>
+        <p>Với tốc độ lập kế hoạch 130–150 từ mỗi phút, 1.000 từ mất khoảng 7 đến 8 phút (6:40 đến 7:42), và một bài nói 5 phút cần khoảng 650–750 từ. Hai mức tốc độ này là giá trị cài sẵn của trang, không phải mức trung bình đã đo. Hãy tập một lần và đo tốc độ của chính bạn để có con số thực.</p>
+      </div>
+      <p>Phần <a href="#calculator">công cụ tính</a> bên dưới có ba chế độ: từ kịch bản sang thời gian, từ thời gian sang số từ, và đo tốc độ thực của bạn từ bản chép lời buổi tập. Bộ đếm từ đọc Markdown như người nghe nghe thấy, nên tiêu đề, gạch đầu dòng, địa chỉ liên kết, <code>[[wikilinks]]</code> và frontmatter dán từ Obsidian không làm tăng số đếm. Công cụ chạy hoàn toàn trong trang này: văn bản của bạn không bao giờ được tải lên, và trang không gửi yêu cầu mạng nào.</p>
+      <nav class="toc" aria-label="Trong hướng dẫn này"><div class="toc-title">Trong hướng dẫn này</div><ol>
+        <li><a href="#calculator">Công cụ tính: từ kịch bản sang thời gian, từ thời gian sang số từ, tốc độ thực của bạn</a></li>
+        <li><a href="#quick-table">Bảng quy đổi nhanh</a></li>
+        <li><a href="#typical-pace">Tốc độ nói thông thường, kèm nguồn</a></li>
+        <li><a href="#pauses-and-slides">Vì sao bài nói thật dài hơn số từ ÷ WPM</a></li>
+        <li><a href="#measure-your-pace">Đo tốc độ của bạn từ buổi tập</a></li>
+        <li><a href="#vox-md">Tập và chép lời với Vox.md</a></li>
+        <li><a href="#faq">Câu hỏi</a></li>
+      </ol></nav>
+
+      <h2 id="calculator">1. Công cụ tính</h2>
+      <p class="mt-nojs" id="st-nojs">Công cụ tính cần JavaScript. Nếu không có, các bảng và nguồn bên dưới vẫn dùng được làm tài liệu tham khảo.</p>
+      <div class="st-tool" id="st-tool" hidden>
+
+        <section class="st-mode" aria-labelledby="st1-title">
+          <h3 id="st1-title">Kịch bản cần tính giờ</h3>
+          <form id="st1-form" aria-labelledby="st1-title">
+            <fieldset class="mt-group">
+              <legend>Kịch bản của bạn</legend>
+              <label class="mt-field" for="st1-script">Dán kịch bản <textarea id="st1-script" rows="8" spellcheck="false" autocomplete="off" aria-describedby="st1-script-hint"></textarea></label>
+              <p class="mt-hint" id="st1-script-hint">Cần bỏ Markdown trước không? Không cần. Tiêu đề, dấu danh sách, chữ đậm, liên kết, địa chỉ liên kết, <code>[[wikilinks]]</code>, chú thích và frontmatter YAML đều bị bỏ qua, nên văn bản dán từ Obsidian được đếm đúng. Từ có dấu gạch nối chỉ đếm một lần và con số được tính là từ.</p>
+              <label class="mt-field" for="st1-words">Hoặc nhập số từ <input type="number" id="st1-words" inputmode="numeric" min="0" max="1000000" step="1" autocomplete="off" aria-describedby="st1-words-hint"></label>
+              <p class="mt-hint" id="st1-words-hint">Chỉ dùng khi ô kịch bản đang trống.</p>
+              <div class="mt-actions">
+                <button type="button" class="btn-secondary" id="st1-example">Tải ví dụ</button>
+                <button type="button" class="btn-secondary" id="st1-clear">Xóa</button>
+              </div>
+            </fieldset>
+            <fieldset class="mt-group">
+              <legend>Tốc độ</legend>
+              <div class="st-chips" role="group" aria-label="Tốc độ cài sẵn" data-target="st1-wpm">
+                <button type="button" class="st-chip" data-wpm="100">Chậm · 100</button>
+                <button type="button" class="st-chip" data-wpm="130">Trò chuyện · 130</button>
+                <button type="button" class="st-chip" data-wpm="150">Trò chuyện, nhanh nhẹn · 150</button>
+                <button type="button" class="st-chip" data-wpm="170">Nhanh · 170</button>
+              </div>
+              <label class="mt-field" for="st1-wpm">Tốc độ tùy chỉnh, số từ mỗi phút <input type="number" id="st1-wpm" inputmode="numeric" min="40" max="400" step="1" value="130" autocomplete="off" aria-describedby="st1-wpm-hint"></label>
+              <p class="mt-hint" id="st1-wpm-hint">Từ 40 đến 400. Không chắc? <a href="#measure-your-pace">Đo tốc độ của chính bạn</a>.</p>
+            </fieldset>
+            <fieldset class="mt-group">
+              <legend>Quãng nghỉ (tùy chọn)</legend>
+              <label class="mt-field" for="st1-pp">Quãng nghỉ mỗi đoạn, giây <input type="number" id="st1-pp" inputmode="decimal" min="0" max="600" step="any" value="0" autocomplete="off"></label>
+              <label class="mt-field" for="st1-slides">Số slide <input type="number" id="st1-slides" inputmode="numeric" min="0" max="500" step="1" value="0" autocomplete="off"></label>
+              <label class="mt-field" for="st1-ps">Quãng nghỉ mỗi slide, giây <input type="number" id="st1-ps" inputmode="decimal" min="0" max="600" step="any" value="0" autocomplete="off"></label>
+              <p class="mt-hint">Một đoạn là một khối văn bản được ngăn cách bằng một dòng trống. Quãng nghỉ được cộng thêm vào thời gian nói. <a href="#pauses-and-slides">Cách chọn</a>.</p>
+            </fieldset>
+          </form>
+          <p class="mt-hint" id="st1-msg" role="status"></p>
+          <div class="st-result" id="st1-result" hidden>
+            <div class="mt-output-head">
+              <h4 id="st1-result-title">Kết quả</h4>
+              <div class="mt-actions"><button type="button" class="btn-primary" id="st1-copy">Sao chép kết quả</button></div>
+            </div>
+            <p class="st-big" id="st1-total"></p>
+            <p id="st1-detail"></p>
+            <div class="docs-table-wrap">
+              <table class="docs-table" aria-labelledby="st1-result-title">
+                <thead><tr><th scope="col">Tốc độ</th><th scope="col">Tổng thời gian</th></tr></thead>
+                <tbody id="st1-table">
+                  <tr data-wpm="100"><th scope="row">100 từ/phút</th><td></td></tr>
+                  <tr data-wpm="130"><th scope="row">130 từ/phút</th><td></td></tr>
+                  <tr data-wpm="150"><th scope="row">150 từ/phút</th><td></td></tr>
+                  <tr data-wpm="170"><th scope="row">170 từ/phút</th><td></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p class="mt-status" id="st1-status" role="status"></p>
+        </section>
+
+        <section class="st-mode" aria-labelledby="st2-title">
+          <h3 id="st2-title">Từ thời gian sang số từ</h3>
+          <form id="st2-form" aria-labelledby="st2-title">
+            <fieldset class="mt-group">
+              <legend>Độ dài mục tiêu và tốc độ</legend>
+              <div class="st-chips" role="group" aria-label="Độ dài mục tiêu cài sẵn" data-target="st2-minutes">
+                <button type="button" class="st-chip" data-wpm="3">3 phút</button>
+                <button type="button" class="st-chip" data-wpm="5">5 phút</button>
+                <button type="button" class="st-chip" data-wpm="10">10 phút</button>
+                <button type="button" class="st-chip" data-wpm="20">20 phút</button>
+              </div>
+              <label class="mt-field" for="st2-minutes">Độ dài mục tiêu, phút <input type="number" id="st2-minutes" inputmode="decimal" min="0.5" max="600" step="any" value="5" autocomplete="off"></label>
+              <div class="st-chips" role="group" aria-label="Tốc độ cài sẵn" data-target="st2-wpm">
+                <button type="button" class="st-chip" data-wpm="100">Chậm · 100</button>
+                <button type="button" class="st-chip" data-wpm="130">Trò chuyện · 130</button>
+                <button type="button" class="st-chip" data-wpm="150">Trò chuyện, nhanh nhẹn · 150</button>
+                <button type="button" class="st-chip" data-wpm="170">Nhanh · 170</button>
+              </div>
+              <label class="mt-field" for="st2-wpm">Tốc độ tùy chỉnh, số từ mỗi phút <input type="number" id="st2-wpm" inputmode="numeric" min="40" max="400" step="1" value="130" autocomplete="off"></label>
+              <label class="mt-field" for="st2-reserve">Thời gian dành cho quãng nghỉ và chuyển slide, tính bằng giây (tùy chọn) <input type="number" id="st2-reserve" inputmode="decimal" min="0" max="36000" step="any" value="0" autocomplete="off"></label>
+            </fieldset>
+          </form>
+          <p class="mt-hint" id="st2-msg" role="status"></p>
+          <div class="st-result" id="st2-result" hidden>
+            <div class="mt-output-head">
+              <h4 id="st2-result-title">Kết quả</h4>
+              <div class="mt-actions"><button type="button" class="btn-primary" id="st2-copy">Sao chép kết quả</button></div>
+            </div>
+            <p class="st-big" id="st2-total"></p>
+            <p id="st2-detail"></p>
+            <div class="docs-table-wrap">
+              <table class="docs-table" aria-labelledby="st2-result-title">
+                <thead><tr><th scope="col">Tốc độ</th><th scope="col">Số từ cần viết</th></tr></thead>
+                <tbody id="st2-table">
+                  <tr data-wpm="100"><th scope="row">100 từ/phút</th><td></td></tr>
+                  <tr data-wpm="130"><th scope="row">130 từ/phút</th><td></td></tr>
+                  <tr data-wpm="150"><th scope="row">150 từ/phút</th><td></td></tr>
+                  <tr data-wpm="170"><th scope="row">170 từ/phút</th><td></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p class="mt-status" id="st2-status" role="status"></p>
+        </section>
+
+        <section class="st-mode" aria-labelledby="st3-title">
+          <h3 id="st3-title">Đo tốc độ thực của bạn</h3>
+          <form id="st3-form" aria-labelledby="st3-title">
+            <fieldset class="mt-group">
+              <legend>Buổi tập của bạn</legend>
+              <label class="mt-field" for="st3-transcript">Dán bản chép lời buổi tập của bạn <textarea id="st3-transcript" rows="8" spellcheck="false" autocomplete="off"></textarea></label>
+              <label class="mt-field" for="st3-duration">Bản ghi âm dài bao lâu, mm:ss <input type="text" id="st3-duration" inputmode="numeric" placeholder="4:35" autocomplete="off" aria-describedby="st3-duration-hint"></label>
+              <p class="mt-hint" id="st3-duration-hint">Phút và giây, như 4:35. Với bản ghi âm dài hơn một giờ, dùng h:mm:ss, như 1:04:35. Dùng độ dài của toàn bộ bản ghi âm, kể cả quãng nghỉ.</p>
+            </fieldset>
+            <fieldset class="mt-group">
+              <legend>Kịch bản của bạn</legend>
+              <label class="mt-field" for="st3-script-words">Số từ trong kịch bản bạn sẽ trình bày <input type="number" id="st3-script-words" inputmode="numeric" min="0" max="1000000" step="1" autocomplete="off" aria-describedby="st3-script-hint"></label>
+              <p class="mt-hint" id="st3-script-hint">Tùy chọn. Nhập một số, hoặc sao chép số từ kịch bản ở công cụ tính đầu tiên.</p>
+              <div class="mt-actions">
+                <button type="button" class="btn-secondary" id="st3-use-count">Dùng số từ của công cụ tính đầu tiên</button>
+                <button type="button" class="btn-secondary" id="st3-example">Tải ví dụ</button>
+                <button type="button" class="btn-secondary" id="st3-clear">Xóa</button>
+              </div>
+            </fieldset>
+          </form>
+          <p class="mt-hint" id="st3-msg" role="status"></p>
+          <div class="st-result" id="st3-result" hidden>
+            <div class="mt-output-head">
+              <h4 id="st3-result-title">Kết quả</h4>
+              <div class="mt-actions"><button type="button" class="btn-primary" id="st3-copy">Sao chép kết quả</button></div>
+            </div>
+            <p class="st-big" id="st3-total"></p>
+            <p id="st3-detail"></p>
+            <div class="docs-table-wrap">
+              <table class="docs-table" aria-labelledby="st3-result-title">
+                <thead><tr><th scope="col">Giá trị cài sẵn</th><th scope="col">So sánh tốc độ của bạn</th></tr></thead>
+                <tbody id="st3-table">
+                  <tr data-wpm="100"><th scope="row">100 từ/phút</th><td></td></tr>
+                  <tr data-wpm="130"><th scope="row">130 từ/phút</th><td></td></tr>
+                  <tr data-wpm="150"><th scope="row">150 từ/phút</th><td></td></tr>
+                  <tr data-wpm="170"><th scope="row">170 từ/phút</th><td></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p id="st3-script"></p>
+          </div>
+          <p class="mt-status" id="st3-status" role="status"></p>
+        </section>
+
+        <div hidden id="st-messages">
+          <span data-message="waiting1">Dán kịch bản hoặc nhập số từ để xem thời gian.</span>
+          <span data-message="bad-wpm">Chọn tốc độ từ 40 đến 400 từ mỗi phút.</span>
+          <span data-message="bad-words">Nhập số từ từ 0 đến 1.000.000.</span>
+          <span data-message="bad-pause">Quãng nghỉ phải nằm trong khoảng từ 0 đến 600 giây.</span>
+          <span data-message="bad-slides">Nhập số slide là số nguyên từ 0 đến 500.</span>
+          <span data-message="need-text">Quãng nghỉ mỗi đoạn được tính từ các đoạn trong kịch bản đã dán, nên không được cộng vào số từ nhập tay.</span>
+          <span data-message="using-text">Số từ lấy từ kịch bản của bạn. Số đã nhập bị bỏ qua khi ô kịch bản có văn bản.</span>
+          <span data-message="r1-total">Tổng thời gian ở {wpm} WPM: {time}</span>
+          <span data-message="r1-detail">{words} từ trong {paragraphs} đoạn. Nói {speech}, quãng nghỉ {pauses}.</span>
+          <span data-message="r1-detail-typed">{words} từ. Nói {speech}, quãng nghỉ {pauses}.</span>
+          <span data-message="bad-minutes">Nhập độ dài mục tiêu từ 0,5 đến 600 phút.</span>
+          <span data-message="bad-reserve">Thời gian dành cho quãng nghỉ phải nằm trong khoảng từ 0 đến 36.000 giây.</span>
+          <span data-message="no-room">Thời gian dành cho quãng nghỉ đã chiếm hết độ dài mục tiêu. Hãy giảm bớt để còn thời gian nói.</span>
+          <span data-message="r2-total">Khoảng {words} từ cho {minutes} phút ở {wpm} WPM</span>
+          <span data-message="r2-detail">Qua các giá trị cài sẵn, 100–170 WPM: {low}–{high} từ. Ở 130–150 WPM: {a}–{b} từ. Thời gian nói {speaking}, quãng nghỉ {pauses}.</span>
+          <span data-message="bad-duration">Nhập độ dài bản ghi âm theo dạng phút:giây, như 4:35, hoặc giờ:phút:giây, như 1:04:35.</span>
+          <span data-message="zero-duration">Độ dài bản ghi âm không thể bằng 0. Hãy nhập bản ghi âm dài bao lâu.</span>
+          <span data-message="no-transcript">Dán bản chép lời buổi tập của bạn để đo tốc độ.</span>
+          <span data-message="pace-out-of-range">Con số đó tương đương {wpm} từ mỗi phút, nằm ngoài khoảng 40–400. Hãy kiểm tra xem bản chép lời và độ dài bản ghi âm có khớp nhau không.</span>
+          <span data-message="r3-total">Tốc độ bạn đã đo: {wpm} WPM</span>
+          <span data-message="r3-detail">{words} từ trong {time}.</span>
+          <span data-message="r3-faster">nhanh hơn {pct}%</span>
+          <span data-message="r3-slower">chậm hơn {pct}%</span>
+          <span data-message="r3-same">gần như nhau</span>
+          <span data-message="r3-script">Kịch bản {words} từ của bạn ở {wpm} WPM: {time}</span>
+          <span data-message="r3-pauses">Quãng nghỉ đã nằm sẵn trong bản ghi âm nên không cộng thêm.</span>
+          <span data-message="copied">Đã sao chép vào clipboard.</span>
+          <span data-message="copy-failed">Sao chép không thành công. Hãy chọn văn bản và tự sao chép.</span>
+          <span data-message="loaded">Đã tải ví dụ.</span>
+          <span data-message="cleared">Đã xóa.</span>
+          <span data-message="no-count">Công cụ tính đầu tiên chưa có số từ.</span>
+          <span data-message="count-used">Số từ được sao chép từ công cụ tính đầu tiên.</span>
+        </div>
+      </div>
+
+      <h2 id="quick-table">2. Bảng quy đổi nhanh</h2>
+      <p>Các bảng này dùng cùng công thức với công cụ tính, không có quãng nghỉ: giây = số từ ÷ WPM × 60, làm tròn đến giây gần nhất, và số từ = số phút × WPM, làm tròn đến từ gần nhất. 130 và 150 WPM là giá trị lập kế hoạch cài sẵn, không phải mức trung bình; xem <a href="#typical-pace">tốc độ nói thông thường</a> để có các con số kèm nguồn.</p>
+      <h3>Từ số phút sang số từ</h3>
+      <div class="docs-table-wrap">
+        <table class="docs-table" id="table-minutes">
+          <thead><tr><th scope="col">Độ dài bài nói</th><th scope="col">Số từ ở 130 WPM</th><th scope="col">Số từ ở 150 WPM</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">1 phút</th><td>130</td><td>150</td></tr>
+            <tr><th scope="row">2 phút</th><td>260</td><td>300</td></tr>
+            <tr><th scope="row">3 phút</th><td>390</td><td>450</td></tr>
+            <tr><th scope="row">5 phút</th><td>650</td><td>750</td></tr>
+            <tr><th scope="row">7 phút</th><td>910</td><td>1,050</td></tr>
+            <tr><th scope="row">10 phút</th><td>1,300</td><td>1,500</td></tr>
+            <tr><th scope="row">15 phút</th><td>1,950</td><td>2,250</td></tr>
+            <tr><th scope="row">20 phút</th><td>2,600</td><td>3,000</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Từ số từ sang phút</h3>
+      <div class="docs-table-wrap">
+        <table class="docs-table" id="table-words">
+          <thead><tr><th scope="col">Số từ</th><th scope="col">Thời gian ở 130 WPM</th><th scope="col">Thời gian ở 150 WPM</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">500 từ</th><td>3:51</td><td>3:20</td></tr>
+            <tr><th scope="row">750 từ</th><td>5:46</td><td>5:00</td></tr>
+            <tr><th scope="row">1.000 từ</th><td>7:42</td><td>6:40</td></tr>
+            <tr><th scope="row">1.500 từ</th><td>11:32</td><td>10:00</td></tr>
+            <tr><th scope="row">2.000 từ</th><td>15:23</td><td>13:20</td></tr>
+            <tr><th scope="row">2.500 từ</th><td>19:14</td><td>16:40</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Thời gian ở định dạng m:ss. Đó chỉ là thời gian nói: hãy cộng thêm các quãng nghỉ, hoặc dùng các ô nghỉ ở trên.</p>
+
+      <h2 id="typical-pace">3. Tốc độ nói thông thường, kèm nguồn</h2>
+      <p>Không có một tốc độ nói đúng duy nhất, và một con số không có nguồn chỉ là phỏng đoán. Đây là những tốc độ chúng tôi xác nhận được ngay trong các nguồn. Mỗi con số mô tả một bối cảnh cụ thể, nên không con số nào là mục tiêu cho bài nói của bạn.</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th scope="col">Cài đặt</th><th scope="col">Tốc độ do nguồn nêu</th><th scope="col">Nguồn</th></tr></thead>
+          <tbody>
+            <tr><td>Các cuộc gọi điện thoại giữa người lạ về các chủ đề được giao (2.438 cuộc hội thoại Switchboard tiếng Anh): tất cả từ của cả hai người nói chia cho tổng thời gian trôi qua</td><td>trung bình 196 WPM; từng cuộc hội thoại dao động từ 111 đến 291 WPM</td><td><a href="https://www.isca-archive.org/interspeech_2006/yuan06_interspeech.html" target="_blank" rel="noopener">Yuan, Liberman và Cieri (2006), Interspeech</a></td></tr>
+            <tr><td>Cùng các cuộc hội thoại đó, loại trừ khoảng lặng và tiếng ồn không phải lời nói</td><td>trung bình 236 WPM; các cuộc hội thoại dao động từ 158 đến 312 WPM</td><td>nghiên cứu Yuan, Liberman và Cieri (2006)</td></tr>
+            <tr><td>Người lớn đọc to, một phân tích tổng hợp của 77 nghiên cứu với 5.965 người tham gia</td><td>trung bình 183 WPM (khoảng tin cậy 95% 177–189)</td><td><a href="https://doi.org/10.1016/j.jml.2019.104047" target="_blank" rel="noopener">Brysbaert (2019), tạp chí Journal of Memory and Language</a></td></tr>
+            <tr><td>Người lớn đọc thầm bằng tiếng Anh, một phân tích tổng hợp của 190 nghiên cứu với 18.573 người tham gia</td><td>trung bình 238 WPM cho phi hư cấu và 260 WPM cho hư cấu</td><td>nghiên cứu Brysbaert (2019)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Những con số này cho biết và không cho biết điều gì:</p>
+      <ul>
+        <li><strong>Chúng cao hơn các giá trị cài sẵn của trang này.</strong> Các giá trị cài sẵn 130 và 150 WPM là quy tắc lập kế hoạch cho bài nói có quãng nghỉ và chuyển slide, là quy tắc kinh nghiệm của chúng tôi chứ không phải một phát hiện. Nếu bạn đọc to kịch bản mà không dừng, hãy kỳ vọng kết quả gần với con số đọc to hơn.</li>
+        <li><strong>Cách đếm làm thay đổi con số.</strong> Yuan và cộng sự thu được 196 WPM khi chia cho toàn bộ thời gian trôi qua và 236 WPM khi loại bỏ khoảng lặng, từ cùng các cuộc hội thoại. Độ dài bản ghi âm của bạn bao gồm các quãng nghỉ, nên tốc độ bạn đo ở chế độ 3 cũng vậy.</li>
+        <li><strong>Tốc độ thay đổi theo ngôn ngữ, người nói và hoàn cảnh.</strong> Yuan và cộng sự báo cáo rằng tốc độ nói thay đổi theo độ dài lượt nói, chủ đề, việc những người nói có quen nhau hay không và tuổi của người nói. Brysbaert báo cáo tốc độ đọc thấp hơn ở trẻ em, người lớn tuổi và người đọc tiếng Anh như ngôn ngữ thứ hai, và tốc độ ở các ngôn ngữ khác có thể được dự đoán từ số từ mà mỗi ngôn ngữ cần để truyền đạt cùng một thông điệp như tiếng Anh. Số từ không thể so sánh giữa các ngôn ngữ.</li>
+        <li><strong>Đọc to không phải là thuyết trình.</strong> Các nghiên cứu đằng sau con số đọc to là nghiên cứu về đọc, không phải thuyết trình. Chúng tôi không tìm thấy nguồn gốc nào đặt tốc độ mục tiêu cho thuyết trình, nên không đưa ra ở đây.</li>
+      </ul>
+
+      <h2 id="pauses-and-slides">4. Vì sao bài nói thật dài hơn số từ ÷ WPM</h2>
+      <p>Chia số từ cho tốc độ cho ra thời gian bạn nói. Một bài nói thật còn có thời gian bạn không nói: một hơi thở giữa các đoạn, một nhịp khi chuyển slide, tiếng cười hay câu hỏi từ khán giả, một ngụm nước. Công cụ tính cho phép bạn cộng thêm những phần này.</p>
+      <ul>
+        <li><strong>Quãng nghỉ mỗi đoạn.</strong> Số giây cộng thêm cho mỗi khối cách nhau bằng dòng trống trong kịch bản đã dán. Quãng nghỉ 2 đến 3 giây là điểm khởi đầu hợp lý cho một bài nói.</li>
+        <li><strong>Slide và quãng nghỉ mỗi slide.</strong> Số giây cộng thêm cho mỗi lần chuyển slide, cho khoảnh khắc khán giả nhìn slide mới. Thử 3 đến 5 giây, lâu hơn với slide bạn muốn mọi người đọc.</li>
+        <li><strong>Thời gian dành cho quãng nghỉ (từ số phút sang số từ).</strong> Một số bằng giây được trừ khỏi độ dài mục tiêu trước khi tính số từ.</li>
+      </ul>
+      <p>Đây là các quy tắc kinh nghiệm lập kế hoạch của chúng tôi, không phải thống kê, và giá trị phù hợp tùy phong cách của bạn. Một kịch bản 1.000 từ với 12 đoạn và 10 slide, ở 130 WPM với 3 giây mỗi đoạn và 4 giây mỗi slide, là 7:42 nói cộng 36 giây cho các đoạn và 40 cho các slide (1:16 quãng nghỉ): tổng cộng 8:58. Cách kiểm tra trung thực là tập một lần và bấm giờ, như bên dưới.</p>
+
+      <h2 id="measure-your-pace">5. Đo tốc độ của bạn từ buổi tập</h2>
+      <p>Cách trung thực để ước tính một bài nói là tập một lần, chép lời và đo, thay vì tin vào con số chung chung 130 WPM. Tốc độ của bạn có thể cao hơn hoặc thấp hơn nhiều so với bất kỳ giá trị cài sẵn nào, và thay đổi tùy bạn thuộc nội dung đến đâu.</p>
+      <ol>
+        <li><strong>Ghi âm một buổi tập.</strong> Hãy nói bài như khi bạn sẽ trình bày thật, kể cả các quãng nghỉ. Trên iPhone hoặc iPad, bài của Hỗ trợ Apple <a href="https://support.apple.com/guide/iphone/make-a-recording-iph4d2a39a3b/ios" target="_blank" rel="noopener">Tạo bản ghi âm trong Voice Memos</a> giải thích cách làm. Trên Mac, xem <a href="https://support.apple.com/guide/voice-memos/create-a-recording-vmaa4b813415/mac" target="_blank" rel="noopener">Tạo bản ghi âm trong Voice Memos trên Mac</a>. Ghi lại bản ghi âm dài bao lâu: độ dài đó đến từ máy ghi âm của bạn.</li>
+        <li><strong>Lấy bản chép lời.</strong> Voice Memos có thể hiển thị bản chép lời khi có sẵn: xem bài của Hỗ trợ Apple <a href="https://support.apple.com/guide/iphone/view-a-transcription-iph00953a982/ios" target="_blank" rel="noopener">Xem bản chép lời trên iPhone</a>, và hướng dẫn của chúng tôi về <a href="/vi/blog/transcribe-voice-memos-iphone/">chép lời Voice Memos trên iPhone</a>. Bạn cũng có thể chép lời bản ghi âm bằng <a href="#vox-md">Vox.md</a>, ngay trên thiết bị. Với bản ghi Zoom hoặc YouTube có phụ đề, <a href="/vi/blog/srt-vtt-to-text-markdown/">Trình chuyển SRT và VTT sang văn bản</a> chuyển tệp phụ đề thành văn bản.</li>
+        <li><strong>Dán và đo.</strong> Dán bản chép lời vào chế độ 3 và nhập độ dài bản ghi âm. Công cụ chia số từ trong bản chép lời cho số phút, hiển thị WPM đã đo và so sánh với các giá trị cài sẵn, rồi tính thời gian nói của kịch bản theo tốc độ của bạn.</li>
+      </ol>
+      <p>Hãy đối chiếu bản chép lời với những gì bạn thực sự đã nói trước khi tin vào con số. Nhận dạng giọng nói có thể sai, và một từ bị bỏ sót hoặc thêm vào sẽ làm lệch số đếm. Hãy tập toàn bộ bài nói, cắt bớt khoảng lặng ở đầu và cuối bản ghi nếu có nhiều, rồi đo lại sau khi chỉnh kịch bản.</p>
+      <p>Quãng nghỉ đã nằm sẵn trong bản ghi âm nên thời gian kịch bản ở chế độ 3 không cộng thêm. Nếu buổi tập của bạn không có slide hay khán giả, hãy dự phòng thêm một chút cho buổi thật.</p>
+
+      <h2 id="vox-md">6. Tập và chép lời với Vox.md</h2>
+      <p>Hãy tập một lần, nói thành tiếng. Vox.md chép lời bản ghi âm ngay trên iPhone, iPad hoặc Mac của bạn và lưu Markdown vào vault, nên bạn có thể đo tốc độ thực của mình tại đây. Dùng cho bài nói, kịch bản video hoặc phần mở đầu podcast. Việc chép lời chạy trên thiết bị bằng Apple Speech, Whisper hoặc Parakeet; xem <a href="/vi/docs/#models">tài liệu tham khảo về mô hình</a> để biết mỗi tùy chọn cần gì. Lưu Markdown cạnh kịch bản trong vault Obsidian giúp bạn so sánh các bản nháp khi viết lại.</p>
+      <p>Các bước đưa bản ghi âm vào nằm trong <a href="/vi/blog/transcribe-voice-memos-iphone/">Chép lời Voice Memos trên iPhone</a> và <a href="/vi/blog/transcribe-audio-file-mac/">Chép lời tệp âm thanh trên Mac</a>, và <a href="/vi/blog/transcribe-interview/">Chép lời một cuộc phỏng vấn một cách riêng tư</a> đề cập đến nhãn người nói. Nếu bạn chỉ cần đọc chính tả, xem <a href="/vi/blog/speech-to-text-iphone/">chuyển giọng nói thành văn bản trên iPhone</a> và <a href="/vi/blog/dictation-on-mac/">đọc chính tả trên Mac</a>. Vox.md cung cấp bản chép lời chứ không phải độ dài: thời lượng đến từ máy ghi âm, còn việc đếm từ bạn làm tại đây.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Hãy tập một lần, nói thành tiếng.</h2>
+        <p>Vox.md chép lời bản ghi âm ngay trên iPhone, iPad hoặc Mac của bạn và lưu Markdown vào vault, nên bạn có thể đo tốc độ nói thực của mình tại đây. Hạn mức miễn phí là 15 phút chép lời và 10 lần giao Capture thành công; dùng không giới hạn là mở khóa trọn đời một lần, không cần đăng ký.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_ca19bbc9dfae">Tải Vox.md</a> <a class="btn-secondary" href="/vi/docs/">Đọc tài liệu</a></p>
+        <p>Công cụ tính ở trên hoạt động đầy đủ mà không cần ứng dụng.</p>
+      </section>
+
+      <h2 id="faq">7. Câu hỏi thường gặp</h2>
+      <h3>Bài nói 3, 5 hoặc 10 phút có bao nhiêu từ?</h3>
+      <p>Ở 130–150 WPM, bài nói 3 phút khoảng 390–450 từ, bài nói 5 phút khoảng 650–750 từ và bài nói 10 phút khoảng 1.300–1.500 từ. Qua các giá trị cài sẵn chậm hơn và nhanh hơn, 100–170 WPM, 5 phút là 500–850 từ. Để so sánh, mức trung bình 183 WPM mà <a href="https://doi.org/10.1016/j.jml.2019.104047" target="_blank" rel="noopener">nghiên cứu Brysbaert (2019)</a> tìm thấy cho việc đọc to sẽ là khoảng 915 từ trong 5 phút. Hãy cộng thêm quãng nghỉ và tập để tìm con số của riêng bạn.</p>
+      <h3>Bài nói 1.000 từ dài bao lâu?</h3>
+      <p>Ở 130 WPM là 7:42, và ở 150 WPM là 6:40, chưa tính quãng nghỉ. Ở 100 WPM là 10:00 và ở 170 WPM là 5:53. Với mức trung bình đọc to 183 WPM của Brysbaert (2019), là 5:28. Với 12 đoạn và 10 slide, hãy cộng thêm các quãng nghỉ từ <a href="#pauses-and-slides">phần ở trên</a>.</p>
+      <h3>Tốc độ nói nào là tốt cho một bài thuyết trình?</h3>
+      <p>Chúng tôi không tìm thấy nguồn gốc nào đặt tốc độ mục tiêu cho thuyết trình. Các con số có nguồn mô tả những bối cảnh khác: <a href="https://www.isca-archive.org/interspeech_2006/yuan06_interspeech.html" target="_blank" rel="noopener">Yuan, Liberman và Cieri (2006)</a> báo cáo 196 WPM trên thời gian trôi qua của các cuộc điện thoại, và Brysbaert (2019) báo cáo 183 WPM khi đọc to. Một tốc độ lập kế hoạch chậm hơn như 130–150 WPM chừa chỗ cho quãng nghỉ và chuyển slide, nhưng câu trả lời đáng tin cậy là tốc độ của chính bạn từ buổi tập, như trong <a href="#measure-your-pace">đo tốc độ của bạn</a>.</p>
+      <h3>Đọc to có mất nhiều thời gian hơn đọc thầm không?</h3>
+      <p>Có, tính trung bình. <a href="https://doi.org/10.1016/j.jml.2019.104047" target="_blank" rel="noopener">nghiên cứu Brysbaert (2019)</a> ước tính 183 WPM khi đọc to và 238 WPM khi đọc thầm văn bản phi hư cấu tiếng Anh (260 WPM với hư cấu). Với các mức trung bình đó, cùng một văn bản phi hư cấu đọc to lâu hơn khoảng 30% (238 ÷ 183 ≈ 1,3). Mỗi người đọc một khác, nên hãy tự đo.</p>
+      <h3>Công cụ tính có tải kịch bản của tôi lên không?</h3>
+      <p>Không. Số từ được đếm bằng một đoạn mã trong trang này, ngay trên thiết bị của bạn, và trang không gửi yêu cầu mạng nào. Nó không lưu văn bản của bạn: đóng hoặc tải lại trang sẽ xóa nó.</p>
+
+      <nav class="toc" aria-label="Hướng dẫn liên quan" id="related"><div class="toc-title">Tiếp tục thiết lập</div><ul>
+        <li><a href="/vi/blog/speech-to-text-iphone/">Chuyển giọng nói thành văn bản trên iPhone</a></li>
+        <li><a href="/vi/blog/dictation-on-mac/">Đọc chính tả trên Mac</a></li>
+        <li><a href="/vi/blog/transcribe-voice-memos-iphone/">Chép lời Voice Memos trên iPhone</a></li>
+        <li><a href="/vi/blog/transcribe-audio-file-mac/">Chép lời tệp âm thanh trên Mac</a></li>
+        <li><a href="/vi/blog/transcribe-interview/">Chép lời một cuộc phỏng vấn một cách riêng tư</a></li>
+        <li><a href="/vi/blog/srt-vtt-to-text-markdown/">Trình chuyển đổi SRT và VTT sang văn bản hoặc Markdown</a></li>
+        <li><a href="/vi/docs/#models">Tài liệu tham khảo về mô hình và chép lời</a></li>
+      </ul></nav>
+<style>
+.st-tool:not([hidden]) { display: flex; flex-direction: column; gap: 40px; }
+.st-tool [hidden] { display: none; }
+.st-mode { display: flex; flex-direction: column; gap: 14px; }
+.st-mode h3 { margin: 0; }
+.st-mode form { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.st-tool .mt-field input, .st-tool .mt-field textarea { font: inherit; font-family: var(--font-mono); font-size: 16px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; padding: 8px 10px; width: 100%; box-sizing: border-box; min-height: 44px; }
+.st-tool .mt-field textarea { resize: vertical; min-height: 160px; }
+.st-tool input:focus-visible, .st-tool textarea:focus-visible, .st-chip:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.st-tool .mt-actions button { font: inherit; font-size: 15px; min-height: 44px; padding: 0 18px; cursor: pointer; }
+.st-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.st-chip { font: inherit; font-size: 14.5px; min-height: 44px; padding: 0 14px; cursor: pointer; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 999px; }
+.st-chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.st-result { display: flex; flex-direction: column; gap: 8px; padding: 14px 18px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; }
+.st-result[hidden] { display: none; }
+.st-result h4 { margin: 0; }
+.st-result p { margin: 0; overflow-wrap: anywhere; }
+.st-big { font-family: var(--font-mono); font-size: clamp(20px, 5vw, 28px); font-weight: 700; }
+.st-tool .mt-hint[role="status"] { min-height: 1.4em; }
+</style>
+<script>
+/* Speech time calculator. Runs locally: no network requests. */
+(function () {
+  var PRESETS = [100, 130, 150, 170];
+  var MIN_WPM = 40, MAX_WPM = 400;
+
+  function pad2(n) { return n < 10 ? '0' + n : String(n); }
+  /* Seconds to m:ss, or h:mm:ss from one hour. */
+  function fmt(total) {
+    total = Math.max(0, Math.round(total));
+    var h = Math.floor(total / 3600), m = Math.floor((total % 3600) / 60), s = total % 60;
+    return h ? h + ':' + pad2(m) + ':' + pad2(s) : m + ':' + pad2(s);
+  }
+  function num(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  function validWpm(w) { return typeof w === 'number' && isFinite(w) && w >= MIN_WPM && w <= MAX_WPM; }
+  function secondsFor(words, wpm) { return Math.round(words / wpm * 60); }
+  function wordsFor(minutes, wpm) { return Math.round(minutes * wpm); }
+
+  /* Strip Markdown and frontmatter, then count words the way a listener hears them. */
+  function clean(text) {
+    var s = String(text || '').replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
+    s = s.replace(/^---[ \t]*\n(?:[\s\S]*?\n)?(?:---|\.\.\.)[ \t]*(?:\n|$)/, '');
+    s = s.replace(/<!--[\s\S]*?-->/g, ' ').replace(/%%[\s\S]*?%%/g, ' ');
+    s = s.replace(/!\[\[[^\]]*\]\]/g, ' ').replace(/!\[[^\]]*\]\([^)]*\)/g, ' ');
+    s = s.replace(/\[\^[^\]]+\]/g, ' ');
+    s = s.replace(/\[\[([^\]]*)\]\]/g, function (all, inner) {
+      var bar = inner.lastIndexOf('|');
+      if (bar >= 0) return inner.slice(bar + 1);
+      var target = inner.split(/[#^]/)[0] || inner.replace(/^[#^]+/, '');
+      return target.slice(target.lastIndexOf('/') + 1);
+    });
+    s = s.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/\[([^\]]*)\]\[[^\]]*\]/g, '$1');
+    s = s.replace(/^[ \t]*\[[^\]]+\]:[ \t]*\S.*$/gm, ' ');
+    s = s.replace(/<\/?[A-Za-z][^>]*>/g, ' ');
+    s = s.replace(/https?:\/\/\S+|www\.\S+/g, ' ');
+    var lines = s.split('\n').map(function (line) {
+      if (/^[ \t]*(```|~~~)/.test(line)) return '';
+      if (/^[\s>*_=:|+-]*$/.test(line) && /[-=*_]{3}|\|/.test(line)) return '';
+      line = line.replace(/^[ \t]*(?:>[ \t]*)*/, '').replace(/^#{1,6}[ \t]+/, '');
+      for (;;) {
+        var next = line.replace(/^(?:[-*+]|\d+[.)])[ \t]+/, '').replace(/^\[[ xX]\][ \t]+/, '');
+        if (next === line) break;
+        line = next;
+      }
+      return line.replace(/\|/g, ' ');
+    });
+    s = lines.join('\n');
+    s = s.replace(/\\([\\`*_{}\[\]()#+.!|-])/g, '$1').replace(/[`*~=]+/g, ' ');
+    s = s.replace(/(^|[\s(])_+|_+(?=[\s).,;:!?]|$)/g, '$1 ').replace(/[—–]/g, ' ');
+    return s;
+  }
+  function countWords(text) {
+    var cleaned = clean(text);
+    var words = 0, paragraphs = 0;
+    cleaned.split(/\n[ \t]*\n/).forEach(function (block) {
+      var n = 0;
+      block.split(/\s+/).forEach(function (tok) { if (tok && /[\p{L}\p{N}]/u.test(tok)) n++; });
+      if (n) { words += n; paragraphs++; }
+    });
+    return { words: words, paragraphs: paragraphs };
+  }
+
+  /* Script to time. opts: words, paragraphs, wpm, pausePara, slides, pauseSlide (seconds). */
+  function scriptTime(o) {
+    if (!validWpm(o.wpm)) return { error: 'bad-wpm' };
+    var words = o.words || 0;
+    var pausePara = o.pausePara || 0, pauseSlide = o.pauseSlide || 0, slides = o.slides || 0;
+    var speech = secondsFor(words, o.wpm);
+    var pauses = Math.round((o.paragraphs || 0) * pausePara + slides * pauseSlide);
+    return { speech: speech, pauses: pauses, total: speech + pauses };
+  }
+  /* Time to words. */
+  function wordsForTime(o) {
+    if (!validWpm(o.wpm)) return { error: 'bad-wpm' };
+    var reserve = o.reserve || 0;
+    var speaking = o.minutes * 60 - reserve;
+    if (speaking <= 0) return { error: 'no-room' };
+    return { words: wordsFor(speaking / 60, o.wpm), speaking: speaking, reserve: reserve };
+  }
+  /* "4:35" or "1:04:35" to seconds, or null. */
+  function parseDuration(text) {
+    var t = String(text || '').trim(), m;
+    if ((m = /^(\d{1,4}):([0-5]\d)$/.exec(t))) return +m[1] * 60 + +m[2];
+    if ((m = /^(\d{1,3}):([0-5]\d):([0-5]\d)$/.exec(t))) return +m[1] * 3600 + +m[2] * 60 + +m[3];
+    return null;
+  }
+  /* Measured pace. Returns {wpm} rounded to a whole number, or {error}. */
+  function measure(words, seconds) {
+    if (!words) return { error: 'no-transcript' };
+    if (!seconds) return { error: 'zero-duration' };
+    var wpm = Math.round(words / (seconds / 60));
+    if (!validWpm(wpm)) return { error: 'pace-out-of-range', wpm: wpm };
+    return { wpm: wpm };
+  }
+  function compare(measured, preset) {
+    var pct = Math.round((measured / preset - 1) * 100);
+    return pct === 0 ? { kind: 'same' } : { kind: pct > 0 ? 'faster' : 'slower', pct: Math.abs(pct) };
+  }
+
+  if (typeof window !== 'undefined') {
+    window.voxSpeechTime = { clean: clean, countWords: countWords, scriptTime: scriptTime, wordsForTime: wordsForTime,
+      parseDuration: parseDuration, measure: measure, compare: compare, fmt: fmt, num: num, secondsFor: secondsFor, wordsFor: wordsFor, PRESETS: PRESETS };
+  }
+
+  var root = document.getElementById('st-tool');
+  if (!root) return;
+  var EXAMPLE = '---\ntitle: Opening talk\ntags: [speech]\n---\n# Opening remarks\n\n- First point, **well-known** idea\n- See [the guide](https:\/\/example.com\/guide) and [[Project plan|plan]]\n\nTotal: 2026 plans.';
+  var EXAMPLE3 = 'Good morning everyone and thank you for coming. Today I want to talk about three ideas that changed how our team plans its work, and I will keep each one short.';
+
+  function el(id) { return document.getElementById(id); }
+  function message(name, fill) {
+    var node = document.querySelector('#st-messages [data-message="' + name + '"]');
+    var text = node ? node.textContent : '';
+    if (fill) Object.keys(fill).forEach(function (key) { text = text.split('{' + key + '}').join(fill[key]); });
+    return text;
+  }
+  function value(id) { var v = el(id).value; return v === '' ? NaN : Number(v); }
+  function say(id, text) {
+    var node = el(id);
+    node.textContent = '';
+    window.setTimeout(function () { node.textContent = text; }, 30);
+  }
+  function setCells(tableId, fn) {
+    Array.prototype.forEach.call(el(tableId).querySelectorAll('tr'), function (row) {
+      row.querySelector('td').textContent = fn(+row.getAttribute('data-wpm'));
+    });
+  }
+  function show(prefix, ok, msg) {
+    el(prefix + '-result').hidden = !ok;
+    el(prefix + '-msg').textContent = msg || '';
+  }
+  function pressed(group) {
+    var target = el(group.getAttribute('data-target'));
+    Array.prototype.forEach.call(group.querySelectorAll('.st-chip'), function (chip) {
+      chip.setAttribute('aria-pressed', String(Number(target.value) === +chip.getAttribute('data-wpm') && target.value !== ''));
+    });
+  }
+  var copyText = { st1: '', st2: '', st3: '' };
+
+  function update1() {
+    var script = el('st1-script').value;
+    var hasText = /\S/.test(script);
+    var counted = hasText ? countWords(script) : null;
+    var typed = value('st1-words');
+    var notes = [];
+    var words;
+    if (hasText) {
+      words = counted.words;
+      if (el('st1-words').value !== '') notes.push(message('using-text'));
+    } else if (el('st1-words').value === '') {
+      return show('st1', false, message('waiting1'));
+    } else if (!(typed >= 0 && typed <= 1000000)) {
+      return show('st1', false, message('bad-words'));
+    } else {
+      words = Math.floor(typed);
+    }
+    var wpm = value('st1-wpm');
+    if (!validWpm(wpm)) return show('st1', false, message('bad-wpm'));
+    var pp = el('st1-pp').value === '' ? 0 : value('st1-pp');
+    var ps = el('st1-ps').value === '' ? 0 : value('st1-ps');
+    if (!(pp >= 0 && pp <= 600) || !(ps >= 0 && ps <= 600)) return show('st1', false, message('bad-pause'));
+    var slides = el('st1-slides').value === '' ? 0 : value('st1-slides');
+    if (!(slides >= 0 && slides <= 500) || slides !== Math.floor(slides)) return show('st1', false, message('bad-slides'));
+    if (!hasText && pp > 0) notes.push(message('need-text'));
+    if (!words) return show('st1', false, message('waiting1'));
+    var r = scriptTime({ words: words, paragraphs: hasText ? counted.paragraphs : 0, wpm: wpm, pausePara: pp, slides: slides, pauseSlide: ps });
+    var total = message('r1-total', { wpm: wpm, time: fmt(r.total) });
+    var detail = hasText
+      ? message('r1-detail', { words: num(words), paragraphs: num(counted.paragraphs), speech: fmt(r.speech), pauses: fmt(r.pauses) })
+      : message('r1-detail-typed', { words: num(words), speech: fmt(r.speech), pauses: fmt(r.pauses) });
+    el('st1-total').textContent = total;
+    el('st1-detail').textContent = detail;
+    var lines = [total, detail];
+    setCells('st1-table', function (p) {
+      var t = scriptTime({ words: words, paragraphs: hasText ? counted.paragraphs : 0, wpm: p, pausePara: pp, slides: slides, pauseSlide: ps });
+      lines.push(p + ' WPM: ' + fmt(t.total));
+      return fmt(t.total);
+    });
+    copyText.st1 = lines.join('\n');
+    show('st1', true, notes.join(' '));
+  }
+
+  function update2() {
+    var minutes = value('st2-minutes');
+    if (!(minutes >= 0.5 && minutes <= 600)) return show('st2', false, message('bad-minutes'));
+    var wpm = value('st2-wpm');
+    if (!validWpm(wpm)) return show('st2', false, message('bad-wpm'));
+    var reserve = el('st2-reserve').value === '' ? 0 : value('st2-reserve');
+    if (!(reserve >= 0 && reserve <= 36000)) return show('st2', false, message('bad-reserve'));
+    var r = wordsForTime({ minutes: minutes, wpm: wpm, reserve: reserve });
+    if (r.error) return show('st2', false, message(r.error));
+    function w(p) { return wordsForTime({ minutes: minutes, wpm: p, reserve: reserve }).words; }
+    var total = message('r2-total', { words: num(r.words), minutes: String(minutes), wpm: wpm });
+    var detail = message('r2-detail', { low: num(w(100)), high: num(w(170)), a: num(w(130)), b: num(w(150)), speaking: fmt(r.speaking), pauses: fmt(reserve) });
+    el('st2-total').textContent = total;
+    el('st2-detail').textContent = detail;
+    var lines = [total, detail];
+    setCells('st2-table', function (p) { lines.push(p + ' WPM: ' + num(w(p)) + ' words'); return num(w(p)); });
+    copyText.st2 = lines.join('\n');
+    show('st2', true, '');
+  }
+
+  function update3() {
+    var transcript = el('st3-transcript').value;
+    var durText = el('st3-duration').value;
+    if (!/\S/.test(transcript)) return show('st3', false, message('no-transcript'));
+    var seconds = parseDuration(durText);
+    if (!/\S/.test(durText) || seconds === null) return show('st3', false, message('bad-duration'));
+    var words = countWords(transcript).words;
+    var m = measure(words, seconds);
+    if (m.error) return show('st3', false, message(m.error, { wpm: m.wpm === undefined ? '' : num(m.wpm) }));
+    var total = message('r3-total', { wpm: m.wpm });
+    var detail = message('r3-detail', { words: num(words), time: fmt(seconds) });
+    el('st3-total').textContent = total;
+    el('st3-detail').textContent = detail;
+    var lines = [total, detail];
+    setCells('st3-table', function (p) {
+      var c = compare(m.wpm, p);
+      var text = message('r3-' + c.kind, { pct: c.pct });
+      lines.push(p + ' WPM: ' + text);
+      return text;
+    });
+    var scriptWords = el('st3-script-words').value === '' ? 0 : value('st3-script-words');
+    var scriptEl = el('st3-script');
+    if (scriptWords > 0 && scriptWords <= 1000000) {
+      var t = scriptTime({ words: Math.floor(scriptWords), wpm: m.wpm });
+      var line = message('r3-script', { words: num(Math.floor(scriptWords)), wpm: m.wpm, time: fmt(t.total) }) + ' ' + message('r3-pauses');
+      scriptEl.textContent = line;
+      scriptEl.hidden = false;
+      lines.push(line);
+    } else {
+      scriptEl.textContent = '';
+      scriptEl.hidden = true;
+    }
+    copyText.st3 = lines.join('\n');
+    show('st3', true, '');
+  }
+
+  function copy(key, statusId) {
+    var text = copyText[key];
+    function fallback() {
+      var area = document.createElement('textarea');
+      area.value = text;
+      area.setAttribute('readonly', '');
+      area.style.position = 'fixed';
+      area.style.opacity = '0';
+      document.body.appendChild(area);
+      area.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      document.body.removeChild(area);
+      say(statusId, message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(statusId, message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  }
+
+  var updaters = { st1: update1, st2: update2, st3: update3 };
+  function refresh() {
+    update1(); update2(); update3();
+    Array.prototype.forEach.call(root.querySelectorAll('.st-chips'), pressed);
+  }
+  ['st1', 'st2', 'st3'].forEach(function (key) {
+    var form = el(key + '-form');
+    form.addEventListener('input', refresh);
+    form.addEventListener('change', refresh);
+    form.addEventListener('submit', function (event) { event.preventDefault(); });
+    el(key + '-copy').addEventListener('click', function () { copy(key, key + '-status'); });
+  });
+  Array.prototype.forEach.call(root.querySelectorAll('.st-chip'), function (chip) {
+    chip.addEventListener('click', function () {
+      el(chip.parentNode.getAttribute('data-target')).value = chip.getAttribute('data-wpm');
+      refresh();
+    });
+  });
+  el('st1-example').addEventListener('click', function () { el('st1-script').value = EXAMPLE; refresh(); say('st1-status', message('loaded')); });
+  el('st1-clear').addEventListener('click', function () {
+    el('st1-script').value = ''; el('st1-words').value = ''; refresh(); el('st1-script').focus(); say('st1-status', message('cleared'));
+  });
+  el('st3-example').addEventListener('click', function () {
+    el('st3-transcript').value = EXAMPLE3; el('st3-duration').value = '0:12'; refresh(); say('st3-status', message('loaded'));
+  });
+  el('st3-clear').addEventListener('click', function () {
+    el('st3-transcript').value = ''; el('st3-duration').value = ''; el('st3-script-words').value = ''; refresh(); el('st3-transcript').focus(); say('st3-status', message('cleared'));
+  });
+  el('st3-use-count').addEventListener('click', function () {
+    var script = el('st1-script').value;
+    var words = /\S/.test(script) ? countWords(script).words : (el('st1-words').value === '' ? 0 : Math.floor(value('st1-words')));
+    if (!(words > 0)) { say('st3-status', message('no-count')); return; }
+    el('st3-script-words').value = words;
+    refresh();
+    say('st3-status', message('count-used'));
+  });
+
+  el('st-nojs').hidden = true;
+  root.hidden = false;
+  refresh();
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/vi/">Trang chủ</a></li>
+        <li><a href="/vi/docs/">Tài liệu</a></li>
+        <li><a href="/vi/blog/">Hướng dẫn</a></li>
+        <li><a href="/vi/compare/">So sánh</a></li>
+        <li><a href="/vi/privacy.html">Quyền riêng tư</a></li>
+        <li><a href="/vi/terms.html">Điều khoản</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Hỗ trợ</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_ca19bbc9dfae">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Ghi nhanh cho ghi chú cục bộ · Không tải nội dung lên.</div>
+    </div>
+  <details class="language-switcher"><summary>Ngôn ngữ</summary><ul><li><a href="/blog/speech-time-calculator/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/speech-time-calculator/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/speech-time-calculator/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/speech-time-calculator/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/speech-time-calculator/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/speech-time-calculator/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/speech-time-calculator/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/speech-time-calculator/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/speech-time-calculator/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/speech-time-calculator/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/speech-time-calculator/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/speech-time-calculator/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/speech-time-calculator/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/speech-time-calculator/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/speech-time-calculator/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/speech-time-calculator/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/speech-time-calculator/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/speech-time-calculator/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/speech-time-calculator/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/speech-time-calculator/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/speech-time-calculator/" lang="vi" hreflang="vi" aria-current="page">Tiếng Việt</a></li><li><a href="/zh-hans/blog/speech-time-calculator/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/speech-time-calculator/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

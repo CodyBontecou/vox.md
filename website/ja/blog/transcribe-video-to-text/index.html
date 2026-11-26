@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr" data-search-section="セクション" data-search-guide="ガイド記事" data-search-empty="「{query}」に一致する結果はありません">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ビデオをテキストに文字起こし (iPhone / Mac)、アップロード不要 | Vox.md</title>
+  <meta name="description" content="お持ちの MP4 や MOV を、iPhone、iPad、Mac で Markdown ノートにします。ビデオを Vox.md に読み込み、デバイス上で Apple Speech、Whisper、Parakeet のいずれかで文字起こしし、テキストを確認して送信します。">
+  <link rel="canonical" href="https://vox.isolated.tech/ja/blog/transcribe-video-to-text/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="言語モデル向けの Vox.md ドキュメント">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="ビデオをテキストに文字起こし (iPhone / Mac)、アップロード不要">
+  <meta property="og:description" content="お持ちの MP4 や MOV を、iPhone、iPad、Mac で Markdown ノートにします。ビデオを Vox.md に読み込み、デバイス上で Apple Speech、Whisper、Parakeet のいずれかで文字起こしし、テキストを確認して送信します。">
+  <meta property="og:url" content="https://vox.isolated.tech/ja/blog/transcribe-video-to-text/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-25">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ビデオをテキストに文字起こし (iPhone / Mac)、アップロード不要">
+  <meta name="twitter:description" content="お持ちの MP4 や MOV を、iPhone、iPad、Mac で Markdown ノートにします。ビデオを Vox.md に読み込み、デバイス上で Apple Speech、Whisper、Parakeet のいずれかで文字起こしし、テキストを確認して送信します。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "ビデオをテキストに文字起こし (iPhone / Mac)、アップロード不要",
+  "description": "お持ちの MP4 や MOV を、iPhone、iPad、Mac で Markdown ノートにします。ビデオを Vox.md に読み込み、デバイス上で Apple Speech、Whisper、Parakeet のいずれかで文字起こしし、テキストを確認して送信します。",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-25",
+  "dateModified": "2026-11-25",
+  "mainEntityOfPage": "https://vox.isolated.tech/ja/blog/transcribe-video-to-text/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "ja",
+  "name": "ビデオをテキストに文字起こし (iPhone / Mac)、アップロード不要 | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/ja/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "ガイド",
+      "item": "https://vox.isolated.tech/ja/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "ビデオをテキストに文字起こし (iPhone / Mac)、アップロード不要",
+      "item": "https://vox.isolated.tech/ja/blog/transcribe-video-to-text/"
+    }
+  ],
+  "inLanguage": "ja",
+  "name": "ビデオをテキストに文字起こし (iPhone / Mac)、アップロード不要 | Vox.md",
+  "description": "お持ちの MP4 や MOV を、iPhone、iPad、Mac で Markdown ノートにします。ビデオを Vox.md に読み込み、デバイス上で Apple Speech、Whisper、Parakeet のいずれかで文字起こしし、テキストを確認して送信します。"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-video-to-text/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-video-to-text/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">ガイド本文へ</a>
+<nav aria-label="メインナビゲーション">
+  <div class="nav-inner">
+    <a href="/ja/" class="logo" aria-label="Vox.md ホーム">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/ja/#how">動作の仕組み</a></li>
+      <li><a href="/ja/docs/">ドキュメント</a></li>
+      <li><a href="/ja/blog/">ガイド</a></li>
+      <li><a href="/ja/compare/">比較する</a></li>
+      <li><a href="/ja/privacy.html">プライバシー</a></li>
+      <li><a href="/ja/terms.html">利用規約</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_ja_3e033cb53350">Vox.md をダウンロード</a>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/blog/transcribe-video-to-text/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-video-to-text/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-video-to-text/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-video-to-text/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-video-to-text/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-video-to-text/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-video-to-text/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-video-to-text/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-video-to-text/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-video-to-text/" lang="ja" hreflang="ja" aria-current="page">日本語</a></li><li><a href="/ko/blog/transcribe-video-to-text/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-video-to-text/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-video-to-text/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-video-to-text/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-video-to-text/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-video-to-text/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-video-to-text/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-video-to-text/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-video-to-text/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-video-to-text/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-video-to-text/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-video-to-text/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-video-to-text/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">ビデオからテキストへ · iPhone · iPad · Mac</div>
+        <h1 class="hero-title">ビデオをテキストに文字起こし (iPhone / Mac)、アップロード不要</h1>
+        <p class="hero-subtitle">ビデオはすでにお使いのスマートフォンか Mac にあるので、そこで文字起こしします。アップロードは不要で、結果はコピー用のテキストボックスではなく、あなたが所有する Markdown ノートです。</p>
+      </div>
+      <aside class="meta-card" aria-label="このガイドについて">
+        <dl>
+          <div><dt>作成者</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>更新日</dt><dd><time datetime="2026-11-25">2026年11月25日</time></dd></div>
+          <div><dt>必要条件</dt><dd>Vox.md: iOS または iPadOS 17.6 以降、または macOS 14 以降 · Apple Speech が使えない場合はダウンロード済みの音声モデル · 保存先フォルダを設定したルート</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="ビデオをテキストに文字起こし (iPhone / Mac)、アップロード不要">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">短く答えると</div>
+        <p><strong>iPhone または iPad:</strong> ビデオをファイルに入れ、Vox.md を開いて、 <strong>オーディオまたはビデオを読み込む</strong> 音声コントロールでファイルを選び、テキストを確認して、「送る」を押します。 <strong>Mac:</strong> 選択: <strong>オーディオを読み込む…</strong> メニューバーから、またはキャプチャのワークスペースでファイルを読み込みます。どちらでも、ビデオはデバイス上で Apple Speech (対応する iOS 26 デバイスでは「自動」)、Whisper、Parakeet のいずれかで文字起こしされ、Markdown ノートとして保存されます。</p>
+      </div>
+      <p><strong>できないこと。</strong> Vox.md は YouTube や TikTok などのビデオリンクを受け付けず、SRT や VTT の字幕も作成しません。すでに字幕ファイルがあり、きれいなテキストだけが欲しい場合は、次を使ってください: <a href="/ja/blog/srt-vtt-to-text-markdown/">SRT/VTT コンバーター</a>。Vox.md の手順は次に従います: <a href="/ja/docs/#quick-capture">速い捕獲</a> と <a href="/ja/docs/#mac">Mac</a> ドキュメントとアプリの動作。</p>
+      <nav class="toc" aria-label="このガイドの内容"><div class="toc-title">このガイドの内容</div><ol>
+        <li><a href="#need">必要なもの</a></li>
+        <li><a href="#iphone">iPhone または iPad の場合</a></li>
+        <li><a href="#mac">Mac の場合</a></li>
+        <li><a href="#models">ビデオの言語に合ったモデルを選ぶ</a></li>
+        <li><a href="#speakers">話者が複数いますか？</a></li>
+        <li><a href="#output">ノートの見た目</a></li>
+        <li><a href="#limits">このツールが適さない場合</a></li>
+        <li><a href="#troubleshooting">問題の解決</a></li>
+        <li><a href="#faq">よくある質問</a></li>
+      </ol></nav>
+
+      <h2 id="need">必要なもの</h2>
+      <ul>
+        <li><strong>文字起こしする権利のあるビデオ</strong>。たとえば、画面収録、スマートフォンで撮ったビデオ、自分で録音した講義や講演、自分が所有する書き出し済みの Zoom や Teams の録画などです。</li>
+        <li><strong>MP4 または MOV ファイル。</strong> このガイドで扱う形式です。</li>
+        <li><strong>保存先のあるルート</strong>: Obsidian の vault またはファイルのフォルダ。次を参照してください: <a href="/ja/docs/#presets">ルート</a> ドキュメントを参照してください。</li>
+        <li><strong>準備のできた文字起こしバックエンド。</strong> 「自動」は、対応する iOS 26 デバイスと言語では Apple Speech を使います。それ以外は Whisper または Parakeet をダウンロードしてください。次を参照してください: <a href="/ja/docs/#models">モデル</a>.</li>
+        <li><strong>無料枠。</strong> 無料枠には 15 分の文字起こしと 10 回の Capture 配信が含まれます。一度だけの買い切りのアンロックで制限がなくなります。次を参照してください: <a href="/ja/docs/#pricing-limits">無料利用と永久ライセンス</a>。App Store の価格が正式なものです。</li>
+      </ul>
+
+      <h2 id="iphone">iPhone または iPad の場合</h2>
+      <h3>1. ビデオをファイルに入れる</h3>
+      <p>ビデオが「写真」にある場合は、まずファイルに共有します。Apple の iPhone ユーザガイドで説明されています: <a href="https://support.apple.com/guide/iphone/share-photos-and-videos-iphf28f17237/ios">写真とビデオの共有</a> および <a href="https://support.apple.com/guide/iphone/files-basics-iphe9d46e90f/ios">ファイル App</a>。共有シートで「ファイルに保存」アクションを探し、フォルダを選びます。</p>
+      <p><strong>重要:</strong> 「写真」から Vox.md の共有エクステンションへ直接ビデオを共有する (<strong>Vox.mdにキャプチャ</strong>) で、キャプチャにファイルとして添付されます。次のことは行い <strong>ありません</strong> を文字起こしします。ビデオを文字起こしするには、アプリ内の <strong>オーディオまたはビデオを読み込む</strong> コントロール。ファイルのピッカーが開きます。</p>
+      <h3>2. 読み込んで文字起こしする</h3>
+      <ol>
+        <li>Vox.md の「速い捕獲」を開いて、使いたいルートを選びます。</li>
+        <li>音声コントロールで、次を選びます: <strong>下書きに追加</strong> で配信前にテキストを確認するか、 <strong>すぐに送信</strong> で、文字起こしの完了時に配信します。</li>
+        <li>タップする項目は、 <strong>オーディオまたはビデオを読み込む</strong> 、ファイルのピッカーでファイルを選びます。</li>
+        <li>文字起こしが終わるまで待ち、名前・数字・用語をビデオと照らし合わせて確認してください。</li>
+        <li>送信をタップ。</li>
+      </ol>
+      <p><strong>大きなファイル。</strong> 始める前に、ビデオを iCloud 上だけでなく、デバイスにダウンロードしておいてください。 <a href="/ja/blog/offline-transcription-iphone-markdown/#offline-check">オフラインガイドの読み込み元の確認</a> で、ファイルが開くことの確認方法を説明しています。</p>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">まず短いビデオ 1 本で試してください。</h2>
+        <p>無料枠は 15 分の文字起こしで、短いクリップには十分です。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_3e033cb53350">Vox.md を入手</a></p>
+      </section>
+
+      <h2 id="mac">Mac の場合</h2>
+      <p>選択 <strong>オーディオを読み込む…</strong> Vox.md のメニューバーから、またはキャプチャのワークスペースでファイルを読み込みます。ファイルのピッカーはオーディオとムービーのファイルに対応します。その後の手順は次と同じです: <a href="/ja/blog/transcribe-audio-file-mac/">Mac で音声ファイルを文字起こしする</a>。そのため、ここでは繰り返しません。</p>
+      <p><strong>任意: サウンドトラックだけを残す。</strong> QuickTime Player で、 <strong>ファイル → 書き出す → オーディオのみ</strong> でオーディオファイルを作成できます。Apple の <a href="https://support.apple.com/guide/quicktime-player/export-movies-qtp20e395859/mac">QuickTime Player ユーザガイド</a> に書き出しオプションの説明があります。ビデオを Vox.md に読み込むのに、この手順は不要です。</p>
+
+      <h2 id="models">ビデオの言語に合ったモデルを選ぶ</h2>
+      <p><strong>自動 / Apple Speech。</strong> 対応する iOS 26 デバイスと言語では、「自動」は Apple Speech を優先します。フォールバック先は、明示的にダウンロードしたローカルモデルだけです。</p>
+      <p><strong>Whisper。</strong> サイズは Tiny (75 MB) から Large v3 Turbo (1.6 GB) まであります。大きいモデルほど、ストレージと処理が多く必要です。 <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a> は Whisper モデル用のオープンソースのランタイムです。</p>
+      <p><strong>Parakeet。</strong> Parakeet v2 (約 800 MB) は英語用です。Parakeet v3 (約 800 MB) は 25 言語に対応します。どちらも次を通じて動作します: <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a>.</p>
+      <p>どちらを選ぶかは、次を参照してください: <a href="/ja/compare/whisper-vs-parakeet/">Whisper と Parakeet の比較</a> 、自分のビデオの短いクリップで試してください。詳細は次にあります: <a href="/ja/docs/#models">モデルのドキュメント</a>.</p>
+
+      <h2 id="speakers">話者が複数いますか？</h2>
+      <p>オンにする項目は、 <strong>スピーカーの識別</strong> をルートで設定します。オプトインで、対応する読み込みで動作し、「Speaker 1」「Speaker 2」のような匿名のベストエフォートのラベルを付けます。名前は手動で変更できます。ラベル付けに失敗した場合は、通常の文字起こしが保持され、ライブラリに理由が表示されます。次を参照してください: <a href="/ja/blog/transcribe-interview/">インタビューをプライベートに文字起こしする</a>.</p>
+
+      <h2 id="output">ノートの見た目</h2>
+      <p>ノートのレイアウトはルートで決まります。見出し、接頭辞またはタイムスタンプ、そして文字起こしの順です。例 (架空のテキスト):</p>
+<pre class="guide-code"><code>## Video transcript
+10:42 AM 2026-11-25
+
+Welcome to the walkthrough. First we open the settings screen.</code></pre>
+      <p>ルートでは「オリジナルを保持」「文章を整える」「会議メモ」「タスクチェックリスト」「カスタム指示」を使えます。Apple Intelligence のモードには対応ハードウェアが必要です。非対応の場合、「タスクチェックリスト」と「会議メモ」は内蔵フォーマッタを使い、「文章を整える」は元のテキストをそのまま保持します。ビデオで講演を練習する場合は、文字起こしを次に貼り付けてください: <a href="/ja/blog/speech-time-calculator/">スピーチ時間計算ツール</a> で話すペースを確認できます。</p>
+
+      <h2 id="limits">このツールが適さない場合</h2>
+      <ul>
+        <li><strong>リンクは不可。</strong> Vox.md は YouTube や TikTok などのビデオリンクを受け付けません。ファイルそのものが必要です。</li>
+        <li><strong>字幕なし。</strong> 保存されるのはテキストで、タイミング付きの SRT や VTT ファイルではありません。手元の字幕ファイルを整えるには、次を使ってください: <a href="/ja/blog/srt-vtt-to-text-markdown/">SRT/VTT コンバーター</a>.</li>
+        <li><strong>許可。</strong> 自分が所有する、または使用許可のあるビデオだけを文字起こしし、録音された人の同意を得てください。</li>
+      </ul>
+
+      <h2 id="troubleshooting">問題の解決</h2>
+      <ul>
+        <li><strong>読み込みがグレーアウトする、または拒否される。</strong> まず現在の録音を終えてください。無料枠を使い切った場合は、買い切りのアンロックが必要です。</li>
+        <li><strong>ファイルが開けない。</strong> iCloud 上だけでなく、デバイスにダウンロードされていることを確認してください。</li>
+        <li><strong>文字起こしが出ない。</strong> モデルが完全にダウンロードされ、選択されていることを確認してください。</li>
+        <li><strong>言語が違う。</strong> 文字起こしの言語を設定するか、Parakeet v2 (英語) が選択されている場合は Parakeet v3 または Whisper を選びます。</li>
+      </ul>
+      <p>その他の対処: <a href="/ja/docs/#troubleshooting">ドキュメントのトラブルシューティング</a>.</p>
+
+      <h2 id="faq">よくある質問</h2>
+      <h3>無料ですか？</h3>
+      <p>無料枠には 15 分の文字起こしと 10 回の配信が含まれます。一度だけの買い切りのアンロックで制限がなくなります。</p>
+      <h3>ビデオはアップロードされますか？</h3>
+      <p>いいえ。キャプチャの内容は Vox.md のサーバに送信されず、文字起こしはデバイス上で実行されます。モデルのダウンロードでは Hugging Face に接続します。次を参照してください: <a href="/ja/privacy.html">プライバシーポリシー</a>.</p>
+      <h3>YouTube の動画を文字起こしできますか？</h3>
+      <p>いいえ。Vox.md はリンクを受け付けません。</p>
+      <h3>字幕は作れますか？</h3>
+      <p>いいえ。作成されるのは Markdown ノートで、SRT や VTT ファイルではありません。</p>
+      <h3>対応形式は？</h3>
+      <p>このガイドでは MP4 と MOV を扱います。</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">ビデオを、あなたが所有するノートに。</h2>
+        <p>まず、使用許可のある短いクリップで試してから、Markdown ファイルを開いてください。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_3e033cb53350">Vox.md を入手</a></p>
+      </section>
+      <nav class="toc" aria-label="関連ガイド" id="related"><div class="toc-title">続ける</div><ul>
+        <li><a href="/ja/blog/transcribe-audio-file-mac/">Mac で音声ファイルを文字起こしする</a></li>
+        <li><a href="/ja/blog/offline-transcription-iphone-markdown/">iPhone でのオフライン文字起こし</a></li>
+        <li><a href="/ja/blog/transcribe-interview/">インタビューをプライベートに文字起こしする</a></li>
+        <li><a href="/ja/blog/transcribe-voice-memos-iphone/">iPhone のボイスメモを Markdown に文字起こし</a></li>
+        <li><a href="/ja/blog/srt-vtt-to-text-markdown/">SRT と VTT をテキストまたは Markdown に</a></li>
+        <li><a href="/ja/compare/whisper-vs-parakeet/">Whisper と Parakeet の比較</a></li>
+        <li><a href="/ja/blog/speech-time-calculator/">話す時間の計算ツール</a></li>
+        <li><a href="/ja/docs/#models">モデルのドキュメント</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ja/">ホーム</a></li>
+        <li><a href="/ja/docs/">ドキュメント</a></li>
+        <li><a href="/ja/blog/">ガイド</a></li>
+        <li><a href="/ja/compare/">比較する</a></li>
+        <li><a href="/ja/privacy.html">プライバシー</a></li>
+        <li><a href="/ja/terms.html">利用規約</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">サポート</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_3e033cb53350">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · ローカルノートにクイックキャプチャ · コンテンツのアップロードなし。</div>
+    </div>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/blog/transcribe-video-to-text/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-video-to-text/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-video-to-text/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-video-to-text/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-video-to-text/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-video-to-text/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-video-to-text/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-video-to-text/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-video-to-text/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-video-to-text/" lang="ja" hreflang="ja" aria-current="page">日本語</a></li><li><a href="/ko/blog/transcribe-video-to-text/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-video-to-text/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-video-to-text/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-video-to-text/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-video-to-text/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-video-to-text/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-video-to-text/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-video-to-text/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-video-to-text/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-video-to-text/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-video-to-text/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-video-to-text/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-video-to-text/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
