@@ -1090,7 +1090,8 @@ final class QuickCaptureViewModel {
     @discardableResult
     func stageRecordedAudio(
         at sourceURL: URL,
-        deliveryID: UUID? = nil
+        deliveryID: UUID? = nil,
+        recordingStartedAt: Date? = nil
     ) async -> CaptureAssetReference? {
         await load()
         let operation = holdCaptureRoute()
@@ -1122,6 +1123,7 @@ final class QuickCaptureViewModel {
                     sourceURL: sourceURL,
                     sourceExtension: sourceExtension,
                     identifier: deliveryID,
+                    createdAt: recordingStartedAt ?? Date(),
                     legacyFilename: deliveryID.map { "Recording-\($0.uuidString.lowercased()).\(sourceExtension)" }
                         ?? "Recording-\(Self.captureFilenameTimestamp()).\(sourceExtension)"
                 ),
@@ -2702,6 +2704,8 @@ final class QuickCaptureViewModel {
     /// Names composer-recorded audio with the delivering Route's Audio
     /// Filename Template, rendered by the same `CapturePresetAudioFilename`
     /// the exporters use. Routes without a template keep the legacy name.
+    /// `createdAt` is the recording start (`{timestamp}`), so names sort in
+    /// the order takes were recorded rather than when they were staged.
     /// Collisions are resolved by the stager and the capture pipeline.
     private func recordedAudioFilename(
         sourceURL: URL,

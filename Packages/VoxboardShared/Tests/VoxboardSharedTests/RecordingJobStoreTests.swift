@@ -89,6 +89,79 @@ final class RecordingJobStoreTests: XCTestCase {
         XCTAssertNil(legacyJob.voiceProcessingConfiguration)
     }
 
+    /// Issue #176: the recording start drives `{timestamp}`. It is persisted
+    /// on the job, survives recovery from a handoff intent, and decodes as nil
+    /// from jobs and handoffs written before the field existed.
+    func test_recordingStartTimePersistsThroughEnqueueAndHandoffRecovery() async throws {
+        let fixture = try makeFixture()
+        defer { fixture.cleanup() }
+        let startedAt = Date(timeIntervalSince1970: 1_795_000_000)
+
+        let queued = try await fixture.store.enqueue(
+            sourceURL: try fixture.makeAudio(named: "started.wav"),
+            recordingStartedAt: startedAt,
+            duration: 303,
+            source: .iOSApp,
+            delivery: .captureDraft(attachAudio: true),
+            modelID: "automatic",
+            language: "auto",
+            configuration: .default
+        )
+        XCTAssertEqual(queued.recordingStartedAt, startedAt)
+        let reloaded = try await fixture.store.load(recoverInterrupted: false).first(where: { $0.id == queued.id })
+        XCTAssertEqual(reloaded?.recordingStartedAt, startedAt)
+
+        let handoffSource = try fixture.makeAudio(named: "handoff-started.wav")
+        let jobID = UUID()
+        try RecordingJobHandoffIntentStore(recordingsDirectoryURL: fixture.root).save(
+            RecordingJobHandoffIntent(
+                jobID: jobID,
+                readiness: .ready,
+                audioFilename: handoffSource.lastPathComponent,
+                recordingStartedAt: startedAt,
+                duration: 303,
+                source: .iOSApp,
+                delivery: .captureDraft(attachAudio: true),
+                modelID: "automatic",
+                language: "auto",
+                configuration: .default
+            )
+        )
+        let recovered = try await fixture.store.recoverExternalOrphans(
+            recordingsDirectoryURL: fixture.root,
+            olderThan: .distantFuture
+        )
+        XCTAssertEqual(recovered.first(where: { $0.id == jobID })?.recordingStartedAt, startedAt)
+
+        var jobObject = try XCTUnwrap(
+            JSONSerialization.jsonObject(with: JSONEncoder().encode(queued)) as? [String: Any]
+        )
+        XCTAssertNotNil(jobObject["recordingStartedAt"])
+        jobObject.removeValue(forKey: "recordingStartedAt")
+        XCTAssertNil(try JSONDecoder().decode(
+            RecordingJob.self,
+            from: JSONSerialization.data(withJSONObject: jobObject)
+        ).recordingStartedAt)
+
+        let legacyHandoff = RecordingJobHandoffIntent(
+            audioFilename: "legacy.wav",
+            duration: 1,
+            source: .iOSApp,
+            delivery: .captureDraft(attachAudio: true),
+            modelID: "automatic",
+            language: "auto",
+            configuration: .default
+        )
+        let legacyObject = try XCTUnwrap(
+            JSONSerialization.jsonObject(with: JSONEncoder().encode(legacyHandoff)) as? [String: Any]
+        )
+        XCTAssertNil(legacyObject["recordingStartedAt"], "Unset start time keeps legacy payloads unchanged")
+        XCTAssertNil(try JSONDecoder().decode(
+            RecordingJobHandoffIntent.self,
+            from: JSONSerialization.data(withJSONObject: legacyObject)
+        ).recordingStartedAt)
+    }
+
     func test_enqueuePersistsOriginBoundMetadataWithoutReacquisition() async throws {
         let fixture = try makeFixture()
         defer { fixture.cleanup() }

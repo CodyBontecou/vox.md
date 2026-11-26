@@ -65,13 +65,14 @@ struct VoxboardMacApp: App {
                     )
                 case .clearOrigin(let profileID):
                     return await quickCaptureViewModel.clearRecordedOrigin(profileID: profileID)
-                case .audio(let url, let draftRequestID, let deliveryID):
+                case .audio(let url, let draftRequestID, let deliveryID, let recordingStartedAt):
                     guard draftRequestID == nil || quickCaptureViewModel.draft.requestID == draftRequestID else {
                         return false
                     }
                     return await quickCaptureViewModel.stageRecordedAudio(
                         at: url,
-                        deliveryID: deliveryID
+                        deliveryID: deliveryID,
+                        recordingStartedAt: recordingStartedAt
                     ) != nil
                 case .transcript(let text, let draftRequestID, let liveSessionID, let deliveryID):
                     guard draftRequestID == nil || quickCaptureViewModel.draft.requestID == draftRequestID else {

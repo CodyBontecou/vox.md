@@ -32,10 +32,14 @@ enum CaptureDraftRecordingEventDelivery {
             )
         case .clearOrigin(let profileID):
             return await viewModel.clearRecordedOrigin(profileID: profileID)
-        case .audio(let url, let draftRequestID, let deliveryID):
+        case .audio(let url, let draftRequestID, let deliveryID, let recordingStartedAt):
             await viewModel.load()
             guard draftRequestID == nil || viewModel.draft.requestID == draftRequestID else { return false }
-            return await viewModel.stageRecordedAudio(at: url, deliveryID: deliveryID) != nil
+            return await viewModel.stageRecordedAudio(
+                at: url,
+                deliveryID: deliveryID,
+                recordingStartedAt: recordingStartedAt
+            ) != nil
         case .liveTranscript(let sessionID, let finalizedText, let volatileText):
             await viewModel.updateLiveRecordedTranscript(
                 sessionID: sessionID,
