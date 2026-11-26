@@ -150,6 +150,7 @@
         <li><strong>Link it to the meeting note.</strong> Build a note with the <a href="../obsidian-meeting-notes-template/">meeting notes template generator</a>, then add a line such as <code>Transcript: [[Team sync transcript]]</code> to it. If you link from a property, the link must be in quotes: <code>transcript: "[[Team sync transcript]]"</code>.</li>
       </ol>
       <p>Text is escaped so that characters such as <code>*</code>, <code>$</code> and a leading <code>#</code> do not turn into formatting, math or tags in Obsidian. Speaker names come from the file, so check them before you share the note.</p>
+      <p>If you also keep a table in the note, such as a list of speakers or decisions, the <a href="../markdown-table-maker/">Markdown table maker</a> builds one from pasted spreadsheet cells and escapes pipes for Obsidian.</p>
 
       <h2 id="skip-subtitles">5. Starting from audio instead of a caption file</h2>
       <p>If you only have a recording, you do not need a subtitle file at all. Vox.md transcribes on the device and writes the Markdown straight into your vault. According to the <a href="../../docs/#models">models documentation</a>, transcription runs on the Apple device with Apple Speech on a supported iOS 26 device and language, or with an optional Whisper or Parakeet model you download; see <a href="../../compare/whisper-vs-parakeet/">Whisper vs Parakeet</a> for the difference. Speaker labels are an opt-in Route step called <strong>Identify Speakers</strong>, and they are anonymous and best-effort.</p>
