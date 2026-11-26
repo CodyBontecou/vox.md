@@ -205,11 +205,11 @@
             <tr><th scope="row">Wybór modelu</th><td>Brak informacji na stronie Apple</td><td>Automatycznie albo pobrany model Whisper lub Parakeet</td><td>Automatycznie albo pobrany model Whisper lub Parakeet</td></tr>
             <tr><th scope="row">Na żywo lub po zatrzymaniu</th><td>Nieomówione na stronie Apple; wypróbuj na swoim iPhone</td><td>Automatycznie: sfinalizowany tekst jest wstawiany w trakcie mówienia. Whisper lub Parakeet: transkrypcja jest wstawiana po zakończeniu</td><td>Po transkrypcji i dostarczeniu nagrania</td></tr>
             <tr><th scope="row">Wymaga pełnego dostępu</th><td>Nie</td><td>Tak, Zezwól na pełny dostęp</td><td>Klawiatura niepotrzebna</td></tr>
-            <tr><th scope="row">Koszt</th><td>Część iOS</td><td>15 bezpłatnych minut transkrypcji, potem jednorazowe dożywotnie odblokowanie</td><td>15 bezpłatnych minut transkrypcji i 10 udanych dostarczeń Capture, potem jednorazowe dożywotnie odblokowanie</td></tr>
+            <tr><th scope="row">Koszt</th><td>Część iOS</td><td>Subskrypcja tygodniowa lub roczna z 7-dniowym bezpłatnym okresem próbnym albo jednorazowy zakup dożywotni</td><td>Subskrypcja tygodniowa lub roczna z 7-dniowym bezpłatnym okresem próbnym albo jednorazowy zakup dożywotni</td></tr>
           </tbody>
         </table>
       </div>
-      <p>Automatycznie używa rozpoznawania mowy Apple na urządzeniu, na obsługiwanych urządzeniach z iOS 26 i w obsługiwanych językach. Nie ma subskrypcji.</p>
+      <p>Tryb Automatyczny korzysta z rozpoznawania mowy Apple na urządzeniu, na obsługiwanych urządzeniach i w językach z iOS 26.</p>
 
       <h2 id="vox-keyboard">Używaj modelu lokalnego w każdej aplikacji dzięki klawiaturze Vox.md</h2>
       <ol>
@@ -221,7 +221,7 @@
       <p>Pełny opis znajdziesz w <a href="/pl/blog/best-voice-to-text-keyboard-iphone/">przewodniku po klawiaturze zamiany mowy na tekst na iPhone</a>. Aby wybrać model, przeczytaj <a href="/pl/compare/whisper-vs-parakeet/">Whisper kontra Parakeet</a>.</p>
 
       <h2 id="dictate-to-notes">Zamiana mowy na tekst prosto do Obsidian lub pliku Markdown</h2>
-      <p>Wybierz to, gdy słowa mają trafić do notatki, a nie do innej aplikacji. Nagrywaj w Vox.md, a trasa dostarczy transkrypcję do notatki dziennej, pod nagłówek lub jako nową notatkę. Zacznij od <a href="/pl/blog/voice-notes-to-obsidian-iphone/">notatki głosowe do Obsidian</a>, a potem zobacz <a href="/pl/blog/append-to-obsidian-daily-note-iphone/">dopisywanie do notatki dziennej</a> lub <a href="/pl/blog/private-voice-journal-iphone/">prywatny dziennik głosowy</a>. W przypadku długich nagrań lub istniejącego audio zobacz <a href="/pl/blog/transcribe-voice-memos-iphone/">transkrypcja notatek głosowych</a> i <a href="/pl/blog/offline-transcription-iphone-markdown/">transkrypcja offline do Markdown</a>. Bezpłatny limit obejmuje 10 udanych dostarczeń Capture.</p>
+      <p>Wybierz to, gdy słowa mają trafić do notatki, a nie do innej aplikacji. Nagrywaj w Vox.md, a trasa dostarczy transkrypcję do notatki dziennej, pod nagłówek lub jako nową notatkę. Zacznij od <a href="/pl/blog/voice-notes-to-obsidian-iphone/">notatki głosowe do Obsidian</a>, a potem zobacz <a href="/pl/blog/append-to-obsidian-daily-note-iphone/">dopisywanie do notatki dziennej</a> lub <a href="/pl/blog/private-voice-journal-iphone/">prywatny dziennik głosowy</a>. W przypadku długich nagrań lub istniejącego audio zobacz <a href="/pl/blog/transcribe-voice-memos-iphone/">transkrypcja notatek głosowych</a> i <a href="/pl/blog/offline-transcription-iphone-markdown/">transkrypcja offline do Markdown</a>. Uprawnione konta otrzymują 7-dniowy bezpłatny okres próbny.</p>
 
       <h2 id="privacy">Co zostaje na iPhone</h2>
       <p>Vox.md nie wysyła zawartości przechwytywania na serwery Vox.md. Transkrypcja działa na Twoim iPhone. Jedyne użycie sieci to pobranie modelu, które sam uruchamiasz, z wykorzystaniem infrastruktury Hugging Face lub FluidAudio. Jeśli notatka trafi do folderu synchronizowanego przez iCloud lub inną usługę, ta usługa obsługuje plik zgodnie z własnymi warunkami. Zobacz <a href="/pl/privacy.html">politykę prywatności</a>. Vox.md używa <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a> dla Whisper oraz <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> dla Parakeet.</p>
@@ -246,7 +246,7 @@
 
       <h2 id="faq">Pytania</h2>
       <h3>Czy dyktowanie na iPhone jest bezpłatne?</h3>
-      <p>Strona Apple nie wspomina o opłacie, choć podaje, że mogą obowiązywać opłaty za transmisję danych komórkowych. Vox.md zawiera 15 minut transkrypcji, a potem jednorazowe odblokowanie na zawsze, bez subskrypcji.</p>
+      <p>Strona Apple nie wspomina o opłatach, choć zaznacza, że mogą obowiązywać opłaty za dane komórkowe. Vox.md wymaga Vox.md Unlimited: subskrypcji tygodniowej lub rocznej z 7-dniowym bezpłatnym okresem próbnym dla uprawnionych kont albo jednorazowego zakupu dożywotniego.</p>
       <h3>Czy działa offline?</h3>
       <p>Apple podaje, że dyktowanie jest w wielu językach przetwarzane na iPhone i nie wymaga połączenia z internetem, z tym że tekst podyktowany w polu wyszukiwania może zostać wysłany do wyszukiwarki. Po pobraniu modelu Vox.md wykonuje transkrypcję na iPhone.</p>
       <h3>Czy jest limit czasu?</h3>
@@ -258,7 +258,7 @@
 
       <section class="cta" aria-labelledby="guide-cta">
         <h2 id="guide-cta">Wybierz model lokalny lub dyktuj do swoich notatek.</h2>
-        <p>Bezpłatny limit to 15 minut transkrypcji i 10 udanych dostarczeń Capture. Potem jednorazowe dożywotnie odblokowanie, pokazane w lokalnej cenie App Store, znosi limity. <a href="/pl/docs/#keyboard-setup">Dokumentacja konfiguracji klawiatury</a>.</p>
+        <p>Nagrywanie, transkrypcja i Capture wymagają Vox.md Unlimited: subskrypcji tygodniowej lub rocznej z 7-dniowym bezpłatnym okresem próbnym dla uprawnionych kont albo jednorazowego zakupu dożywotniego. App Store pokazuje Twoją lokalną cenę. <a href="/pl/docs/#keyboard-setup">Dokumentacja konfiguracji klawiatury</a>.</p>
         <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_pl_9b6a0975c35f">Pobierz Vox.md za darmo</a></p>
       </section>
       <nav class="toc" aria-label="Powiązane poradniki" id="related"><div class="toc-title">Dalej</div><ul>

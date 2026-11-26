@@ -205,11 +205,11 @@
             <tr><th scope="row">モデルの選択</th><td>Apple のページには記載なし</td><td>自動、またはダウンロードした Whisper か Parakeet モデル</td><td>自動、またはダウンロードした Whisper か Parakeet モデル</td></tr>
             <tr><th scope="row">リアルタイム、または停止後</th><td>Apple のページでは扱われていません。お使いの iPhone で試してください</td><td>自動: 確定したテキストが話している間に挿入されます。Whisper または Parakeet: 停止した後に文字起こしが挿入されます</td><td>録音が文字起こしされ、配信された後</td></tr>
             <tr><th scope="row">フルアクセスが必要</th><td>いいえ</td><td>はい、「フルアクセスを許可」</td><td>キーボードは不要</td></tr>
-            <tr><th scope="row">費用</th><td>iOS の一部</td><td>15分の無料文字起こし、その後は1回限りの永久ライセンス</td><td>15 分の無料文字起こしと 10 回の Capture 配信の成功まで。その後は買い切りの生涯アンロック</td></tr>
+            <tr><th scope="row">費用</th><td>iOS の一部</td><td>7日間の無料トライアル付きの週額または年額サブスクリプション、または買い切りの永久ライセンス</td><td>7日間の無料トライアル付きの週額または年額サブスクリプション、または買い切りの永久ライセンス</td></tr>
           </tbody>
         </table>
       </div>
-      <p>自動は、対応する iOS 26 デバイスと言語で Apple のオンデバイス音声認識を使います。サブスクリプションはありません。</p>
+      <p>「自動」は、対応する iOS 26 のデバイスと言語で Apple のオンデバイス音声認識を使います。</p>
 
       <h2 id="vox-keyboard">Vox.md キーボードで、どのアプリでもローカルモデルを使う</h2>
       <ol>
@@ -221,7 +221,7 @@
       <p>手順の全体は次を参照してください <a href="/ja/blog/best-voice-to-text-keyboard-iphone/">iPhone 音声入力キーボードのガイド</a>。モデルを選ぶには、次を読んでください <a href="/ja/compare/whisper-vs-parakeet/">Whisper と Parakeet の比較</a>.</p>
 
       <h2 id="dictate-to-notes">音声からテキストへ、Obsidian や Markdown ファイルに直接</h2>
-      <p>言葉を別のアプリではなくノートに残したいときに選びます。Vox.md で録音すると、ルートが文字起こしをデイリーノート、見出しの下、または新しいノートに届けます。まずは次から始めます <a href="/ja/blog/voice-notes-to-obsidian-iphone/">Obsidian へのボイスメモ</a>。そのあと次を参照してください <a href="/ja/blog/append-to-obsidian-daily-note-iphone/">デイリーノートへの追記</a> または <a href="/ja/blog/private-voice-journal-iphone/">プライベートな音声日記</a>。長い録音や既存の音声については、次を参照してください <a href="/ja/blog/transcribe-voice-memos-iphone/">ボイスメモの文字起こし</a> と <a href="/ja/blog/offline-transcription-iphone-markdown/">Markdown へのオフライン文字起こし</a>。無料枠には 10 回の Capture 配信の成功が含まれます。</p>
+      <p>言葉を別のアプリではなくノートに残したいときに選びます。Vox.md で録音すると、ルートが文字起こしをデイリーノート、見出しの下、または新しいノートに届けます。まずは次から始めます <a href="/ja/blog/voice-notes-to-obsidian-iphone/">Obsidian へのボイスメモ</a>。そのあと次を参照してください <a href="/ja/blog/append-to-obsidian-daily-note-iphone/">デイリーノートへの追記</a> または <a href="/ja/blog/private-voice-journal-iphone/">プライベートな音声日記</a>。長い録音や既存の音声については、次を参照してください <a href="/ja/blog/transcribe-voice-memos-iphone/">ボイスメモの文字起こし</a> と <a href="/ja/blog/offline-transcription-iphone-markdown/">Markdown へのオフライン文字起こし</a>。対象のアカウントは7日間の無料トライアルを利用できます。</p>
 
       <h2 id="privacy">iPhone に残るもの</h2>
       <p>Vox.md はキャプチャの内容を Vox.md のサーバーに送信しません。文字起こしは iPhone 上で実行されます。ネットワークを使うのは、自分で開始するモデルのダウンロードだけで、Hugging Face または FluidAudio のインフラを使います。ノートが iCloud などで同期されるフォルダに保存される場合、そのファイルはそのサービスの規約に従って扱われます。次を参照してください <a href="/ja/privacy.html">プライバシーポリシー</a>。Vox.md が使うのは次のものです: <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a> (Whisper 用)と <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> (Parakeet 用)。</p>
@@ -246,7 +246,7 @@
 
       <h2 id="faq">よくある質問</h2>
       <h3>iPhone の音声入力は無料ですか?</h3>
-      <p>Apple のページには料金の記載はありませんが、モバイルデータ通信料がかかる場合があると書かれています。Vox.md には15分間の文字起こしが含まれ、その後は買い切りの永久アンロックで、サブスクリプションはありません。</p>
+      <p>Apple のページには料金の記載はありませんが、モバイルデータ通信料がかかる場合があるとしています。Vox.md には Vox.md Unlimited が必要です。対象のアカウントは7日間の無料トライアル付きの週額または年額サブスクリプション、または買い切りの永久ライセンスを選べます。</p>
       <h3>オフラインで使えますか?</h3>
       <p>Apple によると、音声入力は多くの言語で iPhone 上で処理され、インターネット接続は不要です。ただし、検索欄に音声入力したテキストは検索エンジンに送信される場合があります。モデルをダウンロードすると、Vox.md は iPhone 上で文字起こしします。</p>
       <h3>時間制限はありますか?</h3>
@@ -258,7 +258,7 @@
 
       <section class="cta" aria-labelledby="guide-cta">
         <h2 id="guide-cta">ローカルモデルを選ぶか、ノートに音声入力できます。</h2>
-        <p>無料枠は 15 分の文字起こしと 10 回の Capture 配信の成功です。それ以降は、お住まいの地域の App Store 価格で表示される買い切りの生涯アンロックで、制限が解除されます。 <a href="/ja/docs/#keyboard-setup">キーボード設定のドキュメント</a>.</p>
+        <p>録音、文字起こし、Capture には Vox.md Unlimited が必要です。対象のアカウントは7日間の無料トライアル付きの週額または年額サブスクリプション、または買い切りの永久ライセンスを選べます。価格は App Store に地域ごとに表示されます。 <a href="/ja/docs/#keyboard-setup">キーボード設定のドキュメント</a>.</p>
         <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_9b6a0975c35f">Vox.md を無料でダウンロード</a></p>
       </section>
       <nav class="toc" aria-label="関連ガイド" id="related"><div class="toc-title">続ける</div><ul>
