@@ -1,0 +1,130 @@
+# Device QA for PR #175 (owner's iPhone 17 Pro): Speak's options chevron and
+# both actions, run against the owner's real vault with their permission.
+#
+# Contract:
+#  - On a note with content the chevron (capture_speak_options) is shown and
+#    lists "Record into this note" and "Record into a new note".
+#  - "Record into this note" starts a recording that writes into the open note.
+#  - "Record into a new note" starts a recording that saves to a new note.
+#  - Both recordings are discarded immediately (audio + live transcript deleted).
+#  - On the resulting blank new note the chevron is hidden.
+#
+# Prerequisites: physical iPhone with a DEBUG build, unlocked, Live Notes on,
+#   Vox.md able to run UI automation. The relaunch autofocuses the editor.
+# Side effects (owner-approved): types " Vox QA speak menu" at the cursor of
+#   the open note, so each run leaves that text in a note in the owner's vault;
+#   remove it afterwards. The microphone runs for ~1-2 s per recording; both are
+#   discarded, nothing is transcribed into a saved note.
+# Polish: the two `live_note_recording_line` text checks were added after the
+#   walkthrough (the same element/strings were observed live with describe).
+version: 1
+requires:
+  platform: ios
+steps:
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_voice_recording
+      timeoutMs: 20000
+  - tool: keyboard
+    args:
+      text: " Vox QA speak menu"
+  - tap:
+      id: capture_done_typing
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: live_note_status
+      expectedText: Saved
+      textMatch: equals
+      timeoutMs: 20000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_speak_options
+      timeoutMs: 10000
+  - tap:
+      id: chevron.down
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_speak_record_new_note
+      timeoutMs: 5000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_speak_record_this_note
+      timeoutMs: 5000
+  - tap:
+      id: capture_speak_record_this_note
+  - echo: Recording must write into THIS note as you talk; then discard it at once
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: live_note_recording_line
+      expectedText: as you talk
+      timeoutMs: 10000
+  - tap:
+      id: capture_recording_discard
+  - tap:
+      text: Discard Recording
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: capture_live_recording_dock
+      timeoutMs: 10000
+  - tap:
+      id: chevron.down
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_speak_record_new_note
+      timeoutMs: 5000
+  # The recorder mapped this tap to an overlapping scroll bar; the executed
+  # target was the "Record into a new note" menu item, so tap it by id.
+  - tap:
+      id: capture_speak_record_new_note
+  - echo: Recording must save to a NEW note when stopped
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: live_note_recording_line
+      expectedText: when you stop
+      timeoutMs: 10000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_recording_discard
+      timeoutMs: 10000
+  - tap:
+      id: capture_recording_discard
+  - tap:
+      text: Discard Recording
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: capture_live_recording_dock
+      timeoutMs: 10000
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: capture_speak_options
+      timeoutMs: 5000
