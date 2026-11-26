@@ -74,7 +74,7 @@ class SubscriptionRetentionTest {
 
     private val catalog = listOf(
         PlaySubscriptionOffer(yearly, "yearly", null, "yearly-base", listOf(yearlyBase)),
-        PlaySubscriptionOffer(weekly, "weekly", null, "weekly-base", listOf(phase("$0.99", 990_000L, "P1W"))),
+        PlaySubscriptionOffer(weekly, "weekly", null, "weekly-base", listOf(phase("$2.99", 2_990_000L, "P1W"))),
     )
 
     @Test fun taggedSwitchOfferIsPricedFromItsOwnPhases() {
