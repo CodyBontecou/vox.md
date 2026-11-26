@@ -2,7 +2,7 @@ name = "voxboard-onboarding-analytics"
 main = "src/index.ts"
 compatibility_date = "2026-05-30"
 
-# UNPUBLISHED: retirement responder only; no D1/KV bindings or cron triggers.
+# DEPLOYED 2026-11-26: retirement responder only; no D1/KV bindings or cron triggers.
 # Existing production storage is NOT deleted by this configuration.
 [observability]
 enabled = false
