@@ -1,13 +1,15 @@
-# Speak options > "Record into a new note" (Android parity for iOS #175):
-# from an open Live Note it closes that note like New, opens a blank note and
-# starts recording into it. The recording is then discarded, so nothing is
-# transcribed or written to the vault.
+# Speak's "Record into a new note" segment, tapped (Android parity for iOS
+# #175, owner's design 2026-11-26): one tap on the icon at Speak's trailing end
+# closes the open Live Note, starts a blank note and records into it. The
+# recording is then discarded, so nothing is transcribed or written.
 #
 # Contract:
-#  - Baseline: the Vox QA note capture-c2d2e1cc-….md is open (path shown).
-#  - The chevron offers "Record into a new note"; choosing it shows the blank
-#    note's planned path (capture-{id}.md) and the recording dock.
-#  - Discard → confirm: the dock goes away and Speak is idle again.
+#  - Baseline: the Vox QA note capture-c2d2e1cc-….md is open and the segment
+#    is visible.
+#  - Tapping it shows the blank note's planned path (capture-{id}.md) with the
+#    recording dock (Discard present).
+#  - Discard → confirm: the dock goes away, Speak is idle, and on the blank note
+#    the segment is hidden (Speak already records into a new note there).
 #
 # Prerequisites: the owner's Pixel 7 (debug md.vox.android) with the Vox QA
 #   vault, whose composer reopens Inbox/capture-c2d2e1cc-a45e-4818-80df-
@@ -15,36 +17,34 @@
 # Side effects:
 #  - RECORDS a few seconds of microphone audio, then discards it.
 #  - Leaves the composer on a blank note. The original note is released (not
-#    modified); reopen it from Files before running again (a second run needs
-#    it open). The released-note "Reopen" toast lasts 6 s, which a replay
-#    can't reach before the discard, and the Files tree is unreliable on this
-#    phone (argent's tree goes stale on pushed screens), so the reset is not
+#    modified); reopen it from Files before running again. The released-note
+#    "Reopen" toast lasts 6 s, which a replay can't reach before the discard,
+#    and argent's tree goes stale on Files on this phone, so the reset is not
 #    automated.
 #  - Known app bug (pre-existing, not from this change): a discarded session's
 #    PCM chunks stay in no_backup/recordings/<id>/ despite the dialog's "The
 #    audio ... deleted".
-# Coordinate exception: none. "Discard Recording" is matched by its label
-# because the confirm dialog is a separate window whose test tags are not
-# exposed (same popup issue fixed for the Speak menu in this PR).
+# Selectors: "Discard Recording" is matched by its label because the confirm
+#   dialog is a separate window whose test tags are not exposed.
 version: 1
 requires:
   platform: android
 steps:
-  - echo: Restart Vox.md; expect the composer on the Vox QA note with Speak's options
-      chevron
+  - echo: Restart Vox.md on the open Vox QA note; expect Speak's Record into a new
+      note segment
   - launch: md.vox.android
-  - await: { visible: { id: capture-speak-options }, timeout: 15000 }
+  - await: { visible: { id: capture-speak-record-new-note }, timeout: 15000 }
   - await: { idle: true }
   - await: { text: { in: { id: live-note-path }, contains: capture-c2d2e1cc-a45e-4818-80df-2a9d3d3581ed.md } }
-  - echo: Open Speak's options and choose Record into a new note
-  - tap: { id: capture-speak-options }
-  - await: { visible: { id: capture-speak-record-new-note } }
+  - echo: Tap Record into a new note; expect a blank note recording
   - tap: { id: capture-speak-record-new-note }
-  - echo: Expect a blank note recording; then discard the recording
   - await: { visible: { id: capture-recording-discard }, timeout: 8000 }
   - await: { idle: true }
   - await: { text: { in: { id: live-note-path }, contains: "capture-{id}.md" } }
+  - echo: Discard the recording; Speak must be idle and the segment hidden on the
+      blank note
   - tap: { id: capture-recording-discard }
   - tap: { text: Discard Recording }
   - await: { hidden: { id: capture-recording-discard }, timeout: 8000 }
   - await: { text: { in: { id: capture-speak }, contains: Start voice capture }, timeout: 8000 }
+  - await: { hidden: { id: capture-speak-record-new-note } }

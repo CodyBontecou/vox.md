@@ -1103,7 +1103,7 @@ internal fun CaptureScreen(
         startRecording()
     }
 
-    // Speak's options > Record into a new note: close the note like New, then start
+    // Speak's record-new-note segment: close the note like New, then start
     // recording once the blank note's text has replaced the old one in the editor.
     var recordsIntoNewNoteAfterRevision by remember { mutableStateOf<Long?>(null) }
     fun recordIntoNewNote() {
@@ -1953,7 +1953,7 @@ internal fun CaptureBottomControls(
     addRecordingTask: () -> Unit = {},
     /** Live Notes: the trailing button is "New" (release and start a blank note), not Send. */
     newNoteLabel: String? = null,
-    /** Live Notes, from an open note (Speak's options): close it like New and record into a blank note. */
+    /** Live Notes, from an open note (Speak's record-new-note segment): close it like New and record into a blank note. */
     recordIntoNewNote: () -> Unit = {},
 ) {
     val c = Signal.colors
@@ -1992,7 +1992,7 @@ internal fun CaptureBottomControls(
     val voiceIdle = !recordingStatus.isActive && !recordingIsProcessing && !recordingNeedsAttention
     // Microphone permanently off: Speak rests disabled under the "Open Settings" card.
     val speakEnabled = !isSending && !(microphoneBlocked && voiceIdle)
-    val showsSpeakOptions = speakOptionsMenuOffers(
+    val showsRecordNewNote = showsRecordNewNoteButton(
         voiceIdle = voiceIdle,
         speakEnabled = speakEnabled,
         canRecordNewNote = canRecordIntoNewNote(offersNewNote = newNoteLabel != null, hasContent = hasContent, isSending = isSending),
@@ -2190,8 +2190,8 @@ internal fun CaptureBottomControls(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    // The options chevron owns the trailing end; the label centres in the rest.
-                    .padding(end = if (showsSpeakOptions) SpeakOptionsWidth else 0.dp)
+                    // The record-new-note segment owns the trailing end; the label centres in the rest.
+                    .padding(end = if (showsRecordNewNote) RecordNewNoteWidth else 0.dp)
                     // Tap starts and stops recording; long-press opens the detailed controls.
                     .combinedClickable(
                         enabled = speakEnabled,
@@ -2226,10 +2226,9 @@ internal fun CaptureBottomControls(
                     )
                 }
             }
-            if (showsSpeakOptions) {
-                SpeakOptionsButton(
+            if (showsRecordNewNote) {
+                RecordNewNoteButton(
                     contentColor = capsuleContent,
-                    recordIntoThisNote = startRecording,
                     recordIntoNewNote = recordIntoNewNote,
                     modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
                 )

@@ -23,7 +23,7 @@
     }
   ],
   "androidCatalog": "apps/android/localization/android-strings.json",
-  "androidCatalogBackedSourceCount": 670,
+  "androidCatalogBackedSourceCount": 668,
   "catalog": "Voxboard/Localizable.xcstrings",
   "catalogBackedSourceCount": 481,
   "dynamicRuntimeCallSiteCount": 0,
@@ -114,9 +114,9 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2393",
-        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2691",
-        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2797",
+        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2392",
+        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2690",
+        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2796",
         "apps/android/app/src/main/kotlin/md/vox/android/CaptureStateViews.kt:314",
         "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt:662"
       ],
@@ -136,13 +136,13 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:3086"
+        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:3085"
       ],
       "source": "Heading %lld"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2907"
+        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2906"
       ],
       "source": "Saved locally in %lld durable chunks."
     }
@@ -152,14 +152,14 @@
     "Dynamic-source call sites are inventoried; the current finite-domain trace has no unresolved dynamic expressions.",
     "Missing sources fall back to English; Android machine translations require human linguistic review."
   ],
-  "literalRuntimeSourceCount": 1156,
+  "literalRuntimeSourceCount": 1154,
   "missingCatalogSourceCount": 0,
   "missingCatalogSources": [],
   "pluralImplementationStatus": "cldr-aware",
   "pluralReviewStatus": "requires-human-review",
   "pluralSourceCount": 12,
   "reviewStatus": "requires-human-review",
-  "runtimeSourceLiteralCount": 3362,
+  "runtimeSourceLiteralCount": 3358,
   "runtimeSourceScanRoots": [
     "apps/android/app/src/main/kotlin",
     "apps/android/capture-domain/src/main/kotlin",

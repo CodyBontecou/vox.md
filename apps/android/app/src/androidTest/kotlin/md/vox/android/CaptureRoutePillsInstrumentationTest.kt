@@ -179,35 +179,28 @@ class CaptureRoutePillsInstrumentationTest {
     }
 
     @Test
-    fun speakOptionsOfferThisNoteOrANewOneWhileANoteIsOpen() {
+    fun recordNewNoteLeavesTheOpenNoteBeforeRecording() {
         var started = 0
         var newNotes = 0
         render(startRecording = { started += 1 }, onNewNote = { newNotes += 1 })
 
-        compose.onNodeWithTag("capture-speak-options").performClick()
-        compose.onNodeWithTag("capture-speak-record-new-note").assertExists()
-        // Opening the menu never starts a recording; picking an item does.
-        compose.runOnIdle { assertEquals(0, started) }
-        compose.onNodeWithTag("capture-speak-record-this-note").performClick()
-        compose.runOnIdle {
-            assertEquals(1, started)
-            assertEquals(0, newNotes)
-        }
-
-        compose.onNodeWithTag("capture-speak-options").performClick()
         compose.onNodeWithTag("capture-speak-record-new-note").performClick()
-        // The note is closed first; recording starts once the blank note is in the editor.
+        // The note is closed first; recording starts once the blank note is in the editor
+        // (the test's onNewNote never clears it, so nothing records here).
         compose.runOnIdle {
             assertEquals(1, newNotes)
-            assertEquals(1, started)
+            assertEquals(0, started)
         }
+        // Speak itself still records into the open note.
+        compose.onNodeWithTag("capture-speak").performClick()
+        compose.runOnIdle { assertEquals(1, started) }
     }
 
     @Test
-    fun blankNoteHasNoSpeakOptions() {
+    fun blankNoteHasNoRecordNewNote() {
         render(draftText = "")
         compose.onNodeWithTag("capture-speak").assertExists()
-        compose.onNodeWithTag("capture-speak-options").assertDoesNotExist()
+        compose.onNodeWithTag("capture-speak-record-new-note").assertDoesNotExist()
     }
 
     @Test

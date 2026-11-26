@@ -8,8 +8,7 @@ import org.junit.Test
 
 /**
  * Tester feedback on iOS 3.0.5 (2026-11-26), ported to Android: with the route rail on the
- * header stops repeating every route, and Speak's options chevron replaces a separate
- * "record new note" button. These cover the decisions behind both.
+ * header stops repeating every route, and Speak gains a record-into-a-new-note segment. These cover the decisions behind both.
  */
 class CaptureRecordBarTest {
     private val routes = listOf(
@@ -75,15 +74,15 @@ class CaptureRecordBarTest {
     }
 
     @Test
-    fun speakOptionsShowOnlyWhenThereIsANoteToLeave() {
-        // A note is open: record into this note or a new one.
-        assertTrue(speakOptionsMenuOffers(voiceIdle = true, speakEnabled = true, canRecordNewNote = true))
+    fun recordNewNoteShowsOnlyWhenThereIsANoteToLeave() {
+        // A note is open: one tap leaves it and records into a new note.
+        assertTrue(showsRecordNewNoteButton(voiceIdle = true, speakEnabled = true, canRecordNewNote = true))
         // A blank note: Speak already records into a new note.
-        assertFalse(speakOptionsMenuOffers(voiceIdle = true, speakEnabled = true, canRecordNewNote = false))
+        assertFalse(showsRecordNewNoteButton(voiceIdle = true, speakEnabled = true, canRecordNewNote = false))
         // Recording, transcribing or needing attention: Speak is the stop/status control.
-        assertFalse(speakOptionsMenuOffers(voiceIdle = false, speakEnabled = true, canRecordNewNote = true))
+        assertFalse(showsRecordNewNoteButton(voiceIdle = false, speakEnabled = true, canRecordNewNote = true))
         // Microphone off or sending.
-        assertFalse(speakOptionsMenuOffers(voiceIdle = true, speakEnabled = false, canRecordNewNote = true))
+        assertFalse(showsRecordNewNoteButton(voiceIdle = true, speakEnabled = false, canRecordNewNote = true))
     }
 
     @Test

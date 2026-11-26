@@ -1,0 +1,29 @@
+# Speak's "Record into a new note" segment (Android parity for iOS #175, owner's
+# design 2026-11-26): with a Live Note open, the trailing end of the Speak
+# capsule, behind a thin divider, is one icon button (iOS note.text.badge.plus,
+# Android NoteAdd) that closes the note, starts a blank note and records into
+# it. There is no menu. The rest of Speak still records into the open note.
+#
+# Contract (nothing is tapped, so nothing is recorded):
+#  - The Vox QA note is open (path shown).
+#  - Speak is idle and shows the Record into a new note segment.
+#  - The header keeps its selected route pill (route rail off, the default).
+# The tap itself is covered by qa-android-speak-record-new-note (records audio).
+#
+# Prerequisites: the owner's Pixel 7 (debug md.vox.android) with the Vox QA
+#   vault, whose composer reopens Inbox/capture-c2d2e1cc-a45e-4818-80df-
+#   2a9d3d3581ed.md on launch; English UI.
+# Side effects: none (launch only; nothing typed, tapped or recorded).
+version: 1
+requires:
+  platform: android
+steps:
+  - echo: Restart Vox.md on the open Vox QA note; expect Speak with its Record into
+      a new note segment and the header route pill
+  - launch: md.vox.android
+  - await: { visible: { id: capture-speak }, timeout: 15000 }
+  - await: { idle: true }
+  - await: { text: { in: { id: live-note-path }, contains: capture-c2d2e1cc-a45e-4818-80df-2a9d3d3581ed.md } }
+  - await: { visible: { id: capture-speak-record-new-note } }
+  - await: { text: { in: { id: capture-speak }, contains: Start voice capture } }
+  - await: { visible: { id: capture-preset-selector } }
