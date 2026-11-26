@@ -186,9 +186,17 @@ public enum NaturalRecordingPreference {
         defaults?.set(enabled, forKey: defaultsKey)
     }
 
-    /// True when a recording at `quality` should use the natural input mode.
-    public static func requestsNatural(quality: RecordingQuality, enabled: Bool) -> Bool {
-        enabled && quality.recordsSeparateKeptAudio
+    /// True when a recording at `quality` in `layout` should use the natural
+    /// input mode. Mono only: in the `.measurement` mode iOS offers no stereo
+    /// polar pattern on the built-in microphones (seen on iPhone 13 Pro Max,
+    /// iOS 27.2), so Natural would silently turn Stereo into mono. Stereo and
+    /// Spatial Audio win and keep the standard mode.
+    public static func requestsNatural(
+        quality: RecordingQuality,
+        enabled: Bool,
+        layout: RecordingChannelLayout = .mono
+    ) -> Bool {
+        enabled && quality.recordsSeparateKeptAudio && layout == .mono
     }
 }
 
@@ -203,23 +211,40 @@ public struct KeptAudioInputOptions: Equatable, Sendable {
     public var highQualityBluetooth: Bool
     /// Use the `.measurement` session mode (see `NaturalRecordingPreference`).
     public var naturalInput: Bool
+    /// Record from the iPhone's built-in microphones even when AirPods or a
+    /// headset are connected (they keep playing audio). Stereo and Spatial
+    /// Audio need the built-in microphones; a headset mic would turn the take
+    /// into mono without saying so.
+    public var builtInMicrophone: Bool
 
-    public init(highQualityBluetooth: Bool = false, naturalInput: Bool = false) {
+    public init(highQualityBluetooth: Bool = false, naturalInput: Bool = false, builtInMicrophone: Bool = false) {
         self.highQualityBluetooth = highQualityBluetooth
         self.naturalInput = naturalInput
+        self.builtInMicrophone = builtInMicrophone
     }
 
     public static let standard = KeptAudioInputOptions()
 
+    /// `layout` is the stored channel layout. Anything but mono keeps the
+    /// standard mode (see `NaturalRecordingPreference.requestsNatural`) and
+    /// records from the built-in microphones, so AirPods stay the output only
+    /// and high-quality Bluetooth recording doesn't apply.
     public static func forRecording(
         quality: RecordingQuality,
         eligible: Bool,
-        naturalEnabled: Bool
+        naturalEnabled: Bool,
+        layout: RecordingChannelLayout = .mono
     ) -> KeptAudioInputOptions {
         guard eligible, quality.recordsSeparateKeptAudio else { return .standard }
+        let builtIn = layout != .mono
         return KeptAudioInputOptions(
-            highQualityBluetooth: true,
-            naturalInput: NaturalRecordingPreference.requestsNatural(quality: quality, enabled: naturalEnabled)
+            highQualityBluetooth: !builtIn,
+            naturalInput: NaturalRecordingPreference.requestsNatural(
+                quality: quality,
+                enabled: naturalEnabled,
+                layout: layout
+            ),
+            builtInMicrophone: builtIn
         )
     }
 }

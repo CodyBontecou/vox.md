@@ -284,12 +284,18 @@ public enum KeptAudioArtifacts {
     public static let filenamePrefix = "kept_"
 
     public static func makeURL(in directory: URL, requestID: String, quality: RecordingQuality) -> URL {
+        makeURL(in: directory, requestID: requestID, fileExtension: quality.fileExtension)
+    }
+
+    /// A kept file with an explicit extension: `.mp4` for Spatial Audio
+    /// (`SpatialAudioRecordingFormat`), `.m4a` for everything else.
+    public static func makeURL(in directory: URL, requestID: String, fileExtension: String) -> URL {
         let safeRequestID = requestID
             .filter { $0.isLetter || $0.isNumber || $0 == "-" || $0 == "_" }
             .prefix(80)
         return directory
             .appendingPathComponent("\(filenamePrefix)\(safeRequestID)_\(UUID().uuidString.lowercased())")
-            .appendingPathExtension(quality.fileExtension)
+            .appendingPathExtension(fileExtension)
     }
 
     /// Removes kept files no handoff intent claims. Call only when no
@@ -347,6 +353,31 @@ public enum KeptAudioInspector {
             && (1...2).contains(format.channelCount)
     }
 
+    /// True for a Spatial Audio kept recording as `SpatialAudioFileWriter`
+    /// writes it: an `.mp4` with a four-channel APAC (first-order ambisonics)
+    /// track and a 48 kHz stereo track. AVAudioFile only sees the stereo
+    /// track, so the tracks are read through AVFoundation.
+    public static func isKeptSpatialRecording(_ url: URL) -> Bool {
+        guard url.pathExtension.lowercased() == SpatialAudioRecordingFormat.fileExtension,
+              let stereo = format(of: url),
+              stereo.channelCount == 2,
+              stereo.sampleRate == SpatialAudioRecordingFormat.sampleRate else { return false }
+        return SpatialAudioTranscriptionCopy.hasAmbisonicsTrack(url)
+    }
+
+    /// True for a kept recording with more than one channel (stereo or
+    /// spatial). A recovered one gets the same downmixed transcription copy
+    /// a live take gets.
+    public static func isKeptMultichannelRecording(_ url: URL) -> Bool {
+        isKeptStereoRecording(url) || isKeptSpatialRecording(url)
+    }
+
+    /// Extension a vault copy of this recording keeps: `.mp4` for spatial
+    /// recordings (APAC doesn't fit in `.m4a`), `.m4a` for everything else.
+    public static func exportFileExtension(for url: URL) -> String {
+        isKeptSpatialRecording(url) ? SpatialAudioRecordingFormat.fileExtension : "m4a"
+    }
+
     /// True for a stereo file in the kept-recording format. Only these need a
     /// different transcription path when recovered: a mono file already
     /// reaches the engine exactly as before.
@@ -365,6 +396,9 @@ public enum KeptAudioInspector {
     /// an Apple Lossless file, or a High-quality (48 kHz) AAC recording.
     /// 16 kHz Speech recordings keep the existing export path.
     public static func shouldPreserveEncoding(_ url: URL) -> Bool {
+        // A spatial recording can't be re-encoded to `.m4a` without losing
+        // its ambisonics track.
+        if isKeptSpatialRecording(url) { return true }
         guard url.pathExtension.lowercased() == "m4a",
               let format = format(of: url) else { return false }
         if format.formatID == kAudioFormatAppleLossless { return true }
@@ -376,9 +410,14 @@ public enum KeptAudioInspector {
     /// the source so hour-long 48 kHz recordings do not load into memory.
     /// A stereo kept recording is downmixed (left and right averaged), so the
     /// engine hears both microphones, as it does with a mono take.
+    /// A spatial recording is read from its stereo compatibility track, also
+    /// averaged, so it transcribes like a stereo take.
     @discardableResult
     public static func makeTranscriptionCopy(of sourceURL: URL, at outputURL: URL) throws -> URL {
-        try AudioFileConverter.convertToWhisperWAVStreaming(
+        if isKeptSpatialRecording(sourceURL) {
+            return try SpatialAudioTranscriptionCopy.make(from: sourceURL, at: outputURL)
+        }
+        return try AudioFileConverter.convertToWhisperWAVStreaming(
             inputURL: sourceURL,
             outputURL: outputURL,
             downmix: true

@@ -1,0 +1,148 @@
+# Issue #133: Settings → Recording Quality offers a Mono / Stereo / Spatial
+# Audio choice for High and Lossless. It is hidden for Speech. On a device whose
+# microphone can't record first-order ambisonics (every simulator), the Spatial
+# Audio row is hidden and the footer explains why; Stereo still works as before
+# (stereo format lines, "High · Stereo · …" summary). Replaces the Stereo-toggle
+# checks of recording-quality-stereo-toggle.yaml for the new rows.
+#
+# Prerequisites: iOS simulator, iPhone 18 Pro Max layout (the coordinates below
+#   come from `describe` there), with a DEBUG build of Vox.md (bontecou.Voxboard)
+#   installed, microphone permission granted, Recording Quality = Speech and
+#   Mono (the defaults). `-VoxAdaptiveSeedDemo` seeds the demo vault.
+# Side effects: none left behind. The test selects Mono, then Speech, again.
+# Not covered: the Spatial Audio row itself; it only appears on an iPhone whose
+#   built-in mic supports FOA on iOS 26+ (e.g. iPhone 16/17 Pro).
+# Selectors: taps are documented coordinates (frame centres from `describe`).
+#   The runner's directive tree carries none of these SwiftUI controls (the
+#   recorder derived `quick_capture_text`, role-only `AXScrollArea` and an SF
+#   Symbol id for them), while the raw accessibility waits resolve, so every check
+#   stays a raw `tool: await-ui-element` step, as in the earlier stereo tests.
+version: 1
+requires:
+  platform: ios
+steps:
+  - echo: Launch Vox.md (DEBUG) with the seeded demo vault. Expect the composer
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+          - -VoxScreenshotUnlocked
+          - -VoxAdaptiveSeedDemo
+          - -VoxAdaptiveNoAutofocus
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_settings
+      timeoutMs: 20000
+  - await: { idle: true }
+  - echo: Composer shown. Open Settings; expect the Recording Quality row
+  # Settings button capture_settings: frame (0.855,0.073,0.100,0.046)
+  - tap:
+      x: 0.905
+      y: 0.096
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: settings_recording_quality
+      timeoutMs: 10000
+  - await: { idle: true }
+  - echo: Open Recording Quality. Speech is selected; the channel choice is hidden
+  # Recording Quality row settings_recording_quality: frame (0.036,0.522,0.927,0.063)
+  - tap:
+      x: 0.5
+      y: 0.553
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: recording_quality_high
+      timeoutMs: 10000
+  - await: { idle: true }
+  - echo: Select High. Expect Mono and Stereo rows, no Spatial row (the simulator
+      mic has no FOA) and the unavailable note
+  # High row recording_quality_high: frame (0.045,0.255,0.909,0.097)
+  - tap:
+      x: 0.5
+      y: 0.303
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: recording_quality_layout_stereo
+      timeoutMs: 10000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: recording_quality_spatial_unavailable
+      timeoutMs: 5000
+  - echo: Choose Stereo. Expect stereo format lines on High and Lossless
+  # Stereo row recording_quality_layout_stereo: frame (0.045,0.605,0.909,0.058)
+  - tap:
+      x: 0.5
+      y: 0.634
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: recording_quality_high
+      expectedText: 48 kHz stereo AAC, about 128 kbps
+      timeoutMs: 10000
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: recording_quality_lossless
+      expectedText: 48 kHz stereo Apple Lossless (ALAC)
+      timeoutMs: 10000
+  - echo: Back to Settings. Expect the summary to name Stereo
+  # Back button BackButton: frame (0.045,0.065,0.100,0.046)
+  - tap:
+      x: 0.095
+      y: 0.088
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: settings_recording_quality
+      expectedText: High · Stereo ·
+      timeoutMs: 10000
+  - await: { idle: true }
+  - echo: Restore defaults. Choose Mono, then Speech; expect the channel choice to
+      disappear
+  # Recording Quality row: frame (0.036,0.522,0.927,0.063)
+  - tap:
+      x: 0.5
+      y: 0.553
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: recording_quality_layout_mono
+      timeoutMs: 10000
+  - await: { idle: true }
+  # Mono row recording_quality_layout_mono: frame (0.045,0.547,0.909,0.058)
+  - tap:
+      x: 0.5
+      y: 0.576
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: recording_quality_high
+      expectedText: 48 kHz mono AAC, about 64 kbps
+      timeoutMs: 10000
+  # Speech row recording_quality_speech: frame (0.045,0.158,0.909,0.097)
+  - tap:
+      x: 0.5
+      y: 0.206
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: recording_quality_layout_mono
+      timeoutMs: 10000

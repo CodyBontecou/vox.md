@@ -33,6 +33,20 @@ final class RecordingAudioSessionConfigurationTests: XCTestCase {
         }
     }
 
+    func testBuiltInMicrophoneKeepsAirPodsAsOutputOnly() {
+        // Stereo and Spatial Audio: AirPods play over A2DP but are never the
+        // microphone (HFP off), and high-quality Bluetooth recording is off.
+        let configuration = RecordingAudioSessionConfiguration(
+            KeptAudioInputOptions(highQualityBluetooth: true, builtInMicrophone: true)
+        )
+        XCTAssertEqual(configuration.mode, .default)
+        XCTAssertEqual(configuration.options, [.defaultToSpeaker, .allowBluetoothA2DP, .mixWithOthers])
+        XCTAssertFalse(configuration.prefersNoSystemAlertInterruptions)
+        XCTAssertTrue(configuration.prefersBuiltInMicrophone)
+        XCTAssertFalse(RecordingAudioSessionConfiguration.standard.prefersBuiltInMicrophone)
+        XCTAssertTrue(configuration.describe().contains("builtInMic"))
+    }
+
     func testApplyingTheStandardSessionSucceeds() throws {
         var messages: [String] = []
         let applied = try RecordingAudioSessionConfiguration.standard.apply(to: .sharedInstance()) { messages.append($0) }

@@ -60,7 +60,8 @@ struct RecordingQualitySettingsView: View {
     var onChange: (RecordingQuality) -> Void = { _ in }
 
     @State private var selection = RecordingQuality.load(from: AppConstants.sharedDefaults)
-    @State private var stereo = StereoRecordingPreference.load(from: AppConstants.sharedDefaults)
+    @State private var layout = RecordingChannelLayout.load(from: AppConstants.sharedDefaults)
+    @State private var spatialSupport = SpatialAudioCaptureSupport.current
     @State private var natural = NaturalRecordingPreference.load(from: AppConstants.sharedDefaults)
     /// Keyboard Listening keeps the always-on mono input, which new
     /// recordings reuse; warn when that overrides Stereo.
@@ -90,51 +91,25 @@ struct RecordingQualitySettingsView: View {
 
             if selection.supportsStereo {
                 Section {
-                    Toggle(isOn: Binding(
-                        get: { stereo },
-                        set: { enabled in
-                            guard stereo != enabled else { return }
-                            stereo = enabled
-                            StereoRecordingPreference.save(enabled, to: AppConstants.sharedDefaults)
-                            onChange(selection)
-                        }
-                    )) {
-                        Text("Stereo")
-                            .font(Geist.label(.body))
-                            .foregroundStyle(Geist.text)
-                    }
-                    .tint(Geist.accent)
-                    .accessibilityIdentifier("recording_quality_stereo")
-
-                    if stereo, keyboardListeningOn {
-                        Label {
-                            Text("Keyboard Listening is on, so new recordings are mono. Turn it off to record in stereo.")
-                                .font(Geist.caption())
-                                .foregroundStyle(Geist.text)
-                                .fixedSize(horizontal: false, vertical: true)
-                        } icon: {
-                            Image(systemName: "exclamationmark.triangle")
-                                .foregroundStyle(Geist.muted)
-                        }
-                        .accessibilityIdentifier("recording_quality_stereo_keyboard_listening_warning")
-                    }
+                    RecordingChannelLayoutRows(
+                        quality: selection,
+                        layout: $layout,
+                        support: spatialSupport,
+                        keyboardListeningOn: keyboardListeningOn
+                    ) { onChange(selection) }
                 } footer: {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("Records High and Lossless in stereo with the iPhone's built-in microphones, for a more natural sound with music and nature. External, Bluetooth and AirPods microphones, and Apple Watch, record in mono.")
-                        // Keyboard Listening keeps one always-on mono input so
-                        // dictation transcripts don't change; recordings that
-                        // reuse it are mono too.
-                        Text("Keyboard dictation, and recordings made while Keyboard Listening is on, stay mono.")
-                            .accessibilityIdentifier("recording_quality_stereo_keyboard_note")
-                    }
+                    RecordingChannelLayoutFooter(support: spatialSupport)
                 }
                 .listRowBackground(Geist.card)
             }
 
             if selection.recordsSeparateKeptAudio {
                 Section {
+                    // Stereo and Spatial Audio win over Natural sound: the
+                    // toggle shows off and is disabled, and the stored choice
+                    // comes back when Mono is chosen again.
                     Toggle(isOn: Binding(
-                        get: { natural },
+                        get: { natural && naturalApplies },
                         set: { enabled in
                             guard natural != enabled else { return }
                             natural = enabled
@@ -147,9 +122,18 @@ struct RecordingQualitySettingsView: View {
                             .foregroundStyle(Geist.text)
                     }
                     .tint(Geist.accent)
+                    .disabled(!naturalApplies)
                     .accessibilityIdentifier("recording_quality_natural")
 
-                    if natural, keyboardListeningOn {
+                    if !naturalApplies {
+                        Text("Natural sound records in mono. Stereo and Spatial Audio keep the iPhone's standard microphone processing.")
+                            .font(Geist.caption())
+                            .foregroundStyle(Geist.muted)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .accessibilityIdentifier("recording_quality_natural_mono_only")
+                    }
+
+                    if natural, naturalApplies, keyboardListeningOn {
                         Label {
                             Text("Keyboard Listening is on, so new recordings use the standard microphone settings. Turn it off to use Natural sound.")
                                 .font(Geist.caption())
@@ -178,9 +162,9 @@ struct RecordingQualitySettingsView: View {
                     Label {
                         VStack(alignment: .leading, spacing: 4) {
                             Text("High and Lossless use more Apple Watch battery and take longer to send to iPhone.")
-                            if StereoRecordingPreference.requestsStereo(quality: selection, enabled: stereo) {
-                                // The sizes above are stereo; the Watch has one
-                                // microphone and keeps recording mono.
+                            if effectiveLayout != .mono {
+                                // The sizes above are stereo or spatial; the Watch
+                                // has one microphone and keeps recording mono.
                                 Text("Apple Watch records in mono: \(selection.localizedStoragePerMinute(stereo: false))")
                             }
                         }
@@ -200,9 +184,19 @@ struct RecordingQualitySettingsView: View {
         .onAppear {
             keyboardListeningOn = AppConstants.sharedDefaults?
                 .bool(forKey: AppConstants.autoListenEnabledKey) ?? false
+            spatialSupport = SpatialAudioCaptureSupport.current
         }
         .navigationTitle("Recording Quality")
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private var effectiveLayout: RecordingChannelLayout { layout(for: selection) }
+
+    /// Natural sound only applies to Mono (see `NaturalRecordingPreference`).
+    private var naturalApplies: Bool { effectiveLayout == .mono }
+
+    private func layout(for quality: RecordingQuality) -> RecordingChannelLayout {
+        .effective(quality: quality, stored: layout, support: spatialSupport)
     }
 
     private func row(_ quality: RecordingQuality) -> some View {
@@ -212,11 +206,11 @@ struct RecordingQualitySettingsView: View {
                     Text(quality.displayName)
                         .font(Geist.label(.body))
                         .foregroundStyle(Geist.text)
-                    Text(quality.localizedStoragePerMinute(stereo: stereo))
+                    Text(quality.localizedStoragePerMinute(layout: layout(for: quality)))
                         .font(Geist.mono(size: 11, relativeTo: .caption))
                         .foregroundStyle(Geist.muted)
                 }
-                Text(quality.formatSummary(stereo: stereo))
+                Text(quality.formatSummary(layout: layout(for: quality)))
                     .font(Geist.mono(size: 11, relativeTo: .caption))
                     .foregroundStyle(Geist.muted)
                 Text(quality.settingsDescription)
