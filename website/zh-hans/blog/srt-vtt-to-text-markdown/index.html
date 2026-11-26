@@ -296,6 +296,7 @@
         <li><strong>将其链接到会议笔记。</strong> 构建笔记,使用 <a href="/zh-hans/blog/obsidian-meeting-notes-template/">会议记录模板生成器</a>,然后添加一行,例如 <code>Transcript: [[Team sync transcript]]</code> 到它。如果从属性中链接,链接必须加引号: <code>transcript: "[[Team sync transcript]]"</code>.</li>
       </ol>
       <p>文本会经过转义,因此 <code>*</code>, <code>$</code> 以及开头的 <code>#</code> 在 Obsidian 中不会变成格式、数学公式或标签。说话人姓名来自文件,分享笔记前请先检查。</p>
+      <p>如果笔记中还有表格，例如发言人或决策列表，那么 <a href="/zh-hans/blog/markdown-table-maker/">Markdown 表格生成器</a> 可根据粘贴的电子表格单元格构建表格，并为 Obsidian 转义竖线。</p>
 
       <h2 id="skip-subtitles">5. 从音频而不是字幕文件开始</h2>
       <p>如果你只有录音,根本不需要字幕文件。Vox.md 在设备上转录,并将 Markdown 直接写入你的库。根据 <a href="/zh-hans/docs/#models">模型文档</a>,转录在 Apple 设备上运行:在受支持的 iOS 26 设备和语言上使用 Apple Speech,或使用你下载的可选 Whisper 或 Parakeet 模型;参见 <a href="/zh-hans/compare/whisper-vs-parakeet/">Whisper 与 Parakeet</a> 了解区别。说话人标签是 Route 中可选启用的步骤,名为 <strong>识别演讲者</strong>,它们是匿名的,并且尽力而为。</p>
