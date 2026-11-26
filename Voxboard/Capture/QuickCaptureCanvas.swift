@@ -278,6 +278,9 @@ struct CaptureSpeakCapsuleLabel: View {
     let title: String
     let systemImage: String
     let modeSymbol: String?
+    /// Room kept clear at the trailing end for an overlaid control (Speak's
+    /// options chevron); the title centers in what is left.
+    var contentTrailingInset: CGFloat = 0
     var isDimmed = false
     var showsProgress = false
 
@@ -302,6 +305,7 @@ struct CaptureSpeakCapsuleLabel: View {
             }
         }
         .foregroundStyle(isDimmed ? Geist.muted : Geist.bg)
+        .padding(.trailing, contentTrailingInset * 2)
         .frame(maxWidth: .infinity)
         .frame(height: Geist.ControlHeight.hero)
         .background(isDimmed ? Geist.well : Geist.text, in: Capsule(style: .continuous))
