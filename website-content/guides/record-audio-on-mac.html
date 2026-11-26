@@ -1,0 +1,116 @@
+<!--{
+  "slug": "record-audio-on-mac",
+  "title": "How to record audio on a Mac: your voice or an app’s sound",
+  "description": "Record your voice on a Mac with QuickTime Player, Voice Memos or Shift-Command-5, see what the built-in tools do not cover, and record one app’s sound plus your microphone locally with Vox.md for Mac.",
+  "subtitle": "Apple’s built-in recorders first, with the Apple Support page for each, then a local route for app audio, a kept audio file and an optional on-device transcript.",
+  "eyebrow": "Mac · Audio recording · Markdown",
+  "requirements": "macOS 14+ · microphone access · a writable folder",
+  "published": "2026-11-26",
+  "modified": "2026-11-26",
+  "image": "/screenshots/00-capture-light.png"
+}-->
+<div class="answer-box" id="short-answer"><div class="label">The short answer</div>
+        <p>To record your voice, use QuickTime Player (File → New Audio Recording) or Voice Memos, which are both built in. To record what an app plays, or the app and your microphone together, you need a tool that captures app audio. Vox.md for Mac does this on your Mac and can save the audio with a Markdown note and a transcript.</p>
+      </div>
+      <p>The menu names below come from Apple Support’s pages, linked in each section. Your menus can differ a little by macOS version. The Vox.md steps follow the <a href="../../docs/#mac-workspace">Mac workspace documentation</a> and the <a href="../../docs/#mac-meeting">meeting capture documentation</a>.</p>
+      <nav class="toc" aria-label="In this guide"><div class="toc-title">In this guide</div><ol>
+        <li><a href="#choose">Which method fits</a></li>
+        <li><a href="#quicktime">Record audio with QuickTime Player</a></li>
+        <li><a href="#voice-memos">Record with Voice Memos on Mac</a></li>
+        <li><a href="#screen-recording">Record screen and audio with Shift-Command-5</a></li>
+        <li><a href="#app-audio">Record the sound an app plays</a></li>
+        <li><a href="#vox-mic">Record your voice into a note with Vox.md</a></li>
+        <li><a href="#already-recorded">Already have a recording?</a></li>
+        <li><a href="#troubleshooting">No sound or a silent file</a></li>
+      </ol></nav>
+
+      <h2 id="choose">Which method fits</h2>
+      <p>Pick the row that matches what you want to capture.</p>
+      <p class="guide-table-hint">On a small screen, swipe the table sideways to see every column.</p>
+      <div class="guide-comparison" role="region" aria-label="Mac audio recording methods; scroll horizontally on small screens" tabindex="0">
+        <table class="comparison">
+          <caption>Mac audio recording methods</caption>
+          <thead><tr><th scope="col">Job</th><th scope="col">Built-in option</th><th scope="col">Records app sound?</th><th scope="col">Output file</th><th scope="col">Transcript</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Your voice, audio only</th><td>QuickTime Player audio recording</td><td>Apple’s page describes choosing a microphone, not app sound</td><td>A file you name and save yourself</td><td>Not part of this flow</td></tr>
+            <tr><th scope="row">Your voice, with iCloud sync</th><td>Voice Memos</td><td>Apple’s page describes a microphone, not app sound</td><td>A recording in the Voice Memos library</td><td>Voice Memos can show a transcription; see Apple’s page</td></tr>
+            <tr><th scope="row">Voice plus screen</th><td>Screenshot toolbar (Shift-Command-5)</td><td>Apple’s page describes a microphone choice only</td><td>A screen recording, saved where you choose</td><td>Not part of this flow</td></tr>
+            <tr><th scope="row">Your voice into a Markdown note</th><td>Not built in: Vox.md microphone recording</td><td>No, microphone only</td><td>An audio file kept next to the note, if Save Audio is on</td><td>On your Mac, with a downloaded model</td></tr>
+            <tr><th scope="row">One app’s sound plus your mic</th><td>Not built in: Vox.md Meeting mode</td><td>Yes, one app you pick</td><td>A playback mix of both tracks, kept if Save Audio is on</td><td>On your Mac, with You and speaker labels</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="quicktime">Record audio with QuickTime Player</h2>
+      <p>These steps follow Apple’s <a href="https://support.apple.com/guide/quicktime-player/record-audio-qtpf25d6f827/mac" target="_blank" rel="noopener">Record audio in QuickTime Player on Mac</a>.</p>
+      <ol>
+        <li>Open QuickTime Player and choose <strong>File → New Audio Recording</strong>.</li>
+        <li>Click the arrow next to the Record button to open the options menu. Under <strong>Microphone</strong>, choose the input if you have more than one. Under <strong>Quality</strong>, choose a setting; Apple notes that maximum quality produces uncompressed files that can use a lot of storage.</li>
+        <li>Click the <strong>Record</strong> button to start and the <strong>Stop</strong> button when you are done. Apple says you can pause by Option-clicking the button and click it again to resume.</li>
+        <li>Choose <strong>File → Save</strong> to name the recording and choose where it goes.</li>
+      </ol>
+      <p>QuickTime Player does not write a transcript, and Apple’s page describes choosing a microphone rather than capturing an app’s sound.</p>
+
+      <h2 id="voice-memos">Record with Voice Memos on Mac</h2>
+      <p>Apple’s <a href="https://support.apple.com/guide/voice-memos/create-a-recording-vmaa4b813415/mac" target="_blank" rel="noopener">Create a recording on Mac</a> gives these steps.</p>
+      <ol>
+        <li>Open the Voice Memos app.</li>
+        <li>Click the <strong>Record</strong> button. You can record with the built-in microphone, a supported headset or an external microphone.</li>
+        <li>Click <strong>Pause</strong> to pause and <strong>Resume</strong> to continue.</li>
+        <li>Click <strong>Done</strong> to save the recording.</li>
+      </ol>
+      <p>With iCloud turned on for Voice Memos and the same Apple Account on each device, recordings appear on your Mac, iPhone and iPad; see Apple’s <a href="https://support.apple.com/guide/voice-memos/see-your-recordings-on-all-your-apple-devices-vma6cc4d0571/mac" target="_blank" rel="noopener">See your recordings on all your Apple devices</a>. To turn memos into text, see <a href="../transcribe-voice-memos-iphone/">transcribe Voice Memos on iPhone</a>. Apple also describes a transcription view in <a href="https://support.apple.com/guide/voice-memos/vm4a03609f0d/mac" target="_blank" rel="noopener">View a Voice Memos transcription on Mac</a>.</p>
+
+      <h2 id="screen-recording">Record screen and audio with Shift-Command-5</h2>
+      <p>Apple’s <a href="https://support.apple.com/guide/mac-help/take-screenshots-or-screen-recordings-mh26782/mac" target="_blank" rel="noopener">Take screenshots or screen recordings on Mac</a> says to press <strong>Shift-Command-5</strong> to open Screenshot and show its tools. Choose a screen recording tool, then open the <strong>Options</strong> pop-up menu. Under <strong>Microphone</strong>, select the microphone you want so a checkmark appears next to it; select <strong>None</strong> to turn it off. The options menu also covers things like where the recording is saved.</p>
+      <p>Apple’s page describes the microphone as the audio option. It does not describe recording an app’s own sound, so this guide does not claim the toolbar does.</p>
+
+      <h2 id="app-audio">Record the sound an app plays</h2>
+      <p>The built-in recorders above are described by Apple in terms of a microphone. If you need the sound a particular app plays, such as a lecture stream, a call or a video, you need software that can capture app audio. The route below does not use a virtual audio driver.</p>
+      <p>macOS gates this capability with a privacy permission. Apple explains it in <a href="https://support.apple.com/guide/mac-help/control-access-screen-system-audio-recording-mchld6aa7d23/mac" target="_blank" rel="noopener">Control access to screen and system audio recording on Mac</a>: some apps can record the screen and audio on your Mac, and you control which ones in <strong>System Settings → Privacy &amp; Security → Screen &amp; System Audio Recording</strong>.</p>
+      <p><strong>How Vox.md does it.</strong> Meeting mode uses Apple’s <a href="https://developer.apple.com/documentation/screencapturekit" target="_blank" rel="noopener">ScreenCaptureKit</a> in single-application mode:</p>
+      <ol>
+        <li>Switch the input mode from <strong>Microphone</strong> to <strong>Meeting</strong>.</li>
+        <li>Start recording. macOS shows its content picker; pick exactly one application.</li>
+        <li>Your microphone is recorded as a separate track, and Vox.md never records its own audio.</li>
+        <li>Press Stop. Each track is transcribed on your Mac, and a playback mix of both is kept as the recording’s audio.</li>
+      </ol>
+      <p>This is one chosen app plus your microphone, not all of the sound your Mac makes. Meeting capture cannot be paused. For the full setup, including Routes, speaker labels and recovery, see <a href="../transcribe-meetings-mac-obsidian/">transcribe Mac meetings locally into Obsidian</a>.</p>
+      <p><strong>Ask before you record.</strong> Recording laws and workplace rules differ by place. Tell other people when you are recording them and get their consent. This is not legal advice.</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Download Vox.md free</a></p>
+      <p>The free download includes 15 transcription minutes. Unlimited use is a one-time lifetime purchase.</p>
+
+      <h2 id="vox-mic">Record your voice into a note with Vox.md</h2>
+      <p>For your own voice, Vox.md for Mac records from the microphone into a note rather than a loose file.</p>
+      <ol>
+        <li>In the Capture workspace, choose <strong>Add to Draft</strong> before you record, so the transcript goes into the composer for review instead of being sent right away.</li>
+        <li>Record. Use <strong>Pause</strong> and <strong>Resume</strong> in the status bar to record one note in pieces. Paused audio is excluded from the recording.</li>
+        <li>In the Route, set <strong>Save Audio</strong> to <strong>Alongside Note</strong> or <strong>Attachments Folder</strong> so the audio file is kept. See <a href="../../docs/#audio-export">audio retention</a>.</li>
+        <li>Embed the kept audio in the note with Obsidian syntax such as <code>![[recording.m4a]]</code>.</li>
+      </ol>
+      <p>If you download a Whisper or Parakeet model, Vox.md also gives you a transcript on your device. The <a href="../../docs/#models">model reference</a> lists sizes and languages, and <a href="../../compare/whisper-vs-parakeet/">Whisper vs Parakeet</a> helps you choose. If you only want to speak text into other apps, see <a href="../dictation-on-mac/">dictation on Mac</a>. Setup details are in the <a href="../../docs/#mac-workspace">Mac workspace documentation</a>, and the free tier is described in <a href="../../docs/#pricing-limits">free use and lifetime unlock</a>.</p>
+
+      <h2 id="already-recorded">Already have a recording?</h2>
+      <p>For an audio file, see <a href="../transcribe-audio-file-mac/">transcribe an audio file on Mac</a>.</p>
+      <p>For a video, see <a href="../transcribe-video-to-text/">transcribe a video to text</a>. Recording an interview? <a href="../transcribe-interview/">Method, consent and review</a>.</p>
+
+      <h2 id="troubleshooting">No sound or a silent file</h2>
+      <ul>
+        <li><strong>Input device.</strong> Choose <strong>Apple menu → System Settings → Sound → Input</strong> and select the device you want. See Apple’s <a href="https://support.apple.com/guide/mac-help/change-the-sound-input-settings-mchlp2567/mac" target="_blank" rel="noopener">Change the sound input settings on Mac</a>.</li>
+        <li><strong>Microphone permission.</strong> In <strong>System Settings → Privacy &amp; Security → Microphone</strong>, turn the app on. See Apple’s <a href="https://support.apple.com/guide/mac-help/control-access-to-the-microphone-on-mac-mchla1b1e1fe/mac" target="_blank" rel="noopener">Control access to the microphone on Mac</a>.</li>
+        <li><strong>App sound.</strong> In <strong>Privacy &amp; Security → Screen &amp; System Audio Recording</strong>, turn the recording app on; see <a href="https://support.apple.com/guide/mac-help/control-access-screen-system-audio-recording-mchld6aa7d23/mac" target="_blank" rel="noopener">Apple’s page</a>. In Vox.md Meeting mode, check that both level meters move while the app plays.</li>
+      </ul>
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Your recording,<br>kept next to your note.</h2>
+        <p>Try a short test recording, then check the audio file and Markdown note in your folder.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Download Vox.md free</a></p>
+        <p>15 free transcription minutes · no account required · one lifetime unlock</p>
+      </section>
+      <nav class="toc" aria-label="Related guides" id="related"><div class="toc-title">Continue your setup</div><ul>
+        <li><a href="../transcribe-meetings-mac-obsidian/">Transcribe Mac meetings locally into Obsidian</a></li>
+        <li><a href="../dictation-on-mac/">Dictate on a Mac</a></li>
+        <li><a href="../transcribe-audio-file-mac/">Transcribe an audio file on Mac</a></li>
+        <li><a href="../transcribe-interview/">Transcribe an interview privately</a></li>
+        <li><a href="../../docs/#mac-workspace">Mac workspace reference</a></li>
+        <li><a href="../../compare/whisper-vs-parakeet/">Whisper vs Parakeet</a></li>
+      </ul></nav>
