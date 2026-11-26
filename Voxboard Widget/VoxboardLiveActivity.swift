@@ -265,20 +265,74 @@ private struct ElapsedReadout: View {
     }
 }
 
-/// Steady recording rule shown where a live waveform would go. Live
-/// microphone levels are not streamed to the activity: every ActivityKit
-/// update re-animates the Dynamic Island, which made the compact island jump
-/// once a second (#180). Red while recording, muted while paused.
+/// Recording line shown where a live waveform would go. It fills left to
+/// right over one window (`lineWindowDuration`, 5 min by default) and the
+/// system draws the fill in real time via `ProgressView(timerInterval:)`, so
+/// no per-second ActivityKit updates are needed. Every update re-animates the
+/// Dynamic Island, which made the compact island jump once a second when
+/// mic levels were streamed (#180); the app now sends one update per window.
+/// Paused: frozen at the recorded fill and muted.
 @available(iOS 17.0, *)
 private struct RecordingRule: View {
     let state: VoxboardLiveActivityState
 
+    private static let height: CGFloat = 3
+
     var body: some View {
-        Capsule()
-            .fill(state.isPaused ? SignalActivity.bar : SignalActivity.red)
-            .frame(height: 3)
-            .frame(maxWidth: .infinity)
-            .accessibilityHidden(true)
+        Group {
+            if let fraction = state.pausedLineFraction {
+                track
+                    .overlay(alignment: .leading) {
+                        GeometryReader { proxy in
+                            Capsule()
+                                .fill(SignalActivity.bar)
+                                .frame(width: proxy.size.width * fraction)
+                        }
+                    }
+            } else if let window = currentWindow {
+                ProgressView(timerInterval: window, countsDown: false) {
+                    EmptyView()
+                } currentValueLabel: {
+                    EmptyView()
+                }
+                .progressViewStyle(.linear)
+                .labelsHidden()
+                .tint(SignalActivity.red)
+                .frame(height: Self.height)
+                .background(track)
+                .clipShape(Capsule())
+            } else {
+                Capsule().fill(SignalActivity.red)
+            }
+        }
+        .frame(height: Self.height)
+        .frame(maxWidth: .infinity)
+        .accessibilityHidden(true)
+    }
+
+    private var track: some View {
+        Capsule().fill(SignalActivity.redTrack)
+    }
+
+    /// The window the app last started; computed from the segment start for
+    /// states sent before the window fields existed.
+    private var currentWindow: ClosedRange<Date>? {
+        let duration = state.lineWindowDuration ?? VoxboardLiveActivityState.defaultLineWindowDuration
+        let start: TimeInterval
+        if let windowStart = state.lineWindowStart {
+            start = windowStart
+        } else if let segmentStart = state.segmentStartedAt,
+                  let computed = VoxboardLiveActivityState.lineWindowStart(
+                    effectiveStartedAt: segmentStart,
+                    elapsed: Date().timeIntervalSince1970 - segmentStart,
+                    window: duration
+                  ) {
+            start = computed
+        } else {
+            return nil
+        }
+        let lower = Date(timeIntervalSince1970: start)
+        return lower...lower.addingTimeInterval(duration)
     }
 }
 
@@ -396,6 +450,7 @@ private enum SignalActivity {
     static let accent = Color(red: 47 / 255, green: 59 / 255, blue: 232 / 255)     // #2F3BE8
     static let accentTint = Color(red: 138 / 255, green: 143 / 255, blue: 255 / 255) // #8A8FFF
     static let red = Color(red: 240 / 255, green: 71 / 255, blue: 74 / 255)        // #F0474A
+    static let redTrack = red.opacity(0.22)
     static let bar = Color(red: 74 / 255, green: 74 / 255, blue: 71 / 255)         // #4A4A47
 }
 

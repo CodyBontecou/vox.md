@@ -3,17 +3,26 @@
 # mic-level waveform. This walks start -> background (island) -> ~1 min recording ->
 # pause -> resume -> stop and checks the island shows the right state at each step.
 #
+# #189 extends it: the red line under the expanded island / lock screen fills on a
+# timer window (ProgressView(timerInterval:)), and the app sends one Live Activity
+# update per window to start the next one. The DEBUG launch argument
+# `-VoxLiveActivityLineWindow 20` shortens the window from 5 min to 20 s, so the
+# ~1 min background run below crosses three window resets (0:20, 0:40, 1:00) and
+# the pause/resume steps check the reset math after paused time.
+#
 # What this test can and can't prove: it checks the island exists and changes state
 # (waveform <-> pause) when it should. The jitter itself is visual; the evidence for
 # it is a screen recording of the island taken alongside this run (see the PR).
 #
 # Setup the test does itself: grants the microphone (settings-permissions) and
-#   launches the DEBUG build with -VoxScreenshotUnlocked (skips the paywall) and
+#   launches the DEBUG build with -VoxScreenshotUnlocked (skips the paywall),
+#   -VoxLiveActivityLineWindow 20 (20 s line window) and
 #   -AppleLanguages (en) -AppleLocale en_US, so the labels below are English.
 # Prerequisites it can't automate:
 #   - Live Activities must run on the simulator. A simslim-slimmed simulator needs
 #     the `widgets` category kept (the Vox pool sim, iPhone 18 Pro Max, keeps it).
-#   - The one-time speech-recognition prompt, answered once on this simulator.
+#   - The one-time microphone and speech-recognition prompts, answered once on this
+#     simulator (the microphone grant above does not always suppress the prompt).
 # Side effects: one ~1:30 recording is stopped and added to the draft (on a simulator
 #   without a speech model it stays in the recording queue).
 #
@@ -46,6 +55,8 @@ steps:
         args:
           - -VoxScreenshotUnlocked
           - --disable-release-notes
+          - -VoxLiveActivityLineWindow
+          - "20"
           - -AppleLanguages
           - (en)
           - -AppleLocale
@@ -80,13 +91,23 @@ steps:
         text: "Audio Waveform, 0:"
       timeoutMs: 15000
   - echo: Island up. Keep recording in the background until the island timer reads
-      1:0x (about a minute of island updates). Expect the island to stay up
+      1:0x (about a minute, crossing three 20 s line-window resets). Expect the
+      island to stay up
   - tool: await-ui-element
     args:
       condition: visible
       selector:
         text: "1:0"
       timeoutMs: 90000
+  - echo: Three window resets passed. Expect the compact island still on the waveform
+      symbol (the reset updates did not change the compact regions)
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Audio Waveform
+        role: Image
+      timeoutMs: 5000
   - echo: Island ran 1:0x. Bring Vox.md back to the front. Expect the still-running
       recording (Pause control)
   - tool: launch-app
