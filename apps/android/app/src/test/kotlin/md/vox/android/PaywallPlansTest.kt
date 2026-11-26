@@ -194,11 +194,11 @@ class PaywallPlansTest {
     // region Savings
 
     private val yearly = VoxPlanOption(VoxPlan.YEARLY, "$29.99", 29_990_000L, "USD", "P1Y", "P1W", "y")
-    private val weekly = VoxPlanOption(VoxPlan.WEEKLY, "$0.99", 990_000L, "USD", "P1W", "P1W", "w")
+    private val weekly = VoxPlanOption(VoxPlan.WEEKLY, "$2.99", 2_990_000L, "USD", "P1W", "P1W", "w")
 
     @Test fun savingsPercentIsRoundedDown() {
-        // 1 - 29.99 / (0.99 x 52) = 41.74 %
-        assertEquals(41, yearlySavingsPercent(weekly, yearly))
+        // 1 - 29.99 / (2.99 x 52) = 80.71 %
+        assertEquals(80, yearlySavingsPercent(weekly, yearly))
         assertEquals(50, yearlySavingsPercent(weekly.copy(priceAmountMicros = 1_000_000L), yearly.copy(priceAmountMicros = 26_000_000L)))
         assertNull(yearlySavingsPercent(weekly.copy(priceAmountMicros = 1_000_000L), yearly.copy(priceAmountMicros = 52_000_000L)))
     }
