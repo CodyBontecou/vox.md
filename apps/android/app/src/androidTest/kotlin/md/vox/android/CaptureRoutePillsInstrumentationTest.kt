@@ -17,6 +17,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import md.vox.android.capturedomain.CaptureDestination
 import md.vox.android.capturedomain.CaptureDraft
 import md.vox.android.capturedomain.CapturePreset
@@ -27,7 +28,9 @@ import md.vox.android.platformservices.RecordingPhase
 import md.vox.android.platformservices.RecordingStatus
 import md.vox.android.ui.CaptureUiState
 import md.vox.android.ui.VoxTheme
+import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -54,6 +57,14 @@ class CaptureRoutePillsInstrumentationTest {
     private val disabled = preset("44444444-4444-4444-8444-444444444444", "Travel", isEnabled = false)
     private val collection = CapturePresetCollection(active.id, listOf(active, inbox, disabled))
     private val sessionID = "99999999-9999-4999-8999-999999999999"
+    private val context get() = InstrumentationRegistry.getInstrumentation().targetContext
+
+    // The rail is a device preference; every test starts and ends with it off.
+    @Before
+    @After
+    fun railOff() {
+        compose.runOnUiThread { CaptureRouteRail.set(context, CaptureRouteRailPlacement.OFF) }
+    }
 
     private fun render(
         draftText: String = "Draft text",
@@ -63,6 +74,8 @@ class CaptureRoutePillsInstrumentationTest {
         onSelectPreset: (String) -> Unit = {},
         openPresets: () -> Unit = {},
         cancelRecording: () -> Unit = {},
+        startRecording: () -> Unit = {},
+        onNewNote: () -> Unit = {},
     ) {
         compose.setContent {
             VoxTheme {
@@ -93,7 +106,8 @@ class CaptureRoutePillsInstrumentationTest {
                             openHistory = {},
                             openSettings = {},
                             openPresets = openPresets,
-                            startRecording = {},
+                            startRecording = startRecording,
+                            onNewNote = onNewNote,
                             pauseRecording = {},
                             resumeRecording = {},
                             stopRecording = {},
@@ -123,7 +137,7 @@ class CaptureRoutePillsInstrumentationTest {
         // No rail and no dropdown: the old toggle is gone.
         compose.onNodeWithContentDescription("Show pinned capture presets").assertDoesNotExist()
 
-        compose.onNodeWithTag("capture-route-pill-${inbox.id}").performClick()
+        compose.onNodeWithContentDescription("Inbox").performClick()
         compose.runOnIdle { assertEquals(inbox.id, selected) }
     }
 
@@ -134,11 +148,66 @@ class CaptureRoutePillsInstrumentationTest {
         render(onSelectPreset = { selected = it }, openPresets = { presetsOpened += 1 })
 
         compose.onNodeWithTag("capture-preset-selector").performClick()
-        compose.onNodeWithTag("capture-route-pill-${inbox.id}").performTouchInput { longClick() }
+        compose.onNodeWithContentDescription("Inbox").performTouchInput { longClick() }
         compose.runOnIdle {
             assertEquals(2, presetsOpened)
             assertEquals(null, selected)
         }
+    }
+
+    @Test
+    fun railOnLeavesOnlyTheSelectedPillInTheHeaderAndSwitchesRoutes() {
+        compose.runOnUiThread { CaptureRouteRail.set(context, CaptureRouteRailPlacement.LEFT) }
+        var selected: String? = null
+        render(onSelectPreset = { selected = it })
+
+        compose.onNodeWithTag("capture-route-rail").assertExists()
+        // The header names the active route; the other routes live only in the rail.
+        compose.onNodeWithTag("capture-preset-selector").assertIsSelected()
+        compose.onNodeWithTag("capture-route-pill-other").assertDoesNotExist()
+        compose.onNodeWithTag("capture-route-rail-selected").assertIsSelected()
+
+        compose.onNodeWithTag("capture-route-rail-${inbox.id}").performClick()
+        compose.runOnIdle { assertEquals(inbox.id, selected) }
+    }
+
+    @Test
+    fun railOffKeepsEveryRouteInTheHeader() {
+        render()
+        compose.onNodeWithTag("capture-route-rail").assertDoesNotExist()
+        compose.onNodeWithTag("capture-route-pill-other").assertExists()
+    }
+
+    @Test
+    fun speakOptionsOfferThisNoteOrANewOneWhileANoteIsOpen() {
+        var started = 0
+        var newNotes = 0
+        render(startRecording = { started += 1 }, onNewNote = { newNotes += 1 })
+
+        compose.onNodeWithTag("capture-speak-options").performClick()
+        compose.onNodeWithTag("capture-speak-record-new-note").assertExists()
+        // Opening the menu never starts a recording; picking an item does.
+        compose.runOnIdle { assertEquals(0, started) }
+        compose.onNodeWithTag("capture-speak-record-this-note").performClick()
+        compose.runOnIdle {
+            assertEquals(1, started)
+            assertEquals(0, newNotes)
+        }
+
+        compose.onNodeWithTag("capture-speak-options").performClick()
+        compose.onNodeWithTag("capture-speak-record-new-note").performClick()
+        // The note is closed first; recording starts once the blank note is in the editor.
+        compose.runOnIdle {
+            assertEquals(1, newNotes)
+            assertEquals(1, started)
+        }
+    }
+
+    @Test
+    fun blankNoteHasNoSpeakOptions() {
+        render(draftText = "")
+        compose.onNodeWithTag("capture-speak").assertExists()
+        compose.onNodeWithTag("capture-speak-options").assertDoesNotExist()
     }
 
     @Test

@@ -1,0 +1,47 @@
+# Android parity for tester feedback on iOS 3.0.5 (2026-11-26):
+#  - The phone route rail is the route switcher when drawn, so the header keeps
+#    only the selected route's pill. (Rail on + 2 or more routes; with one route
+#    the rail draws nothing and the header is unchanged.)
+#  - Speak has a trailing "Recording options" chevron holding "Record into this
+#    note" / "Record into a new note" while a Live Note is open. Opening and
+#    dismissing it must not start a recording.
+#
+# Contract checked here (rail off, the default):
+#  - Composer with an open note: Speak, its options chevron and the header's
+#    selected route pill are visible.
+#  - The chevron opens both record choices; Back dismisses the menu and Speak
+#    still reads "Start voice capture" (nothing was recorded).
+#
+# Prerequisites: Android phone with a debug build of Vox.md (md.vox.android)
+#   whose composer restores an open Live Note on launch (a note with text), so
+#   the chevron is offered. English UI.
+# Side effects: none. Nothing is typed, recorded or saved; the note is only
+#   viewed. The menu is dismissed with Back.
+# Not covered here: Settings > Capture Bar > Route Rail. On the Pixel 7, argent's
+#   tree stays on the composer while pushed screens are shown until its helper
+#   restarts, so a replay cannot read Settings. The rail and the header collapse
+#   are covered by CaptureRoutePillsInstrumentationTest (multi-route) and were
+#   checked by hand on the phone (see the PR).
+version: 1
+requires:
+  platform: android
+steps:
+  - echo: Restart Vox.md; expect the composer on an open note with Speak and its
+      options chevron
+  - launch: md.vox.android
+  - await: { visible: { id: capture-speak }, timeout: 15000 }
+  - await: { idle: true }
+  - await: { visible: { id: capture-speak-options }, timeout: 10000 }
+  - await: { visible: { id: capture-preset-selector } }
+  - echo: Open Speak's options chevron; expect both record choices, and opening must
+      not start a recording
+  - tap: { id: capture-speak-options }
+  - await: { visible: { id: capture-speak-record-new-note }, timeout: 5000 }
+  - await: { idle: true }
+  - assert: { visible: { id: capture-speak-record-this-note } }
+  - echo: Dismiss the menu with Back; Speak must still be idle
+  - tool: button
+    args:
+      button: back
+  - await: { hidden: { id: capture-speak-record-new-note }, timeout: 5000 }
+  - await: { text: { in: { id: capture-speak }, contains: Start voice capture }, timeout: 5000 }

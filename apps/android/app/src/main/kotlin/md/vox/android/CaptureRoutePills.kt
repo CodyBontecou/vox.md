@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
@@ -56,8 +56,9 @@ internal data class CaptureRoutePill(val id: String, val name: String, val emoji
 }
 
 /**
- * Horizontal route radio row: the capture header's only route switcher, resting or
- * typing (port of iOS `CaptureRoutePillsRow`). Every pill keeps its route-order
+ * Horizontal route radio row: the capture header's route switcher, resting or typing
+ * (port of iOS `CaptureRoutePillsRow`). With the phone route rail drawn, the rail is the
+ * switcher and this row keeps only the selected pill, in its route-order tone. Every pill keeps its route-order
  * letter tile; only the selected pill shows the name. Tapping another pill switches
  * the route; tapping the selected one, or long-pressing any pill, opens all presets.
  * Edges fade only while pills are scrolled past them, so the row never ends in a
@@ -73,10 +74,13 @@ internal fun CaptureRoutePillsRow(
     openPresets: () -> Unit,
     modifier: Modifier = Modifier,
     pillHeight: Dp = 40.dp,
+    /** Route rail drawn: the rail is the switcher, so only the selected route's pill shows. */
+    showsOnlySelected: Boolean = false,
 ) {
     val c = Signal.colors
     val listState = rememberLazyListState()
-    val selectedIndex = presets.indexOfFirst { it.id == selectedID }
+    val shown = visibleRoutePills(presets, selectedID, showsOnlySelected)
+    val selectedIndex = shown.indexOfFirst { it.value.id == selectedID }
     LaunchedEffect(selectedIndex) {
         if (selectedIndex >= 0) listState.animateScrollToItem(selectedIndex)
     }
@@ -115,7 +119,7 @@ internal fun CaptureRoutePillsRow(
         horizontalArrangement = Arrangement.spacedBy(6.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        itemsIndexed(presets, key = { _, preset -> preset.id }) { index, preset ->
+        items(shown, key = { it.value.id }) { (index, preset) ->
             val on = preset.id == selectedID
             val name = preset.name.trim().ifEmpty { "Default" }
             Row(
@@ -136,7 +140,8 @@ internal fun CaptureRoutePillsRow(
                         contentDescription = name
                         selected = on
                     }
-                    .testTag(if (on) "capture-preset-selector" else "capture-route-pill-${preset.id}")
+                    // Route ids are per-install UUIDs; tests tell the selected pill from the others.
+                    .testTag(if (on) "capture-preset-selector" else "capture-route-pill-other")
                     .padding(start = if (on) 7.dp else 6.dp, end = if (on) 14.dp else 6.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
