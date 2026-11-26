@@ -141,6 +141,7 @@ def main(argv=None):
             "androidxHilt": "1.4.0",
             "androidxTest": "1.7.0", "androidxTestExtJunit": "1.3.0",
             "appcompat": "1.8.0", "billing": "9.1.0",
+            "playReview": "2.0.2",
             "composeBom": "2026.08.00", "concurrent": "1.3.0", "coreKtx": "1.19.0",
             "coroutines": "1.11.0", "dataStore": "1.2.1",
             "daggerHilt": "2.60.1", "espresso": "3.7.0", "jna": "5.17.0",
@@ -301,6 +302,7 @@ def main(argv=None):
         "coroutines": "1.11.0", "serialization": "1.11.0", "jna": "5.17.0",
         "mlkit-text-recognition": "16.0.1", "mlkit-document-scanner": "16.0.0",
         "mlkit-image-labeling": "17.0.9", "sherpa-onnx": "1.13.4", "vosk": "0.3.75", "billing": "9.1.0",
+        "play-review": "2.0.2",
         "androidx-annotation": "1.7.0", "androidx-test": "1.7.0", "androidx-test-ext-junit": "1.3.0",
         "espresso": "3.7.0", "junit4": "4.13.2",
     }
