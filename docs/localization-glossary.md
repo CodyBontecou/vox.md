@@ -11,7 +11,11 @@ URL, Markdown, wikilink, and printf tokens are preserved exactly.
 | Notes | Plain Markdown notes/files |
 | Clipboard | The system pasteboard |
 | Keyboard Extension | The custom iOS keyboard extension |
-| Unlimited Access | The one-time-purchase entitlement, never a subscription |
+| Unlimited Access / Vox.md Unlimited | Paid access to recording, transcription and Capture, from a weekly or yearly subscription or a one-time lifetime purchase |
+| Subscription | An auto-renewing weekly or yearly plan billed by the App Store or Google Play |
+| Free trial | The seven-day introductory offer on eligible subscriptions; never a free usage allowance |
+| Lifetime | A one-time purchase that never renews and has no trial |
+| Free allowance | Android only: the limited free transcription minutes and Captures before a plan is required |
 | Family Sharing | Apple's Family Sharing entitlement |
 
 Protected names include `Vox.md`, `Apple Intelligence`, `Apple Speech`,
@@ -31,5 +35,5 @@ contains explicit count-argument and CLDR category mappings. These additions rem
 `requires-human-review` with no human approval claim. Transcription means speech
 to text, vault means the user-selected Markdown storage folder, and preset means a
 saved capture configuration. Retry repeats an operation; it never means discard,
-withdraw or refund. Google Play Unlimited is an individual lifetime purchase.
+withdraw or refund. Google Play Unlimited is an individual weekly or yearly subscription or lifetime purchase; Google Play has no Family plans.
 File examples, template tokens, HTTP headers, IDs and URLs retain literal syntax.
