@@ -29,12 +29,14 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
@@ -273,7 +275,7 @@ import md.vox.android.capturedomain.CapturePreset
 import md.vox.android.capturedomain.LiveNotePlan
 import md.vox.android.capturedomain.LiveNoteStatus
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.outlined.NoteAdd
+import androidx.compose.material.icons.outlined.EditNote
 import md.vox.android.capturedomain.CapturePresetCollection
 import md.vox.android.capturedomain.CaptureEntryTemplate
 import md.vox.android.capturedomain.resolvingEntryTemplate
@@ -1101,6 +1103,31 @@ internal fun CaptureScreen(
         startRecording()
     }
 
+    // Speak's record-new-note segment: close the note like New, then start
+    // recording once the blank note's text has replaced the old one in the editor.
+    var recordsIntoNewNoteAfterRevision by remember { mutableStateOf<Long?>(null) }
+    fun recordIntoNewNote() {
+        if (recordingStatus.isActive || recordsIntoNewNoteAfterRevision != null) return
+        recordsIntoNewNoteAfterRevision = appliedEditorRevision
+        onNewNote()
+    }
+    LaunchedEffect(recordsIntoNewNoteAfterRevision, appliedEditorRevision, liveNote.isStarted, liveNote.isWriting, recordingStatus.isActive) {
+        val requestedAt = recordsIntoNewNoteAfterRevision ?: return@LaunchedEffect
+        if (recordingStatus.isActive) {
+            recordsIntoNewNoteAfterRevision = null
+            return@LaunchedEffect
+        }
+        if (appliedEditorRevision == requestedAt || liveNote.isStarted || liveNote.isWriting || editorValue.text.isNotEmpty()) return@LaunchedEffect
+        recordsIntoNewNoteAfterRevision = null
+        startRecordingAtCursor()
+    }
+    // A release that never reaches a blank note must not start a recording later.
+    LaunchedEffect(recordsIntoNewNoteAfterRevision) {
+        if (recordsIntoNewNoteAfterRevision == null) return@LaunchedEffect
+        delay(5_000)
+        recordsIntoNewNoteAfterRevision = null
+    }
+
     fun insertRecordingLine(line: String) {
         val (text, caret) = liveTranscript.insertLine(line, editorValue.text)
         val selection = if (caret != null) TextRange(caret) else editorValue.selection
@@ -1226,6 +1253,10 @@ internal fun CaptureScreen(
         androidx.compose.foundation.layout.WindowInsets.statusBars.getTop(this).toDp()
     }
     val layoutDirection = androidx.compose.ui.platform.LocalLayoutDirection.current
+    // Phone route rail (Settings > Capture Bar > Route Rail): tiles on one edge above Speak.
+    val railPlacement = CaptureRouteRail.placement()
+    val railRoutes = captureRoutePills(state.presetCollection?.activePreset, routePresets)
+    val railShown = showsRouteRail(railPlacement, isPhone = maxWidth < 600.dp && !compactHeight, routeCount = railRoutes.size)
     Scaffold(
         // While the full-screen live recording covers the composer, the covered
         // composer (and its inline recording card) must not be read, announced or
@@ -1262,6 +1293,7 @@ internal fun CaptureScreen(
                 openActivity = openActivity,
                 openFiles = openFiles,
                 activityBadge = activityBadge,
+                routeRailShown = railShown,
                 hideKeyboard = {
                     focusManager.clearFocus()
                     keyboardController?.hide()
@@ -1278,6 +1310,7 @@ internal fun CaptureScreen(
                 isSending = sendingCapture && !liveNote.isStarted,
                 onSubmit = onNewNote,
                 newNoteLabel = voxString(if (liveNote.binding?.isAppendTarget == true && onCloseOpenedFile == null) "Done" else "New"),
+                recordIntoNewNote = ::recordIntoNewNote,
                 toggleKeyboard = {
                     focusManager.clearFocus()
                     keyboardController?.hide()
@@ -1356,10 +1389,15 @@ internal fun CaptureScreen(
             attachmentCount = state.draft.attachments.size,
             modifier = Modifier.fillMaxSize().padding(workspacePadding),
         ) {
+        Box(Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = SignalMetrics.PageGutter)
+                // The rail's side keeps a gutter so text, banners and chips never sit under it.
+                .absolutePadding(
+                    left = if (railShown && railPlacement == CaptureRouteRailPlacement.LEFT) RouteRailGutter else SignalMetrics.PageGutter,
+                    right = if (railShown && railPlacement == CaptureRouteRailPlacement.RIGHT) RouteRailGutter else SignalMetrics.PageGutter,
+                )
                 .padding(top = 4.dp, bottom = 8.dp),
         ) {
             val conflict = liveNote.conflict
@@ -1538,6 +1576,16 @@ internal fun CaptureScreen(
                 }
             }
         }
+        if (railShown) {
+            CaptureRouteSideRail(
+                routes = railRoutes,
+                selectedID = state.presetCollection?.activePreset?.id ?: railRoutes.first().id,
+                enabled = canChangeCaptureRoute && !recordingStatus.isActive && !state.isSending && !locationPreflightPending(),
+                select = { if (!state.isSending && !locationPreflightPending()) onSelectPreset(it) },
+                modifier = Modifier.align(railPlacement.alignment).padding(top = headerInset).padding(bottom = 4.dp),
+            )
+        }
+        }
     }
     }
     if (coversComposer) {
@@ -1597,15 +1645,14 @@ internal fun CaptureTopControls(
     onBack: (() -> Unit)? = null,
     /** Phones: Files, before Activity and Settings in the header. */
     openFiles: (() -> Unit)? = null,
+    /** The phone route rail is drawn beside Speak; the header then names only the selected route. */
+    routeRailShown: Boolean = false,
 ) {
     val routeEditor = rememberCaptureRouteEditorState()
     val c = Signal.colors
     val imeVisible = androidx.compose.foundation.layout.WindowInsets.isImeVisible
     // The selected route always has a pill, even before the collection loads.
-    val pills = when {
-        preset != null && routePresets.none { it.id == preset.id } -> listOf(preset) + routePresets
-        else -> routePresets
-    }.map(::CaptureRoutePill).ifEmpty { listOf(CaptureRoutePill("default", "Default", null)) }
+    val pills = captureRoutePills(preset, routePresets)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -1640,6 +1687,7 @@ internal fun CaptureTopControls(
                 select = selectPreset,
                 openPresets = openPresets,
                 modifier = Modifier.weight(1f),
+                showsOnlySelected = routeRailReplacesHeaderPills(routeRailShown, pills.size),
             )
             if (compactHeight) {
                 Box(Modifier.widthIn(max = 240.dp)) {
@@ -1905,6 +1953,8 @@ internal fun CaptureBottomControls(
     addRecordingTask: () -> Unit = {},
     /** Live Notes: the trailing button is "New" (release and start a blank note), not Send. */
     newNoteLabel: String? = null,
+    /** Live Notes, from an open note (Speak's record-new-note segment): close it like New and record into a blank note. */
+    recordIntoNewNote: () -> Unit = {},
 ) {
     val c = Signal.colors
     var showsAllQuickActions by rememberSaveable { mutableStateOf(initialShowsAllQuickActions) }
@@ -1942,6 +1992,11 @@ internal fun CaptureBottomControls(
     val voiceIdle = !recordingStatus.isActive && !recordingIsProcessing && !recordingNeedsAttention
     // Microphone permanently off: Speak rests disabled under the "Open Settings" card.
     val speakEnabled = !isSending && !(microphoneBlocked && voiceIdle)
+    val showsRecordNewNote = showsRecordNewNoteButton(
+        voiceIdle = voiceIdle,
+        speakEnabled = speakEnabled,
+        canRecordNewNote = canRecordIntoNewNote(offersNewNote = newNoteLabel != null, hasContent = hasContent, isSending = isSending),
+    )
     val actionItem: @Composable (CaptureBarAction) -> Unit = { action ->
         CaptureBarActionItem(
             action = action,
@@ -2130,7 +2185,13 @@ internal fun CaptureBottomControls(
                     .then(if (wideComposer) Modifier.widthIn(min = 200.dp, max = 360.dp) else Modifier.weight(1f))
                     .height(if (compactHeight) 48.dp else SignalMetrics.ControlHero)
                     .clip(speakShape)
-                    .background(capsuleFill)
+                    .background(capsuleFill),
+            ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    // The record-new-note segment owns the trailing end; the label centres in the rest.
+                    .padding(end = if (showsRecordNewNote) RecordNewNoteWidth else 0.dp)
                     // Tap starts and stops recording; long-press opens the detailed controls.
                     .combinedClickable(
                         enabled = speakEnabled,
@@ -2165,6 +2226,14 @@ internal fun CaptureBottomControls(
                     )
                 }
             }
+            if (showsRecordNewNote) {
+                RecordNewNoteButton(
+                    contentColor = capsuleContent,
+                    recordIntoNewNote = recordIntoNewNote,
+                    modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
+                )
+            }
+            }
             if (compactHeight) {
                 IconButton(onClick = toggleVoiceCaptureDetails, modifier = Modifier.testTag("capture-recording-options")) {
                     Icon(Icons.Outlined.Tune, contentDescription = detailsLabel, tint = c.muted)
@@ -2187,7 +2256,8 @@ internal fun CaptureBottomControls(
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                 ) {
                     val ink = c.accentText.copy(alpha = if (canStartNew) 1f else 0.45f)
-                    Icon(Icons.AutoMirrored.Outlined.NoteAdd, contentDescription = null, tint = ink, modifier = Modifier.size(20.dp))
+                    // Pencil on lines (iOS square.and.pencil), distinct from Speak's record-new-note icon.
+                    Icon(Icons.Outlined.EditNote, contentDescription = null, tint = ink, modifier = Modifier.size(20.dp))
                     Text(newNoteLabel, style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold), color = ink, maxLines = 1)
                 }
                 return@Row
