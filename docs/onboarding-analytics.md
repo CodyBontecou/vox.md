@@ -37,7 +37,7 @@ https://vox.isolated.tech/privacy.html
 
 The fastlane privacy, support, and marketing URLs use the canonical `vox.isolated.tech` domain.
 
-`app-store-privacy.json` now holds the post-retirement declaration (Other Data Types → App Functionality → Not Linked to You, for ordinary connection metadata at model and quote providers). Before retirement, App Privacy was published with:
+App Privacy was published on 2026-11-26 from `app-store-privacy.json` with the post-retirement declaration (Other Data → App Functionality → Not Linked to You, for ordinary connection metadata at model and quote providers). Before retirement, App Privacy was published with:
 
 - Product Interaction → Analytics → Not Linked to You
 - Purchase History → Analytics → Not Linked to You
