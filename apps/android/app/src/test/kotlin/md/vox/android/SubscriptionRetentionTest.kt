@@ -149,11 +149,11 @@ class SubscriptionRetentionTest {
     // region Copy state mapping
 
     private fun plan(plan: VoxPlan, price: String) = VoxPlanOption(plan, price, 1L, "USD", null, null, "token-${plan.name}")
-    private val priced = listOf(plan(VoxPlan.YEARLY, "$29.99"), plan(VoxPlan.WEEKLY, "$0.99"), plan(VoxPlan.LIFETIME, "$49.99"))
+    private val priced = listOf(plan(VoxPlan.YEARLY, "$29.99"), plan(VoxPlan.WEEKLY, "$2.99"), plan(VoxPlan.LIFETIME, "$79.99"))
 
     @Test fun statusFollowsOwnership() {
         assertEquals(
-            SubscriptionStatus.Active(VoxPlan.WEEKLY, "$0.99", weeklyScheduled = false),
+            SubscriptionStatus.Active(VoxPlan.WEEKLY, "$2.99", weeklyScheduled = false),
             subscriptionStatus(weeklySubscriber().copy(plans = priced)),
         )
         assertEquals(
@@ -161,7 +161,7 @@ class SubscriptionRetentionTest {
             subscriptionStatus(weeklySubscriber().copy(plans = priced, activeSubscriptionProductID = yearly, scheduledSubscriptionProductID = weekly)),
         )
         assertEquals(
-            SubscriptionStatus.Lifetime("$49.99"),
+            SubscriptionStatus.Lifetime("$79.99"),
             subscriptionStatus(weeklySubscriber().copy(plans = priced, ownsLifetime = true)),
         )
         assertEquals(
@@ -211,9 +211,9 @@ class SubscriptionRetentionTest {
     }
 
     @Test fun pricesAndPlanNamesAreFormattedFromPlay() {
-        assertEquals(voxUiText("%@ / week", "$0.99"), planPriceText(VoxPlan.WEEKLY, "$0.99"))
+        assertEquals(voxUiText("%@ / week", "$2.99"), planPriceText(VoxPlan.WEEKLY, "$2.99"))
         assertEquals(voxUiText("%@ / year", "$29.99"), planPriceText(VoxPlan.YEARLY, "$29.99"))
-        assertEquals(voxUiText("%@, once. No subscription.", "$49.99"), planPriceText(VoxPlan.LIFETIME, "$49.99"))
+        assertEquals(voxUiText("%@, once. No subscription.", "$79.99"), planPriceText(VoxPlan.LIFETIME, "$79.99"))
         assertEquals(voxUiText("Yearly at %@ for the first year", "$19.99"), switchOfferTitle(offer))
         assertEquals(
             voxUiText("Then %@ a year. Starts now; your unused weekly time is credited. Price from Google Play.", "$29.99"),

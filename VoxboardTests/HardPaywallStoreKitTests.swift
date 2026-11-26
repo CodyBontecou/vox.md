@@ -9,23 +9,10 @@ import VoxboardShared
 
 @MainActor
 final class HardPaywallStoreKitTests: XCTestCase {
-    private func makeSession(usesCurrentLifetimePrices: Bool = false) async throws -> SKTestSession {
-        var url = try XCTUnwrap(Bundle.main.url(forResource: "Voxboard", withExtension: "storekit"))
-        if usesCurrentLifetimePrices {
-            // Visual previews must reflect the still-frozen production lifetime
-            // prices. The checked-in catalog uses the same held prices.
-            var catalog = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: url)) as? [String: Any])
-            var products = try XCTUnwrap(catalog["products"] as? [[String: Any]])
-            for index in products.indices {
-                let id = products[index]["productID"] as? String
-                products[index]["displayPrice"] = id == VoxboardPurchaseProduct.family.rawValue ? "39.99" : "19.99"
-            }
-            catalog["products"] = products
-            url = FileManager.default.temporaryDirectory.appendingPathComponent("preview-\(UUID().uuidString).storekit")
-            try JSONSerialization.data(withJSONObject: catalog).write(to: url)
-            let temporaryURL = url
-            addTeardownBlock { try? FileManager.default.removeItem(at: temporaryURL) }
-        }
+    private func makeSession() async throws -> SKTestSession {
+        // The checked-in catalog carries the live US prices, so visual previews
+        // use it directly instead of overriding lifetime prices.
+        let url = try XCTUnwrap(Bundle.main.url(forResource: "Voxboard", withExtension: "storekit"))
         let session = try SKTestSession(contentsOf: url)
         session.resetToDefaultState()
         session.disableDialogs = true
@@ -142,7 +129,7 @@ final class HardPaywallStoreKitTests: XCTestCase {
     }
 
     func testPaywallLayoutLightDarkAndLargeType() async throws {
-        let session = try await makeSession(usesCurrentLifetimePrices: true)
+        let session = try await makeSession()
         defer { withExtendedLifetime(session) {} }
         let tracker = makeTracker()
         let store = StoreManager(usageTracker: tracker)
@@ -331,7 +318,7 @@ final class HardPaywallStoreKitTests: XCTestCase {
     func testInteractiveDesignPreview() async throws {
         #if targetEnvironment(simulator)
         try XCTSkipUnless(FileManager.default.fileExists(atPath: "/tmp/vox-thoughtful-design-preview"))
-        let session = try await makeSession(usesCurrentLifetimePrices: true)
+        let session = try await makeSession()
         defer { withExtendedLifetime(session) {} }
         let defaults = UserDefaults.standard
         let previous = defaults.object(forKey: Thoughtful.introductionKey)

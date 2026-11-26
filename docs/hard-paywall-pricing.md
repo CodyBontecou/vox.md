@@ -1,12 +1,24 @@
 # Hard paywall and subscription pricing
 
-> Unpublished candidate update: custom in-app analytics and attribution have been removed. Historical analytics below describe earlier builds/services. Essential services remain. Prices are unchanged; nothing is deployed, submitted, or released.
+## Current US prices (checked 2026-11-26)
+
+Verified live in App Store Connect and the Google Play Publisher API (US storefront) on 2026-11-26. Prices were raised in the stores after launch, so the 2026-10-29 targets and launch prices later in this document are history, not the live catalog.
+
+| Access | Weekly | Yearly | Lifetime |
+| --- | ---: | ---: | ---: |
+| Apple Individual | $2.99 | $29.99 | $79.99 |
+| Apple Family Sharing | $4.99 | $49.99 | $129.99 |
+| Google Play | $2.99 | $29.99 | $79.99 |
+
+The Apple Family lifetime upgrade (`bontecou.Voxboard.familyUpgrade`) is $49.99. Store prices are authoritative; check the stores again before quoting these elsewhere.
+
+> Unpublished candidate update: custom in-app analytics and attribution have been removed. Historical analytics below describe earlier builds/services. Essential services remain. When this note was written, prices were unchanged and nothing was deployed, submitted, or released. See Current US prices above for the live prices.
 
 ## Approved policy
 
 New and existing free installations must purchase or start a verified StoreKit subscription trial before Capture or transcription. There is no local free-minute or free-Capture allowance. Existing lifetime purchases, Family Sharing entitlements, and verified original paid-app owners keep access. Existing content and usage ledgers are not deleted. Unpaid users can view, search, copy, export, and delete existing history without purchasing; new Capture, transcription, history editing, and queued Capture retries remain gated.
 
-US price targets (USD):
+US price targets approved on 2026-10-29 (USD; superseded by the live prices above):
 
 | Access | Weekly | Yearly | Lifetime |
 | --- | ---: | ---: | ---: |
@@ -29,7 +41,7 @@ Weekly and yearly subscriptions have a seven-day introductory free trial for eli
 
 Use **one subscription group** for all four subscriptions so changing billing period/access does not create concurrent subscriptions or reset introductory eligibility. Family is subscription level 1; Individual is level 2; weekly and yearly are equivalent within their access level. Enable Family Sharing on the two Family subscriptions. Configure one period of a free one-week introductory offer for each subscription.
 
-The owner approved a **$39.99 US Family lifetime upgrade**, replacing the previous $19.99 target. It remains available only to lifetime Individual owners; subscribers do not qualify. Individual lifetime ($49.99) plus the upgrade ($39.99) totals $89.98, one cent below direct Family lifetime ($89.99). Existing upgrade entitlements are unchanged. The development catalog reflects this price; the live App Store Connect price has not yet been changed.
+The owner approved a **$39.99 US Family lifetime upgrade**, replacing the previous $19.99 target. It remains available only to lifetime Individual owners; subscribers do not qualify. Individual lifetime ($49.99) plus the upgrade ($39.99) totals $89.98, one cent below direct Family lifetime ($89.99). Existing upgrade entitlements are unchanged. The live US upgrade price is now $49.99 (see Current US prices), and the development catalog matches it.
 
 ## Implementation
 
@@ -54,9 +66,9 @@ Before the later authorized preparation, app `6758967337` had **no subscription 
 
 This implementation does **not** create or change live App Store Connect products, prices, offers, availability, or submissions. `Voxboard.storekit` is not production configuration. Existing regional lifetime pricing is described in `pricing-20261025.md` and must not be assumed updated.
 
-The subsequent [subscription preparation status](subscription-transition-20261029.md) records the authorized group/product creation, regional subscription configuration, 2.14 (58) build uploads, history-access changes, and review blockers. Existing lifetime prices remain frozen.
+The subsequent [subscription preparation status](subscription-transition-20261029.md) records the authorized group/product creation, regional subscription configuration, 2.14 (58) build uploads, history-access changes, and review blockers. Lifetime prices stayed frozen during that preparation; they have since been raised (see Current US prices).
 
-The historical read-only [regional pricing proposal](regional-pricing-proposal-20261029.md) contains 525 verified lifetime/upgrade price-point candidates across 175 storefronts, plus policy benchmarks for the 700 subscription rows that remain blocked on product creation. Regional prices have not been applied.
+The historical read-only [regional pricing proposal](regional-pricing-proposal-20261029.md) contains 525 verified lifetime/upgrade price-point candidates across 175 storefronts, plus policy benchmarks for the 700 subscription rows that remain blocked on product creation. The proposal itself did not apply any regional prices.
 
 ## Release gate: freeze existing live prices
 
@@ -71,6 +83,8 @@ Required order:
 5. Release the subscription-capable update only after explicit release approval. The pricing gate remains closed until the update is publicly available on every platform in the intended rollout (iOS and Mac unless the owner explicitly narrows scope), all four subscriptions resolve at the approved local prices, eligible trial offers and Family Sharing configuration are present, and a production purchase/restore smoke test has evidence. Any real charge requires explicit authorization. App Review approval, TestFlight availability, or a phased-release start alone does not satisfy this gate.
 6. Record release version/builds, storefront/platform checks, timestamps, and purchase/restore evidence. Ask the owner for a separate go-ahead to change existing lifetime/upgrade prices after reviewing that evidence. Do not treat gate completion as automatic permission.
 7. Only then apply and verify approved US lifetime targets ($49.99 Individual, $89.99 Family, $39.99 upgrade) and separately approved regional overrides. Capture fresh before/after schedules and retain rollback evidence. If the subscription release is delayed, unavailable, or fails production verification, stop and leave all existing prices unchanged.
+
+As of 2026-11-26 the live US lifetime prices are $79.99 Individual, $129.99 Family, and $49.99 upgrade, not the targets in step 7. Start any further price change from the live prices, not from these targets.
 
 ## Verification
 
