@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr" data-search-section="Abschnitt" data-search-guide="Anleitung" data-search-empty="Keine Treffer für „{query}“">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vorlesungen auf iPhone, iPad oder Mac aufnehmen und transkribieren | Vox.md</title>
+  <meta name="description" content="Nimm eine Vorlesung auf, prüfe, ob du aufnehmen darfst, und mach daraus eine Lernnotiz in Markdown. Vox.md transkribiert auf deinem Gerät, daher wird kein Vorlesungsaudio hochgeladen.">
+  <link rel="canonical" href="https://vox.isolated.tech/de/blog/record-and-transcribe-lectures/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Vox.md-Dokumentation für Sprachmodelle">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Vorlesungen auf iPhone, iPad oder Mac aufnehmen und transkribieren">
+  <meta property="og:description" content="Nimm eine Vorlesung auf, prüfe, ob du aufnehmen darfst, und mach daraus eine Lernnotiz in Markdown. Vox.md transkribiert auf deinem Gerät, daher wird kein Vorlesungsaudio hochgeladen.">
+  <meta property="og:url" content="https://vox.isolated.tech/de/blog/record-and-transcribe-lectures/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-26">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vorlesungen auf iPhone, iPad oder Mac aufnehmen und transkribieren">
+  <meta name="twitter:description" content="Nimm eine Vorlesung auf, prüfe, ob du aufnehmen darfst, und mach daraus eine Lernnotiz in Markdown. Vox.md transkribiert auf deinem Gerät, daher wird kein Vorlesungsaudio hochgeladen.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Vorlesungen auf iPhone, iPad oder Mac aufnehmen und transkribieren",
+  "description": "Nimm eine Vorlesung auf, prüfe, ob du aufnehmen darfst, und mach daraus eine Lernnotiz in Markdown. Vox.md transkribiert auf deinem Gerät, daher wird kein Vorlesungsaudio hochgeladen.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-26",
+  "dateModified": "2026-11-26",
+  "mainEntityOfPage": "https://vox.isolated.tech/de/blog/record-and-transcribe-lectures/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "de",
+  "name": "Vorlesungen auf iPhone, iPad oder Mac aufnehmen und transkribieren | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/de/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Anleitungen",
+      "item": "https://vox.isolated.tech/de/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Vorlesungen auf iPhone, iPad oder Mac aufnehmen und transkribieren",
+      "item": "https://vox.isolated.tech/de/blog/record-and-transcribe-lectures/"
+    }
+  ],
+  "inLanguage": "de",
+  "name": "Vorlesungen auf iPhone, iPad oder Mac aufnehmen und transkribieren | Vox.md",
+  "description": "Nimm eine Vorlesung auf, prüfe, ob du aufnehmen darfst, und mach daraus eine Lernnotiz in Markdown. Vox.md transkribiert auf deinem Gerät, daher wird kein Vorlesungsaudio hochgeladen."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/record-and-transcribe-lectures/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/record-and-transcribe-lectures/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Zur Anleitung springen</a>
+<nav aria-label="Hauptnavigation">
+  <div class="nav-inner">
+    <a href="/de/" class="logo" aria-label="Vox.md-Startseite">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/de/#how">So funktioniert es</a></li>
+      <li><a href="/de/docs/">Dokumentation</a></li>
+      <li><a href="/de/blog/">Anleitungen</a></li>
+      <li><a href="/de/compare/">Vergleichen</a></li>
+      <li><a href="/de/privacy.html">Datenschutz</a></li>
+      <li><a href="/de/terms.html">Bedingungen</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_de_f9041816b9bc">Vox.md laden</a>
+  <details class="language-switcher"><summary>Sprache</summary><ul><li><a href="/blog/record-and-transcribe-lectures/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/record-and-transcribe-lectures/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/record-and-transcribe-lectures/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/record-and-transcribe-lectures/" lang="de" hreflang="de" aria-current="page">Deutsch</a></li><li><a href="/es/blog/record-and-transcribe-lectures/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/record-and-transcribe-lectures/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/record-and-transcribe-lectures/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/record-and-transcribe-lectures/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/record-and-transcribe-lectures/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/record-and-transcribe-lectures/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/record-and-transcribe-lectures/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/record-and-transcribe-lectures/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/record-and-transcribe-lectures/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/record-and-transcribe-lectures/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/record-and-transcribe-lectures/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/record-and-transcribe-lectures/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/record-and-transcribe-lectures/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/record-and-transcribe-lectures/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/record-and-transcribe-lectures/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/record-and-transcribe-lectures/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/record-and-transcribe-lectures/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/record-and-transcribe-lectures/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/record-and-transcribe-lectures/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Studierende · Vorlesungen · Auf dem Gerät</div>
+        <h1 class="hero-title">Vorlesungen auf iPhone, iPad oder Mac aufnehmen und transkribieren</h1>
+        <p class="hero-subtitle">Erlaubnis, ein Aufnahmeaufbau, der im Hörsaal funktioniert, Transkription auf deinem eigenen Gerät und eine Durchsicht, die in einer Lernnotiz endet, die du behältst.</p>
+      </div>
+      <aside class="meta-card" aria-label="Über diese Anleitung">
+        <dl>
+          <div><dt>Von</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Aktualisiert</dt><dd><time datetime="2026-11-26">26. November 2026</time></dd></div>
+          <div><dt>Erfordert</dt><dd>Vox.md: iOS oder iPadOS 17.6+ oder macOS 14+ · heruntergeladenes Sprachmodell für Whisper oder Parakeet · beschreibbarer Zielordner</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Vorlesungen auf iPhone, iPad oder Mac aufnehmen und transkribieren">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Die kurze Antwort</div>
+        <p>Fünf Schritte: <strong>1) Prüfe, ob du aufnehmen darfst</strong> zum Aufnehmen; <strong>2) Nimm nah am Sprecher auf</strong> und teste zuerst; <strong>3) transkribieren</strong>, auf deinem eigenen Gerät mit Vox.md oder mit einem anderen Tool; <strong>4) Text mit dem Audio abgleichen</strong>; <strong>5) Speichere sie als Lernnotiz</strong>. Ein automatisches Transkript ist ein Entwurf: Es braucht deine Korrekturen, bevor du damit lernst.</p>
+      </div>
+      <p>Die Methode funktioniert mit jedem Rekorder und jedem Transkriptionstool. Die Vox.md-Schritte folgen der <a href="/de/docs/#models">Modelle</a> und <a href="/de/docs/#mac">Mac</a> Dokumentation und das ausgelieferte Verhalten der App. Externe Quellen sind dort verlinkt, wo sie verwendet werden, und die Beispielnotiz ist erfunden.</p>
+      <nav class="toc" aria-label="In dieser Anleitung"><div class="toc-title">In dieser Anleitung</div><ol>
+        <li><a href="#allowed">Darfst du aufnehmen?</a></li>
+        <li><a href="#recording-setup">Brauchbaren Ton im Hörsaal bekommen</a></li>
+        <li><a href="#options">Möglichkeiten zum Aufnehmen und Transkribieren</a></li>
+        <li><a href="#iphone">Auf iPhone oder iPad</a></li>
+        <li><a href="#mac">Auf dem Mac</a></li>
+        <li><a href="#study-note">Vom Transkript zur Lernnotiz</a></li>
+        <li><a href="#troubleshooting">Fehlerbehebung</a></li>
+        <li><a href="#faq">Häufige Fragen</a></li>
+      </ol></nav>
+
+      <h2 id="allowed">Darfst du aufnehmen?</h2>
+      <p><strong>Die Regeln unterscheiden sich je nach Hochschule und Lehrperson</strong>, prüfe deine also, bevor du auf Aufnahme drückst. Vier Beispiele zeigen die Bandbreite:</p>
+      <ul>
+        <li>Das Disability Resource Center der University of Minnesota <a href="https://disability.umn.edu/audio-recording">FAQ zur Audioaufnahme</a> besagt, dass ein generelles Aufnahmeverbot einen Nachteilsausgleich nicht aufhebt und dass Aufnahmen im Rahmen eines Nachteilsausgleichs nur für den persönlichen Gebrauch bestimmt sind. Außerdem dürfen Vorlesungsaufnahmen nicht ohne Zustimmung der Lehrperson an andere weitergegeben werden.</li>
+        <li>Missouri State: <a href="https://www.missouristate.edu/Disability/tape-recording-policy.htm">Aufnahmerichtlinie</a> gibt berechtigten Studierenden das Recht, Vorlesungen nur für das persönliche Lernen aufzunehmen, und sagt, dass Aufnahmen nicht ohne Zustimmung der Lehrperson weitergegeben werden dürfen.</li>
+        <li>University of Calgary: <a href="https://ucalgary.ca/pubs/calendar/archives/2021/e-6.html">Kalenderabschnitt E.6</a> besagt, dass Studierende ohne formalen Nachteilsausgleich mit Erlaubnis der Lehrperson Vorlesungen nur für das individuelle private Lernen aufnehmen dürfen. Andere Verwendungen brauchen die schriftliche Zustimmung der Lehrperson.</li>
+        <li>University of Montana: <a href="https://www.umt.edu/disability/accommodations/AudioRecording.php">Seite zur Audioaufnahme</a> besagt, dass genehmigte Studierende die Lehrenden vor der Aufnahme informieren müssen, Aufnahmen nicht ohne Erlaubnis der Lehrperson weitergeben dürfen und sie auf Wunsch der Lehrperson am Ende des Semesters löschen müssen.</li>
+      </ul>
+      <p>In der Praxis: Frag die Lehrperson oder, wenn du einen Nachteilsausgleich hast, deine Beratungsstelle für Studierende mit Behinderung. Nutze Aufnahmen nur zum eigenen Lernen und teile oder veröffentliche sie nicht. Das sind allgemeine Informationen, keine Rechtsberatung.</p>
+
+      <h2 id="recording-setup">Brauchbaren Ton im Hörsaal bekommen</h2>
+      <ul>
+        <li><strong>Setz dich nach vorn</strong>, oder in der Nähe der Lautsprecher- bzw. Beschallungsanlage, falls der Raum eine hat.</li>
+        <li><strong>Leg das Telefon mit dem Display nach oben auf den Tisch</strong>, nicht in einer Tasche, und lass nichts darauf liegen.</li>
+        <li><strong>Mach einen 30-Sekunden-Test</strong> zu Beginn der Vorlesung und spiele sie ab. Ein Problem lässt sich jetzt in einer Minute beheben; nach der Vorlesung nicht mehr.</li>
+        <li><strong>Akku und freien Speicher prüfen</strong> , bevor du zur Vorlesung gehst.</li>
+        <li><strong>Schalte „Nicht stören“ ein</strong> , damit kein Benachrichtigungston in die Aufnahme gerät.</li>
+      </ul>
+      <p>Fragen von Studierenden auf den hinteren Plätzen sind in der Aufnahme meist schwach oder fehlen, weil das Telefon näher an der Lehrperson liegt. Notiere sie von Hand.</p>
+
+      <h2 id="options">Möglichkeiten zum Aufnehmen und Transkribieren</h2>
+      <p>Die Tabelle vergleicht Kategorien, keine bestimmten Produkte, und nennt nur Dokumentiertes. Die Angaben zu Apples Sprachmemos stammen aus dem Apple-Support-Artikel <a href="https://support.apple.com/guide/voice-memos/vm4a03609f0d/mac">Eine Transkription in Sprachmemos auf dem Mac ansehen</a> und seinem <a href="https://support.apple.com/guide/iphone/view-a-transcription-iph00953a982/ios">iPhone-Seite</a>; prüfe sie für dein Gerät, deine Sprache und deine Region.</p>
+      <p class="guide-table-hint">Wische die Tabelle auf einem kleinen Bildschirm zur Seite.</p>
+      <div class="guide-comparison" role="region" aria-label="Vergleich der Optionen zur Vorlesungsaufnahme und -transkription; auf kleinen Bildschirmen horizontal scrollen" tabindex="0">
+        <table class="comparison">
+          <caption>Optionen zur Vorlesungsaufnahme und -transkription</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">Wo Audio verarbeitet wird</th><th scope="col">Ausgabe</th><th scope="col">Kostenmodell</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Von Hand</th><td>Dein eigener Computer</td><td>Jede Textdatei</td><td>Deine Zeit</td></tr>
+            <tr><th scope="row">Cloud-Transkription und KI-Notizdienste</th><td>Die Server des Anbieters; prüfe die Bedingungen jedes Anbieters</td><td>Je nach Dienst unterschiedlich</td><td>Je nach Dienst unterschiedlich</td></tr>
+            <tr><th scope="row">Apple-Sprachmemos-Transkripte</th><td>Auf den zitierten Seiten nicht dokumentiert</td><td>Text innerhalb von Sprachmemos; du kopierst ihn heraus</td><td>Teil des Betriebssystems</td></tr>
+            <tr><th scope="row">Vox.md</th><td>Auf deinem iPhone, iPad oder Mac</td><td>Eine Markdown-Notiz in einem Ordner deiner Wahl</td><td>Wochen- oder Jahresabo mit 7 Tagen kostenlosem Test oder einmaliger Lifetime-Kauf</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Wenn du nur schnell etwas Text brauchst, genügt Voice Memos. Vox.md ist für den Fall, dass du das Transkript als einfache Datei möchtest, die dir gehört, mit einem Modell deiner Wahl und einer Kopie, die für die Transkription dein Gerät nie verlässt.</p>
+
+      <h2 id="iphone">Auf iPhone oder iPad</h2>
+      <ol>
+        <li><strong>Wähle ein Transkriptionsmodell.</strong> Automatisch bevorzugt Apple Speech auf einem unterstützten iOS-26-Gerät und bei unterstützter Sprache. Du kannst stattdessen Whisper, Parakeet v2 (Englisch) oder Parakeet v3 (25 Sprachen) laden. Das Laden eines Modells ist deine Entscheidung und der einzige Netzwerkschritt. <a href="/de/compare/whisper-vs-parakeet/">Whisper vs. Parakeet</a> hilft dir bei der Wahl, und <a href="/de/blog/offline-transcription-iphone-markdown/">Offline-Transkription auf dem iPhone</a> beschreibt die Vorbereitung.</li>
+        <li><strong>Lege pro Kurs eine Route an.</strong> Erstelle unter Settings → Routes eine Route mit dem Namen des Kurses, zum Beispiel „BIO 201“. Wähle einen Zielordner (einen Obsidian-Vault oder einen Dateien-Ordner) und <strong>Neue Notiz</strong>, sodass jede Vorlesung eine eigene Datei wird. Optional kannst du statisches Frontmatter hinzufügen, eines <code>key: value</code> pro Zeile, etwa <code>course: bio-201</code>. Die <a href="/de/blog/obsidian-properties-generator/">Properties-Generator</a> erstellt gültiges Frontmatter.</li>
+        <li><strong>Nimm eine lange Vorlesung mit einem Rekorder auf, dem du vertraust, und importiere sie dann.</strong> Nimm die Vorlesung in einer App wie Voice Memos auf, nutze dann die Import-Funktion in Vox.md und wähle <strong>Zum Entwurf hinzufügen</strong> , damit du den Text lesen kannst, bevor er zugestellt wird. Siehe <a href="/de/blog/transcribe-voice-memos-iphone/">Sprachmemos in Markdown transkribieren</a> und <a href="/de/blog/transcribe-video-to-text/">ein Video in Text umwandeln</a> zum Importieren von Dateien.</li>
+        <li><strong>Oder nimm im Vox.md-Composer auf.</strong> Das funktioniert auch. Teste vorher eine Aufnahme in voller Länge auf deinem eigenen Gerät und lass die App während der Aufnahme im Vordergrund.</li>
+        <li><strong>Auf Wunsch: Identify Speakers</strong> für Seminare mit Diskussion. Es ist bei jeder Route optional und fügt nach bestem Bemühen anonyme Labels „Speaker 1“ und „Speaker 2“ hinzu. Bei der ersten Nutzung wird ein Sprechermodell vorbereitet, tu das also vor der Vorlesung.</li>
+        <li><strong>In der Mediathek prüfen.</strong> Die Library zeigt jede Aufnahme; öffne sie und prüfe den Text.</li>
+      </ol>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">Probiere es mit einer kurzen aufgenommenen Vorlesung aus.</h2>
+        <p>Der 7-tägige kostenlose Test reicht, um eine Aufnahme auszuprobieren.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_de_f9041816b9bc">Vox.md holen</a></p>
+      </section>
+      <p>Dieselben Schritte funktionieren auf dem iPad; siehe <a href="/de/blog/speech-to-text-iphone/">Sprache zu Text auf dem iPhone</a> und <a href="/de/blog/speech-to-text-ipad/">Sprache zu Text auf dem iPad</a> für die Seite mit Tastatur und Quick Capture.</p>
+
+      <h2 id="mac">Auf dem Mac</h2>
+      <ul>
+        <li><strong>Vor Ort, mit Laptop.</strong> Nimm mit einer der Optionen in <a href="/de/blog/record-audio-on-mac/">Audio am Mac aufnehmen</a>, und wähle dann <strong>Audio importieren…</strong> in Vox.md für Mac. Die Schritte stehen in <a href="/de/blog/transcribe-audio-file-mac/">Audiodatei auf dem Mac transkribieren</a>.</li>
+        <li><strong>Eine Online-Vorlesung (ein Zoom- oder Teams-Kurs).</strong> Die Meeting-Erfassung nimmt den Ton einer App und dein Mikrofon als getrennte Spuren auf. Beide werden in dauerhaften Abschnitten geschrieben, sodass nach einer Unterbrechung noch eine transkribierbare Aufnahme bleibt (siehe die <a href="/de/docs/#mac">Mac-Dokumentation</a>). Die Einrichtung steht in <a href="/de/blog/transcribe-meetings-mac-obsidian/">Mac-Besprechungen in Obsidian transkribieren</a>. Prüfe auch die Regeln deiner Hochschule zur Aufnahme von Online-Veranstaltungen.</li>
+        <li><strong>Eine Untertiteldatei.</strong> Wenn deine Lernplattform oder Zoom dir eine .srt- oder .vtt-Datei gegeben hat, wandelt der <a href="/de/blog/srt-vtt-to-text-markdown/">SRT- und VTT-Konverter</a> sie in deinem Browser in Text oder Markdown um.</li>
+      </ul>
+      <p>Lass die Route für ein originalgetreues Transkript auf Keep Original.</p>
+
+      <h2 id="study-note">Vom Transkript zur Lernnotiz</h2>
+      <ol>
+        <li><strong>Anhören und korrigieren</strong> Begriffe, Namen, Formeln und Zahlen. Bei Fachbegriffen braucht ein Transkript am häufigsten Korrekturen.</li>
+        <li><strong>Füge pro Thema eine Überschrift hinzu</strong> , damit du die Notiz vor einer Prüfung überfliegen kannst.</li>
+        <li><strong>Literatur und Fristen herausziehen</strong> in eine Checkliste um, mit dem <a href="/de/blog/markdown-checklist-maker/">Markdown-Checklisten-Generator</a>.</li>
+        <li><strong>Lege Definitionen in eine Tabelle</strong> mit dem <a href="/de/blog/markdown-table-maker/">Markdown-Tabellen-Generator</a>.</li>
+        <li><strong>Verlinke die Notiz aus deiner Tagesnotiz</strong>; der <a href="/de/blog/obsidian-daily-note-template/">Tagesnotiz-Vorlage</a> ist eine Möglichkeit, das einzurichten.</li>
+      </ol>
+      <p>Eine fertige Notiz könnte so aussehen (erfundenes Beispiel):</p>
+<pre class="guide-code"><code>---
+course: bio-201
+date: 2026-11-19
+lecture: 7
+---
+
+## Key points
+- Enzymes lower the activation energy of a reaction.
+- Reading for next week: chapter 8.
+
+## Terms
+| Term | Meaning |
+| --- | --- |
+| Substrate | The molecule an enzyme acts on |
+
+## To do
+- [ ] Read chapter 8
+- [ ] Problem set due Friday</code></pre>
+
+      <h2 id="troubleshooting">Fehlerbehebung</h2>
+      <ul>
+        <li><strong>Leiser oder entfernter Ton.</strong> Setz dich beim nächsten Mal näher heran, leg das Telefon mit dem Display nach oben auf den Tisch und mach den 30-Sekunden-Test. Schwacher Ton ergibt ein schwächeres Transkript.</li>
+        <li><strong>Falsche Sprache.</strong> Parakeet v2 unterstützt nur Englisch. Verwende für andere Sprachen Parakeet v3 (25 Sprachen) oder Whisper; siehe <a href="/de/docs/#models">Modelle</a>.</li>
+        <li><strong>Die Notiz ist nicht angekommen.</strong> Prüfe den Zielordner der Route und sieh dann in der Library nach der Aufnahme.</li>
+        <li><strong>Ein verstümmelter Fachbegriff.</strong> Korrigiere es bei deiner Durchsicht und nutze Suchen und Ersetzen, wenn es sich wiederholt.</li>
+        <li><strong>Kein aktives Abo.</strong> Aufnahme, Transkription und Capture erfordern Vox.md Unlimited. Maßgeblich ist der Preis im App Store.</li>
+      </ul>
+
+      <h2 id="faq">Häufige Fragen</h2>
+      <h3>Darf ich eine Vorlesung ohne Erlaubnis aufnehmen?</h3>
+      <p>Das hängt von deiner Hochschule und der Lehrperson ab. Frag zuerst nach; siehe <a href="#allowed">Darfst du aufnehmen?</a></p>
+      <h3>Wird das Audio hochgeladen?</h3>
+      <p>Nicht mit den On-Device-Backends von Vox.md: Apple Speech, Whisper und Parakeet. Das Laden eines Modells ist der einzige Netzwerkschritt. Wenn dein Zielordner synchronisiert wird, etwa über iCloud Drive, hält der Sync-Anbieter die Datei nach seinen eigenen Bedingungen. Siehe die <a href="/de/privacy.html">Datenschutzerklärung</a>.</p>
+      <h3>Funktioniert es offline?</h3>
+      <p>Ja, sobald ein Modell vorbereitet ist. Siehe <a href="/de/blog/offline-transcription-iphone-markdown/">Offline-Transkription auf dem iPhone</a>.</p>
+      <h3>Kann es die Lehrperson von Studierenden unterscheiden?</h3>
+      <p>Es kann anonyme Labels nach bestem Bemühen („Speaker 1“, „Speaker 2“) hinzufügen, wenn du Identify Speakers einschaltest. Es erkennt niemanden mit Namen. Die Methode ist dieselbe wie bei <a href="/de/blog/transcribe-interview/">ein Interview transkribieren</a>.</p>
+      <h3>Fasst es Vorlesungen zusammen?</h3>
+      <p>Dieser Leitfaden behandelt, wie du ein Transkript als Notiz behältst und selbst durchgehst, und macht keine Aussagen zu Zusammenfassungen.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Mach aus deiner nächsten Vorlesung eine Notiz auf deinem eigenen Gerät.</h2>
+        <p>Probiere es während des 7-tägigen kostenlosen Tests mit einer kurzen aufgenommenen Vorlesung aus und öffne dann die Markdown-Datei.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_de_f9041816b9bc">Vox.md holen</a></p>
+      </section>
+      <nav class="toc" aria-label="Verwandte Anleitungen" id="related"><div class="toc-title">Weiter</div><ul>
+        <li><a href="/de/blog/transcribe-voice-memos-iphone/">iPhone-Sprachmemos in Markdown transkribieren</a></li>
+        <li><a href="/de/blog/transcribe-audio-file-mac/">Audiodatei auf dem Mac transkribieren</a></li>
+        <li><a href="/de/blog/record-audio-on-mac/">Audio auf dem Mac aufnehmen</a></li>
+        <li><a href="/de/blog/transcribe-interview/">Ein Interview privat transkribieren</a></li>
+        <li><a href="/de/docs/">Dokumentation</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/de/">Startseite</a></li>
+        <li><a href="/de/docs/">Dokumentation</a></li>
+        <li><a href="/de/blog/">Anleitungen</a></li>
+        <li><a href="/de/compare/">Vergleichen</a></li>
+        <li><a href="/de/privacy.html">Datenschutz</a></li>
+        <li><a href="/de/terms.html">Bedingungen</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Unterstützung</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_de_f9041816b9bc">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Schnellerfassung für lokale Notizen · Keine Inhaltsuploads.</div>
+    </div>
+  <details class="language-switcher"><summary>Sprache</summary><ul><li><a href="/blog/record-and-transcribe-lectures/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/record-and-transcribe-lectures/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/record-and-transcribe-lectures/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/record-and-transcribe-lectures/" lang="de" hreflang="de" aria-current="page">Deutsch</a></li><li><a href="/es/blog/record-and-transcribe-lectures/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/record-and-transcribe-lectures/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/record-and-transcribe-lectures/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/record-and-transcribe-lectures/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/record-and-transcribe-lectures/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/record-and-transcribe-lectures/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/record-and-transcribe-lectures/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/record-and-transcribe-lectures/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/record-and-transcribe-lectures/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/record-and-transcribe-lectures/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/record-and-transcribe-lectures/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/record-and-transcribe-lectures/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/record-and-transcribe-lectures/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/record-and-transcribe-lectures/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/record-and-transcribe-lectures/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/record-and-transcribe-lectures/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/record-and-transcribe-lectures/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/record-and-transcribe-lectures/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/record-and-transcribe-lectures/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
