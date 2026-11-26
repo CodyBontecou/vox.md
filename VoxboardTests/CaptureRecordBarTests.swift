@@ -30,12 +30,12 @@ final class CaptureRecordBarTests: XCTestCase {
         XCTAssertEqual(all.map(\.element.id), ["inbox", "work", "journal"])
     }
 
-    func testSpeakOptionsMenuShowsOnlyWhenThereIsAChoice() {
-        // Live Notes with a note open: this note or a new one.
-        XCTAssertTrue(QuickCaptureView.speakOptionsMenuOffers(liveNotesEnabled: true, canRecordNewNote: true))
+    func testSpeakOffersNewNoteOnlyFromAnOpenLiveNote() {
+        // Live Notes with a note open: Speak's trailing icon records into a new note.
+        XCTAssertTrue(QuickCaptureView.speakOffersNewNote(liveNotesEnabled: true, canRecordNewNote: true))
         // Live Notes on a blank note: Speak already records into a new note.
-        XCTAssertFalse(QuickCaptureView.speakOptionsMenuOffers(liveNotesEnabled: true, canRecordNewNote: false))
-        // Without Live Notes the menu picks what Stop does.
-        XCTAssertTrue(QuickCaptureView.speakOptionsMenuOffers(liveNotesEnabled: false, canRecordNewNote: false))
+        XCTAssertFalse(QuickCaptureView.speakOffersNewNote(liveNotesEnabled: true, canRecordNewNote: false))
+        // Without Live Notes there is no note to leave.
+        XCTAssertFalse(QuickCaptureView.speakOffersNewNote(liveNotesEnabled: false, canRecordNewNote: true))
     }
 }

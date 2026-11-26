@@ -1374,12 +1374,13 @@ struct QuickCaptureView: View {
 
     private var voiceCaptureButton: CaptureViewSection {
         CaptureViewSection {
-            // The options chevron sits on top of the capsule's trailing end,
-            // outside the press gesture, so tapping it never starts recording.
+            // The record-new-note icon sits on top of the capsule's trailing
+            // end, outside the press gesture, so a tap there never also
+            // records into the open note.
             ZStack(alignment: .trailing) {
                 voiceCapturePressArea
-                if showsSpeakOptionsMenu {
-                    speakOptionsMenu
+                if showsSpeakNewNoteButton {
+                    speakNewNoteButton
                         .transition(.opacity)
                 }
             }
@@ -1434,10 +1435,12 @@ struct QuickCaptureView: View {
                     ? String(localized: "Transcribing")
                     : String(localized: "Speak"),
                 systemImage: isCaptureReadOnly ? "lock.fill" : "mic",
-                // What Speak does is chosen in the options menu (the
-                // chevron), so the capsule no longer carries a mode glyph.
-                modeSymbol: nil,
-                contentTrailingInset: showsSpeakOptionsMenu ? Self.speakOptionsMenuWidth / 2 : 0,
+                // With Live Notes speech always goes into the note, so the
+                // what-Stop-does glyph only shows without them; the trailing
+                // end is then free for the record-new-note icon.
+                modeSymbol: viewModel.liveNotesEnabled || persistentRecorder.isAppRecordingTranscribing || isCaptureReadOnly
+                    ? nil : recordingResultModeSymbol,
+                contentTrailingInset: showsSpeakNewNoteButton ? Self.speakNewNoteButtonWidth / 2 : 0,
                 isDimmed: (isMicrophoneDenied || isCaptureReadOnly) && !isLocalizationScreenshot,
                 showsProgress: persistentRecorder.isAppRecordingTranscribing
             )
@@ -1458,79 +1461,59 @@ struct QuickCaptureView: View {
         AVAudioApplication.shared.recordPermission == .denied
     }
 
-    static let speakOptionsMenuWidth: CGFloat = 52
+    /// Compact indicator pinned to the mic control showing the persisted
+    /// recording result mode — `text.badge.plus` when stopping adds the
+    /// transcript to the Capture draft, `paperplane.fill` when it runs the
+    /// selected preset and sends immediately — so users can see what stop
+    /// will do before pressing it.
+    private var recordingResultModeSymbol: String {
+        recordingMode == .draft ? "text.badge.plus" : "paperplane.fill"
+    }
 
-    /// Speak's options (Hans, 2026-11-26: the separate mic-plus "Record new
-    /// note" button read as a second Speak button). The chevron holds the
-    /// choices Speak itself can't show: recording into a new note (Live
-    /// Notes, with a note open) or what Stop does (without Live Notes; with
-    /// Live Notes speech always goes into the note).
-    private var showsSpeakOptionsMenu: Bool {
+    static let speakNewNoteButtonWidth: CGFloat = 52
+
+    /// Live Notes, note open: the trailing end of Speak is a one-tap "record
+    /// into a new note" (Hans, 2026-11-26: the separate mic-plus button read
+    /// as a second Speak button). Tapping the rest of Speak still records
+    /// into the open note.
+    private var showsSpeakNewNoteButton: Bool {
         guard !persistentRecorder.isAppRecordingSegmentActive,
               !persistentRecorder.isAppRecordingTranscribing,
               !isCaptureReadOnly else { return false }
-        return Self.speakOptionsMenuOffers(
+        return Self.speakOffersNewNote(
             liveNotesEnabled: viewModel.liveNotesEnabled,
             canRecordNewNote: viewModel.canRecordNewNote
         )
     }
 
-    /// With Live Notes the only choice is which note to record into, so the
-    /// menu shows only while a note is open to leave; on a blank note Speak
-    /// already records into a new note.
-    static func speakOptionsMenuOffers(liveNotesEnabled: Bool, canRecordNewNote: Bool) -> Bool {
-        liveNotesEnabled ? canRecordNewNote : true
+    /// Only while a note is open to leave; on a blank note Speak already
+    /// records into a new note, and without Live Notes there are no notes.
+    static func speakOffersNewNote(liveNotesEnabled: Bool, canRecordNewNote: Bool) -> Bool {
+        liveNotesEnabled && canRecordNewNote
     }
 
-    private var speakOptionsMenu: CaptureViewSection {
+    private var speakNewNoteButton: CaptureViewSection {
         CaptureViewSection {
-            Menu {
-                if viewModel.liveNotesEnabled {
-                    Button(action: handleVoiceCaptureTap) {
-                        Label("Record into this note", systemImage: "mic")
-                    }
-                    .accessibilityIdentifier("capture_speak_record_this_note")
-                    Button(action: recordNewNote) {
-                        Label("Record into a new note", systemImage: "square.and.pencil")
-                    }
-                    .disabled(persistentRecorder.ownsCaptureRoute)
-                    .keyboardShortcut("n", modifiers: [.command, .shift])
-                    .accessibilityIdentifier("capture_speak_record_new_note")
-                } else {
-                    Picker(selection: recordingModeSelection) {
-                        Label("Add to draft", systemImage: "text.badge.plus")
-                            .tag(CaptureRecordingMode.draft)
-                        Label("Send on stop", systemImage: "paperplane")
-                            .tag(CaptureRecordingMode.preset)
-                    } label: {
-                        Text("When you stop")
-                    }
-                    .pickerStyle(.inline)
-                }
-            } label: {
+            Button(action: recordNewNote) {
                 HStack(spacing: 0) {
                     Rectangle()
                         .fill(Geist.bg.opacity(0.25))
                         .frame(width: 1, height: 22)
-                    Image(systemName: "chevron.down")
-                        .font(.system(size: 13, weight: .semibold))
+                    Image(systemName: "note.text.badge.plus")
+                        .font(.system(size: 17, weight: .semibold))
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 .foregroundStyle(isMicrophoneDenied ? Geist.muted : Geist.bg)
-                .frame(width: Self.speakOptionsMenuWidth, height: Geist.ControlHeight.hero)
+                .frame(width: Self.speakNewNoteButtonWidth, height: Geist.ControlHeight.hero)
                 .contentShape(Rectangle())
             }
-            .menuOrder(.fixed)
-            .disabled(isProcessingMedia)
-            .accessibilityLabel("Recording options")
-            .accessibilityValue(speakOptionsAccessibilityValue)
-            .accessibilityIdentifier("capture_speak_options")
+            .buttonStyle(.plain)
+            .disabled(isProcessingMedia || persistentRecorder.ownsCaptureRoute)
+            .accessibilityLabel("Record into a new note")
+            .accessibilityHint(Text("Closes this file, starts a blank note and starts recording"))
+            .accessibilityIdentifier("capture_speak_record_new_note")
+            .keyboardShortcut("n", modifiers: [.command, .shift])
         }
-    }
-
-    private var speakOptionsAccessibilityValue: Text {
-        if viewModel.liveNotesEnabled { return Text("Records into this note") }
-        return recordingMode == .draft ? Text("Add to draft") : Text("Send on stop")
     }
 
     /// Tap starts or stops recording; a long press opens the detailed
@@ -2793,7 +2776,7 @@ struct QuickCaptureView: View {
                         sendRouteControl
                     }
                 }
-                .animation(reduceMotion ? nil : .easeInOut(duration: 0.18), value: showsSpeakOptionsMenu)
+                .animation(reduceMotion ? nil : .easeInOut(duration: 0.18), value: showsSpeakNewNoteButton)
             }
             .padding(.horizontal, Geist.Spacing.four)
             .padding(.top, Geist.Spacing.three)
