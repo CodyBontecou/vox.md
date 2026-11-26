@@ -39,7 +39,20 @@ public struct VoxboardLiveActivityState: Codable, Hashable, Sendable {
     /// Recent microphone level history, oldest first, each 0...100.
     public var audioLevels: [UInt8]?
 
+    // MARK: Recording line window
+
+    /// Wall-clock start of the current recording-line window. The Live
+    /// Activity fills its red line with `ProgressView(timerInterval:)` from
+    /// here to `lineWindowStart + lineWindowDuration`, so the system animates
+    /// it with no app updates; the app sends one update per window to start
+    /// the next one. Nil while paused (the line freezes at `pausedLineFraction`).
+    public var lineWindowStart: TimeInterval?
+    /// Length of one recording-line window, in seconds.
+    public var lineWindowDuration: TimeInterval?
+
     public static let maximumAudioLevelCount = 40
+    /// Default recording-line window: the line fills once every 5 minutes.
+    public static let defaultLineWindowDuration: TimeInterval = 300
 
     public init(
         isSegmentActive: Bool = false,
@@ -52,7 +65,9 @@ public struct VoxboardLiveActivityState: Codable, Hashable, Sendable {
         destinationPath: String? = nil,
         pausedElapsed: TimeInterval? = nil,
         canPause: Bool? = nil,
-        audioLevels: [UInt8]? = nil
+        audioLevels: [UInt8]? = nil,
+        lineWindowStart: TimeInterval? = nil,
+        lineWindowDuration: TimeInterval? = nil
     ) {
         self.isSegmentActive = isSegmentActive
         self.isTranscribing = isTranscribing
@@ -69,9 +84,54 @@ public struct VoxboardLiveActivityState: Codable, Hashable, Sendable {
         self.audioLevels = audioLevels.map {
             Array($0.suffix(Self.maximumAudioLevelCount).map { min($0, 100) })
         }
+        self.lineWindowStart = lineWindowStart.flatMap { $0.isFinite ? $0 : nil }
+        self.lineWindowDuration = lineWindowDuration.flatMap { $0.isFinite && $0 > 0 ? $0 : nil }
     }
 
     public var isPaused: Bool { isSegmentActive && pausedElapsed != nil }
+
+    /// Start of the window that contains `elapsed` recorded seconds, as wall
+    /// clock time. `effectiveStartedAt` is the wall-clock start minus recorded
+    /// time, so paused time never counts and the fill resumes where it froze.
+    public static func lineWindowStart(
+        effectiveStartedAt: TimeInterval,
+        elapsed: TimeInterval,
+        window: TimeInterval
+    ) -> TimeInterval? {
+        guard effectiveStartedAt.isFinite, elapsed.isFinite, window.isFinite, window > 0 else {
+            return nil
+        }
+        let index = (max(0, elapsed) / window).rounded(.down)
+        return effectiveStartedAt + index * window
+    }
+
+    /// True when the shown line window must be replaced: recorded time has
+    /// moved into a later window, or no window was sent yet (e.g. the first
+    /// state went out before the recorder's segment context existed).
+    public static func lineWindowNeedsUpdate(
+        shown: TimeInterval?,
+        current: TimeInterval?
+    ) -> Bool {
+        guard let current else { return false }
+        guard let shown else { return true }
+        return current > shown + 0.5
+    }
+
+    /// Fraction (0..<1) of the current window filled after `elapsed` recorded seconds.
+    public static func lineWindowFraction(elapsed: TimeInterval, window: TimeInterval) -> Double {
+        guard elapsed.isFinite, window.isFinite, window > 0 else { return 0 }
+        let remainder = max(0, elapsed).truncatingRemainder(dividingBy: window)
+        return min(1, max(0, remainder / window))
+    }
+
+    /// Frozen fill of the recording line while paused.
+    public var pausedLineFraction: Double? {
+        guard isPaused, let pausedElapsed else { return nil }
+        return Self.lineWindowFraction(
+            elapsed: pausedElapsed,
+            window: lineWindowDuration ?? Self.defaultLineWindowDuration
+        )
+    }
 
     /// Converts a normalized 0...1 level to the compact wire value.
     public static func encodedLevel(_ level: Float) -> UInt8 {

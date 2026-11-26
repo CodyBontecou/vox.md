@@ -132,4 +132,50 @@ final class VoxboardLiveActivityStateTests: XCTestCase {
         XCTAssertEqual(VoxboardLiveActivityState.monogram(name: "  ", emoji: "📝"), "📝")
         XCTAssertNil(VoxboardLiveActivityState.monogram(name: nil, emoji: nil))
     }
+
+    // MARK: Recording line window (#189)
+
+    func test_lineWindowStart_advancesOncePerWindowOfRecordedTime() {
+        let start: TimeInterval = 1_000
+        XCTAssertEqual(VoxboardLiveActivityState.lineWindowStart(effectiveStartedAt: start, elapsed: 0, window: 300), 1_000)
+        XCTAssertEqual(VoxboardLiveActivityState.lineWindowStart(effectiveStartedAt: start, elapsed: 299.9, window: 300), 1_000)
+        XCTAssertEqual(VoxboardLiveActivityState.lineWindowStart(effectiveStartedAt: start, elapsed: 300, window: 300), 1_300)
+        XCTAssertEqual(VoxboardLiveActivityState.lineWindowStart(effectiveStartedAt: start, elapsed: 905, window: 300), 1_900)
+        XCTAssertNil(VoxboardLiveActivityState.lineWindowStart(effectiveStartedAt: start, elapsed: 10, window: 0))
+        XCTAssertNil(VoxboardLiveActivityState.lineWindowStart(effectiveStartedAt: .nan, elapsed: 10, window: 300))
+    }
+
+    func test_lineWindow_resumeContinuesFromPausedFill() {
+        // Record 120 s, pause for 60 s, resume. The effective start moves by the
+        // paused time, so the fill at resume equals the frozen paused fill.
+        let window: TimeInterval = 300
+        let paused = VoxboardLiveActivityState(isSegmentActive: true, segmentStartedAt: 1_000, pausedElapsed: 120, lineWindowDuration: window)
+        XCTAssertEqual(paused.pausedLineFraction ?? -1, 0.4, accuracy: 0.0001)
+
+        let resumeWallClock: TimeInterval = 1_180
+        let effectiveStart = resumeWallClock - 120
+        let windowStart = VoxboardLiveActivityState.lineWindowStart(effectiveStartedAt: effectiveStart, elapsed: 120, window: window)!
+        XCTAssertEqual((resumeWallClock - windowStart) / window, 0.4, accuracy: 0.0001)
+    }
+
+    func test_pausedLineFraction_wrapsAndIsNilWhileRecording() {
+        let paused = VoxboardLiveActivityState(isSegmentActive: true, pausedElapsed: 330, lineWindowDuration: 300)
+        XCTAssertEqual(paused.pausedLineFraction ?? -1, 0.1, accuracy: 0.0001)
+        let defaultWindow = VoxboardLiveActivityState(isSegmentActive: true, pausedElapsed: 150)
+        XCTAssertEqual(defaultWindow.pausedLineFraction ?? -1, 0.5, accuracy: 0.0001)
+        XCTAssertNil(VoxboardLiveActivityState(isSegmentActive: true, segmentStartedAt: 1).pausedLineFraction)
+        XCTAssertNil(VoxboardLiveActivityState(lineWindowDuration: -1).lineWindowDuration)
+    }
+
+    func test_lineWindowNeedsUpdate_onceWhenMissingOrNextWindow() {
+        // Missing window (first state sent before the segment context): push once.
+        XCTAssertTrue(VoxboardLiveActivityState.lineWindowNeedsUpdate(shown: nil, current: 1_000))
+        // Same window: no update.
+        XCTAssertFalse(VoxboardLiveActivityState.lineWindowNeedsUpdate(shown: 1_000, current: 1_000))
+        XCTAssertFalse(VoxboardLiveActivityState.lineWindowNeedsUpdate(shown: 1_000, current: 1_000.3))
+        // Next window: one update.
+        XCTAssertTrue(VoxboardLiveActivityState.lineWindowNeedsUpdate(shown: 1_000, current: 1_300))
+        // No computable window: nothing to send.
+        XCTAssertFalse(VoxboardLiveActivityState.lineWindowNeedsUpdate(shown: nil, current: nil))
+    }
 }

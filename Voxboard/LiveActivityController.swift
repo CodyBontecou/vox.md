@@ -92,9 +92,23 @@ final class LiveActivityController {
     // iOS re-animates the whole Dynamic Island on every ActivityKit update, so
     // a once-a-second waveform push made the compact island jump every second
     // even though nothing in it had changed (#180).
+    //
+    // The same watcher starts each recording-line window: the line fills by
+    // itself (`ProgressView(timerInterval:)`), and the app pushes one update
+    // when a window ends — once per `lineWindowDuration`, not per second.
     private var pauseWatcher: Timer?
     private var lastPausedState: Bool?
     private static let pauseWatchInterval: TimeInterval = 0.15
+
+    /// Length of one recording-line window. DEBUG builds accept
+    /// `-VoxLiveActivityLineWindow <seconds>` so UI tests can cover a reset.
+    static var lineWindowDuration: TimeInterval {
+        #if DEBUG
+        let override = UserDefaults.standard.double(forKey: "VoxLiveActivityLineWindow")
+        if override.isFinite, override >= 1 { return override }
+        #endif
+        return VoxboardLiveActivityState.defaultLineWindowDuration
+    }
     #endif
 
     private init() {}
@@ -374,6 +388,15 @@ final class LiveActivityController {
             state.segmentStartedAt = context.effectiveStartedAt
             state.pausedElapsed = context.isPaused ? context.elapsed : nil
             state.canPause = context.canPause
+            let window = Self.lineWindowDuration
+            state.lineWindowDuration = window
+            state.lineWindowStart = context.isPaused
+                ? nil
+                : VoxboardLiveActivityState.lineWindowStart(
+                    effectiveStartedAt: context.effectiveStartedAt,
+                    elapsed: context.elapsed,
+                    window: window
+                )
         }
         return state
     }
@@ -407,11 +430,31 @@ final class LiveActivityController {
             stopPauseWatcher()
             return
         }
-        let paused = PersistentRecorder.active?.liveActivitySegmentContext?.isPaused ?? false
+        let context = PersistentRecorder.active?.liveActivitySegmentContext
+        let paused = context?.isPaused ?? false
         defer { lastPausedState = paused }
         if let lastPausedState, lastPausedState != paused {
             pushDecoratedState()
+        } else if let context, !paused, lineWindowEnded(context) {
+            pushDecoratedState()
         }
+    }
+
+    /// True once recorded time has moved past the shown line window (or none
+    /// was sent yet), so the next window must start. Paused time never counts.
+    private func lineWindowEnded(_ context: LiveActivitySegmentContext) -> Bool {
+        guard context.requestId == nil || context.requestId == desiredState.segmentRequestId else {
+            return false
+        }
+        let current = VoxboardLiveActivityState.lineWindowStart(
+            effectiveStartedAt: context.effectiveStartedAt,
+            elapsed: context.elapsed,
+            window: Self.lineWindowDuration
+        )
+        return VoxboardLiveActivityState.lineWindowNeedsUpdate(
+            shown: desiredState.lineWindowStart,
+            current: current
+        )
     }
 
     private func reloadRouteWidgets() {
