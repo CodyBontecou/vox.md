@@ -1,8 +1,8 @@
-# Retired custom analytics service — unpublished review
+# Retired custom analytics service
 
 Custom app analytics, installation identifiers, advertising joins and event ingestion have been removed from the candidate app. The replacement Worker acknowledges legacy POST /v1/events with 204 without reading its body or using storage. This prevents older clients from repeatedly retrying a retired upload. GET /health reports retirement. Other endpoints return 410. The candidate configuration has no storage bindings, logging or cron triggers.
 
-Nothing has been deployed. Existing released clients and the currently deployed Worker can still collect until an approved cutover. Historical SQL migrations are retained as deployment provenance; do not apply the abandoned shared-privacy migration. Essential receipt verification, scheduling, OAuth and user-requested destinations are separate services and remain intact.
+Deployed 2026-11-26 (version 4187186c-84cc-444d-b925-348b47b03274) after owner approval. Older released clients still upload, but the Worker discards their events; the D1 and cron bindings were dropped from the Worker. The existing D1 database `voxboard-onboarding-analytics` (1,042 rows, newest 2026-07-27) is kept by owner decision and is not deleted. Historical SQL migrations are retained as deployment provenance; do not apply the abandoned shared-privacy migration. Essential receipt verification, scheduling, OAuth and user-requested destinations are separate services and remain intact.
 
 ## Existing data and retirement review
 

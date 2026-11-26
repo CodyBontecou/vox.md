@@ -6,18 +6,18 @@
   "status": "PREPARED_NOT_PUBLISHED",
   "releaseType": "MANUAL",
   "tracking": false,
-  "published_declarations": "UNCHANGED_WHILE_OLDER_COLLECTOR_IS_LIVE",
+  "published_declarations": "PUBLISHED_2026-11-26",
   "cutoverPrerequisites": [
     "Approve retirement responder deployment",
     "Confirm older analytics ingestion has stopped",
     "Publish coordinated policy and terms",
     "Publish candidate questionnaire after processor verification"
   ],
-  "historicalDataDeletion": "Separate operation; not performed",
+  "historicalDataDeletion": "Not performed; owner chose to keep existing records (2026-11-26)",
   "physicalDeviceTesting": "Deferred by owner",
   "candidateDeclarations": [
     {
-      "dataType": "OTHER_DATA_TYPES",
+      "dataType": "OTHER_DATA",
       "purposes": [
         "APP_FUNCTIONALITY"
       ],
@@ -30,5 +30,12 @@
     "USER_ID",
     "PURCHASE_HISTORY",
     "PRODUCT_INTERACTION"
-  ]
+  ],
+  "cutover": {
+    "retirementResponderDeployed": "2026-11-26T17:46:51Z",
+    "workerVersion": "4187186c-84cc-444d-b925-348b47b03274",
+    "ingestionStopped": "Verified 2026-11-26: GET /health reports retired; POST /v1/events returns 204 without storage",
+    "retainedRecords": "1042 rows in D1 voxboard-onboarding-analytics, newest 2026-07-27; kept by owner decision 2026-11-26",
+    "policyAndTermsPublished": "2026-11-26 (vox.md #185)"
+  }
 }

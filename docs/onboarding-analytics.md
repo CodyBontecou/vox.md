@@ -1,5 +1,7 @@
 # Onboarding Analytics
 
+> **Retired 2026-11-26.** iOS/iPadOS 3.0+, macOS 3.0.4+ and Android send no analytics. The Worker now runs the retirement responder in `worker/onboarding-analytics` (204 for legacy uploads, nothing stored). The D1 database below is kept, not deleted, by owner decision. Everything after this note describes the retired system and is kept for history.
+
 Vox.md has an app-side, privacy-safe onboarding analytics engine modeled after the Health.md pricing analytics client.
 
 ## Production status
@@ -35,7 +37,7 @@ https://vox.isolated.tech/privacy.html
 
 The fastlane privacy, support, and marketing URLs use the canonical `vox.isolated.tech` domain.
 
-App Store Connect App Privacy is now published for app `6758967337` with the canonical declaration in `app-store-privacy.json`:
+App Privacy was published on 2026-11-26 from `app-store-privacy.json` with the post-retirement declaration (Other Data → App Functionality → Not Linked to You, for ordinary connection metadata at model and quote providers). Before retirement, App Privacy was published with:
 
 - Product Interaction → Analytics → Not Linked to You
 - Purchase History → Analytics → Not Linked to You

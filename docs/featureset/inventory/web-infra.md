@@ -141,9 +141,9 @@ Scope: Cloudflare workers, website, App Store metadata via fastlane, `.strings` 
 
 ### F-WI-11 App Store Privacy Declaration (app-store-privacy.json)
 - Surface: App Store Connect App Privacy, root `app-store-privacy.json`.
-- Summary: Published privacy declaration for analytics: Product Interaction → Analytics → Not Linked to You; Purchase History → Analytics → Not Linked to You; User ID (anonymous install UUID) → Analytics → Not Linked to You. First-party only, not used for tracking. Explicit instruction: do not mark audio, transcripts, keystrokes, contacts, location, diagnostics, or user content as collected.
-- Details: three declared categories, all Analytics/Not Linked; the anonymous install UUID is the only identifier.
-- Constraints: must stay in sync with the analytics worker's actual data contract.
+- Summary: Post-retirement declaration (2026-11-26): Other Data Types → App Functionality → Not Linked to You, covering ordinary connection metadata received by optional model and quote providers. Not used for tracking. The earlier analytics declarations (Product Interaction, Purchase History, User ID) were removed after the analytics Worker was retired. Do not mark audio, transcripts, keystrokes, contacts, location, diagnostics, or user content as collected.
+- Details: one declared category, App Functionality / Not Linked; no identifiers.
+- Constraints: must match what the apps and their services actually receive.
 - Evidence: `app-store-privacy.json`; mirrored in `docs/onboarding-analytics.md` ("Website and App Store privacy notes").
 - Status: shipped
 
@@ -204,7 +204,7 @@ Scope: Cloudflare workers, website, App Store metadata via fastlane, `.strings` 
 | `docs/localization-glossary.md` | ✅ full | |
 | `docs/localization-remediation.md` | ✅ lines 1-200 | |
 | `docs/onboarding-analytics.md` | ✅ full | |
-| `app-store-privacy.json` | ✅ head (all three dataUsages verified via docs cross-check) | |
+| `app-store-privacy.json` | ✅ head (post-retirement declaration) | |
 
 ## Uncertainties
 - `localization-remediation.md` describes a checkpoint where localized ASC metadata/IAP uploads were "Proposed" (not executed); `fastlane/Fastfile` still pins `app_version: "1.9.5"` and metadata lists iOS 2.0.6 as live in the remediation doc. Whether the localized upload has since been executed is not verifiable from the repo.
