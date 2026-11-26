@@ -162,30 +162,34 @@ storekit_subscriptions = {
     for group in subscription_groups
     for subscription in group.get('subscriptions', [])
 }
+# Current US prices in App Store Connect. The staging script keeps the 2026-10-29
+# launch prices; weekly plans moved to $2.99 / $4.99 in App Store Connect later.
 expected_subscriptions = {
-    'bontecou.Voxboard.individual.weekly': ('P1W', False),
-    'bontecou.Voxboard.individual.yearly': ('P1Y', False),
-    'bontecou.Voxboard.family.weekly': ('P1W', True),
-    'bontecou.Voxboard.family.yearly': ('P1Y', True),
+    'bontecou.Voxboard.individual.weekly': ('P1W', False, '2.99'),
+    'bontecou.Voxboard.individual.yearly': ('P1Y', False, '29.99'),
+    'bontecou.Voxboard.family.weekly': ('P1W', True, '4.99'),
+    'bontecou.Voxboard.family.yearly': ('P1Y', True, '49.99'),
 }
 if set(storekit_subscriptions) != set(expected_subscriptions) or set(staged_subscription_products) != set(expected_subscriptions):
     errors.append(
         f'StoreKit subscriptions {sorted(storekit_subscriptions)} and staged products '
         f'{sorted(staged_subscription_products)} must both equal {sorted(expected_subscriptions)}'
     )
-for product_id, (period, family_shareable) in expected_subscriptions.items():
+for product_id, (period, family_shareable, us_price) in expected_subscriptions.items():
     group, subscription = storekit_subscriptions.get(product_id, (None, None))
     if subscription is None:
         continue
-    staged_price, staged_name = staged_subscription_products.get(product_id, (None, None))
+    _, staged_name = staged_subscription_products.get(product_id, (None, None))
     if subscription.get('type') != 'RecurringSubscription' or subscription.get('recurringSubscriptionPeriod') != period:
         errors.append(f'{product_id} must auto-renew every {period}')
     if subscription.get('familyShareable') is not family_shareable:
         errors.append(f'{product_id} familyShareable must be {family_shareable}')
     if subscription.get('subscriptionGroupID') != group.get('id'):
         errors.append(f'{product_id} must belong to its single shared subscription group')
-    if subscription.get('displayPrice') != staged_price or subscription.get('referenceName') != staged_name:
-        errors.append(f'{product_id} local StoreKit price/name differs from the staged subscription policy')
+    if subscription.get('displayPrice') != us_price:
+        errors.append(f'{product_id} local StoreKit price is {subscription.get("displayPrice")}, expected the live US {us_price}')
+    if subscription.get('referenceName') != staged_name:
+        errors.append(f'{product_id} local StoreKit name differs from the staged subscription policy')
     if subscription.get('introductoryOffer') != {
         'internalID': subscription.get('internalID', '') + '-trial',
         'numberOfPeriods': 1,

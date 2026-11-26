@@ -156,6 +156,7 @@
         <p>将 Vox.md 采集预设连接到仓库，选择每日周期的滚动笔记，匹配现有每日笔记文件名路径。使用底部追加到笔记，或头条插入指定章节下。同一目标位置可接受文本和语音采集。</p>
       </div>
       <p>本指南侧重路由与格式。录音和模型设置请先阅读 <a href="/zh-hans/blog/voice-notes-to-obsidian-iphone/">将 iPhone 语音笔记存入 Obsidian</a>。Obsidian 也有自己的每日笔记采集工具；并非每种追加工作流都需要 Vox.md。</p>
+      <p>想要语音日记，而不是捕捉记录？请参阅 <a href="/zh-hans/blog/private-voice-journal-iphone/">在 iPhone 上写私密语音日记</a>.</p>
       <nav class="toc" aria-label="本指南中"><div class="toc-title">本指南中</div><ol>
         <li><a href="#match-path">匹配每日笔记路径</a></li>
         <li><a href="#heading">选择放置位置和标题</a></li>
@@ -173,14 +174,14 @@
         <li>选择 <strong>滚动笔记</strong> 以及 <strong>每日</strong> 周期。</li>
         <li>对于此示例约定，请将路径模式设为 <code>Journal/{period}.md</code>。发送前核对解析后的目标位置。</li>
       </ol>
-      <p>使用每日周期时， <code>{period}</code> 解析为日期，例如 <code>2026-10-26</code>。如果仓库将每日文件存储在根目录，则应使用 <code>{period}.md</code>。这些是 Vox.md 路径令牌，不是 Obsidian 模板表达式。</p>
+      <p>使用每日周期时， <code>{period}</code> 解析为日期，例如 <code>2026-10-26</code>。如果仓库将每日文件存储在根目录，则应使用 <code>{period}.md</code>。这些是 Vox.md 路径标记，不是 Obsidian 模板表达式。要构建每日笔记模板本身并预览日期格式生成的文件名，请使用 <a href="/zh-hans/blog/obsidian-daily-note-template/">Obsidian 每日笔记模板生成器</a>.</p>
       <p>Vox.md 不自动读取 Daily Notes 插件配置。选择不同文件夹或文件名会创建不同目标。路径相对于通过文件选择的文件夹；除非仓库名确实是子文件夹，否则不要在路径中重复仓库名称。</p>
       <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_24d3c4f9ef44">免费下载 Vox.md</a></p>
       <p>免费试用 10 次成功采集投递和 15 分钟转录。无限使用为一次购买、终身有效；价格因地区而异。</p>
 
       <h2 id="heading">2. 选择放置位置和标题</h2>
       <p>选择 <strong>底部</strong> 以追加到每日笔记末尾，或 <strong>顶部</strong> 以前置插入。要将采集内容保留在某节中，请选择 <strong>头条</strong>，输入标题并设置级别。</p>
-      <p>下例使用名为以下内容的二级标题： <strong>Inbox</strong>。选择在该标题所在节的末尾插入，让新条目排在旧条目之后。将缺少标题时的行为设为 <strong>创建头条</strong> 如果需要 Vox.md 添加它，或 <strong>显示错误</strong> 如果想自行修复笔记。</p>
+      <p>下例使用名为以下内容的二级标题： <strong>Inbox</strong>。选择在该标题所在节的末尾插入，让新条目排在旧条目之后。将缺少标题时的行为设为 <strong>创建标题</strong> 如果需要 Vox.md 添加它，或 <strong>显示错误</strong> 如果想自行修复笔记。</p>
       <figure class="guide-figure">
         <img src="/screenshots/optimized/01-route-heading-light-640.webp" alt="带滚动笔记和标题放置设置的 Vox.md 目标位置编辑器" width="1206" height="2622" loading="lazy" decoding="async">
         <figcaption>目标位置编辑器控制文件目标和放置位置。发送前匹配仓库路径和标题级别。</figcaption>
@@ -197,6 +198,7 @@
       <p>语音可在快速捕捉中用同一预设录制。将转录加入草稿以便发送前核对，或熟悉路由后选择立即发送。键盘将文本插入宿主应用，而不是再导出一份 Markdown 采集。</p>
 
       <h2 id="tasks">设置任务列表格式</h2>
+      <p>要把现有列表转换为任务,请使用 <a href="/zh-hans/blog/markdown-checklist-maker/">Markdown 清单生成器</a>.</p>
       <p>对于 Tasks 章节，选择名为以下内容的二级标题： <strong>Tasks</strong> 以及一致的清单方式。对于未启用文本处理的键入采集，使用保留原文加条目前缀 <code>- [ ] </code> 无需 AI 改写即可将简短条目变为任务。</p>
       <pre class="guide-code"><code>## Tasks
 - [ ] Read the trail guide

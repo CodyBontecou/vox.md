@@ -113,7 +113,12 @@ public struct RecordingJobHandoffIntent: Codable, Equatable, Sendable {
     public var liveSessionID: UUID?
     public var captureSource: CaptureSource?
     public var locationOutcome: CaptureLocationOutcome?
+    /// When this handoff file was first written (the orphan-recovery clock).
     public var createdAt: Date
+    /// When the take began. The single source of the `{timestamp}` audio
+    /// filename token, so names sort in recording order. Nil for imports and
+    /// for handoffs written before this field existed.
+    public var recordingStartedAt: Date?
     public var duration: TimeInterval
     public var source: RecordingJobSource
     public var delivery: RecordingJobDelivery
@@ -136,6 +141,7 @@ public struct RecordingJobHandoffIntent: Codable, Equatable, Sendable {
         captureSource: CaptureSource? = nil,
         locationOutcome: CaptureLocationOutcome? = nil,
         createdAt: Date = Date(),
+        recordingStartedAt: Date? = nil,
         duration: TimeInterval,
         source: RecordingJobSource,
         delivery: RecordingJobDelivery,
@@ -163,6 +169,7 @@ public struct RecordingJobHandoffIntent: Codable, Equatable, Sendable {
         self.captureSource = captureSource
         self.locationOutcome = locationOutcome
         self.createdAt = createdAt
+        self.recordingStartedAt = recordingStartedAt
         self.duration = duration
         self.source = source
         self.delivery = delivery
@@ -229,6 +236,7 @@ public struct RecordingJobHandoffIntent: Codable, Equatable, Sendable {
         captureSource = try container.decodeIfPresent(CaptureSource.self, forKey: .captureSource)
         locationOutcome = try container.decodeIfPresent(CaptureLocationOutcome.self, forKey: .locationOutcome)
         createdAt = try container.decode(Date.self, forKey: .createdAt)
+        recordingStartedAt = try container.decodeIfPresent(Date.self, forKey: .recordingStartedAt)
         duration = try container.decode(TimeInterval.self, forKey: .duration)
         source = try container.decode(RecordingJobSource.self, forKey: .source)
         delivery = try container.decode(RecordingJobDelivery.self, forKey: .delivery)
@@ -278,6 +286,25 @@ public struct RecordingJobHandoffIntentStore: Sendable {
             try URLDeliveryLegacyArchive.scrub(data, at: coordinatedURL)
             return intent
         }
+    }
+
+    /// Every source and related filename named by a saved intent, staging or
+    /// ready. Read-only; used to keep claimed artifacts during cleanup.
+    public func claimedAudioFilenames() -> Set<String> {
+        let directory = Self.directoryURL(in: recordingsDirectoryURL)
+        let urls = (try? FileManager.default.contentsOfDirectory(
+            at: directory,
+            includingPropertiesForKeys: nil
+        )) ?? []
+        var result = Set<String>()
+        for url in urls where url.pathExtension == "json" {
+            guard let data = try? Data(contentsOf: url),
+                  let intent = try? JSONDecoder().decode(RecordingJobHandoffIntent.self, from: data)
+            else { continue }
+            result.insert(intent.audioFilename)
+            result.formUnion(intent.relatedAudioFilenames)
+        }
+        return result
     }
 
     static func directoryURL(in recordingsDirectoryURL: URL) -> URL {
@@ -387,6 +414,9 @@ public struct RecordingJob: Codable, Equatable, Identifiable, Sendable {
     public var artifacts: [RecordingArtifact]?
     public var originalFilename: String?
     public var createdAt: Date
+    /// When the take began; drives the `{timestamp}` audio filename token.
+    /// Nil for imports and for jobs queued before this field existed.
+    public var recordingStartedAt: Date?
     public var updatedAt: Date
     public var duration: TimeInterval
     public var source: RecordingJobSource
@@ -425,6 +455,7 @@ public struct RecordingJob: Codable, Equatable, Identifiable, Sendable {
         artifacts: [RecordingArtifact]? = nil,
         originalFilename: String? = nil,
         createdAt: Date = Date(),
+        recordingStartedAt: Date? = nil,
         updatedAt: Date? = nil,
         duration: TimeInterval,
         source: RecordingJobSource,
@@ -461,6 +492,7 @@ public struct RecordingJob: Codable, Equatable, Identifiable, Sendable {
         self.artifacts = artifacts
         self.originalFilename = originalFilename
         self.createdAt = createdAt
+        self.recordingStartedAt = recordingStartedAt
         self.updatedAt = updatedAt ?? createdAt
         self.duration = max(0, duration)
         self.source = source
@@ -496,7 +528,7 @@ public struct RecordingJob: Codable, Equatable, Identifiable, Sendable {
 
     private enum CodingKeys: String, CodingKey {
         case schemaVersion, id, requestID, draftRequestID, liveSessionID, captureSource, locationOutcome
-        case audioFilename, artifacts, originalFilename, createdAt, updatedAt, duration, source, delivery
+        case audioFilename, artifacts, originalFilename, createdAt, recordingStartedAt, updatedAt, duration, source, delivery
         case voiceProcessingConfiguration, modelID, fallbackModelID, language, retentionPolicy, processingPolicy, initialProcessingPolicy
         case phase, failureStage, statusMessage, attemptCount, revision, transcriptText
         case automaticClipboardDeliveryAttemptedAt, exportedNotePath, exportedAudioPath
@@ -519,6 +551,7 @@ public struct RecordingJob: Codable, Equatable, Identifiable, Sendable {
         artifacts = try c.decodeIfPresent([RecordingArtifact].self, forKey: .artifacts)
         originalFilename = try c.decodeIfPresent(String.self, forKey: .originalFilename)
         createdAt = try c.decode(Date.self, forKey: .createdAt)
+        recordingStartedAt = try c.decodeIfPresent(Date.self, forKey: .recordingStartedAt)
         updatedAt = try c.decode(Date.self, forKey: .updatedAt)
         duration = try c.decode(TimeInterval.self, forKey: .duration)
         source = try c.decode(RecordingJobSource.self, forKey: .source)
@@ -694,6 +727,7 @@ public actor RecordingJobStore {
         captureSource: CaptureSource? = nil,
         locationOutcome: CaptureLocationOutcome? = nil,
         createdAt: Date = Date(),
+        recordingStartedAt: Date? = nil,
         duration: TimeInterval,
         source: RecordingJobSource,
         delivery: RecordingJobDelivery,
@@ -744,7 +778,8 @@ public actor RecordingJobStore {
                 id: id, requestID: requestID, draftRequestID: draftRequestID, liveSessionID: liveSessionID,
                 captureSource: captureSource, locationOutcome: locationOutcome,
                 audioFilename: primary.filename, artifacts: artifacts, originalFilename: primary.originalFilename,
-                createdAt: createdAt, duration: duration, source: source, delivery: delivery,
+                createdAt: createdAt, recordingStartedAt: recordingStartedAt,
+                duration: duration, source: source, delivery: delivery,
                 modelID: modelID, fallbackModelID: fallbackModelID, language: language,
                 retentionPolicy: configuration.sourceAudioRetention, processingPolicy: configuration.processingPolicy,
                 statusMessage: queuedMessage(for: configuration.processingPolicy)
@@ -787,6 +822,7 @@ public actor RecordingJobStore {
         locationOutcome: CaptureLocationOutcome? = nil,
         originalFilename: String? = nil,
         createdAt: Date = Date(),
+        recordingStartedAt: Date? = nil,
         duration: TimeInterval,
         source: RecordingJobSource,
         delivery: RecordingJobDelivery,
@@ -842,6 +878,7 @@ public actor RecordingJobStore {
                 audioFilename: audioFilename,
                 originalFilename: originalFilename ?? sourceURL.lastPathComponent,
                 createdAt: createdAt,
+                recordingStartedAt: recordingStartedAt,
                 duration: duration,
                 source: source,
                 delivery: delivery,
@@ -944,10 +981,10 @@ public actor RecordingJobStore {
                     audioFilename: url.lastPathComponent,
                     originalFilename: url.lastPathComponent,
                     createdAt: (try? url.resourceValues(forKeys: [.creationDateKey]).creationDate) ?? Date(),
-                    duration: 0,
+                    duration: Self.recoveredDuration(of: url),
                     source: .recovered,
                     delivery: .recovery,
-                    modelID: "",
+                    modelID: AppConstants.defaultTranscriptionBackendID,
                     language: "auto",
                     retentionPolicy: .permanent,
                     processingPolicy: .manual,
@@ -1041,10 +1078,10 @@ public actor RecordingJobStore {
                 sourceURL: url,
                 originalFilename: url.lastPathComponent,
                 createdAt: (try? url.resourceValues(forKeys: [.creationDateKey]).creationDate) ?? Date(),
-                duration: 0,
+                duration: Self.recoveredDuration(of: url),
                 source: .recovered,
                 delivery: .recovery,
-                modelID: "",
+                modelID: AppConstants.defaultTranscriptionBackendID,
                 language: "auto",
                 configuration: RecordingQueueConfiguration(
                     sourceAudioRetention: .permanent,
@@ -1133,6 +1170,7 @@ public actor RecordingJobStore {
                     audioFilename: audioFilename,
                     originalFilename: intent.audioFilename,
                     createdAt: intent.createdAt,
+                    recordingStartedAt: intent.recordingStartedAt,
                     duration: intent.duration,
                     source: intent.source,
                     delivery: intent.delivery,
@@ -1353,6 +1391,14 @@ public actor RecordingJobStore {
         }
     }
 
+    /// The length of a recovered recording, read from its header (the 16 kHz
+    /// journal rewrites it on every write, so it survives a crash). 0 if the
+    /// file isn't readable audio.
+    static func recoveredDuration(of url: URL) -> TimeInterval {
+        guard let seconds = AudioFileConverter.duration(of: url), seconds.isFinite, seconds > 0 else { return 0 }
+        return seconds
+    }
+
     public func retry(
         id: UUID,
         modelID: String? = nil,
@@ -1367,6 +1413,9 @@ public actor RecordingJobStore {
             }
             try ensureAudioExists(for: job)
             if let modelID { job.modelID = modelID }
+            // Jobs recovered by earlier builds were saved with no model, which
+            // the transcriber reads as an undownloaded one. Use the default.
+            if job.modelID.isEmpty { job.modelID = AppConstants.defaultTranscriptionBackendID }
             if replaceFallbackModelID {
                 job.fallbackModelID = fallbackModelID
             } else if let fallbackModelID {

@@ -1,0 +1,198 @@
+# Regression for #180: the Dynamic Island jumped about once a second while recording,
+# because the app pushed a Live Activity update every second only to refresh the
+# mic-level waveform. This walks start -> background (island) -> ~1 min recording ->
+# pause -> resume -> stop and checks the island shows the right state at each step.
+#
+# What this test can and can't prove: it checks the island exists and changes state
+# (waveform <-> pause) when it should. The jitter itself is visual; the evidence for
+# it is a screen recording of the island taken alongside this run (see the PR).
+#
+# Setup the test does itself: grants the microphone (settings-permissions) and
+#   launches the DEBUG build with -VoxScreenshotUnlocked (skips the paywall) and
+#   -AppleLanguages (en) -AppleLocale en_US, so the labels below are English.
+# Prerequisites it can't automate:
+#   - Live Activities must run on the simulator. A simslim-slimmed simulator needs
+#     the `widgets` category kept (the Vox pool sim, iPhone 18 Pro Max, keeps it).
+#   - The one-time speech-recognition prompt, answered once on this simulator.
+# Side effects: one ~1:30 recording is stopped and added to the draft (on a simulator
+#   without a speech model it stays in the recording queue).
+#
+# Waits stay raw `tool: await-ui-element`: the runner's native tree carries neither
+#   the composer's SwiftUI ids/labels nor SpringBoard's Dynamic Island; the AX tree the
+#   tool reads does. The island group's own label ("Audio Waveform, 0:02") is cached by
+#   the system and goes stale, so checks after the first use the island's symbol and
+#   timer text elements, which do update.
+# Coordinate taps: the Speak / Pause-Resume / Stop buttons have ids
+#   (capture_voice_recording, capture_recording_pause_toggle, capture_recording_stop_send)
+#   but the runner can't see them, and the recorder resolved each tap to the full-screen
+#   `Toolbar` group instead. The points are the centres of those buttons' frames from
+#   `describe` on iPhone 18 Pro Max; each tap is followed by a check that the button's
+#   state changed.
+version: 1
+requires:
+  platform: ios
+steps:
+  - echo: Grant the microphone, then restart Vox.md unlocked (DEBUG) in English.
+      Expect the Capture composer with Speak
+  - tool: settings-permissions
+    args:
+      action: grant
+      permission: microphone
+      bundleId: bontecou.Voxboard
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - -VoxScreenshotUnlocked
+          - --disable-release-notes
+          - -AppleLanguages
+          - (en)
+          - -AppleLocale
+          - en_US
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_voice_recording
+      timeoutMs: 20000
+  - echo: Idle composer. Tap Speak. Expect a recording to start (Stop/Send control)
+      and the Live Activity to start
+  # Coordinate tap: Speak (capture_voice_recording), see header.
+  - tool: gesture-tap
+    args:
+      x: 0.507
+      y: 0.922
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_recording_stop_send
+      timeoutMs: 15000
+  - echo: Recording. Go Home so the compact Dynamic Island shows the recording timer
+  - tool: button
+    args:
+      button: home
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: "Audio Waveform, 0:"
+      timeoutMs: 15000
+  - echo: Island up. Keep recording in the background until the island timer reads
+      1:0x (about a minute of island updates). Expect the island to stay up
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: "1:0"
+      timeoutMs: 90000
+  - echo: Island ran 1:0x. Bring Vox.md back to the front. Expect the still-running
+      recording (Pause control)
+  - tool: launch-app
+    args:
+      bundleId: bontecou.Voxboard
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Pause recording
+      timeoutMs: 10000
+  # Readiness: the app is still animating to the front; a tap sent now is lost.
+  - await:
+      idle: true
+  - echo: Recording in front. Tap Pause. Expect the Resume control
+  # Coordinate tap: Pause (capture_recording_pause_toggle), see header.
+  - tool: gesture-tap
+    args:
+      x: 0.741
+      y: 0.916
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Resume recording
+      timeoutMs: 10000
+  - echo: Paused. Go Home. Expect the island to switch to the pause symbol
+  - tool: button
+    args:
+      button: home
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: regular.view
+      timeoutMs: 10000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: "Pause, "
+      timeoutMs: 10000
+  - echo: Paused island shown. Bring Vox.md back and tap Resume. Expect the Pause
+      control again
+  - tool: launch-app
+    args:
+      bundleId: bontecou.Voxboard
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Resume recording
+      timeoutMs: 10000
+  # Readiness: the app is still animating to the front; a tap sent now is lost.
+  - await:
+      idle: true
+  # Coordinate tap: Resume (capture_recording_pause_toggle), see header.
+  - tool: gesture-tap
+    args:
+      x: 0.741
+      y: 0.916
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Pause recording
+      timeoutMs: 10000
+  - echo: Resumed. Go Home. Expect the island back on the waveform symbol
+  - tool: button
+    args:
+      button: home
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Audio Waveform
+        role: Image
+      timeoutMs: 10000
+  - echo: Recording island back. Bring Vox.md back and tap Stop. Expect the idle
+      composer with Speak again
+  - tool: launch-app
+    args:
+      bundleId: bontecou.Voxboard
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Stop and add to draft
+      timeoutMs: 10000
+  # Readiness: the app is still animating to the front; a tap sent now is lost.
+  - await:
+      idle: true
+  # Coordinate tap: Stop and add to draft (capture_recording_stop_send), see header.
+  - tool: gesture-tap
+    args:
+      x: 0.873
+      y: 0.916
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_voice_recording
+      timeoutMs: 20000
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        text: Stop and add to draft
+      timeoutMs: 10000

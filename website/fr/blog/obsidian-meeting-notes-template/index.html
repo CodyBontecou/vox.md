@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr" data-search-section="Section" data-search-guide="Guide" data-search-empty="Aucun résultat pour « {query} »">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Générateur de modèles de notes de réunion Obsidian | Vox.md</title>
+  <meta name="description" content="Créez un modèle de notes de réunion Obsidian dans votre navigateur. Choisissez propriétés et sections, dont les actions à mener en tâches, et copiez-le pour Core Templates, Templater ou en Markdown simple.">
+  <link rel="canonical" href="https://vox.isolated.tech/fr/blog/obsidian-meeting-notes-template/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Documentation Vox.md pour les modèles de langage">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Générateur de modèles de notes de réunion Obsidian">
+  <meta property="og:description" content="Créez un modèle de notes de réunion Obsidian dans votre navigateur. Choisissez propriétés et sections, dont les actions à mener en tâches, et copiez-le pour Core Templates, Templater ou en Markdown simple.">
+  <meta property="og:url" content="https://vox.isolated.tech/fr/blog/obsidian-meeting-notes-template/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-19">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Générateur de modèles de notes de réunion Obsidian">
+  <meta name="twitter:description" content="Créez un modèle de notes de réunion Obsidian dans votre navigateur. Choisissez propriétés et sections, dont les actions à mener en tâches, et copiez-le pour Core Templates, Templater ou en Markdown simple.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Générateur de modèles de notes de réunion Obsidian",
+  "description": "Créez un modèle de notes de réunion Obsidian dans votre navigateur. Choisissez propriétés et sections, dont les actions à mener en tâches, et copiez-le pour Core Templates, Templater ou en Markdown simple.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-19",
+  "dateModified": "2026-11-19",
+  "mainEntityOfPage": "https://vox.isolated.tech/fr/blog/obsidian-meeting-notes-template/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "fr",
+  "name": "Générateur de modèles de notes de réunion Obsidian | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/fr/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Guides",
+      "item": "https://vox.isolated.tech/fr/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Générateur de modèles de notes de réunion Obsidian",
+      "item": "https://vox.isolated.tech/fr/blog/obsidian-meeting-notes-template/"
+    }
+  ],
+  "inLanguage": "fr",
+  "name": "Générateur de modèles de notes de réunion Obsidian | Vox.md",
+  "description": "Créez un modèle de notes de réunion Obsidian dans votre navigateur. Choisissez propriétés et sections, dont les actions à mener en tâches, et copiez-le pour Core Templates, Templater ou en Markdown simple."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/obsidian-meeting-notes-template/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Aller au guide</a>
+<nav aria-label="Navigation principale">
+  <div class="nav-inner">
+    <a href="/fr/" class="logo" aria-label="accueil Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/fr/#how">Fonctionnement</a></li>
+      <li><a href="/fr/docs/">Documentation</a></li>
+      <li><a href="/fr/blog/">Guides</a></li>
+      <li><a href="/fr/compare/">Comparer</a></li>
+      <li><a href="/fr/privacy.html">Confidentialité</a></li>
+      <li><a href="/fr/terms.html">Conditions</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_fr_f599543e8b13">Télécharger Vox.md</a>
+  <details class="language-switcher"><summary>Langue</summary><ul><li><a href="/blog/obsidian-meeting-notes-template/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-meeting-notes-template/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-meeting-notes-template/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-meeting-notes-template/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-meeting-notes-template/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-meeting-notes-template/" lang="fr" hreflang="fr" aria-current="page">Français</a></li><li><a href="/hi/blog/obsidian-meeting-notes-template/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-meeting-notes-template/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-meeting-notes-template/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-meeting-notes-template/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-meeting-notes-template/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-meeting-notes-template/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-meeting-notes-template/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-meeting-notes-template/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-meeting-notes-template/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-meeting-notes-template/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-meeting-notes-template/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-meeting-notes-template/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-meeting-notes-template/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-meeting-notes-template/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-meeting-notes-template/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-meeting-notes-template/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-meeting-notes-template/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Outil gratuit</div>
+        <h1 class="hero-title">Générateur de modèles de notes de réunion Obsidian</h1>
+        <p class="hero-subtitle">Choisissez les propriétés et les sections voulues, puis copiez ou téléchargez un modèle écrit dans la syntaxe de votre système de modèles.</p>
+      </div>
+      <aside class="meta-card" aria-label="À propos de ce guide">
+        <dl>
+          <div><dt>Par</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Mis à jour</dt><dd><time datetime="2026-11-19">19 novembre 2026</time></dd></div>
+          <div><dt>Nécessite</dt><dd>Obsidian (toute plateforme). Facultatif : Vox.md pour iPhone, iPad ou Mac pour remplir les notes à partir d’un enregistrement.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Générateur de modèles de notes de réunion Obsidian">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">La réponse courte</div>
+        <p>Enregistrez ce modèle sous <code>Meeting.md</code> dans votre dossier de modèles, puis insérez-le dans une nouvelle note avec le plugin Templates. Il utilise la syntaxe du plugin principal Templates, donc la date et le titre se remplissent à l’insertion.</p>
+      </div>
+      <pre class="guide-code" id="default-template"><code>---
+date: {{date:YYYY-MM-DD}}
+type: meeting
+attendees: []
+tags:
+  - meeting
+---
+# {{title}}
+
+## Agenda
+-&#32;
+
+## Notes
+
+
+## Decisions
+-&#32;
+
+## Action Items
+- [ ]&#32;
+</code></pre>
+      <p>Vous utilisez Templater ou voulez d’autres sections ? Le générateur ci-dessous produit la même structure pour le plugin principal Templates, pour Templater ou en Markdown simple pour Vox.md. Il fonctionne entièrement dans cette page : aucun de vos choix n’est envoyé nulle part.</p>
+      <nav class="toc" aria-label="Dans ce guide"><div class="toc-title">Dans ce guide</div><ol>
+        <li><a href="#generator">Générer votre modèle</a></li>
+        <li><a href="#install">Ajouter le modèle à Obsidian</a></li>
+        <li><a href="#one-note-per-meeting">Une note par réunion</a></li>
+        <li><a href="#action-items">Actions à mener et suivi</a></li>
+        <li><a href="#fill-automatically">Remplir la note à partir d’un enregistrement</a></li>
+        <li><a href="#faq">Questions fréquentes</a></li>
+      </ol></nav>
+
+      <h2 id="generator">1. Générer votre modèle</h2>
+      <p class="mt-nojs" id="mt-nojs">Le générateur nécessite JavaScript. Sans lui, le modèle par défaut ci-dessus et ci-dessous fonctionne tel quel.</p>
+      <form class="mt-tool" id="mt-tool" aria-label="Générateur de modèles de notes de réunion">
+        <fieldset class="mt-group">
+          <legend>Système de modèles</legend>
+          <label class="mt-option"><input type="radio" name="system" value="core" checked> <span>Plugin principal Templates d’Obsidian</span></label>
+          <label class="mt-option"><input type="radio" name="system" value="templater"> <span>Plugin de la communauté Templater</span></label>
+          <label class="mt-option"><input type="radio" name="system" value="plain"> <span>Markdown simple pour Vox.md ou toute autre app</span></label>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>Propriétés (métadonnées d’en-tête YAML)</legend>
+          <label class="mt-option"><input type="checkbox" name="prop" value="date" checked> <span>Date de la réunion</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="time"> <span>Heure</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="type" checked> <span><code>type: meeting</code></span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="attendees" checked> <span>Participants (liste)</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="project"> <span>Projet (lien vers une note)</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="tags" checked> <span>Étiquettes</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="status"> <span>Statut</span></label>
+          <label class="mt-field" for="mt-tag">Nom de l’étiquette <input type="text" id="mt-tag" name="tag" value="meeting" autocomplete="off" spellcheck="false"></label>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>Rubriques</legend>
+          <p class="mt-hint" id="mt-order-hint">Utilisez les boutons Monter et Descendre pour changer l’ordre.</p>
+          <ol class="mt-sections" id="mt-sections" aria-describedby="mt-order-hint">
+            <li data-section="agenda"><label class="mt-option"><input type="checkbox" name="section" value="agenda" checked> <span>Ordre du jour</span></label></li>
+            <li data-section="attendees"><label class="mt-option"><input type="checkbox" name="section" value="attendees"> <span>Participants</span></label></li>
+            <li data-section="notes"><label class="mt-option"><input type="checkbox" name="section" value="notes" checked> <span>Compte rendu</span></label></li>
+            <li data-section="decisions"><label class="mt-option"><input type="checkbox" name="section" value="decisions" checked> <span>Décisions</span></label></li>
+            <li data-section="actions"><label class="mt-option"><input type="checkbox" name="section" value="actions" checked> <span>Actions à mener en tâches</span></label></li>
+            <li data-section="questions"><label class="mt-option"><input type="checkbox" name="section" value="questions"> <span>Questions et suivis</span></label></li>
+            <li data-section="daily"><label class="mt-option"><input type="checkbox" name="section" value="daily"> <span>Lien vers la note quotidienne</span></label></li>
+            <li data-section="transcript"><label class="mt-option"><input type="checkbox" name="section" value="transcript"> <span>Transcription (titre vide pour un enregistrement)</span></label></li>
+          </ol>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>Style des actions à mener</legend>
+          <label class="mt-option"><input type="radio" name="actions" value="plain" checked> <span>Tâche simple</span></label>
+          <label class="mt-option"><input type="radio" name="actions" value="owner"> <span>Responsable, tâche et date d’échéance du plugin Tasks (facultatif)</span></label>
+        </fieldset>
+      </form>
+      <div class="mt-output-head">
+        <h3 id="mt-output-title">Votre modèle</h3>
+        <div class="mt-actions" id="mt-actions" hidden>
+          <button type="button" class="btn-primary" id="mt-copy">Copier</button>
+          <button type="button" class="btn-secondary" id="mt-download">Télécharger le .md</button>
+          <button type="button" class="btn-secondary" id="mt-reset">Réinitialiser</button>
+        </div>
+      </div>
+      <p class="mt-status" id="mt-status" role="status"></p>
+      <pre class="guide-code" id="mt-output" aria-labelledby="mt-output-title" aria-live="polite" tabindex="0"><code id="mt-output-code">---
+date: {{date:YYYY-MM-DD}}
+type: meeting
+attendees: []
+tags:
+  - meeting
+---
+# {{title}}
+
+## Agenda
+-&#32;
+
+## Notes
+
+
+## Decisions
+-&#32;
+
+## Action Items
+- [ ]&#32;
+</code></pre>
+      <div class="mt-notes">
+        <p data-system-note="core"><strong>Plugin Core Templates :</strong> enregistrez le fichier dans votre dossier de modèles et insérez-le avec <code>Templates: Insert template</code>. <code>{{title}}</code> devient le nom de la note, et les dates utilisent les formats Moment.js entre les accolades.</p>
+        <p data-system-note="templater" hidden><strong>Plugin Templater :</strong> enregistrez le fichier dans le dossier de modèles de Templater et insérez-le avec <code>Templater: Open insert template modal</code>, ou utilisez-le comme modèle de dossier. Le plugin principal Templates n’exécute pas les commandes <code>&lt;% %&gt;</code> .</p>
+        <p data-system-note="plain" hidden><strong>Markdown simple :</strong> titres et champs avec des jetons Vox.md entre accolades simples. Obsidian laisse ces jetons tels quels. Vox.md les remplit lorsqu’un Parcours utilise ce fichier comme modèle de coffre ; consultez <a href="#fill-automatically">remplir la note à partir d’un enregistrement</a>.</p>
+        <p>Les titres et les noms de propriétés restent en anglais pour correspondre aux exemples de cette page. Renommez-les après le collage.</p>
+      </div>
+      <dl class="mt-filenames">
+        <div><dt>Nom de fichier suggéré dans Obsidian</dt><dd><code>Meetings/YYYY-MM-DD HHmm Title.md</code></dd></div>
+        <div><dt>Chemin Nouvelle note dans Vox.md</dt><dd><code>Meetings/{date}-{hour}{minute}.md</code></dd></div>
+      </dl>
+      <div hidden id="mt-messages">
+        <span data-message="copied">Modèle copié dans le presse-papiers.</span>
+        <span data-message="copy-failed">La copie a échoué. Sélectionnez le modèle et copiez-le vous-même.</span>
+        <span data-message="downloaded">meeting-template.md téléchargé.</span>
+        <span data-message="reset">Choix réinitialisés au modèle par défaut.</span>
+        <span data-message="moved-up">Section {section} déplacée vers le haut.</span>
+        <span data-message="moved-down">Section {section} déplacée vers le bas.</span>
+        <span data-message="up">Monter la section {section}</span>
+        <span data-message="down">Descendre la section {section}</span>
+        <span data-message="up-text">Monter</span>
+        <span data-message="down-text">Descendre</span>
+      </div>
+
+      <h2 id="install">2. Ajouter le modèle à Obsidian</h2>
+      <p><strong>Plugin Core Templates.</strong> Activez Templates dans Paramètres → Plugins principaux, puis réglez <code>Template folder location</code>, par exemple <code>Templates</code>. Enregistrez-y le modèle sous forme de fichier <code>.md</code> . Dans une nouvelle note, exécutez <code>Templates: Insert template</code> depuis la palette de commandes et choisissez-le. Obsidian remplace <code>{{title}}</code>, <code>{{date}}</code> et <code>{{time}}</code> lorsque vous insérez le modèle. Un format après deux-points, comme <code>{{date:YYYY-MM-DD}}</code>, utilise les jetons Moment.js. Consultez <a href="https://obsidian.md/help/plugins/templates" target="_blank" rel="noopener">l’aide du plugin Templates</a> et le <a href="https://momentjs.com/docs/#/displaying/format/" target="_blank" rel="noopener">tableau des jetons de format Moment.js</a>.</p>
+      <p><strong>Plugin Templater.</strong> Installez Templater depuis les plugins de la communauté et réglez son paramètre <code>Template folder location</code>. Insérez le modèle avec <code>Templater: Open insert template modal</code>. Pour appliquer ce modèle à chaque nouvelle note de <code>Meetings/</code> , activez <code>Trigger Templater on new file creation</code>, réglez <code>Template matching mode</code> sur les modèles de dossier et associez le dossier <code>Meetings</code> au fichier. La <a href="https://silentvoid13.github.io/Templater/settings.html" target="_blank" rel="noopener">documentation des réglages de Templater</a> explique les modèles de dossier, et le <a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html" target="_blank" rel="noopener">module de date</a> documente <code>tp.date.now</code>.</p>
+      <p><strong>Propriétés.</strong> Les métadonnées d’en-tête entre les lignes <code>---</code> deviennent des propriétés de la note. Un lien dans une propriété doit être entre guillemets, c’est pourquoi le champ projet s’écrit <code>"[[Project name]]"</code>. Consultez <a href="https://obsidian.md/help/properties" target="_blank" rel="noopener">Propriétés</a> dans l’aide d’Obsidian. Pour vérifier un frontmatter existant, utilisez le <a href="/fr/blog/obsidian-properties-generator/">générateur et vérificateur de propriétés</a>.</p>
+
+      <h2 id="one-note-per-meeting">3. Une note par réunion</h2>
+      <p>Rangez les réunions dans un seul dossier, comme <code>Meetings/</code>, et mettez la date et l’heure de début dans le nom du fichier : <code>Meetings/2026-11-19 1430 Design review.md</code>. Les noms dans cet ordre se trient par date, et deux réunions du même jour ne partagent jamais un fichier.</p>
+      <p>Activez <strong>Lien vers la note quotidienne</strong> dans le générateur pour ajouter une ligne <code>Daily note:</code> qui renvoie à la note de ce jour. Le lien utilise <code>YYYY-MM-DD</code> ; si vos notes quotidiennes utilisent un autre format de date, modifiez-le pour qu’il corresponde ; le <a href="/fr/blog/obsidian-daily-note-template/">générateur de modèle de note quotidienne</a> prévisualise le nom de fichier produit par un format. Pour lister aussi les réunions du jour dans la note quotidienne, faites-y un lien ; <a href="/fr/blog/append-to-obsidian-daily-note-iphone/">ajouter à une note quotidienne Obsidian</a> montre comment Vox.md peut y ajouter des entrées.</p>
+
+      <h2 id="action-items">4. Actions à mener et suivi</h2>
+      <p>Écrivez chaque action à mener sous forme de tâche Obsidian, <code>- [ ] Send the release notes</code>, puis cochez-la sous la forme <code>- [x]</code> une fois terminée ; consultez <a href="https://obsidian.md/help/syntax" target="_blank" rel="noopener">Syntaxe de mise en forme de base</a>. Placez le responsable en premier pour que chaque ligne indique qui fait quoi.</p>
+      <p>Si vos actions sont déjà une simple liste, le <a href="/fr/blog/markdown-checklist-maker/">Générateur de checklist Markdown</a> les transforme en tâches et ajoute une échéance au format Tasks, Dataview ou Reminder.</p>
+      <p>Le style facultatif ajoute une date d’échéance au format d’un plugin de la communauté, le <a href="https://publish.obsidian.md/tasks/Getting+Started/Dates" target="_blank" rel="noopener">plugin Tasks</a>: <code>📅</code> suivi de <code>YYYY-MM-DD</code>. Le générateur indique la date de la réunion ; remplacez-la par la vraie date d’échéance. Sans le plugin Tasks, l’emoji et la date restent du texte brut et la tâche fonctionne quand même.</p>
+      <p>Pour rassembler les points ouverts de toutes les réunions au même endroit, ajoutez une requête Tasks à une note :</p>
+      <pre class="guide-code"><code>```tasks
+not done
+path includes Meetings
+```</code></pre>
+      <p>La requête liste les tâches non terminées des notes dont le chemin contient <code>Meetings</code>. Dataview peut créer des listes similaires si vous l’utilisez déjà.</p>
+
+      <h2 id="fill-automatically">5. Remplir la note à partir d’un enregistrement</h2>
+      <p>Un modèle vous donne les titres. Vox.md peut écrire la note lui-même : il enregistre la réunion, la transcrit sur votre appareil et enregistre un fichier Markdown dans votre coffre via un Parcours.</p>
+      <ol>
+        <li><strong>Enregistrez.</strong> Sur Mac, Vox.md peut enregistrer une app d’appel et votre micro sur des pistes séparées ; suivez <a href="/fr/blog/transcribe-meetings-mac-obsidian/">Transcrire localement les réunions sur Mac dans Obsidian</a>. Pour une réunion en présentiel, enregistrez avec le micro de l’iPhone ou de l’iPad ; consultez <a href="/fr/blog/voice-notes-to-obsidian-iphone/">enregistrer les notes vocales iPhone dans Obsidian</a>.</li>
+        <li><strong>Choisissez la destination.</strong> Dans le Parcours, choisissez votre coffre, sélectionnez <strong>Nouvelle note</strong>, puis saisissez un chemin comme <code>Meetings/{date}-{hour}{minute}.md</code>. <code>{date}</code> s’écrit <code>2026-11-19</code> et <code>{hour}{minute}</code> s’écrit <code>1430</code>. Ce sont des jetons Vox.md, pas des formats Moment.js. Consultez <a href="/fr/blog/obsidian-capture-templates/">Modèles de capture Obsidian</a> pour d’autres recettes de chemins.</li>
+        <li><strong>Choisissez le mode.</strong> Réglez le mode de traitement du Parcours sur <strong>Notes de réunion</strong>. Il produit une section <code>## Notes</code> et, si la transcription contient des actions à mener, une liste de contrôle <code>## Action Items</code> à cocher. Il utilise Apple Intelligence sur le matériel compatible avec macOS 26 ou iOS 26 ; sinon, un outil de mise en forme déterministe construit la structure.</li>
+      </ol>
+      <p>Notes de réunion ne remplit pas l’ordre du jour, les participants ni les décisions à votre place. Si vous voulez ces titres au-dessus des notes, choisissez <strong>Markdown simple</strong> dans le générateur, décochez « Compte rendu » et « Actions à mener en tâches », puis enregistrez le résultat dans votre coffre. Sélectionnez ensuite ce fichier comme modèle de coffre du Parcours. Vox.md remplit ses jetons à accolades simples dans le modèle et écrit la transcription traitée en dessous. Vérifiez la première note avant de vous fier à la mise en page ; la <a href="/fr/docs/#presets">documentation des Parcours</a> couvre les destinations et les modèles.</p>
+      <p>Si la réunion avait lieu sur Zoom ou Teams et que vous avez téléchargé sa transcription en fichier .srt ou .vtt, convertissez-la en Markdown avec les tours de parole grâce au <a href="/fr/blog/srt-vtt-to-text-markdown/">Convertisseur SRT et VTT</a>, puis collez-le sous le <code>## Transcript</code> titre de ce modèle.</p>
+      <p>Dites à toutes les personnes présentes que vous enregistrez et transcrivez la réunion, et obtenez d’abord leur consentement. Les règles varient selon le lieu et l’entreprise ; consultez <a href="/fr/blog/transcribe-meetings-mac-obsidian/#consent">comment prévenir les participants que vous enregistrez</a>.</p>
+
+      <h2 id="faq">6. Questions fréquentes</h2>
+      <h3>Faut-il utiliser Core Templates ou Templater ?</h3>
+      <p>Core Templates est fourni avec Obsidian et gère le titre, la date et l’heure. Templater est un plugin de la communauté qui ajoute des scripts, des décalages de date et des modèles de dossier, si bien qu’une nouvelle note dans <code>Meetings/</code> peut recevoir le modèle automatiquement. Si vous n’avez besoin que des champs de cette page, Core Templates suffit.</p>
+      <h3>Pourquoi <code>{{date}}</code> ne change-t-il pas ensuite ?</h3>
+      <p>Obsidian remplace les variables de modèle une seule fois, lorsque vous insérez le modèle. La note contient ensuite du texte brut, par exemple <code>2026-11-19</code>, et la conserve. C’est ce qu’il faut pour un compte rendu de réunion.</p>
+      <h3>Vox.md peut-il utiliser mon modèle Obsidian ?</h3>
+      <p>En partie. Un Parcours peut utiliser un fichier Markdown de votre coffre comme modèle. Vox.md remplit ses propres jetons à accolades simples, comme <code>{date}</code>, ainsi que les commandes de date Templater <code>tp.date.now</code> et <code>tp.file.creation_date</code>. Il n’exécute pas les autres commandes Templater, comme <code>tp.file.title</code>, et ne développe pas les variables du plugin principal Templates comme <code>{{title}}</code>. Laissez-les donc hors du modèle d’un Parcours. Utilisez la sortie Markdown simple pour un Parcours Vox.md.</p>
+      <h3>Le générateur envoie-t-il mes choix quelque part ?</h3>
+      <p>Non. Le modèle est construit par un script de cette page. Il enregistre vos derniers choix dans le stockage local de votre navigateur, pour les retrouver la prochaine fois, et Réinitialiser les efface.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Plus besoin de tout taper.</h2>
+        <p>Enregistrez la réunion et laissez Vox.md écrire la note dans votre coffre.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_fr_f599543e8b13">Télécharger Vox.md gratuitement</a></p>
+        <p>15 minutes de transcription gratuites · aucun compte requis · un déblocage à vie. Vous configurez un appel sur Mac ? Suivez le <a href="/fr/blog/transcribe-meetings-mac-obsidian/">guide des réunions sur Mac</a>.</p>
+      </section>
+      <nav class="toc" aria-label="Guides associés" id="related"><div class="toc-title">Poursuivre la configuration</div><ul>
+        <li><a href="/fr/blog/transcribe-meetings-mac-obsidian/">Transcrire localement les réunions sur Mac dans Obsidian</a></li>
+        <li><a href="/fr/blog/obsidian-capture-templates/">Recettes de chemins et de modèles</a></li>
+        <li><a href="/fr/blog/voice-notes-to-obsidian-iphone/">Enregistrer les notes vocales iPhone dans Obsidian</a></li>
+        <li><a href="/fr/blog/append-to-obsidian-daily-note-iphone/">Ajouter à une note quotidienne Obsidian</a></li>
+        <li><a href="/fr/docs/#presets">Référence des Parcours</a></li>
+        <li><a href="/fr/docs/#mac">Référence de l’app Mac</a></li>
+      </ul></nav>
+<script>
+/* Meeting notes template generator. Runs locally: no network requests. */
+(function () {
+  var form = document.getElementById('mt-tool');
+  if (!form) return;
+  var STORAGE_KEY = 'vox-meeting-template-v1';
+  var list = document.getElementById('mt-sections');
+  var code = document.getElementById('mt-output-code');
+  var status = document.getElementById('mt-status');
+  var tagInput = document.getElementById('mt-tag');
+  var defaultOrder = Array.prototype.map.call(list.children, function (li) { return li.getAttribute('data-section'); });
+  var defaults = snapshot();
+
+  var SYNTAX = {
+    core: { date: '{{date:YYYY-MM-DD}}', time: '{{time:HH:mm}}', title: '# {{title}}' },
+    templater: { date: '<% tp.date.now("YYYY-MM-DD") %>', time: "<% tp.date.now('HH:mm') %>", title: '# <% tp.file.title %>' },
+    plain: { date: '{date}', time: '{hour}:{minute}', title: '# Meeting {date}' }
+  };
+  var HEADINGS = {
+    agenda: ['## Agenda', '- '],
+    attendees: ['## Attendees', '- '],
+    notes: ['## Notes', ''],
+    decisions: ['## Decisions', '- '],
+    questions: ['## Questions and Follow-ups', '- '],
+    transcript: ['## Transcript', '']
+  };
+
+  function message(name, section) {
+    var el = document.querySelector('#mt-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : '';
+    return section === undefined ? text : text.split('{section}').join(section);
+  }
+  function sectionName(li) { return li.querySelector('label span').textContent; }
+  function checked(name) {
+    return Array.prototype.filter.call(form.elements[name], function (i) { return i.checked; }).map(function (i) { return i.value; });
+  }
+  function radio(name) { return checked(name)[0]; }
+  function cleanTag(value) {
+    var tag = value.trim().replace(/^#+/, '').replace(/\s+/g, '-').replace(/[^\w\/-]/g, '');
+    return tag || 'meeting';
+  }
+
+  function build(state) {
+    var s = SYNTAX[state.system];
+    var lines = [];
+    var props = state.props;
+    if (props.length) {
+      lines.push('---');
+      props.forEach(function (p) {
+        if (p === 'date') lines.push('date: ' + s.date);
+        if (p === 'time') lines.push('time: "' + s.time + '"');
+        if (p === 'type') lines.push('type: meeting');
+        if (p === 'attendees') lines.push('attendees: []');
+        if (p === 'project') lines.push('project: "[[Project name]]"');
+        if (p === 'tags') { lines.push('tags:'); lines.push('  - ' + cleanTag(state.tag)); }
+        if (p === 'status') lines.push('status: open');
+      });
+      lines.push('---');
+    }
+    lines.push(s.title);
+    state.order.forEach(function (id) {
+      if (state.sections.indexOf(id) === -1) return;
+      lines.push('');
+      if (id === 'daily') { lines.push('Daily note: [[' + s.date + ']]'); return; }
+      if (id === 'actions') {
+        lines.push('## Action Items');
+        lines.push(state.actions === 'owner' ? '- [ ] Owner — task 📅 ' + s.date : '- [ ] ');
+        return;
+      }
+      lines.push(HEADINGS[id][0]);
+      lines.push(HEADINGS[id][1]);
+    });
+    while (lines.length && lines[lines.length - 1] === '') lines.pop();
+    return lines.join('\n') + '\n';
+  }
+
+  function snapshot() {
+    return {
+      system: radio('system'), props: checked('prop'), tag: tagInput.value,
+      sections: checked('section'), actions: radio('actions'),
+      order: Array.prototype.map.call(list.children, function (li) { return li.getAttribute('data-section'); })
+    };
+  }
+  function apply(state) {
+    Array.prototype.forEach.call(form.elements.system, function (i) { i.checked = i.value === state.system; });
+    Array.prototype.forEach.call(form.elements.actions, function (i) { i.checked = i.value === state.actions; });
+    Array.prototype.forEach.call(form.elements.prop, function (i) { i.checked = state.props.indexOf(i.value) !== -1; });
+    Array.prototype.forEach.call(form.elements.section, function (i) { i.checked = state.sections.indexOf(i.value) !== -1; });
+    tagInput.value = state.tag;
+    state.order.forEach(function (id) {
+      var li = list.querySelector('[data-section="' + id + '"]');
+      if (li) list.appendChild(li);
+    });
+  }
+  function valid(state) {
+    return state && SYNTAX[state.system] && (state.actions === 'plain' || state.actions === 'owner') &&
+      Array.isArray(state.props) && Array.isArray(state.sections) && typeof state.tag === 'string' &&
+      Array.isArray(state.order) && state.order.length === defaultOrder.length &&
+      defaultOrder.every(function (id) { return state.order.indexOf(id) !== -1; });
+  }
+  function save(state) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* storage unavailable */ }
+  }
+
+  function update(store) {
+    var state = snapshot();
+    code.textContent = build(state);
+    Array.prototype.forEach.call(document.querySelectorAll('[data-system-note]'), function (p) {
+      p.hidden = p.getAttribute('data-system-note') !== state.system;
+    });
+    Array.prototype.forEach.call(list.children, function (li, index) {
+      var name = sectionName(li);
+      var up = li.querySelector('.mt-up');
+      var down = li.querySelector('.mt-down');
+      up.setAttribute('aria-label', message('up', name));
+      down.setAttribute('aria-label', message('down', name));
+      up.disabled = index === 0;
+      down.disabled = index === list.children.length - 1;
+    });
+    if (store) save(state);
+  }
+  function say(text) {
+    status.textContent = '';
+    window.setTimeout(function () { status.textContent = text; }, 30);
+  }
+
+  Array.prototype.forEach.call(list.children, function (li) {
+    var controls = document.createElement('span');
+    controls.className = 'mt-move';
+    [['mt-up', 'up-text', -1], ['mt-down', 'down-text', 1]].forEach(function (spec) {
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'mt-move-button ' + spec[0];
+      button.textContent = message(spec[1]);
+      button.addEventListener('click', function () {
+        var sibling = spec[2] < 0 ? li.previousElementSibling : li.nextElementSibling;
+        if (!sibling) return;
+        list.insertBefore(li, spec[2] < 0 ? sibling : sibling.nextElementSibling);
+        update(true);
+        var target = button.disabled ? li.querySelector(spec[2] < 0 ? '.mt-down' : '.mt-up') : button;
+        target.focus();
+        say(message(spec[2] < 0 ? 'moved-up' : 'moved-down', sectionName(li)));
+      });
+      controls.appendChild(button);
+    });
+    li.appendChild(controls);
+  });
+
+  try {
+    var stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+    if (valid(stored)) apply(stored);
+  } catch (e) { /* ignore unreadable saved choices */ }
+
+  form.addEventListener('change', function () { update(true); });
+  form.addEventListener('input', function () { update(true); });
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+
+  document.getElementById('mt-copy').addEventListener('click', function () {
+    var text = code.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(code);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+  document.getElementById('mt-download').addEventListener('click', function () {
+    var blob = new Blob([code.textContent], { type: 'text/markdown;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = 'meeting-template.md';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    say(message('downloaded'));
+  });
+  document.getElementById('mt-reset').addEventListener('click', function () {
+    apply(defaults);
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* storage unavailable */ }
+    update(false);
+    say(message('reset'));
+  });
+
+  document.getElementById('mt-nojs').hidden = true;
+  document.getElementById('mt-actions').hidden = false;
+  form.classList.add('is-ready');
+  update(false);
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/fr/">Accueil</a></li>
+        <li><a href="/fr/docs/">Documentation</a></li>
+        <li><a href="/fr/blog/">Guides</a></li>
+        <li><a href="/fr/compare/">Comparer</a></li>
+        <li><a href="/fr/privacy.html">Confidentialité</a></li>
+        <li><a href="/fr/terms.html">Conditions</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Assistance</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_fr_f599543e8b13">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Capture rapide pour notes locales · Aucun envoi de contenu.</div>
+    </div>
+  <details class="language-switcher"><summary>Langue</summary><ul><li><a href="/blog/obsidian-meeting-notes-template/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-meeting-notes-template/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-meeting-notes-template/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-meeting-notes-template/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-meeting-notes-template/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-meeting-notes-template/" lang="fr" hreflang="fr" aria-current="page">Français</a></li><li><a href="/hi/blog/obsidian-meeting-notes-template/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-meeting-notes-template/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-meeting-notes-template/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-meeting-notes-template/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-meeting-notes-template/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-meeting-notes-template/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-meeting-notes-template/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-meeting-notes-template/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-meeting-notes-template/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-meeting-notes-template/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-meeting-notes-template/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-meeting-notes-template/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-meeting-notes-template/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-meeting-notes-template/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-meeting-notes-template/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-meeting-notes-template/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-meeting-notes-template/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

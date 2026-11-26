@@ -513,7 +513,7 @@ LID: IU. Baseline inventory of every user-visible feature found in `Voxboard/Vie
 - Surface: `CapturePresetView` full recording UI driven by `CapturePresetController`
 - Summary: Phase-based full-screen recording UI for keyboard-initiated app recordings: Starting…, Recording (large duration m:ss.t, "Return to Your App" swipe-back prompt telling the user recording continues and to tap Stop on the keyboard), Transcribing (percent + progress bar or animated dots, "Processing audio on-device"), Transcript Ready (result preview 5 lines), Error. Bottom action: destructive "Stop and Transcribe" while recording; Close X when done/error. Controller records via AudioRecorder, listens for the keyboard stop command via Darwin notification + 0.5 s poll timer, transcribes in a background task with monotonic progress publishing over IPC, saves to TranscriptStore, deletes audio on successful delivery, and writes IPC status/response for the keyboard extension.
 - Details: error path writes error response over IPC and keeps phase .error (RecordingFlowView.swift:20-160); mic-unavailable and no-audio error messages
-- Constraints: used for keyboard-relay flow; success feeds `ReviewPromptManager`
+- Constraints: used for keyboard-relay flow
 - Evidence: `Voxboard/Views/RecordingFlowView.swift` (all)
 - Status: shipped
 

@@ -3,6 +3,7 @@
 
 Default is offline plan generation. Explicit --fetch / --metadata / --apply-prices /
 --apply-offers switches select stages. Receipts are cached; uncertain writes stop.
+--apply-prices is disabled: PRODUCTS holds the 2026-10-29 launch prices, not live ones.
 """
 import argparse
 from concurrent.futures import ThreadPoolExecutor
@@ -20,6 +21,11 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "docs/evidence/subscription-transition-20261029"
 PRIOR = ROOT / "docs/evidence/hard-paywall-regional-proposal-20261029"
 GROUP = "22526843"
+# PRODUCTS records the 2026-10-29 launch US base prices that produced the saved
+# evidence in docs/evidence/subscription-transition-20261029/ (the tests compare
+# that evidence against this table). They are not the live prices: weekly plans
+# were raised in App Store Connect after launch (US $2.99 Individual, $4.99 Family,
+# verified 2026-11-26). Do not push this table to App Store Connect.
 PRODUCTS = {
     "individual-weekly": ("6828566827", "bontecou.Voxboard.individual.weekly", "0.99", "Individual Weekly"),
     "individual-yearly": ("6828566769", "bontecou.Voxboard.individual.yearly", "29.99", "Individual Yearly"),
@@ -144,7 +150,18 @@ def metadata():
             "Seven-day introductory free trial for eligible accounts, then auto-renews at the displayed localized price. Individual is for one Apple Account; Family supports Apple Family Sharing. Existing lifetime purchases remain valid. Unpaid users may view/export existing history but cannot create new recordings or Capture deliveries. First subscriptions will be reviewed with the updated iOS and macOS paywall builds; existing lifetime prices remain unchanged. No release before owner approval."])
 
 
+APPLY_PRICES_REFUSAL = (
+    "--apply-prices is disabled: PRODUCTS holds the 2026-10-29 launch prices "
+    "($0.99/$1.99 weekly), and applying them would roll back the live US weekly "
+    "prices ($2.99 Individual, $4.99 Family, verified 2026-11-26). Regenerate the "
+    "price plan from live App Store Connect prices before applying any price change."
+)
+
+
 def apply_prices():
+    raise SystemExit(APPLY_PRICES_REFUSAL)
+    # The launch-time steps below are kept as the record of how the plan was applied.
+    # Re-enable them only together with a plan regenerated from live prices.
     # New subscriptions only. No API or CLI route here can mutate an IAP schedule.
     for key, (sid, _, base, _) in PRODUCTS.items():
         run(key + "-prices-dry-run", ["subscriptions", "pricing", "prices", "import", "--subscription-id", sid, "--input", str(OUT / (key + "-prices.csv")), "--dry-run", "--continue-on-error=false"])
@@ -242,14 +259,15 @@ def main():
     for flag in ("fetch", "metadata", "apply-prices", "apply-offers", "verify"):
         parser.add_argument("--" + flag, action="store_true")
     args = parser.parse_args()
+    if args.apply_prices:
+        # Refuse before any other stage runs, so no partial work happens first.
+        apply_prices()
     if args.metadata:
         metadata()
     if args.fetch:
         fetch()
     if args.fetch or not any(vars(args).values()):
         plan()
-    if args.apply_prices:
-        apply_prices()
     if args.apply_offers:
         apply_offers()
     if args.verify:

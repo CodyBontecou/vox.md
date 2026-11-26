@@ -61,6 +61,11 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
     /// missing or uninstalled override also falls back to the app-wide choice;
     /// see `CapturePresetStore.resolvedTranscriptionModelID(flowID:defaults:)`.
     public var transcriptionModelID: String?
+    /// Whether this route's recordings run speech-to-text. Off saves only the
+    /// audio to the route's destination: iPhone recordings, imports and Apple
+    /// Watch recordings skip transcription. Keyboard and note dictation still
+    /// transcribe, because their output is text. Existing routes decode as on.
+    public var transcriptionEnabled: Bool
 
     public init(
         id: String,
@@ -91,7 +96,8 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         captureDestinationID: UUID? = nil,
         captureEntryTemplateID: UUID? = nil,
         capturePlacementOverride: CapturePlacement? = nil,
-        transcriptionModelID: String? = nil
+        transcriptionModelID: String? = nil,
+        transcriptionEnabled: Bool = true
     ) {
         self.id = id
         self.name = name
@@ -122,6 +128,7 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         self.captureEntryTemplateID = captureEntryTemplateID
         self.capturePlacementOverride = capturePlacementOverride
         self.transcriptionModelID = transcriptionModelID
+        self.transcriptionEnabled = transcriptionEnabled
     }
 
     public var visibleName: String? {
@@ -225,6 +232,7 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         case captureEntryTemplateID
         case capturePlacementOverride
         case transcriptionModelID
+        case transcriptionEnabled
     }
 
     public init(from decoder: Decoder) throws {
@@ -262,7 +270,8 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
             captureDestinationID: try container.decodeIfPresent(UUID.self, forKey: .captureDestinationID),
             captureEntryTemplateID: try container.decodeIfPresent(UUID.self, forKey: .captureEntryTemplateID),
             capturePlacementOverride: try container.decodeIfPresent(CapturePlacement.self, forKey: .capturePlacementOverride),
-            transcriptionModelID: try container.decodeIfPresent(String.self, forKey: .transcriptionModelID)
+            transcriptionModelID: try container.decodeIfPresent(String.self, forKey: .transcriptionModelID),
+            transcriptionEnabled: try container.decodeIfPresent(Bool.self, forKey: .transcriptionEnabled) ?? true
         )
     }
 
@@ -299,6 +308,11 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         try container.encodeIfPresent(captureEntryTemplateID, forKey: .captureEntryTemplateID)
         try container.encodeIfPresent(capturePlacementOverride, forKey: .capturePlacementOverride)
         try container.encodeIfPresent(transcriptionModelID, forKey: .transcriptionModelID)
+        // Only the non-default value is written, so existing routes keep
+        // byte-identical payloads (fixtures, Watch sync, older app versions).
+        if !transcriptionEnabled {
+            try container.encode(transcriptionEnabled, forKey: .transcriptionEnabled)
+        }
     }
 }
 
@@ -373,8 +387,10 @@ public enum CapturePresetAudioSaveMode: String, Codable, CaseIterable, Sendable,
 
     /// Whether an "Add to Draft" recording keeps its audio: this "Save audio"
     /// setting unless the person flipped the draft's Audio switch for this preset.
-    public func draftRecordingAttachesAudio(override: Bool?) -> Bool {
-        override ?? (self != .off)
+    /// A route with "Transcribe Recordings" off keeps the audio, since an
+    /// audio-only take is the only thing it can produce.
+    public func draftRecordingAttachesAudio(presetTranscribes: Bool = true, override: Bool?) -> Bool {
+        override ?? (self != .off || !presetTranscribes)
     }
 }
 

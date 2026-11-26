@@ -172,7 +172,7 @@
         <img src="/screenshots/optimized/05-settings-local-360.webp" alt="Ustawienia lokalnych modeli i obróbki Vox.md" width="1206" height="2622" loading="lazy" decoding="async">
         <figcaption>Wybierz i przygotuj lokalny silnik przy połączeniu z siecią. Dostępne modele i ustawienia zależą od zainstalowanej wersji oraz urządzenia.</figcaption>
       </figure>
-      <p>Wybór modelu zmienia zużycie pamięci, czas przetwarzania, zakres obsługiwanych języków i jakość rozpoznawania. Sprawdź <a href="/pl/docs/#models">dokumentacja modeli</a> zamiast zakładać obsługę większego modelu lub każdego języka jednym wyborem.</p>
+      <p>Wybór modelu zmienia zużycie pamięci, czas przetwarzania, zakres obsługiwanych języków i jakość rozpoznawania. Sprawdź <a href="/pl/docs/#models">dokumentacja modeli</a> zamiast zakładać, że większy model jest obsługiwany albo że jedna opcja rozpoznaje każdy język. Nie wiesz, który pobrać? <a href="/pl/compare/whisper-vs-parakeet/">Porównaj Whisper i Parakeet</a> i przetestuj oba na własnym nagraniu.</p>
 
       <h2 id="destination">2. Wybierz miejsce Markdown</h2>
       <p>Utwórz lub wybierz preset przechwytywania i połącz go z folderem przez Pliki. W pierwszym teście wybierz cel „Nowe notatki”, aby łatwo rozpoznać wynik. Obróbka „Zachowaj oryginał” jest dobrym punktem wyjścia, gdy chcesz transkrypcję bez opcjonalnego przepisywania.</p>
@@ -185,7 +185,7 @@
 <h2 id="transcribe">3. Nagraj lub importuj audio</h2>
       <ol>
         <li>Otwórz szybkie przechwytywanie i wybierz preset z przygotowanym miejscem. Wybierz <strong>Dodaj do wersji roboczej</strong> w głosie przed startem, by sprawdzić tekst.</li>
-        <li>Nagraj krótką notatkę głosową lub użyj <strong>Importuj audio lub wideo</strong> w sterowaniu głosem, aby wybrać obsługiwany istniejący plik.</li>
+        <li>Nagraj krótką notatkę głosową lub użyj <strong>Importuj audio lub wideo</strong> w elementach sterowania głosem, aby wybrać istniejący obsługiwany plik. W przypadku wideo zobacz <a href="/pl/blog/transcribe-video-to-text/">zamienić wideo na tekst</a>.</li>
         <li>Poczekaj, aż wybrany silnik zakończy rozpoznawanie, sprawdź transkrypcję w wersji roboczej, a następnie stuknij Wyślij.</li>
         <li>Sprawdź, czy dostawa się zakończyła, a następnie otwórz plik Markdown w miejscu docelowym.</li>
       </ol>
@@ -207,6 +207,7 @@
       <h2 id="limitations">Poznaj prywatność i ograniczenia dostępności</h2>
       <p>Vox.md nie wysyła audio do transkrypcji. Gdy celowo zapiszesz tekst lub dźwięk w chmurze, dostawca synchronizuje na swoich warunkach. Użyj lokalnego miejsca, jeśli nie chcesz tego.</p>
       <p>Na praktyczne wyniki wpływają długie nagrania, dostępna pamięć, jakość audio i obsługa modelu. Ten poradnik nie formułuje uniwersalnych twierdzeń o szybkości ani dokładności transkrypcji. Sprawdź wrażliwe lub brzemienne w skutki sformułowania przed ich użyciem.</p>
+      <p>Masz Maca? Zobacz przewodnik <a href="/pl/blog/transcribe-meetings-mac-obsidian/">lokalna transkrypcja spotkań na Macu do Obsidian</a> i nagraj aplikację do rozmów oraz swój mikrofon jako osobne ścieżki.</p>
       <p>Dla nagrań zegarka <a href="/pl/blog/apple-watch-obsidian-voice-notes/">sparowany iPhone nadal transkrybuje i dostarcza</a>. Nagranie na zegarku bez telefonu to odroczona dostawa, nie niezależna transkrypcja.</p>
       <section class="cta" aria-labelledby="guide-cta">
         <h2 id="guide-cta">Przygotuj raz.<br>Sprawdź przed odłączeniem.</h2>
@@ -216,6 +217,7 @@
       <nav class="toc" aria-label="Powiązane poradniki"><div class="toc-title">Kontynuuj konfigurację</div><ul>
         <li><a href="/pl/blog/voice-notes-to-obsidian-iphone/">Notatki głosowe iPhone do Obsidian</a></li>
         <li><a href="/pl/blog/obsidian-capture-templates/">Formatuj skrzynkę, dziennik i zadania</a></li>
+        <li><a href="/pl/blog/transcribe-interview/">Prywatna transkrypcja wywiadu z etykietami mówców</a></li>
         <li><a href="/pl/docs/#models">Wymagania silnika i języki</a></li>
       </ul></nav>
     </div>

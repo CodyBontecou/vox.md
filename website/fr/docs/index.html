@@ -247,7 +247,7 @@
           <div><strong>Photos et appareil photo</strong><p>Sélectionnez photos ou captures d’écran, ou prenez une photo. Les images sont préparées puis intégrées à la note envoyée.</p></div>
           <div><strong>Fichiers</strong><p>Sélectionnez plusieurs éléments Fichiers. Les images sont intégrées, l’audio reste du contenu audio et les autres fichiers utilisent les liens de style Obsidian.</p></div>
           <div><strong>Scans de documents</strong><p>Scannez des pages avec VisionKit. Vox.md conserve les images, crée un PDF et inclut un OCR sur appareil au mieux de ses possibilités.</p></div>
-          <div><strong>OCR de journal</strong><p>Capturez jusqu’à 10 pages de journal avec déclenchement manuel ou choisissez les photos. L’OCR précis Vision détecte automatiquement la langue.</p></div>
+          <div><strong>OCR de journal</strong><p>Capturez jusqu’à 10 pages de journal au déclencheur manuel ou choisissez des photos de journal. L’OCR précis de Vision utilise la détection automatique de la langue. Voir <a href="/fr/blog/handwritten-notes-to-obsidian-iphone/">notes manuscrites vers Obsidian</a>.</p></div>
           <div><strong>Croquis</strong><p>Dessinez au stylo noir sur une toile PencilKit blanche. Vox.md stocke le dessin modifiable et un aperçu PNG.</p></div>
           <div><strong>Action Localisation actuelle</strong><p>Demandez une position et insérez un lien Markdown Google Maps validé dans le brouillon. Cette action indépendante de la Barre de capture ne change aucune des commandes de localisation par parcours.</p></div>
           <div><strong>Voix et audio importé</strong><p>Enregistrez dans l’éditeur ou importez audio/vidéo, transcrivez localement et ajoutez au brouillon ou envoyez immédiatement.</p></div>
@@ -262,8 +262,8 @@
             <tbody>
               <tr><td>Ajouter des médias</td><td>Ouvre les choix Croquis, Appareil photo, Photo, Capture d’écran et Lien web.</td></tr>
               <tr><td>Ajouter des fichiers</td><td>Sélectionne plusieurs fichiers dans Fichiers et les prépare avec le brouillon.</td></tr>
-              <tr><td>Le scanner du document</td><td>Capture un scan multipage, un PDF, les images de pages et un OCR au mieux.</td></tr>
-              <tr><td>Extrait de texte</td><td>Propose Capturer des pages de journal et Choisir des photos de journal pour une capture axée OCR.</td></tr>
+              <tr><td>Scanner un document</td><td>Capture un scan multipage, un PDF, les images de pages et un OCR au mieux.</td></tr>
+              <tr><td>Extraire le texte</td><td>Propose Capturer des pages de journal et Choisir des photos de journal pour une capture axée OCR.</td></tr>
               <tr><td>Nine</td><td>Annule la dernière opération de l’éditeur.</td></tr>
               <tr><td>Formats Markdown</td><td>Applique gras, italique, hashtag ou titres de niveau 1 à 6.</td></tr>
               <tr><td>Markdown Link à</td><td>Insère <code>[link text](url)</code> et sélectionne la partie modifiable.</td></tr>
@@ -312,8 +312,8 @@
           <li>Ouvrez Réglages → Parcours pour créer, renommer, activer, désactiver, choisir une icône ou supprimer un parcours personnalisé.</li>
           <li>Le sélecteur d’icônes recherchable regroupe les symboles sous Écriture, Voix, Tâches, Personnel et Travail.</li>
           <li>Les parcours désactivés sont masqués des sélecteurs ordinaires. Le parcours par défaut intégré ne peut pas être supprimé.</li>
-          <li>Le parcours intégré par défaut utilise le symbole d’onde et le message <em>Capturez une idée, une tâche, un lien, un fichier, un scan ou un enregistrement.</em>, <code>type: capture</code> comme métadonnées, le traitement Texte épuré, le traitement du texte saisi désactivé et la conservation audio désactivée.</li>
-          <li>Un nouveau parcours personnalisé commence par <em>Parcours personnalisé</em>, utilise l’icône de curseurs et <em>Que voulez-vous capturer ?</em> comme message et démarre avec Instruction personnalisée choisie, mais traitement saisi/mixte désactivé.</li>
+          <li>Le parcours intégré par défaut utilise le symbole d’onde et le message <em>Capturez une idée, une tâche, un lien, un fichier, un scan ou un enregistrement.</em>, <code>type: capture</code> comme métadonnées, le traitement Texte épuré avec <strong>Utiliser Apple Intelligence</strong> désactivé, et la conservation audio désactivée.</li>
+          <li>Un nouveau parcours personnalisé commence par <em>Parcours personnalisé</em>, utilise l’icône de curseurs et <em>Que voulez-vous capturer ?</em> comme message et démarre avec Instruction personnalisée choisie, mais <strong>Utiliser Apple Intelligence</strong> désactivé.</li>
         </ul>
 
         <h3 id="processing-modes">Modes de traitement</h3>
@@ -324,16 +324,17 @@
               <tr><td>Conserver l’original</td><td>Conserve le texte capturé sans réécriture par IA.</td><td>Le texte original est envoyé.</td></tr>
               <tr><td>Texte épuré</td><td>Nettoie casse et ponctuation sans changer le sens ni le Markdown.</td><td>Texte original si l’enrichissement sur appareil est indisponible.</td></tr>
               <tr><td>Liste de tâches</td><td>Produit du Markdown <code>- [ ]</code> comme éléments de tâche.</td><td>Un formateur déterministe de listes à cocher.</td></tr>
-              <tr><td>Notes de réunion</td><td>Produit une liste d’éléments <code>## Notes</code> comme section et, si présente, <code>## Action Items</code>.</td><td>Structure déterministe de notes de réunion.</td></tr>
+              <tr><td>Notes de réunion</td><td>Produit une liste d’éléments <code>## Notes</code> comme section et, si présente, <code>## Action Items</code>.</td><td>Structure déterministe de notes de réunion pour les transcriptions vocales ; le texte capturé est livré tel quel.</td></tr>
               <tr><td>Instruction personnalisée</td><td>Suit votre instruction avec Apple Intelligence sur appareil lorsque disponible.</td><td>Texte original lorsque l’instruction ne peut s’exécuter localement.</td></tr>
             </tbody>
           </table>
         </div>
-        <p>Les transcriptions vocales utilisent le mode du parcours choisi. <strong>Utiliser pour capturer le texte</strong> est une activation séparée, désactivée par défaut, pour traiter Markdown saisi, OCR et captures mixtes contenant du texte. La laisser éteinte évite une réécriture inattendue du Markdown rédigé. La requête traitée exacte est sauvegardée avant envoi ; les tentatives suivantes ne retraitent pas selon des réglages modifiés.</p>
+        <p>Pour ajouter des titres d’ordre du jour, de participants et de décisions autour de la sortie Notes de réunion, <a href="/fr/blog/obsidian-meeting-notes-template/">générez un modèle de notes de réunion Obsidian</a>. Pour transformer une liste existante en <code>- [ ]</code> tâches, utilisez le <a href="/fr/blog/markdown-checklist-maker/">Générateur de checklist Markdown</a>.</p>
+        <p><strong>Utiliser Apple Intelligence</strong>, désactivé par défaut, active le mode de traitement du parcours. <strong>Appliquer à</strong> choisit ensuite ce qui est traité : <strong>Voix et texte</strong> (par défaut), <strong>Voix uniquement</strong> ou <strong>Texte uniquement</strong>. Le texte désigne le Markdown saisi, le texte extrait de photos ou de scans et les autres captures contenant du texte ; choisissez <strong>Voix uniquement</strong> pour éviter que le Markdown rédigé soit réécrit. Interrupteur désactivé, les transcriptions vocales reçoivent quand même la structure déterministe de Liste de tâches et de Notes de réunion, et le texte capturé est livré tel quel. La requête traitée exacte est sauvegardée avant envoi ; les tentatives suivantes ne retraitent pas selon des réglages modifiés.</p>
 
         <h3 id="preset-metadata">Métaphysique</h3>
         <ul>
-          <li>Saisissez les métadonnées statiques sous forme d’une paire <code>key: value</code> par ligne, comme <code>tags: [journal, idea]</code>.</li>
+          <li>Saisissez les métadonnées statiques sous forme d’une paire <code>key: value</code> par ligne, comme <code>tags: [journal, idea]</code>. Pour générer un frontmatter valide pour Note Frontmatter, utilisez le <a href="/fr/blog/obsidian-properties-generator/">générateur de propriétés</a>.</li>
           <li><strong>Métadonnées d’en-tête de note</strong> écrit les métadonnées à l’échelle du document.</li>
           <li><strong>Champs d’entrée en ligne</strong> écrit <code>key:: value</code> à côté de chaque entrée d’une note périodique.</li>
           <li>Si disponible, l’enrichissement local ajoute titre, étiquettes, catégorie et texte nettoyé aux métadonnées statiques du parcours.</li>
@@ -424,6 +425,8 @@
             </tbody>
           </table>
         </div>
+
+        <p>Vous ne savez pas quel modèle télécharger ? <a href="/fr/compare/whisper-vs-parakeet/">Comparer Whisper et Parakeet</a> et testez les deux sur votre propre audio.</p>
 
         <h3 id="automatic-model">Fonctionnement d’automatique</h3>
         <ul>
@@ -599,8 +602,10 @@
           <li>Appuyez sur Command-Return pour envoyer la capture. Un parcours avec Utiliser la localisation actuelle activé demande une position d’origine Mac à l’envoi ou à l’arrêt de l’enregistrement, avec ou sans sortie de métadonnées.</li>
           <li>Une bannière de configuration de destination et un inspecteur de parcours affichent la note résolue et le placement du parcours sélectionné.</li>
         </ul>
+        <p>Pour une configuration pas à pas, voir <a href="/fr/blog/transcribe-audio-file-mac/">transcrire un fichier audio sur Mac, en local, vers Markdown</a>, ou <a href="/fr/blog/record-audio-on-mac/">comment enregistrer de l’audio sur un Mac</a>.</p>
 
         <h3 id="mac-meeting">Capture de réunion avec pistes séparées</h3>
+        <p>Pour une configuration pas à pas, voir <a href="/fr/blog/transcribe-meetings-mac-obsidian/">Transcrire localement les réunions sur Mac dans Obsidian</a>.</p>
         <p>Changez le sélecteur de mode de saisie de <strong>Micro</strong> vers <strong>Réunion</strong> pour enregistrer une app Mac et votre micro comme deux pistes nettement séparées. Vox.md utilise ScreenCaptureKit en mode application unique : vous choisissez exactement une app et Vox.md lui-même n’est jamais capturé.</p>
         <ul>
           <li>Pendant l’enregistrement, la barre d’état affiche les niveaux système et micro en direct, l’état par source et les avertissements de capture.</li>
@@ -610,6 +615,7 @@
         </ul>
 
         <h3 id="mac-keybinds">Raccourcis globaux</h3>
+        <p>Pour une configuration pas à pas, voir <a href="/fr/blog/dictation-on-mac/">dicter sur un Mac, en privé avec une option locale</a>.</p>
         <p>Réglages → Raccourcis globaux permet d’attribuer des raccourcis à <strong>Transcrire à Clipboard</strong>, <strong>Parcours sélectionné</strong>, ou tout parcours activé. Les raccourcis sont désactivés par défaut, exigent une touche non modificatrice plus Control, Option ou Command, acceptent aussi Shift et refusent les conflits. Réappuyez sur le raccourci actif pour arrêter.</p>
         <div class="docs-callout docs-callout-neutral">
           <p><strong>Transcrire à Clipboard</strong> ne crée ni note, ni élément de bibliothèque, ni audio conservé. Cette fonction vise la dictée rapide dans toute app Mac.</p>
@@ -670,7 +676,7 @@
           <li>L’utilisation gratuite comprend <strong>15 minutes de transcription</strong> et <strong>10 envois de Capture réussis</strong>.</li>
           <li>Une transcription vocale déjà décomptée du temps de transcription ne consomme pas aussi le quota distinct de Capture lors de son envoi en Markdown.</li>
           <li>Les écritures échouées et tentatives idempotentes ne consomment pas d’envoi de Capture réussi.</li>
-          <li>L’illimité est un achat unique à vie, sans abonnement, renouvellement ni publicité. Le prix local App Store fait foi ; aux États-Unis : 19,99 $ Individuel, 39,99 $ Famille et 19,99 $ Mise à niveau familiale, avec tarifs selon le pouvoir d’achat dans les autres boutiques.</li>
+          <li>L’illimité est un achat unique à vie, sans abonnement, renouvellement ni publicité. Le prix local App Store fait foi ; aux États-Unis : 79,99 $ Individuel, 129,99 $ Famille et 49,99 $ Mise à niveau familiale, avec tarifs selon le pouvoir d’achat dans les autres boutiques.</li>
           <li>Restaurer l’achat récupère un achat éligible. Les utilisateurs d’anciennes versions payantes admissibles conservent l’utilisation illimitée.</li>
           <li>Un registre App Group sans contenu empêche la double facturation des nouvelles tentatives tant que les données locales restent. Il n’est pas dans le trousseau ; supprimer les données locales renouvelle le quota gratuit.</li>
         </ul>

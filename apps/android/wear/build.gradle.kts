@@ -12,6 +12,23 @@ val releaseSigningEnvironment = mapOf(
 )
 val hasCompleteReleaseSigning = releaseSigningEnvironment.values.all { !it.isNullOrBlank() }
 
+// Wear ships inside md.vox.android with the phone, so every bundle needs a unique versionCode.
+// The phone's app/build.gradle.kts stays the single version source: Wear reuses its versionName
+// and offsets its versionCode by 1,000,000 (phone codes are held below that by Play policy).
+val wearVersionCodeOffset = 1_000_000
+val phoneBuildScript = providers.fileContents(
+    rootProject.layout.projectDirectory.file("app/build.gradle.kts"),
+).asText.get()
+val phoneVersionCode = requireNotNull(
+    Regex("""(?m)^\s*versionCode = (\d+)""").find(phoneBuildScript),
+) { "phone versionCode not found in app/build.gradle.kts" }.groupValues[1].toInt()
+val phoneVersionName = requireNotNull(
+    Regex("""(?m)^\s*versionName = "([^"]+)"""").find(phoneBuildScript),
+) { "phone versionName not found in app/build.gradle.kts" }.groupValues[1]
+check(phoneVersionCode in 1 until wearVersionCodeOffset) {
+    "phone versionCode $phoneVersionCode must stay below $wearVersionCodeOffset"
+}
+
 android {
     namespace = "md.vox.android.wear"
 
@@ -19,8 +36,8 @@ android {
         applicationId = "md.vox.android"
         minSdk = 30
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = wearVersionCodeOffset + phoneVersionCode
+        versionName = phoneVersionName
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     if (hasCompleteReleaseSigning) {

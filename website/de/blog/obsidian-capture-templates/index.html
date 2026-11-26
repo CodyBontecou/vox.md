@@ -183,6 +183,7 @@
       <pre class="guide-code"><code>## Journal
 - **14:05** A short walk helped me settle on the next step.</code></pre>
       <p>Stunden- und Minuten-Token werden von der Vox.md-Eintragsformatierung erweitert. Eine Vorlage auf Notizebene kann die umgebenden Überschriften liefern, während das Eintragspräfix jede Erfassung formatiert. Halte diese Aufgaben getrennt, damit spätere Einträge nicht wiederholt die ganze Tagesnotizstruktur einfügen.</p>
+      <p>Um die Vorlage für die Tagesnotiz zu erzeugen und dein Datumsformat zu prüfen, nutze den <a href="/de/blog/obsidian-daily-note-template/">Generator für Tagesnotiz-Vorlagen</a>. Wie du um dieses Rezept ein ganzes Sprachtagebuch aufbaust, siehst du in <a href="/de/blog/private-voice-journal-iphone/">ein privates Sprachtagebuch auf dem iPhone führen</a>. Wenn dein Tagebuch auf Papier ist, <a href="/de/blog/handwritten-notes-to-obsidian-iphone/">Seiten fotografieren und den Text an dieselbe Notiz senden</a>.</p>
       <p>Zur detaillierten Routenkonfiguration siehe <a href="/de/blog/append-to-obsidian-daily-note-iphone/">Tagesnotizpfade und Überschriftenplatzierung</a>.</p>
       <figure class="guide-figure">
         <img src="/screenshots/optimized/01-route-heading-light-640.webp" alt="Vox.md-Zieleditor zum Festlegen von Notizziel und Überschriftenplatzierung" width="1206" height="2622" loading="lazy" decoding="async">
@@ -197,6 +198,7 @@
 - [ ] Review the draft outline
 - [ ] Send the reading list</code></pre>
       <p>Wenn du stattdessen „Todo-Checkliste“ als Verarbeitung aktivierst, überlasse ihr die Checklistenmarkierungen. Konfiguriere nicht zusätzlich ein doppeltes Kontrollkästchen-Präfix. Die Verarbeitung von getipptem und gemischtem Text wird separat aktiviert; Sprachverarbeitung und ein getippter Editorinhalt sind keine austauschbaren Einstellungen.</p>
+      <p>Um eine vorhandene Liste in <code>- [ ]</code> -Aufgaben umzuwandeln, mit Verschachtelung und optionalem Fälligkeitsdatum, füge sie in den <a href="/de/blog/markdown-checklist-maker/">Markdown-Checklisten-Generator</a>.</p>
       <p>Eine Aufgabe ist nur nützlich, wenn ihr Wortlaut stimmt. Prüfe bei Spracherfassungen das Transkript, wenn ein Erkennungsfehler die Anweisung verändern könnte. Die <a href="/de/blog/voice-notes-to-obsidian-iphone/">iPhone-Sprachanleitung</a> erklärt „Zum Entwurf hinzufügen“ und „Sofort senden“.</p>
       <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_de_32fa42cf87f1">Vox.md kostenlos laden</a></p>
       <p>Der kostenlose Download enthält 10 erfolgreiche Erfassungszustellungen und 15 Transkriptionsminuten. Unbegrenzte Nutzung ist ein einmaliger Kauf auf Lebenszeit.</p>
@@ -205,7 +207,7 @@
       <p>Vox.md-Pfad- und Eintragseinstellungen verwenden Token wie <code>{period}</code>, <code>{date}</code>, <code>{hour}</code> und <code>{minute}</code>. Diese Beispiele sind keine Ausdrücke für Obsidian Core Templates oder Templater. Verwende in den Einstellungen eines Vorlagensystems dessen eigene Syntax.</p>
       <p>Verwende <code>{hour}:{minute}</code> für die hier gezeigte Uhrzeit mit Doppelpunkten. Das Vox.md-Token <code>{time}</code> Token ist ein kompakter Zeitwert; ersetze damit nicht das Token im Rezept in der Annahme, die Darstellung sei gleich.</p>
       <p>Erfassungsinhalt ist kein Vorlageneditor. Ein in einem Gedanken geschriebenes Token kann wörtlicher Text bleiben; konfiguriere die Token-Erweiterung in den unterstützten Formatierungseinstellungen des Ziels. Siehe die <a href="/de/docs/#placement-templates">Token- und Vorlagenreferenz</a> zu den verfügbaren Feldern.</p>
-      <p>Wenn du YAML-Metadaten hinzufügst, unterscheide Frontmatter auf Notizebene von Feldern für einzelne Rolling-Note-Einträge. Eine Eigenschaft der gesamten Datei ist nicht automatisch eine eigene Eigenschaft jedes Journaleintrags. Beginne ohne zusätzliche Metadaten und ergänze sie, sobald du weißt, wie du sie abfragen wirst.</p>
+      <p>Wenn du YAML-Metadaten hinzufügst, unterscheide Frontmatter auf Notizebene von Feldern für jeden Eintrag einer fortlaufenden Notiz. Eine Property der ganzen Datei ist nicht automatisch eine eigene Property für jeden Journal-Eintrag. Beginne ohne zusätzliche Metadaten und füge sie hinzu, wenn du weißt, wie du sie abfragen willst. Der <a href="/de/blog/obsidian-properties-generator/">Properties-Generator und -Prüfer</a> erstellt gültiges YAML für die gewählten Metadaten.</p>
 
       <h2 id="check">Ergebnis prüfen, bevor du ein Aufnahme-Preset wiederverwendest</h2>
       <ol>
@@ -215,6 +217,7 @@
         <li>Sende eine zweite Erfassung und prüfe Reihenfolge, Abstände und wiederholte Markierungen.</li>
         <li>Ergänze erst dann Sprache, Anhänge, optionale Verarbeitung oder Metadaten.</li>
       </ol>
+      <p>Für Besprechungen gibt ein Pfad für Neue Notiz wie <code>Meetings/{date}-{hour}{minute}.md</code> jedem Anruf eine eigene Datei; siehe <a href="/de/blog/transcribe-meetings-mac-obsidian/">Mac-Besprechungen in Obsidian transkribieren</a>. Um diesen Notizen Überschriften für Tagesordnung und Entscheidungen hinzuzufügen, <a href="/de/blog/obsidian-meeting-notes-template/">erstelle eine Vorlage für Besprechungsnotizen</a>.</p>
       <p>Diese Rezepte können in einer Tagesdatei unter getrennten Überschriften nebeneinander bestehen. Bei einem zugänglichen Ordner kann dasselbe Aufnahme-Preset auch ein Transkript annehmen aus dem <a href="/de/blog/apple-watch-obsidian-voice-notes/">Erfassungsablauf von Watch zu iPhone</a>. Beachte Ordnerberechtigungen und Dateianbieterverfügbarkeit, wenn eine Erfassung ausstehend bleibt.</p>
       <section class="cta" aria-labelledby="guide-cta">
         <h2 id="guide-cta">Halte das Format vorhersehbar.<br>Lass Raum für den Gedanken.</h2>

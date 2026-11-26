@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="th" dir="ltr" data-search-section="ส่วน" data-search-guide="คู่มือ" data-search-empty="ไม่พบ “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>วิธีถอดเสียงสัมภาษณ์แบบส่วนตัว พร้อมป้ายชื่อผู้พูด | Vox.md</title>
+  <meta name="description" content="วิธีที่ใช้ได้จริงในการเปลี่ยนการสัมภาษณ์ที่บันทึกไว้เป็นข้อความถอดเสียงที่ตรวจทานได้: ความยินยอม การบันทึก ตามคำพูดทุกคำหรือแบบเรียบเรียง การตรวจทาน และป้ายชื่อผู้พูดแบบไม่ระบุตัวตนที่เลือกใช้ได้ Vox.md ถอดเสียงบนอุปกรณ์ของคุณและบันทึกโน้ต Markdown ที่เป็นของคุณ">
+  <link rel="canonical" href="https://vox.isolated.tech/th/blog/transcribe-interview/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="เอกสาร Vox.md สำหรับโมเดลภาษา">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="วิธีถอดเสียงสัมภาษณ์แบบส่วนตัว พร้อมป้ายชื่อผู้พูด">
+  <meta property="og:description" content="วิธีที่ใช้ได้จริงในการเปลี่ยนการสัมภาษณ์ที่บันทึกไว้เป็นข้อความถอดเสียงที่ตรวจทานได้: ความยินยอม การบันทึก ตามคำพูดทุกคำหรือแบบเรียบเรียง การตรวจทาน และป้ายชื่อผู้พูดแบบไม่ระบุตัวตนที่เลือกใช้ได้ Vox.md ถอดเสียงบนอุปกรณ์ของคุณและบันทึกโน้ต Markdown ที่เป็นของคุณ">
+  <meta property="og:url" content="https://vox.isolated.tech/th/blog/transcribe-interview/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-24">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="วิธีถอดเสียงสัมภาษณ์แบบส่วนตัว พร้อมป้ายชื่อผู้พูด">
+  <meta name="twitter:description" content="วิธีที่ใช้ได้จริงในการเปลี่ยนการสัมภาษณ์ที่บันทึกไว้เป็นข้อความถอดเสียงที่ตรวจทานได้: ความยินยอม การบันทึก ตามคำพูดทุกคำหรือแบบเรียบเรียง การตรวจทาน และป้ายชื่อผู้พูดแบบไม่ระบุตัวตนที่เลือกใช้ได้ Vox.md ถอดเสียงบนอุปกรณ์ของคุณและบันทึกโน้ต Markdown ที่เป็นของคุณ">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "วิธีถอดเสียงสัมภาษณ์แบบส่วนตัว พร้อมป้ายชื่อผู้พูด",
+  "description": "วิธีที่ใช้ได้จริงในการเปลี่ยนการสัมภาษณ์ที่บันทึกไว้เป็นข้อความถอดเสียงที่ตรวจทานได้: ความยินยอม การบันทึก ตามคำพูดทุกคำหรือแบบเรียบเรียง การตรวจทาน และป้ายชื่อผู้พูดแบบไม่ระบุตัวตนที่เลือกใช้ได้ Vox.md ถอดเสียงบนอุปกรณ์ของคุณและบันทึกโน้ต Markdown ที่เป็นของคุณ",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-24",
+  "dateModified": "2026-11-24",
+  "mainEntityOfPage": "https://vox.isolated.tech/th/blog/transcribe-interview/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "th",
+  "name": "วิธีถอดเสียงสัมภาษณ์แบบส่วนตัว พร้อมป้ายชื่อผู้พูด | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/th/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "คู่มือ",
+      "item": "https://vox.isolated.tech/th/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "วิธีถอดเสียงสัมภาษณ์แบบส่วนตัว พร้อมป้ายชื่อผู้พูด",
+      "item": "https://vox.isolated.tech/th/blog/transcribe-interview/"
+    }
+  ],
+  "inLanguage": "th",
+  "name": "วิธีถอดเสียงสัมภาษณ์แบบส่วนตัว พร้อมป้ายชื่อผู้พูด | Vox.md",
+  "description": "วิธีที่ใช้ได้จริงในการเปลี่ยนการสัมภาษณ์ที่บันทึกไว้เป็นข้อความถอดเสียงที่ตรวจทานได้: ความยินยอม การบันทึก ตามคำพูดทุกคำหรือแบบเรียบเรียง การตรวจทาน และป้ายชื่อผู้พูดแบบไม่ระบุตัวตนที่เลือกใช้ได้ Vox.md ถอดเสียงบนอุปกรณ์ของคุณและบันทึกโน้ต Markdown ที่เป็นของคุณ"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-interview/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-interview/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-interview/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-interview/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-interview/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-interview/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-interview/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-interview/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-interview/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-interview/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-interview/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-interview/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-interview/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-interview/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-interview/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-interview/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-interview/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-interview/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">ข้ามไปคู่มือ</a>
+<nav aria-label="การนำทางหลัก">
+  <div class="nav-inner">
+    <a href="/th/" class="logo" aria-label="หน้าแรก Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/th/#how">วิธีทำงาน</a></li>
+      <li><a href="/th/docs/">เอกสาร</a></li>
+      <li><a href="/th/blog/">คู่มือ</a></li>
+      <li><a href="/th/compare/">เปรียบเทียบ</a></li>
+      <li><a href="/th/privacy.html">ความเป็นส่วนตัว</a></li>
+      <li><a href="/th/terms.html">ข้อกำหนด</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_th_4113af33d28a">ดาวน์โหลด Vox.md</a>
+  <details class="language-switcher"><summary>ภาษา</summary><ul><li><a href="/blog/transcribe-interview/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-interview/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-interview/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-interview/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-interview/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-interview/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-interview/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-interview/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-interview/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-interview/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-interview/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-interview/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-interview/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-interview/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-interview/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-interview/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-interview/" lang="th" hreflang="th" aria-current="page">ไทย</a></li><li><a href="/tr/blog/transcribe-interview/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-interview/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-interview/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-interview/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-interview/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-interview/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">สัมภาษณ์ · บนอุปกรณ์ · ป้ายชื่อผู้พูด</div>
+        <h1 class="hero-title">วิธีถอดเสียงสัมภาษณ์แบบส่วนตัว พร้อมป้ายชื่อผู้พูด</h1>
+        <p class="hero-subtitle">ความยินยอม การบันทึก การถอดเสียง และรอบการตรวจทาน พร้อมเส้นทางบนอุปกรณ์ เพื่อไม่ให้เสียงของผู้เข้าร่วมถูกอัปโหลดไปยังบริการถอดเสียง</p>
+      </div>
+      <aside class="meta-card" aria-label="เกี่ยวกับคู่มือนี้">
+        <dl>
+          <div><dt>โดย</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>ปรับปรุง</dt><dd><time datetime="2026-11-24">24 พฤศจิกายน 2026</time></dd></div>
+          <div><dt>ต้องใช้</dt><dd>Vox.md: iOS หรือ iPadOS 17.6+ หรือ macOS 14+ · โมเดลเสียงพูดที่ดาวน์โหลดแล้วสำหรับ Whisper หรือ Parakeet · โฟลเดอร์ปลายทางที่เขียนได้</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="วิธีถอดเสียงสัมภาษณ์แบบส่วนตัว พร้อมป้ายชื่อผู้พูด">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">คำตอบสั้น ๆ</div>
+        <p>ห้าขั้นตอน: <strong>1) ขอความยินยอม</strong> และบอกว่าจะประมวลผลและจัดเก็บเสียงอย่างไร <strong>2) บันทึกให้ชัดเจน</strong> โดยทดสอบก่อน <strong>3) ถอดเสียง</strong>; <strong>4) ตรวจทานข้อความเทียบกับเสียง</strong>; <strong>5) ติดป้ายผู้พูดและบันทึก</strong> คุณทำทั้งหมดนี้บนอุปกรณ์ของคุณเองด้วย Vox.md บน iPhone, iPad หรือ Mac เสียงที่บันทึกจึงไม่ถูกอัปโหลดไปยังบริการถอดเสียง ป้ายชื่อผู้พูดเป็นทางเลือก ไม่ระบุตัวตน และทำอย่างเต็มความสามารถ (“Speaker 1”, “Speaker 2”) คุณเปลี่ยนชื่อเองด้วยตนเอง</p>
+      </div>
+      <p>วิธีนี้ใช้ได้กับทุกเครื่องมือ ขั้นตอนของ Vox.md เป็นไปตาม <a href="/th/docs/#models">โมเดล</a> และ <a href="/th/docs/#mac">Mac</a> และพฤติกรรมจริงของแอป แหล่งข้อมูลภายนอกมีลิงก์ไว้ที่จุดที่ใช้ และโน้ตตัวอย่างเป็นเพียงภาพประกอบ ไม่ใช่การสัมภาษณ์จริง</p>
+      <nav class="toc" aria-label="ในคู่มือนี้"><div class="toc-title">ในคู่มือนี้</div><ol>
+        <li><a href="#before-you-record">ก่อนบันทึก</a></li>
+        <li><a href="#verbatim-or-clean">ตามคำพูดทุกคำหรือแบบเรียบเรียง?</a></li>
+        <li><a href="#options">วิธีถอดเสียง</a></li>
+        <li><a href="#iphone">พบกันต่อหน้าบน iPhone หรือ iPad</a></li>
+        <li><a href="#mac">บน Mac</a></li>
+        <li><a href="#review">รอบการตรวจทาน</a></li>
+        <li><a href="#troubleshooting">แก้ปัญหา</a></li>
+        <li><a href="#faq">คำถามที่พบบ่อย</a></li>
+      </ol></nav>
+
+      <h2 id="before-you-record">ก่อนบันทึก</h2>
+      <p><strong>ความยินยอมและการจัดการข้อมูล</strong> บอกผู้เข้าร่วมว่าจะประมวลผลและจัดเก็บเสียงอย่างไร และขอความยินยอมก่อนบันทึก คู่มือของ Centre College <a href="https://library.centre.edu/oralhistories/standards">คู่มือประวัติศาสตร์บอกเล่า</a> ระบุว่าผู้สัมภาษณ์ควรตรวจสอบให้แน่ใจว่าผู้ให้สัมภาษณ์ยินยอมโดยสมัครใจ อธิบายวัตถุประสงค์ของการสัมภาษณ์ และทำให้ชัดเจนว่ามีตัวเลือกใดบ้าง รวมถึงการจำกัดการเข้าถึงหรือการไม่เปิดเผยชื่อ ตรวจสอบคณะกรรมการจริยธรรมหรือนโยบายข้อมูลของคุณด้วย: หลายแห่งถามว่าเสียงของผู้เข้าร่วมถูกประมวลผลและจัดเก็บที่ใด ดังนั้นควรตัดสินใจคำตอบก่อนการสัมภาษณ์ครั้งแรก</p>
+      <p><strong>การตั้งค่าการบันทึก</strong> ของ Harvard Library <a href="https://guides.library.harvard.edu/c.php?g=796889&amp;p=10476360">การบันทึกและการถอดเสียง</a> แนะนำให้ใช้เวลากับการบันทึกเสียงให้ดีก่อน เพราะทำให้การถอดเสียงง่ายขึ้น ในทางปฏิบัติ:</p>
+      <ul>
+        <li>ใช้ไมโครโฟนหนึ่งตัวต่อผู้พูดหนึ่งคนหากทำได้ และนั่งใกล้แต่ละคน</li>
+        <li>เลือกห้องที่เงียบ และปิดทุกอย่างที่มีเสียงดังหรือเสียงหึ่ง</li>
+        <li>บันทึกเสียงทดสอบสั้น ๆ แล้วเล่นกลับก่อนการสัมภาษณ์จริง</li>
+      </ul>
+
+      <h2 id="verbatim-or-clean">ตามคำพูดทุกคำหรือแบบเรียบเรียง?</h2>
+      <p>ตัดสินใจเรื่องรูปแบบก่อนถอดเสียง และใช้ให้สม่ำเสมอตลอดโครงการ ของคู่มือ Centre College <a href="https://library.centre.edu/oralhistories/transcribing">การถอดเสียง</a> อธิบายการถอดเสียงแบบตรงตามคำพูดว่าเป็นคำต่อคำ รวมถึงเสียงเติม การหยุดเว้น การขัดจังหวะ และเสียงหัวเราะ และระบุว่านักประวัติศาสตร์ชอบแบบนี้เพราะจับความละเอียดอ่อนได้มากที่สุด “ตามคำพูดทุกคำแบบเรียบเรียง” และ “เรียบเรียงแล้ว” เป็นชื่อที่พบบ่อยของรูปแบบที่เบากว่า ตารางแสดงว่าโดยทั่วไปต่างกันอย่างไร แบบใดที่คุณต้องใช้ขึ้นอยู่กับโครงการ สำนักพิมพ์ หรือคณะกรรมการจริยธรรมของคุณ</p>
+      <p class="guide-table-hint">บนหน้าจอเล็ก ให้ปัดตารางไปด้านข้าง</p>
+      <div class="guide-comparison" role="region" aria-label="การเปรียบเทียบรูปแบบข้อความถอดเสียง เลื่อนในแนวนอนบนหน้าจอขนาดเล็ก" tabindex="0">
+        <table class="comparison">
+          <caption>รูปแบบข้อความถอดเสียงที่พบบ่อย</caption>
+          <thead><tr><th scope="col">รูปแบบ</th><th scope="col">สิ่งที่เก็บไว้</th><th scope="col">ความเหมาะสมโดยทั่วไป</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">ตามคำพูดทุกคำ</th><td>ทุกอย่างที่พูด: คำเติม ประโยคที่เริ่มแล้วทิ้ง การหยุดเว้น เสียงที่ไม่ใช่คำพูด</td><td>ประวัติศาสตร์บอกเล่าและงานวิจัยที่ถ้อยคำและลีลาการพูดเป็นข้อมูล</td></tr>
+            <tr><th scope="row">ตามคำพูดทุกคำแบบเรียบเรียง</th><td>คำที่พูด โดยตัดคำเติมและประโยคที่เริ่มแล้วทิ้งออก</td><td>การวิเคราะห์และการอ้างอิงการสัมภาษณ์ส่วนใหญ่ ที่ความหมายสำคัญกว่าลีลาการพูด</td></tr>
+            <tr><th scope="row">เรียบเรียงแล้ว</th><td>ปรับถ้อยคำเพื่อให้อ่านง่าย: แก้ไวยากรณ์ ตัดบางตอนออก</td><td>ร่างสำหรับเผยแพร่ เฉพาะเมื่อผู้พูดอนุมัติ หากโครงการของคุณกำหนด</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>การถอดเสียงอัตโนมัติไม่ได้เลือกรูปแบบให้คุณ คุณยังต้องใช้รูปแบบนั้นในรอบการตรวจทาน</p>
+
+      <h2 id="options">วิธีถอดเสียง</h2>
+      <p>ตารางนี้เปรียบเทียบประเภท ไม่ใช่ผลิตภัณฑ์เฉพาะ และระบุเฉพาะสิ่งที่มีเอกสารรองรับ รายละเอียดของบันทึกเสียงใน Apple มาจาก Apple Support <a href="https://support.apple.com/guide/voice-memos/vm4a03609f0d/mac">ดูข้อความถอดเสียงในแอปบันทึกเสียงบน Mac</a> และ <a href="https://support.apple.com/guide/iphone/view-a-transcription-iph00953a982/ios">หน้า iPhone</a> ตรวจสอบให้ตรงกับอุปกรณ์ ภาษา และภูมิภาคของคุณ</p>
+      <p class="guide-table-hint">บนหน้าจอเล็ก ให้ปัดตารางไปด้านข้าง</p>
+      <div class="guide-comparison" role="region" aria-label="การเปรียบเทียบตัวเลือกการถอดเสียงสัมภาษณ์ เลื่อนในแนวนอนบนหน้าจอขนาดเล็ก" tabindex="0">
+        <table class="comparison">
+          <caption>ตัวเลือกการถอดเสียงสัมภาษณ์</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">เสียงถูกประมวลผลที่ใด</th><th scope="col">ป้ายผู้พูด</th><th scope="col">เอาต์พุต</th><th scope="col">รูปแบบค่าใช้จ่าย</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">ด้วยตนเอง</th><td>คอมพิวเตอร์ของคุณเอง</td><td>คุณพิมพ์เอง</td><td>ไฟล์ข้อความใดก็ได้</td><td>เวลาของคุณ: <a href="https://www.nps.gov/articles/000/oral-history-resources-interview-transcribing.htm">National Park Service (กรมอุทยานแห่งชาติสหรัฐฯ)</a> ระบุว่าประมาณ 6–8 ชั่วโมงต่อการบันทึกหนึ่งชั่วโมง</td></tr>
+            <tr><th scope="row">บริการถอดเสียงบนคลาวด์</th><td>เซิร์ฟเวอร์ของผู้ให้บริการ ตรวจสอบข้อกำหนดของแต่ละผู้ให้บริการ</td><td>แตกต่างกันตามบริการ</td><td>แตกต่างกันตามบริการ</td><td>แตกต่างกันตามบริการ</td></tr>
+            <tr><th scope="row">ข้อความถอดเสียงของบันทึกเสียงใน Apple</th><td>ไม่มีระบุในหน้าที่อ้างอิง</td><td>ไม่มีระบุในหน้าที่อ้างอิง</td><td>ข้อความภายในบันทึกเสียง คุณคัดลอกออกเอง</td><td>ส่วนหนึ่งของระบบปฏิบัติการ</td></tr>
+            <tr><th scope="row">Vox.md</th><td>บน iPhone, iPad หรือ Mac ของคุณ</td><td>เลือกเปิดเอง ไม่ระบุตัวตน ทำอย่างเต็มความสามารถ</td><td>โน้ต Markdown ในโฟลเดอร์ที่คุณเลือก</td><td>ถอดเสียงฟรี 15 นาทีและส่งมอบสำเร็จ 10 ครั้ง จากนั้นปลดล็อกตลอดชีพแบบจ่ายครั้งเดียว</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>หากคุณต้องการเพียงข้อความด่วนภายในบันทึกเสียง ให้ใช้ได้เลย ดู <a href="/th/blog/transcribe-voice-memos-iphone/">ถอดเสียงบันทึกเสียงเป็น Markdown</a> สำหรับย้ายการบันทึกไปเป็นโน้ต Vox.md เหมาะเมื่อคุณต้องการข้อความถอดเสียงเป็นไฟล์ธรรมดาที่เป็นของคุณ โมเดลในเครื่องที่คุณเลือก และป้ายชื่อผู้พูดที่เลือกใช้ได้</p>
+
+      <h2 id="iphone">พบกันต่อหน้าบน iPhone หรือ iPad</h2>
+      <ol>
+        <li><strong>เลือกโมเดลถอดเสียง</strong> อัตโนมัติจะเลือกใช้ Apple Speech บนอุปกรณ์ iOS 26 และภาษาที่รองรับก่อน หรือคุณจะดาวน์โหลด Whisper (ตั้งแต่ Tiny ถึง Large v3 Turbo), Parakeet v2 (อังกฤษ) หรือ Parakeet v3 (25 ภาษา) ก็ได้ การดาวน์โหลดโมเดลเป็นทางเลือกของคุณ และเป็นขั้นตอนเดียวที่ใช้เครือข่าย <a href="/th/compare/whisper-vs-parakeet/">Whisper เทียบกับ Parakeet</a> ช่วยคุณเลือก และ <a href="/th/blog/offline-transcription-iphone-markdown/">การถอดเสียงแบบออฟไลน์บน iPhone</a> อธิบายวิธีเตรียม</li>
+        <li><strong>สร้างเส้นทาง “Interviews”</strong> ใน การตั้งค่า → เส้นทาง สร้างเส้นทางชื่อ Interviews เลือกโฟลเดอร์ปลายทาง (vault ของ Obsidian หรือโฟลเดอร์ใน Files) และ <strong>หมายเหตุใหม่</strong> เพื่อให้การบันทึกแต่ละครั้งกลายเป็นไฟล์ของตัวเอง หากต้องการ ให้เพิ่ม frontmatter แบบคงที่ บรรทัดละหนึ่ง <code>key: value</code> ต่อบรรทัด เช่น <code>project: housing-study</code> ส่วน <a href="/th/blog/obsidian-properties-generator/">ตัวสร้างคุณสมบัติ</a> สร้าง frontmatter ที่ถูกต้อง อย่าใส่รหัสผู้เข้าร่วมในข้อมูลเมตาแบบคงที่ เพราะจะใช้กับทุกโน้ตจากเส้นทาง</li>
+        <li><strong>เปิด การระบุผู้พูด</strong> เป็นการตั้งค่าที่เลือกเปิดเองในแต่ละเส้นทาง เมื่อใช้ครั้งแรกจะเตรียมโมเดลผู้พูดแยกต่างหาก จึงควรทำล่วงหน้าก่อนการสัมภาษณ์ ไม่ใช่ต่อหน้าผู้เข้าร่วม หลังจากนั้นจะทำงานในเครื่อง ไลบรารีโอเพนซอร์ส <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> ใช้สำหรับประมวลผลผู้พูดในเครื่อง</li>
+        <li><strong>ทดสอบ 30 วินาทีด้วยเสียงสองคน</strong> บันทึกการสนทนาสั้น ๆ กับใครสักคน แล้วตรวจสอบว่าโน้ตมาถึงโฟลเดอร์ปลายทางและแสดงป้ายชื่อสองป้าย</li>
+        <li><strong>บันทึกหรือนำเข้า</strong> บันทึกจากช่องเขียนของ Vox.md หรือใช้ตัวควบคุมนำเข้าสำหรับไฟล์เสียงหรือวิดีโอที่มีอยู่ (<a href="/th/blog/transcribe-video-to-text/">วิธีนำเข้าวิดีโอ</a>) เลือก <strong>เพิ่มไปยังฉบับร่าง</strong> หากคุณต้องการอ่านข้อความก่อนส่ง หรือ <strong>ส่งทันที</strong> เพื่อส่งเมื่อการถอดเสียงเสร็จ</li>
+        <li><strong>ตรวจทานใน คลัง</strong> คลัง แสดงการบันทึกแต่ละรายการ และหากการระบุผู้พูดทำงานไม่ได้ จะแสดงเหตุผล</li>
+      </ol>
+      <p>เมื่อเปิด การระบุผู้พูด แต่ละช่วงการพูดในข้อความที่บันทึกจะมีบรรทัดป้ายชื่อของตัวเอง ตามด้วยข้อความของช่วงนั้นในบรรทัดถัดไป และแต่ละช่วงคั่นด้วยบรรทัดว่าง:</p>
+<pre class="guide-code"><code>Speaker 1:
+Thanks for agreeing to talk with me today.
+
+Speaker 2:
+Happy to. Where would you like me to start?</code></pre>
+      <p>ป้ายชื่อไม่ระบุตัวตนและทำอย่างเต็มความสามารถ Vox.md ไม่รู้จักบุคคลตามชื่อ และมีให้ใช้สำหรับการส่งข้อความถอดเสียงไปยัง Apple Watch และในแอป Mac ด้วย</p>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">ลองกับการบันทึกสั้น ๆ หนึ่งรายการ</h2>
+        <p>โควตาฟรีคือการถอดเสียง 15 นาทีและการส่งสำเร็จ 10 ครั้ง</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_th_4113af33d28a">รับ Vox.md</a></p>
+      </section>
+
+      <h2 id="mac">บน Mac</h2>
+      <ul>
+        <li><strong>การบันทึกเสียงบน Mac</strong> สำหรับตัวบันทึกในตัวและการจับเสียงจากแอปหนึ่งแอป ดู <a href="/th/blog/record-audio-on-mac/">บันทึกเสียงบน Mac</a>.</li>
+        <li><strong>ไฟล์ที่มีอยู่แล้ว</strong> ใช้ <strong>นำเข้าเสียง…</strong> ใน Vox.md สำหรับ Mac ซึ่งรับไฟล์เสียงและวิดีโอ ขั้นตอนอยู่ใน <a href="/th/blog/transcribe-audio-file-mac/">ถอดเสียงไฟล์เสียงบน Mac</a> เปิด การระบุผู้พูด บนเส้นทางเพื่อให้ได้ป้ายชื่อแบบไม่ระบุตัวตน</li>
+        <li><strong>การสัมภาษณ์ทางไกล</strong> การบันทึกการประชุมจะบันทึกเสียงของแอปหนึ่งและไมโครโฟนของคุณแยกเป็นสเต็ม คุณจะปรากฏเป็น “You” และอีกฝ่ายจะถูกระบุเป็นผู้พูดระยะไกล การระบุผู้พูดสามารถแยกเสียงระยะไกลหลายเสียงออกจากกันได้อีก ดูวิธีตั้งค่าใน <a href="/th/blog/transcribe-meetings-mac-obsidian/">ถอดเสียงการประชุมบน Mac ลง Obsidian</a> แจ้งผู้เข้าร่วมทางไกลว่าคุณกำลังบันทึก เช่นเดียวกับขั้นตอนขอความยินยอมข้างต้น</li>
+        <li><strong>ไฟล์คำบรรยาย</strong> หาก Zoom หรือ Teams ให้ไฟล์ .srt หรือ .vtt แก่คุณแล้ว <a href="/th/blog/srt-vtt-to-text-markdown/">ตัวแปลง SRT และ VTT</a> เปลี่ยนเป็นข้อความหรือ Markdown ในเบราว์เซอร์ของคุณ</li>
+      </ul>
+      <p>โหมดประมวลผลบันทึกการประชุมมีอยู่ แต่จะจัดโครงสร้างข้อความใหม่เป็นโน้ต สำหรับข้อความถอดเสียงงานวิจัยแบบตรงตามคำพูด ให้คงเส้นทางไว้ที่ เก็บต้นฉบับ</p>
+
+      <h2 id="review">รอบการตรวจทาน</h2>
+      <p>ข้อความที่ถอดเสียงอัตโนมัติต้องได้รับการตรวจสอบ คู่มือของ Harvard ระบุว่า เช่นเดียวกับข้อความถอดเสียงที่สร้างอัตโนมัติทุกชนิด คุณต้องแก้ไขด้วยตนเอง และคู่มือของ Centre College ระบุว่าข้อความถอดเสียงอัตโนมัติไม่อาจแทนงานของมนุษย์ได้</p>
+      <ol>
+        <li><strong>ฟังอีกครั้ง</strong> ด้วยความเร็วปกติหรือช้ากว่าขณะอ่าน และแก้ชื่อ ศัพท์ ตัวเลข และวันที่</li>
+        <li><strong>ใช้รูปแบบของคุณ</strong> จากตัวเลือกตามคำพูดทุกคำหรือแบบเรียบเรียงข้างต้น</li>
+        <li><strong>เปลี่ยนชื่อผู้พูด</strong> ใช้ค้นหาและแทนที่เพื่อเปลี่ยน <code>Speaker 1</code> เป็นรหัสผู้สัมภาษณ์ของคุณ และ <code>Speaker 2</code> เป็นรหัสผู้เข้าร่วม เช่น P03</li>
+        <li><strong>ทำให้ไม่ระบุตัวตน</strong> ชื่อ สถานที่ และรายละเอียดอื่นที่ระบุตัวตนได้ ตามที่ความยินยอมและแผนข้อมูลของคุณกำหนด</li>
+        <li><strong>เก็บเสียงต้นฉบับไว้</strong> ตามแผนข้อมูลของคุณ</li>
+      </ol>
+      <p>โน้ตที่เสร็จแล้วอาจมีลักษณะดังนี้ (ข้อความตัวอย่างที่แต่งขึ้น):</p>
+<pre class="guide-code"><code>---
+participant: P03
+date: 2026-11-24
+consent: recorded
+---
+
+Interviewer:
+Thanks for agreeing to talk with me today.
+
+P03:
+Happy to. Where would you like me to start?</code></pre>
+
+      <h2 id="troubleshooting">แก้ปัญหา</h2>
+      <ul>
+        <li><strong>ไม่มีป้ายชื่อผู้พูด</strong> ข้อความถอดเสียงธรรมดาจะถูกเก็บไว้เสมอ และ คลัง จะแสดงเหตุผลที่ข้ามการระบุ เหตุผลได้แก่ ไม่มีข้อมูลเวลาในข้อความถอดเสียง เวลาไม่ครอบคลุมข้อความทั้งหมด ไม่พบผู้พูดที่แตกต่างกัน พื้นที่เก็บโมเดลไม่พร้อมใช้งาน เตรียมโมเดลไม่ได้ หรือการประมวลผลล้มเหลว ตรวจสอบว่าเปิด การระบุผู้พูด สำหรับเส้นทางแล้ว และเตรียมโมเดลผู้พูดแล้ว</li>
+        <li><strong>ผู้พูดถูกรวมหรือแยกผิด</strong> บันทึกให้ใกล้เสียงแต่ละคนมากขึ้น ใช้ไมโครโฟนแยกกันหากทำได้ และแก้ป้ายชื่อด้วยตนเอง</li>
+        <li><strong>การบันทึกที่ยาว</strong> โมเดลที่ใหญ่กว่าใช้เวลานานกว่า ลองใช้โมเดลที่เล็กกว่าก่อน และชาร์จอุปกรณ์ไว้</li>
+        <li><strong>ภาษาที่ Parakeet v2 ไม่รองรับ</strong> Parakeet v2 รองรับเฉพาะภาษาอังกฤษ ใช้ Parakeet v3 (25 ภาษา) หรือ Whisper ดู <a href="/th/docs/#models">รูปแบบ</a>.</li>
+        <li><strong>ใช้สิทธิ์ฟรีหมดแล้ว</strong> คือการถอดเสียง 15 นาทีและการส่งสำเร็จ 10 ครั้ง จากนั้นเป็นการปลดล็อกตลอดชีพครั้งเดียว ราคาใน App Store เป็นราคาที่ถูกต้อง</li>
+      </ul>
+
+      <h2 id="faq">คำถามที่พบบ่อย</h2>
+      <h3>ฉันถอดเสียงสัมภาษณ์แบบออฟไลน์ได้ไหม</h3>
+      <p>ได้ เมื่อเตรียมโมเดลแล้ว การดาวน์โหลดโมเดลและการเตรียมโมเดลผู้พูดต้องเชื่อมต่ออินเทอร์เน็ตหนึ่งครั้ง จากนั้นการถอดเสียงจะทำงานบนอุปกรณ์ ดู <a href="/th/blog/offline-transcription-iphone-markdown/">การถอดเสียงแบบออฟไลน์บน iPhone</a>.</p>
+      <h3>Vox.md อัปโหลดการบันทึกของฉันหรือไม่</h3>
+      <p>ไม่ การถอดเสียงและการติดป้ายผู้พูดทำงานบนอุปกรณ์ของคุณ และไฟล์จะถูกเขียนไปยังโฟลเดอร์ที่คุณเลือกเท่านั้น หากโฟลเดอร์นั้นซิงก์ (เช่น iCloud Drive) ผู้ให้บริการซิงก์จะเก็บไฟล์ตามข้อกำหนดของตนเอง ดู <a href="/th/privacy.html">นโยบายความเป็นส่วนตัว</a>.</p>
+      <h3>บอกได้ไหมว่าใครพูดตามชื่อ</h3>
+      <p>ไม่ ป้ายชื่อไม่ระบุตัวตน (“Speaker 1”, “Speaker 2”) และทำอย่างเต็มความสามารถ คุณเปลี่ยนชื่อเอง</p>
+      <h3>การถอดเสียงสัมภาษณ์ด้วยมือใช้เวลานานแค่ไหน</h3>
+      <p>ของ National Park Service <a href="https://www.nps.gov/articles/000/oral-history-resources-interview-transcribing.htm">การถอดเสียงสัมภาษณ์</a> ระบุว่าโดยเฉลี่ยใช้เวลา 6–8 ชั่วโมงต่อการสัมภาษณ์ที่บันทึกไว้หนึ่งชั่วโมง</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">ถอดเสียงการสัมภาษณ์ครั้งต่อไปบนอุปกรณ์ของคุณเอง</h2>
+        <p>ทดลองกับการสัมภาษณ์สั้น ๆ หนึ่งรายการด้วยการถอดเสียงฟรี 15 นาที แล้วเปิดไฟล์ Markdown</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_th_4113af33d28a">รับ Vox.md</a></p>
+      </section>
+      <nav class="toc" aria-label="คู่มือที่เกี่ยวข้อง" id="related"><div class="toc-title">ดำเนินการต่อ</div><ul>
+        <li><a href="/th/blog/transcribe-audio-file-mac/">ถอดเสียงไฟล์เสียงบน Mac</a></li>
+        <li><a href="/th/blog/transcribe-meetings-mac-obsidian/">ถอดเสียงการประชุมบน Mac ลง Obsidian</a></li>
+        <li><a href="/th/blog/transcribe-voice-memos-iphone/">ถอดเสียง Voice Memos บน iPhone เป็น Markdown</a></li>
+        <li><a href="/th/blog/offline-transcription-iphone-markdown/">การถอดเสียงแบบออฟไลน์บน iPhone</a></li>
+        <li><a href="/th/compare/whisper-vs-parakeet/">Whisper เทียบกับ Parakeet</a></li>
+        <li><a href="/th/blog/obsidian-properties-generator/">ตัวสร้างพรอเพอร์ตี้ Obsidian</a></li>
+        <li><a href="/th/blog/srt-vtt-to-text-markdown/">SRT และ VTT เป็นข้อความหรือ Markdown</a></li>
+        <li><a href="/th/docs/">เอกสาร</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/th/">หน้าแรก</a></li>
+        <li><a href="/th/docs/">เอกสาร</a></li>
+        <li><a href="/th/blog/">คู่มือ</a></li>
+        <li><a href="/th/compare/">เปรียบเทียบ</a></li>
+        <li><a href="/th/privacy.html">ความเป็นส่วนตัว</a></li>
+        <li><a href="/th/terms.html">ข้อกำหนด</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">ช่วยเหลือ</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_th_4113af33d28a">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · จดด่วนสำหรับโน้ตในเครื่อง · ไม่อัปโหลดเนื้อหา</div>
+    </div>
+  <details class="language-switcher"><summary>ภาษา</summary><ul><li><a href="/blog/transcribe-interview/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-interview/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-interview/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-interview/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-interview/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-interview/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-interview/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-interview/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-interview/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-interview/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-interview/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-interview/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-interview/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-interview/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-interview/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-interview/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-interview/" lang="th" hreflang="th" aria-current="page">ไทย</a></li><li><a href="/tr/blog/transcribe-interview/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-interview/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-interview/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-interview/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-interview/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-interview/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

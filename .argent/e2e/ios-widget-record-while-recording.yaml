@@ -1,0 +1,93 @@
+# Regression for #115: a Lock Screen control / widget record launch while a recording
+# is active must save that recording and start a new one, with no
+# "Finish the current recording…" prompt.
+#
+# The Lock Screen control can't be pressed on a simulator, so the test fires
+# voxboard://widget-record, which reaches the same consumer
+# (QuickCaptureView.consumePendingWidgetRecordIfNeeded → WidgetRecordingLaunch).
+# open-url is the entry point under test here, not a stand-in for in-app navigation.
+#
+# Setup the test does itself: grants the microphone (settings-permissions) and
+#   launches the DEBUG build with -VoxScreenshotUnlocked (skips the paywall) and
+#   -AppleLanguages (en) -AppleLocale en_US, so the timer text below is English
+#   whatever the simulator's language.
+# Prerequisites it can't automate: the one-time speech-recognition prompt (not a
+#   settings-permissions service) and the one-time "Open in “Vox.md”?" URL prompt,
+#   both answered once on this simulator (Allow / Open).
+# Side effects: the first recording is saved to the recording queue (on a simulator
+#   without a speech model it is "preserved in the queue"); the second recording is
+#   left running and is discarded by the next run's restart.
+# The recording timer text is the evidence that a new recording started. Before the
+#   second press the first recording has run at least 10s ("Recording, 00:1…"). From
+#   then on it can only read 00:1x…00:4x for the next 30s, never "Recording, 00:0…".
+#   A new recording reads 00:0x for its first 10s, so waiting up to 30s for
+#   "Recording, 00:0" passes however slowly the launch starts it, and still fails
+#   if the first recording was left running (the pre-fix behaviour) or a prompt
+#   blocked the start. Unit tests (WidgetRecordingLaunchTests) cover the flow
+#   without timing.
+# Waits stay raw `tool: await-ui-element`: the runner's native tree does not carry
+#   these SwiftUI accessibility ids/labels, the AX tree the tool reads does.
+version: 1
+requires:
+  platform: ios
+steps:
+  - echo: Grant the microphone, then restart Vox.md unlocked (DEBUG) in English.
+      Expect the Capture composer with Speak
+  - tool: settings-permissions
+    args:
+      action: grant
+      permission: microphone
+      bundleId: bontecou.Voxboard
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - -VoxScreenshotUnlocked
+          - --disable-release-notes
+          - -AppleLanguages
+          - (en)
+          - -AppleLocale
+          - en_US
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_voice_recording
+      timeoutMs: 20000
+  - echo: Idle composer. Fire the widget/control record launch. Expect a recording
+      to start
+  - tool: open-url
+    args:
+      url: voxboard://widget-record
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_recording_stop_send
+      timeoutMs: 15000
+  - echo: Recording. Let it run past 10s so a restarted timer is distinguishable
+  - tool: await-ui-element
+    args:
+      condition: exists
+      selector:
+        text: Recording, 00:1
+      timeoutMs: 20000
+  - echo: Recording for 10s+. Press the control again. Expect the current recording
+      saved and a fresh one started (timer back under 10s), with no
+      Finish-the-current-recording prompt
+  - tool: open-url
+    args:
+      url: voxboard://widget-record
+  - tool: await-ui-element
+    args:
+      condition: exists
+      selector:
+        text: Recording, 00:0
+      timeoutMs: 30000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_recording_stop_send
+      timeoutMs: 5000

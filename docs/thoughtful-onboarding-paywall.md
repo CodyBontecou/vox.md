@@ -41,7 +41,7 @@ History remains available from the real gated onboarding/paywall when its view m
 - Unavailable products cannot be bought; loading/error/retry and restore states remain supported.
 - Paywall analytics moved to the actual plans presentation, rather than counting the introductory pages as paywall views.
 
-The visual StoreKit fixture intentionally uses the **still-frozen US lifetime prices** ($19.99 Individual, $39.99 Family, $19.99 upgrade). The separate future-target catalog assertions remain intact. This temporary test fixture is removed during teardown and does not change live pricing or the bundled catalog.
+When this was written, the visual StoreKit fixture overrode lifetime prices with the then-frozen US lifetime prices ($19.99 Individual, $39.99 Family, $19.99 upgrade) through a temporary catalog removed during teardown. Lifetime prices were raised in the stores after launch; the bundled catalog now carries the live US prices (verified 2026-11-26), so the visual tests use it directly and the override has been removed.
 
 ## Source
 

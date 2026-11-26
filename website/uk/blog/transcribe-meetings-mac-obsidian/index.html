@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="uk" dir="ltr" data-search-section="Розділ" data-search-guide="Посібник" data-search-empty="Немає збігів для «{query}»">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Розшифровуйте зустрічі на Mac локально в Obsidian | Vox.md</title>
+  <meta name="description" content="Записуйте звук одного застосунку та свій мікрофон окремими доріжками у Vox.md для Mac, розшифровуйте обидві на пристрої та зберігайте в Obsidian нотатку Markdown із мітками мовців. Без бота для зустрічей і без облікового запису.">
+  <link rel="canonical" href="https://vox.isolated.tech/uk/blog/transcribe-meetings-mac-obsidian/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Документація Vox.md для мовних моделей">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Розшифровуйте зустрічі на Mac локально в Obsidian">
+  <meta property="og:description" content="Записуйте звук одного застосунку та свій мікрофон окремими доріжками у Vox.md для Mac, розшифровуйте обидві на пристрої та зберігайте в Obsidian нотатку Markdown із мітками мовців. Без бота для зустрічей і без облікового запису.">
+  <meta property="og:url" content="https://vox.isolated.tech/uk/blog/transcribe-meetings-mac-obsidian/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-18">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Розшифровуйте зустрічі на Mac локально в Obsidian">
+  <meta name="twitter:description" content="Записуйте звук одного застосунку та свій мікрофон окремими доріжками у Vox.md для Mac, розшифровуйте обидві на пристрої та зберігайте в Obsidian нотатку Markdown із мітками мовців. Без бота для зустрічей і без облікового запису.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Розшифровуйте зустрічі на Mac локально в Obsidian",
+  "description": "Записуйте звук одного застосунку та свій мікрофон окремими доріжками у Vox.md для Mac, розшифровуйте обидві на пристрої та зберігайте в Obsidian нотатку Markdown із мітками мовців. Без бота для зустрічей і без облікового запису.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-18",
+  "dateModified": "2026-11-18",
+  "mainEntityOfPage": "https://vox.isolated.tech/uk/blog/transcribe-meetings-mac-obsidian/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "uk",
+  "name": "Розшифровуйте зустрічі на Mac локально в Obsidian | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/uk/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Посібники",
+      "item": "https://vox.isolated.tech/uk/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Розшифровуйте зустрічі на Mac локально в Obsidian",
+      "item": "https://vox.isolated.tech/uk/blog/transcribe-meetings-mac-obsidian/"
+    }
+  ],
+  "inLanguage": "uk",
+  "name": "Розшифровуйте зустрічі на Mac локально в Obsidian | Vox.md",
+  "description": "Записуйте звук одного застосунку та свій мікрофон окремими доріжками у Vox.md для Mac, розшифровуйте обидві на пристрої та зберігайте в Obsidian нотатку Markdown із мітками мовців. Без бота для зустрічей і без облікового запису."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-meetings-mac-obsidian/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Перейти до посібника</a>
+<nav aria-label="Основна навігація">
+  <div class="nav-inner">
+    <a href="/uk/" class="logo" aria-label="Головна Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/uk/#how">Як це працює</a></li>
+      <li><a href="/uk/docs/">Документація</a></li>
+      <li><a href="/uk/blog/">Посібники</a></li>
+      <li><a href="/uk/compare/">Порівняти</a></li>
+      <li><a href="/uk/privacy.html">Конфіденційність</a></li>
+      <li><a href="/uk/terms.html">Умови</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_uk_f0ba2ed6ae97">Завантажити Vox.md</a>
+  <details class="language-switcher"><summary>Мова</summary><ul><li><a href="/blog/transcribe-meetings-mac-obsidian/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-meetings-mac-obsidian/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-meetings-mac-obsidian/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-meetings-mac-obsidian/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-meetings-mac-obsidian/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-meetings-mac-obsidian/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-meetings-mac-obsidian/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-meetings-mac-obsidian/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-meetings-mac-obsidian/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-meetings-mac-obsidian/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-meetings-mac-obsidian/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-meetings-mac-obsidian/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-meetings-mac-obsidian/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-meetings-mac-obsidian/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-meetings-mac-obsidian/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-meetings-mac-obsidian/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-meetings-mac-obsidian/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-meetings-mac-obsidian/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-meetings-mac-obsidian/" lang="uk" hreflang="uk" aria-current="page">Українська</a></li><li><a href="/ur/blog/transcribe-meetings-mac-obsidian/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-meetings-mac-obsidian/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Mac · Зустрічі · Markdown</div>
+        <h1 class="hero-title">Розшифровуйте зустрічі на Mac локально в Obsidian</h1>
+        <p class="hero-subtitle">Виберіть застосунок для дзвінків, запишіть, зупиніть і отримайте нотатку Markdown у своєму сховищі. Дізнайтеся, що залишається на Mac, а що ні.</p>
+      </div>
+      <aside class="meta-card" aria-label="Про посібник">
+        <dl>
+          <div><dt>Автор:</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Оновлено</dt><dd><time datetime="2026-11-18">18 листопада 2026 року</time></dd></div>
+          <div><dt>Потребує</dt><dd>macOS 14+ · завантажена модель мовлення · папка сховища з правом запису</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Розшифровуйте зустрічі на Mac локально в Obsidian">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Коротка відповідь</div>
+        <p>Vox.md для Mac може записувати звук одного застосунку та ваш мікрофон окремими доріжками, розшифровувати обидві на Mac і зберігати нотатку Markdown із мітками мовців у сховище Obsidian або будь-яку папку. Немає ні бота для зустрічей, ні облікового запису.</p>
+      </div>
+      <p>Цей посібник проводить через одне робоче налаштування: від маршруту, який записує до <code>Meetings/</code> у вашому сховищі, до готової нотатки. Кроки відповідають <a href="/uk/docs/#mac-meeting">документації із захоплення зустрічей на Mac</a> та поведінці випущеного застосунку. Наведений нижче Markdown — наочний приклад, а не запис справжнього дзвінка.</p>
+      <nav class="toc" aria-label="У посібнику"><div class="toc-title">У посібнику</div><ol>
+        <li><a href="#requirements">Що знадобиться</a></li>
+        <li><a href="#prepare-route">Підготуйте маршрут для зустрічей</a></li>
+        <li><a href="#record">Запишіть дзвінок</a></li>
+        <li><a href="#stop-transcribe">Зупиніть, розшифруйте й доставте</a></li>
+        <li><a href="#recovery">Якщо запис перервався</a></li>
+        <li><a href="#consent">Повідомте учасників про запис</a></li>
+        <li><a href="#compare">Порівняйте підходи до нотаток зустрічей</a></li>
+        <li><a href="#limitations">Обмеження, які варто знати перед довгим дзвінком</a></li>
+      </ol></nav>
+
+      <h2 id="requirements">1. Що знадобиться</h2>
+      <ul>
+        <li><strong>Mac із macOS 14 або новішою</strong> із застосунком Vox.md для Mac, встановленим з тієї самої сторінки App Store, що й застосунок для iPhone.</li>
+        <li><strong>Доступ до мікрофона</strong> для Vox.md, щоб записувався ваш голос.</li>
+        <li><strong>Доступ до запису екрана та системного звуку.</strong> Захоплення зустрічей використовує <a href="https://developer.apple.com/documentation/screencapturekit" target="_blank" rel="noopener">фреймворк Apple ScreenCaptureKit</a> для запису звуку вибраного застосунку. Якщо macOS попросить дозвіл, дозвольте. Обидва дозволи можна переглянути в розділі Системні параметри → Приватність і безпека; Apple пояснює це налаштування у статті <a href="https://support.apple.com/guide/mac-help/control-access-screen-system-audio-recording-mchld6aa7d23/mac" target="_blank" rel="noopener">Керування доступом до запису екрана та системного звуку на Mac</a>.</li>
+        <li><strong>Завантажена модель Whisper або Parakeet.</strong> Відкрийте екран Моделі на Mac, завантажте модель і задайте мову розшифровки. Розміри та мови наводить <a href="/uk/docs/#models">довідник моделей</a> — там розміри та мови, а <a href="/uk/compare/whisper-vs-parakeet/">Whisper чи Parakeet</a> допоможе вибрати. Whisper працює через <a href="https://github.com/ggml-org/whisper.cpp" target="_blank" rel="noopener">whisper.cpp</a> а Parakeet — через <a href="https://github.com/FluidInference/FluidAudio" target="_blank" rel="noopener">FluidAudio</a>.</li>
+        <li><strong>Папка з правом запису</strong>, наприклад ваше сховище Obsidian або папка <code>Meetings</code> усередині нього.</li>
+        <li>Потрібен просто звичайний запис? Див. <a href="/uk/blog/record-audio-on-mac/">як записати звук на Mac</a>.</li>
+      </ul>
+      <p>Необов’язкова обробка Apple Intelligence, яку режим Нотатки зустрічі використовує для перебудови розшифровки, потребує сумісного Mac із macOS 26. Без неї Vox.md використовує детермінований форматувальник, тож маршрут усе одно працює.</p>
+
+      <h2 id="prepare-route">2. Підготуйте маршрут для зустрічей</h2>
+      <p>Маршрут визначає, як обробляється захоплення і куди записується його Markdown. У деяких версіях для Mac маршрути в Налаштуваннях називаються Передустановки захоплення.</p>
+      <ol>
+        <li>Відкрийте Налаштування в застосунку для Mac і створіть новий маршрут із назвою на кшталт <em>Зустрічі</em>.</li>
+        <li>У місці призначення виберіть сховище як папку. Як цільову нотатку виберіть <strong>Новий запис</strong> — тоді кожна зустріч матиме власний файл.</li>
+        <li>Введіть шаблон шляху, наприклад <code>Meetings/{date}-{hour}{minute}.md</code>. Час у назві розносить дві зустрічі одного дня по різних нотатках. Див. <a href="/uk/blog/obsidian-capture-templates/">Шаблони захоплення для Obsidian</a> — там більше рецептів для шляхів і токенів.</li>
+        <li>Виберіть спосіб обробки в полі <strong>Режим</strong>. <strong>Зберегти оригінал</strong> доставляє позначену розшифровку в розпізнаному вигляді. <strong>Нотатки зустрічі</strong> створює розділ <code>## Notes</code> і, якщо в тексті є завдання, розділ <code>## Action Items</code> із чеклистом. Хочете також заголовки для порядку денного й рішень? <a href="/uk/blog/obsidian-meeting-notes-template/">Створіть шаблон нотаток зустрічі</a>.</li>
+        <li>Необов’язково: увімкніть <strong>Визначення виступаючих</strong> якщо говорять кілька віддалених учасників. Модель мовців завантажується під час першого використання цього маршруту.</li>
+        <li>Необов’язково: налаштуйте <strong>Зберегти аудіо</strong> щоб зберігати запис поруч із нотаткою або в папці вкладень. Залиште вимкненим, якщо потрібен лише текст.</li>
+      </ol>
+
+      <h2 id="record">3. Запишіть дзвінок</h2>
+      <ol>
+        <li>Приєднайтеся до дзвінка в його власному застосунку: Zoom, Microsoft Teams, FaceTime або браузері з Google Meet.</li>
+        <li>У вікні Захоплення застосунку Vox.md виберіть маршрут <em>Зустрічі</em> зі списку.</li>
+        <li>Перемкніть джерело звуку на <strong>Зустріч</strong>; типово вибрано <strong>Мікрофон</strong>. Залежно від версії застосунку цей перемикач розташований у вікні Захоплення або в меню Захоплення → Джерело звуку в рядку меню.</li>
+        <li>Почніть запис. macOS покаже свій вибір вмісту; виберіть рівно один застосунок. Vox.md ніколи не записує власний звук. Для дзвінка в браузері виберіть браузер. Його звук записується цілком, тож вимкніть звук в інших вкладках, які щось відтворюють.</li>
+        <li>Під час запису рядок стану показує живі індикатори рівня Система та Мік., стан кожного джерела й попередження захоплення. Переконайтеся, що обидва індикатори рухаються, коли люди говорять.</li>
+      </ol>
+      <p>Захоплення зустрічі не можна призупинити. Записи з мікрофона мають Пауза та Продовжити, але зустріч триває від початку до зупинки. Також не можна перемкнутися на інший застосунок посередині; натомість зупиніть запис і почніть новий.</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_uk_f0ba2ed6ae97">Завантажити Vox.md безкоштовно</a></p>
+      <p>Безкоштовне завантаження містить 15 хвилин розшифровки. Необмежене використання — одноразова покупка назавжди.</p>
+
+      <h2 id="stop-transcribe">4. Зупиніть, розшифруйте й доставте</h2>
+      <p>Натисніть Зупинити, коли дзвінок закінчиться. Vox.md розшифровує дві доріжки окремо на вашому Mac вибраною моделлю, а потім чергує їх на спільній шкалі часу. Доріжка мікрофона отримує мітку <code>You</code>, а доріжка застосунку — мітку віддаленого мовця, наприклад <code>Speaker 2</code>. У режимі Зберегти оригінал коротка зустріч може дати таке тіло нотатки, як у цьому наочному прикладі:</p>
+      <pre class="guide-code"><code>You:
+Thanks for joining. Can we start with the launch checklist?
+
+Speaker 2:
+Sure. The release notes are ready, but we still need screenshots.
+
+You:
+I’ll take the screenshots by Friday.</code></pre>
+      <p>Коли увімкнено Визначення виступаючих, Vox.md намагається розділити віддалену доріжку на більше міток, наприклад <code>Speaker 2</code> і <code>Speaker 3</code>. Ці мітки анонімні й працюють за принципом «як вийде». Якщо визначення не вдається запустити, у вас залишається звичайна розшифровка, а застосунок показує причину.</p>
+      <p>Саме окремі доріжки дають змогу мітці <code>You</code> працювати. Ваш голос надходить із доріжки мікрофона, а інші учасники — з доріжки застосунку, тож Vox.md не мусить вгадувати з одного змішаного запису, яка сторона дзвінка що сказала. Мітки все одно можуть помилятися. Наприклад, мікрофон може вловити звук із ваших динаміків, якщо ви без навушників.</p>
+      <p>Що буде далі, залежить від варіанта запису, вибраного перед початком:</p>
+      <ul>
+        <li><strong>Додати до чернетки</strong> поміщає розшифровку в редактор Захоплення. Перегляньте й відредагуйте її, потім натисніть Command-Return, щоб надіслати через маршрут.</li>
+        <li><strong>Надіслати негайно</strong> доставляє нотатку через маршрут одразу після завершення розшифровки.</li>
+      </ul>
+      <p>Розшифровка також дотримується ваших налаштувань буфера обміну, як і будь-який інший запис. Мікс обох доріжок для відтворення зберігається як аудіо запису і зберігається з нотаткою, лише якщо налаштування маршруту Зберегти аудіо зберігає звук. Відкрийте нотатку в Obsidian один раз, щоб переконатися, що шлях і мітки виглядають так, як ви очікуєте.</p>
+
+      <h2 id="recovery">5. Якщо запис перервався</h2>
+      <p>Обидві доріжки записуються на диск надійними фрагментами з маніфестом відновлення. Якщо потік зупиниться, мікрофон від’єднають або Vox.md примусово закриють, уже записані фрагменти все одно можна завершити й розшифрувати. Відновлення запускається, коли черга записів відновлюється, наприклад під час наступного відкриття Vox.md.</p>
+      <p>Нотатка з неповного захоплення починається з рядка попередження, де сказано, якої частини бракувало, щоб ви знали, що в розшифровці можуть бути пропуски.</p>
+
+      <h2 id="consent">6. Повідомте учасників про запис</h2>
+      <p>Закони про запис і правила на роботі відрізняються залежно від місця та організації. Деякі вимагають згоди всіх. Повідомте іншим учасникам, що ви записуєте й розшифровуєте, і отримайте їхню згоду до початку. Це не юридична консультація; перевірте правила, що діють для вас.</p>
+
+      <h2 id="compare">7. Порівняйте підходи до нотаток зустрічей</h2>
+      <p>Інструменти для нотаток зустрічей умовно поділяються на три групи. Продукти відрізняються й змінюються, тому таблиця описує підходи, а не конкретні продукти. Якщо ви порівнюєте такі застосунки, як Granola, Otter чи Fireflies, перевірте в документації кожного постачальника, де обробляється звук і де зберігаються нотатки.</p>
+      <p class="guide-table-hint">На маленькому екрані прокрутіть таблицю вбік, щоб порівняти підходи.</p>
+      <div class="guide-comparison" role="region" aria-label="Порівняння підходів до нотаток зустрічей; на маленьких екранах прокручуйте горизонтально" tabindex="0">
+        <table class="comparison">
+          <caption>Загальні підходи, перевірено 18 листопада 2026 року</caption>
+          <thead><tr><th scope="col">Питання</th><th scope="col">Бот-нотатник</th><th scope="col">Хмарний застосунок без бота</th><th scope="col">Локальне захоплення Vox.md</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Як приєднується</th><td>Бот приєднується до дзвінка як учасник</td><td>Застосунок на вашому комп’ютері записує дзвінок</td><td>Застосунок для Mac записує звук одного застосунку та ваш мікрофон</td></tr>
+            <tr><th scope="row">Де обробляється звук</td><td>Зазвичай на серверах постачальника</td><td>Зазвичай на серверах постачальника</td><td>На вашому Mac</td></tr>
+            <tr><th scope="row">Де зберігаються нотатки</td><td>Зазвичай у робочому просторі постачальника</td><td>Зазвичай у робочому просторі постачальника</td><td>Файли Markdown у вибраній вами папці</td></tr>
+            <tr><th scope="row">Обліковий запис</th><td>Зазвичай обов’язковий</td><td>Зазвичай обов’язковий</td><td>Не потрібно</td></tr>
+            <tr><th scope="row">Модель оплати</td><td>Перегляньте сторінку цін постачальника</td><td>Перегляньте сторінку цін постачальника</td><td>15 безкоштовних хвилин розшифровки, потім одноразове розблокування назавжди</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Хмарні інструменти можуть пропонувати функції, яких немає в локального застосунку, наприклад спільні робочі простори або підсумки за багатьма зустрічами. Вибирайте залежно від того, де має оброблятися звук і куди мають потрапляти нотатки.</p>
+
+      <h2 id="limitations">8. Обмеження, які варто знати перед довгим дзвінком</h2>
+      <ul>
+        <li><strong>Один застосунок на запис.</strong> Захоплення зустрічі записує один застосунок плюс ваш мікрофон.</li>
+        <li><strong>Мітки приблизні.</strong> Мітки мовців залежать від чистого окремого звуку, а розпізнавання мовців може об’єднувати або розділяти голоси.</li>
+        <li><strong>Якість залежить від моделі та мови.</strong> Більші моделі займають більше місця й часу. Звіряйте важливі формулювання з аудіо, перш ніж на них покладатися.</li>
+        <li><strong>Безкоштовний рівень — 15 хвилин розшифровки.</strong> Одна довга зустріч може його вичерпати. Необмежене використання — одноразова покупка назавжди; див. <a href="/uk/docs/#pricing-limits">безкоштовне використання й розблокування назавжди</a>.</li>
+        <li><strong>Дещо залишає ваш Mac.</strong> Запис і розшифровка залишаються на пристрої, і звук не вивантажується для розшифровки. Під час завантаження моделі Whisper або Parakeet відбувається звернення до Hugging Face (докладніше див. <a href="/uk/privacy.html#third-party-services">політику конфіденційності</a>), а модель мовців теж завантажується один раз. Якщо ваше сховище синхронізується через iCloud Drive або Obsidian Sync, готова нотатка синхронізується на умовах цього сервісу. Vox.md записує файли; синхронізація — ваш вибір.</li>
+      </ul>
+      <p>Шукаєте швидкий спосіб друкувати голосом? Сполучення клавіш Mac <strong>Перекласти на Clipboard</strong> сполучення клавіш копіює локальний транскрипт, щоб його можна було вставити в будь-який застосунок без створення нотатки; див. <a href="/uk/blog/dictation-on-mac/">диктовка на Mac</a> і <a href="/uk/docs/#mac-keybinds">глобальні сполучення клавіш</a>.</p>
+      <p>Уже є запис? <a href="/uk/blog/transcribe-audio-file-mac/">Розшифровка аудіофайлу на Mac.</a> Уже маєте транскрипт із Zoom або Teams як файл .srt чи .vtt? <a href="/uk/blog/srt-vtt-to-text-markdown/">Конвертер SRT і VTT у Markdown</a> перетворює його на нотатку у вашому браузері.</p>
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Ваші зустрічі —<br>у вигляді ваших власних файлів.</h2>
+        <p>Проведіть короткий тестовий дзвінок із колегою, який на це погодився, потім перевірте нотатку Markdown у своєму сховищі.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_uk_f0ba2ed6ae97">Завантажити Vox.md безкоштовно</a></p>
+        <p>15 безкоштовних хвилин розшифровки · без облікового запису · одне розблокування назавжди</p>
+      </section>
+      <nav class="toc" aria-label="Пов’язані посібники" id="related"><div class="toc-title">Продовжте підготовку</div><ul>
+        <li><a href="/uk/blog/transcribe-interview/">Записуєте інтерв’ю сам на сам? Метод, згода та перегляд</a></li>
+        <li><a href="/uk/docs/#mac-meeting">Довідник із захоплення зустрічей на Mac</a></li>
+        <li><a href="/uk/docs/#models">Моделі мовлення та мови</a></li>
+        <li><a href="/uk/blog/obsidian-capture-templates/">Рецепти шляхів і шаблонів</a></li>
+        <li><a href="/uk/blog/voice-notes-to-obsidian-iphone/">Зберігайте голосові нотатки iPhone до Obsidian</a></li>
+        <li><a href="/uk/blog/offline-transcription-iphone-markdown/">Підготуйте локальну розшифровку та призначення Markdown</a></li>
+        <li><a href="/uk/compare/vox-md-vs-obsidian-quick-capture/">Порівняйте Vox.md з Obsidian Quick Capture</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/uk/">Головна</a></li>
+        <li><a href="/uk/docs/">Документація</a></li>
+        <li><a href="/uk/blog/">Посібники</a></li>
+        <li><a href="/uk/compare/">Порівняти</a></li>
+        <li><a href="/uk/privacy.html">Конфіденційність</a></li>
+        <li><a href="/uk/terms.html">Умови</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Підтримка</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_uk_f0ba2ed6ae97">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Швидке захоплення до локальних нотаток · Без надсилання вмісту на сервер.</div>
+    </div>
+  <details class="language-switcher"><summary>Мова</summary><ul><li><a href="/blog/transcribe-meetings-mac-obsidian/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-meetings-mac-obsidian/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-meetings-mac-obsidian/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-meetings-mac-obsidian/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-meetings-mac-obsidian/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-meetings-mac-obsidian/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-meetings-mac-obsidian/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-meetings-mac-obsidian/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-meetings-mac-obsidian/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-meetings-mac-obsidian/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-meetings-mac-obsidian/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-meetings-mac-obsidian/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-meetings-mac-obsidian/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-meetings-mac-obsidian/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-meetings-mac-obsidian/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-meetings-mac-obsidian/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-meetings-mac-obsidian/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-meetings-mac-obsidian/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-meetings-mac-obsidian/" lang="uk" hreflang="uk" aria-current="page">Українська</a></li><li><a href="/ur/blog/transcribe-meetings-mac-obsidian/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-meetings-mac-obsidian/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

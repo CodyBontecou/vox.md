@@ -2,6 +2,7 @@ import AVFoundation
 import Combine
 import Photos
 import PhotosUI
+import StoreKit
 import SwiftUI
 import UIKit
 import UniformTypeIdentifiers
@@ -93,7 +94,9 @@ struct QuickCaptureView: View {
     @Environment(WatchRecordingPipeline.self) private var watchRecordingPipeline
     @Environment(\.defersCaptureInputFocusForReleaseNotes) private var defersCaptureInputFocusForReleaseNotes
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.requestReview) private var requestReview
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.layoutDirection) private var layoutDirection
     @Environment(\.calendar) private var calendar
     @Environment(\.locale) private var locale
     @Environment(\.timeZone) private var timeZone
@@ -145,6 +148,11 @@ struct QuickCaptureView: View {
     @State private var attachRecordingAudioOverride: Bool?
     @State private var lastStartedRecordingMode: CaptureRecordingMode = .preset
     @State private var microphonePermissionTask: Task<Void, Never>?
+    /// One Lock Screen / widget launch at a time; a duplicate delivery of the
+    /// same press is dropped instead of racing the first start (#115).
+    @State private var widgetRecordLaunches = WidgetRecordingLaunchCoordinator()
+    /// A draft launch is waiting for earlier work on the composer to finish.
+    @State private var isWidgetRecordWaitingForComposer = false
     @State private var showsMicrophoneSettings = false
     @State private var showsFirstNoteFolderPicker = false
     @State private var isSavingFirstNoteFolder = false
@@ -168,6 +176,8 @@ struct QuickCaptureView: View {
     @State private var isFindingLocation = false
     @State private var locationRequestTask: Task<Void, Never>?
     @State private var showsSentToast = false
+    /// Waits out a success toast before the App Store review prompt may ask.
+    @State private var reviewPromptTask: Task<Void, Never>?
     @State private var sentUndoSnapshot: SentCaptureUndoSnapshot?
     @State private var sentToastPresentationID: UUID?
     @State private var showsPresetSendConfirmation = false
@@ -325,7 +335,74 @@ struct QuickCaptureView: View {
                         .accessibilityHidden(true)
                 }
             } else {
+                // Phone route rail (#160): overlaid so the editor frame and
+                // the controls below keep their layout.
                 composer
+                    .overlay(
+                        alignment: captureToolbarPreferences.routeRailPlacement
+                            .overlayAlignment(for: layoutDirection)
+                    ) {
+                        routeSideRail
+                    }
+            }
+        }
+    }
+
+    /// The rail is the route switcher when it is drawn (it needs 2+ routes),
+    /// so the header stops repeating every route and only names the active one.
+    private var routeRailReplacesHeaderPills: Bool {
+        Self.routeRailReplacesHeaderPills(railShown: showsRouteSideRail, routeCount: enabledFlows.count)
+    }
+
+    static func routeRailReplacesHeaderPills(railShown: Bool, routeCount: Int) -> Bool {
+        railShown && routeCount > 1
+    }
+
+    private var showsRouteSideRail: Bool {
+        layout == .compact
+            && captureToolbarPreferences.routeRailPlacement != .off
+            && !isLocalizationScreenshot
+    }
+
+    /// Keeps text clear of the rail: its 44pt column plus padding, minus the
+    /// editor's own 20pt gutter.
+    private var routeSideRailGutter: UIEdgeInsets {
+        guard showsRouteSideRail, enabledFlows.count > 1 else { return .zero }
+        let extra = CaptureRouteSideRail.hitTargetSide + 2 * Geist.Spacing.one - 16
+        switch captureToolbarPreferences.routeRailPlacement {
+        case .left: return UIEdgeInsets(top: 0, left: extra, bottom: 0, right: 0)
+        case .right: return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: extra)
+        case .off: return .zero
+        }
+    }
+
+    /// The rail gutter as SwiftUI insets for overlays drawn over the editor
+    /// (the empty-note quote). The gutter is a physical edge, so map it.
+    private var routeSideRailContentInsets: EdgeInsets {
+        let gutter = routeSideRailGutter
+        let isRTL = layoutDirection == .rightToLeft
+        return EdgeInsets(
+            top: 0,
+            leading: isRTL ? gutter.right : gutter.left,
+            bottom: 0,
+            trailing: isRTL ? gutter.left : gutter.right
+        )
+    }
+
+    private var routeSideRail: CaptureViewSection {
+        CaptureViewSection {
+            if showsRouteSideRail {
+                CaptureRouteSideRail(
+                    profiles: enabledFlows.map(\.captureProfile),
+                    selectedID: viewModel.draft.voxID ?? selectedFlow.id,
+                    isEnabled: viewModel.canSelectCapturePreset,
+                    select: { id in
+                        guard let flow = flows.first(where: { $0.id == id }) else { return }
+                        selectFlow(flow)
+                    }
+                )
+                .padding(.horizontal, Geist.Spacing.one)
+                .transition(.opacity)
             }
         }
     }
@@ -564,6 +641,7 @@ struct QuickCaptureView: View {
                         }
                         .accessibilityElement(children: .ignore)
                         .accessibilityLabel(Text(verbatim: routeDestinationPath))
+                        .accessibilityIdentifier("capture_route_path")
                         if viewModel.hasAnyRouteOverride {
                             SignalBadge(text: "Override")
                         }
@@ -675,6 +753,13 @@ struct QuickCaptureView: View {
                 .padding(.horizontal, Geist.Spacing.four)
                 .padding(.bottom, Geist.Spacing.two)
                 .transition(.move(edge: .top).combined(with: .opacity))
+            }
+            if isWidgetRecordWaitingForComposer {
+                // A Lock Screen / widget draft launch starts its new note as
+                // soon as the previous recording has reached the draft (#115).
+                // Cancel ends the wait without recording, so a composer that
+                // stays busy never leaves a spinner the user can't dismiss.
+                WidgetRecordLaunchWaitingBanner { widgetRecordLaunches.cancel() }
             }
             if isExtractingText {
                 QuickCaptureOCRProgress()
@@ -788,9 +873,6 @@ struct QuickCaptureView: View {
                         }
                     }
                     usageTracker.reload()
-                    ReviewPromptManager.shared.recordSuccessfulCapture(
-                        totalCaptureCount: usageTracker.successfulCapturesUsed
-                    )
                     Task { await presentSentToast(for: receipt) }
                 }
                 .onChange(of: selectedPhotos) { _, items in
@@ -845,6 +927,10 @@ struct QuickCaptureView: View {
                             id: observedSnapshot.id
                           ) else { return }
                     Task { await presentSentToast(replacingWith: snapshot) }
+                }
+                .onChange(of: persistentRecorder.lastInAppVoiceNoteDeliveryID) { _, deliveryID in
+                    guard deliveryID != nil else { return }
+                    offerReviewPromptAfterSuccess()
                 }
                 .onChange(of: persistentRecorder.lastError) { _, message in
                     guard let message else { return }
@@ -957,12 +1043,14 @@ struct QuickCaptureView: View {
                     ),
                     titleVisibility: .visible
                 ) {
-                    Button("Retry") { Task { await viewModel.retryUnavailableLocation() } }
+                    Button("Retry") {
+                        sendOfferingReviewPrompt { await viewModel.retryUnavailableLocation() }
+                    }
                     Button("Send Without Location") {
-                        Task { await viewModel.sendWithoutUnavailableLocation(alwaysForPreset: false) }
+                        sendOfferingReviewPrompt { await viewModel.sendWithoutUnavailableLocation(alwaysForPreset: false) }
                     }
                     Button("Always Send Without Location for This Route") {
-                        Task { await viewModel.sendWithoutUnavailableLocation(alwaysForPreset: true) }
+                        sendOfferingReviewPrompt { await viewModel.sendWithoutUnavailableLocation(alwaysForPreset: true) }
                     }
                     Button("Cancel", role: .cancel) {
                         discardSentUndoSnapshot()
@@ -1286,6 +1374,21 @@ struct QuickCaptureView: View {
 
     private var voiceCaptureButton: CaptureViewSection {
         CaptureViewSection {
+            // The record-new-note icon sits on top of the capsule's trailing
+            // end, outside the press gesture, so a tap there never also
+            // records into the open note.
+            ZStack(alignment: .trailing) {
+                voiceCapturePressArea
+                if showsSpeakNewNoteButton {
+                    speakNewNoteButton
+                        .transition(.opacity)
+                }
+            }
+        }
+    }
+
+    private var voiceCapturePressArea: CaptureViewSection {
+        CaptureViewSection {
             // One container keeps the press gesture alive while the label swaps
             // between idle, push-to-talk and recording presentations.
             ZStack {
@@ -1332,8 +1435,12 @@ struct QuickCaptureView: View {
                     ? String(localized: "Transcribing")
                     : String(localized: "Speak"),
                 systemImage: isCaptureReadOnly ? "lock.fill" : "mic",
-                modeSymbol: persistentRecorder.isAppRecordingTranscribing || isCaptureReadOnly
+                // With Live Notes speech always goes into the note, so the
+                // what-Stop-does glyph only shows without them; the trailing
+                // end is then free for the record-new-note icon.
+                modeSymbol: viewModel.liveNotesEnabled || persistentRecorder.isAppRecordingTranscribing || isCaptureReadOnly
                     ? nil : recordingResultModeSymbol,
+                contentTrailingInset: showsSpeakNewNoteButton ? Self.speakNewNoteButtonWidth / 2 : 0,
                 isDimmed: (isMicrophoneDenied || isCaptureReadOnly) && !isLocalizationScreenshot,
                 showsProgress: persistentRecorder.isAppRecordingTranscribing
             )
@@ -1361,6 +1468,52 @@ struct QuickCaptureView: View {
     /// will do before pressing it.
     private var recordingResultModeSymbol: String {
         recordingMode == .draft ? "text.badge.plus" : "paperplane.fill"
+    }
+
+    static let speakNewNoteButtonWidth: CGFloat = 52
+
+    /// Live Notes, note open: the trailing end of Speak is a one-tap "record
+    /// into a new note" (Hans, 2026-11-26: the separate mic-plus button read
+    /// as a second Speak button). Tapping the rest of Speak still records
+    /// into the open note.
+    private var showsSpeakNewNoteButton: Bool {
+        guard !persistentRecorder.isAppRecordingSegmentActive,
+              !persistentRecorder.isAppRecordingTranscribing,
+              !isCaptureReadOnly else { return false }
+        return Self.speakOffersNewNote(
+            liveNotesEnabled: viewModel.liveNotesEnabled,
+            canRecordNewNote: viewModel.canRecordNewNote
+        )
+    }
+
+    /// Only while a note is open to leave; on a blank note Speak already
+    /// records into a new note, and without Live Notes there are no notes.
+    static func speakOffersNewNote(liveNotesEnabled: Bool, canRecordNewNote: Bool) -> Bool {
+        liveNotesEnabled && canRecordNewNote
+    }
+
+    private var speakNewNoteButton: CaptureViewSection {
+        CaptureViewSection {
+            Button(action: recordNewNote) {
+                HStack(spacing: 0) {
+                    Rectangle()
+                        .fill(Geist.bg.opacity(0.25))
+                        .frame(width: 1, height: 22)
+                    Image(systemName: "note.text.badge.plus")
+                        .font(.system(size: 17, weight: .semibold))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                .foregroundStyle(isMicrophoneDenied ? Geist.muted : Geist.bg)
+                .frame(width: Self.speakNewNoteButtonWidth, height: Geist.ControlHeight.hero)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .disabled(isProcessingMedia || persistentRecorder.ownsCaptureRoute)
+            .accessibilityLabel("Record into a new note")
+            .accessibilityHint(Text("Closes this file, starts a blank note and starts recording"))
+            .accessibilityIdentifier("capture_speak_record_new_note")
+            .keyboardShortcut("n", modifiers: [.command, .shift])
+        }
     }
 
     /// Tap starts or stops recording; a long press opens the detailed
@@ -1975,6 +2128,7 @@ struct QuickCaptureView: View {
                 showsRawMarkdown: showsRawMarkdown,
                 resolveEmbedURL: { [viewModel] target in viewModel.liveNoteEmbedURL(target) },
                 topContentInset: composerTopInset,
+                sideGutter: routeSideRailGutter,
                 scrollActivityDidChange: { activity in
                     floatingChromeState = QuickCaptureFloatingChrome.State(
                         isScrolling: activity.isScrolling,
@@ -2035,6 +2189,7 @@ struct QuickCaptureView: View {
                 ) {
                     inspirationPlaceholder
                         .padding(.top, composerTopInset)
+                        .padding(routeSideRailContentInsets)
                         .task { await loadInspirationQuote() }
                 }
             }
@@ -2054,7 +2209,8 @@ struct QuickCaptureView: View {
         InspirationQuotePresentation.recordingStatus(
             forDraftText: viewModel.draft.text,
             isRecording: persistentRecorder.isAppRecordingSegmentActive,
-            isPaused: persistentRecorder.isSegmentPaused
+            isPaused: persistentRecorder.isSegmentPaused,
+            transcribes: persistentRecorder.activeSegmentTranscribes
         )
     }
 
@@ -2465,9 +2621,13 @@ struct QuickCaptureView: View {
         CaptureViewSection {
             Button {
                 Task {
+                    let previouslyClosedNote = viewModel.lastClosedNote
                     await viewModel.startNewNote()
                     if viewModel.needsCaptureUnlock {
                         presentPaywall(context: .captureLimit)
+                    } else if let closed = viewModel.lastClosedNote, closed != previouslyClosedNote {
+                        // Finishing a note is the Live Notes success moment.
+                        offerReviewPromptAfterSuccess()
                     }
                 }
             } label: {
@@ -2483,30 +2643,9 @@ struct QuickCaptureView: View {
         }
     }
 
-    /// Live Notes, from an open note: one tap closes it like New note, opens
-    /// a blank note and starts recording into it through the regular Speak
-    /// path (permission prompt, paywall, Live Activity).
-    private var recordNewNoteControl: CaptureViewSection {
-        CaptureViewSection {
-            Button(action: recordNewNote) {
-                Image(systemName: "mic.badge.plus")
-                    .accessibilityLabel("Record new note")
-            }
-            .buttonStyle(SignalCircleButtonStyle(diameter: Geist.ControlHeight.large))
-            .disabled(isProcessingMedia || persistentRecorder.ownsCaptureRoute)
-            .accessibilityHint(Text("Closes this file, starts a blank note and starts recording"))
-            .accessibilityIdentifier("capture_record_new_note")
-            .keyboardShortcut("n", modifiers: [.command, .shift])
-            .transition(.scale.combined(with: .opacity))
-        }
-    }
-
-    /// Shown only while there is a note to leave; on a blank note Speak
-    /// already records into a new note.
-    private var showsRecordNewNote: Bool {
-        viewModel.canRecordNewNote && !persistentRecorder.isAppRecordingSegmentActive
-    }
-
+    /// Live Notes, from an open note (Speak's options menu): closes it like
+    /// New note, opens a blank note and starts recording into it through the
+    /// regular Speak path (permission prompt, paywall, Live Activity).
     private func recordNewNote() {
         guard microphonePermissionTask == nil, !persistentRecorder.ownsCaptureRoute else { return }
         if usageTracker.isAtLimit {
@@ -2574,24 +2713,40 @@ struct QuickCaptureView: View {
         layout != .regularPane || commands == nil
     }
 
+    /// The rail sits just above the quick-action row, so a toast inserted
+    /// below that row would move the rail under the user's thumb (#160).
+    private var floatsClosedNoteToast: Bool {
+        showsRouteSideRail && layout == .compact
+    }
+
+    /// "<note> is in <route> · Reopen", shown for a few seconds after a
+    /// route switch closes the open note.
+    private var liveNoteClosedToast: CaptureViewSection {
+        CaptureViewSection {
+            if let closed = viewModel.lastClosedNote {
+                LiveNoteClosedToast(note: closed) {
+                    Task {
+                        await viewModel.reopenClosedNote()
+                        focusComposer()
+                    }
+                }
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .task(id: closed.id) {
+                    try? await Task.sleep(for: .seconds(6))
+                    if viewModel.lastClosedNote == closed {
+                        withAnimation { viewModel.lastClosedNote = nil }
+                    }
+                }
+            }
+        }
+    }
+
     /// Bottom bar: Attach (+) | wide ink Speak capsule | accent Send arrow.
     private var captureActionBar: CaptureViewSection {
         CaptureViewSection {
             VStack(spacing: Geist.Spacing.three) {
-                if let closed = viewModel.lastClosedNote {
-                    LiveNoteClosedToast(note: closed) {
-                        Task {
-                            await viewModel.reopenClosedNote()
-                            focusComposer()
-                        }
-                    }
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-                    .task(id: closed.id) {
-                        try? await Task.sleep(for: .seconds(6))
-                        if viewModel.lastClosedNote == closed {
-                            withAnimation { viewModel.lastClosedNote = nil }
-                        }
-                    }
+                if !floatsClosedNoteToast {
+                    liveNoteClosedToast
                 }
                 if !composerIsFocused, captureHintRowHasContent {
                     captureHintRow
@@ -2614,7 +2769,6 @@ struct QuickCaptureView: View {
 
                     // Remote only has no note to keep editing; it always Sends.
                     if viewModel.liveNotesEnabled, !viewModel.selectedRouteIsRemoteOnly {
-                        if showsRecordNewNote { recordNewNoteControl }
                         if footerShowsSend { newNoteControl }
                     } else if captureFooterIsVaultUnreachable {
                         queueSaveControl
@@ -2622,13 +2776,24 @@ struct QuickCaptureView: View {
                         sendRouteControl
                     }
                 }
-                .animation(reduceMotion ? nil : .easeInOut(duration: 0.18), value: showsRecordNewNote)
+                .animation(reduceMotion ? nil : .easeInOut(duration: 0.18), value: showsSpeakNewNoteButton)
             }
             .padding(.horizontal, Geist.Spacing.four)
             .padding(.top, Geist.Spacing.three)
             // With the keyboard up there is no home-indicator inset below
             // the bar, so give it more room above the keys.
             .padding(.bottom, composerIsFocused ? Geist.Spacing.four : Geist.Spacing.two)
+            // With the route rail on, the toast floats over the quick-action
+            // row instead of pushing it (and the rail) up for a few seconds.
+            .overlay(alignment: .top) {
+                if floatsClosedNoteToast {
+                    // A zero-height frame at the bar's top edge; the toast
+                    // hangs upward from it over the quick-action row.
+                    liveNoteClosedToast
+                        .padding(.horizontal, Geist.Spacing.four)
+                        .frame(height: 0, alignment: .bottom)
+                }
+            }
             // Strictly opt-in confirmation (default off) for Preset sends.
             // Attached to the bar so it also works when Send lives in the
             // route pane.
@@ -2968,6 +3133,10 @@ struct QuickCaptureView: View {
     }
 
     private func handleScenePhaseChange(_ phase: ScenePhase) {
+        // A draft launch waiting for the composer must not outlive the visit.
+        if phase == .background { widgetRecordLaunches.cancel() }
+        // A success moment belongs to the visit; leaving the app ends it.
+        if phase != .active { cancelReviewPrompt() }
         if phase == .active {
             reloadFlows()
             // Returning from Settings may have changed folder access.
@@ -2995,7 +3164,9 @@ struct QuickCaptureView: View {
     }
 
     private func handleCaptureDisappear() {
+        cancelReviewPrompt()
         microphonePermissionTask?.cancel()
+        widgetRecordLaunches.cancel()
         locationRequestTask?.cancel()
         initialComposerFocusIsPending = false
         sentToastPresentationID = nil
@@ -3297,7 +3468,73 @@ struct QuickCaptureView: View {
                viewModel.locationDecision == nil {
                 discardSentUndoSnapshot(matching: snapshot.id)
             }
+            // A classic Send the user saw delivered. A Live Notes first save
+            // keeps the note open for editing, so it is not a moment to ask.
+            if viewModel.lastSentReceipt?.requestID == snapshot.requestID,
+               viewModel.liveNote == nil {
+                offerReviewPromptAfterSuccess()
+            }
         }
+    }
+
+    /// Runs a user-initiated send and, if it delivered, may follow it with
+    /// the App Store review prompt.
+    private func sendOfferingReviewPrompt(_ send: @escaping @MainActor () async -> Void) {
+        Task {
+            let previousReceipt = viewModel.lastSentReceipt
+            await send()
+            if let receipt = viewModel.lastSentReceipt, receipt != previousReceipt,
+               viewModel.liveNote == nil {
+                offerReviewPromptAfterSuccess()
+            }
+        }
+    }
+
+    // MARK: - App Store review prompt
+
+    /// Follows an in-app success the user saw (a Send, a finished note, a
+    /// delivered voice note) with the system review prompt when the policy
+    /// allows. Waits for the success toast to go; skips the moment if
+    /// anything else is on screen. Never queued for a later launch.
+    private func offerReviewPromptAfterSuccess() {
+        reviewPromptTask?.cancel()
+        reviewPromptTask = Task { @MainActor in
+            await ReviewPromptManager.shared.offerAfterVisibleSuccess(
+                isShowingSuccessFeedback: {
+                    showsSentToast || fileExportToast != nil || viewModel.lastClosedNote != nil
+                },
+                hasActiveAccess: {
+                    usageTracker.reload()
+                    return usageTracker.hasUnlocked
+                },
+                isPresentationClear: { reviewPromptPresentationIsClear },
+                requestReview: { requestReview() }
+            )
+        }
+    }
+
+    private func cancelReviewPrompt() {
+        reviewPromptTask?.cancel()
+        reviewPromptTask = nil
+    }
+
+    /// No sheet, alert, paywall, release notes, first-note celebration,
+    /// recording or half-written next capture.
+    private var reviewPromptPresentationIsClear: Bool {
+        scenePhase == .active
+            && ReviewPromptPresentation.keyWindowIsUncovered
+            && !defersCaptureInputFocusForReleaseNotes
+            && firstNoteReceipt == nil
+            && firstNoteDocument == nil
+            && !showsFirstNoteFolderPicker
+            && !showsPaywall
+            && viewModel.locationDecision == nil
+            && viewModel.inboxLocationDecision == nil
+            && !viewModel.isSubmitting
+            && !viewModel.draft.hasCaptureContent
+            && !persistentRecorder.isSegmentActive
+            && !persistentRecorder.isAppRecordingSegmentActive
+            && !persistentRecorder.isTranscribing
     }
 
     /// Restores the just-sent Capture into the composer as an editable draft.
@@ -3512,6 +3749,7 @@ struct QuickCaptureView: View {
                 selectedID: viewModel.draft.voxID ?? selectedFlow.id,
                 isEnabled: viewModel.canSelectCapturePreset,
                 pillHeight: isCoverScreen ? 44 : 40,
+                showsOnlySelected: routeRailReplacesHeaderPills,
                 select: { id in
                     guard let flow = flows.first(where: { $0.id == id }) else { return }
                     selectFlow(flow)
@@ -3751,6 +3989,7 @@ struct QuickCaptureView: View {
     private var attachRecordingAudio: Bool {
         Self.draftRecordingAttachesAudio(
             presetAudioSaveMode: selectedFlow.audioSaveMode,
+            presetTranscribes: selectedFlow.transcriptionEnabled,
             override: attachRecordingAudioOverride
         )
     }
@@ -3765,11 +4004,14 @@ struct QuickCaptureView: View {
     /// Draft ("Add to Draft") recordings used to drop audio unless the Audio
     /// switch was turned on by hand each time, ignoring a preset set to save
     /// and embed it. The preset now decides; the switch only overrides.
+    /// A route with "Transcribe Recordings" off keeps the audio, since an
+    /// audio-only take is the only thing it can produce.
     static nonisolated func draftRecordingAttachesAudio(
         presetAudioSaveMode: CapturePresetAudioSaveMode,
+        presetTranscribes: Bool = true,
         override: Bool?
     ) -> Bool {
-        presetAudioSaveMode.draftRecordingAttachesAudio(override: override)
+        presetAudioSaveMode.draftRecordingAttachesAudio(presetTranscribes: presetTranscribes, override: override)
     }
 
     private var selectedRecordingCompletionMode: RecordingCompletionMode {
@@ -4088,33 +4330,51 @@ struct QuickCaptureView: View {
         pendingWidgetRecord = false
         let request = PendingQuickRecordingRequest.consume()
         guard AppConstants.lockScreenQuickRecordEnabled else { return }
+        // The same press can reach the app more than once (launch flag,
+        // notification, scene activation). The coordinator drops a copy that
+        // would race the start in flight (that used to show "Finish the
+        // current recording…" while the first copy recorded the reaction) and
+        // lets a newer press replace a launch that is waiting.
 
-        switch request.recordingAction.command(isRecording: persistentRecorder.isSegmentActive) {
-        case .none:
-            return
-        case .stop:
-            // Stop preserves the active segment's preset and completion mode,
-            // and does not require loading or changing the composer's route.
-            persistentRecorder.stopInAppSegment()
-            return
-        case .start:
-            break
-        }
-        Task { @MainActor in
-            await viewModel.load()
-            guard viewModel.requireCaptureRouteAvailable(), !persistentRecorder.isSegmentActive else { return }
-            let selection = WidgetRecordingFlowSelection.resolve(requestedFlowID: request.requestedFlowID)
-            // Draft delivery preserves the composer's route; the requested
-            // preset supplies only the frozen voice-processing policy.
-            lastStartedRecordingMode = request.draftAttachAudio == nil ? .preset : .draft
-            persistentRecorder.lastTranscriptionResult = nil
-            _ = persistentRecorder.startOneShotInAppSegment(
-                flowId: selection.flowID,
-                completionMode: request.completionMode(flowID: selection.flowID),
-                origin: .quickRecord,
-                draftRequestID: request.draftRequestID(in: viewModel.draft)
-            )
-        }
+        let isDraft = request.draftAttachAudio != nil
+        let effects = WidgetRecordingLaunch.Effects(
+            isRecording: { persistentRecorder.isSegmentActive },
+            finishActiveRecording: { persistentRecorder.stopInAppSegment() },
+            loadComposer: { await viewModel.load() },
+            isComposerAvailable: { viewModel.canChangeCaptureRoute },
+            setWaitingForComposer: { isWaiting in
+                withAnimation(.easeInOut(duration: 0.18)) {
+                    isWidgetRecordWaitingForComposer = isWaiting
+                }
+            },
+            newNotePlan: {
+                WidgetRecordingLaunch.newNotePlan(
+                    hasOpenNote: viewModel.liveNote != nil,
+                    hasContent: viewModel.draft.hasCaptureContent,
+                    canCloseIntoNewNote: viewModel.canRecordNewNote
+                )
+            },
+            prepareNewNote: { await viewModel.prepareNewNoteForRecording() },
+            start: {
+                let selection = WidgetRecordingFlowSelection.resolve(requestedFlowID: request.requestedFlowID)
+                // Draft delivery preserves the composer's route; the requested
+                // preset supplies only the frozen voice-processing policy.
+                lastStartedRecordingMode = isDraft ? .draft : .preset
+                persistentRecorder.lastTranscriptionResult = nil
+                return persistentRecorder.startOneShotInAppSegment(
+                    flowId: selection.flowID,
+                    completionMode: request.completionMode(flowID: selection.flowID),
+                    origin: .quickRecord,
+                    draftRequestID: request.draftRequestID(in: viewModel.draft)
+                )
+            }
+        )
+        widgetRecordLaunches.launch(
+            action: request.recordingAction,
+            isDraftDelivery: isDraft,
+            startsNewRecording: request.startsNewRecording,
+            effects: effects
+        )
     }
 
     private func handleRecorderNeedsUnlock(_ needsUnlock: Bool) {

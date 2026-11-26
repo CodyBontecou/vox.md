@@ -156,6 +156,7 @@
         <p>Connect a Vox.md Capture Preset to your vault, choose a Rolling Note with a daily period, and match its path to your existing daily-note filenames. Use Bottom to append to the note, or Heading to insert beneath a named section. The same destination can accept text and voice captures.</p>
       </div>
       <p>This guide focuses on routing and formatting. For recording and model setup, start with <a href="/blog/voice-notes-to-obsidian-iphone/">iPhone voice notes to Obsidian</a>. Obsidian also has its own daily-note capture tools; you do not need Vox.md for every append workflow.</p>
+      <p>Want a voice journal rather than a capture log? See <a href="/blog/private-voice-journal-iphone/">keep a private voice journal on iPhone</a>.</p>
       <nav class="toc" aria-label="In this guide"><div class="toc-title">In this guide</div><ol>
         <li><a href="#match-path">Match your daily-note path</a></li>
         <li><a href="#heading">Choose placement and a heading</a></li>
@@ -173,7 +174,7 @@
         <li>Choose <strong>Rolling Note</strong> and the <strong>Daily</strong> period.</li>
         <li>For the example convention, set the path pattern to <code>Journal/{period}.md</code>. Review the resolved destination before sending.</li>
       </ol>
-      <p>With a daily period, <code>{period}</code> resolves to a date such as <code>2026-10-26</code>. A vault that stores daily files at its root would instead use <code>{period}.md</code>. These are Vox.md path tokens, not Obsidian template expressions.</p>
+      <p>With a daily period, <code>{period}</code> resolves to a date such as <code>2026-10-26</code>. A vault that stores daily files at its root would instead use <code>{period}.md</code>. These are Vox.md path tokens, not Obsidian template expressions. To build the daily note template itself and preview the file name your date format makes, use the <a href="/blog/obsidian-daily-note-template/">Obsidian daily note template generator</a>.</p>
       <p>Vox.md does not automatically read your Daily Notes plugin configuration. Choosing a different folder or filename creates a different target. The path is relative to the folder selected through Files; do not repeat the vault’s own name in the path unless that is an actual subfolder.</p>
       <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_daily_note">Download Vox.md free</a></p>
       <p>Try 10 successful Capture deliveries and 15 transcription minutes free. Unlimited use is a one-time lifetime purchase; prices vary by region.</p>
@@ -197,6 +198,7 @@
       <p>For voice, record through Quick Capture with the same preset. Add the transcript to the draft for review before Send, or choose Send Immediately once you are comfortable with the route. The keyboard inserts text into a host app instead of exporting a second Markdown capture.</p>
 
       <h2 id="tasks">Format a task list</h2>
+      <p>To convert a list you already have into tasks, use the <a href="/blog/markdown-checklist-maker/">Markdown checklist maker</a>.</p>
       <p>For a Tasks section, choose a level-two heading named <strong>Tasks</strong> and a consistent checklist method. For typed captures without text processing, Keep Original plus the entry prefix <code>- [ ] </code> makes a short entry a task without AI rewriting.</p>
       <pre class="guide-code"><code>## Tasks
 - [ ] Read the trail guide

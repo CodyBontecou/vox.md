@@ -269,6 +269,6 @@ private val settingsStoryLog = """
 /** Story prices as Play would format them for a US account; only stories use fixed values. */
 internal fun storySubscriptionPlans(trial: Boolean): List<VoxPlanOption> = listOf(
     VoxPlanOption(VoxPlan.YEARLY, "$29.99", 29_990_000L, "USD", "P1Y", if (trial) "P1W" else null, "story-yearly"),
-    VoxPlanOption(VoxPlan.WEEKLY, "$0.99", 990_000L, "USD", "P1W", if (trial) "P1W" else null, "story-weekly"),
-    VoxPlanOption(VoxPlan.LIFETIME, "$49.99", 49_990_000L, "USD", null, null, "story-lifetime"),
+    VoxPlanOption(VoxPlan.WEEKLY, "$2.99", 2_990_000L, "USD", "P1W", if (trial) "P1W" else null, "story-weekly"),
+    VoxPlanOption(VoxPlan.LIFETIME, "$79.99", 79_990_000L, "USD", null, null, "story-lifetime"),
 )

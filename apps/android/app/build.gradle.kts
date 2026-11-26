@@ -32,8 +32,8 @@ android {
         // Setup links for ScrawlKit (debug builds): `scrawl link --scheme voxscrawl`.
         manifestPlaceholders["scrawlScheme"] = "voxscrawl"
         applicationId = "md.vox.android"
-        versionCode = 7
-        versionName = "3.0.1"
+        versionCode = 10
+        versionName = "3.0.4"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     packaging.jniLibs.excludes += setOf(
@@ -167,6 +167,7 @@ val generateRuntimeLocalizations by tasks.registering(Exec::class) {
     inputs.file(generator)
     inputs.file(catalog)
     inputs.files(rootProject.fileTree("localization") { include("*.json") })
+    inputs.file(rootProject.file("wear/src/main/res/values/strings.xml"))
     inputs.files(fileTree("src/main/kotlin") { include("**/*.kt") })
     inputs.files(rootProject.fileTree("capture-domain/src/main/kotlin") { include("**/*.kt") })
     inputs.files(rootProject.fileTree("data/src/main/kotlin") { include("**/*.kt") })

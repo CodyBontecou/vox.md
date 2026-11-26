@@ -156,6 +156,7 @@
         <p>Vox.md 캡처 프리셋을 보관함에 연결하고 일별 롤링 노트를 골라 기존 일일 노트 파일명에 경로를 맞추세요. 맨 아래로 추가하거나 이 옵션으로 이름 있는 섹션 아래 삽입하세요. 같은 대상은 텍스트와 음성을 받습니다.</p>
       </div>
       <p>이 가이드는 라우팅과 서식에 집중합니다. 녹음 및 모델 설정은 다음부터 시작하세요: <a href="/ko/blog/voice-notes-to-obsidian-iphone/">iPhone 음성 노트를 Obsidian으로</a>. Obsidian에도 일일 노트 캡처 도구가 있으므로 모든 추가 워크플로에 Vox.md가 필요하지는 않습니다.</p>
+      <p>캡처 기록이 아니라 음성 일기를 원하시나요? 다음을 참고하세요: <a href="/ko/blog/private-voice-journal-iphone/">iPhone에서 비공개 음성 일기 쓰기</a>.</p>
       <nav class="toc" aria-label="이 가이드에서"><div class="toc-title">이 가이드에서</div><ol>
         <li><a href="#match-path">일일 노트 경로 맞추기</a></li>
         <li><a href="#heading">배치 위치와 제목 선택</a></li>
@@ -173,14 +174,14 @@
         <li>선택: <strong>롤링 노트</strong> 및 다음을 <strong>매일</strong> 주기입니다.</li>
         <li>예시 규칙을 따르려면 경로 패턴을 다음으로 설정하세요: <code>Journal/{period}.md</code>. 보내기 전에 해석된 대상을 확인하세요.</li>
       </ol>
-      <p>일별 주기에서는 <code>{period}</code> 는 다음과 같은 날짜로 해석됩니다: <code>2026-10-26</code>. 루트에 일일 파일을 저장하는 보관함은 대신 다음을 사용합니다: <code>{period}.md</code>. 이는 Vox.md 경로 토큰이며 Obsidian 템플릿 표현식이 아닙니다.</p>
+      <p>일별 주기에서는 <code>{period}</code> 는 다음과 같은 날짜로 해석됩니다: <code>2026-10-26</code>. 루트에 일일 파일을 저장하는 보관함은 대신 다음을 사용합니다: <code>{period}.md</code>. 이것들은 Vox.md 경로 토큰이며 Obsidian 템플릿 표현식이 아닙니다. 일일 노트 템플릿 자체를 만들고 날짜 형식으로 만들어지는 파일 이름을 미리 보려면 다음 생성기를 사용하세요: <a href="/ko/blog/obsidian-daily-note-template/">Obsidian 일일 노트 템플릿 생성기</a>.</p>
       <p>Vox.md는 Daily Notes 플러그인 설정을 자동 읽지 않습니다. 다른 폴더나 파일명은 다른 대상을 만듭니다. 경로는 파일 앱에서 선택한 폴더 기준이므로 실제 하위 폴더가 아니면 보관함 이름을 반복하지 마세요.</p>
       <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ko_24d3c4f9ef44">Vox.md 무료 다운로드</a></p>
       <p>성공한 캡처 전송 10회와 전사 15분을 무료로 체험하세요. 무제한 사용은 일회성 평생 구매이며 가격은 지역별로 다릅니다.</p>
 
       <h2 id="heading">2. 배치 위치와 제목 선택</h2>
       <p>선택: <strong>아래</strong> 으로 일일 노트 끝에 추가하거나, <strong>TOP</strong> 을 선택해 앞에 추가하세요. 캡처를 한 섹션에 모으려면 다음을 선택하세요: <strong>이</strong>, 제목을 입력하고 수준을 정하세요.</p>
-      <p>아래 예제에는 다음 이름의 2단계 제목을 사용하세요: <strong>Inbox</strong>. 해당 제목의 섹션 끝에 삽입하도록 선택하면 새 항목이 이전 항목 뒤에 놓입니다. 제목이 없을 때의 동작을 다음으로 설정하세요: <strong>이를 만들기</strong> Vox.md가 추가해야 한다면 선택하거나, <strong>실수 표시</strong> 노트를 직접 수정하려면 사용하세요.</p>
+      <p>아래 예제에는 다음 이름의 2단계 제목을 사용하세요: <strong>Inbox</strong>. 해당 제목의 섹션 끝에 삽입하도록 선택하면 새 항목이 이전 항목 뒤에 놓입니다. 제목이 없을 때의 동작을 다음으로 설정하세요: <strong>제목 만들기</strong> Vox.md가 추가해야 한다면 선택하거나, <strong>실수 표시</strong> 노트를 직접 수정하려면 사용하세요.</p>
       <figure class="guide-figure">
         <img src="/screenshots/optimized/01-route-heading-light-640.webp" alt="롤링 노트 및 제목 배치 설정이 있는 Vox.md 대상 편집기" width="1206" height="2622" loading="lazy" decoding="async">
         <figcaption>대상 편집기가 파일과 배치를 제어합니다. 보내기 전에 보관함 경로와 제목 수준을 맞추세요.</figcaption>
@@ -197,6 +198,7 @@
       <p>음성은 같은 프리셋으로 빠른 캡처에서 녹음하세요. 보내기 전에 검토하도록 전사를 초안에 추가하거나 루트에 익숙해지면 즉시 전송을 선택하세요. 키보드는 두 번째 Markdown 캡처를 내보내는 대신 호스트 앱에 텍스트를 삽입합니다.</p>
 
       <h2 id="tasks">할 일 목록 서식 지정</h2>
+      <p>이미 가지고 있는 목록을 작업으로 바꾸려면 다음을 사용하세요: <a href="/ko/blog/markdown-checklist-maker/">Markdown 체크리스트 메이커</a>.</p>
       <p>Tasks 섹션에는 다음 이름의 2단계 제목을 고르세요: <strong>Tasks</strong> 과 일관된 체크리스트 방식을 사용하세요. 텍스트 처리 없는 입력 캡처에는 원본 유지와 다음 접두사를 <code>- [ ] </code> 로 AI 재작성 없이 짧은 항목을 할 일로 만듭니다.</p>
       <pre class="guide-code"><code>## Tasks
 - [ ] Read the trail guide

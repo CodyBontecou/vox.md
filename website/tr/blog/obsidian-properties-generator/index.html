@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="tr" dir="ltr" data-search-section="Bölüm" data-search-guide="Kılavuz" data-search-empty="“{query}” için sonuç yok">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obsidian not özellikleri (YAML frontmatter) oluşturucu ve denetleyici | Vox.md</title>
+  <meta name="description" content="Obsidian not özellikleri için ücretsiz, tarayıcı içi araç. Her özellik türü için geçerli YAML frontmatter oluşturun veya mevcut frontmatter&#x27;ı yapıştırıp Obsidian Help kurallarına dayanan, satır numaralı düzeltmeler alın.">
+  <link rel="canonical" href="https://vox.isolated.tech/tr/blog/obsidian-properties-generator/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Dil modelleri için Vox.md belgeleri">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Obsidian not özellikleri (YAML frontmatter) oluşturucu ve denetleyici">
+  <meta property="og:description" content="Obsidian not özellikleri için ücretsiz, tarayıcı içi araç. Her özellik türü için geçerli YAML frontmatter oluşturun veya mevcut frontmatter&#x27;ı yapıştırıp Obsidian Help kurallarına dayanan, satır numaralı düzeltmeler alın.">
+  <meta property="og:url" content="https://vox.isolated.tech/tr/blog/obsidian-properties-generator/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-11-22">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Obsidian not özellikleri (YAML frontmatter) oluşturucu ve denetleyici">
+  <meta name="twitter:description" content="Obsidian not özellikleri için ücretsiz, tarayıcı içi araç. Her özellik türü için geçerli YAML frontmatter oluşturun veya mevcut frontmatter&#x27;ı yapıştırıp Obsidian Help kurallarına dayanan, satır numaralı düzeltmeler alın.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Obsidian not özellikleri (YAML frontmatter) oluşturucu ve denetleyici",
+  "description": "Obsidian not özellikleri için ücretsiz, tarayıcı içi araç. Her özellik türü için geçerli YAML frontmatter oluşturun veya mevcut frontmatter'ı yapıştırıp Obsidian Help kurallarına dayanan, satır numaralı düzeltmeler alın.",
+  "image": "https://vox.isolated.tech/screenshots/01-route-heading-light.png",
+  "datePublished": "2026-11-22",
+  "dateModified": "2026-11-22",
+  "mainEntityOfPage": "https://vox.isolated.tech/tr/blog/obsidian-properties-generator/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "tr",
+  "name": "Obsidian not özellikleri (YAML frontmatter) oluşturucu ve denetleyici | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/tr/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Kılavuzlar",
+      "item": "https://vox.isolated.tech/tr/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Obsidian not özellikleri (YAML frontmatter) oluşturucu ve denetleyici",
+      "item": "https://vox.isolated.tech/tr/blog/obsidian-properties-generator/"
+    }
+  ],
+  "inLanguage": "tr",
+  "name": "Obsidian not özellikleri (YAML frontmatter) oluşturucu ve denetleyici | Vox.md",
+  "description": "Obsidian not özellikleri için ücretsiz, tarayıcı içi araç. Her özellik türü için geçerli YAML frontmatter oluşturun veya mevcut frontmatter'ı yapıştırıp Obsidian Help kurallarına dayanan, satır numaralı düzeltmeler alın."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/obsidian-properties-generator/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Kılavuza atla</a>
+<nav aria-label="Ana gezinme">
+  <div class="nav-inner">
+    <a href="/tr/" class="logo" aria-label="Vox.md ana sayfası">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/tr/#how">Nasıl Çalışır?</a></li>
+      <li><a href="/tr/docs/">Belgeler</a></li>
+      <li><a href="/tr/blog/">Kılavuzlar</a></li>
+      <li><a href="/tr/compare/">Karşılaştırın</a></li>
+      <li><a href="/tr/privacy.html">Gizlilik</a></li>
+      <li><a href="/tr/terms.html">Koşullar</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_tr_292ad7cca3ec">Vox.md&#x27;yi indirin</a>
+  <details class="language-switcher"><summary>Dil</summary><ul><li><a href="/blog/obsidian-properties-generator/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-properties-generator/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-properties-generator/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-properties-generator/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-properties-generator/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-properties-generator/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-properties-generator/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-properties-generator/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-properties-generator/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-properties-generator/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-properties-generator/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-properties-generator/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-properties-generator/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-properties-generator/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-properties-generator/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-properties-generator/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-properties-generator/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-properties-generator/" lang="tr" hreflang="tr" aria-current="page">Türkçe</a></li><li><a href="/uk/blog/obsidian-properties-generator/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-properties-generator/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-properties-generator/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-properties-generator/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-properties-generator/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Ücretsiz araç</div>
+        <h1 class="hero-title">Obsidian not özellikleri (YAML frontmatter) oluşturucu ve denetleyici</h1>
+        <p class="hero-subtitle">Obsidian&#x27;ın beklediği biçimde özellikler oluşturun veya elinizdeki frontmatter&#x27;ı denetleyip bir özelliğin neden istediğiniz türde görünmediğini görün.</p>
+      </div>
+      <aside class="meta-card" aria-label="Bu kılavuz hakkında">
+        <dl>
+          <div><dt>Yazan</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Güncellendi</dt><dd><time datetime="2026-11-22">22 Kasım 2026</time></dd></div>
+          <div><dt>Gerektirir:</dt><dd>Obsidian (herhangi bir platform). İsteğe bağlı: yakalanan notlara özellik eklemek için iPhone, Apple Watch veya Mac için Vox.md.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Obsidian not özellikleri (YAML frontmatter) oluşturucu ve denetleyici">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Kısa yanıt</div>
+        <p>Obsidian not özellikleri, bir notun en üstünde YAML olarak yer alır, iki <code>---</code> satırları. Her özellik bir <code>name: value</code> çifti, liste ise şuna sahiptir: <code>- value</code> satır, ve dahili bağlantı tırnak içinde olmalıdır. Bu örnek geçerlidir:</p>
+      </div>
+      <pre class="guide-code" id="default-properties"><code>---
+tags:
+  - journal
+  - idea
+aliases:
+  - Weekly review
+date: 2026-11-21
+project: "[[Vox.md launch]]"
+published: true
+---
+</code></pre>
+      <p>Başka özelliklere mi ihtiyacınız var, ya da birinin neden istediğiniz türde görünmediğini mi öğrenmek istiyorsunuz? Aşağıdaki oluşturucu YAML&#x27;i yazar, denetleyici ise satır numaralı sorunları düzeltmeyle birlikte listeler. İkisi de tamamen bu sayfada çalışır: yazdığınız hiçbir şey bir yere gönderilmez. Kurallar Obsidian Help&#x27;ten gelir: <a href="https://obsidian.md/help/properties" target="_blank" rel="noopener">Özellikler</a> ve <a href="https://obsidian.md/help/tags" target="_blank" rel="noopener">Etiketler</a>.</p>
+      <nav class="toc" aria-label="Bu kılavuzda"><div class="toc-title">Bu kılavuzda</div><ol>
+        <li><a href="#generator">Özellik oluştur</a></li>
+        <li><a href="#checker">Elinizdeki frontmatter&#x27;ı denetleyin</a></li>
+        <li><a href="#types">Özellik türleri ve her birinin yazılışı</a></li>
+        <li><a href="#rules">Özellikleri en sık bozan kurallar</a></li>
+        <li><a href="#templates">Şablonlarda özellik kullanımı</a></li>
+        <li><a href="#vox">Yakaladığınız notlara özellik ekleyin</a></li>
+        <li><a href="#faq">Sorular</a></li>
+      </ol></nav>
+
+      <h2 id="generator">1. Özellik oluştur</h2>
+      <p class="mt-nojs" id="pg-nojs">Oluşturucu ve denetleyici JavaScript gerektirir. JavaScript olmadan da yukarıdaki örnek, tür tablosu ve aşağıdaki kurallar başvuru olarak çalışır.</p>
+      <form class="pg-tool" id="pg-tool" aria-label="Özellik oluşturucu" hidden>
+        <div class="pg-bar">
+          <button type="button" class="btn-secondary" id="pg-add">Özellik ekle</button>
+          <button type="button" class="btn-secondary" data-default="tags">tags ekle</button>
+          <button type="button" class="btn-secondary" data-default="aliases">aliases ekle</button>
+          <button type="button" class="btn-secondary" data-default="cssclasses">cssclasses ekle</button>
+        </div>
+        <ol class="pg-rows" id="pg-rows"></ol>
+        <fieldset class="mt-group">
+          <legend>Şablon eklentisi belirteçleri</legend>
+          <label class="mt-option"><input type="radio" name="tokens" value="none" checked> <span>Girdiğim tarihleri yaz</span></label>
+          <label class="mt-option"><input type="radio" name="tokens" value="core"> <span>Çekirdek Templates: tarih alanları şuna dönüşür: <code>{{date:YYYY-MM-DD}}</code></span></label>
+          <label class="mt-option"><input type="radio" name="tokens" value="templater"> <span>Templater: tarih alanları şuna dönüşür: <code>&lt;% tp.date.now("YYYY-MM-DD") %&gt;</code></span></label>
+          <p class="mt-hint">Bir belirteç açıkken, Tarih ve Tarih ve saat alanları şablon kullanıldığında doldurulur. Diğer değerler yazıldığı gibi yazılır.</p>
+        </fieldset>
+      </form>
+      <div class="mt-output-head" id="pg-output-head" hidden>
+        <h3 id="pg-output-title">Özellikleriniz</h3>
+        <div class="mt-actions">
+          <button type="button" class="btn-primary" id="pg-copy">Kopyala</button>
+          <button type="button" class="btn-secondary" id="pg-download">.md olarak indir</button>
+        </div>
+      </div>
+      <p class="mt-status" id="pg-status" role="status"></p>
+      <pre class="guide-code" id="pg-output" aria-labelledby="pg-output-title" aria-live="polite" tabindex="0" hidden><code id="pg-output-code"></code></pre>
+      <p class="mt-hint" id="pg-warnings" role="status" hidden></p>
+      <div class="mt-output-head" id="pg-route-head" hidden>
+        <h3 id="pg-route-title">Bir Vox.md Route için</h3>
+        <div class="mt-actions"><button type="button" class="btn-secondary" id="pg-route-copy">Vox.md Route metadata olarak kopyala</button></div>
+      </div>
+      <pre class="guide-code" id="pg-route" aria-labelledby="pg-route-title" tabindex="0" hidden><code id="pg-route-code"></code></pre>
+
+      <h2 id="checker">2. Elinizdeki frontmatter&#x27;ı denetleyin</h2>
+      <p>Bir notun üst kısmını yapıştırın, <code>---</code> satırları. Denetleyici bloğu satır satır okur ve her sorunu satır numarası ve düzeltmeyle listeler. Tam bir YAML ayrıştırıcısı değil, sabit bir satır kuralları kümesi kullanır; bu yüzden bir ayrıştırıcının bulacağı bir hatayı kaçırabilir ve yalnızca burada listelenen kuralları denetler.</p>
+      <div class="pg-check" id="pg-check" hidden>
+        <label class="mt-field" for="pg-check-input">Denetlenecek frontmatter <textarea id="pg-check-input" rows="10" spellcheck="false" autocomplete="off" placeholder="---
+tags:
+  - günlük
+---"></textarea></label>
+        <div class="mt-actions">
+          <button type="button" class="btn-primary" id="pg-check-run">Frontmatter&#x27;ı denetle</button>
+          <button type="button" class="btn-secondary" id="pg-check-example">Hatalı bir örnek yapıştır</button>
+        </div>
+        <div id="pg-check-result" role="status" aria-live="polite" tabindex="-1"></div>
+      </div>
+      <p>Denetleyici şunlara bakar: girinti için kullanılan sekmeler, eksik açılış veya kapanış <code>---</code>, tırnaksız dahili bağlantılar, boşluklu etiketler, <code>#</code> öneki, etiketlerin içeremeyeceği diğer karakterler veya yalnızca sayılar, kullanımdan kaldırılmış adlar <code>tag</code>, <code>alias</code> ve <code>cssclass</code>, iç içe nesneler, değerlerde Markdown biçimlendirmesi, yinelenen adlar ve YAML&#x27;in kastettiğinizden farklı okuduğu birkaç değer. Şu gibi şablon belirteçleri <code>{{date}}</code> ve <code>&lt;% %&gt;</code> atlanır.</p>
+
+      <div hidden id="pg-messages">
+        <span data-message="name-label">Özellik adı</span>
+        <span data-message="type-label">Tür</span>
+        <span data-message="value-label">Değer</span>
+        <span data-message="remove">Kaldır</span>
+        <span data-message="remove-label">{name} özelliğini kaldır</span>
+        <span data-message="list-hint">Satır başına bir değer</span>
+        <span data-message="tags-hint">Satır başına bir etiket, # önekiyle veya öneksiz</span>
+        <span data-message="checked">İşaretli</span>
+        <span data-message="token-set">Şablon eklentisi tarafından doldurulur</span>
+        <span data-message="type-text">Metin</span>
+        <span data-message="type-list">Liste</span>
+        <span data-message="type-number">Sayı</span>
+        <span data-message="type-checkbox">Onay kutusu</span>
+        <span data-message="type-date">Tarih</span>
+        <span data-message="type-datetime">Tarih ve saat</span>
+        <span data-message="type-tags">Etiketler</span>
+        <span data-message="copied">Panoya kopyalandı.</span>
+        <span data-message="route-copied">Kopyalandı. Route&#x27;un Metadata alanına yapıştırın.</span>
+        <span data-message="copy-failed">Kopyalanamadı. Metni seçip kendiniz kopyalayın.</span>
+        <span data-message="downloaded">properties.md indirildi.</span>
+        <span data-message="added">{name} eklendi.</span>
+        <span data-message="exists">{name} zaten listede.</span>
+        <span data-message="w-empty-name">Adı olmayan bir özellik dışarıda bırakılır.</span>
+        <span data-message="w-duplicate">{name} birden fazla kez geçiyor. Her özellik için tek satır bırakın.</span>
+        <span data-message="w-number">{name} bir sayı değil, bu yüzden boş bırakıldı.</span>
+        <span data-message="w-tag">“{from}” etiketi {to} olarak yazıldı; çünkü etiketler boşluk veya # öneki içeremez ve sayısal olmayan bir karakter gerektirir.</span>
+        <span data-message="w-tag-empty">Geçerli hale getirilemeyen bir etiket dışarıda bırakıldı: {from}</span>
+        <span data-message="w-datetime">{name} hem tarih hem saat gerektirir, bu yüzden boş bırakıldı.</span>
+        <span data-message="c-none">Sorun bulunamadı.</span>
+        <span data-message="c-empty">Denetlemek için biraz frontmatter yapıştırın.</span>
+        <span data-message="c-json">Bu JSON&#x27;a benziyor. Obsidian bunu okur ve YAML olarak kaydeder. Buradaki satır kuralları YAML için geçerlidir; denetlemek için YAML sürümünü yapıştırın.</span>
+        <span data-message="c-count">Bulunan sorun: {n}</span>
+        <span data-message="c-line">Satır {line}</span>
+        <span data-message="c-fix">Düzeltme:</span>
+        <span data-message="m-no-open">Blok bir --- satırıyla başlamıyor. Özellikler, notun en üstünde iki --- satırının arasında yer alır.</span>
+        <span data-message="f-no-open">İlk özellikten önce kendi satırına --- ekleyin.</span>
+        <span data-message="m-no-close">Özelliklerden sonra kapanış --- satırı yok.</span>
+        <span data-message="f-no-close">Son özellikten sonra kendi satırına --- ekleyin.</span>
+        <span data-message="m-tabs">Bu satır sekmeyle girintilenmiş. YAML girinti için sekmeye izin vermez.</span>
+        <span data-message="f-tabs">Baştaki her sekmeyi boşluklarla değiştirin, örneğin iki boşluk.</span>
+        <span data-message="m-not-pair">Bu satır bir ad: değer çifti değil.</span>
+        <span data-message="f-not-pair">ad: değer biçiminde yazın, iki noktadan sonra bir boşlukla.</span>
+        <span data-message="m-duplicate">{key} özelliği zaten {first}. satırda tanımlanmış.</span>
+        <span data-message="f-duplicate">Tek bir {key} satırı bırakın ve değerleri onda birleştirin.</span>
+        <span data-message="m-deprecated">{key} kullanımdan kaldırılmış bir özellik adıdır. Obsidian 1.4&#x27;te kullanımdan kaldırıldı ve varsayılan özellik olarak desteği 1.9&#x27;da bırakıldı.</span>
+        <span data-message="f-deprecated">Adını {fixed} olarak değiştirin.</span>
+        <span data-message="m-link-unquoted">Bir özellikteki dahili bağlantı tırnak içine alınmalıdır.</span>
+        <span data-message="f-link-unquoted">Şöyle yazın: {fixed}</span>
+        <span data-message="m-tag-hash">Özelliklerdeki etiketler # öneki olmadan yazılır.</span>
+        <span data-message="f-tag-hash">Şöyle yazın: {fixed}</span>
+        <span data-message="m-tag-space">{tag} etiketi boşluk içeriyor. Etiketler boşluk içeremez.</span>
+        <span data-message="f-tag-space">Tire kullanın, örneğin {fixed}, ya da her etiketi kendi satırına yazın.</span>
+        <span data-message="m-tag-numeric">{tag} etiketinde sayısal olmayan bir karakter yok. Bir etiket en az bir tane içermelidir.</span>
+        <span data-message="f-tag-numeric">Bir harf ekleyin, örneğin {fixed}</span>
+        <span data-message="m-tag-chars">{tag} etiketinde etiketlerin içeremeyeceği bir karakter var. Etiketlerde harf, rakam, alt çizgi, tire ve iç içe yazım için / kullanılabilir.</span>
+        <span data-message="f-tag-chars">Kaldırın veya değiştirin, örneğin {fixed}</span>
+        <span data-message="m-nested">{key} iç içe bir nesne içeriyor. Özellikler iç içe nesneleri desteklemez.</span>
+        <span data-message="f-nested">Ayrı üst düzey özelliklere düzleştirin veya kaynak modunda düzenleyin.</span>
+        <span data-message="m-markdown">Değer Markdown biçimlendirmesi içeriyor ({sample}). Özellikler tasarım gereği Markdown&#x27;ı işlemez.</span>
+        <span data-message="f-markdown">Biçimlendirme karakterlerini kaldırın ve düz metin bırakın.</span>
+        <span data-message="m-bad-colon">Tırnaksız bu değer iki nokta ve ardından boşluk içeriyor; YAML bunu başka bir adın başlangıcı olarak okur.</span>
+        <span data-message="f-bad-colon">Değeri tırnak içine alın: {fixed}</span>
+        <span data-message="m-bad-start">Tırnaksız bu değer {char} ile başlıyor; YAML bunu özel olarak ele alır.</span>
+        <span data-message="f-bad-start">Değeri tırnak içine alın: {fixed}</span>
+        <span data-message="m-unclosed-quote">Bu satırda bir tırnak açılmış ama kapatılmamış.</span>
+        <span data-message="f-unclosed-quote">Kapanış tırnağını ekleyin.</span>
+        <span data-message="m-comment">YAML&#x27;de bir boşluktan sonra gelen # yorum başlatır, bu yüzden satırın geri kalanı değerin parçası olmaz.</span>
+        <span data-message="f-comment"># değerin parçasıysa, değeri tırnak içine alın: {fixed}</span>
+        <span data-message="broken-example">Hatalı örnek yüklendi.</span>
+      </div>
+
+      <h2 id="types">3. Özellik türleri ve her birinin yazılışı</h2>
+      <p>Obsidian yedi özellik türünü destekler. Her biri YAML&#x27;de şöyle yazılır:</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th>Tür</th><th>YAML örneği</th><th>Dikkat</th></tr></thead>
+          <tbody>
+            <tr><td>Metin</td><td><code>title: Weekly review</code></td><td>YAML&#x27;in yanlış okuyacağı bir değeri tırnak içine alın; örneğin şunu içeren bir değer: <code>: </code> içeren veya şununla başlayan bir değer: <code>#</code>. Dahili bağlantılar tırnak içinde olmalıdır.</td></tr>
+            <tr><td>Liste</td><td><code>topics:</code><br><code>&nbsp;&nbsp;- sleep</code><br><code>&nbsp;&nbsp;- focus</code></td><td>Her değer kendi satırındadır; önünde bir tire ve bir boşluk bulunur.</td></tr>
+            <tr><td>Sayı</td><td><code>rating: 4</code></td><td>Sayıyı tırnaksız yazın.</td></tr>
+            <tr><td>Onay kutusu</td><td><code>published: true</code></td><td>Değer: <code>true</code> veya <code>false</code>.</td></tr>
+            <tr><td>Tarih</td><td><code>date: 2026-11-21</code></td><td>Biçim şöyledir: <code>YYYY-MM-DD</code>.</td></tr>
+            <tr><td>Tarih ve saat</td><td><code>time: 2026-11-21T10:30:00</code></td><td>Biçim şöyledir: <code>YYYY-MM-DDTHH:MM:SS</code>.</td></tr>
+            <tr><td>Etiketler</td><td><code>tags:</code><br><code>&nbsp;&nbsp;- recipe</code><br><code>&nbsp;&nbsp;- cooking</code></td><td>Şu olmadan yazılır: <code>#</code>. Boşluk yok ve en az bir sayısal olmayan karakter var.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Obsidian&#x27;ın ayrıca üç varsayılan özelliği vardır: <code>tags</code>, <code>aliases</code> ve <code>cssclasses</code>. Oluşturucuda her biri için bir düğme vardır.</p>
+
+      <h2 id="rules">4. Özellikleri en sık bozan kurallar</h2>
+      <ul>
+        <li><strong>Dahili bağlantıları tırnak içine alın.</strong> <code>project: "[[Vox.md launch]]"</code>, değil <code>project: [[Vox.md launch]]</code>. Bu, metin özellikleri ve listedeki öğeler için geçerlidir.</li>
+        <li><strong>Satır başına bir liste öğesi.</strong> Her öğe bir tire ve bir boşlukla başlar, özellik adının altında girintilenir. Girinti için sekme değil, boşluk kullanın.</li>
+        <li><strong>Etiketlerin kendi kuralları vardır.</strong> Hayır <code>#</code> YAML&#x27;de, boşluksuz ve en az bir sayısal olmayan karakterle: <code>1984</code> geçerli bir etiket değildir, ama <code>y1984</code> dir. Şunu kullanın: <code>/</code> iç içe etiketler için, örneğin <code>inbox/to-read</code>. Bkz. <a href="https://obsidian.md/help/tags" target="_blank" rel="noopener">Etiketler</a> (Obsidian Yardım).</li>
+        <li><strong>Tarihleri saklanan biçimde yazın.</strong> <code>2026-11-21</code> tarih ve <code>2026-11-21T10:30:00</code> tarih ve saat için.</li>
+        <li><strong>Güncel adları kullanın.</strong> <code>tag</code>, <code>alias</code> ve <code>cssclass</code> Obsidian 1.4&#x27;te kullanımdan kaldırıldı; yerine şu geldi: <code>tags</code>, <code>aliases</code> ve <code>cssclasses</code>; bunların varsayılan özellik olarak desteği Obsidian 1.9&#x27;da bırakıldı.</li>
+        <li><strong>İç içe yazmayın.</strong> Özellikler iç içe nesneleri desteklemez. Obsidian, iç içe özellikleri görmek için kaynak modunu önerir; bu yüzden onları şu gibi üst düzey adlara düzleştirin: <code>project_status</code>.</li>
+        <li><strong>Markdown kullanmayın.</strong> Kalın yazı, bağlantılar ve diğer biçimlendirme özelliklerde işlenmez. Obsidian bunu bilinçli bir tercih olarak açıklar, çünkü özellikler küçük, atomik bilgi parçaları içindir.</li>
+      </ul>
+
+      <h2 id="templates">5. Şablonlarda özellik kullanımı</h2>
+      <p>Açın: <strong>Şablon eklentisi belirteçleri</strong> oluşturucuda, tarih alanlarını sabit tarih yerine belirteç olarak yazmak için. Çekirdek Templates eklentisi şunu kullanır: <code>{{date:YYYY-MM-DD}}</code>; Templater topluluk eklentisi şunu kullanır: <code>&lt;% tp.date.now("YYYY-MM-DD") %&gt;</code> (bkz. Templater <a href="https://silentvoid13.github.io/Templater/" target="_blank" rel="noopener">belgeler</a>). Tarih ve saat alanları şunu kullanır: <code>YYYY-MM-DD[T]HH:mm:ss</code> belirteçte, şununla <code>T</code> köşeli parantez içinde, böylece harf olarak yazılır.</p>
+      <p>Bağlantılarda dikkat gerekir. Obsidian, Properties arayüzünde yazdığınız bağlantı için tırnakları ekler, ama şablon eklentisi metni dosyaya olduğu gibi yazar; bu yüzden şablonda tırnakları kendiniz yazın: <code>project: "[[Vox.md launch]]"</code>.</p>
+      <p>Bu özellikleri kullanan tam şablonlar için bkz. <a href="/tr/blog/obsidian-daily-note-template/">günlük not şablonu oluşturucusu</a> ve <a href="/tr/blog/obsidian-meeting-notes-template/">toplantı notları şablon oluşturucu</a>.</p>
+
+      <h2 id="vox">6. Yakaladığınız notlara özellik ekleyin</h2>
+      <p>Bir Vox.md Route&#x27;unda Metadata alanı bir tane alır: <code>key: value</code> çifti, her satıra bir tane; örneğin: <code>tags: [journal, idea]</code>. <strong>Not Ön Bilgileri</strong> metadata&#x27;yı belge kapsamında yazar. <strong>Satır İçi Girdi Alanları</strong> yazar <code>key:: value</code> alanlarını, yuvarlanan bir notta her girdinin yanına koyar. Bkz. <a href="/tr/docs/#preset-metadata">Route başvurusunda Metadata</a>.</p>
+      <p>Oluşturucunun <strong>Vox.md Route metadata olarak kopyala</strong> düğmesi özelliklerinizi bu biçimde yazar; listeler şöyle yazılır: <code>[a, b]</code> ve satır başına bir özellik. Vox.md belgeleri bu alanı şöyle tanımlar: <code>key: value</code> satırları; bu sayfa her özellik türünün nasıl yazıldığını test etmez, bu yüzden yakalanan ilk notu Obsidian&#x27;da açıp kontrol edin. Günlük not ve gelen kutusu için Route&#x27;lar şurada anlatılır: <a href="/tr/blog/append-to-obsidian-daily-note-iphone/">Obsidian günlük notuna ekleyin</a>, <a href="/tr/blog/obsidian-capture-templates/">yakalama şablonları</a> ve <a href="/tr/blog/voice-notes-to-obsidian-iphone/">iPhone sesli notlarından Obsidian&#x27;a</a>.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Bu özellikleri yakalanan her nota ekleyin.</h2>
+        <p>Bu özellikler iPhone, Apple Watch veya Mac&#x27;ten yakaladığınız her notta olsun mu? Bunları bir Vox.md Route&#x27;unun Metadata alanına yapıştırın ve Note Frontmatter&#x27;ı seçin. Ücretsiz katman 15 dakika transkripsiyon ve 10 başarılı Capture teslimi içerir.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_tr_292ad7cca3ec">App Store&#x27;dan Vox.md edinin</a></p>
+      </section>
+
+      <h2 id="faq">7. Sorular</h2>
+      <h3>Obsidian neden özelliğimi istediğim türde göstermiyor?</h3>
+      <p>Obsidian özellikleri YAML olarak okur ve türünün kurallarına uymayan bir değer o türde gösterilmez. Olağan nedenler: tırnaksız bir bağlantı, satır başına bir öğe olarak yazılmamış bir liste, şu biçimde olmayan bir tarih <code>YYYY-MM-DD</code>ve boşluk içeren etiketler. Satırı bulmak için bloğu yukarıdaki denetleyiciye yapıştırın.</p>
+      <h3>Özelliklerde etiketlerin başında # olmalı mı?</h3>
+      <p>Hayır. YAML&#x27;de etiketler düz sözcükler olarak yazılır, örneğin <code>- recipe</code>. <code>#</code> bir notun gövdesindeki etiketler içindir.</p>
+      <h3>Özellikleri iç içe yazabilir miyim?</h3>
+      <p>Hayır. Özellikler iç içe nesneleri desteklemez. Düz adlar kullanın veya iç içe etiketleri şununla yazın: <code>/</code> içinde, şunun <code>tags</code> listesi.</p>
+      <h3>Özellikleri JSON olarak yazabilir miyim?</h3>
+      <p>Obsidian bir JSON bloğunu okuyabilir, ama onu YAML olarak okur ve kaydeder. Yukarıdaki denetleyici satır kurallarını yalnızca YAML&#x27;e uygular.</p>
+
+      <nav class="toc" aria-label="İlgili kılavuzlar" id="related"><div class="toc-title">Kuruluma devam edin</div><ul>
+        <li><a href="/tr/blog/obsidian-daily-note-template/">Obsidian günlük not şablonu oluşturucu</a></li>
+        <li><a href="/tr/blog/obsidian-meeting-notes-template/">Obsidian toplantı notu şablonu oluşturucu</a></li>
+        <li><a href="/tr/blog/obsidian-capture-templates/">Yol ve şablon tarifleri</a></li>
+        <li><a href="/tr/blog/append-to-obsidian-daily-note-iphone/">Obsidian günlük notuna ekleyin</a></li>
+        <li><a href="/tr/blog/voice-notes-to-obsidian-iphone/">iPhone sesli notlarını Obsidian&#x27;a kaydedin</a></li>
+        <li><a href="/tr/docs/#preset-metadata">Route metadata başvurusu</a></li>
+      </ul></nav>
+<style>
+.pg-tool:not([hidden]) { display: flex; flex-direction: column; gap: 16px; }
+.pg-bar { display: flex; flex-wrap: wrap; gap: 8px; }
+.pg-bar button, .pg-check .mt-actions button { font: inherit; font-size: 15px; min-height: 44px; padding: 0 16px; cursor: pointer; }
+.pg-rows { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.pg-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px 12px; padding: 14px 16px; background: var(--card); border: 1.5px solid var(--ink); border-radius: 16px; }
+.pg-row .mt-field { margin-top: 0; }
+.pg-row .pg-value, .pg-row .pg-remove-cell { grid-column: 1 / -1; }
+.pg-row input[type="text"], .pg-row input[type="number"], .pg-row input[type="date"], .pg-row input[type="datetime-local"], .pg-row select, .pg-row textarea, .pg-check textarea { font: inherit; font-family: var(--font-mono); font-size: 15px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; padding: 8px 10px; min-height: 40px; width: 100%; box-sizing: border-box; }
+.pg-row textarea, .pg-check textarea { resize: vertical; }
+.pg-row input:focus-visible, .pg-row select:focus-visible, .pg-row textarea:focus-visible, .pg-check textarea:focus-visible, #pg-check-result:focus-visible, #pg-route:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.pg-remove { font: inherit; font-size: 14px; min-height: 40px; padding: 0 14px; cursor: pointer; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; }
+.pg-remove:hover { background: var(--lime); }
+.pg-check:not([hidden]) { display: flex; flex-direction: column; gap: 12px; }
+.pg-check .mt-field { color: var(--ink); }
+.pg-problems { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.pg-problems li { padding: 12px 14px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow-wrap: anywhere; }
+.pg-problems .pg-line { display: block; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+.pg-problems .pg-fix { display: block; margin-top: 4px; }
+.pg-ok { font-weight: 600; color: var(--accent-text); }
+@media (min-width: 720px) { .pg-row { grid-template-columns: minmax(0, 1fr) 180px minmax(0, 2fr) auto; align-items: start; } .pg-row .pg-value, .pg-row .pg-remove-cell { grid-column: auto; } .pg-row .pg-remove-cell { align-self: end; } }
+</style>
+<script>
+/* Properties generator and checker. Runs locally: no network requests. */
+(function () {
+  var NUMERIC = /^[-+]?(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?$/;
+  var TOKEN = /^(\{\{[^{}]*\}\}|<%[\s\S]*%>)$/;
+  var TAG_BAD = /[^\p{L}\p{N}_\/-]/gu;
+  var DEFAULTS = { tags: 'tags', aliases: 'list', cssclasses: 'list' };
+  var TOKENS = {
+    core: { date: '{{date:YYYY-MM-DD}}', datetime: '{{date:YYYY-MM-DD[T]HH:mm:ss}}' },
+    templater: { date: '<% tp.date.now("YYYY-MM-DD") %>', datetime: '<% tp.date.now("YYYY-MM-DD[T]HH:mm:ss") %>' }
+  };
+
+  function quote(s) { return '"' + s.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"'; }
+  function stripLinkQuotes(s) {
+    var m = /^"(\[\[.*\]\])"$/.exec(s);
+    return m ? m[1] : s;
+  }
+  /* Does YAML need quotes to read this text value as the text you typed? */
+  function needsQuote(s) {
+    if (s === '') return false;
+    if (/^\[\[/.test(s)) return true;
+    if (/^[#\[\]{}*&!%@`'"|>?,]/.test(s)) return true;
+    if (/^[-:]( |$)/.test(s)) return true;
+    if (/:(\s|$)/.test(s) || /\s#/.test(s)) return true;
+    if (/^\s|\s$/.test(s)) return true;
+    if (/^(yes|no|true|false|null|on|off|y|n|~)$/i.test(s)) return true;
+    if (NUMERIC.test(s) || /^0x[0-9a-f]+$/i.test(s)) return true;
+    if (/^\d{4}-\d{2}-\d{2}/.test(s)) return true;
+    return false;
+  }
+  function textScalar(value, mode) {
+    var s = stripLinkQuotes(String(value).replace(/[\r\n]+/g, ' ').trim());
+    if (mode !== 'none' && TOKEN.test(s)) return s;
+    return needsQuote(s) ? quote(s) : s;
+  }
+  function keyScalar(name) {
+    var odd = /^[#\[\]{}*&!%@`'"|>?,]/.test(name) || /^[-:]( |$)/.test(name) || /:(\s|$)/.test(name) || /\s#/.test(name) || /^\s|\s$/.test(name);
+    return odd ? quote(name) : name;
+  }
+  /* Make a tag valid, or return '' if that is not possible. */
+  function cleanTag(value) {
+    var t = String(value).trim().replace(/^#+/, '').replace(/\s+/g, '-').replace(TAG_BAD, '').replace(/^\/+|\/+$/g, '');
+    return /[^\d\/_-]/.test(t) || /\p{L}/u.test(t) ? t : '';
+  }
+  function lines(value, splitCommas) {
+    return String(value || '').split(splitCommas ? /[\r\n,]+/ : /[\r\n]+/).map(function (s) { return s.trim(); }).filter(Boolean);
+  }
+  function dateTimeValue(v) {
+    var m = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})(?::(\d{2}))?/.exec(v || '');
+    return m ? m[1] + 'T' + m[2] + ':' + (m[3] || '00') : '';
+  }
+  function dateValue(v) { return /^\d{4}-\d{2}-\d{2}$/.test(v || '') ? v : ''; }
+
+  /* rows: [{name, type, value}]. type: text|list|number|checkbox|date|datetime|tags. mode: none|core|templater. */
+  function build(rows, mode) {
+    mode = mode || 'none';
+    var out = [];
+    rows.forEach(function (row) {
+      var name = String(row.name || '').trim();
+      if (!name) return;
+      var key = keyScalar(name) + ':';
+      var v = row.value;
+      switch (row.type) {
+        case 'list':
+        case 'tags':
+          var items = row.type === 'tags'
+            ? lines(v, true).map(cleanTag).filter(Boolean)
+            : lines(v).map(function (s) { return textScalar(s, mode); });
+          if (!items.length) { out.push(key + ' []'); break; }
+          out.push(key);
+          items.forEach(function (item) { out.push('  - ' + item); });
+          break;
+        case 'number': out.push(NUMERIC.test(String(v || '').trim()) ? key + ' ' + String(v).trim() : key); break;
+        case 'checkbox': out.push(key + ' ' + (v === 'true' || v === true ? 'true' : 'false')); break;
+        case 'date':
+          if (mode !== 'none') { out.push(key + ' ' + TOKENS[mode].date); break; }
+          out.push(dateValue(v) ? key + ' ' + dateValue(v) : key); break;
+        case 'datetime':
+          if (mode !== 'none') { out.push(key + ' ' + TOKENS[mode].datetime); break; }
+          out.push(dateTimeValue(v) ? key + ' ' + dateTimeValue(v) : key); break;
+        default: var t = textScalar(v || '', mode); out.push(t ? key + ' ' + t : key);
+      }
+    });
+    return out.length ? '---\n' + out.join('\n') + '\n---\n' : '';
+  }
+  /* Problems with the rows themselves. Each: {id, ...params}. */
+  function warnings(rows, mode) {
+    var found = [], seen = {};
+    rows.forEach(function (row) {
+      var name = String(row.name || '').trim();
+      if (!name) { if (found.every(function (w) { return w.id !== 'w-empty-name'; })) found.push({ id: 'w-empty-name' }); return; }
+      if (seen[name] && found.every(function (w) { return w.id !== 'w-duplicate' || w.name !== name; })) found.push({ id: 'w-duplicate', name: name });
+      seen[name] = true;
+      if (row.type === 'number' && String(row.value || '').trim() && !NUMERIC.test(String(row.value).trim())) found.push({ id: 'w-number', name: name });
+      if (row.type === 'datetime' && mode === 'none' && row.value && !dateTimeValue(row.value)) found.push({ id: 'w-datetime', name: name });
+      if (row.type === 'tags') lines(row.value, true).forEach(function (raw) {
+        var fixed = cleanTag(raw);
+        if (!fixed) found.push({ id: 'w-tag-empty', from: raw });
+        else if (fixed !== raw) found.push({ id: 'w-tag', from: raw, to: fixed });
+      });
+    });
+    return found;
+  }
+  function routeMetadata(rows) {
+    var out = [];
+    rows.forEach(function (row) {
+      var name = String(row.name || '').trim();
+      if (!name) return;
+      var v = row.value, text;
+      if (row.type === 'list' || row.type === 'tags') {
+        var items = row.type === 'tags' ? lines(v, true).map(cleanTag).filter(Boolean) : lines(v).map(function (s) { return textScalar(s, 'none'); });
+        items = items.map(function (s) { return /[,\[\]]/.test(s) && !/^"/.test(s) ? quote(s) : s; });
+        if (!items.length) return;
+        text = '[' + items.join(', ') + ']';
+      } else if (row.type === 'checkbox') text = v === 'true' || v === true ? 'true' : 'false';
+      else if (row.type === 'number') text = NUMERIC.test(String(v || '').trim()) ? String(v).trim() : '';
+      else if (row.type === 'date') text = dateValue(v);
+      else if (row.type === 'datetime') text = dateTimeValue(v);
+      else text = textScalar(v || '', 'none');
+      if (text) out.push(keyScalar(name) + ': ' + text);
+    });
+    return out.join('\n');
+  }
+
+  /* ---- Checker: fixed line rules, not a YAML parser. ---- */
+  var DEPRECATED = { tag: 'tags', alias: 'aliases', cssclass: 'cssclasses' };
+  var PAIR = /^("[^"]*"|'[^']*'|[^\s:#'"\-\[{][^:]*?|-[^\s:][^:]*?):(?:[ ]+(.*)|)$/;
+  var MAP_ITEM = /^[^\s"'\[{#][^:]*:(\s|$)/;
+  var MARKDOWN = [
+    [/\*\*[^*]+\*\*/, 'bold'], [/__[^_]+__/, 'bold'], [/~~[^~]+~~/, 'strikethrough'], [/==[^=]+==/, 'highlight'],
+    [/`[^`]+`/, 'code'], [/\[[^\[\]]+\]\([^)]*\)/, 'link'], [/(^|[^*\w])\*[^*\s][^*]*\*(?!\*)/, 'italic']
+  ];
+  function unquote(s) {
+    var m = /^"(.*)"$|^'(.*)'$/.exec(s);
+    return m ? (m[1] !== undefined ? m[1] : m[2]) : s;
+  }
+
+  function check(text) {
+    var all = String(text).replace(/\r\n?/g, '\n').split('\n');
+    var problems = [];
+    function add(line, rule, params) { problems.push({ line: line, rule: rule, params: params || {} }); }
+    var start = 0;
+    while (start < all.length && all[start].trim() === '') start++;
+    if (start >= all.length) return { empty: true, json: false, problems: [] };
+    if (all[start].trim().charAt(0) === '{' && !TOKEN.test(all[start].trim())) return { empty: false, json: true, problems: [] };
+    var opened = /^---\s*$/.test(all[start]);
+    var first = opened ? start + 1 : start;
+    var end = all.length;
+    for (var c = first; c < all.length; c++) if (/^(---|\.\.\.)\s*$/.test(all[c])) { end = c; break; }
+    if (!opened) add(start + 1, 'no-open');
+    else if (end === all.length) add(start + 1, 'no-close');
+
+    var seen = {}, current = null, block = false, flow = false, nested = {};
+    function quoted(s) { return quote(unquote(s)); }
+    function tagIssues(raw, n) {
+      var t = unquote(raw.trim());
+      if (!t) return;
+      if (t.charAt(0) === '#') { add(n, 'tag-hash', { tag: t, fixed: t.replace(/^#+/, '') }); return; }
+      if (/\s/.test(t)) { add(n, 'tag-space', { tag: t, fixed: t.replace(/\s+/g, '-') }); return; }
+      if (/^\d+$/.test(t)) { add(n, 'tag-numeric', { tag: t, fixed: 'y' + t }); return; }
+      if (TAG_BAD.test(t)) { TAG_BAD.lastIndex = 0; add(n, 'tag-chars', { tag: t, fixed: t.replace(TAG_BAD, '') }); }
+      TAG_BAD.lastIndex = 0;
+    }
+    function value(val, n, key, isItem) {
+      if (TOKEN.test(val)) return;
+      var q = /^"(.*)"$|^'(.*)'$/.exec(val);
+      if (!q && /^["']/.test(val)) { add(n, 'unclosed-quote'); return; }
+      var body = q ? (q[1] !== undefined ? q[1] : q[2]) : val;
+      var comment = false;
+      if (!q) {
+        var hash = val.search(/(^|\s)#/);
+        if (hash !== -1 && !(isItem === false && hash === 0 && !val)) {
+          if (hash === 0 || key === 'tags' || key === 'tag') {
+            if (key === 'tags' || key === 'tag') { tagIssues(val.slice(hash === 0 ? 0 : hash).trim(), n); return; }
+          } else { comment = true; body = val.slice(0, hash).trim(); }
+        }
+      }
+      if (key === 'tags' || key === 'tag') {
+        var parts;
+        if (!q && /^\[/.test(body)) parts = body.replace(/^\[|\]\s*$/g, '').split(',');
+        else parts = isItem || q ? [body] : body.split(',');
+        parts.forEach(function (p) { tagIssues(p, n); });
+        return;
+      }
+      if (!q) {
+        var noQuoted = body.replace(/"[^"]*"|'[^']*'/g, '');
+        if (/^\[\[/.test(body) || (/^\[/.test(body) && /\[\[/.test(noQuoted))) {
+          var fixed = body.replace(/\[\[[^\[\]]*\]\]/g, function (m) { return '"' + m + '"'; });
+          add(n, 'link-unquoted', { fixed: fixed });
+          return;
+        }
+        if (/^\{/.test(body)) { reportNested(n, key); return; }
+        if (!/^\[/.test(body)) {
+          if (/:(\s|$)/.test(body)) { add(n, 'bad-colon', { fixed: quote(body) }); return; }
+          if (/^[@%`*&!]/.test(body)) { add(n, 'bad-start', { char: body.charAt(0), fixed: quote(body) }); return; }
+        }
+        if (comment) { add(n, 'comment', { fixed: quote(val) }); }
+      }
+      var plain = body.replace(/\[\[.*?\]\]/g, '');
+      for (var i = 0; i < MARKDOWN.length; i++) {
+        var m = MARKDOWN[i][0].exec(plain);
+        if (m) { add(n, 'markdown', { sample: m[0].trim() }); break; }
+      }
+    }
+    function reportNested(n, key) {
+      if (nested[key]) return;
+      nested[key] = true;
+      add(n, 'nested', { key: key });
+    }
+
+    for (var i = first; i < end; i++) {
+      var raw = all[i], n = i + 1;
+      if (/^[ ]*\t/.test(raw)) add(n, 'tabs');
+      var line = raw.replace(/^[ \t]+/, function (m) { return m.replace(/\t/g, '  '); });
+      if (line.trim() === '' || /^\s*#/.test(line)) continue;
+      if (block) { if (/^\s/.test(line)) continue; block = false; }
+      if (flow) { if (line.indexOf(']') !== -1) flow = false; continue; }
+      var indent = line.match(/^ */)[0].length;
+      var body = line.trim();
+      if (/^-(\s|$)/.test(body)) {
+        if (!current) { add(n, 'not-pair'); continue; }
+        var item = body.replace(/^-\s*/, '');
+        if (item === '') continue;
+        if (MAP_ITEM.test(item) && !TOKEN.test(item)) { reportNested(n, current); continue; }
+        value(item, n, current, true);
+        continue;
+      }
+      if (indent > 0) {
+        if (current && MAP_ITEM.test(body)) reportNested(n, current);
+        continue;
+      }
+      var m = PAIR.exec(body);
+      if (!m) { add(n, 'not-pair'); continue; }
+      var key = unquote(m[1]), val = (m[2] || '').trim();
+      if (Object.prototype.hasOwnProperty.call(seen, key)) add(n, 'duplicate', { key: key, first: seen[key] });
+      else seen[key] = n;
+      current = key;
+      if (Object.prototype.hasOwnProperty.call(DEPRECATED, key)) add(n, 'deprecated', { key: key, fixed: DEPRECATED[key] });
+      if (val === '') continue;
+      if (/^[|>]/.test(val)) { block = true; continue; }
+      if (/^\[/.test(val) && !/\]\s*(#.*)?$/.test(val)) { flow = true; }
+      value(val, n, key, false);
+    }
+    problems.sort(function (a, b) { return a.line - b.line; });
+    return { empty: false, json: false, problems: problems };
+  }
+
+  var EXAMPLE_BROKEN = '---\ntags:\n\t- #journal\n  - my idea\n  - 2026\nalias: Weekly\nproject: [[Vox.md launch]]\ntitle: Plan: phase 1\nsummary: Done and **dusted**\nsettings:\n  theme: dark\ndate: 2026-11-21\ndate: 2026-11-22\n---\n';
+
+  if (typeof window !== 'undefined') {
+    window.voxProperties = { build: build, warnings: warnings, routeMetadata: routeMetadata, check: check, needsQuote: needsQuote, cleanTag: cleanTag };
+  }
+
+  var form = document.getElementById('pg-tool');
+  if (!form) return;
+  var rowsEl = document.getElementById('pg-rows');
+  var outHead = document.getElementById('pg-output-head');
+  var outPre = document.getElementById('pg-output');
+  var outCode = document.getElementById('pg-output-code');
+  var warnEl = document.getElementById('pg-warnings');
+  var routeHead = document.getElementById('pg-route-head');
+  var routePre = document.getElementById('pg-route');
+  var routeCode = document.getElementById('pg-route-code');
+  var status = document.getElementById('pg-status');
+  var rows = [{ name: 'tags', type: 'tags', value: 'journal\nidea' }, { name: 'date', type: 'date', value: '' }];
+  var TYPES = ['text', 'list', 'number', 'checkbox', 'date', 'datetime', 'tags'];
+  var uid = 0;
+
+  function message(name, fill) {
+    var el = document.querySelector('#pg-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : '';
+    if (fill) Object.keys(fill).forEach(function (k) { text = text.split('{' + k + '}').join(fill[k]); });
+    return text;
+  }
+  function say(text) { status.textContent = ''; window.setTimeout(function () { status.textContent = text; }, 30); }
+  function mode() { return form.elements.tokens.value; }
+  function el(tag, attrs, text) {
+    var e = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) { e.setAttribute(k, attrs[k]); });
+    if (text) e.textContent = text;
+    return e;
+  }
+  function labelled(text, control, id) {
+    var label = el('label', { 'class': 'mt-field', 'for': id });
+    label.appendChild(document.createTextNode(text + ' '));
+    control.id = id;
+    label.appendChild(control);
+    return label;
+  }
+
+  function renderValue(li, row) {
+    var cell = li.querySelector('.pg-value');
+    cell.textContent = '';
+    var id = 'pg-v' + li.getAttribute('data-uid');
+    var control, tokenOn = mode() !== 'none' && (row.type === 'date' || row.type === 'datetime');
+    var label = message('value-label');
+    if (tokenOn) {
+      var note = el('p', { 'class': 'mt-hint' }, message('token-set'));
+      cell.appendChild(note);
+      return;
+    }
+    switch (row.type) {
+      case 'list': case 'tags':
+        control = el('textarea', { rows: '3', spellcheck: 'false', placeholder: message(row.type === 'tags' ? 'tags-hint' : 'list-hint') });
+        break;
+      case 'number': control = el('input', { type: 'number', step: 'any' }); break;
+      case 'checkbox':
+        control = el('input', { type: 'checkbox' });
+        var wrap = el('label', { 'class': 'mt-option', 'for': id });
+        control.id = id;
+        control.checked = row.value === 'true';
+        control.addEventListener('change', function () { row.value = control.checked ? 'true' : 'false'; update(); });
+        wrap.appendChild(control);
+        wrap.appendChild(el('span', {}, message('checked')));
+        cell.appendChild(wrap);
+        return;
+      case 'date': control = el('input', { type: 'date' }); break;
+      case 'datetime': control = el('input', { type: 'datetime-local', step: '1' }); break;
+      default: control = el('input', { type: 'text', autocomplete: 'off', spellcheck: 'false' });
+    }
+    control.value = row.value || '';
+    control.addEventListener('input', function () { row.value = control.value; update(); });
+    cell.appendChild(labelled(label, control, id));
+  }
+  function renderRow(row) {
+    var li = el('li', { 'class': 'pg-row', 'data-uid': String(++uid) });
+    var nameInput = el('input', { type: 'text', autocomplete: 'off', spellcheck: 'false' });
+    nameInput.value = row.name;
+    nameInput.addEventListener('input', function () { row.name = nameInput.value; update(); });
+    li.appendChild(labelled(message('name-label'), nameInput, 'pg-n' + uid));
+    var select = el('select');
+    TYPES.forEach(function (t) { select.appendChild(el('option', { value: t }, message('type-' + t))); });
+    select.value = row.type;
+    select.addEventListener('change', function () {
+      row.type = select.value;
+      row.value = row.type === 'checkbox' ? 'false' : '';
+      renderValue(li, row);
+      update();
+    });
+    li.appendChild(labelled(message('type-label'), select, 'pg-t' + uid));
+    li.appendChild(el('div', { 'class': 'pg-value' }));
+    var removeCell = el('div', { 'class': 'pg-remove-cell' });
+    var remove = el('button', { type: 'button', 'class': 'pg-remove' }, message('remove'));
+    remove.setAttribute('aria-label', message('remove-label', { name: row.name || '' }));
+    remove.addEventListener('click', function () {
+      rows.splice(rows.indexOf(row), 1);
+      li.remove();
+      update();
+    });
+    nameInput.addEventListener('input', function () { remove.setAttribute('aria-label', message('remove-label', { name: row.name })); });
+    removeCell.appendChild(remove);
+    li.appendChild(removeCell);
+    rowsEl.appendChild(li);
+    renderValue(li, row);
+    li._row = row;
+    return li;
+  }
+  function addRow(row) {
+    rows.push(row);
+    var li = renderRow(row);
+    update();
+    return li;
+  }
+
+  function update() {
+    var text = build(rows, mode());
+    outCode.textContent = text;
+    var route = routeMetadata(rows);
+    routeCode.textContent = route;
+    var hasOutput = text !== '';
+    outHead.hidden = !hasOutput; outPre.hidden = !hasOutput;
+    routeHead.hidden = route === ''; routePre.hidden = route === '';
+    var notes = warnings(rows, mode()).map(function (w) { return message(w.id, w); });
+    warnEl.textContent = notes.join(' ');
+    warnEl.hidden = !notes.length;
+  }
+
+  rows.forEach(renderRow);
+  Array.prototype.forEach.call(form.querySelectorAll('[data-default]'), function (button) {
+    button.addEventListener('click', function () {
+      var name = button.getAttribute('data-default');
+      var existing = rows.filter(function (r) { return r.name === name; })[0];
+      if (existing) {
+        var found = Array.prototype.filter.call(rowsEl.children, function (li) { return li._row === existing; })[0];
+        if (found) found.querySelector('input').focus();
+        say(message('exists', { name: name }));
+        return;
+      }
+      var li = addRow({ name: name, type: DEFAULTS[name], value: '' });
+      li.querySelector('textarea').focus();
+      say(message('added', { name: name }));
+    });
+  });
+  document.getElementById('pg-add').addEventListener('click', function () {
+    var li = addRow({ name: '', type: 'text', value: '' });
+    li.querySelector('input').focus();
+  });
+  form.addEventListener('change', function (event) {
+    if (event.target.name !== 'tokens') return;
+    Array.prototype.forEach.call(rowsEl.children, function (li) { renderValue(li, li._row); });
+    update();
+  });
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+
+  function copy(node, okMessage) {
+    var text = node.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(node);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? okMessage : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message(okMessage)); }, fallback);
+    } else fallback();
+  }
+  document.getElementById('pg-copy').addEventListener('click', function () { copy(outCode, 'copied'); });
+  document.getElementById('pg-route-copy').addEventListener('click', function () { copy(routeCode, 'route-copied'); });
+  document.getElementById('pg-download').addEventListener('click', function () {
+    var blob = new Blob([outCode.textContent], { type: 'text/markdown;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = 'properties.md';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    say(message('downloaded'));
+  });
+
+  /* Checker */
+  var checkBox = document.getElementById('pg-check');
+  var checkInput = document.getElementById('pg-check-input');
+  var checkResult = document.getElementById('pg-check-result');
+  function runCheck() {
+    var result = check(checkInput.value);
+    checkResult.textContent = '';
+    if (result.empty) { checkResult.appendChild(el('p', {}, message('c-empty'))); return; }
+    if (result.json) { checkResult.appendChild(el('p', {}, message('c-json'))); return; }
+    if (!result.problems.length) { checkResult.appendChild(el('p', { 'class': 'pg-ok' }, message('c-none'))); return; }
+    checkResult.appendChild(el('p', { 'class': 'pg-ok' }, message('c-count', { n: result.problems.length })));
+    var list = el('ol', { 'class': 'pg-problems' });
+    result.problems.forEach(function (p) {
+      var li = el('li');
+      li.appendChild(el('span', { 'class': 'pg-line' }, message('c-line', { line: p.line })));
+      li.appendChild(document.createTextNode(message('m-' + p.rule, p.params)));
+      li.appendChild(el('span', { 'class': 'pg-fix' }, message('c-fix') + ' ' + message('f-' + p.rule, p.params)));
+      list.appendChild(li);
+    });
+    checkResult.appendChild(list);
+  }
+  document.getElementById('pg-check-run').addEventListener('click', runCheck);
+  document.getElementById('pg-check-example').addEventListener('click', function () {
+    checkInput.value = EXAMPLE_BROKEN;
+    runCheck();
+  });
+
+  document.getElementById('pg-nojs').hidden = true;
+  form.hidden = false;
+  checkBox.hidden = false;
+  update();
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/tr/">Ana Sayfa</a></li>
+        <li><a href="/tr/docs/">Belgeler</a></li>
+        <li><a href="/tr/blog/">Kılavuzlar</a></li>
+        <li><a href="/tr/compare/">Karşılaştırın</a></li>
+        <li><a href="/tr/privacy.html">Gizlilik</a></li>
+        <li><a href="/tr/terms.html">Koşullar</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Destek</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_tr_292ad7cca3ec">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Yerel notlar için hızlı yakalama · İçerik yükleme yok.</div>
+    </div>
+  <details class="language-switcher"><summary>Dil</summary><ul><li><a href="/blog/obsidian-properties-generator/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-properties-generator/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-properties-generator/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-properties-generator/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-properties-generator/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-properties-generator/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-properties-generator/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-properties-generator/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-properties-generator/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-properties-generator/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-properties-generator/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-properties-generator/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-properties-generator/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-properties-generator/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-properties-generator/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-properties-generator/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-properties-generator/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-properties-generator/" lang="tr" hreflang="tr" aria-current="page">Türkçe</a></li><li><a href="/uk/blog/obsidian-properties-generator/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-properties-generator/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-properties-generator/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-properties-generator/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-properties-generator/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

@@ -156,6 +156,7 @@
         <p>Kết nối Chụp trước Vox.md với kho của bạn, chọn Rolling Note theo chu kỳ hằng ngày và khớp đường dẫn với tên các tệp ghi chú hằng ngày đã có. Dùng dưới để nối vào cuối ghi chú, hoặc hướng dẫn để chèn bên dưới một phần có tên. Cùng đích đó có thể nhận cả nội dung ghi nhanh bằng văn bản và giọng nói.</p>
       </div>
       <p>Hướng dẫn tập trung định tuyến và định dạng. Ghi âm và mô hình bắt đầu ở <a href="/vi/blog/voice-notes-to-obsidian-iphone/">Ghi chú giọng nói iPhone vào Obsidian</a>. Obsidian có công cụ ghi hằng ngày riêng; không cần Vox.md mọi lần nối.</p>
+      <p>Muốn một nhật ký giọng nói thay vì nhật ký ghi nhanh? Xem <a href="/vi/blog/private-voice-journal-iphone/">ghi nhật ký giọng nói riêng tư trên iPhone</a>.</p>
       <nav class="toc" aria-label="Trong hướng dẫn này"><div class="toc-title">Trong hướng dẫn này</div><ol>
         <li><a href="#match-path">Khớp đường ghi chú hằng ngày</a></li>
         <li><a href="#heading">Chọn vị trí và tiêu đề</a></li>
@@ -173,14 +174,14 @@
         <li>Chọn <strong>Rolling Note</strong> và <strong>Hằng ngày</strong> làm chu kỳ.</li>
         <li>Với quy tắc minh họa, đặt mẫu đường dẫn thành <code>Journal/{period}.md</code>. Kiểm tra đích phân giải trước gửi.</li>
       </ol>
-      <p>Với chu kỳ hằng ngày, <code>{period}</code> phân giải thành ngày như <code>2026-10-26</code>. Kho lưu tệp hằng ngày ở gốc sẽ dùng <code>{period}.md</code>. Đây là token đường dẫn Vox.md, không phải biểu thức mẫu Obsidian.</p>
+      <p>Với chu kỳ hằng ngày, <code>{period}</code> phân giải thành ngày như <code>2026-10-26</code>. Kho lưu tệp hằng ngày ở gốc sẽ dùng <code>{period}.md</code>. Đây là token đường dẫn của Vox.md, không phải biểu thức mẫu của Obsidian. Để tạo chính mẫu ghi chú hằng ngày và xem trước tên tệp mà định dạng ngày của bạn tạo ra, hãy dùng <a href="/vi/blog/obsidian-daily-note-template/">Trình tạo mẫu ghi chú hằng ngày Obsidian</a>.</p>
       <p>Vox.md không tự đọc cấu hình phần bổ trợ Daily Notes của bạn. Chọn thư mục hoặc tên tệp khác sẽ tạo đích khác. Đường dẫn được tính tương đối với thư mục đã chọn qua Files; đừng lặp lại tên kho trong đường dẫn, trừ khi đó thực sự là một thư mục con.</p>
       <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_24d3c4f9ef44">Tải Vox.md miễn phí</a></p>
       <p>Thử miễn phí 10 lần gửi ghi nhanh thành công và 15 phút chép lời. Dùng không giới hạn là mua một lần trọn đời; giá thay đổi theo khu vực.</p>
 
       <h2 id="heading">2. Chọn vị trí và tiêu đề</h2>
       <p>Chọn <strong>dưới</strong> để nối cuối ghi chú hằng ngày, hoặc <strong>Top</strong> để chèn đầu. Để giữ ghi nhanh trong một phần, chọn <strong>hướng dẫn</strong>, nhập tên và đặt cấp tiêu đề.</p>
-      <p>Ví dụ bên dưới dùng tiêu đề cấp hai tên <strong>Inbox</strong>. Chọn chèn cuối phần tiêu đề để mục mới theo sau mục cũ. Đặt hành vi thiếu tiêu đề thành <strong>Tạo Head</strong> nếu muốn Vox.md thêm, hoặc <strong>Hiển thị lỗi</strong> nếu muốn tự sửa ghi chú.</p>
+      <p>Ví dụ bên dưới dùng tiêu đề cấp hai tên <strong>Inbox</strong>. Chọn chèn cuối phần tiêu đề để mục mới theo sau mục cũ. Đặt hành vi thiếu tiêu đề thành <strong>Tạo tiêu đề</strong> nếu muốn Vox.md thêm, hoặc <strong>Hiển thị lỗi</strong> nếu muốn tự sửa ghi chú.</p>
       <figure class="guide-figure">
         <img src="/screenshots/optimized/01-route-heading-light-640.webp" alt="Trình sửa đích Vox.md với cài đặt ghi chú liên tục và vị trí tiêu đề" width="1206" height="2622" loading="lazy" decoding="async">
         <figcaption>Trình sửa đích điều khiển tệp mục tiêu và vị trí. Khớp đường kho và cấp tiêu đề trước khi gửi.</figcaption>
@@ -197,6 +198,7 @@
       <p>Với giọng nói, ghi trong nhanh capture dùng cùng cấu hình. Thêm bản chép vào nháp kiểm trước Gửi hoặc chọn Gửi ngay khi quen lộ trình. Bàn phím chèn chữ vào ứng dụng chủ thay vì xuất ghi Markdown thứ hai.</p>
 
       <h2 id="tasks">Định dạng danh sách tác vụ</h2>
+      <p>Để chuyển một danh sách bạn đã có thành tác vụ, hãy dùng <a href="/vi/blog/markdown-checklist-maker/">Trình tạo danh sách kiểm Markdown</a>.</p>
       <p>Cho phần Tasks chọn tiêu đề cấp hai tên <strong>Tasks</strong> và cách danh sách kiểm nhất quán. Gõ không xử lý dùng Giữ nguyên bản cùng tiền tố <code>- [ ] </code> biến mục ngắn thành tác vụ không AI viết lại.</p>
       <pre class="guide-code"><code>## Tasks
 - [ ] Read the trail guide

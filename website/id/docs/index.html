@@ -247,7 +247,7 @@
           <div><strong>Foto dan kamera</strong><p>Pilih foto atau tangkapan layar, atau ambil foto baru. Gambar disiapkan dan disematkan dalam catatan yang dikirim.</p></div>
           <div><strong>File</strong><p>Pilih beberapa item Files. Gambar menjadi sematan, audio tetap muatan audio, dan berkas lain memakai tautan bergaya Obsidian.</p></div>
           <div><strong>Pindaian dokumen</strong><p>Pindai halaman dengan VisionKit. Vox.md mempertahankan gambar halaman, membuat PDF, dan menyertakan OCR di perangkat dengan upaya terbaik.</p></div>
-          <div><strong>OCR Jurnal</strong><p>Ambil hingga 10 halaman jurnal dengan rana manual atau pilih foto jurnal. Vision OCR akurat memakai deteksi bahasa otomatis.</p></div>
+          <div><strong>OCR Jurnal</strong><p>Ambil hingga 10 halaman jurnal dengan rana manual atau pilih foto jurnal. OCR Vision yang akurat memakai deteksi bahasa otomatis. Lihat <a href="/id/blog/handwritten-notes-to-obsidian-iphone/">catatan tulisan tangan ke Obsidian</a>.</p></div>
           <div><strong>Sketsa</strong><p>Gambar di kanvas PencilKit putih dengan pena hitam. Vox.md menyimpan data gambar yang dapat disunting dan pratinjau PNG.</p></div>
           <div><strong>Tindakan Lokasi saat ini</strong><p>Minta satu lokasi dan sisipkan tautan Markdown Google Maps tervalidasi dalam draf. Tindakan Bilah Tangkapan mandiri ini tidak mengubah kedua kontrol lokasi per rute.</p></div>
           <div><strong>Suara dan audio impor</strong><p>Rekam dari penyusun atau impor audio/video, transkripsikan lokal, lalu tambahkan hasil ke draf atau kirim segera.</p></div>
@@ -262,7 +262,7 @@
             <tbody>
               <tr><td>Menambahkan Media</td><td>Membuka pilihan Sketsa, Kamera, Foto, Tangkapan Layar, dan Tautan Web.</td></tr>
               <tr><td>Tambahkan File</td><td>Memilih beberapa berkas dari Files dan menyiapkannya bersama draf.</td></tr>
-              <tr><td>Scan dokumen</td><td>Menyimpan pindaian multihalaman, PDF, gambar halaman, dan OCR dengan upaya terbaik.</td></tr>
+              <tr><td>Pindai Dokumen</td><td>Menyimpan pindaian multihalaman, PDF, gambar halaman, dan OCR dengan upaya terbaik.</td></tr>
               <tr><td>Ekstrak teks</td><td>Menyediakan Simpan Halaman Jurnal dan Pilih Foto Jurnal untuk pencatatan berfokus OCR.</td></tr>
               <tr><td>Sembilan</td><td>Membatalkan operasi editor terakhir.</td></tr>
               <tr><td>Formatnya Markdown</td><td>Menerapkan Tebal, Miring, Tagar, atau Judul 1 hingga Judul 6.</td></tr>
@@ -312,8 +312,8 @@
           <li>Buka Pengaturan → Rute untuk membuat, mengganti nama, mengaktifkan, menonaktifkan, memilih ikon, atau menghapus rute kustom.</li>
           <li>Pemilih ikon yang dapat dicari mengelompokkan simbol dalam Menulis, Suara, Tugas, Pribadi, dan Kerja.</li>
           <li>Rute nonaktif disembunyikan dari pemilih biasa. Rute Default bawaan tidak dapat dihapus.</li>
-          <li>Rute Default bawaan memakai simbol bentuk gelombang, perintah <em>Catat gagasan, tugas, tautan, berkas, hasil pindai, atau rekaman.</em>, <code>type: capture</code> sebagai metadata, pemrosesan Prosa Rapi, pemrosesan teks ketikan nonaktif, dan penyimpanan audio nonaktif.</li>
-          <li>Rute kustom baru dimulai sebagai <em>Rute Kustom</em>, memakai ikon penggeser dan <em>Apa yang ingin Anda catat?</em> sebagai perintah, dan dimulai dengan Instruksi Kustom dipilih tetapi pemrosesan teks ketikan/campuran nonaktif.</li>
+          <li>Rute Default bawaan memakai simbol bentuk gelombang, perintah <em>Catat gagasan, tugas, tautan, berkas, hasil pindai, atau rekaman.</em>, <code>type: capture</code> sebagai metadata, pemrosesan Prosa Rapi dengan <strong>Gunakan Apple Intelligence</strong> nonaktif, dan penyimpanan audio nonaktif.</li>
+          <li>Rute kustom baru dimulai sebagai <em>Rute Kustom</em>, memakai ikon penggeser dan <em>Apa yang ingin Anda catat?</em> sebagai perintah, dan dimulai dengan Instruksi Khusus dipilih tetapi <strong>Gunakan Apple Intelligence</strong> nonaktif.</li>
         </ul>
 
         <h3 id="processing-modes">Mode pemrosesan</h3>
@@ -324,16 +324,17 @@
               <tr><td>Pertahankan Asli</td><td>Mempertahankan teks tangkapan tanpa penulisan ulang AI.</td><td>Teks asli dikirim.</td></tr>
               <tr><td>Prosa Rapi</td><td>Merapikan kapitalisasi dan tanda baca sambil mempertahankan makna dan Markdown.</td><td>Teks asli saat pengayaan di perangkat tidak tersedia.</td></tr>
               <tr><td>Daftar Tugas</td><td>Menghasilkan Markdown <code>- [ ]</code> item tugas.</td><td>Pemformat daftar centang deterministik.</td></tr>
-              <tr><td>Catatan Rapat</td><td>Menghasilkan <code>## Notes</code> sebagai bagian dan, jika ada, <code>## Action Items</code>.</td><td>Struktur catatan rapat deterministik.</td></tr>
+              <tr><td>Catatan Rapat</td><td>Menghasilkan <code>## Notes</code> sebagai bagian dan, jika ada, <code>## Action Items</code>.</td><td>Struktur catatan rapat deterministik untuk transkrip suara; teks tangkapan dikirim tanpa perubahan.</td></tr>
               <tr><td>Instruksi Khusus</td><td>Mengikuti instruksi Anda dengan Apple Intelligence di perangkat jika tersedia.</td><td>Teks asli ketika instruksi tidak dapat dijalankan secara lokal.</td></tr>
             </tbody>
           </table>
         </div>
-        <p>Transkrip suara memakai mode rute pilihan. <strong>Menggunakan capture text</strong> adalah pengaktifan terpisah, nonaktif secara default, yang mengizinkan pemrosesan Markdown ketikan, OCR, dan tangkapan campuran lain berisi teks. Membiarkannya nonaktif mencegah penulisan ulang Markdown buatan Anda yang tidak diharapkan. Permintaan yang sudah diproses disimpan persis sebelum pengiriman, sehingga percobaan ulang tidak menjalankan ulang pemrosesan dengan pengaturan yang berubah.</p>
+        <p>Untuk menambahkan judul agenda, peserta, dan keputusan di sekitar keluaran Catatan Rapat, <a href="/id/blog/obsidian-meeting-notes-template/">buat templat catatan rapat Obsidian</a>. Untuk mengubah daftar yang ada menjadi <code>- [ ]</code> tugas, gunakan <a href="/id/blog/markdown-checklist-maker/">Pembuat daftar periksa Markdown</a>.</p>
+        <p><strong>Gunakan Apple Intelligence</strong>, yang nonaktif secara default, menyalakan mode pemrosesan rute. <strong>Terapkan Ke</strong> lalu menentukan apa yang diproses: <strong>Suara &amp; Teks</strong> (default), <strong>Hanya Suara</strong> atau <strong>Hanya Teks</strong>. Teks berarti Markdown ketikan, teks yang diekstrak dari foto atau hasil pindai, dan tangkapan lain yang berisi teks; pilih <strong>Hanya Suara</strong> agar Markdown buatan Anda tidak ditulis ulang. Saat sakelar nonaktif, transkrip suara tetap mendapat struktur deterministik Daftar Tugas dan Catatan Rapat, dan teks tangkapan dikirim tanpa perubahan. Permintaan yang sudah diproses disimpan persis sebelum pengiriman, sehingga percobaan ulang tidak menjalankan ulang pemrosesan dengan pengaturan yang berubah.</p>
 
         <h3 id="preset-metadata">Metadata</h3>
         <ul>
-          <li>Masukkan metadata statis sebagai satu <code>key: value</code> pasangan per baris, seperti <code>tags: [journal, idea]</code>.</li>
+          <li>Masukkan metadata statis sebagai satu <code>key: value</code> pasangan per baris, seperti <code>tags: [journal, idea]</code>. Untuk membuat frontmatter yang valid bagi Note Frontmatter, gunakan <a href="/id/blog/obsidian-properties-generator/">generator properti</a>.</li>
           <li><strong>Frontmatter Catatan</strong> menulis metadata pada cakupan dokumen.</li>
           <li><strong>Bidang Entri Sebaris</strong> menulis <code>key:: value</code> di samping tiap entri dalam catatan bergulir.</li>
           <li>Jika tersedia, pengayaan di perangkat dapat menambah judul, tag, kategori, dan teks rapi di samping metadata rute statis.</li>
@@ -381,7 +382,7 @@
         <h3 id="placement-templates">Penempatan, judul, dan templat</h3>
         <ul>
           <li><strong>bawah</strong> menambahkan di akhir; <strong>Top</strong> menambahkan di awal; <strong>Kepala</strong> menyisipkan di bawah judul pilihan dari tingkat 1 hingga 6.</li>
-          <li>Jika judul tidak ada, pilih <strong>Tampilkan kesalahan</strong> atau <strong>Membuat head</strong>.</li>
+          <li>Jika judul tidak ada, pilih <strong>Tampilkan kesalahan</strong> atau <strong>Buat judul</strong>.</li>
           <li>Gunakan berkas templat Markdown langsung dari vault, Templat Entri pakai ulang, atau teks awalan dan akhiran kustom.</li>
           <li>Pemformatan entri mendukung <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>, dan <code>{location}</code>.</li>
           <li>Subfolder lampiran default adalah <code>attachments</code>.</li>
@@ -424,6 +425,8 @@
             </tbody>
           </table>
         </div>
+
+        <p>Tidak yakin model mana yang harus diunduh? <a href="/id/compare/whisper-vs-parakeet/">Bandingkan Whisper dan Parakeet</a> dan uji keduanya dengan audio Anda sendiri.</p>
 
         <h3 id="automatic-model">Cara kerja Otomatis</h3>
         <ul>
@@ -599,8 +602,10 @@
           <li>Tekan Command-Return untuk Kirim Tangkapan. Rute dengan Gunakan Lokasi Saat Ini aktif meminta satu lokasi asal Mac saat Kirim atau perekaman berhenti, baik keluaran metadata aktif maupun tidak.</li>
           <li>Spanduk penyiapan tujuan dan pemeriksa rute memperlihatkan catatan hasil resolusi serta penempatan rute pilihan.</li>
         </ul>
+        <p>Untuk penyiapan langkah demi langkah, lihat <a href="/id/blog/transcribe-audio-file-mac/">transkripsikan file audio di Mac, secara lokal, ke Markdown</a>, atau <a href="/id/blog/record-audio-on-mac/">cara merekam audio di Mac</a>.</p>
 
         <h3 id="mac-meeting">Pencatatan rapat dengan trek terpisah</h3>
+        <p>Untuk penyiapan langkah demi langkah, lihat <a href="/id/blog/transcribe-meetings-mac-obsidian/">transkripsikan rapat Mac secara lokal ke Obsidian</a>.</p>
         <p>Ubah pemilih mode masukan dari <strong>Mikrofon</strong> ke <strong>Rapat</strong> untuk merekam audio yang diputar aplikasi di Mac dan mikrofon Anda sebagai dua trek terpisah bersih. Vox.md memakai ScreenCaptureKit dalam mode satu aplikasi, jadi Anda memilih tepat satu aplikasi dan Vox.md sendiri tidak pernah direkam.</p>
         <ul>
           <li>Saat merekam, bar status menampilkan meter level sistem dan mikrofon langsung, status per sumber, serta peringatan tangkapan.</li>
@@ -610,6 +615,7 @@
         </ul>
 
         <h3 id="mac-keybinds">Pintasan global</h3>
+        <p>Untuk penyiapan langkah demi langkah, lihat <a href="/id/blog/dictation-on-mac/">mendikte di Mac, secara privat dengan opsi lokal</a>.</p>
         <p>Settings → Global Keybinds dapat menetapkan pintasan untuk <strong>Menulis dengan Clipboard</strong>, <strong>Rute yang Dipilih</strong>, atau rute aktif apa pun. Pintasan nonaktif secara default, memerlukan tombol nonpengubah ditambah Control, Option, atau Command, boleh menyertakan Shift, dan menolak konflik. Tekan pintasan aktif lagi untuk berhenti merekam.</p>
         <div class="docs-callout docs-callout-neutral">
           <p><strong>Menulis dengan Clipboard</strong> tidak membuat catatan, item Pustaka, atau audio tersimpan. Fitur ini untuk dikte cepat ke aplikasi Mac apa pun.</p>
@@ -670,7 +676,7 @@
           <li>Penggunaan gratis mencakup <strong>15 menit transkripsi</strong> dan <strong>10 pengiriman Tangkapan yang berhasil</strong>.</li>
           <li>Transkrip suara yang sudah dihitung dalam waktu transkripsi tidak sekaligus memakai jatah Tangkapan terpisah saat dirutekan ke Markdown.</li>
           <li>Penulisan gagal dan percobaan ulang idempoten tidak memakai pengiriman Tangkapan berhasil.</li>
-          <li>Tanpa Batas adalah pembelian sekali untuk seumur hidup tanpa langganan, perpanjangan, atau iklan. Harga App Store lokal adalah acuan; harga AS adalah $19.99 Individual, $39.99 Family, dan $19.99 Family Upgrade, dengan harga berdasarkan daya beli di etalase lainnya.</li>
+          <li>Tanpa Batas adalah pembelian sekali untuk seumur hidup tanpa langganan, perpanjangan, atau iklan. Harga App Store lokal adalah acuan; harga AS adalah $79.99 Individual, $129.99 Family, dan $49.99 Family Upgrade, dengan harga berdasarkan daya beli di etalase lainnya.</li>
           <li>Pulihkan Pembelian memulihkan pembelian yang memenuhi syarat. Pengguna versi berbayar lama yang memenuhi syarat mendapat penggunaan tanpa batas berdasarkan hak sebelumnya.</li>
           <li>Buku pencatatan App Group tanpa konten mencegah penghitungan ganda saat percobaan ulang selama data aplikasi lokal masih ada. Tidak disimpan di Keychain; menghapus data aplikasi lokal memulai jatah gratis baru.</li>
         </ul>

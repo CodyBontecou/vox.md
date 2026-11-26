@@ -247,7 +247,7 @@
           <div><strong>Ảnh và camera</strong><p>Chọn ảnh, ảnh màn hình hoặc chụp mới. Ảnh chuẩn bị và nhúng trong ghi chú gửi.</p></div>
           <div><strong>Tệp</strong><p>Chọn nhiều mục Files. Ảnh thành nhúng, âm vẫn là dữ liệu âm, tệp khác dùng liên kết Obsidian.</p></div>
           <div><strong>Bản quét tài liệu</strong><p>Quét trang bằng VisionKit. Vox.md giữ ảnh trang, tạo PDF và kèm OCR trên thiết bị theo khả năng.</p></div>
-          <div><strong>OCR nhật ký</strong><p>Chụp thủ công tối đa 10 trang nhật ký hoặc chọn ảnh nhật ký. Chế độ nhận dạng chính xác của Vision OCR tự phát hiện ngôn ngữ.</p></div>
+          <div><strong>OCR nhật ký</strong><p>Chụp tối đa 10 trang nhật ký bằng nút chụp thủ công hoặc chọn ảnh nhật ký. Vision OCR độ chính xác cao dùng tính năng tự động nhận diện ngôn ngữ. Xem <a href="/vi/blog/handwritten-notes-to-obsidian-iphone/">ghi chú viết tay vào Obsidian</a>.</p></div>
           <div><strong>Phác thảo</strong><p>Vẽ trên nền PencilKit trắng với bút đen. Vox.md lưu dữ liệu vẽ sửa được và xem trước PNG.</p></div>
           <div><strong>Tác vụ Vị trí hiện tại</strong><p>Yêu cầu một vị trí rồi chèn liên kết Google Maps dạng Markdown đã được kiểm tra tính hợp lệ vào bản nháp. Tác vụ độc lập này trên Thanh ghi nhanh không thay đổi bất kỳ điều khiển vị trí nào trong hai điều khiển của từng lộ trình.</p></div>
           <div><strong>Giọng nói và âm thanh nhập</strong><p>Ghi từ trình soạn hoặc nhập âm thanh hay video, chép cục bộ, thêm kết quả vào nháp hoặc gửi ngay.</p></div>
@@ -262,8 +262,8 @@
             <tbody>
               <tr><td>Thêm Media</td><td>Mở chọn Sketch, Camera, Ảnh, Ảnh màn hình và Liên kết web.</td></tr>
               <tr><td>Thêm file</td><td>Chọn nhiều tệp từ Files, chuẩn bị cùng bản nháp.</td></tr>
-              <tr><td>Scan tài liệu</td><td>Ghi quét nhiều trang, PDF, ảnh trang và OCR theo khả năng.</td></tr>
-              <tr><td>Text Extract Bài viết</td><td>Có Ghi trang nhật ký và Chọn ảnh nhật ký cho ghi tập trung OCR.</td></tr>
+              <tr><td>Quét tài liệu</td><td>Ghi quét nhiều trang, PDF, ảnh trang và OCR theo khả năng.</td></tr>
+              <tr><td>Trích xuất văn bản</td><td>Có Ghi trang nhật ký và Chọn ảnh nhật ký cho ghi tập trung OCR.</td></tr>
               <tr><td>9 Đời</td><td>Hoàn tác thao tác sửa cuối.</td></tr>
               <tr><td>Định dạng Markdown</td><td>Áp dụng Đậm, Nghiêng, Hashtag hoặc Tiêu đề 1 đến 6.</td></tr>
               <tr><td>Markdown Link</td><td>Chèn <code>[link text](url)</code> và chọn phần sửa được.</td></tr>
@@ -312,8 +312,8 @@
           <li>Mở Cài đặt → Lộ trình để tạo, đổi tên, bật, tắt, chọn biểu tượng hay xóa lộ trình riêng.</li>
           <li>Bộ chọn biểu tượng tìm được nhóm ký hiệu theo Viết, Giọng nói, Tác vụ, Cá nhân và Công việc.</li>
           <li>Lộ trình tắt ẩn khỏi bộ chọn thường. Lộ trình Default tích hợp không xóa được.</li>
-          <li>Lộ trình Default tích hợp dùng biểu tượng sóng, lời nhắc <em>Ghi lại ý tưởng, tác vụ, liên kết, tệp, bản quét hoặc bản ghi âm.</em>, <code>type: capture</code> làm siêu dữ liệu, xử lý Văn bản gọn, tắt xử lý gõ và tắt lưu âm thanh.</li>
-          <li>Lộ trình tùy chỉnh mới bắt đầu là <em>Lộ trình tùy chỉnh</em>, dùng biểu tượng thanh trượt và <em>Bạn muốn ghi gì?</em> làm lời nhắc, bắt đầu chọn Hướng dẫn tùy chỉnh nhưng tắt xử lý gõ và hỗn hợp.</li>
+          <li>Lộ trình Default tích hợp dùng biểu tượng sóng, lời nhắc <em>Ghi lại ý tưởng, tác vụ, liên kết, tệp, bản quét hoặc bản ghi âm.</em>, <code>type: capture</code> làm siêu dữ liệu, xử lý Văn bản gọn với <strong>Dùng Apple Intelligence</strong> tắt, và tắt lưu âm thanh.</li>
+          <li>Lộ trình tùy chỉnh mới bắt đầu là <em>Lộ trình tùy chỉnh</em>, dùng biểu tượng thanh trượt và <em>Bạn muốn ghi gì?</em> làm lời nhắc, bắt đầu với Hướng dẫn tùy chỉnh được chọn nhưng <strong>Dùng Apple Intelligence</strong> tắt.</li>
         </ul>
 
         <h3 id="processing-modes">Chế độ xử lý</h3>
@@ -324,16 +324,17 @@
               <tr><td>Giữ nguyên bản</td><td>Giữ văn bản ghi, không AI viết lại.</td><td>Gửi chữ gốc.</td></tr>
               <tr><td>Văn bản gọn</td><td>Sửa hoa thường, dấu câu, giữ nghĩa và Markdown.</td><td>Chữ gốc khi bổ sung trên máy không khả dụng.</td></tr>
               <tr><td>Danh sách việc cần làm</td><td>Tạo Markdown <code>- [ ]</code> mục tác vụ.</td><td>Bộ định dạng danh sách kiểm xác định.</td></tr>
-              <tr><td>Ghi chú cuộc họp</td><td>Tạo <code>## Notes</code> làm phần và, khi có, <code>## Action Items</code>.</td><td>Cấu trúc ghi chú cuộc họp xác định.</td></tr>
+              <tr><td>Ghi chú cuộc họp</td><td>Tạo <code>## Notes</code> làm phần và, khi có, <code>## Action Items</code>.</td><td>Cấu trúc ghi chú cuộc họp xác định cho bản chép giọng nói; văn bản ghi lại được gửi nguyên vẹn.</td></tr>
               <tr><td>Hướng dẫn tùy chỉnh</td><td>Theo chỉ dẫn bằng Apple Intelligence trên máy khi sẵn.</td><td>Văn bản gốc khi chỉ dẫn không chạy cục bộ được.</td></tr>
             </tbody>
           </table>
         </div>
-        <p>Bản chép giọng nói dùng chế độ lộ trình đã chọn. <strong>Ứng dụng Capture Text</strong> là tùy chọn bật riêng, mặc định tắt, cho phép xử lý Markdown gõ, OCR và các nội dung ghi nhanh hỗn hợp khác có chứa văn bản. Giữ tắt để tránh viết lại Markdown đã soạn ngoài ý muốn. Toàn bộ yêu cầu sau xử lý được lưu nguyên vẹn trước khi gửi, nên thử lại không chạy lại quá trình xử lý với những cài đặt đã thay đổi.</p>
+        <p>Để thêm tiêu đề chương trình họp, người tham dự và quyết định quanh đầu ra Ghi chú cuộc họp, <a href="/vi/blog/obsidian-meeting-notes-template/">tạo mẫu ghi chú cuộc họp Obsidian</a>. Để biến một danh sách có sẵn thành <code>- [ ]</code> hãy dùng <a href="/vi/blog/markdown-checklist-maker/">Trình tạo danh sách kiểm Markdown</a>.</p>
+        <p><strong>Dùng Apple Intelligence</strong>, mặc định tắt, bật chế độ xử lý của lộ trình. <strong>Áp dụng cho</strong> sau đó chọn nội dung được xử lý: <strong>Giọng nói &amp; văn bản</strong> (mặc định), <strong>Chỉ giọng nói</strong> hoặc <strong>Chỉ văn bản</strong>. Văn bản nghĩa là Markdown gõ, chữ trích từ ảnh hoặc bản quét và các nội dung ghi nhanh khác có chứa văn bản; chọn <strong>Chỉ giọng nói</strong> để Markdown bạn đã soạn không bị viết lại. Khi tắt công tắc, bản chép giọng nói vẫn có cấu trúc xác định của Danh sách việc cần làm và Ghi chú cuộc họp, còn văn bản ghi lại được gửi nguyên vẹn. Toàn bộ yêu cầu sau xử lý được lưu nguyên vẹn trước khi gửi, nên thử lại không chạy lại quá trình xử lý với những cài đặt đã thay đổi.</p>
 
         <h3 id="preset-metadata">metadata</h3>
         <ul>
-          <li>Nhập siêu dữ liệu tĩnh dưới dạng một <code>key: value</code> mỗi cặp một dòng, như <code>tags: [journal, idea]</code>.</li>
+          <li>Nhập siêu dữ liệu tĩnh dưới dạng một <code>key: value</code> mỗi cặp một dòng, như <code>tags: [journal, idea]</code>. Để tạo frontmatter hợp lệ cho Note Frontmatter, hãy dùng <a href="/vi/blog/obsidian-properties-generator/">trình tạo thuộc tính</a>.</li>
           <li><strong>Frontmatter ghi chú</strong> ghi siêu dữ liệu cấp tài liệu.</li>
           <li><strong>Trường mục nội tuyến</strong> ghi <code>key:: value</code> thành các trường bên cạnh từng mục trong ghi chú liên tục.</li>
           <li>Khi khả dụng, tính năng bổ sung thông tin trên thiết bị có thể thêm tiêu đề, thẻ, danh mục và văn bản đã làm sạch bên cạnh siêu dữ liệu tĩnh của lộ trình.</li>
@@ -381,7 +382,7 @@
         <h3 id="placement-templates">Vị trí chèn, tiêu đề và mẫu</h3>
         <ul>
           <li><strong>dưới</strong> nối cuối; <strong>Top</strong> chèn đầu; <strong>hướng dẫn</strong> chèn dưới tiêu đề chọn cấp 1 đến 6.</li>
-          <li>Nếu thiếu tiêu đề, chọn <strong>Hiển thị lỗi</strong> hoặc <strong>Tạo Head</strong>.</li>
+          <li>Nếu thiếu tiêu đề, chọn <strong>Hiển thị lỗi</strong> hoặc <strong>Tạo tiêu đề</strong>.</li>
           <li>Dùng tệp mẫu Markdown trực tiếp từ kho, mẫu mục dùng lại hoặc tiền tố và hậu tố tùy chỉnh.</li>
           <li>Định dạng mục hỗ trợ <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>, và <code>{location}</code>.</li>
           <li>Thư mục con đính kèm mặc định là <code>attachments</code>.</li>
@@ -424,6 +425,8 @@
             </tbody>
           </table>
         </div>
+
+        <p>Chưa rõ nên tải mô hình nào? <a href="/vi/compare/whisper-vs-parakeet/">So sánh Whisper và Parakeet</a> và thử cả hai trên âm thanh của chính bạn.</p>
 
         <h3 id="automatic-model">Tự động hoạt động thế nào</h3>
         <ul>
@@ -599,8 +602,10 @@
           <li>Nhấn Command-Return để gửi ghi nhanh. Lộ trình bật Sử dụng vị trí hiện tại yêu cầu một vị trí gốc Mac lúc Gửi hoặc dừng ghi, bất kể xuất siêu dữ liệu có bật không.</li>
           <li>Biểu ngữ thiết lập đích và trình kiểm tra lộ trình cho thấy ghi chú và vị trí chèn đã phân giải của lộ trình chọn.</li>
         </ul>
+        <p>Để xem cách thiết lập từng bước, xem <a href="/vi/blog/transcribe-audio-file-mac/">chép lời tệp âm thanh trên Mac, cục bộ, sang Markdown</a>, hoặc <a href="/vi/blog/record-audio-on-mac/">cách ghi âm trên máy Mac</a>.</p>
 
         <h3 id="mac-meeting">Ghi cuộc họp với các luồng âm thanh riêng</h3>
+        <p>Để thiết lập từng bước, xem <a href="/vi/blog/transcribe-meetings-mac-obsidian/">chép lời cuộc họp trên Mac cục bộ vào Obsidian</a>.</p>
         <p>Chuyển bộ chọn chế độ đầu vào từ <strong>Micrô</strong> đến <strong>Cuộc họp</strong> để ghi âm ứng dụng phát trên Mac và micrô riêng thành hai luồng tách sạch. Vox.md dùng ScreenCaptureKit chế độ một ứng dụng, chọn đúng một ứng dụng, không bao giờ ghi Vox.md.</p>
         <ul>
           <li>Khi ghi, thanh trạng thái hiện mức hệ thống và micrô trực tiếp, trạng thái từng nguồn, mọi cảnh báo ghi.</li>
@@ -610,6 +615,7 @@
         </ul>
 
         <h3 id="mac-keybinds">Phím tắt toàn cục</h3>
+        <p>Để xem cách thiết lập từng bước, xem <a href="/vi/blog/dictation-on-mac/">đọc chính tả trên Mac, riêng tư với một lựa chọn cục bộ</a>.</p>
         <p>Settings → Global Keybinds có thể gán phím tắt cho <strong>Tải về Clipboard</strong>, <strong>Lộ trình đã chọn</strong>, hoặc lộ trình bật bất kỳ. Phím tắt mặc định tắt, cần phím thường cùng Control, Option hay Command, có thể kèm Shift, từ chối xung đột. Nhấn phím đang bật lần nữa dừng ghi.</p>
         <div class="docs-callout docs-callout-neutral">
           <p><strong>Tải về Clipboard</strong> không tạo ghi chú, mục Thư viện hay âm thanh giữ lại. Dành cho đọc chính tả nhanh vào mọi ứng dụng Mac.</p>
@@ -670,7 +676,7 @@
           <li>Dùng miễn phí gồm <strong>15 phút chép lời</strong> và <strong>10 lần gửi ghi nhanh thành công</strong>.</li>
           <li>Bản chép đã tính thời gian chép lời không dùng thêm hạn mức ghi nhanh riêng khi định tuyến sang Markdown.</li>
           <li>Lần ghi tệp thất bại và lần thử lại không tạo kết quả trùng không tiêu tốn hạn mức gửi ghi nhanh thành công.</li>
-          <li>Unlimited là mua một lần trọn đời, không thuê bao, gia hạn hay quảng cáo. Giá App Store địa phương là chính thức; tại Mỹ $19.99 Individual, $39.99 Family và $19.99 Family Upgrade, cửa hàng khác định giá theo sức mua.</li>
+          <li>Unlimited là mua một lần trọn đời, không thuê bao, gia hạn hay quảng cáo. Giá App Store địa phương là chính thức; tại Mỹ $79.99 Individual, $129.99 Family và $49.99 Family Upgrade, cửa hàng khác định giá theo sức mua.</li>
           <li>Khôi phục mua lấy lại giao dịch đủ điều kiện. Người dùng bản trả phí cũ đủ điều kiện giữ quyền dùng không giới hạn.</li>
           <li>Sổ App Group không nội dung ngăn tính lại khi thử trong lúc dữ liệu cục bộ còn. Không lưu Keychain; xóa dữ liệu cục bộ bắt đầu hạn mức mới.</li>
         </ul>

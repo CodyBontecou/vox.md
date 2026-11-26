@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="vi" dir="ltr" data-search-section="Mục" data-search-guide="Hướng dẫn" data-search-empty="Không khớp “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trình tạo mẫu ghi chú cuộc họp Obsidian | Vox.md</title>
+  <meta name="description" content="Tạo mẫu ghi chú cuộc họp Obsidian ngay trên trình duyệt. Chọn thuộc tính và các mục, gồm việc cần làm dạng tác vụ, rồi sao chép cho Core Templates, Templater hoặc Markdown thuần.">
+  <link rel="canonical" href="https://vox.isolated.tech/vi/blog/obsidian-meeting-notes-template/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Tài liệu Vox.md về mô hình ngôn ngữ">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Trình tạo mẫu ghi chú cuộc họp Obsidian">
+  <meta property="og:description" content="Tạo mẫu ghi chú cuộc họp Obsidian ngay trên trình duyệt. Chọn thuộc tính và các mục, gồm việc cần làm dạng tác vụ, rồi sao chép cho Core Templates, Templater hoặc Markdown thuần.">
+  <meta property="og:url" content="https://vox.isolated.tech/vi/blog/obsidian-meeting-notes-template/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-19">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Trình tạo mẫu ghi chú cuộc họp Obsidian">
+  <meta name="twitter:description" content="Tạo mẫu ghi chú cuộc họp Obsidian ngay trên trình duyệt. Chọn thuộc tính và các mục, gồm việc cần làm dạng tác vụ, rồi sao chép cho Core Templates, Templater hoặc Markdown thuần.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Trình tạo mẫu ghi chú cuộc họp Obsidian",
+  "description": "Tạo mẫu ghi chú cuộc họp Obsidian ngay trên trình duyệt. Chọn thuộc tính và các mục, gồm việc cần làm dạng tác vụ, rồi sao chép cho Core Templates, Templater hoặc Markdown thuần.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-19",
+  "dateModified": "2026-11-19",
+  "mainEntityOfPage": "https://vox.isolated.tech/vi/blog/obsidian-meeting-notes-template/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "vi",
+  "name": "Trình tạo mẫu ghi chú cuộc họp Obsidian | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/vi/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Hướng dẫn",
+      "item": "https://vox.isolated.tech/vi/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Trình tạo mẫu ghi chú cuộc họp Obsidian",
+      "item": "https://vox.isolated.tech/vi/blog/obsidian-meeting-notes-template/"
+    }
+  ],
+  "inLanguage": "vi",
+  "name": "Trình tạo mẫu ghi chú cuộc họp Obsidian | Vox.md",
+  "description": "Tạo mẫu ghi chú cuộc họp Obsidian ngay trên trình duyệt. Chọn thuộc tính và các mục, gồm việc cần làm dạng tác vụ, rồi sao chép cho Core Templates, Templater hoặc Markdown thuần."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/obsidian-meeting-notes-template/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Đến hướng dẫn</a>
+<nav aria-label="Điều hướng chính">
+  <div class="nav-inner">
+    <a href="/vi/" class="logo" aria-label="trang chủ Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/vi/#how">Cách hoạt động</a></li>
+      <li><a href="/vi/docs/">Tài liệu</a></li>
+      <li><a href="/vi/blog/">Hướng dẫn</a></li>
+      <li><a href="/vi/compare/">So sánh</a></li>
+      <li><a href="/vi/privacy.html">Quyền riêng tư</a></li>
+      <li><a href="/vi/terms.html">Điều khoản</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_vi_f599543e8b13">Tải Vox.md</a>
+  <details class="language-switcher"><summary>Ngôn ngữ</summary><ul><li><a href="/blog/obsidian-meeting-notes-template/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-meeting-notes-template/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-meeting-notes-template/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-meeting-notes-template/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-meeting-notes-template/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-meeting-notes-template/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-meeting-notes-template/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-meeting-notes-template/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-meeting-notes-template/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-meeting-notes-template/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-meeting-notes-template/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-meeting-notes-template/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-meeting-notes-template/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-meeting-notes-template/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-meeting-notes-template/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-meeting-notes-template/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-meeting-notes-template/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-meeting-notes-template/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-meeting-notes-template/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-meeting-notes-template/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-meeting-notes-template/" lang="vi" hreflang="vi" aria-current="page">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-meeting-notes-template/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-meeting-notes-template/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Công cụ miễn phí</div>
+        <h1 class="hero-title">Trình tạo mẫu ghi chú cuộc họp Obsidian</h1>
+        <p class="hero-subtitle">Chọn thuộc tính và các mục bạn muốn, rồi sao chép hoặc tải về mẫu viết theo cú pháp của hệ thống mẫu bạn dùng.</p>
+      </div>
+      <aside class="meta-card" aria-label="Về hướng dẫn này">
+        <dl>
+          <div><dt>Bởi</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Cập nhật</dt><dd><time datetime="2026-11-19">19 tháng 11 năm 2026</time></dd></div>
+          <div><dt>Yêu cầu</dt><dd>Obsidian (mọi nền tảng). Tùy chọn: Vox.md cho iPhone, iPad hoặc Mac để điền ghi chú từ bản ghi.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Trình tạo mẫu ghi chú cuộc họp Obsidian">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Trả lời ngắn</div>
+        <p>Lưu nội dung này thành <code>Meeting.md</code> trong thư mục mẫu, rồi chèn vào ghi chú mới bằng plugin Templates. Mẫu dùng cú pháp Templates lõi, nên ngày và tiêu đề tự điền khi bạn chèn.</p>
+      </div>
+      <pre class="guide-code" id="default-template"><code>---
+date: {{date:YYYY-MM-DD}}
+type: meeting
+attendees: []
+tags:
+  - meeting
+---
+# {{title}}
+
+## Agenda
+-&#32;
+
+## Notes
+
+
+## Decisions
+-&#32;
+
+## Action Items
+- [ ]&#32;
+</code></pre>
+      <p>Dùng Templater hay muốn các mục khác? Trình tạo bên dưới viết cùng cấu trúc cho plugin Templates lõi, cho Templater, hoặc dạng Markdown thuần cho Vox.md. Mọi thứ chạy ngay trong trang này: lựa chọn của bạn không được gửi đi đâu cả.</p>
+      <nav class="toc" aria-label="Trong hướng dẫn này"><div class="toc-title">Trong hướng dẫn này</div><ol>
+        <li><a href="#generator">Tạo mẫu của bạn</a></li>
+        <li><a href="#install">Thêm mẫu vào Obsidian</a></li>
+        <li><a href="#one-note-per-meeting">Mỗi cuộc họp một ghi chú</a></li>
+        <li><a href="#action-items">Việc cần làm và theo dõi tiếp</a></li>
+        <li><a href="#fill-automatically">Điền ghi chú từ bản ghi</a></li>
+        <li><a href="#faq">Câu hỏi</a></li>
+      </ol></nav>
+
+      <h2 id="generator">1. Tạo mẫu của bạn</h2>
+      <p class="mt-nojs" id="mt-nojs">Trình tạo cần JavaScript. Không có nó, mẫu mặc định ở trên và bên dưới vẫn dùng được như vậy.</p>
+      <form class="mt-tool" id="mt-tool" aria-label="Trình tạo mẫu ghi chú cuộc họp">
+        <fieldset class="mt-group">
+          <legend>Hệ thống mẫu</legend>
+          <label class="mt-option"><input type="radio" name="system" value="core" checked> <span>Plugin Templates lõi của Obsidian</span></label>
+          <label class="mt-option"><input type="radio" name="system" value="templater"> <span>Plugin cộng đồng Templater</span></label>
+          <label class="mt-option"><input type="radio" name="system" value="plain"> <span>Markdown thuần cho Vox.md hoặc ứng dụng bất kỳ</span></label>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>Thuộc tính (frontmatter YAML)</legend>
+          <label class="mt-option"><input type="checkbox" name="prop" value="date" checked> <span>Ngày</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="time"> <span>Giờ</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="type" checked> <span><code>type: meeting</code></span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="attendees" checked> <span>Người tham dự (danh sách)</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="project"> <span>Dự án (liên kết tới ghi chú)</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="tags" checked> <span>Thẻ</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="status"> <span>Trạng thái</span></label>
+          <label class="mt-field" for="mt-tag">Tên thẻ <input type="text" id="mt-tag" name="tag" value="meeting" autocomplete="off" spellcheck="false"></label>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>Các phần</legend>
+          <p class="mt-hint" id="mt-order-hint">Dùng nút Lên và Xuống để đổi thứ tự.</p>
+          <ol class="mt-sections" id="mt-sections" aria-describedby="mt-order-hint">
+            <li data-section="agenda"><label class="mt-option"><input type="checkbox" name="section" value="agenda" checked> <span>Chương trình họp</span></label></li>
+            <li data-section="attendees"><label class="mt-option"><input type="checkbox" name="section" value="attendees"> <span>Người tham dự</span></label></li>
+            <li data-section="notes"><label class="mt-option"><input type="checkbox" name="section" value="notes" checked> <span>Ghi chú</span></label></li>
+            <li data-section="decisions"><label class="mt-option"><input type="checkbox" name="section" value="decisions" checked> <span>Quyết định</span></label></li>
+            <li data-section="actions"><label class="mt-option"><input type="checkbox" name="section" value="actions" checked> <span>Việc cần làm dạng tác vụ</span></label></li>
+            <li data-section="questions"><label class="mt-option"><input type="checkbox" name="section" value="questions"> <span>Câu hỏi và việc theo dõi</span></label></li>
+            <li data-section="daily"><label class="mt-option"><input type="checkbox" name="section" value="daily"> <span>Liên kết tới ghi chú hằng ngày</span></label></li>
+            <li data-section="transcript"><label class="mt-option"><input type="checkbox" name="section" value="transcript"> <span>Bản chép lời (tiêu đề trống cho bản ghi)</span></label></li>
+          </ol>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>Kiểu việc cần làm</legend>
+          <label class="mt-option"><input type="radio" name="actions" value="plain" checked> <span>Tác vụ thường</span></label>
+          <label class="mt-option"><input type="radio" name="actions" value="owner"> <span>Người phụ trách, tác vụ và ngày đến hạn của plugin Tasks (tùy chọn)</span></label>
+        </fieldset>
+      </form>
+      <div class="mt-output-head">
+        <h3 id="mt-output-title">Mẫu của bạn</h3>
+        <div class="mt-actions" id="mt-actions" hidden>
+          <button type="button" class="btn-primary" id="mt-copy">Sao chép</button>
+          <button type="button" class="btn-secondary" id="mt-download">Tải .md</button>
+          <button type="button" class="btn-secondary" id="mt-reset">Đặt lại</button>
+        </div>
+      </div>
+      <p class="mt-status" id="mt-status" role="status"></p>
+      <pre class="guide-code" id="mt-output" aria-labelledby="mt-output-title" aria-live="polite" tabindex="0"><code id="mt-output-code">---
+date: {{date:YYYY-MM-DD}}
+type: meeting
+attendees: []
+tags:
+  - meeting
+---
+# {{title}}
+
+## Agenda
+-&#32;
+
+## Notes
+
+
+## Decisions
+-&#32;
+
+## Action Items
+- [ ]&#32;
+</code></pre>
+      <div class="mt-notes">
+        <p data-system-note="core"><strong>Plugin Core Templates:</strong> lưu tệp vào thư mục mẫu và chèn bằng <code>Templates: Insert template</code>. <code>{{title}}</code> trở thành tên ghi chú, còn ngày dùng định dạng Moment.js trong dấu ngoặc nhọn.</p>
+        <p data-system-note="templater" hidden><strong>Plugin Templater:</strong> lưu tệp vào thư mục mẫu của Templater và chèn bằng <code>Templater: Open insert template modal</code>, hoặc dùng nó làm mẫu thư mục. Plugin Templates lõi không chạy lệnh <code>&lt;% %&gt;</code> của Templater.</p>
+        <p data-system-note="plain" hidden><strong>Markdown thuần:</strong> tiêu đề và trường với token Vox.md trong một cặp ngoặc nhọn. Obsidian giữ nguyên các token này. Vox.md điền chúng khi một Lộ trình dùng tệp này làm mẫu kho; xem <a href="#fill-automatically">điền ghi chú từ bản ghi</a>.</p>
+        <p>Tiêu đề và tên thuộc tính vẫn giữ tiếng Anh để khớp với ví dụ trên trang này. Hãy đổi tên sau khi dán.</p>
+      </div>
+      <dl class="mt-filenames">
+        <div><dt>Tên tệp gợi ý trong Obsidian</dt><dd><code>Meetings/YYYY-MM-DD HHmm Title.md</code></dd></div>
+        <div><dt>Đường dẫn Note mới của Vox.md</dt><dd><code>Meetings/{date}-{hour}{minute}.md</code></dd></div>
+      </dl>
+      <div hidden id="mt-messages">
+        <span data-message="copied">Đã sao chép mẫu vào bộ nhớ tạm.</span>
+        <span data-message="copy-failed">Sao chép thất bại. Hãy chọn mẫu và tự sao chép.</span>
+        <span data-message="downloaded">Đã tải meeting-template.md.</span>
+        <span data-message="reset">Đã đặt lại lựa chọn về mẫu mặc định.</span>
+        <span data-message="moved-up">Đã chuyển {section} lên.</span>
+        <span data-message="moved-down">Đã chuyển {section} xuống.</span>
+        <span data-message="up">Chuyển {section} lên</span>
+        <span data-message="down">Chuyển {section} xuống</span>
+        <span data-message="up-text">Lên</span>
+        <span data-message="down-text">Xuống</span>
+      </div>
+
+      <h2 id="install">2. Thêm mẫu vào Obsidian</h2>
+      <p><strong>Plugin Core Templates.</strong> Bật Templates trong Cài đặt → Plugin lõi, rồi đặt <code>Template folder location</code>, ví dụ <code>Templates</code>. Lưu mẫu vào đó dưới dạng tệp <code>.md</code> . Trong ghi chú mới, chạy <code>Templates: Insert template</code> từ bảng lệnh rồi chọn mẫu đó. Obsidian thay <code>{{title}}</code>, <code>{{date}}</code> và <code>{{time}}</code> khi bạn chèn mẫu. Định dạng sau dấu hai chấm, như <code>{{date:YYYY-MM-DD}}</code>, dùng token Moment.js. Xem <a href="https://obsidian.md/help/plugins/templates" target="_blank" rel="noopener">trợ giúp plugin Templates</a> và <a href="https://momentjs.com/docs/#/displaying/format/" target="_blank" rel="noopener">token định dạng Moment.js</a>.</p>
+      <p><strong>Plugin Templater.</strong> Cài Templater từ Plugin cộng đồng rồi đặt <code>Template folder location</code>. Chèn mẫu bằng <code>Templater: Open insert template modal</code>. Để mọi ghi chú mới trong <code>Meetings/</code> dùng mẫu này, hãy bật <code>Trigger Templater on new file creation</code>, đặt <code>Template matching mode</code> thành mẫu thư mục, và gán thư mục <code>Meetings</code> với tệp này. <a href="https://silentvoid13.github.io/Templater/settings.html" target="_blank" rel="noopener">Tài liệu cài đặt Templater</a> giải thích mẫu thư mục, còn <a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html" target="_blank" rel="noopener">mô-đun ngày</a> mô tả <code>tp.date.now</code>.</p>
+      <p><strong>Thuộc tính.</strong> Frontmatter giữa các dòng <code>---</code> trở thành thuộc tính của ghi chú. Liên kết trong thuộc tính phải đặt trong dấu ngoặc kép, vì vậy trường project được viết là <code>"[[Project name]]"</code>. Xem <a href="https://obsidian.md/help/properties" target="_blank" rel="noopener">Thuộc tính</a> trong Obsidian Help. Để kiểm tra frontmatter bạn đã có, hãy dùng <a href="/vi/blog/obsidian-properties-generator/">trình tạo và kiểm tra thuộc tính</a>.</p>
+
+      <h2 id="one-note-per-meeting">3. Mỗi cuộc họp một ghi chú</h2>
+      <p>Giữ các cuộc họp trong một thư mục, như <code>Meetings/</code>, và đặt ngày cùng giờ bắt đầu vào tên tệp: <code>Meetings/2026-11-19 1430 Design review.md</code>. Tên theo thứ tự này tự sắp theo ngày, và hai cuộc họp cùng ngày không bao giờ dùng chung một tệp.</p>
+      <p>Bật <strong>Liên kết tới ghi chú hằng ngày</strong> trong trình tạo để thêm dòng <code>Daily note:</code> liên kết tới ghi chú của ngày đó. Liên kết dùng <code>YYYY-MM-DD</code>; nếu ghi chú hằng ngày của bạn dùng định dạng ngày khác, hãy đổi cho khớp; <a href="/vi/blog/obsidian-daily-note-template/">trình tạo mẫu ghi chú hằng ngày</a> xem trước tên tệp mà một định dạng tạo ra. Để liệt kê các cuộc họp trong ngày ngay trong ghi chú hằng ngày, hãy liên kết chúng từ đó; <a href="/vi/blog/append-to-obsidian-daily-note-iphone/">nối vào ghi chú hằng ngày Obsidian</a> cho thấy cách Vox.md thêm mục vào đó.</p>
+
+      <h2 id="action-items">4. Việc cần làm và theo dõi tiếp</h2>
+      <p>Viết mỗi việc cần làm thành một tác vụ Obsidian, <code>- [ ] Send the release notes</code>, và đánh dấu thành <code>- [x]</code> khi xong; xem <a href="https://obsidian.md/help/syntax" target="_blank" rel="noopener">Cú pháp định dạng cơ bản</a>. Đặt người phụ trách lên trước để mỗi dòng cho biết ai làm gì.</p>
+      <p>Nếu các việc cần làm của bạn đã là một danh sách thuần, <a href="/vi/blog/markdown-checklist-maker/">Trình tạo danh sách kiểm Markdown</a> sẽ biến chúng thành tác vụ và thêm ngày đến hạn theo định dạng Tasks, Dataview hoặc Reminder.</p>
+      <p>Kiểu tùy chọn thêm ngày đến hạn theo định dạng của plugin cộng đồng <a href="https://publish.obsidian.md/tasks/Getting+Started/Dates" target="_blank" rel="noopener">Tasks</a>: <code>📅</code> theo sau là <code>YYYY-MM-DD</code>. Trình tạo điền ngày họp; hãy đổi thành ngày đến hạn thật. Không có plugin Tasks, emoji và ngày chỉ là văn bản thường và tác vụ vẫn hoạt động.</p>
+      <p>Để gom các việc còn mở từ mọi cuộc họp vào một chỗ, hãy thêm truy vấn Tasks vào một ghi chú:</p>
+      <pre class="guide-code"><code>```tasks
+not done
+path includes Meetings
+```</code></pre>
+      <p>Truy vấn này liệt kê các tác vụ chưa xong từ những ghi chú có đường dẫn chứa <code>Meetings</code>. Dataview có thể tạo danh sách tương tự nếu bạn đã dùng nó.</p>
+
+      <h2 id="fill-automatically">5. Điền ghi chú từ bản ghi</h2>
+      <p>Mẫu cho bạn các tiêu đề. Vox.md có thể tự viết ghi chú: ứng dụng ghi âm cuộc họp, chép lời ngay trên thiết bị và lưu tệp Markdown vào kho qua một Lộ trình.</p>
+      <ol>
+        <li><strong>Ghi âm.</strong> Trên Mac, Vox.md có thể ghi một ứng dụng gọi và micrô của bạn thành các track riêng; làm theo <a href="/vi/blog/transcribe-meetings-mac-obsidian/">chép lời cuộc họp trên Mac cục bộ vào Obsidian</a>. Với cuộc họp trực tiếp trong phòng, hãy ghi âm bằng micrô trên iPhone hoặc iPad; xem <a href="/vi/blog/voice-notes-to-obsidian-iphone/">lưu ghi chú giọng nói iPhone vào Obsidian</a>.</li>
+        <li><strong>Chọn đích.</strong> Trong Lộ trình, chọn kho, chọn <strong>Note mới</strong>, rồi nhập đường dẫn như <code>Meetings/{date}-{hour}{minute}.md</code>. <code>{date}</code> được ghi thành <code>2026-11-19</code> và <code>{hour}{minute}</code> thành <code>1430</code>. Đây là token Vox.md, không phải định dạng Moment.js. Xem <a href="/vi/blog/obsidian-capture-templates/">Mẫu ghi nhanh cho Obsidian</a> để xem thêm công thức đường dẫn.</li>
+        <li><strong>Chọn chế độ.</strong> Đặt chế độ xử lý của Lộ trình thành <strong>Ghi chú cuộc họp</strong>. Chế độ này tạo phần <code>## Notes</code> và, khi bản chép lời có việc cần làm, một danh sách <code>## Action Items</code> để đánh dấu. Chế độ này dùng Apple Intelligence trên phần cứng tương thích với macOS 26 hoặc iOS 26; nếu không, một bộ định dạng tất định sẽ dựng cấu trúc.</li>
+      </ol>
+      <p>Ghi chú cuộc họp không tự điền chương trình họp, người tham dự hay quyết định. Nếu muốn có các tiêu đề đó phía trên ghi chú, hãy chọn <strong>Markdown thuần</strong> trong trình tạo, bỏ chọn Ghi chú và Việc cần làm, rồi lưu kết quả vào kho. Sau đó chọn tệp đó làm mẫu kho của Lộ trình. Vox.md điền các token một cặp ngoặc nhọn trong mẫu và ghi bản chép lời đã xử lý bên dưới. Hãy kiểm tra ghi chú đầu tiên trước khi dựa vào bố cục; <a href="/vi/docs/#presets">tài liệu Lộ trình</a> trình bày đích và mẫu.</p>
+      <p>Nếu cuộc họp diễn ra trên Zoom hoặc Teams và bạn đã tải bản chép lời về dưới dạng tệp .srt hoặc .vtt, hãy chuyển nó sang Markdown có lượt nói của từng người bằng <a href="/vi/blog/srt-vtt-to-text-markdown/">Trình chuyển đổi SRT và VTT</a>, rồi dán nó dưới <code>## Transcript</code> tiêu đề của mẫu này.</p>
+      <p>Hãy báo cho mọi người trong cuộc họp rằng bạn đang ghi âm và chép lời, và xin sự đồng ý trước. Quy định khác nhau tùy nơi và nơi làm việc; xem <a href="/vi/blog/transcribe-meetings-mac-obsidian/#consent">báo cho mọi người biết bạn đang ghi âm</a>.</p>
+
+      <h2 id="faq">6. Câu hỏi</h2>
+      <h3>Nên dùng Core Templates hay Templater?</h3>
+      <p>Core Templates đi kèm Obsidian và lo tiêu đề, ngày và giờ. Templater là plugin cộng đồng thêm khả năng viết script, dịch chuyển ngày và mẫu thư mục, nên một ghi chú mới trong <code>Meetings/</code> có thể tự động nhận mẫu. Nếu chỉ cần các trường trên trang này, Core Templates là đủ.</p>
+      <h3>Vì sao <code>{{date}}</code> không thay đổi về sau?</h3>
+      <p>Obsidian thay biến mẫu một lần, khi bạn chèn mẫu. Sau đó ghi chú chứa văn bản thường, như <code>2026-11-19</code>, và giữ nguyên. Đó là điều bạn cần cho biên bản cuộc họp.</p>
+      <h3>Vox.md có dùng được mẫu Obsidian của tôi không?</h3>
+      <p>Một phần. Lộ trình có thể dùng một tệp Markdown trong kho làm mẫu. Vox.md điền các token một cặp ngoặc nhọn của riêng nó, như <code>{date}</code>, cùng các lệnh ngày của Templater <code>tp.date.now</code> và <code>tp.file.creation_date</code>. Ứng dụng không chạy các lệnh Templater khác, như <code>tp.file.title</code>, và không mở rộng biến của Templates lõi như <code>{{title}}</code>, nên đừng đưa chúng vào mẫu của Lộ trình. Dùng đầu ra Markdown thuần cho Lộ trình Vox.md.</p>
+      <h3>Trình tạo có gửi lựa chọn của tôi đi đâu không?</h3>
+      <p>Không. Mẫu được tạo bởi một script trong trang này. Script lưu lựa chọn gần nhất của bạn trong bộ nhớ cục bộ của trình duyệt, nên lần sau vẫn còn, và Đặt lại sẽ xóa chúng.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Khỏi phải gõ.</h2>
+        <p>Ghi âm cuộc họp và để Vox.md viết ghi chú vào kho của bạn.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_f599543e8b13">Tải Vox.md miễn phí</a></p>
+        <p>15 phút chép lời miễn phí · không cần tài khoản · mở khóa trọn đời một lần. Thiết lập cuộc gọi trên Mac? Làm theo <a href="/vi/blog/transcribe-meetings-mac-obsidian/">hướng dẫn họp trên Mac</a>.</p>
+      </section>
+      <nav class="toc" aria-label="Hướng dẫn liên quan" id="related"><div class="toc-title">Tiếp tục thiết lập</div><ul>
+        <li><a href="/vi/blog/transcribe-meetings-mac-obsidian/">Chép lời cuộc họp trên Mac cục bộ vào Obsidian</a></li>
+        <li><a href="/vi/blog/obsidian-capture-templates/">Công thức đường dẫn và mẫu</a></li>
+        <li><a href="/vi/blog/voice-notes-to-obsidian-iphone/">Lưu giọng nói iPhone vào Obsidian</a></li>
+        <li><a href="/vi/blog/append-to-obsidian-daily-note-iphone/">Nối vào ghi chú hằng ngày Obsidian</a></li>
+        <li><a href="/vi/docs/#presets">Tài liệu Lộ trình</a></li>
+        <li><a href="/vi/docs/#mac">Tài liệu ứng dụng Mac</a></li>
+      </ul></nav>
+<script>
+/* Meeting notes template generator. Runs locally: no network requests. */
+(function () {
+  var form = document.getElementById('mt-tool');
+  if (!form) return;
+  var STORAGE_KEY = 'vox-meeting-template-v1';
+  var list = document.getElementById('mt-sections');
+  var code = document.getElementById('mt-output-code');
+  var status = document.getElementById('mt-status');
+  var tagInput = document.getElementById('mt-tag');
+  var defaultOrder = Array.prototype.map.call(list.children, function (li) { return li.getAttribute('data-section'); });
+  var defaults = snapshot();
+
+  var SYNTAX = {
+    core: { date: '{{date:YYYY-MM-DD}}', time: '{{time:HH:mm}}', title: '# {{title}}' },
+    templater: { date: '<% tp.date.now("YYYY-MM-DD") %>', time: "<% tp.date.now('HH:mm') %>", title: '# <% tp.file.title %>' },
+    plain: { date: '{date}', time: '{hour}:{minute}', title: '# Meeting {date}' }
+  };
+  var HEADINGS = {
+    agenda: ['## Agenda', '- '],
+    attendees: ['## Attendees', '- '],
+    notes: ['## Notes', ''],
+    decisions: ['## Decisions', '- '],
+    questions: ['## Questions and Follow-ups', '- '],
+    transcript: ['## Transcript', '']
+  };
+
+  function message(name, section) {
+    var el = document.querySelector('#mt-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : '';
+    return section === undefined ? text : text.split('{section}').join(section);
+  }
+  function sectionName(li) { return li.querySelector('label span').textContent; }
+  function checked(name) {
+    return Array.prototype.filter.call(form.elements[name], function (i) { return i.checked; }).map(function (i) { return i.value; });
+  }
+  function radio(name) { return checked(name)[0]; }
+  function cleanTag(value) {
+    var tag = value.trim().replace(/^#+/, '').replace(/\s+/g, '-').replace(/[^\w\/-]/g, '');
+    return tag || 'meeting';
+  }
+
+  function build(state) {
+    var s = SYNTAX[state.system];
+    var lines = [];
+    var props = state.props;
+    if (props.length) {
+      lines.push('---');
+      props.forEach(function (p) {
+        if (p === 'date') lines.push('date: ' + s.date);
+        if (p === 'time') lines.push('time: "' + s.time + '"');
+        if (p === 'type') lines.push('type: meeting');
+        if (p === 'attendees') lines.push('attendees: []');
+        if (p === 'project') lines.push('project: "[[Project name]]"');
+        if (p === 'tags') { lines.push('tags:'); lines.push('  - ' + cleanTag(state.tag)); }
+        if (p === 'status') lines.push('status: open');
+      });
+      lines.push('---');
+    }
+    lines.push(s.title);
+    state.order.forEach(function (id) {
+      if (state.sections.indexOf(id) === -1) return;
+      lines.push('');
+      if (id === 'daily') { lines.push('Daily note: [[' + s.date + ']]'); return; }
+      if (id === 'actions') {
+        lines.push('## Action Items');
+        lines.push(state.actions === 'owner' ? '- [ ] Owner — task 📅 ' + s.date : '- [ ] ');
+        return;
+      }
+      lines.push(HEADINGS[id][0]);
+      lines.push(HEADINGS[id][1]);
+    });
+    while (lines.length && lines[lines.length - 1] === '') lines.pop();
+    return lines.join('\n') + '\n';
+  }
+
+  function snapshot() {
+    return {
+      system: radio('system'), props: checked('prop'), tag: tagInput.value,
+      sections: checked('section'), actions: radio('actions'),
+      order: Array.prototype.map.call(list.children, function (li) { return li.getAttribute('data-section'); })
+    };
+  }
+  function apply(state) {
+    Array.prototype.forEach.call(form.elements.system, function (i) { i.checked = i.value === state.system; });
+    Array.prototype.forEach.call(form.elements.actions, function (i) { i.checked = i.value === state.actions; });
+    Array.prototype.forEach.call(form.elements.prop, function (i) { i.checked = state.props.indexOf(i.value) !== -1; });
+    Array.prototype.forEach.call(form.elements.section, function (i) { i.checked = state.sections.indexOf(i.value) !== -1; });
+    tagInput.value = state.tag;
+    state.order.forEach(function (id) {
+      var li = list.querySelector('[data-section="' + id + '"]');
+      if (li) list.appendChild(li);
+    });
+  }
+  function valid(state) {
+    return state && SYNTAX[state.system] && (state.actions === 'plain' || state.actions === 'owner') &&
+      Array.isArray(state.props) && Array.isArray(state.sections) && typeof state.tag === 'string' &&
+      Array.isArray(state.order) && state.order.length === defaultOrder.length &&
+      defaultOrder.every(function (id) { return state.order.indexOf(id) !== -1; });
+  }
+  function save(state) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* storage unavailable */ }
+  }
+
+  function update(store) {
+    var state = snapshot();
+    code.textContent = build(state);
+    Array.prototype.forEach.call(document.querySelectorAll('[data-system-note]'), function (p) {
+      p.hidden = p.getAttribute('data-system-note') !== state.system;
+    });
+    Array.prototype.forEach.call(list.children, function (li, index) {
+      var name = sectionName(li);
+      var up = li.querySelector('.mt-up');
+      var down = li.querySelector('.mt-down');
+      up.setAttribute('aria-label', message('up', name));
+      down.setAttribute('aria-label', message('down', name));
+      up.disabled = index === 0;
+      down.disabled = index === list.children.length - 1;
+    });
+    if (store) save(state);
+  }
+  function say(text) {
+    status.textContent = '';
+    window.setTimeout(function () { status.textContent = text; }, 30);
+  }
+
+  Array.prototype.forEach.call(list.children, function (li) {
+    var controls = document.createElement('span');
+    controls.className = 'mt-move';
+    [['mt-up', 'up-text', -1], ['mt-down', 'down-text', 1]].forEach(function (spec) {
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'mt-move-button ' + spec[0];
+      button.textContent = message(spec[1]);
+      button.addEventListener('click', function () {
+        var sibling = spec[2] < 0 ? li.previousElementSibling : li.nextElementSibling;
+        if (!sibling) return;
+        list.insertBefore(li, spec[2] < 0 ? sibling : sibling.nextElementSibling);
+        update(true);
+        var target = button.disabled ? li.querySelector(spec[2] < 0 ? '.mt-down' : '.mt-up') : button;
+        target.focus();
+        say(message(spec[2] < 0 ? 'moved-up' : 'moved-down', sectionName(li)));
+      });
+      controls.appendChild(button);
+    });
+    li.appendChild(controls);
+  });
+
+  try {
+    var stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+    if (valid(stored)) apply(stored);
+  } catch (e) { /* ignore unreadable saved choices */ }
+
+  form.addEventListener('change', function () { update(true); });
+  form.addEventListener('input', function () { update(true); });
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+
+  document.getElementById('mt-copy').addEventListener('click', function () {
+    var text = code.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(code);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+  document.getElementById('mt-download').addEventListener('click', function () {
+    var blob = new Blob([code.textContent], { type: 'text/markdown;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = 'meeting-template.md';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    say(message('downloaded'));
+  });
+  document.getElementById('mt-reset').addEventListener('click', function () {
+    apply(defaults);
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* storage unavailable */ }
+    update(false);
+    say(message('reset'));
+  });
+
+  document.getElementById('mt-nojs').hidden = true;
+  document.getElementById('mt-actions').hidden = false;
+  form.classList.add('is-ready');
+  update(false);
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/vi/">Trang chủ</a></li>
+        <li><a href="/vi/docs/">Tài liệu</a></li>
+        <li><a href="/vi/blog/">Hướng dẫn</a></li>
+        <li><a href="/vi/compare/">So sánh</a></li>
+        <li><a href="/vi/privacy.html">Quyền riêng tư</a></li>
+        <li><a href="/vi/terms.html">Điều khoản</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Hỗ trợ</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_f599543e8b13">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Ghi nhanh cho ghi chú cục bộ · Không tải nội dung lên.</div>
+    </div>
+  <details class="language-switcher"><summary>Ngôn ngữ</summary><ul><li><a href="/blog/obsidian-meeting-notes-template/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-meeting-notes-template/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-meeting-notes-template/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-meeting-notes-template/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-meeting-notes-template/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-meeting-notes-template/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-meeting-notes-template/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-meeting-notes-template/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-meeting-notes-template/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-meeting-notes-template/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-meeting-notes-template/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-meeting-notes-template/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-meeting-notes-template/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-meeting-notes-template/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-meeting-notes-template/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-meeting-notes-template/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-meeting-notes-template/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-meeting-notes-template/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-meeting-notes-template/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-meeting-notes-template/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-meeting-notes-template/" lang="vi" hreflang="vi" aria-current="page">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-meeting-notes-template/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-meeting-notes-template/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

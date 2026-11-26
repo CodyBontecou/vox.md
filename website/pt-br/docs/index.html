@@ -247,7 +247,7 @@
           <div><strong>Fotos e câmera</strong><p>Escolha fotos/capturas ou tire foto. São preparadas e incorporadas na nota.</p></div>
           <div><strong>Arquivos</strong><p>Escolha vários Arquivos. Imagens incorporam, áudio permanece áudio e outros usam links Obsidian.</p></div>
           <div><strong>Digitalizações de documentos</strong><p>Digitalize com VisionKit. Vox.md mantém imagens, cria PDF e OCR local conforme possível.</p></div>
-          <div><strong>OCR de diário</strong><p>Capture até 10 páginas de diário com disparo manual ou escolha fotos de diário. O Vision OCR preciso usa detecção automática de idioma.</p></div>
+          <div><strong>OCR de diário</strong><p>Capture até 10 páginas de diário com obturador manual ou escolha fotos do diário. O OCR preciso do Vision usa detecção automática de idioma. Veja <a href="/pt-br/blog/handwritten-notes-to-obsidian-iphone/">notas manuscritas no Obsidian</a>.</p></div>
           <div><strong>Desenhos</strong><p>Desenhe preto na tela branca PencilKit. Vox.md guarda editável e prévia PNG.</p></div>
           <div><strong>Ação Localização atual</strong><p>Peça posição e insira link Markdown Google Maps validado. Ação independente não muda controles da rota.</p></div>
           <div><strong>Voz e áudio importado</strong><p>Grave ou importe áudio/vídeo, transcreva local e adicione ao rascunho ou envie.</p></div>
@@ -312,8 +312,8 @@
           <li>Abra Ajustes → Rotas para criar, renomear, ativar/desativar, escolher ícone ou excluir personalizada.</li>
           <li>Seletor pesquisável agrupa Escrita, Voz, Tarefas, Pessoal e Trabalho.</li>
           <li>Rotas desativadas ficam ocultas dos seletores. A rota padrão integrada não pode ser excluída.</li>
-          <li>Rota padrão usa onda e convite <em>Capture uma ideia, tarefa, link, arquivo, digitalização ou gravação.</em>, <code>type: capture</code> como metadados, Texto aprimorado, texto digitado e retenção de áudio desativados.</li>
-          <li>Rota nova começa como <em>Rota personalizada</em>, usa ícone de controles e <em>O que quer capturar?</em> como convite, com Instrução personalizada escolhida e processamento de texto e conteúdo misto desativado.</li>
+          <li>Rota padrão usa onda e convite <em>Capture uma ideia, tarefa, link, arquivo, digitalização ou gravação.</em>, <code>type: capture</code> como metadados, processamento Texto aprimorado com <strong>Usar Apple Intelligence</strong> desativado e retenção de áudio desativada.</li>
+          <li>Rota nova começa como <em>Rota personalizada</em>, usa ícone de controles e <em>O que quer capturar?</em> como convite, e começa com Instrução personalizada selecionada, mas com <strong>Usar Apple Intelligence</strong> desativado.</li>
         </ul>
 
         <h3 id="processing-modes">Modos de processamento</h3>
@@ -324,16 +324,17 @@
               <tr><td>Manter original</td><td>Preserva o texto sem reescrita IA.</td><td>O texto original é enviado.</td></tr>
               <tr><td>Texto aprimorado</td><td>Limpa caixa/pontuação mantendo sentido e Markdown.</td><td>Original se enriquecimento local indisponível.</td></tr>
               <tr><td>Lista de tarefas</td><td>Produz Markdown <code>- [ ]</code> como tarefas.</td><td>Formatador determinístico de checklist.</td></tr>
-              <tr><td>Notas da reunião</td><td>Produz uma seção <code>## Notes</code> e, quando presente, <code>## Action Items</code>.</td><td>Estrutura determinística para reunião.</td></tr>
+              <tr><td>Notas da reunião</td><td>Produz uma seção <code>## Notes</code> e, quando presente, <code>## Action Items</code>.</td><td>Estrutura determinística de notas de reunião para transcrições de voz; o texto capturado é entregue sem alterações.</td></tr>
               <tr><td>Instrução personalizada</td><td>Segue instrução com Apple Intelligence local se disponível.</td><td>Texto original se a instrução não roda localmente.</td></tr>
             </tbody>
           </table>
         </div>
-        <p>Voz usa o modo da rota escolhida. <strong>Aplicar para capturar texto</strong> é uma opção separada, desativada por padrão, para processar Markdown digitado, OCR e mistos. Desativá-la evita reescrita inesperada do Markdown. O pedido exato é salvo antes de enviar; repetir não reprocessa com ajustes novos.</p>
+        <p>Para adicionar títulos de pauta, participantes e decisões em torno da saída de Notas da reunião, <a href="/pt-br/blog/obsidian-meeting-notes-template/">gere um modelo de notas de reunião para o Obsidian</a>. Para transformar uma lista existente em <code>- [ ]</code> tarefas, use o <a href="/pt-br/blog/markdown-checklist-maker/">Gerador de checklist em Markdown</a>.</p>
+        <p><strong>Usar Apple Intelligence</strong>, desativado por padrão, liga o modo de processamento da rota. <strong>Aplicar a</strong> escolhe então o que é processado: <strong>Voz e Texto</strong> (o padrão), <strong>Somente Voz</strong> ou <strong>Somente Texto</strong>. Texto significa Markdown digitado, texto extraído de fotos ou digitalizações e outras capturas com texto; escolha <strong>Somente Voz</strong> para evitar que o Markdown que você escreveu seja reescrito. Com a chave desativada, as transcrições de voz ainda recebem a estrutura determinística de Lista de tarefas e Notas da reunião, e o texto capturado é entregue sem alterações. O pedido processado exato é salvo antes do envio, então novas tentativas não reprocessam com ajustes alterados.</p>
 
         <h3 id="preset-metadata">Metadados</h3>
         <ul>
-          <li>Insira metadados estáticos como par <code>key: value</code> por linha, como <code>tags: [journal, idea]</code>.</li>
+          <li>Insira metadados estáticos como par <code>key: value</code> por linha, como <code>tags: [journal, idea]</code>. Para criar um frontmatter válido para Note Frontmatter, use o <a href="/pt-br/blog/obsidian-properties-generator/">gerador de propriedades</a>.</li>
           <li><strong>Metadados iniciais da nota</strong> grava metadados no documento.</li>
           <li><strong>Campos de entrada inline</strong> grava <code>key:: value</code> junto de cada entrada periódica.</li>
           <li>Quando disponível, o enriquecimento no dispositivo pode adicionar título, tags, categoria e texto limpo ao lado dos metadados estáticos da rota.</li>
@@ -424,6 +425,8 @@
             </tbody>
           </table>
         </div>
+
+        <p>Não sabe qual modelo baixar? <a href="/pt-br/compare/whisper-vs-parakeet/">Compare Whisper e Parakeet</a> e teste os dois com o seu próprio áudio.</p>
 
         <h3 id="automatic-model">Como automaticamente funciona</h3>
         <ul>
@@ -599,8 +602,10 @@
           <li>Pressione Command-Return para enviar a captura. Uma rota com Usar localização atual ativado solicita uma posição de origem no Mac ao enviar ou ao parar a gravação, independentemente de a saída de metadados estar ativada.</li>
           <li>Um banner de configuração do destino e o inspetor da rota mostram a nota resolvida e o posicionamento da rota selecionada.</li>
         </ul>
+        <p>Para uma configuração passo a passo, veja <a href="/pt-br/blog/transcribe-audio-file-mac/">transcrever um arquivo de áudio no Mac, localmente, para Markdown</a>, ou <a href="/pt-br/blog/record-audio-on-mac/">como gravar áudio no Mac</a>.</p>
 
         <h3 id="mac-meeting">Captura de reuniões com faixas separadas</h3>
+        <p>Para uma configuração passo a passo, veja <a href="/pt-br/blog/transcribe-meetings-mac-obsidian/">Transcreva reuniões do Mac localmente no Obsidian</a>.</p>
         <p>Troque o modo de entrada de <strong>Microfone</strong> para <strong>Reunião</strong> para som de um app Mac e microfone em duas faixas separadas. Vox.md usa ScreenCaptureKit por app: escolha um e Vox.md nunca é capturado.</p>
         <ul>
           <li>Gravando, a barra mostra medidores live de sistema/mic, estado de fonte e avisos.</li>
@@ -610,6 +615,7 @@
         </ul>
 
         <h3 id="mac-keybinds">Atalhos globais</h3>
+        <p>Para uma configuração passo a passo, veja <a href="/pt-br/blog/dictation-on-mac/">ditar no Mac, com privacidade e uma opção local</a>.</p>
         <p>Ajustes → Atalhos globais atribui atalhos a <strong>Transcrição para Clipboard</strong>, <strong>Rota Selecionada</strong>, ou rota ativa. Atalhos desativados por padrão, exigem tecla não modificadora e Control, Option ou Command; podem incluir Shift e rejeitam conflitos. Pressione novamente para parar.</p>
         <div class="docs-callout docs-callout-neutral">
           <p><strong>Transcrição para Clipboard</strong> não cria nota, item na Biblioteca ou áudio retido. É ditado rápido em qualquer app Mac.</p>
@@ -670,7 +676,7 @@
           <li>O uso gratuito inclui <strong>15 minutos de transcrição</strong> e <strong>10 envios de Captura concluídos</strong>.</li>
           <li>Voz já cobrada em minutos não consome também Captura ao enviar Markdown.</li>
           <li>Falhas e tentativas idempotentes não consomem envios concluídos.</li>
-          <li>Ilimitado é compra única vitalícia, sem assinatura, renovação ou anúncios. Preço local App Store prevalece; EUA: US$ 19,99 Individual, US$ 39,99 Família e US$ 19,99 Upgrade Família, com poder de compra em outras lojas.</li>
+          <li>Ilimitado é compra única vitalícia, sem assinatura, renovação ou anúncios. Preço local App Store prevalece; EUA: US$ 79,99 Individual, US$ 129,99 Família e US$ 49,99 Upgrade Família, com poder de compra em outras lojas.</li>
           <li>Restaurar compra recupera compra elegível. Usuários de builds pagas antigas qualificadas mantêm uso ilimitado.</li>
           <li>Registro App Group sem conteúdo evita cobrança dupla enquanto dados locais existem. Não fica em Chaves; excluir dados renova cota.</li>
         </ul>

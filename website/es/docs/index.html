@@ -247,7 +247,7 @@
           <div><strong>Fotos y cámara</strong><p>Selecciona fotos o capturas de pantalla, o haz una foto nueva. Las imágenes se preparan y se insertan en la nota entregada.</p></div>
           <div><strong>Archivos</strong><p>Selecciona varios elementos de Archivos. Las imágenes se insertan, el audio se conserva como contenido de audio y los demás archivos usan enlaces al estilo de Obsidian.</p></div>
           <div><strong>Escaneos de documentos</strong><p>Escanea páginas con VisionKit. Vox.md conserva las imágenes de las páginas, crea un PDF e incluye OCR local con el mejor resultado posible.</p></div>
-          <div><strong>OCR de diario</strong><p>Captura hasta 10 páginas de diario con disparo manual o elige fotos de diario. El OCR preciso de Vision usa detección automática de idioma.</p></div>
+          <div><strong>OCR de diario</strong><p>Captura hasta 10 páginas de diario con obturador manual o elige fotos del diario. El OCR preciso de Vision usa detección automática de idioma. Consulta <a href="/es/blog/handwritten-notes-to-obsidian-iphone/">notas escritas a mano en Obsidian</a>.</p></div>
           <div><strong>Bocetos</strong><p>Dibuja en un lienzo blanco de PencilKit con un bolígrafo negro. Vox.md almacena datos de dibujo editables y una vista previa PNG.</p></div>
           <div><strong>Acción Ubicación actual</strong><p>Solicita una ubicación e inserta un enlace Markdown validado de Google Maps en el borrador. Esta acción independiente de la Barra de captura no cambia ninguno de los dos controles de ubicación por ruta.</p></div>
           <div><strong>Voz y audio importado</strong><p>Graba desde el editor o importa audio o vídeo, transcribe localmente y añade el resultado al borrador o envíalo inmediatamente.</p></div>
@@ -262,7 +262,7 @@
             <tbody>
               <tr><td>Añadir medios</td><td>Abre las opciones Boceto, Cámara, Foto, Captura de pantalla y Enlace web.</td></tr>
               <tr><td>Adicionar archivos</td><td>Selecciona varios archivos de Archivos y los prepara junto al borrador.</td></tr>
-              <tr><td>Escanear el documento</td><td>Captura un escaneo de varias páginas, un PDF, imágenes de página y OCR con el mejor resultado posible.</td></tr>
+              <tr><td>Escanear documento</td><td>Captura un escaneo de varias páginas, un PDF, imágenes de página y OCR con el mejor resultado posible.</td></tr>
               <tr><td>Extraer texto</td><td>Ofrece Capturar páginas de diario y Elegir fotos de diario para captura centrada en OCR.</td></tr>
               <tr><td>nueve</td><td>Deshace la última operación del editor.</td></tr>
               <tr><td>Formato Markdown</td><td>Aplica negrita, cursiva, hashtag o encabezados de nivel 1 a 6.</td></tr>
@@ -312,8 +312,8 @@
           <li>Abre Ajustes → Rutas para crear, renombrar, activar, desactivar, elegir un icono o eliminar una ruta personalizada.</li>
           <li>El selector de iconos con búsqueda agrupa los símbolos en Escritura, Voz, Tareas, Personal y Trabajo.</li>
           <li>Las rutas desactivadas se ocultan de los selectores normales. La ruta predeterminada integrada no se puede eliminar.</li>
-          <li>La ruta predeterminada integrada usa el símbolo de forma de onda y el mensaje <em>Captura una idea, tarea, enlace, archivo, escaneo o grabación.</em>, <code>type: capture</code> como metadatos, procesamiento Prosa depurada, procesamiento de texto escrito desactivado y guardado de audio desactivado.</li>
-          <li>Una ruta personalizada nueva comienza como <em>Ruta personalizada</em>, usa el icono de reguladores y <em>¿Qué quieres capturar?</em> como mensaje, y empieza con Instrucción personalizada seleccionado pero con el procesamiento de texto escrito o mixto desactivado.</li>
+          <li>La ruta predeterminada integrada usa el símbolo de forma de onda y el mensaje <em>Captura una idea, tarea, enlace, archivo, escaneo o grabación.</em>, <code>type: capture</code> como metadatos, procesamiento Prosa depurada con <strong>Usar Apple Intelligence</strong> desactivado y guardado de audio desactivado.</li>
+          <li>Una ruta personalizada nueva comienza como <em>Ruta personalizada</em>, usa el icono de reguladores y <em>¿Qué quieres capturar?</em> como mensaje, y empieza con Instrucción personalizada seleccionado pero con <strong>Usar Apple Intelligence</strong> desactivado.</li>
         </ul>
 
         <h3 id="processing-modes">Modos de procesamiento</h3>
@@ -324,16 +324,17 @@
               <tr><td>Conservar original</td><td>Conserva el texto capturado sin reescritura por IA.</td><td>Se entrega el texto original.</td></tr>
               <tr><td>Prosa depurada</td><td>Corrige mayúsculas y puntuación conservando el significado y el Markdown.</td><td>Texto original cuando el enriquecimiento en el dispositivo no está disponible.</td></tr>
               <tr><td>Lista de tareas</td><td>Produce Markdown <code>- [ ]</code> elementos de tarea.</td><td>Un formateador determinista de listas de verificación.</td></tr>
-              <tr><td>Notas de reunión</td><td>Produce una <code>## Notes</code> como sección y, cuando esté presente, <code>## Action Items</code>.</td><td>Estructura determinista de notas de reunión.</td></tr>
+              <tr><td>Notas de reunión</td><td>Produce una <code>## Notes</code> como sección y, cuando esté presente, <code>## Action Items</code>.</td><td>Estructura determinista de notas de reunión para transcripciones de voz; el texto capturado se entrega sin cambios.</td></tr>
               <tr><td>Instrucción personalizada</td><td>Sigue tu instrucción con Apple Intelligence en el dispositivo cuando está disponible.</td><td>Texto original cuando la instrucción no puede ejecutarse localmente.</td></tr>
             </tbody>
           </table>
         </div>
-        <p>Las transcripciones de voz usan el modo de ruta seleccionado. <strong>Aplique para capturar texto</strong> es una activación voluntaria independiente, desactivada de forma predeterminada, que permite procesar Markdown escrito, OCR y otras capturas mixtas con texto. Dejarla desactivada evita reescrituras inesperadas del Markdown creado. La solicitud procesada exacta se guarda antes de la entrega, de modo que los reintentos no vuelven a procesarla con ajustes modificados.</p>
+        <p>Para añadir encabezados de orden del día, asistentes y decisiones alrededor de la salida de Notas de reunión, <a href="/es/blog/obsidian-meeting-notes-template/">genera una plantilla de notas de reunión para Obsidian</a>. Para convertir una lista existente en tareas con formato <code>- [ ]</code> , usa el <a href="/es/blog/markdown-checklist-maker/">Generador de listas de verificación en Markdown</a>.</p>
+        <p><strong>Usar Apple Intelligence</strong>, desactivado de forma predeterminada, activa el modo de procesamiento de la ruta. <strong>Aplicar a</strong> elige después qué se procesa: <strong>Voz y texto</strong> (predeterminado), <strong>Solo voz</strong> o <strong>Solo texto</strong>. Texto significa Markdown escrito, texto extraído de fotos o escaneos y otras capturas con texto; elige <strong>Solo voz</strong> para evitar que se reescriba el Markdown que has creado. Con el interruptor desactivado, las transcripciones de voz siguen recibiendo la estructura determinista de Lista de tareas y Notas de reunión, y el texto capturado se entrega sin cambios. La solicitud procesada exacta se guarda antes de la entrega, de modo que los reintentos no vuelven a procesarla con ajustes modificados.</p>
 
         <h3 id="preset-metadata">Metadatos</h3>
         <ul>
-          <li>Introduce los metadatos estáticos como un <code>key: value</code> por línea, como <code>tags: [journal, idea]</code>.</li>
+          <li>Introduce los metadatos estáticos como un <code>key: value</code> por línea, como <code>tags: [journal, idea]</code>. Para crear un frontmatter válido para Note Frontmatter, usa el <a href="/es/blog/obsidian-properties-generator/">generador de propiedades</a>.</li>
           <li><strong>Metadatos iniciales de la nota</strong> escribe metadatos en el ámbito de documento.</li>
           <li><strong>Campos de entrada en línea</strong> escribe <code>key:: value</code> junto a cada entrada de una nota periódica.</li>
           <li>Cuando está disponible, el enriquecimiento en el dispositivo puede añadir título, etiquetas, categoría y texto depurado junto a los metadatos estáticos de la ruta.</li>
@@ -381,7 +382,7 @@
         <h3 id="placement-templates">Ubicación, encabezados y plantillas</h3>
         <ul>
           <li><strong>Bajo</strong> añade al final; <strong>Top</strong> antepone; <strong>La dirección</strong> inserta bajo un encabezado elegido de nivel 1 a 6.</li>
-          <li>Si falta un encabezado, elige <strong>Mostrar error</strong> o <strong>Creación de la cabeza</strong>.</li>
+          <li>Si falta un encabezado, elige <strong>Mostrar error</strong> o <strong>Crear encabezado</strong>.</li>
           <li>Usa un archivo de plantilla Markdown activo de la bóveda, una plantilla de entrada reutilizable o texto personalizado de prefijo y sufijo.</li>
           <li>El formato de entrada admite <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>, y <code>{location}</code>.</li>
           <li>La subcarpeta de adjuntos predeterminada es <code>attachments</code>.</li>
@@ -424,6 +425,8 @@
             </tbody>
           </table>
         </div>
+
+        <p>¿No sabes qué modelo descargar? <a href="/es/compare/whisper-vs-parakeet/">Compara Whisper y Parakeet</a> y prueba ambos con tu propio audio.</p>
 
         <h3 id="automatic-model">Cómo funciona automático</h3>
         <ul>
@@ -599,8 +602,10 @@
           <li>Pulsa Command-Return para enviar la captura. Una ruta con Usar ubicación actual activado solicita una ubicación originada en el Mac al enviar o al detener la grabación, esté o no activada la salida de metadatos.</li>
           <li>Un aviso de configuración del destino y un inspector de ruta muestran la nota resuelta y la ubicación de la ruta seleccionada.</li>
         </ul>
+        <p>Para una configuración paso a paso, consulta <a href="/es/blog/transcribe-audio-file-mac/">transcribir un archivo de audio en Mac, en local, a Markdown</a>, o <a href="/es/blog/record-audio-on-mac/">cómo grabar audio en un Mac</a>.</p>
 
         <h3 id="mac-meeting">Captura de reuniones con pistas separadas</h3>
+        <p>Para una configuración paso a paso, consulta <a href="/es/blog/transcribe-meetings-mac-obsidian/">Transcribe reuniones del Mac en local a Obsidian</a>.</p>
         <p>Cambia el selector de modo de entrada de <strong>Micrófono</strong> a <strong>Reunión</strong> para grabar lo que reproduce una aplicación en tu Mac y tu propio micrófono como dos pistas de audio claramente separadas. Vox.md usa ScreenCaptureKit en modo de una sola aplicación, así que eliges exactamente una app y nunca se captura el propio Vox.md.</p>
         <ul>
           <li>Durante la grabación, la barra de estado muestra medidores de nivel del sistema y del micrófono en directo, el estado de cada fuente y los avisos de captura.</li>
@@ -610,6 +615,7 @@
         </ul>
 
         <h3 id="mac-keybinds">Atajos globales</h3>
+        <p>Para una configuración paso a paso, consulta <a href="/es/blog/dictation-on-mac/">dictar en un Mac, de forma privada con una opción local</a>.</p>
         <p>Ajustes → Atajos globales permite asignar atajos a <strong>Transcribir a Clipboard</strong>, <strong>Ruta seleccionada</strong>, o cualquier ruta activada. Los atajos están desactivados de forma predeterminada, requieren una tecla no modificadora más Control, Option o Command, también pueden incluir Shift y rechazan conflictos. Pulsa otra vez el atajo activo para detener la grabación.</p>
         <div class="docs-callout docs-callout-neutral">
           <p><strong>Transcribir a Clipboard</strong> no crea ninguna nota, elemento de biblioteca ni audio conservado. Está pensado para dictar rápidamente en cualquier app del Mac.</p>
@@ -670,7 +676,7 @@
           <li>El uso gratuito incluye <strong>15 minutos de transcripción</strong> y <strong>10 entregas de Captura completadas</strong>.</li>
           <li>Una transcripción de voz ya descontada del tiempo de transcripción no consume además el cupo independiente de Captura al enviarse a Markdown.</li>
           <li>Las escrituras fallidas y los reintentos idempotentes no consumen una entrega de Captura completada.</li>
-          <li>El acceso ilimitado es una compra única de por vida, sin suscripción, renovación ni anuncios. El precio local del App Store es el de referencia; los precios en EE. UU. son 19,99 $ Individual, 39,99 $ Familiar y 19,99 $ Actualización familiar, con precios según poder adquisitivo en otras tiendas regionales.</li>
+          <li>El acceso ilimitado es una compra única de por vida, sin suscripción, renovación ni anuncios. El precio local del App Store es el de referencia; los precios en EE. UU. son 79,99 $ Individual, 129,99 $ Familiar y 49,99 $ Actualización familiar, con precios según poder adquisitivo en otras tiendas regionales.</li>
           <li>Restaurar compra recupera una compra válida. Los usuarios de versiones antiguas de pago que cumplan los requisitos conservan el derecho al uso ilimitado.</li>
           <li>Un registro sin contenido del App Group evita el doble cobro entre reintentos mientras se conserven los datos locales de la app. No se almacena en el llavero; eliminar los datos locales inicia un nuevo cupo gratuito.</li>
         </ul>

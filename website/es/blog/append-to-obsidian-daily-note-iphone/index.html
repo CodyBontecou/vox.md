@@ -156,6 +156,7 @@
         <p>Conecta un Capturar Prep de Vox.md a tu bóveda, elige Rolling Note con período diario y haz coincidir su ruta con los nombres de archivo de tus notas diarias existentes. Usa Bajo para añadir al final de la nota, o La dirección para insertar bajo una sección con nombre. El mismo destino puede aceptar capturas de texto y voz.</p>
       </div>
       <p>Esta guía se centra en el enrutamiento y el formato. Para configurar grabación y modelos, empieza por <a href="/es/blog/voice-notes-to-obsidian-iphone/">Notas de voz del iPhone a Obsidian</a>. Obsidian también tiene sus propias herramientas de captura para notas diarias; no necesitas Vox.md para todos los flujos de inserción.</p>
+      <p>¿Quieres un diario de voz en lugar de un registro de capturas? Consulta <a href="/es/blog/private-voice-journal-iphone/">lleva un diario de voz privado en el iPhone</a>.</p>
       <nav class="toc" aria-label="En esta guía"><div class="toc-title">En esta guía</div><ol>
         <li><a href="#match-path">Sigue tu ruta de notas diarias</a></li>
         <li><a href="#heading">Elige la ubicación y un encabezado</a></li>
@@ -173,14 +174,14 @@
         <li>elegir <strong>Rolling Note</strong> y la <strong>Diaria</strong> como período.</li>
         <li>Para la convención de ejemplo, establece el patrón de ruta en <code>Journal/{period}.md</code>. Revisa el destino resuelto antes de enviar.</li>
       </ol>
-      <p>Con un período diario, <code>{period}</code> se resuelve en una fecha como <code>2026-10-26</code>. Una bóveda que almacene los archivos diarios en su raíz usaría en su lugar <code>{period}.md</code>. Son tokens de ruta de Vox.md, no expresiones de plantilla de Obsidian.</p>
+      <p>Con un período diario, <code>{period}</code> se resuelve en una fecha como <code>2026-10-26</code>. Una bóveda que almacene los archivos diarios en su raíz usaría en su lugar <code>{period}.md</code>. Son tokens de ruta de Vox.md, no expresiones de plantilla de Obsidian. Para crear la propia plantilla de nota diaria y previsualizar el nombre de archivo que produce tu formato de fecha, usa el <a href="/es/blog/obsidian-daily-note-template/">Generador de plantillas de nota diaria de Obsidian</a>.</p>
       <p>Vox.md no lee automáticamente la configuración del complemento Daily Notes. Elegir otra carpeta o nombre de archivo crea un destino distinto. La ruta es relativa a la carpeta seleccionada mediante Archivos; no repitas el nombre de la propia bóveda en la ruta salvo que sea una subcarpeta real.</p>
       <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_es_24d3c4f9ef44">Descargar Vox.md gratis</a></p>
       <p>Prueba gratis 10 entregas de Captura completadas y 15 minutos de transcripción. El uso ilimitado se obtiene con una compra única de por vida; los precios varían por región.</p>
 
       <h2 id="heading">2. Elige la ubicación y un encabezado</h2>
       <p>elegir <strong>Bajo</strong> para añadir al final de la nota diaria, o <strong>Top</strong> para anteponer. Para mantener las capturas en una sección, elige <strong>La dirección</strong>, introduce su título y establece su nivel.</p>
-      <p>Para el ejemplo siguiente, usa un encabezado de nivel dos llamado <strong>Inbox</strong>. Elige insertar al final de la sección de ese encabezado para que las entradas nuevas sigan a las anteriores. Establece el comportamiento cuando falta el encabezado en <strong>Creación de la cabeza</strong> si Vox.md debe añadirlo, o <strong>Mostrar error</strong> si quieres corregir la nota por tu cuenta.</p>
+      <p>Para el ejemplo siguiente, usa un encabezado de nivel dos llamado <strong>Inbox</strong>. Elige insertar al final de la sección de ese encabezado para que las entradas nuevas sigan a las anteriores. Establece el comportamiento cuando falta el encabezado en <strong>Crear encabezado</strong> si Vox.md debe añadirlo, o <strong>Mostrar error</strong> si quieres corregir la nota por tu cuenta.</p>
       <figure class="guide-figure">
         <img src="/screenshots/optimized/01-route-heading-light-640.webp" alt="Editor de destinos de Vox.md con ajustes de nota periódica y ubicación en encabezados" width="1206" height="2622" loading="lazy" decoding="async">
         <figcaption>El editor de destinos controla el archivo de destino y la ubicación. Comprueba la ruta y el nivel del encabezado de tu bóveda antes de enviar.</figcaption>
@@ -197,6 +198,7 @@
       <p>Para voz, graba mediante Rápido captura con el mismo preajuste. Añade la transcripción al borrador para revisarla antes de Envío, o elige Enviar inmediatamente cuando te sientas cómodo con la ruta. El teclado inserta texto en una app anfitriona en vez de exportar una segunda captura Markdown.</p>
 
       <h2 id="tasks">Da formato a una lista de tareas</h2>
+      <p>Para convertir una lista que ya tienes en tareas, usa el <a href="/es/blog/markdown-checklist-maker/">Generador de listas de verificación en Markdown</a>.</p>
       <p>Para una sección Tasks, elige un encabezado de nivel dos llamado <strong>Tasks</strong> y un método de lista de verificación coherente. Para capturas escritas sin procesamiento de texto, Conservar original más el prefijo de entrada <code>- [ ] </code> convierte una entrada corta en tarea sin reescritura por IA.</p>
       <pre class="guide-code"><code>## Tasks
 - [ ] Read the trail guide

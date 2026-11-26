@@ -89,6 +89,79 @@ final class RecordingJobStoreTests: XCTestCase {
         XCTAssertNil(legacyJob.voiceProcessingConfiguration)
     }
 
+    /// Issue #176: the recording start drives `{timestamp}`. It is persisted
+    /// on the job, survives recovery from a handoff intent, and decodes as nil
+    /// from jobs and handoffs written before the field existed.
+    func test_recordingStartTimePersistsThroughEnqueueAndHandoffRecovery() async throws {
+        let fixture = try makeFixture()
+        defer { fixture.cleanup() }
+        let startedAt = Date(timeIntervalSince1970: 1_795_000_000)
+
+        let queued = try await fixture.store.enqueue(
+            sourceURL: try fixture.makeAudio(named: "started.wav"),
+            recordingStartedAt: startedAt,
+            duration: 303,
+            source: .iOSApp,
+            delivery: .captureDraft(attachAudio: true),
+            modelID: "automatic",
+            language: "auto",
+            configuration: .default
+        )
+        XCTAssertEqual(queued.recordingStartedAt, startedAt)
+        let reloaded = try await fixture.store.load(recoverInterrupted: false).first(where: { $0.id == queued.id })
+        XCTAssertEqual(reloaded?.recordingStartedAt, startedAt)
+
+        let handoffSource = try fixture.makeAudio(named: "handoff-started.wav")
+        let jobID = UUID()
+        try RecordingJobHandoffIntentStore(recordingsDirectoryURL: fixture.root).save(
+            RecordingJobHandoffIntent(
+                jobID: jobID,
+                readiness: .ready,
+                audioFilename: handoffSource.lastPathComponent,
+                recordingStartedAt: startedAt,
+                duration: 303,
+                source: .iOSApp,
+                delivery: .captureDraft(attachAudio: true),
+                modelID: "automatic",
+                language: "auto",
+                configuration: .default
+            )
+        )
+        let recovered = try await fixture.store.recoverExternalOrphans(
+            recordingsDirectoryURL: fixture.root,
+            olderThan: .distantFuture
+        )
+        XCTAssertEqual(recovered.first(where: { $0.id == jobID })?.recordingStartedAt, startedAt)
+
+        var jobObject = try XCTUnwrap(
+            JSONSerialization.jsonObject(with: JSONEncoder().encode(queued)) as? [String: Any]
+        )
+        XCTAssertNotNil(jobObject["recordingStartedAt"])
+        jobObject.removeValue(forKey: "recordingStartedAt")
+        XCTAssertNil(try JSONDecoder().decode(
+            RecordingJob.self,
+            from: JSONSerialization.data(withJSONObject: jobObject)
+        ).recordingStartedAt)
+
+        let legacyHandoff = RecordingJobHandoffIntent(
+            audioFilename: "legacy.wav",
+            duration: 1,
+            source: .iOSApp,
+            delivery: .captureDraft(attachAudio: true),
+            modelID: "automatic",
+            language: "auto",
+            configuration: .default
+        )
+        let legacyObject = try XCTUnwrap(
+            JSONSerialization.jsonObject(with: JSONEncoder().encode(legacyHandoff)) as? [String: Any]
+        )
+        XCTAssertNil(legacyObject["recordingStartedAt"], "Unset start time keeps legacy payloads unchanged")
+        XCTAssertNil(try JSONDecoder().decode(
+            RecordingJobHandoffIntent.self,
+            from: JSONSerialization.data(withJSONObject: legacyObject)
+        ).recordingStartedAt)
+    }
+
     func test_enqueuePersistsOriginBoundMetadataWithoutReacquisition() async throws {
         let fixture = try makeFixture()
         defer { fixture.cleanup() }
@@ -710,6 +783,79 @@ final class RecordingJobStoreTests: XCTestCase {
         XCTAssertTrue(recovered.isEmpty)
         XCTAssertTrue(FileManager.default.fileExists(atPath: outsideURL.path))
         XCTAssertTrue(FileManager.default.fileExists(atPath: intentURL.path))
+    }
+
+    func test_crashedJournalRecoversWithItsLengthAndTheDefaultModel() async throws {
+        let fixture = try makeFixture()
+        defer { fixture.cleanup() }
+        // A journal cut off mid-take: IncrementalWAVWriter keeps its header
+        // current, so the file left behind by a crash still states its length.
+        let journalURL = fixture.root.appendingPathComponent("segment_crashed.wav")
+        let writer = try IncrementalWAVWriter(url: journalURL, sampleRate: 16_000)
+        try writer.append(samples: [Float](repeating: 0.1, count: 16_000 * 3))
+
+        let recovered = try await fixture.store.recoverExternalOrphans(
+            recordingsDirectoryURL: fixture.root,
+            olderThan: .distantFuture
+        )
+
+        let job = try XCTUnwrap(recovered.first)
+        XCTAssertEqual(recovered.count, 1)
+        XCTAssertEqual(job.duration, 3, accuracy: 0.01)
+        XCTAssertEqual(job.modelID, AppConstants.defaultTranscriptionBackendID)
+        XCTAssertFalse(job.modelID.isEmpty)
+    }
+
+    func test_unreadableOrphanRecoversWithZeroLength() async throws {
+        let fixture = try makeFixture()
+        defer { fixture.cleanup() }
+        _ = try fixture.makeAudio(named: "recording_garbage.wav")
+
+        let recovered = try await fixture.store.recoverExternalOrphans(
+            recordingsDirectoryURL: fixture.root,
+            olderThan: .distantFuture
+        )
+
+        XCTAssertEqual(recovered.map(\.duration), [0])
+    }
+
+    func test_retryGivesAModellessRecoveredJobTheDefaultModel() async throws {
+        let fixture = try makeFixture()
+        defer { fixture.cleanup() }
+        // Saved by an earlier build, before recovery set a model.
+        let recovered = try await fixture.store.enqueue(
+            sourceURL: try fixture.makeAudio(),
+            duration: 0,
+            source: .recovered,
+            delivery: .recovery,
+            modelID: "",
+            language: "auto",
+            configuration: RecordingQueueConfiguration(
+                sourceAudioRetention: .permanent,
+                processingPolicy: .manual
+            )
+        )
+        _ = try await fixture.store.claim(id: recovered.id)
+        _ = try await fixture.store.markFailed(id: recovered.id, stage: .storage, message: "Choose a route")
+
+        let retried = try await fixture.store.retry(
+            id: recovered.id,
+            delivery: .preset(CapturePresetStore.defaultFlows[0])
+        )
+
+        XCTAssertEqual(retried.modelID, AppConstants.defaultTranscriptionBackendID)
+    }
+
+    func test_retryKeepsAnExplicitModel() async throws {
+        let fixture = try makeFixture()
+        defer { fixture.cleanup() }
+        let job = try await fixture.enqueue()
+        _ = try await fixture.store.claim(id: job.id)
+        _ = try await fixture.store.markFailed(id: job.id, stage: .transcription, message: "failed")
+
+        let retried = try await fixture.store.retry(id: job.id, modelID: "chosen")
+
+        XCTAssertEqual(retried.modelID, "chosen")
     }
 
     func test_primaryCleanupFailureReceiptPreventsDuplicateRecovery() async throws {

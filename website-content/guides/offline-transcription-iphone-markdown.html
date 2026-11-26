@@ -29,7 +29,7 @@
         <img src="../../screenshots/optimized/05-settings-local-360.webp" alt="Vox.md settings for local speech models and processing" width="1206" height="2622" loading="lazy" decoding="async">
         <figcaption>Choose and prepare a local backend while connected. Available models and settings depend on the installed version and device.</figcaption>
       </figure>
-      <p>Model choice changes storage use, processing time, language coverage and recognition quality. Check the <a href="../../docs/#models">model reference</a> instead of assuming that a larger model is supported or that one option recognizes every language.</p>
+      <p>Model choice changes storage use, processing time, language coverage and recognition quality. Check the <a href="../../docs/#models">model reference</a> instead of assuming that a larger model is supported or that one option recognizes every language. Not sure which to download? <a href="../../compare/whisper-vs-parakeet/">Compare Whisper and Parakeet</a> and test both on your own audio.</p>
 
       <h2 id="destination">2. Choose the Markdown destination</h2>
       <p>Create or select a Capture Preset and connect it to a folder through Files. Use a New Note target for the first test so the output is easy to identify. Keep Original processing is a useful starting point when you want the transcript without an optional rewrite.</p>
@@ -42,7 +42,7 @@
 <h2 id="transcribe">3. Record or import audio</h2>
       <ol>
         <li>Open Quick Capture and select the preset with your prepared destination. Choose <strong>Add to Draft</strong> in the voice controls before starting so you can review the first transcript.</li>
-        <li>Record a short voice note, or use <strong>Import audio or video</strong> in the voice controls to select an existing supported file.</li>
+        <li>Record a short voice note, or use <strong>Import audio or video</strong> in the voice controls to select an existing supported file. For a video, see <a href="../transcribe-video-to-text/">transcribe a video to text</a>.</li>
         <li>Let the selected backend finish recognition, review the transcript in the draft, then tap Send.</li>
         <li>Check that delivery completed, then open the Markdown file in its destination.</li>
       </ol>
@@ -64,6 +64,7 @@
       <h2 id="limitations">Understand privacy and availability limits</h2>
       <p>Vox.md does not upload audio for transcription. If you deliberately save the resulting transcript or retained audio in a cloud-backed folder, that provider can handle synchronization under its own terms. Keep the destination local if you do not want that file synced through a provider.</p>
       <p>Long recordings, available storage, audio quality and model support affect practical results. This guide makes no universal claim about transcription speed or accuracy. Review sensitive or consequential wording before using it.</p>
+      <p>On a Mac? Follow <a href="../transcribe-meetings-mac-obsidian/">transcribe Mac meetings locally into Obsidian</a> to record a call app and your microphone as separate tracks.</p>
       <p>For Watch recordings, the <a href="../apple-watch-obsidian-voice-notes/">paired iPhone still performs transcription and delivery</a>. Keeping a recording on Watch while the phone is unavailable is delayed delivery, not independent Watch transcription.</p>
       <section class="cta" aria-labelledby="guide-cta">
         <h2 id="guide-cta">Prepare it once.<br>Check it before you disconnect.</h2>
@@ -73,5 +74,6 @@
       <nav class="toc" aria-label="Related guides"><div class="toc-title">Continue your setup</div><ul>
         <li><a href="../voice-notes-to-obsidian-iphone/">iPhone voice notes to Obsidian</a></li>
         <li><a href="../obsidian-capture-templates/">Format inbox, journal and task entries</a></li>
+        <li><a href="../transcribe-interview/">Transcribe an interview privately, with speaker labels</a></li>
         <li><a href="../../docs/#models">Backend requirements and language options</a></li>
       </ul></nav>

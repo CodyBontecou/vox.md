@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="th" dir="ltr" data-search-section="ส่วน" data-search-guide="คู่มือ" data-search-empty="ไม่พบ “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>วิธีป้อนข้อความด้วยเสียงบน Mac และตัวเลือกในเครื่องที่เป็นส่วนตัว | Vox.md</title>
+  <meta name="description" content="เปิดการป้อนด้วยเสียงของ Apple ใน System Settings เรียนรู้ตัวเลือกปุ่มลัด ภาษา และไมโครโฟน แล้วเปรียบเทียบกับปุ่มลัดส่วนกลางของ Vox.md ที่ถอดเสียงบน Mac ของคุณด้วย Whisper หรือ Parakeet และคัดลอกข้อความ">
+  <link rel="canonical" href="https://vox.isolated.tech/th/blog/dictation-on-mac/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="เอกสาร Vox.md สำหรับโมเดลภาษา">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="วิธีป้อนข้อความด้วยเสียงบน Mac และตัวเลือกในเครื่องที่เป็นส่วนตัว">
+  <meta property="og:description" content="เปิดการป้อนด้วยเสียงของ Apple ใน System Settings เรียนรู้ตัวเลือกปุ่มลัด ภาษา และไมโครโฟน แล้วเปรียบเทียบกับปุ่มลัดส่วนกลางของ Vox.md ที่ถอดเสียงบน Mac ของคุณด้วย Whisper หรือ Parakeet และคัดลอกข้อความ">
+  <meta property="og:url" content="https://vox.isolated.tech/th/blog/dictation-on-mac/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-22">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="วิธีป้อนข้อความด้วยเสียงบน Mac และตัวเลือกในเครื่องที่เป็นส่วนตัว">
+  <meta name="twitter:description" content="เปิดการป้อนด้วยเสียงของ Apple ใน System Settings เรียนรู้ตัวเลือกปุ่มลัด ภาษา และไมโครโฟน แล้วเปรียบเทียบกับปุ่มลัดส่วนกลางของ Vox.md ที่ถอดเสียงบน Mac ของคุณด้วย Whisper หรือ Parakeet และคัดลอกข้อความ">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "วิธีป้อนข้อความด้วยเสียงบน Mac และตัวเลือกในเครื่องที่เป็นส่วนตัว",
+  "description": "เปิดการป้อนด้วยเสียงของ Apple ใน System Settings เรียนรู้ตัวเลือกปุ่มลัด ภาษา และไมโครโฟน แล้วเปรียบเทียบกับปุ่มลัดส่วนกลางของ Vox.md ที่ถอดเสียงบน Mac ของคุณด้วย Whisper หรือ Parakeet และคัดลอกข้อความ",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-22",
+  "dateModified": "2026-11-22",
+  "mainEntityOfPage": "https://vox.isolated.tech/th/blog/dictation-on-mac/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "th",
+  "name": "วิธีป้อนข้อความด้วยเสียงบน Mac และตัวเลือกในเครื่องที่เป็นส่วนตัว | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/th/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "คู่มือ",
+      "item": "https://vox.isolated.tech/th/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "วิธีป้อนข้อความด้วยเสียงบน Mac และตัวเลือกในเครื่องที่เป็นส่วนตัว",
+      "item": "https://vox.isolated.tech/th/blog/dictation-on-mac/"
+    }
+  ],
+  "inLanguage": "th",
+  "name": "วิธีป้อนข้อความด้วยเสียงบน Mac และตัวเลือกในเครื่องที่เป็นส่วนตัว | Vox.md",
+  "description": "เปิดการป้อนด้วยเสียงของ Apple ใน System Settings เรียนรู้ตัวเลือกปุ่มลัด ภาษา และไมโครโฟน แล้วเปรียบเทียบกับปุ่มลัดส่วนกลางของ Vox.md ที่ถอดเสียงบน Mac ของคุณด้วย Whisper หรือ Parakeet และคัดลอกข้อความ"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/dictation-on-mac/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">ข้ามไปคู่มือ</a>
+<nav aria-label="การนำทางหลัก">
+  <div class="nav-inner">
+    <a href="/th/" class="logo" aria-label="หน้าแรก Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/th/#how">วิธีทำงาน</a></li>
+      <li><a href="/th/docs/">เอกสาร</a></li>
+      <li><a href="/th/blog/">คู่มือ</a></li>
+      <li><a href="/th/compare/">เปรียบเทียบ</a></li>
+      <li><a href="/th/privacy.html">ความเป็นส่วนตัว</a></li>
+      <li><a href="/th/terms.html">ข้อกำหนด</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_th_a0e7bb45fc7a">ดาวน์โหลด Vox.md</a>
+  <details class="language-switcher"><summary>ภาษา</summary><ul><li><a href="/blog/dictation-on-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/dictation-on-mac/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/dictation-on-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/dictation-on-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/dictation-on-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/dictation-on-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/dictation-on-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/dictation-on-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/dictation-on-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/dictation-on-mac/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/dictation-on-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/dictation-on-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/dictation-on-mac/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/dictation-on-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/dictation-on-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/dictation-on-mac/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/dictation-on-mac/" lang="th" hreflang="th" aria-current="page">ไทย</a></li><li><a href="/tr/blog/dictation-on-mac/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/dictation-on-mac/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/dictation-on-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/dictation-on-mac/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/dictation-on-mac/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/dictation-on-mac/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Mac · การป้อนด้วยเสียง · การถอดเสียงในเครื่อง</div>
+        <h1 class="hero-title">วิธีป้อนข้อความด้วยเสียงบน Mac และตัวเลือกในเครื่องที่เป็นส่วนตัว</h1>
+        <p class="hero-subtitle">ตั้งค่าการป้อนด้วยเสียงในไม่กี่ขั้นตอน แก้ไขหากใช้ไม่ได้ และตัดสินใจว่าต้องการโมเดลในเครื่องหรือโน้ต Markdown</p>
+      </div>
+      <aside class="meta-card" aria-label="เกี่ยวกับคู่มือนี้">
+        <dl>
+          <div><dt>โดย</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>ปรับปรุง</dt><dd><time datetime="2026-11-22">22 พฤศจิกายน 2026</time></dd></div>
+          <div><dt>ต้องใช้</dt><dd>Vox.md: macOS 14 ขึ้นไป ความพร้อมใช้งานของการป้อนด้วยเสียงของ Apple ขึ้นอยู่กับ Mac เวอร์ชัน macOS และภาษาของคุณ</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="วิธีป้อนข้อความด้วยเสียงบน Mac และตัวเลือกในเครื่องที่เป็นส่วนตัว">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">คำตอบสั้น ๆ</div>
+        <p>เปิดการป้อนด้วยเสียงของ Apple ใน System Settings &gt; Keyboard แล้วกดปุ่มลัด Dictation ในช่องข้อความใดก็ได้ หากต้องการเลือกโมเดล Whisper หรือ Parakeet ในเครื่อง หรือส่งข้อความที่พูดไปยังโน้ต Markdown ให้กำหนดปุ่มลัดส่วนกลางของ Vox.md</p>
+      </div>
+      <p>ขั้นตอนของ Apple ด้านล่างนำมาจากหน้า Apple Support <a href="https://support.apple.com/guide/mac-help/use-dictation-mh40584/mac">ใช้การป้อนด้วยเสียงบน Mac</a> อ่านเมื่อวันที่ 22 พฤศจิกายน 2026 ชื่อเมนูอาจแตกต่างกันตามเวอร์ชัน macOS จึงควรดูหน้านั้นสำหรับเวอร์ชันของคุณ ขั้นตอนของ Vox.md เป็นไปตาม <a href="/th/docs/#mac-keybinds">ปุ่มลัดส่วนกลาง</a> และ <a href="/th/docs/#models">โมเดล</a> เอกสาร</p>
+      <nav class="toc" aria-label="ในคู่มือนี้"><div class="toc-title">ในคู่มือนี้</div><ol>
+        <li><a href="#apple-dictation">วิธีเปิดการป้อนด้วยเสียงบน Mac</a></li>
+        <li><a href="#which-to-use">การป้อนด้วยเสียงของ Apple หรือแอปป้อนด้วยเสียงในเครื่อง</a></li>
+        <li><a href="#transcribe-to-clipboard">ป้อนด้วยเสียงในแอป Mac ใดก็ได้ด้วย Vox.md</a></li>
+        <li><a href="#dictate-to-notes">ป้อนด้วยเสียงลงโน้ต Obsidian หรือไฟล์ Markdown</a></li>
+        <li><a href="#privacy">สิ่งที่อยู่บน Mac</a></li>
+        <li><a href="#troubleshooting">การป้อนด้วยเสียงบน Mac ใช้ไม่ได้</a></li>
+        <li><a href="#faq">คำถาม</a></li>
+      </ol></nav>
+
+      <h2 id="apple-dictation">วิธีเปิดการป้อนด้วยเสียงบน Mac</h2>
+      <ol>
+        <li>เลือก <strong>เมนู Apple &gt; การตั้งค่าระบบ</strong> แล้วคลิก <strong>แป้นพิมพ์</strong> ในแถบด้านข้าง</li>
+        <li>ไปที่ <strong>การป้อนด้วยเสียง</strong> และเปิดใช้งาน</li>
+        <li><strong>ปุ่มลัด:</strong> ในที่เดียวกัน คลิก <strong>ปุ่มลัด</strong> และเลือกปุ่มลัดเพื่อเริ่มการป้อนด้วยเสียง หน้าของ Apple ไม่ได้ระบุค่าเริ่มต้น ดังนั้นให้ดูว่าเครื่อง Mac ของคุณตั้งค่าไว้อย่างไร</li>
+        <li><strong>ภาษา:</strong> คลิก <strong>แก้ไข</strong> ถัดจากภาษา แล้วเลือกภาษาและภูมิภาค ขณะป้อนด้วยเสียง คุณสลับภาษาได้โดยคลิกภาษาข้างเคอร์เซอร์ หรือกดปุ่ม Globe หากคีย์บอร์ดของคุณมี</li>
+        <li><strong>ไมโครโฟน:</strong> ใช้ <strong>แหล่งไมโครโฟน</strong> เมนูป๊อปอัปเพื่อเลือกไมโครโฟนสำหรับการป้อนด้วยเสียง เมื่อเลือก Automatic Apple ระบุว่า Mac ของคุณจะฟังจากอุปกรณ์ที่คุณน่าจะใช้มากที่สุด</li>
+        <li><strong>เริ่มป้อนด้วยเสียง:</strong> คลิกในช่องข้อความ แล้วกดปุ่มไมโครโฟนหากแถวปุ่มฟังก์ชันของคุณมี ใช้ปุ่มลัดการป้อนด้วยเสียง หรือเลือก <strong>แก้ไข &gt; เริ่มป้อนด้วยเสียง</strong>.</li>
+        <li><strong>หยุด:</strong> กดปุ่ม Escape ปุ่มไมโครโฟน (หากมี) หรือปุ่มลัดการป้อนด้วยเสียง</li>
+      </ol>
+      <p><strong>สิ่งที่ Apple ระบุเกี่ยวกับการประมวลผลและขีดจำกัด</strong> Apple ระบุว่าคุณตรวจสอบการตั้งค่า Keyboard ได้ว่าการป้อนข้อความทั่วไปด้วยเสียง “ถูกประมวลผลบนอุปกรณ์ของคุณและไม่ถูกส่งไปยังเซิร์ฟเวอร์ Siri” หรือไม่ หน้านั้นไม่ได้ระบุว่าการป้อนด้วยเสียงทำงานแบบออฟไลน์ได้ Apple ยังระบุว่าคุณป้อนข้อความด้วยเสียงได้ทุกความยาวโดยไม่มีการหมดเวลา และการป้อนด้วยเสียงจะหยุดอัตโนมัติเมื่อตรวจไม่พบเสียงพูดเป็นเวลา 30 วินาที การแชร์การบันทึกเสียงกับ Apple เป็นทางเลือก (<strong>แชร์การบันทึกเสียง</strong>) Apple ระบุว่าการป้อนด้วยเสียงไม่มีในทุกภาษาหรือภูมิภาค และฟีเจอร์อาจแตกต่างกัน ดู <a href="https://support.apple.com/guide/mac-help/use-dictation-mh40584/mac">หน้า Dictation</a> และหน้าความพร้อมใช้งานของฟีเจอร์ macOS ที่ลิงก์ไว้ เมื่อเปิด Voice Control Apple ระบุว่าการป้อนด้วยเสียงมาตรฐานของ macOS จะใช้ไม่ได้</p>
+
+      <h2 id="which-to-use">การป้อนด้วยเสียงของ Apple หรือแอปป้อนด้วยเสียงในเครื่อง</h2>
+      <p>การป้อนด้วยเสียงของ Apple มีอยู่ใน Mac ของคุณแล้วและเพียงพอสำหรับหลายคน เลือกวิธีอื่นเมื่อต้องการเลือกโมเดลเสียงพูด เก็บข้อความถอดเสียงไว้นอกเซิร์ฟเวอร์ของ Apple ตามการออกแบบ หรือบันทึกคำพูดเป็น Markdown ตารางเปรียบเทียบการตั้งค่าสามแบบตามที่ระบุไว้ในเอกสาร และไม่ได้อ้างเรื่องความแม่นยำหรือความเร็ว</p>
+      <p class="guide-table-hint">บนหน้าจอเล็ก ให้ปัดตารางไปด้านข้าง</p>
+      <div class="guide-comparison" role="region" aria-label="การเปรียบเทียบตัวเลือกการป้อนด้วยเสียง เลื่อนในแนวนอนบนหน้าจอเล็ก" tabindex="0">
+        <table class="comparison">
+          <caption>ตัวเลือกการป้อนด้วยเสียงบน Mac ตรวจสอบเมื่อวันที่ 22 พฤศจิกายน 2026</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">การป้อนตามคำบอกของ Apple</th><th scope="col">Vox.md แปลงไปยัง Clipboard</th><th scope="col">ปุ่มลัด Route ของ Vox.md</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">ข้อความไปที่ไหน</th><td>ลงในช่องข้อความที่คุณอยู่</td><td>คลิปบอร์ด คุณวางด้วย Command-V</td><td>โน้ตหรือไฟล์ Markdown ตามที่ Route ของคุณกำหนด</td></tr>
+            <tr><th scope="row">เสียงพูดถูกประมวลผลที่ไหน</th><td>ตามที่ Apple ระบุ ขึ้นอยู่กับการตั้งค่าของคุณ ตรวจสอบการตั้งค่า Keyboard</td><td>บน Mac ของคุณ</td><td>บน Mac ของคุณ</td></tr>
+            <tr><th scope="row">การเลือกโมเดล</th><td>ไม่มี คุณเลือกภาษาและไมโครโฟนเอง</td><td>โมเดล Whisper หรือ Parakeet ที่คุณดาวน์โหลด</td><td>โมเดล Whisper หรือ Parakeet ที่คุณดาวน์โหลด</td></tr>
+            <tr><th scope="row">แบบสดหรือหลังจากคุณหยุด</th><td>ไม่ได้ระบุไว้ในหน้าของ Apple ลองดูบน Mac ของคุณ</td><td>หลังจากคุณหยุด</td><td>หลังจากคุณหยุด</td></tr>
+            <tr><th scope="row">ต้องมีบัญชีไหม</th><td>ไม่ได้ระบุไว้ในหน้าของ Apple</td><td>ไม่</td><td>ไม่</td></tr>
+            <tr><th scope="row">ค่าใช้จ่าย</th><td>เป็นส่วนหนึ่งของ macOS</td><td>ถอดเสียงฟรี 15 นาที จากนั้นปลดล็อกตลอดชีพแบบจ่ายครั้งเดียว</td><td>ถอดเสียงฟรี 15 นาทีและ Capture ที่ส่งสำเร็จ 10 ครั้ง จากนั้นเป็นการปลดล็อกตลอดชีพแบบจ่ายครั้งเดียว</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>ถ้าคุณแค่ต้องพูดใส่อีเมลหรือเอกสารเป็นครั้งคราว การป้อนด้วยเสียงในตัวก็เพียงพอ ปุ่มลัดของ Vox.md น่าลองเมื่อคุณต้องการโมเดลในเครื่องเฉพาะ หรือต้องการให้คำพูดไปอยู่ในโน้ตของคุณ</p>
+
+      <h2 id="transcribe-to-clipboard">ป้อนด้วยเสียงในแอป Mac ใดก็ได้ด้วย Vox.md</h2>
+      <p><strong>แปลงไปยัง Clipboard</strong> เป็นปุ่มลัดส่วนกลาง คุณกดปุ่ม พูด แล้วกดอีกครั้ง Vox.md จะถอดเสียงบน Mac ของคุณและใส่ข้อความลงคลิปบอร์ด จากนั้นคุณวางด้วย Command-V มันไม่พิมพ์ลงในแอปที่อยู่ด้านหน้าเอง ไม่สร้างโน้ตหรือรายการใน Library และไม่เก็บเสียง</p>
+      <ol>
+        <li><strong>ติดตั้งและดาวน์โหลดโมเดล</strong> ติดตั้ง Vox.md สำหรับ Mac (macOS 14 ขึ้นไป) ที่หน้าจอ <strong>รูปแบบ</strong> ดาวน์โหลดโมเดล: Whisper ตั้งแต่ Tiny (75 MB) ถึง Large v3 Turbo (1.6 GB) Parakeet v2 สำหรับภาษาอังกฤษ หรือ Parakeet v3 สำหรับ 25 ภาษา (ประมาณ 800 MB ต่อโมเดล) คุณเริ่มดาวน์โหลดทุกครั้งเอง และลบโมเดลภายหลังได้ Whisper ใช้การเร่งความเร็วด้วย Metal บน Mac ที่รองรับ เลือกภาษาถอดเสียงในหน้าจอเดียวกัน ดู <a href="/th/compare/whisper-vs-parakeet/">Whisper เทียบกับ Parakeet</a> สำหรับวิธีเลือก</li>
+        <li><strong>กำหนดปุ่มลัด</strong> เปิด <strong>การตั้งค่า &gt; Global Keybinds</strong> และกำหนด <strong>แปลงไปยัง Clipboard</strong> ปุ่มลัดปิดอยู่ตามค่าเริ่มต้น ปุ่มลัดต้องมีปุ่มที่ไม่ใช่ตัวปรับแต่งร่วมกับ Control, Option หรือ Command และใส่ Shift เพิ่มได้ ส่วน Vox.md จะปฏิเสธปุ่มลัดที่ขัดแย้งกัน</li>
+        <li><strong>บันทึกเสียง</strong> คลิกตรงที่ต้องการให้ข้อความไปอยู่ กดปุ่มลัด แล้วพูด</li>
+        <li><strong>หยุด</strong> กดปุ่มลัดเดิมอีกครั้ง รอจนแถบเมนูแสดงว่าถอดเสียงเสร็จแล้ว</li>
+        <li><strong>วาง</strong> กด Command-V</li>
+      </ol>
+      <p>หากต้องการข้อความอีกครั้ง ให้เลือก <strong>คัดลอกข้อความถอดเสียงล่าสุด</strong> จากแถบเมนูของ Vox.md การทำงานในแถบเมนูมีรายการอยู่ใน <a href="/th/docs/#mac-menu-bar">เอกสารแถบเมนู</a> สิ่งที่เทียบเท่าบน iPhone คือคีย์บอร์ด ดู <a href="/th/blog/best-voice-to-text-keyboard-iphone/">คู่มือคีย์บอร์ดแปลงเสียงเป็นข้อความบน iPhone</a> และ <a href="/th/blog/speech-to-text-iphone/">วิธีใช้การแปลงเสียงพูดเป็นข้อความบน iPhone</a> หรือ <a href="/th/blog/speech-to-text-ipad/">บน iPad</a>.</p>
+
+      <h2 id="dictate-to-notes">ป้อนด้วยเสียงลงโน้ต Obsidian หรือไฟล์ Markdown</h2>
+      <p>เลือกวิธีนี้เมื่อต้องการให้คำพูดไปอยู่ในโน้ตแทนที่จะอยู่ในแอปอื่น ใน <strong>การตั้งค่า &gt; Global Keybinds</strong> กำหนดปุ่มลัดให้ <strong>เส้นทางที่เลือก</strong> หรือไปยัง Route ที่ระบุ จากนั้นข้อความถอดเสียงจะเป็นไปตาม Route นั้น ได้แก่โน้ตรายวัน ตำแหน่งใต้หัวข้อ และโหมดการประมวลผลที่คุณตั้งไว้ที่นั่น นี่ไม่ใช่การวาง Vox.md ส่งข้อความไปยังปลายทางของ Route ตั้งค่า Route ได้ใน <a href="/th/blog/obsidian-daily-note-template/">คู่มือเทมเพลตโน้ตรายวัน</a> และ <a href="/th/blog/obsidian-capture-templates/">คู่มือเทมเพลต Capture</a> หากต้องการบันทึกการโทรแทนการป้อนด้วยเสียง ดู <a href="/th/blog/transcribe-meetings-mac-obsidian/">การประชุมบน Mac ลง Obsidian</a> สิทธิ์ใช้ฟรีรวม Capture ที่ส่งสำเร็จ 10 ครั้ง</p>
+      <p>การพูดให้พิมพ์ยังเป็นวิธีรวดเร็วในการซ้อมพูดออกเสียง: พูดให้พิมพ์ตลอดหนึ่งรอบ จดว่าใช้เวลาเท่าใด แล้ววางข้อความและเวลาลงใน <a href="/th/blog/speech-time-calculator/">เครื่องคำนวณเวลาพูด</a> เพื่อหาจังหวะจริงของคุณ</p>
+
+      <h2 id="privacy">สิ่งที่อยู่บน Mac</h2>
+      <p>Vox.md ไม่ส่งเนื้อหา Capture ไปยังเซิร์ฟเวอร์ของ Vox.md การถอดเสียงทำงานบน Mac ของคุณ การใช้เครือข่ายอย่างเดียวคือการดาวน์โหลดโมเดลที่คุณเริ่มเอง ซึ่งใช้โครงสร้างพื้นฐานของ Hugging Face หรือ FluidAudio การถอดเสียงเองทำงานบน Mac หากโน้ตไปอยู่ในโฟลเดอร์ที่ซิงค์ผ่าน iCloud หรือบริการอื่น บริการนั้นจะจัดการไฟล์ตามข้อกำหนดของตนเอง ดู <a href="/th/privacy.html">นโยบายความเป็นส่วนตัว</a> และ <a href="/th/blog/offline-transcription-iphone-markdown/">การตั้งค่าถอดเสียงแบบออฟไลน์</a> Vox.md ใช้ <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a> สำหรับ Whisper และ <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> สำหรับ Parakeet</p>
+
+      <h2 id="troubleshooting">การป้อนด้วยเสียงบน Mac ใช้ไม่ได้</h2>
+      <h3>สิ่งที่ควรตรวจสอบกับการป้อนด้วยเสียงของ Apple</h3>
+      <p>หน้าของ Apple <a href="https://support.apple.com/guide/mac-help/if-dictation-on-mac-doesnt-work-as-expected-mchlc480652b/27/mac/27">หากการป้อนด้วยเสียงบน Mac ทำงานไม่ตรงตามที่คาด</a> ระบุไว้ดังนี้</p>
+      <ul>
+        <li>ตรวจสอบว่าเปิดการป้อนด้วยเสียงไว้ในการตั้งค่า Keyboard</li>
+        <li>เลือกภาษาและภูมิภาคให้ถูกต้อง การป้อนด้วยเสียงไม่มีในทุกภาษาหรือภูมิภาค</li>
+        <li>ตรวจสอบว่าคุณใช้ปุ่มลัดการป้อนด้วยเสียงถูกต้อง ถ้ามีปุ่มลัดอื่นใช้ปุ่มชุดเดียวกัน ให้เปลี่ยนปุ่มลัดการป้อนด้วยเสียงใน Keyboard &gt; Dictation</li>
+        <li>ถ้า Mac ของคุณไม่มีไมโครโฟนในตัว ให้ตรวจสอบว่าต่อไมโครโฟนภายนอกและเลือกไว้ในการตั้งค่า Sound หรือ Keyboard แล้ว และระดับเสียงอินพุตเพียงพอ</li>
+        <li>ตรวจสอบว่าไมโครโฟนไม่ถูกบัง พูดให้ชัดเจนด้วยระดับเสียงที่ไม่เบาหรือดังเกินไป และหลีกเลี่ยงเสียงรบกวนรอบข้าง</li>
+        <li>คุณอาจต้องใช้อินเทอร์เน็ต ตรวจสอบการตั้งค่า Keyboard ว่าการป้อนด้วยเสียงถูกประมวลผลบนอุปกรณ์ของคุณหรือไม่</li>
+      </ul>
+      <h3>สิ่งที่ Vox.md ตรวจสอบ</h3>
+      <ul>
+        <li><strong>ปุ่มลัดไม่ทำงาน</strong> ปุ่มลัดปิดอยู่ตามค่าเริ่มต้น กำหนดได้ใน Settings &gt; Global Keybinds Vox.md จะปฏิเสธปุ่มลัดที่ขัดแย้งกัน ดังนั้นให้เลือกชุดปุ่มอื่น</li>
+        <li><strong>ไม่มีข้อความถอดเสียง</strong> ตรวจสอบว่าดาวน์โหลดโมเดลแล้วและเลือกไว้ในหน้าจอ Models</li>
+        <li><strong>ภาษาไม่ถูกต้อง</strong> เลือกภาษาในหน้าจอ Models</li>
+        <li><strong>ไม่มีอะไรให้วาง</strong> รอให้แถบเมนูแสดงว่าถอดเสียงเสร็จแล้ว จากนั้นกด Command-V หรือเลือกคัดลอกข้อความถอดเสียงล่าสุด</li>
+      </ul>
+
+      <h2 id="faq">คำถาม</h2>
+      <h3>การป้อนด้วยเสียงบน Mac ใช้แบบออฟไลน์ได้ไหม</h3>
+      <p>หน้า Use Dictation ของ Apple ไม่ได้ระบุเช่นนั้น หน้านั้นระบุว่าคุณตรวจสอบการตั้งค่า Keyboard ได้ว่าการป้อนข้อความทั่วไปด้วยเสียงถูกประมวลผลบนอุปกรณ์ของคุณและไม่ถูกส่งไปยังเซิร์ฟเวอร์ Siri หรือไม่ หน้าการแก้ปัญหาระบุว่าคุณอาจต้องใช้อินเทอร์เน็ต หลังจากดาวน์โหลดโมเดลแล้ว Vox.md จะถอดเสียงบน Mac ของคุณ</p>
+      <h3>มีขีดจำกัดเวลาไหม</h3>
+      <p>Apple ระบุว่าคุณสามารถป้อนข้อความด้วยเสียงได้ทุกความยาวโดยไม่มีการหมดเวลา และการป้อนด้วยเสียงจะหยุดหลังจากไม่มีเสียงพูด 30 วินาที สำหรับ Vox.md ระดับฟรีมีการถอดเสียง 15 นาที จากนั้นเป็นการปลดล็อกตลอดชีพแบบจ่ายครั้งเดียว</p>
+      <h3>เปลี่ยนปุ่มลัดได้ไหม</h3>
+      <p>ได้ ทั้งสองแบบ สำหรับการป้อนด้วยเสียงของ Apple ใช้เมนูป๊อปอัป Shortcut ใน System Settings &gt; Keyboard &gt; Dictation สำหรับ Vox.md กำหนดใน Settings &gt; Global Keybinds โดยใช้ปุ่มที่ไม่ใช่ตัวปรับแต่งร่วมกับ Control, Option หรือ Command</p>
+      <h3>Vox.md ต้องมีบัญชีไหม</h3>
+      <p>ไม่</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">ป้อนข้อความด้วยเสียงบน Mac ด้วยโมเดลในเครื่อง</h2>
+        <p>สิทธิ์ใช้ฟรีคือการถอดเสียง 15 นาทีและ Capture ที่ส่งสำเร็จ 10 ครั้ง หลังจากนั้น การปลดล็อกตลอดชีพแบบจ่ายครั้งเดียวซึ่งแสดงเป็นราคา App Store ในประเทศของคุณจะปลดข้อจำกัด</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_th_a0e7bb45fc7a">ดาวน์โหลด Vox.md ฟรี</a></p>
+      </section>
+      <nav class="toc" aria-label="คู่มือที่เกี่ยวข้อง" id="related"><div class="toc-title">ดำเนินการต่อ</div><ul>
+        <li><a href="/th/docs/#mac-keybinds">Global Keybinds ในเอกสาร</a></li>
+        <li><a href="/th/blog/transcribe-audio-file-mac/">ถอดเสียงไฟล์เสียงบน Mac</a></li>
+        <li><a href="/th/blog/record-audio-on-mac/">บันทึกเสียงบน Mac: เสียงของคุณหรือเสียงจากแอป</a></li>
+        <li><a href="/th/blog/transcribe-meetings-mac-obsidian/">ถอดเสียงการประชุมบน Mac ภายในเครื่องลง Obsidian</a></li>
+        <li><a href="/th/blog/best-voice-to-text-keyboard-iphone/">คีย์บอร์ดเสียงเป็นข้อความที่ดีที่สุดสำหรับ iPhone</a></li>
+        <li><a href="/th/blog/obsidian-daily-note-template/">เครื่องมือสร้างเทมเพลตบันทึกประจำวัน Obsidian</a></li>
+        <li><a href="/th/blog/obsidian-capture-templates/">เทมเพลตการจดบันทึก Obsidian</a></li>
+        <li><a href="/th/blog/offline-transcription-iphone-markdown/">ถอดเสียงเป็น Markdown แบบออฟไลน์บน iPhone</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/th/">หน้าแรก</a></li>
+        <li><a href="/th/docs/">เอกสาร</a></li>
+        <li><a href="/th/blog/">คู่มือ</a></li>
+        <li><a href="/th/compare/">เปรียบเทียบ</a></li>
+        <li><a href="/th/privacy.html">ความเป็นส่วนตัว</a></li>
+        <li><a href="/th/terms.html">ข้อกำหนด</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">ช่วยเหลือ</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_th_a0e7bb45fc7a">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · จดด่วนสำหรับโน้ตในเครื่อง · ไม่อัปโหลดเนื้อหา</div>
+    </div>
+  <details class="language-switcher"><summary>ภาษา</summary><ul><li><a href="/blog/dictation-on-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/dictation-on-mac/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/dictation-on-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/dictation-on-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/dictation-on-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/dictation-on-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/dictation-on-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/dictation-on-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/dictation-on-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/dictation-on-mac/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/dictation-on-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/dictation-on-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/dictation-on-mac/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/dictation-on-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/dictation-on-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/dictation-on-mac/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/dictation-on-mac/" lang="th" hreflang="th" aria-current="page">ไทย</a></li><li><a href="/tr/blog/dictation-on-mac/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/dictation-on-mac/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/dictation-on-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/dictation-on-mac/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/dictation-on-mac/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/dictation-on-mac/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

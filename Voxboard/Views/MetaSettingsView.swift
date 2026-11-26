@@ -26,6 +26,10 @@ struct MetaSettingsView: View {
     @State private var liveActivityMonitorEnabled: Bool = AppConstants.liveActivityMonitorEnabled
     @State private var shortcutRecordingLiveActivityEnabled: Bool = AppConstants.shortcutRecordingLiveActivityEnabled
     @State private var lockScreenQuickRecordEnabled: Bool = AppConstants.lockScreenQuickRecordEnabled
+    @State private var recordingQuality = RecordingQuality.load(from: AppConstants.sharedDefaults)
+    @State private var recordingStereo = StereoRecordingPreference.load(from: AppConstants.sharedDefaults)
+    @State private var recordingNatural = NaturalRecordingPreference.load(from: AppConstants.sharedDefaults)
+    @State private var recordingLayout = RecordingChannelLayout.load(from: AppConstants.sharedDefaults)
     @State private var vault: VoxVault?
     @State private var isPickingVault = false
     @State private var vaultMessage: String?
@@ -214,7 +218,37 @@ struct MetaSettingsView: View {
             summaryRow(String(localized: "Language"), subtitle: languageSummary, identifier: "settings_language") {
                 TranscriptionLanguageSettingsView()
             }
+            rowDivider
+            summaryRow(
+                String(localized: "Recording Quality"),
+                subtitle: recordingQualitySummary,
+                identifier: "settings_recording_quality"
+            ) {
+                RecordingQualitySettingsView { quality in
+                    recordingQuality = quality
+                    recordingStereo = StereoRecordingPreference.load(from: AppConstants.sharedDefaults)
+                    recordingNatural = NaturalRecordingPreference.load(from: AppConstants.sharedDefaults)
+                    recordingLayout = RecordingChannelLayout.load(from: AppConstants.sharedDefaults)
+                    persistentRecorder.recordingQualityDidChange()
+                    WatchRecordingController.shared.publishState()
+                }
+            }
         }
+    }
+
+    /// "High · ≈ 0.5 MB/min", "High · Stereo · ≈ 1 MB/min", or with Natural
+    /// sound on (Mono only), "High · Natural · ≈ 0.5 MB/min".
+    private var recordingQualitySummary: String {
+        if let spatial = recordingQuality.spatialSettingsSummary(storedLayout: recordingLayout) { return spatial }
+        let storage = recordingQuality.localizedStoragePerMinute(stereo: recordingStereo)
+        var name = recordingQuality.displayName
+        if StereoRecordingPreference.requestsStereo(quality: recordingQuality, enabled: recordingStereo) {
+            name = String(localized: "\(name) · \(String(localized: "Stereo"))")
+        }
+        if NaturalRecordingPreference.requestsNatural(quality: recordingQuality, enabled: recordingNatural, layout: recordingLayout) {
+            name = String(localized: "\(name) · \(String(localized: "Natural"))")
+        }
+        return String(localized: "\(name) · \(storage)")
     }
 
     private var modelSummary: String {

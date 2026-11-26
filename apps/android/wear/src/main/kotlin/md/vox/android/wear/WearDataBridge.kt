@@ -23,6 +23,11 @@ internal object WearDataBridge {
         WearQueueStore.load(context).count { item -> syncOne(context, item) }
     }
 
+    /** True when a paired phone is connected right now; Data Layer writes otherwise wait on the watch. */
+    suspend fun isPhoneConnected(context: Context): Boolean = withContext(Dispatchers.IO) {
+        runCatching { Tasks.await(Wearable.getNodeClient(context).connectedNodes).isNotEmpty() }.getOrDefault(false)
+    }
+
     private fun syncOne(context: Context, present: WearQueueItem): Boolean = runCatching {
         if (present.phase in setOf(
                 WearQueuePhase.PHONE_QUEUED,

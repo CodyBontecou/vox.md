@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" dir="ltr" data-search-section="段落" data-search-guide="指南" data-search-empty="沒有與“{query}”匹配的結果">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obsidian 會議記錄範本產生器 | Vox.md</title>
+  <meta name="description" content="在瀏覽器中建立 Obsidian 會議記錄範本。選擇屬性和章節（包括以任務形式列出的待辦事項），然後複製適用於 Core Templates、Templater 或純 Markdown 的版本。">
+  <link rel="canonical" href="https://vox.isolated.tech/zh-hant/blog/obsidian-meeting-notes-template/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="供語言模型使用的 Vox.md 文件">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Obsidian 會議記錄範本產生器">
+  <meta property="og:description" content="在瀏覽器中建立 Obsidian 會議記錄範本。選擇屬性和章節（包括以任務形式列出的待辦事項），然後複製適用於 Core Templates、Templater 或純 Markdown 的版本。">
+  <meta property="og:url" content="https://vox.isolated.tech/zh-hant/blog/obsidian-meeting-notes-template/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-19">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Obsidian 會議記錄範本產生器">
+  <meta name="twitter:description" content="在瀏覽器中建立 Obsidian 會議記錄範本。選擇屬性和章節（包括以任務形式列出的待辦事項），然後複製適用於 Core Templates、Templater 或純 Markdown 的版本。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Obsidian 會議記錄範本產生器",
+  "description": "在瀏覽器中建立 Obsidian 會議記錄範本。選擇屬性和章節（包括以任務形式列出的待辦事項），然後複製適用於 Core Templates、Templater 或純 Markdown 的版本。",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-19",
+  "dateModified": "2026-11-19",
+  "mainEntityOfPage": "https://vox.isolated.tech/zh-hant/blog/obsidian-meeting-notes-template/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "zh-Hant",
+  "name": "Obsidian 會議記錄範本產生器 | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/zh-hant/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "指南",
+      "item": "https://vox.isolated.tech/zh-hant/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Obsidian 會議記錄範本產生器",
+      "item": "https://vox.isolated.tech/zh-hant/blog/obsidian-meeting-notes-template/"
+    }
+  ],
+  "inLanguage": "zh-Hant",
+  "name": "Obsidian 會議記錄範本產生器 | Vox.md",
+  "description": "在瀏覽器中建立 Obsidian 會議記錄範本。選擇屬性和章節（包括以任務形式列出的待辦事項），然後複製適用於 Core Templates、Templater 或純 Markdown 的版本。"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/obsidian-meeting-notes-template/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳至指南</a>
+<nav aria-label="主導航">
+  <div class="nav-inner">
+    <a href="/zh-hant/" class="logo" aria-label="Vox.md 首頁">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/zh-hant/#how">工作原理</a></li>
+      <li><a href="/zh-hant/docs/">文件</a></li>
+      <li><a href="/zh-hant/blog/">指南</a></li>
+      <li><a href="/zh-hant/compare/">比較</a></li>
+      <li><a href="/zh-hant/privacy.html">隱私</a></li>
+      <li><a href="/zh-hant/terms.html">條款</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_f599543e8b13">下載 Vox.md</a>
+  <details class="language-switcher"><summary>語言</summary><ul><li><a href="/blog/obsidian-meeting-notes-template/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-meeting-notes-template/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-meeting-notes-template/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-meeting-notes-template/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-meeting-notes-template/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-meeting-notes-template/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-meeting-notes-template/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-meeting-notes-template/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-meeting-notes-template/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-meeting-notes-template/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-meeting-notes-template/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-meeting-notes-template/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-meeting-notes-template/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-meeting-notes-template/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-meeting-notes-template/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-meeting-notes-template/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-meeting-notes-template/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-meeting-notes-template/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-meeting-notes-template/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-meeting-notes-template/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-meeting-notes-template/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-meeting-notes-template/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-meeting-notes-template/" lang="zh-Hant" hreflang="zh-Hant" aria-current="page">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">免費工具</div>
+        <h1 class="hero-title">Obsidian 會議記錄範本產生器</h1>
+        <p class="hero-subtitle">選擇你需要的屬性和章節，然後複製或下載按你所用範本系統的語法撰寫的範本。</p>
+      </div>
+      <aside class="meta-card" aria-label="關於本指南">
+        <dl>
+          <div><dt>作者：</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>更新於</dt><dd><time datetime="2026-11-19">2026年11月19日</time></dd></div>
+          <div><dt>需要</dt><dd>Obsidian（任何平台）。選用：用於從錄音填入筆記的 iPhone、iPad 或 Mac 版 Vox.md。</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Obsidian 會議記錄範本產生器">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">簡短回答</div>
+        <p>將此內容儲存為 <code>Meeting.md</code> ，放在你的範本資料夾中，然後用 Templates 外掛把它插入新筆記。它使用核心 Templates 語法，所以插入時會自動填入日期和標題。</p>
+      </div>
+      <pre class="guide-code" id="default-template"><code>---
+date: {{date:YYYY-MM-DD}}
+type: meeting
+attendees: []
+tags:
+  - meeting
+---
+# {{title}}
+
+## Agenda
+-&#32;
+
+## Notes
+
+
+## Decisions
+-&#32;
+
+## Action Items
+- [ ]&#32;
+</code></pre>
+      <p>使用 Templater，或想要不同的章節？下面的產生器可以為核心 Templates 外掛、Templater 或 Vox.md 的純 Markdown 產生相同的結構。它完全在本頁面中執行：你的選擇不會傳送到任何地方。</p>
+      <nav class="toc" aria-label="本指南中"><div class="toc-title">本指南中</div><ol>
+        <li><a href="#generator">產生範本</a></li>
+        <li><a href="#install">將範本加入 Obsidian</a></li>
+        <li><a href="#one-note-per-meeting">每場會議一則筆記</a></li>
+        <li><a href="#action-items">待辦事項與後續追蹤</a></li>
+        <li><a href="#fill-automatically">用錄音填入筆記</a></li>
+        <li><a href="#faq">常見問題</a></li>
+      </ol></nav>
+
+      <h2 id="generator">1. 產生範本</h2>
+      <p class="mt-nojs" id="mt-nojs">產生器需要 JavaScript。沒有 JavaScript 時，上下方的預設範本也可以直接使用。</p>
+      <form class="mt-tool" id="mt-tool" aria-label="會議記錄範本產生器">
+        <fieldset class="mt-group">
+          <legend>範本系統</legend>
+          <label class="mt-option"><input type="radio" name="system" value="core" checked> <span>Obsidian 核心 Templates 外掛</span></label>
+          <label class="mt-option"><input type="radio" name="system" value="templater"> <span>Templater 社群外掛</span></label>
+          <label class="mt-option"><input type="radio" name="system" value="plain"> <span>適用於 Vox.md 或任何 App 的純 Markdown</span></label>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>屬性（YAML frontmatter）</legend>
+          <label class="mt-option"><input type="checkbox" name="prop" value="date" checked> <span>日期</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="time"> <span>時間</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="type" checked> <span><code>type: meeting</code></span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="attendees" checked> <span>與會者（清單）</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="project"> <span>專案（連結到筆記）</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="tags" checked> <span>標籤</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="status"> <span>狀態</span></label>
+          <label class="mt-field" for="mt-tag">標籤名稱 <input type="text" id="mt-tag" name="tag" value="meeting" autocomplete="off" spellcheck="false"></label>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>章節</legend>
+          <p class="mt-hint" id="mt-order-hint">使用「上移」和「下移」按鈕調整順序。</p>
+          <ol class="mt-sections" id="mt-sections" aria-describedby="mt-order-hint">
+            <li data-section="agenda"><label class="mt-option"><input type="checkbox" name="section" value="agenda" checked> <span>議程</span></label></li>
+            <li data-section="attendees"><label class="mt-option"><input type="checkbox" name="section" value="attendees"> <span>與會者</span></label></li>
+            <li data-section="notes"><label class="mt-option"><input type="checkbox" name="section" value="notes" checked> <span>筆記</span></label></li>
+            <li data-section="decisions"><label class="mt-option"><input type="checkbox" name="section" value="decisions" checked> <span>決策</span></label></li>
+            <li data-section="actions"><label class="mt-option"><input type="checkbox" name="section" value="actions" checked> <span>以任務形式列出待辦事項</span></label></li>
+            <li data-section="questions"><label class="mt-option"><input type="checkbox" name="section" value="questions"> <span>問題與後續追蹤</span></label></li>
+            <li data-section="daily"><label class="mt-option"><input type="checkbox" name="section" value="daily"> <span>連結到每日筆記</span></label></li>
+            <li data-section="transcript"><label class="mt-option"><input type="checkbox" name="section" value="transcript"> <span>轉錄（為錄音預留的空標題）</span></label></li>
+          </ol>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>待辦事項樣式</legend>
+          <label class="mt-option"><input type="radio" name="actions" value="plain" checked> <span>一般任務</span></label>
+          <label class="mt-option"><input type="radio" name="actions" value="owner"> <span>負責人、任務和 Tasks 外掛截止日期（選用）</span></label>
+        </fieldset>
+      </form>
+      <div class="mt-output-head">
+        <h3 id="mt-output-title">你的範本</h3>
+        <div class="mt-actions" id="mt-actions" hidden>
+          <button type="button" class="btn-primary" id="mt-copy">複製</button>
+          <button type="button" class="btn-secondary" id="mt-download">下載 .md</button>
+          <button type="button" class="btn-secondary" id="mt-reset">重設</button>
+        </div>
+      </div>
+      <p class="mt-status" id="mt-status" role="status"></p>
+      <pre class="guide-code" id="mt-output" aria-labelledby="mt-output-title" aria-live="polite" tabindex="0"><code id="mt-output-code">---
+date: {{date:YYYY-MM-DD}}
+type: meeting
+attendees: []
+tags:
+  - meeting
+---
+# {{title}}
+
+## Agenda
+-&#32;
+
+## Notes
+
+
+## Decisions
+-&#32;
+
+## Action Items
+- [ ]&#32;
+</code></pre>
+      <div class="mt-notes">
+        <p data-system-note="core"><strong>Core Templates 外掛：</strong> 將檔案儲存到你的範本資料夾，並用以下命令插入： <code>Templates: Insert template</code>. <code>{{title}}</code> 會變成筆記名稱，日期使用大括號中的 Moment.js 格式。</p>
+        <p data-system-note="templater" hidden><strong>Templater 外掛：</strong> 將檔案儲存到 Templater 的範本資料夾，並用以下命令插入： <code>Templater: Open insert template modal</code>，或將其用作資料夾範本。核心 Templates 外掛不會執行 <code>&lt;% %&gt;</code> 命令。</p>
+        <p data-system-note="plain" hidden><strong>純 Markdown：</strong> 使用單大括號 Vox.md 令牌的標題和欄位。Obsidian 會原樣保留這些令牌。當路線把此檔案用作儲存庫範本時，Vox.md 會填入它們；參閱 <a href="#fill-automatically">用錄音填入筆記</a>.</p>
+        <p>標題和屬性名稱保持英文，以便與本頁的範例一致。貼上後可自行重新命名。</p>
+      </div>
+      <dl class="mt-filenames">
+        <div><dt>Obsidian 中的建議檔名</dt><dd><code>Meetings/YYYY-MM-DD HHmm Title.md</code></dd></div>
+        <div><dt>Vox.md 新筆記路徑</dt><dd><code>Meetings/{date}-{hour}{minute}.md</code></dd></div>
+      </dl>
+      <div hidden id="mt-messages">
+        <span data-message="copied">範本已複製到剪貼簿。</span>
+        <span data-message="copy-failed">複製失敗。請選取範本後自行複製。</span>
+        <span data-message="downloaded">已下載 meeting-template.md。</span>
+        <span data-message="reset">已將選擇重設為預設範本。</span>
+        <span data-message="moved-up">已將{section}上移。</span>
+        <span data-message="moved-down">已將{section}下移。</span>
+        <span data-message="up">將{section}上移</span>
+        <span data-message="down">將{section}下移</span>
+        <span data-message="up-text">上移</span>
+        <span data-message="down-text">下移</span>
+      </div>
+
+      <h2 id="install">2. 將範本加入 Obsidian</h2>
+      <p><strong>Core Templates 外掛。</strong> 在「設定 → 核心外掛」中開啟 Templates，然後設定 <code>Template folder location</code>，例如 <code>Templates</code>。將範本以 <code>.md</code> 檔案格式儲存在那裡。在新筆記中，從命令面板執行 <code>Templates: Insert template</code> ，然後選擇該範本。Obsidian 會在你插入範本時替換 <code>{{title}}</code>, <code>{{date}}</code> 和 <code>{{time}}</code> 。冒號後的格式，例如 <code>{{date:YYYY-MM-DD}}</code>，使用 Moment.js 令牌。參閱 <a href="https://obsidian.md/help/plugins/templates" target="_blank" rel="noopener">Templates 外掛說明</a> 以及 <a href="https://momentjs.com/docs/#/displaying/format/" target="_blank" rel="noopener">Moment.js 格式令牌</a>.</p>
+      <p><strong>Templater 外掛。</strong> 從社群外掛安裝 Templater，並設定其 <code>Template folder location</code>。使用以下命令插入範本： <code>Templater: Open insert template modal</code>。要讓 <code>Meetings/</code> 中的每則新筆記都使用此範本，請開啟 <code>Trigger Templater on new file creation</code>，將 <code>Template matching mode</code> 設為資料夾範本，並將 <code>Meetings</code> 資料夾對應到該檔案。 <a href="https://silentvoid13.github.io/Templater/settings.html" target="_blank" rel="noopener">Templater 設定文件</a> 介紹了資料夾範本，而 <a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html" target="_blank" rel="noopener">date 模組</a> 記錄了 <code>tp.date.now</code>.</p>
+      <p><strong>屬性。</strong> 位於 <code>---</code> 行之間的 frontmatter 會成為筆記屬性。屬性中的連結必須加上引號，所以 project 欄位寫成 <code>"[[Project name]]"</code>。參閱 <a href="https://obsidian.md/help/properties" target="_blank" rel="noopener">屬性</a> 見 Obsidian 幫助。若要檢查你已有的 frontmatter，請使用 <a href="/zh-hant/blog/obsidian-properties-generator/">屬性產生器和檢查器</a>.</p>
+
+      <h2 id="one-note-per-meeting">3. 每場會議一則筆記</h2>
+      <p>把會議放在同一個資料夾中，例如 <code>Meetings/</code>，並在檔名中寫入日期和開始時間： <code>Meetings/2026-11-19 1430 Design review.md</code>。按這種順序命名的檔案會依日期排序，同一天的兩場會議也絕不會共用一個檔案。</p>
+      <p>開啟 <strong>連結到每日筆記</strong> （在產生器中），即可新增一行 <code>Daily note:</code> ，連結到當天的筆記。連結使用 <code>YYYY-MM-DD</code>；如果你的每日筆記使用其他日期格式，請改成一致； <a href="/zh-hant/blog/obsidian-daily-note-template/">每日筆記範本產生器</a> 可預覽某個格式產生的檔案名稱。若還想在每日筆記中列出當天的會議，請從那里連結它們； <a href="/zh-hant/blog/append-to-obsidian-daily-note-iphone/">追加到 Obsidian 每日筆記</a> 介紹了 Vox.md 如何向每日筆記加入條目。</p>
+
+      <h2 id="action-items">4. 待辦事項與後續追蹤</h2>
+      <p>把每個待辦事項寫成 Obsidian 任務，例如 <code>- [ ] Send the release notes</code>，完成後將其勾選為 <code>- [x]</code> ；參閱 <a href="https://obsidian.md/help/syntax" target="_blank" rel="noopener">基本格式語法</a>。把負責人放在最前面，這樣每一行讀起來就是誰做什麼。</p>
+      <p>如果你的待辦事項已經是普通清單, <a href="/zh-hant/blog/markdown-checklist-maker/">Markdown 清單產生器</a> 會把它們變成任務,並添加 Tasks、Dataview 或 Reminder 格式的到期日。</p>
+      <p>選用樣式會加入截止日期，格式來自社群 <a href="https://publish.obsidian.md/tasks/Getting+Started/Dates" target="_blank" rel="noopener">Tasks 外掛</a>: <code>📅</code> 後接 <code>YYYY-MM-DD</code>。產生器會填入會議日期；請改為實際截止日期。沒有 Tasks 外掛時，表情符號和日期只是一般文字，任務仍然有效。</p>
+      <p>要把所有會議中未完成的事項彙整到一處，請在筆記中加入一個 Tasks 查詢：</p>
+      <pre class="guide-code"><code>```tasks
+not done
+path includes Meetings
+```</code></pre>
+      <p>該查詢會列出路徑包含 <code>Meetings</code>的筆記中未完成的任務。如果你已經在用 Dataview，它也能產生類似的清單。</p>
+
+      <h2 id="fill-automatically">5. 用錄音填入筆記</h2>
+      <p>範本為你提供標題。Vox.md 可以直接寫出筆記：它會錄下會議，在你的裝置上轉錄，並透過路線把 Markdown 檔案儲存到你的儲存庫。</p>
+      <ol>
+        <li><strong>錄音。</strong> 在 Mac 上，Vox.md 可以把一個通話 App 和你的麥克風錄製為獨立的音軌；請依照 <a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/">在本機將 Mac 會議轉錄到 Obsidian</a>。對於實體會議，請用 iPhone 或 iPad 的麥克風錄音；參閱 <a href="/zh-hant/blog/voice-notes-to-obsidian-iphone/">將 iPhone 語音筆記儲存到 Obsidian</a>.</li>
+        <li><strong>選擇目標位置。</strong> 在路線中選擇你的儲存庫，選擇 <strong>新筆記</strong>，並輸入路徑，例如 <code>Meetings/{date}-{hour}{minute}.md</code>. <code>{date}</code> 會寫成 <code>2026-11-19</code> 和 <code>{hour}{minute}</code> 寫成 <code>1430</code>。這些是 Vox.md 令牌，不是 Moment.js 格式。參閱 <a href="/zh-hant/blog/obsidian-capture-templates/">Obsidian 擷取範本</a> ，了解更多路徑範例。</li>
+        <li><strong>選擇模式。</strong> 將路線的處理模式設為 <strong>會議記錄</strong>。它會產生 <code>## Notes</code> 段落，並在轉錄文字包含待辦事項時產生 <code>## Action Items</code> 清單。在搭載 macOS 26 或 iOS 26 的相容硬體上，它使用 Apple Intelligence；否則由確定性的格式器建立結構。</li>
+      </ol>
+      <p>會議記錄不會替你填寫議程、與會者或決策。如果你想在筆記上方保留這些標題，請在產生器中選擇 <strong>純 Markdown</strong> ，取消勾選「筆記」和「待辦事項」，然後將結果儲存到你的儲存庫。接著把該檔案選為路線的儲存庫範本。Vox.md 會填入範本中的單大括號令牌，並把處理後的轉錄文字寫在範本下方。在依賴這個版面之前，請先檢查第一則筆記； <a href="/zh-hant/docs/#presets">路線文件</a> 介紹了目標位置和範本。</p>
+      <p>如果會議在 Zoom 或 Teams 上進行,而且你已將其逐字稿下載為 .srt 或 .vtt 檔案,請將其轉換為 Markdown(含發言人輪次),使用 <a href="/zh-hant/blog/srt-vtt-to-text-markdown/">SRT 和 VTT 轉換器</a>,然後將其貼到 <code>## Transcript</code> 此範本的標題。</p>
+      <p>告訴會議中的每個人你正在錄音和轉錄，並事先徵得他們的同意。規則因地區和工作場所而異；參閱 <a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/#consent">告知他人你正在錄音</a>.</p>
+
+      <h2 id="faq">6. 常見問題</h2>
+      <h3>我應該使用 Core Templates 還是 Templater？</h3>
+      <p>Core Templates 隨 Obsidian 提供，涵蓋標題、日期和時間。Templater 是一個社群外掛，增加了指令碼、日期偏移和資料夾範本，因此 <code>Meetings/</code> 中的新筆記可以自動套用範本。如果你只需要本頁中的欄位，Core Templates 就足夠了。</p>
+      <h3>為什麼 <code>{{date}}</code> 之後不會變化？</h3>
+      <p>Obsidian 只在插入範本時替換一次範本變數。之後筆記中保存的是純文字，例如 <code>2026-11-19</code>，並會一直保持不變。這正是會議記錄所需要的。</p>
+      <h3>Vox.md 可以使用我的 Obsidian 範本嗎？</h3>
+      <p>部分可以。路線可以使用儲存庫中的 Markdown 檔案作為範本。Vox.md 會填入它自己的單大括號令牌，例如 <code>{date}</code>，以及 Templater 日期命令 <code>tp.date.now</code> 和 <code>tp.file.creation_date</code>。它不會執行其他 Templater 命令，例如 <code>tp.file.title</code>，也不會展開核心 Templates 變數，例如 <code>{{title}}</code>，所以不要把它們放進路線的範本。Vox.md 路線請使用純 Markdown 輸出。</p>
+      <h3>產生器會把我的選擇傳送到任何地方嗎？</h3>
+      <p>不會。範本由本頁面中的指令碼產生。它會把你上次的選擇儲存在瀏覽器的本機儲存空間中，下次仍會保留；點按「重設」即可清除。</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">省去打字的麻煩。</h2>
+        <p>錄下會議，讓 Vox.md 把筆記寫入你的儲存庫。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_f599543e8b13">免費下載 Vox.md</a></p>
+        <p>15 分鐘免費轉錄 · 不需要帳號 · 一次性終身解鎖。要在 Mac 上設定通話錄音？請參閱 <a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/">Mac 會議指南</a>.</p>
+      </section>
+      <nav class="toc" aria-label="相關指南" id="related"><div class="toc-title">繼續設定</div><ul>
+        <li><a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/">在本機將 Mac 會議轉錄到 Obsidian</a></li>
+        <li><a href="/zh-hant/blog/obsidian-capture-templates/">路徑與範本範例</a></li>
+        <li><a href="/zh-hant/blog/voice-notes-to-obsidian-iphone/">將 iPhone 語音筆記儲存到 Obsidian</a></li>
+        <li><a href="/zh-hant/blog/append-to-obsidian-daily-note-iphone/">追加到 Obsidian 每日筆記</a></li>
+        <li><a href="/zh-hant/docs/#presets">路線參考</a></li>
+        <li><a href="/zh-hant/docs/#mac">Mac App 參考</a></li>
+      </ul></nav>
+<script>
+/* Meeting notes template generator. Runs locally: no network requests. */
+(function () {
+  var form = document.getElementById('mt-tool');
+  if (!form) return;
+  var STORAGE_KEY = 'vox-meeting-template-v1';
+  var list = document.getElementById('mt-sections');
+  var code = document.getElementById('mt-output-code');
+  var status = document.getElementById('mt-status');
+  var tagInput = document.getElementById('mt-tag');
+  var defaultOrder = Array.prototype.map.call(list.children, function (li) { return li.getAttribute('data-section'); });
+  var defaults = snapshot();
+
+  var SYNTAX = {
+    core: { date: '{{date:YYYY-MM-DD}}', time: '{{time:HH:mm}}', title: '# {{title}}' },
+    templater: { date: '<% tp.date.now("YYYY-MM-DD") %>', time: "<% tp.date.now('HH:mm') %>", title: '# <% tp.file.title %>' },
+    plain: { date: '{date}', time: '{hour}:{minute}', title: '# Meeting {date}' }
+  };
+  var HEADINGS = {
+    agenda: ['## Agenda', '- '],
+    attendees: ['## Attendees', '- '],
+    notes: ['## Notes', ''],
+    decisions: ['## Decisions', '- '],
+    questions: ['## Questions and Follow-ups', '- '],
+    transcript: ['## Transcript', '']
+  };
+
+  function message(name, section) {
+    var el = document.querySelector('#mt-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : '';
+    return section === undefined ? text : text.split('{section}').join(section);
+  }
+  function sectionName(li) { return li.querySelector('label span').textContent; }
+  function checked(name) {
+    return Array.prototype.filter.call(form.elements[name], function (i) { return i.checked; }).map(function (i) { return i.value; });
+  }
+  function radio(name) { return checked(name)[0]; }
+  function cleanTag(value) {
+    var tag = value.trim().replace(/^#+/, '').replace(/\s+/g, '-').replace(/[^\w\/-]/g, '');
+    return tag || 'meeting';
+  }
+
+  function build(state) {
+    var s = SYNTAX[state.system];
+    var lines = [];
+    var props = state.props;
+    if (props.length) {
+      lines.push('---');
+      props.forEach(function (p) {
+        if (p === 'date') lines.push('date: ' + s.date);
+        if (p === 'time') lines.push('time: "' + s.time + '"');
+        if (p === 'type') lines.push('type: meeting');
+        if (p === 'attendees') lines.push('attendees: []');
+        if (p === 'project') lines.push('project: "[[Project name]]"');
+        if (p === 'tags') { lines.push('tags:'); lines.push('  - ' + cleanTag(state.tag)); }
+        if (p === 'status') lines.push('status: open');
+      });
+      lines.push('---');
+    }
+    lines.push(s.title);
+    state.order.forEach(function (id) {
+      if (state.sections.indexOf(id) === -1) return;
+      lines.push('');
+      if (id === 'daily') { lines.push('Daily note: [[' + s.date + ']]'); return; }
+      if (id === 'actions') {
+        lines.push('## Action Items');
+        lines.push(state.actions === 'owner' ? '- [ ] Owner — task 📅 ' + s.date : '- [ ] ');
+        return;
+      }
+      lines.push(HEADINGS[id][0]);
+      lines.push(HEADINGS[id][1]);
+    });
+    while (lines.length && lines[lines.length - 1] === '') lines.pop();
+    return lines.join('\n') + '\n';
+  }
+
+  function snapshot() {
+    return {
+      system: radio('system'), props: checked('prop'), tag: tagInput.value,
+      sections: checked('section'), actions: radio('actions'),
+      order: Array.prototype.map.call(list.children, function (li) { return li.getAttribute('data-section'); })
+    };
+  }
+  function apply(state) {
+    Array.prototype.forEach.call(form.elements.system, function (i) { i.checked = i.value === state.system; });
+    Array.prototype.forEach.call(form.elements.actions, function (i) { i.checked = i.value === state.actions; });
+    Array.prototype.forEach.call(form.elements.prop, function (i) { i.checked = state.props.indexOf(i.value) !== -1; });
+    Array.prototype.forEach.call(form.elements.section, function (i) { i.checked = state.sections.indexOf(i.value) !== -1; });
+    tagInput.value = state.tag;
+    state.order.forEach(function (id) {
+      var li = list.querySelector('[data-section="' + id + '"]');
+      if (li) list.appendChild(li);
+    });
+  }
+  function valid(state) {
+    return state && SYNTAX[state.system] && (state.actions === 'plain' || state.actions === 'owner') &&
+      Array.isArray(state.props) && Array.isArray(state.sections) && typeof state.tag === 'string' &&
+      Array.isArray(state.order) && state.order.length === defaultOrder.length &&
+      defaultOrder.every(function (id) { return state.order.indexOf(id) !== -1; });
+  }
+  function save(state) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* storage unavailable */ }
+  }
+
+  function update(store) {
+    var state = snapshot();
+    code.textContent = build(state);
+    Array.prototype.forEach.call(document.querySelectorAll('[data-system-note]'), function (p) {
+      p.hidden = p.getAttribute('data-system-note') !== state.system;
+    });
+    Array.prototype.forEach.call(list.children, function (li, index) {
+      var name = sectionName(li);
+      var up = li.querySelector('.mt-up');
+      var down = li.querySelector('.mt-down');
+      up.setAttribute('aria-label', message('up', name));
+      down.setAttribute('aria-label', message('down', name));
+      up.disabled = index === 0;
+      down.disabled = index === list.children.length - 1;
+    });
+    if (store) save(state);
+  }
+  function say(text) {
+    status.textContent = '';
+    window.setTimeout(function () { status.textContent = text; }, 30);
+  }
+
+  Array.prototype.forEach.call(list.children, function (li) {
+    var controls = document.createElement('span');
+    controls.className = 'mt-move';
+    [['mt-up', 'up-text', -1], ['mt-down', 'down-text', 1]].forEach(function (spec) {
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'mt-move-button ' + spec[0];
+      button.textContent = message(spec[1]);
+      button.addEventListener('click', function () {
+        var sibling = spec[2] < 0 ? li.previousElementSibling : li.nextElementSibling;
+        if (!sibling) return;
+        list.insertBefore(li, spec[2] < 0 ? sibling : sibling.nextElementSibling);
+        update(true);
+        var target = button.disabled ? li.querySelector(spec[2] < 0 ? '.mt-down' : '.mt-up') : button;
+        target.focus();
+        say(message(spec[2] < 0 ? 'moved-up' : 'moved-down', sectionName(li)));
+      });
+      controls.appendChild(button);
+    });
+    li.appendChild(controls);
+  });
+
+  try {
+    var stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+    if (valid(stored)) apply(stored);
+  } catch (e) { /* ignore unreadable saved choices */ }
+
+  form.addEventListener('change', function () { update(true); });
+  form.addEventListener('input', function () { update(true); });
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+
+  document.getElementById('mt-copy').addEventListener('click', function () {
+    var text = code.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(code);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+  document.getElementById('mt-download').addEventListener('click', function () {
+    var blob = new Blob([code.textContent], { type: 'text/markdown;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = 'meeting-template.md';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    say(message('downloaded'));
+  });
+  document.getElementById('mt-reset').addEventListener('click', function () {
+    apply(defaults);
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* storage unavailable */ }
+    update(false);
+    say(message('reset'));
+  });
+
+  document.getElementById('mt-nojs').hidden = true;
+  document.getElementById('mt-actions').hidden = false;
+  form.classList.add('is-ready');
+  update(false);
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/zh-hant/">首頁</a></li>
+        <li><a href="/zh-hant/docs/">文件</a></li>
+        <li><a href="/zh-hant/blog/">指南</a></li>
+        <li><a href="/zh-hant/compare/">比較</a></li>
+        <li><a href="/zh-hant/privacy.html">隱私</a></li>
+        <li><a href="/zh-hant/terms.html">條款</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">支援</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_f599543e8b13">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · 本地筆記快速擷取 · 不上傳內容。</div>
+    </div>
+  <details class="language-switcher"><summary>語言</summary><ul><li><a href="/blog/obsidian-meeting-notes-template/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-meeting-notes-template/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-meeting-notes-template/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-meeting-notes-template/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-meeting-notes-template/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-meeting-notes-template/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-meeting-notes-template/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-meeting-notes-template/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-meeting-notes-template/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-meeting-notes-template/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-meeting-notes-template/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-meeting-notes-template/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-meeting-notes-template/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-meeting-notes-template/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-meeting-notes-template/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-meeting-notes-template/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-meeting-notes-template/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-meeting-notes-template/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-meeting-notes-template/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-meeting-notes-template/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-meeting-notes-template/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-meeting-notes-template/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-meeting-notes-template/" lang="zh-Hant" hreflang="zh-Hant" aria-current="page">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

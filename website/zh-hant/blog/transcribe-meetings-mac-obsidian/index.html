@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" dir="ltr" data-search-section="段落" data-search-guide="指南" data-search-empty="沒有與“{query}”匹配的結果">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在本機將 Mac 會議轉錄到 Obsidian | Vox.md</title>
+  <meta name="description" content="使用 Vox.md for Mac 將一個 App 的音訊和你的麥克風錄製為獨立音軌，在裝置上轉錄兩者，並將帶說話人標籤的 Markdown 筆記儲存到 Obsidian。不需要會議機器人或帳號。">
+  <link rel="canonical" href="https://vox.isolated.tech/zh-hant/blog/transcribe-meetings-mac-obsidian/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="供語言模型使用的 Vox.md 文件">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="在本機將 Mac 會議轉錄到 Obsidian">
+  <meta property="og:description" content="使用 Vox.md for Mac 將一個 App 的音訊和你的麥克風錄製為獨立音軌，在裝置上轉錄兩者，並將帶說話人標籤的 Markdown 筆記儲存到 Obsidian。不需要會議機器人或帳號。">
+  <meta property="og:url" content="https://vox.isolated.tech/zh-hant/blog/transcribe-meetings-mac-obsidian/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-18">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="在本機將 Mac 會議轉錄到 Obsidian">
+  <meta name="twitter:description" content="使用 Vox.md for Mac 將一個 App 的音訊和你的麥克風錄製為獨立音軌，在裝置上轉錄兩者，並將帶說話人標籤的 Markdown 筆記儲存到 Obsidian。不需要會議機器人或帳號。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "在本機將 Mac 會議轉錄到 Obsidian",
+  "description": "使用 Vox.md for Mac 將一個 App 的音訊和你的麥克風錄製為獨立音軌，在裝置上轉錄兩者，並將帶說話人標籤的 Markdown 筆記儲存到 Obsidian。不需要會議機器人或帳號。",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-18",
+  "dateModified": "2026-11-18",
+  "mainEntityOfPage": "https://vox.isolated.tech/zh-hant/blog/transcribe-meetings-mac-obsidian/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "zh-Hant",
+  "name": "在本機將 Mac 會議轉錄到 Obsidian | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/zh-hant/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "指南",
+      "item": "https://vox.isolated.tech/zh-hant/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "在本機將 Mac 會議轉錄到 Obsidian",
+      "item": "https://vox.isolated.tech/zh-hant/blog/transcribe-meetings-mac-obsidian/"
+    }
+  ],
+  "inLanguage": "zh-Hant",
+  "name": "在本機將 Mac 會議轉錄到 Obsidian | Vox.md",
+  "description": "使用 Vox.md for Mac 將一個 App 的音訊和你的麥克風錄製為獨立音軌，在裝置上轉錄兩者，並將帶說話人標籤的 Markdown 筆記儲存到 Obsidian。不需要會議機器人或帳號。"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-meetings-mac-obsidian/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳至指南</a>
+<nav aria-label="主導航">
+  <div class="nav-inner">
+    <a href="/zh-hant/" class="logo" aria-label="Vox.md 首頁">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/zh-hant/#how">工作原理</a></li>
+      <li><a href="/zh-hant/docs/">文件</a></li>
+      <li><a href="/zh-hant/blog/">指南</a></li>
+      <li><a href="/zh-hant/compare/">比較</a></li>
+      <li><a href="/zh-hant/privacy.html">隱私</a></li>
+      <li><a href="/zh-hant/terms.html">條款</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_f0ba2ed6ae97">下載 Vox.md</a>
+  <details class="language-switcher"><summary>語言</summary><ul><li><a href="/blog/transcribe-meetings-mac-obsidian/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-meetings-mac-obsidian/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-meetings-mac-obsidian/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-meetings-mac-obsidian/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-meetings-mac-obsidian/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-meetings-mac-obsidian/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-meetings-mac-obsidian/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-meetings-mac-obsidian/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-meetings-mac-obsidian/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-meetings-mac-obsidian/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-meetings-mac-obsidian/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-meetings-mac-obsidian/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-meetings-mac-obsidian/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-meetings-mac-obsidian/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-meetings-mac-obsidian/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-meetings-mac-obsidian/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-meetings-mac-obsidian/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-meetings-mac-obsidian/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-meetings-mac-obsidian/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-meetings-mac-obsidian/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-meetings-mac-obsidian/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hant" hreflang="zh-Hant" aria-current="page">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Mac · 會議 · Markdown</div>
+        <h1 class="hero-title">在本機將 Mac 會議轉錄到 Obsidian</h1>
+        <p class="hero-subtitle">選擇通話 App，錄製，停止，即可在儲存庫中得到一篇 Markdown 筆記。瞭解哪些內容留在你的 Mac 上，哪些不會。</p>
+      </div>
+      <aside class="meta-card" aria-label="關於本指南">
+        <dl>
+          <div><dt>作者：</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>更新於</dt><dd><time datetime="2026-11-18">2026 年 11 月 18 日</time></dd></div>
+          <div><dt>需要</dt><dd>macOS 14+ · 已下載的語音模型 · 可寫入的儲存庫資料夾</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="在本機將 Mac 會議轉錄到 Obsidian">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">簡短回答</div>
+        <p>Vox.md for Mac 可以將一個 App 的音訊和你的麥克風錄製為獨立音軌，在你的 Mac 上轉錄兩者，並將帶說話人標籤的 Markdown 筆記儲存到 Obsidian 儲存庫或任何資料夾。沒有會議機器人，也不需要帳號。</p>
+      </div>
+      <p>本指南介紹一套可用的設定：從寫入儲存庫中 <code>Meetings/</code> 的路線，到完成的筆記。步驟依據 <a href="/zh-hant/docs/#mac-meeting">Mac 會議擷取文件</a> 以及 App 實際發布的行為。下方顯示的 Markdown 是示意範例，並非真實通話的錄音。</p>
+      <nav class="toc" aria-label="本指南中"><div class="toc-title">本指南中</div><ol>
+        <li><a href="#requirements">你需要準備什麼</a></li>
+        <li><a href="#prepare-route">準備會議路線</a></li>
+        <li><a href="#record">錄製通話</a></li>
+        <li><a href="#stop-transcribe">停止、轉錄並傳送</a></li>
+        <li><a href="#recovery">如果錄製中斷</a></li>
+        <li><a href="#consent">告知他人你正在錄音</a></li>
+        <li><a href="#compare">比較會議筆記方式</a></li>
+        <li><a href="#limitations">長時間通話前需瞭解的限制</a></li>
+      </ol></nav>
+
+      <h2 id="requirements">1. 你需要準備什麼</h2>
+      <ul>
+        <li><strong>一台執行 macOS 14 或更新版本的 Mac</strong> ，並安裝 Vox.md Mac App（與 iPhone App 來自同一個 App Store 頁面）。</li>
+        <li><strong>麥克風權限</strong> ：授予 Vox.md，以便錄製你自己的聲音。</li>
+        <li><strong>螢幕與系統錄音權限。</strong> 會議擷取使用 Apple 的 <a href="https://developer.apple.com/documentation/screencapturekit" target="_blank" rel="noopener">ScreenCaptureKit 框架</a> 錄製你所選 App 的音訊。如果 macOS 詢問，請允許。你可以在「系統設定」→「隱私權與安全性」中查看這兩項權限；Apple 在以下文章中說明了該設定： <a href="https://support.apple.com/guide/mac-help/control-access-screen-system-audio-recording-mchld6aa7d23/mac" target="_blank" rel="noopener">在 Mac 上控制螢幕與系統錄音的取用權限</a>.</li>
+        <li><strong>已下載的 Whisper 或 Parakeet 模型。</strong> 打開 Mac 的模型畫面，下載一個模型，並設定轉錄語言。 <a href="/zh-hant/docs/#models">模型參考</a> 列出了大小和語言，並且 <a href="/zh-hant/compare/whisper-vs-parakeet/">Whisper 與 Parakeet</a> 可幫助你選擇。Whisper 透過以下方式運行： <a href="https://github.com/ggml-org/whisper.cpp" target="_blank" rel="noopener">whisper.cpp</a> 執行；Parakeet 則使用 <a href="https://github.com/FluidInference/FluidAudio" target="_blank" rel="noopener">FluidAudio</a>.</li>
+        <li><strong>一個可寫入的資料夾</strong>，例如你的 Obsidian 儲存庫或其中的 <code>Meetings</code> 資料夾。</li>
+        <li>只需要一個普通錄音？請參閱 <a href="/zh-hant/blog/record-audio-on-mac/">如何在 Mac 上錄音</a>.</li>
+      </ul>
+      <p>可選的 Apple Intelligence 處理（會議記錄模式用它重新組織轉錄內容）需要執行 macOS 26 的相容 Mac。沒有它時，Vox.md 會改用確定性的格式化程式，因此路線仍然可用。</p>
+
+      <h2 id="prepare-route">2. 準備會議路線</h2>
+      <p>路線決定擷取內容的處理方式以及 Markdown 的寫入位置。某些 Mac 版本在設定中將路線標示為「擷取預設」。</p>
+      <ol>
+        <li>在 Mac App 中打開設定，新增一個路線，名稱可以類似 <em>會議</em>.</li>
+        <li>在其目的地中，將你的儲存庫選為資料夾。筆記目標請選擇 <strong>新筆記</strong> ，讓每場會議都有自己的檔案。</li>
+        <li>輸入路徑範本，例如 <code>Meetings/{date}-{hour}{minute}.md</code>。包含時間可讓同一天的兩場會議儲存在不同筆記中。請參閱 <a href="/zh-hant/blog/obsidian-capture-templates/">Obsidian 擷取範本</a> ，瞭解更多路徑和標記範例。</li>
+        <li>選擇處理 <strong>模式</strong>. <strong>保留原文</strong> 按辨識結果傳送帶標籤的轉錄。 <strong>會議記錄</strong> 會產生 <code>## Notes</code> 段落，並在文字包含待辦事項時產生 <code>## Action Items</code> 清單。還想要議程和決策的標題？ <a href="/zh-hant/blog/obsidian-meeting-notes-template/">產生會議記錄範本</a>.</li>
+        <li>可選：如果有多位遠端人員發言，請開啟 <strong>識別演講者</strong> 。說話人模型會在此路線首次使用時下載。</li>
+        <li>可選：設定 <strong>保存音頻</strong> ，將錄音儲存在筆記旁邊或附件資料夾中。如果只需要文字，請保持關閉。</li>
+      </ol>
+
+      <h2 id="record">3. 錄製通話</h2>
+      <ol>
+        <li>在通話所用的 App 中加入：Zoom、Microsoft Teams、FaceTime，或執行 Google Meet 的瀏覽器。</li>
+        <li>在 Vox.md 擷取視窗中，選擇 <em>會議</em> 路線。</li>
+        <li>將音訊來源切換為 <strong>會議</strong>；預設值為 <strong>麥克風</strong>。依 App 版本不同，此控制項位於擷取視窗中，或在選單列的「擷取」→「音訊來源」下。</li>
+        <li>開始錄製。macOS 會顯示其內容選擇器；只選擇一個應用程式。Vox.md 從不錄製自身的音訊。若在瀏覽器中通話，請選擇該瀏覽器。瀏覽器的音訊會被整體錄製，因此請將其他會發出聲音的分頁設為靜音。</li>
+        <li>錄製時，狀態列會顯示即時的系統和麥克風音量表、每個來源的狀態以及任何擷取警告。請確認有人說話時兩個音量表都在跳動。</li>
+      </ol>
+      <p>會議擷取無法暫停。麥克風錄音有暫停和繼續，但會議從開始一直錄到停止。你也不能中途切換到其他 App；請停止後重新開始一段錄音。</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_f0ba2ed6ae97">免費下載 Vox.md</a></p>
+      <p>免費下載包含 15 分鐘轉錄。無限使用為一次購買、終身有效。</p>
+
+      <h2 id="stop-transcribe">4. 停止、轉錄並傳送</h2>
+      <p>通話結束時按「停止」。Vox.md 使用你選擇的模型在 Mac 上分別轉錄兩條音軌，然後在共享時間軸上將它們交錯排列。你的麥克風音軌標記為 <code>You</code>，App 音軌則標記為遠端說話人，例如 <code>Speaker 2</code>。使用保留原文時，一場簡短會議可能產生如下筆記正文（示意範例）：</p>
+      <pre class="guide-code"><code>You:
+Thanks for joining. Can we start with the launch checklist?
+
+Speaker 2:
+Sure. The release notes are ready, but we still need screenshots.
+
+You:
+I’ll take the screenshots by Friday.</code></pre>
+      <p>開啟識別演講者後，Vox.md 會嘗試將遠端音軌拆分為更多標籤，例如 <code>Speaker 2</code> 和 <code>Speaker 3</code>。這些標籤是匿名的，且只能盡力而為。如果無法執行識別，你會保留一般轉錄，App 也會顯示原因。</p>
+      <p>正是因為音軌分開， <code>You</code> 標籤才能發揮作用。你的聲音來自麥克風音軌，其他參與者來自 App 音軌，因此 Vox.md 不必從單一混合錄音中猜測通話的哪一方說了什麼。標籤仍可能出錯。例如，如果你沒有戴耳機，麥克風可能會收錄揚聲器的聲音。</p>
+      <p>接下來的操作取決於你在開始前選擇的錄製選項：</p>
+      <ul>
+        <li><strong>加入草稿</strong> 會將轉錄放入擷取編輯器。檢查並編輯後，按 Command-Return 透過路線傳送。</li>
+        <li><strong>立即傳送</strong> 會在轉錄完成後立即透過路線傳送筆記。</li>
+      </ul>
+      <p>與其他錄音一樣，轉錄也遵循你的剪貼簿設定。兩條音軌的播放混音會作為錄音的音訊保留，只有當路線的「保存音頻」設定保留音訊時，才會與筆記一起儲存。請在 Obsidian 中打開一次筆記，確認路徑和標籤符合預期。</p>
+
+      <h2 id="recovery">5. 如果錄製中斷</h2>
+      <p>兩條音軌都會以持久區塊的形式寫入磁碟，並附帶復原清單。如果串流停止、麥克風被拔出或 Vox.md 被強制結束，已錄製的區塊仍可完成處理並轉錄。復原會在錄製佇列恢復時執行，例如下次打開 Vox.md 時。</p>
+      <p>來自不完整擷取的筆記會以一行警告開頭，說明缺少哪一部分，讓你知道轉錄可能有缺漏。</p>
+
+      <h2 id="consent">6. 告知他人你正在錄音</h2>
+      <p>錄音相關法律和工作場所政策因地區和組織而異。有些要求所有人同意。請告訴其他參與者你正在錄音和轉錄，並在開始前取得他們的同意。本文不構成法律建議；請查看適用於你的規定。</p>
+
+      <h2 id="compare">7. 比較會議筆記方式</h2>
+      <p>會議筆記工具大致分為三類。各產品不同且會變化，因此本表描述的是方式，而非具體產品。如果你在比較 Granola、Otter 或 Fireflies 等 App，請查看各供應商自己的文件，瞭解音訊在哪裡處理、筆記儲存在哪裡。</p>
+      <p class="guide-table-hint">在小螢幕上，左右滑動表格以比較各方式。</p>
+      <div class="guide-comparison" role="region" aria-label="會議筆記方式比較；在小螢幕上可水平捲動" tabindex="0">
+        <table class="comparison">
+          <caption>一般方式，審閱於 2026 年 11 月 18 日</caption>
+          <thead><tr><th scope="col">問題</th><th scope="col">機器人記錄員</th><th scope="col">無機器人的雲端 App</th><th scope="col">Vox.md 本機擷取</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">加入方式</th><td>機器人以參與者身分加入通話</td><td>你電腦上的 App 錄製通話</td><td>Mac App 錄製一個 App 的音訊和你的麥克風</td></tr>
+            <tr><th scope="row">音訊處理位置</td><td>通常在供應商的伺服器上</td><td>通常在供應商的伺服器上</td><td>在你的 Mac 上</td></tr>
+            <tr><th scope="row">筆記存放位置</td><td>通常在供應商的工作區中</td><td>通常在供應商的工作區中</td><td>你所選資料夾中的 Markdown 檔案</td></tr>
+            <tr><th scope="row">帳號</th><td>通常需要</td><td>通常需要</td><td>不需要</td></tr>
+            <tr><th scope="row">定價模式</td><td>查看供應商的價格頁面</td><td>查看供應商的價格頁面</td><td>15 分鐘免費轉錄，之後一次性終身解鎖</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>雲端工具可能提供本機 App 沒有的功能，例如共享工作區或跨多場會議的摘要。請根據你希望音訊在哪裡處理、筆記最終存放在哪裡來選擇。</p>
+
+      <h2 id="limitations">8. 長時間通話前需瞭解的限制</h2>
+      <ul>
+        <li><strong>每次錄製一個 App。</strong> 會議擷取錄製單一應用程式以及你的麥克風。</li>
+        <li><strong>標籤只能盡力而為。</strong> 說話者標籤取決於清晰、分離的音訊，說話者識別可能會合併或拆分聲音。</li>
+        <li><strong>品質取決於模型和語言。</strong> 較大的模型佔用更多儲存空間和時間。在依賴重要措辭之前，請對照音訊進行核對。</li>
+        <li><strong>免費額度為 15 分鐘轉錄。</strong> 一場長會議就可能用完。無限使用為一次購買、終身有效；請參閱 <a href="/zh-hant/docs/#pricing-limits">免費使用與終身解鎖</a>.</li>
+        <li><strong>有些內容會離開你的 Mac。</strong> 錄製和轉錄都在裝置上進行，音訊不會為轉錄而上傳。下載 Whisper 或 Parakeet 模型會連線到 Hugging Face，如 <a href="/zh-hant/privacy.html#third-party-services">隱私權政策</a>所述；說話人模型也是一次性下載。如果你的儲存庫透過 iCloud Drive 或 Obsidian Sync 同步，完成的筆記會依照該服務的條款同步。Vox.md 只寫入檔案；是否同步由你決定。</li>
+      </ul>
+      <p>想用更快的方式以語音打字？Mac 的 <strong>轉載到 Clipboard</strong> 快速鍵會複製本機轉錄文字，讓你可以貼上到任何 App 中，而不建立筆記；請參閱 <a href="/zh-hant/blog/dictation-on-mac/">Mac 聽寫</a> 和 <a href="/zh-hant/docs/#mac-keybinds">全域快速鍵</a>.</p>
+      <p>已經有錄音了？ <a href="/zh-hant/blog/transcribe-audio-file-mac/">在 Mac 上轉錄音訊檔案。</a> 已經有來自 Zoom 或 Teams 的 .srt 或 .vtt 逐字稿? <a href="/zh-hant/blog/srt-vtt-to-text-markdown/">SRT 和 VTT 轉 Markdown 轉換器</a> 在瀏覽器中將其變成筆記。</p>
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">你的會議，<br>成為你擁有的檔案。</h2>
+        <p>先與已同意的同事進行一次簡短的測試通話，然後檢查儲存庫中的 Markdown 筆記。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_f0ba2ed6ae97">免費下載 Vox.md</a></p>
+        <p>15 分鐘免費轉錄 · 不需要帳號 · 一次性終身解鎖</p>
+      </section>
+      <nav class="toc" aria-label="相關指南" id="related"><div class="toc-title">繼續設定</div><ul>
+        <li><a href="/zh-hant/blog/transcribe-interview/">錄製一對一訪談？方法、知情同意與覆核</a></li>
+        <li><a href="/zh-hant/docs/#mac-meeting">Mac 會議擷取參考</a></li>
+        <li><a href="/zh-hant/docs/#models">語音模型與語言</a></li>
+        <li><a href="/zh-hant/blog/obsidian-capture-templates/">路徑與範本範例</a></li>
+        <li><a href="/zh-hant/blog/voice-notes-to-obsidian-iphone/">將 iPhone 語音筆記儲存到 Obsidian</a></li>
+        <li><a href="/zh-hant/blog/offline-transcription-iphone-markdown/">準備本機轉錄和 Markdown 目標位置</a></li>
+        <li><a href="/zh-hant/compare/vox-md-vs-obsidian-quick-capture/">比較 Vox.md 與 Obsidian Quick Capture</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/zh-hant/">首頁</a></li>
+        <li><a href="/zh-hant/docs/">文件</a></li>
+        <li><a href="/zh-hant/blog/">指南</a></li>
+        <li><a href="/zh-hant/compare/">比較</a></li>
+        <li><a href="/zh-hant/privacy.html">隱私</a></li>
+        <li><a href="/zh-hant/terms.html">條款</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">支援</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_f0ba2ed6ae97">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · 本地筆記快速擷取 · 不上傳內容。</div>
+    </div>
+  <details class="language-switcher"><summary>語言</summary><ul><li><a href="/blog/transcribe-meetings-mac-obsidian/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-meetings-mac-obsidian/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-meetings-mac-obsidian/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-meetings-mac-obsidian/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-meetings-mac-obsidian/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-meetings-mac-obsidian/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-meetings-mac-obsidian/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-meetings-mac-obsidian/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-meetings-mac-obsidian/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-meetings-mac-obsidian/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-meetings-mac-obsidian/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-meetings-mac-obsidian/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-meetings-mac-obsidian/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-meetings-mac-obsidian/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-meetings-mac-obsidian/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-meetings-mac-obsidian/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-meetings-mac-obsidian/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-meetings-mac-obsidian/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-meetings-mac-obsidian/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-meetings-mac-obsidian/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-meetings-mac-obsidian/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hant" hreflang="zh-Hant" aria-current="page">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

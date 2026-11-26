@@ -247,7 +247,7 @@
           <div><strong>Zdjęcia i aparat</strong><p>Wybierz zdjęcia lub zrzuty, albo zrób zdjęcie. Obrazy są przygotowywane i osadzane w dostarczonej notatce.</p></div>
           <div><strong>Pliki</strong><p>Wybierz wiele elementów w Plikach. Obrazy stają się osadzonymi załącznikami, audio pozostaje danymi audio, a inne pliki używają linków w stylu Obsidian.</p></div>
           <div><strong>Skany dokumentów</strong><p>Skanuj strony przez VisionKit. Vox.md zachowuje obrazy stron, tworzy PDF i wykonuje OCR na urządzeniu z możliwą dokładnością.</p></div>
-          <div><strong>OCR dziennika</strong><p>Zrób zdjęcia maksymalnie 10 stron dziennika, ręcznie wyzwalając migawkę, lub wybierz zdjęcia dziennika. Dokładny Vision OCR używa automatycznego wykrywania języka.</p></div>
+          <div><strong>OCR dziennika</strong><p>Sfotografuj do 10 stron dziennika ręczną migawką lub wybierz zdjęcia dziennika. Dokładny Vision OCR automatycznie wykrywa język. Zobacz <a href="/pl/blog/handwritten-notes-to-obsidian-iphone/">odręczne notatki do Obsidian</a>.</p></div>
           <div><strong>Szkice</strong><p>Rysuj czarnym piórem na białym płótnie PencilKit. Vox.md zapisuje edytowalne dane rysunku i podgląd PNG.</p></div>
           <div><strong>Działanie bieżącej lokalizacji</strong><p>Żąda jednej pozycji i wstawia poprawny link Markdown Google Maps do wersji roboczej. Niezależny pasek nie zmienia opcji lokalizacji tras.</p></div>
           <div><strong>Głos i importowane audio</strong><p>Nagraj z edytora lub zaimportuj audio/wideo, wykonaj transkrypcję lokalnie i dodaj wynik do wersji roboczej albo wyślij go natychmiast.</p></div>
@@ -262,8 +262,8 @@
             <tbody>
               <tr><td>Dodaj media</td><td>Otwiera szkic, aparat, zdjęcie, zrzut i link.</td></tr>
               <tr><td>Dodaj pliki</td><td>Wybiera wiele plików z Plików i przygotowuje z wersją roboczą.</td></tr>
-              <tr><td>Skanowanie dokumentów</td><td>Zapisuje wiele stron, PDF, obrazy i OCR według możliwości.</td></tr>
-              <tr><td>Wyciąg tekst</td><td>Daje zapis stron i wybór zdjęć dziennika dla OCR.</td></tr>
+              <tr><td>Skanuj dokument</td><td>Zapisuje wiele stron, PDF, obrazy i OCR według możliwości.</td></tr>
+              <tr><td>Wyodrębnij tekst</td><td>Daje zapis stron i wybór zdjęć dziennika dla OCR.</td></tr>
               <tr><td>Jedenaście</td><td>Cofa ostatnią operację edytora.</td></tr>
               <tr><td>Formatuj Markdown</td><td>Stosuje pogrubienie, kursywę, hashtag lub nagłówki 1–6.</td></tr>
               <tr><td>Markdown Linków</td><td>Wstawia <code>[link text](url)</code> i zaznacza edytowalną część.</td></tr>
@@ -312,8 +312,8 @@
           <li>Ustawienia → Trasy: twórz, zmieniaj nazwę, włączaj, wyłączaj, wybieraj ikony lub usuwaj własne trasy.</li>
           <li>Wyszukiwarka ikon grupuje symbole jako pisanie, głos, zadania, osobiste i praca.</li>
           <li>Wyłączone trasy są ukryte w zwykłym wyborze. Wbudowanej Default nie można usunąć.</li>
-          <li>Default ma symbol fali, monit <em>Zapisz pomysł, zadanie, link, plik, skan lub nagranie.</em>, <code>type: capture</code> metadane, obróbkę „Uporządkowany tekst”, wyłączone przetwarzanie tekstu pisanego i wyłączony zapis audio.</li>
-          <li>Nowa własna trasa zaczyna jako <em>Własna trasa</em>, używa ikony suwaków i <em>Co chcesz zapisać?</em> i zaczyna z własną instrukcją, ale wyłączoną obróbką pisania/mieszanego.</li>
+          <li>Default ma symbol fali, monit <em>Zapisz pomysł, zadanie, link, plik, skan lub nagranie.</em>, <code>type: capture</code> metadane, obróbkę „Uporządkowany tekst” z wyłączonym <strong>Użyj Apple Intelligence</strong> oraz wyłączony zapis audio.</li>
+          <li>Nowa własna trasa zaczyna jako <em>Własna trasa</em>, używa ikony suwaków i <em>Co chcesz zapisać?</em> jako monit i zaczyna z wybraną opcją „Własna instrukcja”, ale <strong>Użyj Apple Intelligence</strong> jest wyłączone.</li>
         </ul>
 
         <h3 id="processing-modes">Tryby obróbki</h3>
@@ -324,16 +324,17 @@
               <tr><td>Zachowaj oryginał</td><td>Zachowuje tekst bez przepisywania AI.</td><td>Dostarcza oryginalny tekst.</td></tr>
               <tr><td>Uporządkowany tekst</td><td>Czyści wielkość liter i interpunkcję, zachowując sens i Markdown.</td><td>Oryginał, gdy lokalne wzbogacanie niedostępne.</td></tr>
               <tr><td>Lista zadań</td><td>Tworzy Markdown <code>- [ ]</code> punkty zadań.</td><td>Deterministyczny format listy wyboru.</td></tr>
-              <tr><td>Notatki ze spotkania</td><td>Tworzy <code>## Notes</code> sekcję i, jeśli jest, <code>## Action Items</code>.</td><td>Deterministyczna struktura notatki spotkania.</td></tr>
+              <tr><td>Notatki ze spotkania</td><td>Tworzy <code>## Notes</code> sekcję i, jeśli jest, <code>## Action Items</code>.</td><td>Deterministyczna struktura notatki spotkania dla transkrypcji głosowych; zapisany tekst jest dostarczany bez zmian.</td></tr>
               <tr><td>Własna instrukcja</td><td>Wykonuje instrukcję lokalnym Apple Intelligence, jeśli dostępne.</td><td>Oryginał, gdy instrukcja nie może działać lokalnie.</td></tr>
             </tbody>
           </table>
         </div>
-        <p>Głos używa wybranego trybu trasy. <strong>Zastosuj do przechwytywania tekstu</strong> jest osobną, domyślnie wyłączoną zgodą na obróbkę pisanego Markdown, OCR i mieszanego tekstu. Bez niej brak nieoczekiwanego przepisywania autorskiego Markdown. Dokładne przetworzone żądanie zapisuje się przed dostawą, więc ponowienia nie przetwarzają według nowych ustawień.</p>
+        <p>Aby dodać nagłówki planu spotkania, uczestników i decyzji wokół wyniku trybu Notatki ze spotkania, <a href="/pl/blog/obsidian-meeting-notes-template/">wygeneruj szablon notatek ze spotkań dla Obsidian</a>. Aby zamienić istniejącą listę w zadania <code>- [ ]</code> , użyj <a href="/pl/blog/markdown-checklist-maker/">Kreator list kontrolnych Markdown</a>.</p>
+        <p><strong>Użyj Apple Intelligence</strong>, domyślnie wyłączone, włącza tryb przetwarzania trasy. <strong>Zastosuj do</strong> określa następnie, co jest przetwarzane: <strong>Głos i tekst</strong> (domyślnie), <strong>Tylko głos</strong> lub <strong>Tylko tekst</strong>. Tekst oznacza wpisany Markdown, tekst wyodrębniony ze zdjęć lub skanów oraz inne zapisy zawierające tekst; wybierz <strong>Tylko głos</strong> – wtedy autorski Markdown nie zostanie przepisany. Przy wyłączonym przełączniku transkrypcje głosowe nadal otrzymują deterministyczną strukturę trybów „Lista zadań” i „Notatki ze spotkania”, a zapisany tekst jest dostarczany bez zmian. Dokładne przetworzone żądanie zapisuje się przed dostawą, więc ponowienia nie przetwarzają według nowych ustawień.</p>
 
         <h3 id="preset-metadata">Metadane</h3>
         <ul>
-          <li>Wpisz statyczne metadane po jednym <code>key: value</code> parę na wiersz, np. <code>tags: [journal, idea]</code>.</li>
+          <li>Wpisz statyczne metadane po jednym <code>key: value</code> parę na wiersz, np. <code>tags: [journal, idea]</code>. Aby zbudować poprawny frontmatter dla Note Frontmatter, użyj <a href="/pl/blog/obsidian-properties-generator/">generator właściwości</a>.</li>
           <li><strong>Frontmatter notatki</strong> zapisuje metadane dokumentu.</li>
           <li><strong>Pola liniowe wpisu</strong> zapisuje <code>key:: value</code> pola obok każdego wpisu notatki okresowej.</li>
           <li>Lokalne wzbogacanie, jeśli dostępne, dodaje tytuł, tagi, kategorię i czysty tekst obok statycznych metadanych trasy.</li>
@@ -381,7 +382,7 @@
         <h3 id="placement-templates">Położenie, nagłówki i szablony</h3>
         <ul>
           <li><strong>Dno</strong> dopisuje; <strong>Top</strong> dodaje na początku; <strong>kierunek</strong> wstawia pod nagłówkiem poziomu 1–6.</li>
-          <li>Jeśli brakuje nagłówka, wybierz <strong>Pokaż błąd</strong> lub <strong>Tworzenie tytułów</strong>.</li>
+          <li>Jeśli brakuje nagłówka, wybierz <strong>Pokaż błąd</strong> lub <strong>Utwórz nagłówek</strong>.</li>
           <li>Użyj odczytywanego na bieżąco pliku szablonu Markdown ze skarbca, wielokrotnego szablonu wpisu lub własnego tekstu prefiksu i sufiksu.</li>
           <li>Format wpisu obsługuje <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>, i <code>{location}</code>.</li>
           <li>Domyślny podfolder załączników to <code>attachments</code>.</li>
@@ -424,6 +425,8 @@
             </tbody>
           </table>
         </div>
+
+        <p>Nie wiesz, który model pobrać? <a href="/pl/compare/whisper-vs-parakeet/">Porównaj Whisper i Parakeet</a> i przetestuj oba na własnym nagraniu.</p>
 
         <h3 id="automatic-model">Jak działa tryb automatyczny</h3>
         <ul>
@@ -599,8 +602,10 @@
           <li>Naciśnij Command-Return, aby wysłać przechwycenie. Trasa z włączonym „Użyj bieżącej lokalizacji” żąda jednej lokalizacji pochodzącej z Mac przy wysłaniu lub zatrzymaniu nagrania, niezależnie od tego, czy zapis metadanych jest włączony.</li>
           <li>Baner miejsca i inspektor trasy pokazują wynikową notatkę i położenie wybranej trasy.</li>
         </ul>
+        <p>Instrukcję krok po kroku znajdziesz w <a href="/pl/blog/transcribe-audio-file-mac/">transkrypcja pliku audio na Macu lokalnie do Markdown</a>, lub <a href="/pl/blog/record-audio-on-mac/">jak nagrywać dźwięk na Macu</a>.</p>
 
         <h3 id="mac-meeting">Nagrywanie spotkań z osobnymi ścieżkami</h3>
+        <p>Konfigurację krok po kroku opisuje przewodnik <a href="/pl/blog/transcribe-meetings-mac-obsidian/">lokalna transkrypcja spotkań na Macu do Obsidian</a>.</p>
         <p>Przełącz wybór trybu z <strong>Mikrofon</strong> do <strong>Spotkanie</strong> do nagrania dźwięku jednej aplikacji Mac i mikrofonu jako dwóch osobnych ścieżek. Vox.md używa ScreenCaptureKit w trybie jednej aplikacji; wybierasz jedną, samo Vox.md nie jest nagrywane.</p>
         <ul>
           <li>Podczas nagrywania pasek stanu pokazuje bieżące mierniki poziomu dźwięku systemowego i mikrofonu, stan każdego źródła oraz wszelkie ostrzeżenia przechwytywania.</li>
@@ -610,6 +615,7 @@
         </ul>
 
         <h3 id="mac-keybinds">Globalne skróty klawiszowe</h3>
+        <p>Instrukcję krok po kroku znajdziesz w <a href="/pl/blog/dictation-on-mac/">dyktowanie na Macu, prywatnie z opcją lokalną</a>.</p>
         <p>Ustawienia → Globalne skróty klawiszowe pozwalają przypisać skróty do <strong>Transcribe do Clipboard</strong>, <strong>Wybrana trasa</strong>, lub włączonej trasie. Skróty domyślnie wyłączone, wymagają zwykłego klawisza i Control, Option lub Command, mogą mieć Shift, odrzucają konflikty. Powtórz aktywny skrót dla stopu.</p>
         <div class="docs-callout docs-callout-neutral">
           <p><strong>Transcribe do Clipboard</strong> nie tworzy notatki, pozycji biblioteki ani zachowanego audio. Służy szybkiemu dyktowaniu do aplikacji Mac.</p>
@@ -670,7 +676,7 @@
           <li>Darmowe użycie zawiera <strong>15 minut transkrypcji</strong> i <strong>10 udanych dostaw przechwycenia</strong>.</li>
           <li>Transkrypcja głosowa już rozliczona w czasie transkrypcji nie zużywa też osobnego limitu przechwyceń, gdy jest kierowana do Markdown.</li>
           <li>Błędne zapisy i idempotentne ponowienia nie zużywają udanej dostawy.</li>
-          <li>Brak limitów to zakup dożywotni bez subskrypcji, odnowień i reklam. Wiążąca jest lokalna cena App Store; USA: $19.99 indywidualnie, $39.99 rodzinnie, $19.99 rozszerzenie rodzinne; inne sklepy uwzględniają siłę nabywczą.</li>
+          <li>Brak limitów to zakup dożywotni bez subskrypcji, odnowień i reklam. Wiążąca jest lokalna cena App Store; USA: $79.99 indywidualnie, $129.99 rodzinnie, $49.99 rozszerzenie rodzinne; inne sklepy uwzględniają siłę nabywczą.</li>
           <li>Przywrócenie zakupu odzyskuje uprawniony zakup. Użytkownicy kwalifikujących się dawnych płatnych wersji zachowują dostęp bez limitów.</li>
           <li>Rejestr App Group bez treści zapobiega podwójnemu naliczaniu przy ponowieniach, dopóki pozostają lokalne dane aplikacji. Nie jest przechowywany w pęku kluczy; usunięcie lokalnych danych aplikacji rozpoczyna nowy bezpłatny limit.</li>
         </ul>

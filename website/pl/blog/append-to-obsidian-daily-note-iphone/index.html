@@ -156,6 +156,7 @@
         <p>Połącz preset przechwytywania Vox.md ze skarbcem, wybierz Rolling Note z okresem dziennym i dopasuj jej ścieżkę do istniejących nazw plików notatek dziennych. Użyj „Dno”, aby dopisywać do notatki, lub „kierunek”, aby wstawiać pod nazwaną sekcją. To samo miejsce może przyjmować przechwycenia tekstu i głosu.</p>
       </div>
       <p>Poradnik dotyczy tras i formatu. Nagrania i modele zacznij od <a href="/pl/blog/voice-notes-to-obsidian-iphone/">Notatki głosowe iPhone do Obsidian</a>. Obsidian ma też własne narzędzia przechwytywania do notatek dziennych; Vox.md nie jest potrzebne do każdego procesu dopisywania.</p>
+      <p>Chcesz dziennika głosowego, a nie dziennika zapisów? Zobacz <a href="/pl/blog/private-voice-journal-iphone/">prowadzenie prywatnego dziennika głosowego na iPhone</a>.</p>
       <nav class="toc" aria-label="W poradniku"><div class="toc-title">W poradniku</div><ol>
         <li><a href="#match-path">Dopasuj ścieżkę dnia</a></li>
         <li><a href="#heading">Wybierz położenie i nagłówek</a></li>
@@ -173,14 +174,14 @@
         <li>Wybierz <strong>Rolling Note</strong> i <strong>Codziennie</strong> okres.</li>
         <li>Dla przykładowej konwencji ustaw wzorzec ścieżki <code>Journal/{period}.md</code>. Sprawdź wynikowe miejsce przed wysłaniem.</li>
       </ol>
-      <p>Przy okresie dziennym <code>{period}</code> rozwija się do daty, np. <code>2026-10-26</code>. Skarbiec z plikami dziennymi w korzeniu użyłby zamiast tego <code>{period}.md</code>. To tokeny ścieżek Vox.md, nie wyrażenia szablonów Obsidian.</p>
+      <p>Przy okresie dziennym <code>{period}</code> rozwija się do daty, np. <code>2026-10-26</code>. Skarbiec z plikami dziennymi w korzeniu użyłby zamiast tego <code>{period}.md</code>. To tokeny ścieżek Vox.md, a nie wyrażenia szablonów Obsidiana. Aby zbudować sam szablon notatki dziennej i zobaczyć podgląd nazwy pliku wynikającej z formatu daty, użyj <a href="/pl/blog/obsidian-daily-note-template/">Generator szablonu notatki dziennej Obsidiana</a>.</p>
       <p>Vox.md nie odczytuje automatycznie konfiguracji Twojej wtyczki Daily Notes. Wybór innego folderu lub nazwy pliku tworzy inny cel. Ścieżka jest względna wobec folderu wybranego przez Pliki; nie powtarzaj w niej nazwy samego skarbca, chyba że jest to rzeczywisty podfolder.</p>
       <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_pl_24d3c4f9ef44">Pobierz Vox.md za darmo</a></p>
       <p>Wypróbuj bezpłatnie 10 udanych dostaw przechwyconej treści i 15 minut transkrypcji. Użycie bez limitów to jednorazowy zakup dożywotni; ceny różnią się w zależności od regionu.</p>
 
       <h2 id="heading">2. Wybierz położenie i nagłówek</h2>
       <p>Wybierz <strong>Dno</strong> aby dopisywać na końcu notatki dziennej, albo <strong>Top</strong> dla początku. Aby trzymać w sekcji, wybierz <strong>kierunek</strong>, wpisz tytuł i ustaw poziom.</p>
-      <p>W przykładzie użyj nagłówka drugiego poziomu o nazwie <strong>Inbox</strong>. Wybierz koniec sekcji tego nagłówka, aby nowsze wpisy następowały po starszych. Dla brakującego nagłówka ustaw <strong>Tworzenie tytułów</strong> jeśli Vox.md ma go dodać, albo <strong>Pokaż błąd</strong> jeśli chcesz naprawić notatkę samodzielnie.</p>
+      <p>W przykładzie użyj nagłówka drugiego poziomu o nazwie <strong>Inbox</strong>. Wybierz koniec sekcji tego nagłówka, aby nowsze wpisy następowały po starszych. Dla brakującego nagłówka ustaw <strong>Utwórz nagłówek</strong> jeśli Vox.md ma go dodać, albo <strong>Pokaż błąd</strong> jeśli chcesz naprawić notatkę samodzielnie.</p>
       <figure class="guide-figure">
         <img src="/screenshots/optimized/01-route-heading-light-640.webp" alt="Edytor miejsca Vox.md z notatką okresową i położeniem pod nagłówkiem" width="1206" height="2622" loading="lazy" decoding="async">
         <figcaption>Edytor miejsca ustawia plik i położenie. Sprawdź ścieżkę skarbca i poziom nagłówka przed wysłaniem.</figcaption>
@@ -197,6 +198,7 @@
       <p>Dla głosu nagrywaj przez „Szybkie złapanie” z tym samym presetem. Dodaj transkrypcję do wersji roboczej do sprawdzenia przed wysłaniem lub wybierz „Wyślij natychmiast”, gdy nabierzesz pewności co do trasy. Klawiatura wstawia tekst do aplikacji gospodarza zamiast eksportować drugie przechwycenie Markdown.</p>
 
       <h2 id="tasks">Sformatuj listę zadań</h2>
+      <p>Aby zamienić listę, którą już masz, w zadania, użyj <a href="/pl/blog/markdown-checklist-maker/">Kreator list kontrolnych Markdown</a>.</p>
       <p>Dla sekcji Tasks wybierz nagłówek drugiego poziomu o nazwie <strong>Tasks</strong> i jednolitego sposobu listy. Dla pisanego bez obróbki oryginał i prefiks <code>- [ ] </code> robi zadanie z krótkiego wpisu bez AI.</p>
       <pre class="guide-code"><code>## Tasks
 - [ ] Read the trail guide

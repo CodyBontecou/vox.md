@@ -156,6 +156,7 @@
         <p>Hubungkan Menangkap Preset Vox.md ke vault, pilih Rolling Note yang dengan periode harian, dan cocokkan jalurnya dengan nama berkas catatan harian yang ada. Gunakan Bawah untuk menambahkan ke catatan, atau Kepala untuk menyisipkan di bawah bagian bernama. Tujuan sama dapat menerima tangkapan teks dan suara.</p>
       </div>
       <p>Panduan ini berfokus pada perutean dan format. Untuk penyiapan rekaman dan model, mulai dengan <a href="/id/blog/voice-notes-to-obsidian-iphone/">Catatan suara iPhone ke Obsidian</a>. Obsidian juga memiliki alat pencatatan harian sendiri; Anda tidak membutuhkan Vox.md untuk setiap alur penambahan.</p>
+      <p>Ingin jurnal suara, bukan log capture? Lihat <a href="/id/blog/private-voice-journal-iphone/">membuat jurnal suara pribadi di iPhone</a>.</p>
       <nav class="toc" aria-label="Dalam panduan ini"><div class="toc-title">Dalam panduan ini</div><ol>
         <li><a href="#match-path">Cocokkan jalur catatan harian Anda</a></li>
         <li><a href="#heading">Pilih penempatan dan judul</a></li>
@@ -173,14 +174,14 @@
         <li>Pilih <strong>Rolling Note yang</strong> dan <strong>Harian</strong> sebagai periode.</li>
         <li>Untuk contoh konvensi ini, atur pola jalur menjadi <code>Journal/{period}.md</code>. Tinjau tujuan hasil resolusi sebelum mengirim.</li>
       </ol>
-      <p>Dengan periode harian, <code>{period}</code> menghasilkan tanggal seperti <code>2026-10-26</code>. Vault yang menyimpan berkas harian di akarnya akan menggunakan <code>{period}.md</code>. Ini token jalur Vox.md, bukan ekspresi templat Obsidian.</p>
+      <p>Dengan periode harian, <code>{period}</code> menghasilkan tanggal seperti <code>2026-10-26</code>. Vault yang menyimpan berkas harian di akarnya akan menggunakan <code>{period}.md</code>. Ini adalah token path Vox.md, bukan ekspresi templat Obsidian. Untuk membuat templat catatan harian itu sendiri dan melihat pratinjau nama berkas dari format tanggal Anda, gunakan <a href="/id/blog/obsidian-daily-note-template/">Generator templat catatan harian Obsidian</a>.</p>
       <p>Vox.md tidak otomatis membaca konfigurasi plugin Daily Notes. Memilih folder atau nama berkas berbeda membuat target berbeda. Jalur relatif terhadap folder pilihan melalui Files; jangan ulangi nama vault sendiri dalam jalur kecuali itu benar-benar subfolder.</p>
       <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_id_24d3c4f9ef44">Unduh Vox.md gratis</a></p>
       <p>Coba gratis 10 pengiriman Tangkapan yang berhasil dan 15 menit transkripsi. Penggunaan tanpa batas adalah pembelian sekali untuk seumur hidup; harga berbeda menurut wilayah.</p>
 
       <h2 id="heading">2. Pilih penempatan dan judul</h2>
       <p>Pilih <strong>bawah</strong> untuk menambahkan di akhir catatan harian, atau <strong>Top</strong> untuk menambahkan di awal. Untuk menyimpan tangkapan dalam suatu bagian, pilih <strong>Kepala</strong>, masukkan judulnya, dan atur tingkatnya.</p>
-      <p>Untuk contoh di bawah, gunakan judul tingkat dua bernama <strong>Inbox</strong>. Pilih penyisipan di akhir bagian judul tersebut agar entri baru mengikuti entri lama. Atur perilaku jika judul tidak ada menjadi <strong>Membuat head</strong> jika Vox.md harus menambahkannya, atau <strong>Tampilkan kesalahan</strong> jika ingin memperbaiki catatan sendiri.</p>
+      <p>Untuk contoh di bawah, gunakan judul tingkat dua bernama <strong>Inbox</strong>. Pilih penyisipan di akhir bagian judul tersebut agar entri baru mengikuti entri lama. Atur perilaku jika judul tidak ada menjadi <strong>Buat judul</strong> jika Vox.md harus menambahkannya, atau <strong>Tampilkan kesalahan</strong> jika ingin memperbaiki catatan sendiri.</p>
       <figure class="guide-figure">
         <img src="/screenshots/optimized/01-route-heading-light-640.webp" alt="Editor tujuan Vox.md dengan pengaturan catatan bergulir dan penempatan judul" width="1206" height="2622" loading="lazy" decoding="async">
         <figcaption>Editor tujuan mengontrol target berkas dan penempatan. Cocokkan jalur vault dan tingkat judul sebelum mengirim.</figcaption>
@@ -197,6 +198,7 @@
       <p>Untuk suara, rekam melalui Cepat menangkap dengan preset yang sama. Tambahkan transkrip ke draf untuk ditinjau sebelum Kirim, atau pilih Kirim Sekarang setelah terbiasa dengan rutenya. Papan ketik menyisipkan teks ke aplikasi induk, bukan mengekspor tangkapan Markdown kedua.</p>
 
       <h2 id="tasks">Format daftar tugas</h2>
+      <p>Untuk mengonversi daftar yang sudah ada menjadi tugas, gunakan <a href="/id/blog/markdown-checklist-maker/">Pembuat daftar periksa Markdown</a>.</p>
       <p>Untuk bagian Tasks, pilih judul tingkat dua bernama <strong>Tasks</strong> dan metode daftar centang konsisten. Untuk tangkapan ketikan tanpa pemrosesan teks, Pertahankan Asli ditambah awalan entri <code>- [ ] </code> menjadikan entri singkat sebagai tugas tanpa penulisan ulang AI.</p>
       <pre class="guide-code"><code>## Tasks
 - [ ] Read the trail guide

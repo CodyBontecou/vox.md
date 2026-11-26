@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="th" dir="ltr" data-search-section="ส่วน" data-search-guide="คู่มือ" data-search-empty="ไม่พบ “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ถอดเสียงไฟล์เสียงบน Mac ในเครื่อง เป็น Markdown | Vox.md</title>
+  <meta name="description" content="ดูว่าแอปบันทึกเสียงและโน้ตบน Mac มีอะไรให้ฟรี จากนั้นนำเข้าไฟล์เสียงหรือวิดีโอที่มีอยู่ไปยัง Vox.md สำหรับ Mac ถอดเสียงบน Mac ของคุณด้วย Whisper หรือ Parakeet แล้วบันทึกเป็นโน้ต Markdown ที่เป็นของคุณ">
+  <link rel="canonical" href="https://vox.isolated.tech/th/blog/transcribe-audio-file-mac/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="เอกสาร Vox.md สำหรับโมเดลภาษา">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="ถอดเสียงไฟล์เสียงบน Mac ในเครื่อง เป็น Markdown">
+  <meta property="og:description" content="ดูว่าแอปบันทึกเสียงและโน้ตบน Mac มีอะไรให้ฟรี จากนั้นนำเข้าไฟล์เสียงหรือวิดีโอที่มีอยู่ไปยัง Vox.md สำหรับ Mac ถอดเสียงบน Mac ของคุณด้วย Whisper หรือ Parakeet แล้วบันทึกเป็นโน้ต Markdown ที่เป็นของคุณ">
+  <meta property="og:url" content="https://vox.isolated.tech/th/blog/transcribe-audio-file-mac/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-22">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ถอดเสียงไฟล์เสียงบน Mac ในเครื่อง เป็น Markdown">
+  <meta name="twitter:description" content="ดูว่าแอปบันทึกเสียงและโน้ตบน Mac มีอะไรให้ฟรี จากนั้นนำเข้าไฟล์เสียงหรือวิดีโอที่มีอยู่ไปยัง Vox.md สำหรับ Mac ถอดเสียงบน Mac ของคุณด้วย Whisper หรือ Parakeet แล้วบันทึกเป็นโน้ต Markdown ที่เป็นของคุณ">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "ถอดเสียงไฟล์เสียงบน Mac ในเครื่อง เป็น Markdown",
+  "description": "ดูว่าแอปบันทึกเสียงและโน้ตบน Mac มีอะไรให้ฟรี จากนั้นนำเข้าไฟล์เสียงหรือวิดีโอที่มีอยู่ไปยัง Vox.md สำหรับ Mac ถอดเสียงบน Mac ของคุณด้วย Whisper หรือ Parakeet แล้วบันทึกเป็นโน้ต Markdown ที่เป็นของคุณ",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-22",
+  "dateModified": "2026-11-22",
+  "mainEntityOfPage": "https://vox.isolated.tech/th/blog/transcribe-audio-file-mac/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "th",
+  "name": "ถอดเสียงไฟล์เสียงบน Mac ในเครื่อง เป็น Markdown | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/th/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "คู่มือ",
+      "item": "https://vox.isolated.tech/th/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "ถอดเสียงไฟล์เสียงบน Mac ในเครื่อง เป็น Markdown",
+      "item": "https://vox.isolated.tech/th/blog/transcribe-audio-file-mac/"
+    }
+  ],
+  "inLanguage": "th",
+  "name": "ถอดเสียงไฟล์เสียงบน Mac ในเครื่อง เป็น Markdown | Vox.md",
+  "description": "ดูว่าแอปบันทึกเสียงและโน้ตบน Mac มีอะไรให้ฟรี จากนั้นนำเข้าไฟล์เสียงหรือวิดีโอที่มีอยู่ไปยัง Vox.md สำหรับ Mac ถอดเสียงบน Mac ของคุณด้วย Whisper หรือ Parakeet แล้วบันทึกเป็นโน้ต Markdown ที่เป็นของคุณ"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-audio-file-mac/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">ข้ามไปคู่มือ</a>
+<nav aria-label="การนำทางหลัก">
+  <div class="nav-inner">
+    <a href="/th/" class="logo" aria-label="หน้าแรก Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/th/#how">วิธีทำงาน</a></li>
+      <li><a href="/th/docs/">เอกสาร</a></li>
+      <li><a href="/th/blog/">คู่มือ</a></li>
+      <li><a href="/th/compare/">เปรียบเทียบ</a></li>
+      <li><a href="/th/privacy.html">ความเป็นส่วนตัว</a></li>
+      <li><a href="/th/terms.html">ข้อกำหนด</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_th_5aaec3f62945">ดาวน์โหลด Vox.md</a>
+  <details class="language-switcher"><summary>ภาษา</summary><ul><li><a href="/blog/transcribe-audio-file-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-audio-file-mac/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-audio-file-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-audio-file-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-audio-file-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-audio-file-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-audio-file-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-audio-file-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-audio-file-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-audio-file-mac/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-audio-file-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-audio-file-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-audio-file-mac/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-audio-file-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-audio-file-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-audio-file-mac/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-audio-file-mac/" lang="th" hreflang="th" aria-current="page">ไทย</a></li><li><a href="/tr/blog/transcribe-audio-file-mac/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-audio-file-mac/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-audio-file-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-audio-file-mac/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-audio-file-mac/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-audio-file-mac/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Mac · ไฟล์เสียง · ถอดเสียงในเครื่อง</div>
+        <h1 class="hero-title">ถอดเสียงไฟล์เสียงบน Mac ในเครื่อง เป็น Markdown</h1>
+        <p class="hero-subtitle">เริ่มจากตัวเลือกในตัวที่ฟรี แล้วต่อด้วยเส้นทางในเครื่องจากไฟล์ที่คุณมีอยู่ไปเป็นโน้ต Markdown ใน Obsidian หรือโฟลเดอร์ใดก็ได้</p>
+      </div>
+      <aside class="meta-card" aria-label="เกี่ยวกับคู่มือนี้">
+        <dl>
+          <div><dt>โดย</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>ปรับปรุง</dt><dd><time datetime="2026-11-22">22 พฤศจิกายน 2026</time></dd></div>
+          <div><dt>ต้องใช้</dt><dd>Vox.md: macOS 14 ขึ้นไป · โมเดลเสียงที่ดาวน์โหลดแล้ว การถอดเสียงในตัวของ Apple: ดูหน้าบริการช่วยเหลือของ Apple สำหรับ Mac และภาษาของคุณ</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="ถอดเสียงไฟล์เสียงบน Mac ในเครื่อง เป็น Markdown">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">คำตอบสั้น ๆ</div>
+        <p>แอปบันทึกเสียงและโน้ตของ Apple ถอดเสียงบน Mac ได้ฟรี และสำหรับหลายคนก็เพียงพอแล้ว หากต้องการเปลี่ยนไฟล์เสียงหรือวิดีโอที่มีอยู่เป็นโน้ต Markdown ให้เปิด Vox.md สำหรับ Mac แล้วเลือก <strong>นำเข้าเสียง…</strong> จากแถบเมนู (หรือนำเข้าไฟล์ในพื้นที่ทำงานการจด) ให้โมเดล Whisper หรือ Parakeet ในเครื่องถอดเสียง ตรวจทานข้อความ แล้วส่งไปยังโน้ตของเส้นทางของคุณ</p>
+      </div>
+      <p>รายละเอียดของ Apple ด้านล่างมาจากหน้าบริการช่วยเหลือของ Apple <a href="https://support.apple.com/guide/voice-memos/vm4a03609f0d/mac">ดูข้อความถอดเสียงในแอปบันทึกเสียงบน Mac</a> และ <a href="https://support.apple.com/guide/notes/apdb5106e334/mac">บันทึกและถอดเสียงจากเสียงในโน้ตบน Mac</a> อ่านเมื่อวันที่ 22 พฤศจิกายน 2026 หน้าของ Apple อาจเปลี่ยนแปลง จึงควรตรวจสอบกับ Mac ของคุณ ขั้นตอนของ Vox.md อ้างอิงจาก <a href="/th/docs/#mac">เอกสารสำหรับ Mac</a>.</p>
+      <nav class="toc" aria-label="ในคู่มือนี้"><div class="toc-title">ในคู่มือนี้</div><ol>
+        <li><a href="#built-in">ตัวเลือกฟรีที่มีอยู่แล้วบน Mac ของคุณ</a></li>
+        <li><a href="#choose">วิธีไหนเหมาะ</a></li>
+        <li><a href="#prepare">เตรียม Vox.md สำหรับ Mac</a></li>
+        <li><a href="#import">นำเข้าและถอดเสียงไฟล์</a></li>
+        <li><a href="#verify">ตรวจสอบโน้ต Markdown</a></li>
+        <li><a href="#privacy">อะไรที่ออกจาก Mac ของคุณ</a></li>
+        <li><a href="#troubleshooting">แก้ปัญหา</a></li>
+        <li><a href="#related">คู่มือที่เกี่ยวข้อง</a></li>
+      </ol></nav>
+
+      <p>ยังต้องบันทึกเสียงอยู่ใช่ไหม ดู <a href="/th/blog/record-audio-on-mac/">บันทึกเสียงบน Mac</a>.</p>
+
+      <h2 id="built-in">ตัวเลือกฟรีที่มีอยู่แล้วบน Mac ของคุณ</h2>
+      <h3>บันทึกเสียง</h3>
+      <p>หน้าแอปบันทึกเสียงของ Apple ระบุว่าคุณคลิกปุ่ม <strong>การถอดเสียง</strong>  ขณะบันทึกเพื่อดูข้อความแบบสด หรือเลือกการบันทึกที่เสร็จแล้วแล้วคลิกปุ่มเดียวกัน คุณค้นหาข้อความในชื่อหรือในข้อความถอดเสียงจากรายการบันทึกได้ และคัดลอกข้อความถอดเสียงโดยเลือกข้อความ กด Control แล้วคลิก และเลือก <strong>คัดลอก</strong> Apple ระบุว่าถ้าคุณเปิดการบันทึกที่ทำใน macOS 14 หรือเก่ากว่า หรือบนอุปกรณ์ที่ไม่รองรับการถอดเสียง แอปบันทึกเสียงจะถอดเสียงให้อัตโนมัติ และการถอดเสียงจากเสียงยังไม่มีให้ในทุกประเทศหรือภูมิภาค</p>
+      <h3>โน้ต</h3>
+      <p>หน้าโน้ตของ Apple อธิบายการบันทึกเสียงในโน้ต: คลิกปุ่มไฟล์แนบ แล้วเลือก <strong>บันทึกเสียง</strong> บันทึก แล้วคลิกปุ่มการถอดเสียงเพื่อดูข้อความถอดเสียง หน้านั้นระบุว่าการถอดเสียงจากเสียงใช้ได้บน Mac ที่มี M1 ขึ้นไป สำหรับภาษาของอุปกรณ์ที่ Apple ระบุไว้ในหน้านั้น ถ้าไม่เห็นปุ่มการถอดเสียง Apple ระบุว่า Mac ของคุณไม่ตรงตามข้อกำหนดขั้นต่ำหรือตรวจไม่พบภาษาที่รองรับ</p>
+      <h3>ข้อจำกัด</h3>
+      <p>ข้อความจะอยู่ในแอปเหล่านั้นจนกว่าคุณจะคัดลอกออกมา ใน โน้ต Apple ระบุว่าการลบการบันทึกเสียงจะลบข้อความถอดเสียงด้วย เรายืนยันจากหน้าของ Apple ไม่ได้ว่าแต่ละแอปนำเข้าไฟล์ประเภทใดได้บ้าง จึงควรตรวจสอบกับการบันทึกของคุณ คู่มือนี้ไม่ได้อ้างอะไรในเรื่องนี้</p>
+      <p>ทางเลือกสุดท้ายคือบางคนเปิดเสียงแล้วพูดตามลงในโปรแกรมแก้ไขข้อความ นั่นเป็นวิธีแก้ขัด ไม่ใช่การถอดเสียงไฟล์ ดู <a href="/th/blog/dictation-on-mac/">การป้อนด้วยเสียงบน Mac</a> สำหรับการพูดเป็นข้อความโดยตรง</p>
+
+      <h2 id="choose">วิธีไหนเหมาะ</h2>
+      <p>ตารางนี้แสดงเฉพาะสิ่งที่หน้าของ Apple หรือเอกสารของ Vox.md ระบุไว้ “ไม่มีเอกสารระบุ” หมายความว่าแหล่งที่เราอ้างอิงไม่ได้พูดถึง ตารางนี้ไม่ได้อ้างเรื่องความแม่นยำหรือความเร็ว</p>
+      <p class="guide-table-hint">บนหน้าจอเล็ก ให้ปัดตารางไปด้านข้าง</p>
+      <div class="guide-comparison" role="region" aria-label="เปรียบเทียบตัวเลือกถอดเสียงจากเสียงบน Mac เลื่อนตารางในแนวนอนบนหน้าจอขนาดเล็ก" tabindex="0">
+        <table class="comparison">
+          <caption>ตัวเลือกถอดเสียงจากเสียงบน Mac ตรวจสอบเมื่อวันที่ 22 พฤศจิกายน 2026</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">บันทึกเสียง</th><th scope="col">โน้ต</th><th scope="col">Vox.md สำหรับ Mac</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">ข้อความถูกบันทึกไว้ที่ใด</th><td>อยู่ในแอปบันทึกเสียง คุณคัดลอกออกมาเอง</td><td>ในโน้ต พร้อมกับการบันทึกเสียง</td><td>โน้ต Markdown ในโฟลเดอร์หรือ vault ที่คุณเลือก</td></tr>
+            <tr><th scope="row">อะไรทำงานบน Mac</th><td>ไม่มีเอกสารระบุ</td><td>ไม่มีเอกสารระบุ</td><td>การถอดเสียงด้วยโมเดล Whisper หรือ Parakeet ที่คุณดาวน์โหลด</td></tr>
+            <tr><th scope="row">นำเข้าไฟล์</th><td>ไม่มีเอกสารระบุ</td><td>ไม่มีเอกสารระบุ</td><td>นำเข้าเสียง… รับไฟล์เสียงหรือไฟล์วิดีโอ</td></tr>
+            <tr><th scope="row">เอาต์พุต Markdown</th><td>ไม่มีเอกสารระบุ</td><td>ไม่มีเอกสารระบุ</td><td>ใช่</td></tr>
+            <tr><th scope="row">ป้ายผู้พูด</th><td>ไม่มีเอกสารระบุ</td><td>ไม่มีเอกสารระบุ</td><td>ทางเลือก ด้วย การระบุผู้พูด (ดู <a href="/th/blog/transcribe-interview/">การถอดเสียงสัมภาษณ์</a>)</td></tr>
+            <tr><th scope="row">ค่าใช้จ่าย</th><td>เป็นส่วนหนึ่งของ macOS</td><td>เป็นส่วนหนึ่งของ macOS</td><td>ถอดเสียงฟรี 15 นาทีและส่งมอบสำเร็จ 10 ครั้ง จากนั้นปลดล็อกตลอดชีพแบบจ่ายครั้งเดียว</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>ถ้าข้อความแค่ต้องอยู่ในแอปบันทึกเสียงหรือโน้ต ก็ใช้แอปเหล่านั้นได้ Vox.md เหมาะเมื่อคุณต้องการไฟล์ธรรมดาที่เป็นของคุณ โมเดลในเครื่องที่เฉพาะเจาะจง หรือข้อความใน vault ของคุณ</p>
+
+      <h2 id="prepare">เตรียม Vox.md สำหรับ Mac</h2>
+      <ol>
+        <li><strong>ติดตั้ง</strong> Vox.md สำหรับ Mac ต้องใช้ macOS 14 ขึ้นไป รับได้จากลิงก์ App Store ด้านล่าง</li>
+        <li><strong>ดาวน์โหลดโมเดล</strong> เปิด <strong>การตั้งค่า → โมเดล</strong> แล้วดาวน์โหลดหนึ่งโมเดล ได้แก่ Whisper ตั้งแต่ Tiny (75 MB) ไปจนถึง Large v3 Turbo (1.6 GB), Parakeet v2 (ประมาณ 800 MB, ภาษาอังกฤษ) หรือ Parakeet v3 (ประมาณ 800 MB, 25 ภาษา) ตั้งภาษาที่ใช้ถอดเสียงในหน้าจอเดียวกัน Whisper ใช้การเร่งความเร็วด้วย Metal บน Mac ที่รองรับ การดาวน์โหลดโมเดลเป็นขั้นตอนเดียวที่ใช้เครือข่าย ดู <a href="/th/compare/whisper-vs-parakeet/">Whisper เทียบกับ Parakeet</a> เพื่อเลือก <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a> เรียกใช้โมเดล Whisper และ <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> เรียกใช้ Parakeet</li>
+        <li><strong>เลือกหรือสร้างเส้นทาง</strong> เส้นทางเก็บโฟลเดอร์ปลายทางหรือ vault และโน้ตเป้าหมาย ได้แก่ โน้ตใหม่ โน้ตรายวันที่ต่อท้ายไปเรื่อย ๆ หรือโน้ตที่มีอยู่ภายใต้หัวข้อ ดู <a href="/th/docs/#presets">เส้นทางในเอกสาร</a>.</li>
+      </ol>
+      <p>มีไฟล์คำบรรยาย (.srt หรือ .vtt) อยู่แล้วแทนที่จะเป็นเสียงใช่ไหม ไม่ต้องถอดเสียงอะไรเลย: <a href="/th/blog/srt-vtt-to-text-markdown/">ตัวแปลง SRT และ VTT เป็นข้อความหรือ Markdown</a> ทำความสะอาดในเบราว์เซอร์ของคุณ</p>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">รับ Vox.md สำหรับ Mac</h2>
+        <p>สิทธิ์ใช้ฟรีคือการถอดเสียง 15 นาทีและส่งมอบสำเร็จ 10 ครั้ง พอสำหรับลองกับการบันทึกหนึ่งรายการ</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_th_5aaec3f62945">รับ Vox.md สำหรับ Mac</a></p>
+      </section>
+
+      <h2 id="import">นำเข้าและถอดเสียงไฟล์</h2>
+      <ol>
+        <li><strong>นำเข้า</strong> จากแถบเมนูของ Vox.md เลือก <strong>นำเข้าเสียง…</strong> หรือนำเข้าหรือลากเสียงไปยังพื้นที่จดบันทึก เอกสารระบุว่ารับไฟล์เสียงและไฟล์ภาพยนตร์ และจะผ่านการถอดเสียงในเครื่องแบบเดียวกับการบันทึก สำหรับไฟล์วิดีโอโดยเฉพาะ ดู <a href="/th/blog/transcribe-video-to-text/">ถอดเสียงวิดีโอเป็นข้อความ</a>.</li>
+        <li><strong>เลือกเพิ่มไปยังฉบับร่าง หรือส่งทันที</strong> ด้วย <strong>ส่งทันที</strong> ข้อความถอดเสียงจะถูกส่งเมื่อเสร็จ เมื่อใช้ <strong>เพิ่มไปยังฉบับร่าง</strong> คุณตรวจทานได้ก่อน ตรวจชื่อ ตัวเลข และวันที่เทียบกับเสียง</li>
+        <li><strong>ไม่บังคับ: การระบุผู้พูด</strong> เปิด <strong>การระบุผู้พูด</strong> ในเส้นทางเพื่อให้ได้ป้ายผู้พูดแบบไม่ระบุตัวตนตามความพยายามสูงสุด ครั้งแรกจะเตรียมโมเดลแยกต่างหาก ถ้าทำงานไม่ได้ จะเก็บข้อความถอดเสียงธรรมดาไว้ และแสดงเหตุผลในคลัง</li>
+        <li><strong>ไม่บังคับ: โหมดการประมวลผล</strong> เส้นทางใช้ เก็บต้นฉบับ, ปรับข้อความให้อ่านง่าย, บันทึกการประชุม, รายการสิ่งที่ต้องทำ หรือ คำสั่งกำหนดเอง ได้ โหมด Apple Intelligence ต้องใช้ฮาร์ดแวร์ที่รองรับ macOS 26 หากไม่มี รายการสิ่งที่ต้องทำและบันทึกการประชุมจะใช้ตัวจัดรูปแบบในตัว ส่วนปรับข้อความให้อ่านง่ายและคำสั่งกำหนดเองจะคงข้อความเดิมไว้</li>
+        <li><strong>ส่ง</strong> กด Command-Return เพื่อส่งสิ่งที่จดไปยังโน้ตของเส้นทาง</li>
+      </ol>
+
+      <h2 id="verify">ตรวจสอบโน้ต Markdown</h2>
+      <p>เลือก <strong>แสดงส่งออกล่าสุด</strong> จากแถบเมนู หรือหารายการในคลังแล้วแสดงใน Finder จากนั้นเปิดไฟล์ใน Obsidian ถ้าคุณต้องการแค่ข้อความ ให้เลือก <strong>คัดลอกข้อความถอดเสียงล่าสุด</strong> สำหรับโครงสร้างโน้ตที่จะเติมจากการบันทึก ดู <a href="/th/blog/obsidian-meeting-notes-template/">ตัวสร้างเทมเพลตบันทึกการประชุม</a>.</p>
+      <p>หากการบันทึกเป็นการซ้อมพูด ให้วางบทถอดเสียงและความยาวของการบันทึกลงใน <a href="/th/blog/speech-time-calculator/">เครื่องคำนวณเวลาพูด</a> เพื่อวัดจำนวนคำต่อนาทีของคุณ และเวลาพูดของสคริปต์ที่จังหวะของคุณเอง</p>
+
+      <h2 id="privacy">อะไรที่ออกจาก Mac ของคุณ</h2>
+      <p>การถอดเสียงทำงานบน Mac และ Vox.md ไม่ส่งเนื้อหาที่จดไปยังเซิร์ฟเวอร์ของ Vox.md การดาวน์โหลดโมเดลจะติดต่อโครงสร้างพื้นฐานของ Hugging Face หรือ FluidAudio ถ้าโฟลเดอร์ปลายทางซิงค์ผ่าน iCloud หรือบริการอื่น บริการนั้นจะจัดการไฟล์ตามข้อกำหนดของตนเอง ดู <a href="/th/privacy.html">นโยบายความเป็นส่วนตัว</a>.</p>
+
+      <h2 id="troubleshooting">แก้ปัญหา</h2>
+      <ul>
+        <li><strong>ไม่มีข้อความถอดเสียง หรือภาษาผิด</strong> ตรวจสอบว่าดาวน์โหลดและเลือกโมเดลแล้ว และตั้งภาษาไว้ใน การตั้งค่า → โมเดล</li>
+        <li><strong>ไม่มีโน้ตปรากฏ</strong> ตรวจสอบโฟลเดอร์ปลายทางของเส้นทาง และดูว่า Vox.md เข้าถึงโฟลเดอร์นั้นได้</li>
+        <li><strong>ไฟล์ยาวใช้เวลาสักพัก</strong> โมเดลที่ใหญ่กว่าใช้เวลานานกว่ากับการบันทึกที่ยาว ลองโมเดลที่เล็กกว่าก่อน แล้วค่อยเปรียบเทียบ</li>
+        <li><strong>ใช้สิทธิ์ฟรีหมดแล้ว</strong> ครอบคลุมการถอดเสียง 15 นาทีและส่งมอบสำเร็จ 10 ครั้ง จากนั้นปลดล็อกตลอดชีพแบบจ่ายครั้งเดียว ราคาใน App Store เป็นราคาที่ถือตาม ดู <a href="/th/docs/#pricing-limits">การใช้งานฟรีและการปลดล็อกตลอดชีพ</a>.</li>
+      </ul>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">เปลี่ยนการบันทึกเป็นโน้ตที่เป็นของคุณ</h2>
+        <p>เริ่มด้วยคลิปสั้น ๆ ที่ไม่มีข้อมูลละเอียดอ่อนในสิทธิ์ใช้ฟรี แล้วเปิดไฟล์ Markdown</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_th_5aaec3f62945">รับ Vox.md สำหรับ Mac</a></p>
+      </section>
+      <nav class="toc" aria-label="คู่มือที่เกี่ยวข้อง" id="related"><div class="toc-title">ดำเนินการต่อ</div><ul>
+        <li><a href="/th/blog/transcribe-meetings-mac-obsidian/">หากต้องการบันทึกสายสด: การประชุมบน Mac ลง Obsidian</a></li>
+        <li><a href="/th/blog/dictation-on-mac/">พูดเป็นข้อความบน Mac</a></li>
+        <li><a href="/th/compare/whisper-vs-parakeet/">Whisper เทียบกับ Parakeet</a></li>
+        <li><a href="/th/blog/transcribe-voice-memos-iphone/">ถอดเสียง Voice Memos บน iPhone เป็น Markdown</a></li>
+        <li><a href="/th/blog/obsidian-meeting-notes-template/">ตัวสร้างเทมเพลตบันทึกการประชุมสำหรับ Obsidian</a></li>
+        <li><a href="/th/blog/transcribe-interview/">ถอดเสียงสัมภาษณ์แบบส่วนตัว พร้อมป้ายชื่อผู้พูด</a></li>
+        <li><a href="/th/docs/#mac">เอกสารสำหรับ Mac</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/th/">หน้าแรก</a></li>
+        <li><a href="/th/docs/">เอกสาร</a></li>
+        <li><a href="/th/blog/">คู่มือ</a></li>
+        <li><a href="/th/compare/">เปรียบเทียบ</a></li>
+        <li><a href="/th/privacy.html">ความเป็นส่วนตัว</a></li>
+        <li><a href="/th/terms.html">ข้อกำหนด</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">ช่วยเหลือ</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_th_5aaec3f62945">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · จดด่วนสำหรับโน้ตในเครื่อง · ไม่อัปโหลดเนื้อหา</div>
+    </div>
+  <details class="language-switcher"><summary>ภาษา</summary><ul><li><a href="/blog/transcribe-audio-file-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-audio-file-mac/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-audio-file-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-audio-file-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-audio-file-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-audio-file-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-audio-file-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-audio-file-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-audio-file-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-audio-file-mac/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-audio-file-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-audio-file-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-audio-file-mac/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-audio-file-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-audio-file-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-audio-file-mac/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-audio-file-mac/" lang="th" hreflang="th" aria-current="page">ไทย</a></li><li><a href="/tr/blog/transcribe-audio-file-mac/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-audio-file-mac/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-audio-file-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-audio-file-mac/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-audio-file-mac/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-audio-file-mac/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

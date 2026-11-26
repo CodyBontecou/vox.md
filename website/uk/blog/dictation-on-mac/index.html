@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="uk" dir="ltr" data-search-section="Розділ" data-search-guide="Посібник" data-search-empty="Немає збігів для «{query}»">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Як диктувати на Mac і приватний локальний варіант | Vox.md</title>
+  <meta name="description" content="Увімкніть Apple Dictation у System Settings, дізнайтеся про сполучення клавіш, мову й мікрофон, а потім порівняйте з глобальним сполученням клавіш Vox.md, яке транскрибує на вашому Mac через Whisper або Parakeet і копіює текст.">
+  <link rel="canonical" href="https://vox.isolated.tech/uk/blog/dictation-on-mac/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Документація Vox.md для мовних моделей">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Як диктувати на Mac і приватний локальний варіант">
+  <meta property="og:description" content="Увімкніть Apple Dictation у System Settings, дізнайтеся про сполучення клавіш, мову й мікрофон, а потім порівняйте з глобальним сполученням клавіш Vox.md, яке транскрибує на вашому Mac через Whisper або Parakeet і копіює текст.">
+  <meta property="og:url" content="https://vox.isolated.tech/uk/blog/dictation-on-mac/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-22">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Як диктувати на Mac і приватний локальний варіант">
+  <meta name="twitter:description" content="Увімкніть Apple Dictation у System Settings, дізнайтеся про сполучення клавіш, мову й мікрофон, а потім порівняйте з глобальним сполученням клавіш Vox.md, яке транскрибує на вашому Mac через Whisper або Parakeet і копіює текст.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Як диктувати на Mac і приватний локальний варіант",
+  "description": "Увімкніть Apple Dictation у System Settings, дізнайтеся про сполучення клавіш, мову й мікрофон, а потім порівняйте з глобальним сполученням клавіш Vox.md, яке транскрибує на вашому Mac через Whisper або Parakeet і копіює текст.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-22",
+  "dateModified": "2026-11-22",
+  "mainEntityOfPage": "https://vox.isolated.tech/uk/blog/dictation-on-mac/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "uk",
+  "name": "Як диктувати на Mac і приватний локальний варіант | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/uk/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Посібники",
+      "item": "https://vox.isolated.tech/uk/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Як диктувати на Mac і приватний локальний варіант",
+      "item": "https://vox.isolated.tech/uk/blog/dictation-on-mac/"
+    }
+  ],
+  "inLanguage": "uk",
+  "name": "Як диктувати на Mac і приватний локальний варіант | Vox.md",
+  "description": "Увімкніть Apple Dictation у System Settings, дізнайтеся про сполучення клавіш, мову й мікрофон, а потім порівняйте з глобальним сполученням клавіш Vox.md, яке транскрибує на вашому Mac через Whisper або Parakeet і копіює текст."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/dictation-on-mac/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Перейти до посібника</a>
+<nav aria-label="Основна навігація">
+  <div class="nav-inner">
+    <a href="/uk/" class="logo" aria-label="Головна Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/uk/#how">Як це працює</a></li>
+      <li><a href="/uk/docs/">Документація</a></li>
+      <li><a href="/uk/blog/">Посібники</a></li>
+      <li><a href="/uk/compare/">Порівняти</a></li>
+      <li><a href="/uk/privacy.html">Конфіденційність</a></li>
+      <li><a href="/uk/terms.html">Умови</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_uk_a0e7bb45fc7a">Завантажити Vox.md</a>
+  <details class="language-switcher"><summary>Мова</summary><ul><li><a href="/blog/dictation-on-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/dictation-on-mac/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/dictation-on-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/dictation-on-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/dictation-on-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/dictation-on-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/dictation-on-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/dictation-on-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/dictation-on-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/dictation-on-mac/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/dictation-on-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/dictation-on-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/dictation-on-mac/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/dictation-on-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/dictation-on-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/dictation-on-mac/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/dictation-on-mac/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/dictation-on-mac/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/dictation-on-mac/" lang="uk" hreflang="uk" aria-current="page">Українська</a></li><li><a href="/ur/blog/dictation-on-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/dictation-on-mac/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/dictation-on-mac/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/dictation-on-mac/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Mac · Диктовка · Локальне транскрибування</div>
+        <h1 class="hero-title">Як диктувати на Mac і приватний локальний варіант</h1>
+        <p class="hero-subtitle">Налаштуйте Dictation за кілька кроків, виправте її, якщо не працює, і вирішіть, чи потрібна вам локальна модель або нотатка Markdown.</p>
+      </div>
+      <aside class="meta-card" aria-label="Про посібник">
+        <dl>
+          <div><dt>Автор:</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Оновлено</dt><dd><time datetime="2026-11-22">22 листопада 2026 р.</time></dd></div>
+          <div><dt>Потребує</dt><dd>Vox.md: macOS 14 або новіша. Доступність Apple Dictation залежить від вашого Mac, версії macOS і мови.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Як диктувати на Mac і приватний локальний варіант">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Коротка відповідь</div>
+        <p>Увімкніть Apple Dictation у System Settings &gt; Keyboard і натисніть сполучення клавіш диктовки в будь-якому текстовому полі. Якщо хочете вибрати локальну модель Whisper або Parakeet чи надсилати диктовку в нотатки Markdown, призначте глобальне сполучення клавіш Vox.md.</p>
+      </div>
+      <p>Кроки Apple нижче взято зі сторінки підтримки Apple: <a href="https://support.apple.com/guide/mac-help/use-dictation-mh40584/mac">Використання диктовки на Mac</a>, прочитано 22 листопада 2026 року. Назви меню можуть відрізнятися між версіями macOS, тож перегляньте цю сторінку для своєї. Кроки Vox.md відповідають <a href="/uk/docs/#mac-keybinds">глобальні сполучення клавіш</a> і <a href="/uk/docs/#models">моделей</a> документації.</p>
+      <nav class="toc" aria-label="У посібнику"><div class="toc-title">У посібнику</div><ol>
+        <li><a href="#apple-dictation">Як увімкнути диктовку на Mac</a></li>
+        <li><a href="#which-to-use">Apple Dictation або локальний застосунок для диктовки</a></li>
+        <li><a href="#transcribe-to-clipboard">Диктуйте в будь-який застосунок Mac за допомогою Vox.md</a></li>
+        <li><a href="#dictate-to-notes">Диктуйте в нотатку Obsidian або файл Markdown</a></li>
+        <li><a href="#privacy">Що залишається на Mac</a></li>
+        <li><a href="#troubleshooting">Диктовка на Mac не працює</a></li>
+        <li><a href="#faq">Запитання</a></li>
+      </ol></nav>
+
+      <h2 id="apple-dictation">Як увімкнути диктовку на Mac</h2>
+      <ol>
+        <li>Вибирайте <strong>Меню Apple &gt; Системні налаштування</strong>, потім клацніть <strong>Клавіатура</strong> на бічній панелі.</li>
+        <li>Перейдіть до <strong>Диктовка</strong> і ввімкніть її.</li>
+        <li><strong>Сполучення клавіш:</strong> там само клацніть <strong>Сполучення клавіш</strong> і виберіть сполучення клавіш для запуску Dictation. Сторінка Apple не називає типового, тому перегляньте, що задано на вашому Mac.</li>
+        <li><strong>Мова:</strong> клацніть <strong>Правка</strong> поруч із Languages, потім виберіть мову й регіон. Під час диктовки можна перемикатися, клацнувши мову біля курсора або натиснувши клавішу Globe, якщо вона є на клавіатурі.</li>
+        <li><strong>Мікрофон:</strong> скористайтеся <strong>Джерело мікрофона</strong> щоб вибрати мікрофон для Dictation. З варіантом Automatic, за словами Apple, Mac слухає пристрій, яким ви найімовірніше скористаєтеся.</li>
+        <li><strong>Почніть диктувати:</strong> клацніть у текстовому полі, потім натисніть клавішу мікрофона, якщо вона є в ряду функціональних клавіш, скористайтеся сполученням клавіш диктовки або виберіть <strong>Правка &gt; Почати диктовку</strong>.</li>
+        <li><strong>Зупинка:</strong> натисніть клавішу Escape, клавішу мікрофона (якщо є) або сполучення клавіш диктовки.</li>
+      </ol>
+      <p><strong>Що Apple каже про обробку та обмеження.</strong> Apple каже, що в налаштуваннях Keyboard можна перевірити, чи загальна диктовка тексту «обробляється на вашому пристрої й не надсилається на сервери Siri». Сторінка не стверджує, що Dictation працює офлайн. Apple також каже, що можна диктувати текст будь-якої довжини без тайм-ауту, а Dictation автоматично зупиняється, якщо мовлення не виявлено 30 секунд. Надання аудіозаписів Apple необов’язкове (<strong>Надавати аудіозаписи</strong>). Apple зазначає, що Dictation доступна не в усіх мовах чи регіонах і функції можуть відрізнятися; див. <a href="https://support.apple.com/guide/mac-help/use-dictation-mh40584/mac">сторінка Dictation</a> і сторінка Apple про доступність функцій macOS, на яку вона посилається. Коли Voice Control увімкнено, Apple зазначає, що стандартна диктовка macOS недоступна.</p>
+
+      <h2 id="which-to-use">Apple Dictation або локальний застосунок для диктовки</h2>
+      <p>Apple Dictation уже є на вашому Mac і багатьом достатньо. Шукайте щось інше, коли хочете вибрати модель мовлення, свідомо не передавати транскрипт на сервери Apple або зберігати мовлення як Markdown. Таблиця порівнює три налаштування за документацією; вона не містить тверджень про точність чи швидкість.</p>
+      <p class="guide-table-hint">На малому екрані гортайте таблицю вбік.</p>
+      <div class="guide-comparison" role="region" aria-label="Порівняння варіантів диктовки; на малих екранах прокручуйте горизонтально" tabindex="0">
+        <table class="comparison">
+          <caption>Варіанти диктовки на Mac, перевірено 22 листопада 2026 року</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">Диктування Apple</th><th scope="col">Vox.md: Транскрибувати в Clipboard</th><th scope="col">сполучення клавіш маршруту Vox.md</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Куди потрапляє текст</th><td>У текстове поле, де ви перебуваєте</td><td>Буфер обміну; ви вставляєте його через Command-V</td><td>Нотатка або файл Markdown, як указує ваш маршрут</td></tr>
+            <tr><th scope="row">Де обробляється мовлення</th><td>За даними Apple, залежить від ваших налаштувань; перевірте налаштування Keyboard</td><td>На вашому Mac</td><td>На вашому Mac</td></tr>
+            <tr><th scope="row">Вибір моделі</th><td>Немає; мову й мікрофон вибираєте ви</td><td>Модель Whisper або Parakeet, яку ви завантажуєте</td><td>Модель Whisper або Parakeet, яку ви завантажуєте</td></tr>
+            <tr><th scope="row">Наживо або після зупинки</th><td>Не описано на сторінці Apple; спробуйте на своєму Mac</td><td>Після зупинки</td><td>Після зупинки</td></tr>
+            <tr><th scope="row">Потрібен обліковий запис</th><td>Не вказано на сторінці Apple</td><td>Ні</td><td>Ні</td></tr>
+            <tr><th scope="row">Вартість</th><td>Частина macOS</td><td>15 безкоштовних хвилин розшифровки, потім одноразове розблокування назавжди</td><td>15 безкоштовних хвилин транскрибування й 10 успішних доставок Capture, потім одноразове довічне розблокування</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Якщо вам лише зрідка потрібно щось продиктувати в листі чи документі, вбудованої диктовки досить. Сполучення клавіш Vox.md варто спробувати, коли потрібна конкретна локальна модель або щоб слова потрапляли у ваші нотатки.</p>
+
+      <h2 id="transcribe-to-clipboard">Диктуйте в будь-який застосунок Mac за допомогою Vox.md</h2>
+      <p><strong>Перекласти на Clipboard</strong> це глобальне сполучення клавіш. Ви натискаєте його, говорите й натискаєте знову. Vox.md транскрибує на вашому Mac і кладе текст у буфер обміну, а ви вставляєте його через Command-V. Воно саме не вводить текст у активний застосунок. Воно не створює нотатку чи елемент Library й не зберігає аудіо.</p>
+      <ol>
+        <li><strong>Установіть застосунок і завантажте модель.</strong> Установіть Vox.md для Mac (macOS 14 або новіша). На <strong>Моделі</strong> екрані завантажте модель: Whisper від Tiny (75 МБ) до Large v3 Turbo (1,6 ГБ), Parakeet v2 для англійської або Parakeet v3 для 25 мов (по приблизно 800 МБ). Кожне завантаження ви запускаєте самі й можете пізніше видалити модель. Whisper використовує прискорення Metal на підтримуваних Mac. Мову транскрибування виберіть на тому самому екрані. Див. <a href="/uk/compare/whisper-vs-parakeet/">Whisper чи Parakeet</a> щоб дізнатися, як вибирати.</li>
+        <li><strong>Призначте сполучення клавіш.</strong> Відкриті <strong>Налаштування &gt; Глобальні сполучення клавіш</strong> і призначте <strong>Перекласти на Clipboard</strong>. Сполучення клавіш типово вимкнені. Сполучення потребує не-модифікаторної клавіші плюс Control, Option або Command, може містити Shift, а Vox.md відхиляє конфліктні сполучення.</li>
+        <li><strong>Запишіть.</strong> Клацніть там, куди потрібен текст, натисніть сполучення клавіш і говоріть.</li>
+        <li><strong>Зупиніть.</strong> Натисніть те саме сполучення ще раз. Зачекайте, поки рядок меню покаже, що транскрибування завершено.</li>
+        <li><strong>Вставте.</strong> Натисніть Command-V.</li>
+      </ol>
+      <p>Якщо текст знову потрібен, виберіть <strong>Копіювати останній транскрипт</strong> у рядку меню Vox.md. Дії рядка меню наведено в <a href="/uk/docs/#mac-menu-bar">документації рядка меню</a>. Еквівалент на iPhone це клавіатура; див. <a href="/uk/blog/best-voice-to-text-keyboard-iphone/">посібнику про клавіатуру голосу в текст для iPhone</a> і <a href="/uk/blog/speech-to-text-iphone/">як користуватися перетворенням мовлення на текст на iPhone</a> або <a href="/uk/blog/speech-to-text-ipad/">на iPad</a>.</p>
+
+      <h2 id="dictate-to-notes">Диктуйте в нотатку Obsidian або файл Markdown</h2>
+      <p>Виберіть це, коли слова мають потрапити в нотатку, а не в інший застосунок. У <strong>Налаштування &gt; Глобальні сполучення клавіш</strong>, призначте сполучення для <strong>Вибраний маршрут</strong> або в конкретний маршрут. Транскрипт тоді йде за цим маршрутом: щоденна нотатка, розміщення під заголовком і режим обробки, які ви там налаштували. Це не вставлення; Vox.md доставляє текст у місце призначення маршруту. Налаштуйте маршрут у <a href="/uk/blog/obsidian-daily-note-template/">посібнику про шаблон щоденної нотатки</a> і <a href="/uk/blog/obsidian-capture-templates/">посібнику про шаблони захоплення</a>. Про запис дзвінків, а не диктовку, див. <a href="/uk/blog/transcribe-meetings-mac-obsidian/">Зустрічі з Mac в Obsidian</a>. Безкоштовний ліміт містить 10 успішних доставок Capture.</p>
+      <p>Диктування — це також швидкий спосіб прорепетирувати виступ уголос: надиктуйте прогін, запишіть, скільки він тривав, а потім вставте текст і час у <a href="/uk/blog/speech-time-calculator/">калькулятор часу виступу</a> щоб дізнатися свій справжній темп.</p>
+
+      <h2 id="privacy">Що залишається на Mac</h2>
+      <p>Vox.md не надсилає вміст Capture на сервери Vox.md. Транскрибування виконується на вашому Mac. Єдине використання мережі це завантаження моделі, яке ви запускаєте самі, через інфраструктуру Hugging Face або FluidAudio. Саме транскрибування виконується на Mac. Якщо нотатка потрапляє в папку, що синхронізується через iCloud чи іншу службу, ця служба обробляє файл за власними умовами. Див. <a href="/uk/privacy.html">політику конфіденційності</a> і <a href="/uk/blog/offline-transcription-iphone-markdown/">налаштування офлайн-розшифровки</a>. Vox.md використовує <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a> для Whisper і <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> для Parakeet.</p>
+
+      <h2 id="troubleshooting">Диктовка на Mac не працює</h2>
+      <h3>Перевірки Apple Dictation</h3>
+      <p>сторінка Apple <a href="https://support.apple.com/guide/mac-help/if-dictation-on-mac-doesnt-work-as-expected-mchlc480652b/27/mac/27">Якщо диктовка на Mac працює не так, як очікується</a> наводить такі:</p>
+      <ul>
+        <li>Переконайтеся, що Dictation увімкнено в налаштуваннях Keyboard.</li>
+        <li>Виберіть правильну мову й регіон. Dictation доступна не в усіх мовах чи регіонах.</li>
+        <li>Переконайтеся, що користуєтеся правильним сполученням клавіш диктовки. Якщо ті самі клавіші використовує інше сполучення, змініть сполучення диктовки в Keyboard &gt; Dictation.</li>
+        <li>Якщо у вашому Mac немає вбудованого мікрофона, переконайтеся, що зовнішній мікрофон підключено й вибрано в налаштуваннях Sound або Keyboard, а його гучність входу достатня.</li>
+        <li>Переконайтеся, що мікрофон не закритий, говоріть чітко, не надто тихо й не надто голосно, і уникайте фонового шуму.</li>
+        <li>Може знадобитися інтернет-з’єднання; перевірте в налаштуваннях Keyboard, чи диктовка обробляється на вашому пристрої.</li>
+      </ul>
+      <h3>Vox.md перевіряє</h3>
+      <ul>
+        <li><strong>Сполучення клавіш нічого не робить.</strong> Сполучення клавіш типово вимкнені. Призначте його в Settings &gt; Global Keybinds. Vox.md відхиляє конфліктні сполучення, тож виберіть іншу комбінацію клавіш.</li>
+        <li><strong>Немає транскрипту.</strong> Переконайтеся, що на екрані Models завантажено й вибрано модель.</li>
+        <li><strong>Неправильна мова.</strong> Виберіть мову на екрані Models.</li>
+        <li><strong>Нічого вставляти.</strong> Зачекайте, поки рядок меню покаже, що транскрибування завершено, потім натисніть Command-V або виберіть Copy Last Transcript.</li>
+      </ul>
+
+      <h2 id="faq">Запитання</h2>
+      <h3>Чи працює диктовка на Mac офлайн?</h3>
+      <p>Сторінка Apple Use Dictation цього не стверджує. Вона каже, що в налаштуваннях Keyboard можна перевірити, чи загальна диктовка тексту обробляється на вашому пристрої й не надсилається на сервери Siri. Сторінка усунення несправностей каже, що може знадобитися інтернет-з’єднання. Після завантаження моделі Vox.md транскрибує на вашому Mac.</p>
+      <h3>Чи є обмеження за часом?</h3>
+      <p>Apple каже, що можна диктувати текст будь-якої довжини без тайм-ауту, а Dictation зупиняється через 30 секунд без мовлення. У Vox.md безкоштовний рівень містить 15 хвилин транскрибування, далі одноразове довічне розблокування.</p>
+      <h3>Чи можна змінити сполучення клавіш?</h3>
+      <p>Так, в обох. Для Apple Dictation скористайтеся спливним меню Shortcut у System Settings &gt; Keyboard &gt; Dictation. Для Vox.md призначте його в Settings &gt; Global Keybinds, із не-модифікаторною клавішею плюс Control, Option або Command.</p>
+      <h3>Чи потрібен Vox.md обліковий запис?</h3>
+      <p>Ні.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Диктуйте на Mac із локальною моделлю.</h2>
+        <p>Безкоштовний ліміт це 15 хвилин транскрибування й 10 успішних доставок Capture. Після цього одноразове довічне розблокування, ціна якого показана у вашому місцевому App Store, знімає обмеження.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_uk_a0e7bb45fc7a">Завантажити Vox.md безкоштовно</a></p>
+      </section>
+      <nav class="toc" aria-label="Пов’язані посібники" id="related"><div class="toc-title">Продовжити</div><ul>
+        <li><a href="/uk/docs/#mac-keybinds">Глобальні сполучення клавіш у документації</a></li>
+        <li><a href="/uk/blog/transcribe-audio-file-mac/">Розшифровка аудіофайлу на Mac</a></li>
+        <li><a href="/uk/blog/record-audio-on-mac/">Як записати звук на Mac: ваш голос або звук застосунку</a></li>
+        <li><a href="/uk/blog/transcribe-meetings-mac-obsidian/">Розшифровуйте зустрічі на Mac локально в Obsidian</a></li>
+        <li><a href="/uk/blog/best-voice-to-text-keyboard-iphone/">Найкраща клавіатура голосу в текст для iPhone</a></li>
+        <li><a href="/uk/blog/obsidian-daily-note-template/">Генератор шаблонів щоденної нотатки Obsidian</a></li>
+        <li><a href="/uk/blog/obsidian-capture-templates/">Шаблони захоплення для Obsidian</a></li>
+        <li><a href="/uk/blog/offline-transcription-iphone-markdown/">Розшифровуйте аудіо в Markdown без мережі на iPhone</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/uk/">Головна</a></li>
+        <li><a href="/uk/docs/">Документація</a></li>
+        <li><a href="/uk/blog/">Посібники</a></li>
+        <li><a href="/uk/compare/">Порівняти</a></li>
+        <li><a href="/uk/privacy.html">Конфіденційність</a></li>
+        <li><a href="/uk/terms.html">Умови</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Підтримка</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_uk_a0e7bb45fc7a">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Швидке захоплення до локальних нотаток · Без надсилання вмісту на сервер.</div>
+    </div>
+  <details class="language-switcher"><summary>Мова</summary><ul><li><a href="/blog/dictation-on-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/dictation-on-mac/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/dictation-on-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/dictation-on-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/dictation-on-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/dictation-on-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/dictation-on-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/dictation-on-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/dictation-on-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/dictation-on-mac/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/dictation-on-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/dictation-on-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/dictation-on-mac/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/dictation-on-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/dictation-on-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/dictation-on-mac/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/dictation-on-mac/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/dictation-on-mac/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/dictation-on-mac/" lang="uk" hreflang="uk" aria-current="page">Українська</a></li><li><a href="/ur/blog/dictation-on-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/dictation-on-mac/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/dictation-on-mac/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/dictation-on-mac/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

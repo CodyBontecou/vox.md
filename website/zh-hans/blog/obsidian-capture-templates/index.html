@@ -183,6 +183,7 @@
       <pre class="guide-code"><code>## Journal
 - **14:05** A short walk helped me settle on the next step.</code></pre>
       <p>小时与分钟令牌由 Vox.md 条目格式器展开。笔记级模板文件可提供周围标题，而条目前缀格式化每次采集。请分清两者职责，避免后续条目反复插入整套每日笔记结构。</p>
+      <p>要生成每日笔记模板并检查日期格式，请使用 <a href="/zh-hans/blog/obsidian-daily-note-template/">每日笔记模板生成器</a>。若要围绕这个方案构建完整的语音日志，请参阅 <a href="/zh-hans/blog/private-voice-journal-iphone/">在 iPhone 上写私密语音日记</a>。如果你的日记在纸上， <a href="/zh-hans/blog/handwritten-notes-to-obsidian-iphone/">拍摄页面，并把文字发送到同一篇笔记</a>.</p>
       <p>详细的路由配置请参阅 <a href="/zh-hans/blog/append-to-obsidian-daily-note-iphone/">每日笔记路径与标题放置</a>.</p>
       <figure class="guide-figure">
         <img src="/screenshots/optimized/01-route-heading-light-640.webp" alt="用于设置笔记目标与标题放置的 Vox.md 目标位置编辑器" width="1206" height="2622" loading="lazy" decoding="async">
@@ -197,6 +198,7 @@
 - [ ] Review the draft outline
 - [ ] Send the reading list</code></pre>
       <p>若改为启用待办清单处理，就让处理步骤负责清单标记。不要再配置重复的复选框前缀。键入和混合文本处理需单独启用；语音处理和键入编辑器的设置不可互换。</p>
+      <p>要把现有列表转换为 <code>- [ ]</code> 任务,并带有嵌套和可选的截止日期,请粘贴到 <a href="/zh-hans/blog/markdown-checklist-maker/">Markdown 清单生成器</a>.</p>
       <p>任务只有表述正确才有用。语音采集中，如果识别错误可能改变指令，请核对转录文本。 <a href="/zh-hans/blog/voice-notes-to-obsidian-iphone/">iPhone 语音指南</a> 介绍添加到草稿和立即发送。</p>
       <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_32fa42cf87f1">免费下载 Vox.md</a></p>
       <p>免费下载包含 10 次成功采集投递和 15 分钟转录。无限使用为一次购买、终身有效。</p>
@@ -205,7 +207,7 @@
       <p>Vox.md 路径和条目设置使用令牌，例如 <code>{period}</code>, <code>{date}</code>, <code>{hour}</code> 和 <code>{minute}</code>。这些示例不是 Obsidian Core Templates 或 Templater 表达式。在模板系统自身的设置中，应使用该系统的语法。</p>
       <p>使用 <code>{hour}:{minute}</code> 以显示此处用冒号分隔的时间。Vox.md 的 <code>{time}</code> 令牌是紧凑时间值，不应假定呈现方式相同而直接替换方案中的令牌。</p>
       <p>采集内容不是模板编辑器。想法中的令牌可能保持为字面文本；请在目标位置支持的格式设置中配置令牌展开。请参阅 <a href="/zh-hans/docs/#placement-templates">令牌与模板参考</a> 了解可用字段。</p>
-      <p>如果添加 YAML 元数据，请区分笔记级 frontmatter 与每个滚动笔记条目的字段。整个文件的属性不会自动成为各条日志的独立属性。先不添加额外元数据，等明确查询方式后再添加。</p>
+      <p>如果你添加 YAML 元数据，请区分笔记级别的 frontmatter 与针对每个滚动笔记条目的字段。整个文件上的属性不会自动成为每条日志条目各自的属性。先不加额外元数据，等你知道如何查询它时再添加。 <a href="/zh-hans/blog/obsidian-properties-generator/">属性生成器和检查器</a> 会为你选择的元数据生成有效的 YAML。</p>
 
       <h2 id="check">复用预设前检查结果</h2>
       <ol>
@@ -215,6 +217,7 @@
         <li>发送第二次采集，检查顺序、间距和重复标记。</li>
         <li>之后再添加语音、附件、可选处理或元数据。</li>
       </ol>
+      <p>对于会议，使用新笔记路径，例如 <code>Meetings/{date}-{hour}{minute}.md</code> ，可让每次通话都有自己的文件；请参阅 <a href="/zh-hans/blog/transcribe-meetings-mac-obsidian/">将 Mac 会议转录到 Obsidian</a>。要为这些笔记添加议程和决策标题，请 <a href="/zh-hans/blog/obsidian-meeting-notes-template/">生成会议记录模板</a>.</p>
       <p>这些方案可放在同一个每日文件的不同标题下。文件夹可访问时，同一预设也能接收来自以下来源的转录： <a href="/zh-hans/blog/apple-watch-obsidian-voice-notes/">手表到 iPhone 的采集工作流</a>。采集仍待处理时，请留意文件夹权限和文件提供商可用性。</p>
       <section class="cta" aria-labelledby="guide-cta">
         <h2 id="guide-cta">保持格式可预测。<br>给想法留点空间。</h2>

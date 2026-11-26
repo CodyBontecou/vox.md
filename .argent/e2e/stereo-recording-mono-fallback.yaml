@@ -1,0 +1,183 @@
+# Issue #118: with High + Stereo on, a recording whose input has no built-in
+# stereo microphones (the iOS simulator's mic, like a USB mic on a phone;
+# AirPods no longer count: Stereo records from the built-in mics with them
+# connected) falls back to mono and is still saved. On a phone the dock shows
+# "Recording in mono: …"; on the simulator the Apple Speech error takes that
+# slot.
+#
+# Prerequisites: iOS simulator (iPhone 18 Pro Max layout since #133) with a DEBUG build of Vox.md
+#   (bontecou.Voxboard) installed, Recording Quality = Speech and Mono at
+#   start, microphone permission granted, and the speech-recognition prompt
+#   already answered (it appears on the first recording only; dismiss it once by
+#   hand). `-VoxAdaptiveSeedDemo` seeds the demo vault.
+# Side effects: adds one recording to the app's queue (transcription fails on a
+#   simulator without a model; the audio is kept). Settings end as they began.
+# Evidence the UI cannot show: after a run, the newest file in the app group's
+#   Recordings/RecordingJobs/audio/ is mono 48 kHz AAC, e.g.
+#   `afinfo <file>.m4a` → "1 ch, 48000 Hz, aac", and keyboard_debug.log has
+#   `Stereo input: unavailable(reason: "built-in mic has no data sources")`.
+# Selectors: taps are documented coordinates (frame centres from `describe` on
+#   an iPhone 18 Pro Max simulator); the runner's directive tree carries none of these
+#   SwiftUI controls, so every check stays a raw `tool: await-ui-element` step.
+# #133: Stereo is now a row of the Mono / Stereo / Spatial Audio choice
+#   (recording_quality_layout_*) instead of a toggle.
+version: 1
+requires:
+  platform: ios
+steps:
+  - echo: Launch Vox.md (DEBUG) with the seeded demo vault. Expect the composer
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+          - -VoxScreenshotUnlocked
+          - -VoxAdaptiveSeedDemo
+          - -VoxAdaptiveNoAutofocus
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_settings
+      timeoutMs: 20000
+  - await: { idle: true }
+  - echo: Settings → Recording Quality → High, Stereo
+  # Settings button capture_settings: frame (0.855,0.073,0.100,0.046)
+  - tap:
+      x: 0.905
+      y: 0.096
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: settings_recording_quality
+      timeoutMs: 10000
+  - await: { idle: true }
+  # Recording Quality row: frame (0.036,0.522,0.927,0.063)
+  - tap:
+      x: 0.5
+      y: 0.553
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: recording_quality_high
+      timeoutMs: 10000
+  - await: { idle: true }
+  # High row recording_quality_high: frame (0.045,0.255,0.909,0.097)
+  - tap:
+      x: 0.5
+      y: 0.303
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: recording_quality_layout_stereo
+      timeoutMs: 10000
+  # Stereo row recording_quality_layout_stereo: frame (0.045,0.605,0.909,0.058)
+  - tap:
+      x: 0.5
+      y: 0.634
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: recording_quality_high
+      expectedText: 48 kHz stereo AAC, about 128 kbps
+      timeoutMs: 10000
+  # Back button BackButton: frame (0.045,0.065,0.100,0.046)
+  - tap:
+      x: 0.095
+      y: 0.088
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: settings_recording_quality
+      expectedText: High · Stereo ·
+      timeoutMs: 10000
+  - await: { idle: true }
+  - echo: Back to the composer and record. Stereo is requested; the simulator mic has none
+  # Back to capture signal.back: frame (0.045,0.073,0.100,0.046)
+  - tap:
+      x: 0.095
+      y: 0.096
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_voice_recording
+      timeoutMs: 10000
+  - await: { idle: true }
+  # Speak button capture_voice_recording: frame (0.182,0.889,0.491..0.636,0.067);
+  # its width depends on whether a note is open, so tap inside both
+  - tap:
+      x: 0.42
+      y: 0.922
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_recording_stop_send
+      timeoutMs: 10000
+  - echo: Recording runs (with pre-roll). Stop and add to draft. Expect it to save, not fail
+  # Stop and add to draft capture_recording_stop_send: frame (0.814,0.889,0.118,0.054)
+  - tap:
+      x: 0.873
+      y: 0.916
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: capture_recording_stop_send
+      timeoutMs: 15000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_settings
+      timeoutMs: 15000
+  - await: { idle: true }
+  - echo: Restore defaults. Mono, then Speech
+  - tap:
+      x: 0.905
+      y: 0.096
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: settings_recording_quality
+      timeoutMs: 10000
+  - await: { idle: true }
+  - tap:
+      x: 0.5
+      y: 0.553
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: recording_quality_layout_mono
+      timeoutMs: 10000
+  - await: { idle: true }
+  # Mono row recording_quality_layout_mono: frame (0.045,0.547,0.909,0.058)
+  - tap:
+      x: 0.5
+      y: 0.576
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: recording_quality_high
+      expectedText: 48 kHz mono AAC, about 64 kbps
+      timeoutMs: 10000
+  # Speech row recording_quality_speech: frame (0.045,0.158,0.909,0.097)
+  - tap:
+      x: 0.5
+      y: 0.206
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: recording_quality_layout_mono
+      timeoutMs: 10000

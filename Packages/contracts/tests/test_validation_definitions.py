@@ -87,6 +87,8 @@ class Tests(unittest.TestCase):
   t=tempfile.TemporaryDirectory(); self.addCleanup(t.cleanup); r=Path(t.name)/'contracts'; shutil.copytree(CONTRACTS,r,ignore=shutil.ignore_patterns('__pycache__')); return r
  def docs(self,root=CONTRACTS): return {n:validator.load(root/'validation'/n) for n in ('device-matrix.json','provider-matrix.json','case-catalog.json','performance-gates.json','aggregate-policy.json','case-evidence-policy.json','approval-policy.json')}
  def schemas(self,root=CONTRACTS): return {p.name:validator.load(p) for p in (root/'schemas').glob('*.json')}
+ # Fixture repos turn off git auto-maintenance: `git commit` otherwise starts a
+ # detached `git repack` that races TemporaryDirectory cleanup (ENOTEMPTY).
  def synthetic_repository(self):
   t=tempfile.TemporaryDirectory(); self.addCleanup(t.cleanup); root=Path(t.name)/'repository'; root.mkdir()
   provenance_paths={x for value in validator.EXPECTED_PROVENANCE_PATHS.values() for x in value.values() if x is not None}; paths=set().union(*validator.REQUIRED_PROVENANCE_SOURCES.values())|provenance_paths|{'toolchains/android-wear-shared-core.json','Packages/contracts/tests/test_validation_definitions.py','.github/workflows/core-rust-ci.yml','Packages/vox-core-rust/scripts/run-m2-hosted-evidence.sh'}
@@ -97,14 +99,14 @@ class Tests(unittest.TestCase):
    path=root/rel; path.parent.mkdir(parents=True,exist_ok=True); content='synthetic:'+rel+'\n'
    if rel=='.github/workflows/core-rust-ci.yml': content='name: Synthetic M2\non: workflow_dispatch\njobs:\n  m2-evidence:\n    permissions:\n      contents: read\n      id-token: write\n    runs-on: macos-26\n    steps:\n      - name: Produce and validate M2 evidence\n        run: Packages/vox-core-rust/scripts/run-m2-hosted-evidence.sh\n'
    path.write_text(content)
-  subprocess.run(['git','init','-q'],cwd=root,check=True); subprocess.run(['git','config','user.email','synthetic@invalid.test'],cwd=root,check=True); subprocess.run(['git','config','user.name','Synthetic Contract Test'],cwd=root,check=True); subprocess.run(['git','add','.'],cwd=root,check=True); subprocess.run(['git','commit','-qm','synthetic provenance'],cwd=root,check=True)
+  subprocess.run(['git','init','-q'],cwd=root,check=True); subprocess.run(['git','config','maintenance.auto','false'],cwd=root,check=True); subprocess.run(['git','config','gc.auto','0'],cwd=root,check=True); subprocess.run(['git','config','user.email','synthetic@invalid.test'],cwd=root,check=True); subprocess.run(['git','config','user.name','Synthetic Contract Test'],cwd=root,check=True); subprocess.run(['git','add','.'],cwd=root,check=True); subprocess.run(['git','commit','-qm','synthetic provenance'],cwd=root,check=True)
   return root
  def build_identity(self,repository,case='PERF-008'):
   source=subprocess.run(['git','rev-parse','HEAD'],cwd=repository,check=True,text=True,capture_output=True).stdout.strip(); recipe=validator.EXPECTED_PROVENANCE_PATHS[case]['buildRecipe']; executable_source=validator.PYTHON_EXECUTABLE_SOURCES.get(case); executable_sha=digest(repository/executable_source) if executable_source else '3'*64
   return {'kind':'sourceBuiltHost','sourceRevision':source,'sourceTreeState':'clean','toolchainManifestSha256':digest(repository/'toolchains/android-wear-shared-core.json'),'buildRecipeSha256':digest(repository/recipe),'executableSha256':executable_sha}
  def commit_root(self,root,message):
   if not (root/'.git').exists():
-   subprocess.run(['git','init','-q'],cwd=root,check=True); subprocess.run(['git','config','user.email','synthetic@invalid.test'],cwd=root,check=True); subprocess.run(['git','config','user.name','Synthetic Contract Test'],cwd=root,check=True)
+   subprocess.run(['git','init','-q'],cwd=root,check=True); subprocess.run(['git','config','maintenance.auto','false'],cwd=root,check=True); subprocess.run(['git','config','gc.auto','0'],cwd=root,check=True); subprocess.run(['git','config','user.email','synthetic@invalid.test'],cwd=root,check=True); subprocess.run(['git','config','user.name','Synthetic Contract Test'],cwd=root,check=True)
   subprocess.run(['git','add','.'],cwd=root,check=True)
   if subprocess.run(['git','diff','--cached','--quiet'],cwd=root).returncode: subprocess.run(['git','commit','-qm',message],cwd=root,check=True)
  def host(self): return {'osName':'macOS','osVersion':'synthetic-15','architecture':'arm64','cpuModel':'synthetic-cpu','logicalCPUCount':12,'totalMemoryBytes':32_000_000_000}

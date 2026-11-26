@@ -183,6 +183,7 @@
       <pre class="guide-code"><code>## Journal
 - **14:05** A short walk helped me settle on the next step.</code></pre>
       <p>Saat ve dakika belirteçleri Vox.md girdi biçimlendiricisi tarafından genişletilir. Not düzeyindeki şablon dosyası çevredeki başlıkları sağlayabilir; girdi öneki her yakalamayı biçimlendirir. Sonraki girdilerin tüm günlük not yapısını tekrar tekrar eklememesi için bu sorumlulukları ayırın.</p>
+      <p>Günlük not şablonunu oluşturmak ve tarih biçiminizi denetlemek için şu aracı kullanın: <a href="/tr/blog/obsidian-daily-note-template/">günlük not şablonu oluşturucusu</a>. Bu tarife dayanan eksiksiz bir sesli günlük kurmak için şuna bakın: <a href="/tr/blog/private-voice-journal-iphone/">iPhone&#x27;da özel bir sesli günlük tutun</a>. Günlüğünüz kağıttaysa, <a href="/tr/blog/handwritten-notes-to-obsidian-iphone/">sayfaları fotoğraflayın ve metni aynı nota gönderin</a>.</p>
       <p>Ayrıntılı rota yapılandırması için bkz. <a href="/tr/blog/append-to-obsidian-daily-note-iphone/">günlük not yolları ve başlık yerleşimi</a>.</p>
       <figure class="guide-figure">
         <img src="/screenshots/optimized/01-route-heading-light-640.webp" alt="Not hedefi ve başlık yerleşimi ayarlamak için Vox.md hedef düzenleyicisi" width="1206" height="2622" loading="lazy" decoding="async">
@@ -197,6 +198,7 @@
 - [ ] Review the draft outline
 - [ ] Send the reading list</code></pre>
       <p>Bunun yerine Yapılacaklar Kontrol Listesi işlemesini açarsanız kontrol listesi işaretlerini işlemeye bırakın. Yinelenen onay kutusu öneki de yapılandırmayın. Yazılı ve karma metin işleme ayrı tercihtir; ses işleme ve yazılı düzenleyici ayarları birbirinin yerine geçmez.</p>
+      <p>Mevcut bir listeyi <code>- [ ]</code> görevlerine, iç içe yapı ve isteğe bağlı bir bitiş tarihiyle dönüştürmek için şuraya yapıştırın: <a href="/tr/blog/markdown-checklist-maker/">Markdown onay listesi oluşturucu</a>.</p>
       <p>Bir görev, ancak kelimeleri doğruysa yararlıdır. Sesli yakalamalarda, tanıma hatası talimatı değiştirebilecekse dökümü gözden geçirin. <a href="/tr/blog/voice-notes-to-obsidian-iphone/">iPhone ses kılavuzu</a> Taslağa Ekle ve Hemen Gönder seçeneklerini açıklar.</p>
       <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_tr_32fa42cf87f1">Vox.md&#x27;yi ücretsiz indirin</a></p>
       <p>Ücretsiz indirme 10 başarılı Yakalama teslimatı ve 15 dakikalık döküm içerir. Sınırsız kullanım ömür boyu geçerli tek seferlik satın alımdır.</p>
@@ -205,7 +207,7 @@
       <p>Vox.md yol ve girdi ayarları şu tür belirteçleri kullanır: <code>{period}</code>, <code>{date}</code>, <code>{hour}</code> ve <code>{minute}</code>. Bu örnekler Obsidian Core Templates veya Templater ifadeleri değildir. Şablon sisteminin kendi ayarlarında kendi sözdizimini kullanın.</p>
       <p>Kullanın: <code>{hour}:{minute}</code> burada gösterilen iki noktayla ayrılmış saat için. Vox.md&#x27;nin <code>{time}</code> belirteci kısa saat değeridir; aynı görünümü verdiği varsayımıyla tarifte yerine konmamalıdır.</p>
       <p>Yakalanan içerik şablon düzenleyicisi değildir. Düşünceye yazılan belirteç düz metin kalabilir; belirteç genişletmeyi hedefin desteklenen biçimlendirme ayarlarında yapılandırın. Bkz. <a href="/tr/docs/#placement-templates">belirteç ve şablon başvurusu</a> kullanılabilir alanlar için.</p>
-      <p>YAML meta verisi eklerseniz not düzeyindeki ön bilgilerle dönen notun her girdisine yönelik alanları ayırın. Tüm dosyaya ait bir özellik, otomatik olarak her günlük girdisi için ayrı özellik olmaz. Ek meta veri olmadan başlayın; nasıl sorgulayacağınızı öğrendiğinizde ekleyin.</p>
+      <p>YAML metadata eklerseniz, not düzeyindeki frontmatter ile yuvarlanan notun her girdisine ayrılmış alanları birbirinden ayırın. Tüm dosyadaki bir özellik, her günlük girdisi için otomatik olarak ayrı bir özellik olmaz. Fazladan metadata olmadan başlayın, nasıl sorgulayacağınızı bildiğinizde ekleyin. <a href="/tr/blog/obsidian-properties-generator/">özellik oluşturucu ve denetleyici</a> seçtiğiniz metadata için geçerli YAML oluşturur.</p>
 
       <h2 id="check">Ön ayarı yeniden kullanmadan önce sonucu kontrol edin</h2>
       <ol>
@@ -215,6 +217,7 @@
         <li>İkinci bir yakalama gönderip sıralamayı, boşlukları ve tekrarlanan işaretleri kontrol edin.</li>
         <li>Ancak bundan sonra ses, ekler, isteğe bağlı işleme veya meta veri ekleyin.</li>
       </ol>
+      <p>Toplantılar için şunun gibi bir Yeni Not yolu <code>Meetings/{date}-{hour}{minute}.md</code> her görüşmeye kendi dosyasını verir; bkz. <a href="/tr/blog/transcribe-meetings-mac-obsidian/">Mac toplantılarının Obsidian&#x27;a dökümü</a>. Bu notlara gündem ve karar başlıkları eklemek için <a href="/tr/blog/obsidian-meeting-notes-template/">bir toplantı notu şablonu oluşturun</a>.</p>
       <p>Bu tarifler tek günlük dosyada ayrı başlıklar altında birlikte bulunabilir. Erişilebilir klasörde aynı ön ayar, şuradan teslim edilen dökümü de kabul edebilir: <a href="/tr/blog/apple-watch-obsidian-voice-notes/">Watch&#x27;tan iPhone&#x27;a yakalama iş akışı</a>. Yakalama beklemede kaldığında klasör izinlerini ve dosya sağlayıcısının kullanılabilirliğini göz önünde bulundurun.</p>
       <section class="cta" aria-labelledby="guide-cta">
         <h2 id="guide-cta">Biçimi öngörülebilir tutun.<br>Düşünceye yer bırakın.</h2>

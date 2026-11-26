@@ -83,15 +83,32 @@ enum BackgroundRecordingAction {
         var endShortcutActivity: () -> Void
     }
 
+    /// `startsNewRecording` (controls): Start while recording finishes and
+    /// saves that recording, then starts a new one (#115). Without it, Start
+    /// leaves an active recording unchanged, as Shortcuts document.
     static func perform(
         action: RecordingAction,
         flowID: String?,
+        startsNewRecording: Bool = false,
         effects: Effects?
     ) -> Outcome {
         guard let effects else {
             // Stop is idempotent, even when there is no recorder. Never send it
             // through a start-only foreground fallback.
             return action == .stop ? .completed : .openApp(action: .start)
+        }
+
+        if action == .start, startsNewRecording, effects.isRecording() {
+            // Without a status card the new recording can't start in the
+            // background. Leave the active one running and let the app finish
+            // and restart it in one step (the press is still marked), so the
+            // user is never left with no recording in between.
+            guard effects.ensureLiveActivity() else { return .openApp(action: .start) }
+            // The stopped recording keeps its own Route and completion mode
+            // and is processed from the queue; the new one gets a fresh
+            // engine (startOneShotInAppSegment) and the same status card.
+            effects.stop()
+            return startNew(flowID: flowID, effects: effects)
         }
 
         switch action.command(isRecording: effects.isRecording()) {
@@ -113,19 +130,23 @@ enum BackgroundRecordingAction {
             }
             return .completed
         case .start:
-            guard effects.start(flowID) else {
-                effects.endShortcutActivity()
-                return .openApp(action: .start)
-            }
-            guard effects.ensureLiveActivity() else {
-                // An AudioRecordingIntent must not return a newly activated
-                // audio session with no Live Activity. Tear it down before the
-                // foreground retry; retry Start, not Toggle.
-                effects.stopListening()
-                effects.endShortcutActivity()
-                return .openApp(action: .start)
-            }
-            return .completed
+            return startNew(flowID: flowID, effects: effects)
         }
+    }
+
+    private static func startNew(flowID: String?, effects: Effects) -> Outcome {
+        guard effects.start(flowID) else {
+            effects.endShortcutActivity()
+            return .openApp(action: .start)
+        }
+        guard effects.ensureLiveActivity() else {
+            // An AudioRecordingIntent must not return a newly activated
+            // audio session with no Live Activity. Tear it down before the
+            // foreground retry; retry Start, not Toggle.
+            effects.stopListening()
+            effects.endShortcutActivity()
+            return .openApp(action: .start)
+        }
+        return .completed
     }
 }

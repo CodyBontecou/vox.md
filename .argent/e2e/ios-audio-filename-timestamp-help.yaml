@@ -1,0 +1,143 @@
+# Issue #176: the Audio Filename Template help states that {timestamp} is the
+# time the recording started. Opens the Meeting Notes route editor, turns Save
+# Audio on so the template field and its help appear, checks the new help line,
+# then turns Save Audio back off.
+#
+# Prerequisites: iOS simulator (recorded on an iPhone 17) with a DEBUG build of
+#   Vox.md (bontecou.Voxboard) installed. `-VoxAdaptiveSeedDemo` creates the
+#   local "Vox Notes" demo vault and the starter routes; Meeting Notes starts
+#   with Save Audio off.
+# Side effects: none on the route; the run sets Save Audio back to Off at the
+#   end (a run stopped midway leaves it on: uninstall the app to reset). The
+#   demo seed appends its "Project sync" entry to today's Meetings note.
+# Selectors: every check is a raw `tool: await-ui-element` step. The runner's
+#   directive tree carries none of these SwiftUI controls (as in
+#   ios-route-transcription-off.yaml), so `await:` conversions would fail.
+#   Coordinate taps: the Settings button sits under the full-screen composer
+#   field (the recorder derived that field instead), Settings/route rows and the
+#   Save Audio picker resolve only to a role-only AXScrollArea selector, and
+#   route rows use per-install random UUID ids. Each tap is followed by an
+#   identity or value check, so a mis-hit fails the run. The scroll steps are
+#   raw swipes because the target section has no id the runner tree carries;
+#   the following check proves where they landed.
+version: 1
+requires:
+  platform: ios
+steps:
+  - echo: Launch Vox.md (DEBUG) with the seeded demo vault. Expect the capture screen
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+          - -VoxScreenshotUnlocked
+          - -VoxAdaptiveSeedDemo
+          - -VoxAdaptiveNoAutofocus
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_settings
+      timeoutMs: 20000
+  - await: { idle: true }
+  - echo: Capture screen. Open Settings. Expect the settings screen
+  # Coordinate tap (fallback, see header). `capture_settings` frame
+  # (0.841,0.080,0.109,0.050) from `describe` on an iPhone 17.
+  - tap:
+      x: 0.8955
+      y: 0.105
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: settings_routes
+      timeoutMs: 10000
+  - await: { idle: true }
+  - echo: Settings open. Open Routes. Expect the route list
+  # Coordinate tap (fallback, see header). `settings_routes` frame
+  # (0.040,0.323,0.920,0.069).
+  - tap:
+      x: 0.5
+      y: 0.3575
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_preset_add
+      timeoutMs: 10000
+  - await: { idle: true }
+  - echo: Route list open. Open the Meeting Notes route editor
+  # Coordinate tap (fallback, see header). Meeting Notes row frame
+  # (0.000,0.307,1.000,0.164); its id embeds a random route UUID.
+  - tap:
+      x: 0.5
+      y: 0.36
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: route_step_1
+      timeoutMs: 10000
+  - await: { idle: true }
+  - echo: Meeting Notes editor open. Scroll to the bottom (Voice Audio section)
+  - tool: run-sequence
+    args:
+      steps:
+        - tool: gesture-swipe
+          args: { fromX: 0.5, fromY: 0.85, toX: 0.5, toY: 0.15, durationMs: 200 }
+        - tool: gesture-swipe
+          args: { fromX: 0.5, fromY: 0.85, toX: 0.5, toY: 0.15, durationMs: 200 }
+        - tool: gesture-swipe
+          args: { fromX: 0.5, fromY: 0.85, toX: 0.5, toY: 0.15, durationMs: 200 }
+        - tool: gesture-swipe
+          args: { fromX: 0.5, fromY: 0.85, toX: 0.5, toY: 0.15, durationMs: 200 }
+        - tool: gesture-swipe
+          args: { fromX: 0.5, fromY: 0.85, toX: 0.5, toY: 0.15, durationMs: 200 }
+        - tool: gesture-swipe
+          args: { fromX: 0.5, fromY: 0.85, toX: 0.5, toY: 0.15, durationMs: 200 }
+  - await: { idle: true }
+  - echo: Voice Audio section visible. Set Save Audio to Alongside Note
+  # Coordinate tap (fallback, see header). "Save Audio, Off" picker frame
+  # (0.080,0.860,0.841,0.039) at the bottom of the scrolled editor.
+  - tap:
+      x: 0.5
+      y: 0.8795
+  - tap:
+      text: Alongside Note
+  - tool: await-ui-element
+    args:
+      condition: exists
+      selector:
+        identifier: capture_preset_audio_filename_help
+      timeoutMs: 10000
+  - echo: Template help present. Scroll it into view and check the timestamp line
+  - tool: run-sequence
+    args:
+      steps:
+        - tool: gesture-swipe
+          args: { fromX: 0.5, fromY: 0.85, toX: 0.5, toY: 0.15, durationMs: 200 }
+        - tool: gesture-swipe
+          args: { fromX: 0.5, fromY: 0.85, toX: 0.5, toY: 0.15, durationMs: 200 }
+  - await: { idle: true }
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: capture_preset_audio_filename_help
+      expectedText: "{timestamp} is the time the recording started."
+      timeoutMs: 10000
+  - echo: Help verified. Restore Save Audio to Off
+  # Coordinate tap (fallback, see header). "Save Audio, Alongside Note" picker
+  # frame (0.080,0.460,0.841,0.039) once scrolled to the end.
+  - tap:
+      x: 0.5
+      y: 0.4795
+  - tap:
+      text: "Off"
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: capture_preset_audio_filename_help
+      timeoutMs: 10000

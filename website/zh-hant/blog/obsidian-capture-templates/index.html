@@ -183,6 +183,7 @@
       <pre class="guide-code"><code>## Journal
 - **14:05** A short walk helped me settle on the next step.</code></pre>
       <p>小時與分鐘令牌由 Vox.md 條目格式器展開。筆記級模板檔案可提供周圍標題，而條目前綴格式化每次擷取。請分清兩者職責，避免後續條目反復插入整套每日筆記結構。</p>
+      <p>要產生每日筆記範本並檢查日期格式，請使用 <a href="/zh-hant/blog/obsidian-daily-note-template/">每日筆記範本產生器</a>。若要圍繞這個方案建立完整的語音日誌，請參閱 <a href="/zh-hant/blog/private-voice-journal-iphone/">在 iPhone 上寫私密語音日記</a>。如果你的日記在紙上， <a href="/zh-hant/blog/handwritten-notes-to-obsidian-iphone/">拍攝頁面，並把文字傳送到同一篇筆記</a>.</p>
       <p>詳細的路線配置請參閱 <a href="/zh-hant/blog/append-to-obsidian-daily-note-iphone/">每日筆記路徑與標題放置</a>.</p>
       <figure class="guide-figure">
         <img src="/screenshots/optimized/01-route-heading-light-640.webp" alt="用於設定筆記目標與標題放置的 Vox.md 目標位置編輯器" width="1206" height="2622" loading="lazy" decoding="async">
@@ -197,6 +198,7 @@
 - [ ] Review the draft outline
 - [ ] Send the reading list</code></pre>
       <p>若改為啟用待辦清單處理，就讓處理步驟負責清單標記。不要再配置重復的復選框前綴。鍵入和混合文字處理需單獨啟用；語音處理和鍵入編輯器的設定不可互換。</p>
+      <p>要把現有清單轉換為 <code>- [ ]</code> 任務,並帶有巢狀和可選的到期日,請貼上到 <a href="/zh-hant/blog/markdown-checklist-maker/">Markdown 清單產生器</a>.</p>
       <p>任務只有表述正確才有用。語音擷取中，如果識別錯誤可能改變指令，請核對轉錄文字。 <a href="/zh-hant/blog/voice-notes-to-obsidian-iphone/">iPhone 語音指南</a> 介紹加入草稿和立即傳送。</p>
       <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_32fa42cf87f1">免費下載 Vox.md</a></p>
       <p>免費下載包含 10 次成功擷取傳送和 15 分鐘轉錄。無限使用為一次購買、終身有效。</p>
@@ -205,7 +207,7 @@
       <p>Vox.md 路徑和條目設定使用令牌，例如 <code>{period}</code>, <code>{date}</code>, <code>{hour}</code> 和 <code>{minute}</code>。這些範例不是 Obsidian Core Templates 或 Templater 表達式。在模板系統自身的設定中，應使用該系統的語法。</p>
       <p>使用 <code>{hour}:{minute}</code> 以顯示此處用冒號分隔的時間。Vox.md 的 <code>{time}</code> 令牌是緊湊時間值，不應假定呈現方式相同而直接替換方案中的令牌。</p>
       <p>擷取內容不是模板編輯器。想法中的令牌可能保持為字面文字；請在目標位置支援的格式設定中配置令牌展開。請參閱 <a href="/zh-hant/docs/#placement-templates">令牌與模板參考</a> 瞭解可用欄位。</p>
-      <p>如果添加 YAML 後設資料，請區分筆記級 frontmatter 與每個滾動筆記條目的欄位。整個檔案的屬性不會自動成為各條日誌的獨立屬性。先不添加額外後設資料，等明確查詢方式後再添加。</p>
+      <p>如果你添加 YAML 中繼資料，請區分筆記級別的 frontmatter 與針對每個捲動筆記條目的欄位。整個文件上的屬性不會自動成為每條日誌條目各自的屬性。先不加額外中繼資料，等你知道如何查詢它時再添加。 <a href="/zh-hant/blog/obsidian-properties-generator/">屬性產生器和檢查器</a> 會為你選擇的中繼資料產生有效的 YAML。</p>
 
       <h2 id="check">復用預設前檢查結果</h2>
       <ol>
@@ -215,6 +217,7 @@
         <li>傳送第二次擷取，檢查順序、間距和重復標記。</li>
         <li>之後再添加語音、附件、可選處理或後設資料。</li>
       </ol>
+      <p>對於會議，使用新筆記路徑，例如 <code>Meetings/{date}-{hour}{minute}.md</code> ，可讓每次通話都有自己的檔案；請參閱 <a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/">將 Mac 會議轉錄到 Obsidian</a>。要為這些筆記加入議程和決策標題，請 <a href="/zh-hant/blog/obsidian-meeting-notes-template/">產生會議記錄範本</a>.</p>
       <p>這些方案可放在同一個每日檔案的不同標題下。資料夾可取用時，同一預設也能接收來自以下來源的轉錄： <a href="/zh-hant/blog/apple-watch-obsidian-voice-notes/">手錶到 iPhone 的擷取工作流程</a>。擷取仍待處理時，請留意資料夾權限和檔案提供商可用性。</p>
       <section class="cta" aria-labelledby="guide-cta">
         <h2 id="guide-cta">保持格式可預測。<br>給想法留點空間。</h2>

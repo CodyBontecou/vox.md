@@ -1,6 +1,7 @@
 import SwiftUI
 import UIKit
 import UniformTypeIdentifiers
+import VoxboardShared
 
 /// Imperative bridge used by the Markdown toolbar so selection-aware edits use
 /// the same UITextView undo stack as keyboard typing on the iOS 17 target.
@@ -150,9 +151,27 @@ struct MarkdownComposerTextView: UIViewRepresentable {
     /// Room for chrome that floats over the top of the editor (the iPhone
     /// capture header): the text starts below it and scrolls up beneath it.
     var topContentInset: CGFloat = 0
+    /// Extra room on a physical side edge (left/right only) for controls that
+    /// float over the editor, like the phone route rail, so text and task
+    /// boxes never sit beneath them.
+    var sideGutter: UIEdgeInsets = .zero
     /// The writer's own scrolling: `isScrolling` covers dragging and the
     /// fling after it; `isBelowTop` is true once text sits under the inset.
     var scrollActivityDidChange: ((MarkdownComposerScrollActivity) -> Void)? = nil
+
+    static let baseSideInset: CGFloat = 20
+
+    /// Only the side insets change; the top keeps any room the text view
+    /// added itself (a leading dropped quote).
+    private func applySideGutter(to textView: UITextView) {
+        let left = Self.baseSideInset + sideGutter.left
+        let right = Self.baseSideInset + sideGutter.right
+        var inset = textView.textContainerInset
+        guard inset.left != left || inset.right != right else { return }
+        inset.left = left
+        inset.right = right
+        textView.textContainerInset = inset
+    }
 
     func makeCoordinator() -> Coordinator {
         Coordinator(parent: self)
@@ -177,7 +196,12 @@ struct MarkdownComposerTextView: UIViewRepresentable {
         // Signal composer: 17pt Geist body on the ground, generous side gutter.
         textView.font = MarkdownComposerStyler.baseFont
         textView.adjustsFontForContentSizeCategory = true
-        textView.textContainerInset = UIEdgeInsets(top: 12, left: 20, bottom: 24, right: 20)
+        textView.textContainerInset = UIEdgeInsets(
+            top: 12,
+            left: Self.baseSideInset + sideGutter.left,
+            bottom: 24,
+            right: Self.baseSideInset + sideGutter.right
+        )
         textView.keyboardDismissMode = .interactive
         textView.applyTopContentInset(topContentInset)
         textView.smartQuotesType = .no
@@ -217,6 +241,7 @@ struct MarkdownComposerTextView: UIViewRepresentable {
         (textView as? MarkdownComposerUITextView)?.showsRawMarkdown = showsRawMarkdown
         (textView as? MarkdownComposerUITextView)?.resolveEmbedURL = resolveEmbedURL
         textView.applyTopContentInset(topContentInset)
+        applySideGutter(to: textView)
 
         let textChanged = textView.text != text
         if textChanged {
@@ -604,6 +629,9 @@ final class MarkdownComposerUITextView: UITextView {
     private var propertiesView: MarkdownPropertiesView?
     private var embedViews: [String: MarkdownRichCardView] = [:]
     private var imageAspectRatios: [String: CGFloat] = [:]
+    /// Whether a `.mp4`/`.mov` embed has no video track, by path and
+    /// modification date (read once; restyling runs on every edit).
+    private var audioOnlyMedia: [String: Bool] = [:]
     private var revealedBlockLocations: Set<Int> = []
 
     /// Height of the widget drawn over a block.
@@ -615,6 +643,50 @@ final class MarkdownComposerUITextView: UITextView {
             let width = max(0, bounds.width - textContainerInset.left - textContainerInset.right)
             guard let ratio = imageAspectRatios[embed.target], width > 0 else { return 200 }
             return min(MarkdownImageEmbedView.maximumHeight, max(80, width * ratio))
+        }
+    }
+
+    /// A video embed whose file has only audio (a Spatial Audio `.mp4`)
+    /// gets the audio player instead of an empty video box.
+    /// A take's embed line is written before its file finishes copying into
+    /// the vault, so a file that can't be read yet is checked again shortly.
+    private func displayKind(for embed: MarkdownRichBlocks.Embed) -> MarkdownRichBlocks.EmbedKind {
+        guard embed.kind == .video, let url = resolveEmbedURL?(embed.target) else { return embed.kind }
+        let modified = (try? url.resourceValues(forKeys: [.contentModificationDateKey]))?
+            .contentModificationDate?.timeIntervalSince1970
+        if let modified {
+            let key = "\(url.path)#\(modified)"
+            if let audioOnly = audioOnlyMedia[key] { return audioOnly ? .audio : .video }
+            switch MediaFileTracks.contents(of: url) {
+            case .audioOnly:
+                audioOnlyMedia[key] = true
+                return .audio
+            case .video:
+                audioOnlyMedia[key] = false
+                return .video
+            case .unreadable:
+                break
+            }
+        }
+        scheduleMediaRecheck(for: url.path)
+        return embed.kind
+    }
+
+    private var mediaRechecks: [String: Int] = [:]
+    private var mediaRecheckPending = false
+
+    /// Re-lays out the blocks every 0.5 s while a media file is unreadable,
+    /// for up to 30 s per file.
+    private func scheduleMediaRecheck(for path: String) {
+        let attempts = mediaRechecks[path, default: 0]
+        guard attempts < 60 else { return }
+        mediaRechecks[path] = attempts + 1
+        guard !mediaRecheckPending else { return }
+        mediaRecheckPending = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self else { return }
+            self.mediaRecheckPending = false
+            self.restyleMarkdown()
         }
     }
 
@@ -645,6 +717,8 @@ final class MarkdownComposerUITextView: UITextView {
                 revealedBlockLocations.insert(embed.range.location)
                 continue
             }
+            var embed = embed
+            embed.kind = displayKind(for: embed)
             embedBlocks.append(embed)
             hideBlock(embed.range, reserving: richHeight(for: embed))
         }
@@ -728,7 +802,7 @@ final class MarkdownComposerUITextView: UITextView {
 
         var used = Set<String>()
         for (index, embed) in embedBlocks.enumerated() {
-            let key = "\(index):\(embed.target)"
+            let key = "\(index):\(embed.kind):\(embed.target)"
             used.insert(key)
             guard let y = top(of: embed.range.location) else { continue }
             let url = resolveEmbedURL?(embed.target)

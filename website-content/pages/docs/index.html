@@ -218,7 +218,7 @@
           <div><strong>Photos and camera</strong><p>Select photos or screenshots, or take a new photo. Images are staged and embedded in the delivered note.</p></div>
           <div><strong>Files</strong><p>Select multiple Files items. Images become embeds, audio remains an audio payload, and other files use Obsidian-style links.</p></div>
           <div><strong>Document scans</strong><p>Scan pages with VisionKit. Vox.md preserves page images, creates a PDF, and includes best-effort on-device OCR.</p></div>
-          <div><strong>Journal OCR</strong><p>Capture up to 10 manual-shutter journal pages or choose journal photos. Accurate Vision OCR uses automatic language detection.</p></div>
+          <div><strong>Journal OCR</strong><p>Capture up to 10 manual-shutter journal pages or choose journal photos. Accurate Vision OCR uses automatic language detection. See <a href="../blog/handwritten-notes-to-obsidian-iphone/">handwritten notes into Obsidian</a>.</p></div>
           <div><strong>Sketches</strong><p>Draw on a white PencilKit canvas with a black pen. Vox.md stores editable drawing data and a PNG preview.</p></div>
           <div><strong>Current Location action</strong><p>Request one location and insert a validated Google Maps Markdown link in the draft. This independent Capture Bar action does not change either per-route location control.</p></div>
           <div><strong>Voice and imported audio</strong><p>Record from the composer or import audio/video, transcribe locally, and add the result to the draft or send it immediately.</p></div>
@@ -283,8 +283,8 @@
           <li>Open Settings → Routes to create, rename, enable, disable, select an icon for, or delete a custom route.</li>
           <li>The searchable icon picker groups symbols under Writing, Voice, Tasks, Personal, and Work.</li>
           <li>Disabled routes are hidden from normal selectors. The built-in Default route cannot be deleted.</li>
-          <li>The built-in Default route uses the waveform symbol, the prompt <em>Capture an idea, task, link, file, scan, or recording.</em>, <code>type: capture</code> metadata, Clean Prose processing, typed-text processing off, and audio saving off.</li>
-          <li>A new custom route begins as <em>Custom Route</em>, uses the slider icon and <em>What do you want to capture?</em> prompt, and starts with Custom Instruction selected but typed/mixed-text processing off.</li>
+          <li>The built-in Default route uses the waveform symbol, the prompt <em>Capture an idea, task, link, file, scan, or recording.</em>, <code>type: capture</code> metadata, Clean Prose processing with <strong>Use Apple Intelligence</strong> off, and audio saving off.</li>
+          <li>A new custom route begins as <em>Custom Route</em>, uses the slider icon and <em>What do you want to capture?</em> prompt, and starts with Custom Instruction selected but <strong>Use Apple Intelligence</strong> off.</li>
         </ul>
 
         <h3 id="processing-modes">Processing modes</h3>
@@ -295,16 +295,17 @@
               <tr><td>Keep Original</td><td>Preserves captured text without AI rewriting.</td><td>The original text is delivered.</td></tr>
               <tr><td>Clean Prose</td><td>Cleans casing and punctuation while preserving meaning and Markdown.</td><td>Original text when on-device enrichment is unavailable.</td></tr>
               <tr><td>Todo Checklist</td><td>Produces Markdown <code>- [ ]</code> task items.</td><td>A deterministic checklist formatter.</td></tr>
-              <tr><td>Meeting Notes</td><td>Produces a <code>## Notes</code> section and, when present, <code>## Action Items</code>.</td><td>Deterministic meeting-note structure.</td></tr>
+              <tr><td>Meeting Notes</td><td>Produces a <code>## Notes</code> section and, when present, <code>## Action Items</code>.</td><td>Deterministic meeting-note structure for voice transcripts; captured text is delivered unchanged.</td></tr>
               <tr><td>Custom Instruction</td><td>Follows your instruction with on-device Apple Intelligence when available.</td><td>Original text when the instruction cannot run locally.</td></tr>
             </tbody>
           </table>
         </div>
-        <p>Voice transcripts use the selected route mode. <strong>Apply to Capture Text</strong> is a separate opt-in, off by default, that allows processing of typed Markdown, OCR, and other text-bearing mixed captures. Leaving it off prevents unexpected rewriting of authored Markdown. The exact processed request is saved before delivery, so retries do not rerun processing against changed settings.</p>
+        <p>To add agenda, attendee and decision headings around Meeting Notes output, <a href="../blog/obsidian-meeting-notes-template/">generate an Obsidian meeting notes template</a>. To turn an existing list into <code>- [ ]</code> tasks, use the <a href="../blog/markdown-checklist-maker/">Markdown checklist maker</a>.</p>
+        <p><strong>Use Apple Intelligence</strong>, off by default, turns on the route's processing mode. <strong>Apply To</strong> then chooses what it processes: <strong>Voice &amp; Text</strong> (the default), <strong>Voice Only</strong> or <strong>Text Only</strong>. Text means typed Markdown, text extracted from photos or scans, and other text-bearing captures; choose <strong>Voice Only</strong> to keep authored Markdown from being rewritten. With the toggle off, voice transcripts still get the deterministic Todo Checklist and Meeting Notes structure, and captured text is delivered unchanged. The exact processed request is saved before delivery, so retries do not rerun processing against changed settings.</p>
 
         <h3 id="preset-metadata">Metadata</h3>
         <ul>
-          <li>Enter static metadata as one <code>key: value</code> pair per line, such as <code>tags: [journal, idea]</code>.</li>
+          <li>Enter static metadata as one <code>key: value</code> pair per line, such as <code>tags: [journal, idea]</code>. To build valid frontmatter for Note Frontmatter, use the <a href="../blog/obsidian-properties-generator/">properties generator</a>.</li>
           <li><strong>Note Frontmatter</strong> writes metadata at document scope.</li>
           <li><strong>Inline Entry Fields</strong> writes <code>key:: value</code> fields beside each entry in a rolling note.</li>
           <li>When available, on-device enrichment can add a title, tags, category, and cleaned text alongside static route metadata.</li>
@@ -395,6 +396,8 @@
             </tbody>
           </table>
         </div>
+
+        <p>Not sure which model to download? <a href="../compare/whisper-vs-parakeet/">Compare Whisper and Parakeet</a> and test both on your own audio.</p>
 
         <h3 id="automatic-model">How Automatic works</h3>
         <ul>
@@ -570,8 +573,10 @@
           <li>Press Command-Return to Send Capture. A route with Use Current Location enabled requests one Mac-origin location at Send or recording stop, whether or not metadata output is enabled.</li>
           <li>A destination setup banner and route inspector expose the selected route's resolved note and placement.</li>
         </ul>
+        <p>For a step-by-step setup, see <a href="../blog/transcribe-audio-file-mac/">transcribe an audio file on Mac, locally, to Markdown</a>, or <a href="../blog/record-audio-on-mac/">how to record audio on a Mac</a>.</p>
 
         <h3 id="mac-meeting">Meeting capture with separate stems</h3>
+        <p>For a step-by-step setup, <a href="../blog/transcribe-meetings-mac-obsidian/">transcribe Mac meetings locally into Obsidian</a>.</p>
         <p>Switch the input-mode picker from <strong>Microphone</strong> to <strong>Meeting</strong> to record what an application plays on your Mac and your own microphone as two cleanly separated audio stems. Vox.md uses ScreenCaptureKit in single-application mode, so you pick exactly one app and Vox.md itself is never captured.</p>
         <ul>
           <li>While recording, the status bar shows live system and microphone level meters, per-source status, and any capture warnings.</li>
@@ -581,6 +586,7 @@
         </ul>
 
         <h3 id="mac-keybinds">Global keybinds</h3>
+        <p>For a step-by-step setup, see <a href="../blog/dictation-on-mac/">dictate on a Mac, privately with a local option</a>.</p>
         <p>Settings → Global Keybinds can assign shortcuts to <strong>Transcribe to Clipboard</strong>, <strong>Selected Route</strong>, or any enabled route. Shortcuts are off by default, require a non-modifier key plus Control, Option, or Command, may also include Shift, and reject conflicts. Press the active shortcut again to stop recording.</p>
         <div class="docs-callout docs-callout-neutral">
           <p><strong>Transcribe to Clipboard</strong> creates no note, Library item, or retained audio. It is intended for quick dictation into any Mac app.</p>
@@ -641,7 +647,7 @@
           <li>Free use includes <strong>15 minutes of transcription</strong> and <strong>10 successful Capture deliveries</strong>.</li>
           <li>A voice transcript already charged against transcription time does not also consume the separate Capture allowance when routed to Markdown.</li>
           <li>Failed writes and idempotent retries do not consume a successful Capture delivery.</li>
-          <li>Unlimited is a one-time lifetime purchase with no subscription, renewal, or ads. The localized App Store price is authoritative; US prices are $19.99 Individual, $39.99 Family, and $19.99 Family Upgrade, with purchasing-power pricing in other storefronts.</li>
+          <li>Unlimited is a one-time lifetime purchase with no subscription, renewal, or ads. The localized App Store price is authoritative; US prices are $79.99 Individual, $129.99 Family, and $49.99 Family Upgrade, with purchasing-power pricing in other storefronts.</li>
           <li>Restore Purchase recovers an eligible purchase. Users from qualifying older paid builds are grandfathered into unlimited use.</li>
           <li>A content-free App Group ledger prevents double charging across retries while local app data remains. It is not stored in Keychain; removing local app data starts a fresh free allowance.</li>
         </ul>

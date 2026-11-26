@@ -65,13 +65,14 @@ struct VoxboardMacApp: App {
                     )
                 case .clearOrigin(let profileID):
                     return await quickCaptureViewModel.clearRecordedOrigin(profileID: profileID)
-                case .audio(let url, let draftRequestID, let deliveryID):
+                case .audio(let url, let draftRequestID, let deliveryID, let recordingStartedAt):
                     guard draftRequestID == nil || quickCaptureViewModel.draft.requestID == draftRequestID else {
                         return false
                     }
                     return await quickCaptureViewModel.stageRecordedAudio(
                         at: url,
-                        deliveryID: deliveryID
+                        deliveryID: deliveryID,
+                        recordingStartedAt: recordingStartedAt
                     ) != nil
                 case .transcript(let text, let draftRequestID, let liveSessionID, let deliveryID):
                     guard draftRequestID == nil || quickCaptureViewModel.draft.requestID == draftRequestID else {
@@ -115,6 +116,7 @@ struct VoxboardMacApp: App {
         _windowCoordinator = State(initialValue: windowCoordinator)
 
         #if DEBUG
+        ReviewPromptManager.shared.applyDebugSeedIfRequested()
         if ProcessInfo.processInfo.arguments.contains(Self.runtimeQueueValidationArgument) {
             // Allows isolated, noninteractive app-runtime validation with
             // VOXBOARD_SHARED_CONTAINER_OVERRIDE. No production launch path

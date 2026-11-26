@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="bn" dir="ltr" data-search-section="অংশ" data-search-guide="গাইড" data-search-empty="“{query}”-এর কোনো ফল নেই">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown চেকলিস্ট মেকার: যেকোনো তালিকাকে শেষ তারিখসহ কাজে রূপান্তর করুন | Vox.md</title>
+  <meta name="description" content="বিনামূল্যের ব্রাউজার টুল, যা পেস্ট করা তালিকাকে Obsidian বা GitHub-এর জন্য Markdown কাজের তালিকায় রূপান্তর করে, Tasks, Dataview বা Reminder ফরম্যাটে ঐচ্ছিক শেষ তারিখসহ। কিছু আপলোড হয় না।">
+  <link rel="canonical" href="https://vox.isolated.tech/bn/blog/markdown-checklist-maker/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="ভাষা মডেলের জন্য Vox.md নথি">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Markdown চেকলিস্ট মেকার: যেকোনো তালিকাকে শেষ তারিখসহ কাজে রূপান্তর করুন">
+  <meta property="og:description" content="বিনামূল্যের ব্রাউজার টুল, যা পেস্ট করা তালিকাকে Obsidian বা GitHub-এর জন্য Markdown কাজের তালিকায় রূপান্তর করে, Tasks, Dataview বা Reminder ফরম্যাটে ঐচ্ছিক শেষ তারিখসহ। কিছু আপলোড হয় না।">
+  <meta property="og:url" content="https://vox.isolated.tech/bn/blog/markdown-checklist-maker/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-11-24">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Markdown চেকলিস্ট মেকার: যেকোনো তালিকাকে শেষ তারিখসহ কাজে রূপান্তর করুন">
+  <meta name="twitter:description" content="বিনামূল্যের ব্রাউজার টুল, যা পেস্ট করা তালিকাকে Obsidian বা GitHub-এর জন্য Markdown কাজের তালিকায় রূপান্তর করে, Tasks, Dataview বা Reminder ফরম্যাটে ঐচ্ছিক শেষ তারিখসহ। কিছু আপলোড হয় না।">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Markdown চেকলিস্ট মেকার: যেকোনো তালিকাকে শেষ তারিখসহ কাজে রূপান্তর করুন",
+  "description": "বিনামূল্যের ব্রাউজার টুল, যা পেস্ট করা তালিকাকে Obsidian বা GitHub-এর জন্য Markdown কাজের তালিকায় রূপান্তর করে, Tasks, Dataview বা Reminder ফরম্যাটে ঐচ্ছিক শেষ তারিখসহ। কিছু আপলোড হয় না।",
+  "image": "https://vox.isolated.tech/screenshots/01-route-heading-light.png",
+  "datePublished": "2026-11-24",
+  "dateModified": "2026-11-24",
+  "mainEntityOfPage": "https://vox.isolated.tech/bn/blog/markdown-checklist-maker/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "bn",
+  "name": "Markdown চেকলিস্ট মেকার: যেকোনো তালিকাকে শেষ তারিখসহ কাজে রূপান্তর করুন | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/bn/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "গাইড",
+      "item": "https://vox.isolated.tech/bn/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Markdown চেকলিস্ট মেকার: যেকোনো তালিকাকে শেষ তারিখসহ কাজে রূপান্তর করুন",
+      "item": "https://vox.isolated.tech/bn/blog/markdown-checklist-maker/"
+    }
+  ],
+  "inLanguage": "bn",
+  "name": "Markdown চেকলিস্ট মেকার: যেকোনো তালিকাকে শেষ তারিখসহ কাজে রূপান্তর করুন | Vox.md",
+  "description": "বিনামূল্যের ব্রাউজার টুল, যা পেস্ট করা তালিকাকে Obsidian বা GitHub-এর জন্য Markdown কাজের তালিকায় রূপান্তর করে, Tasks, Dataview বা Reminder ফরম্যাটে ঐচ্ছিক শেষ তারিখসহ। কিছু আপলোড হয় না।"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/markdown-checklist-maker/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">সরাসরি গাইডে যান</a>
+<nav aria-label="প্রধান নেভিগেশন">
+  <div class="nav-inner">
+    <a href="/bn/" class="logo" aria-label="Vox.md হোম">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/bn/#how">যেভাবে কাজ করে</a></li>
+      <li><a href="/bn/docs/">নথি</a></li>
+      <li><a href="/bn/blog/">গাইড</a></li>
+      <li><a href="/bn/compare/">তুলনা করুন</a></li>
+      <li><a href="/bn/privacy.html">গোপনীয়তা</a></li>
+      <li><a href="/bn/terms.html">শর্তাবলি</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_bn_7d9ef8e50226">Vox.md ডাউনলোড করুন</a>
+  <details class="language-switcher"><summary>ভাষা</summary><ul><li><a href="/blog/markdown-checklist-maker/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/markdown-checklist-maker/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/markdown-checklist-maker/" lang="bn" hreflang="bn" aria-current="page">বাংলা</a></li><li><a href="/de/blog/markdown-checklist-maker/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/markdown-checklist-maker/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/markdown-checklist-maker/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/markdown-checklist-maker/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/markdown-checklist-maker/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/markdown-checklist-maker/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/markdown-checklist-maker/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/markdown-checklist-maker/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/markdown-checklist-maker/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/markdown-checklist-maker/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/markdown-checklist-maker/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/markdown-checklist-maker/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/markdown-checklist-maker/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/markdown-checklist-maker/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/markdown-checklist-maker/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/markdown-checklist-maker/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/markdown-checklist-maker/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/markdown-checklist-maker/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/markdown-checklist-maker/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/markdown-checklist-maker/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">বিনামূল্যের টুল</div>
+        <h1 class="hero-title">Markdown চেকলিস্ট মেকার: যেকোনো তালিকাকে শেষ তারিখসহ কাজে রূপান্তর করুন</h1>
+        <p class="hero-subtitle">সাধারণ লাইন, বুলেট, ক্রমিক আইটেম বা বিদ্যমান কাজের তালিকা পেস্ট করুন এবং বৈধ - [ ] কাজ কপি করুন, নেস্টিং অক্ষত রেখে, ঐচ্ছিক শেষ তারিখ ও কতটি সম্পন্ন তার গণনাসহ।</p>
+      </div>
+      <aside class="meta-card" aria-label="এই গাইড সম্পর্কে">
+        <dl>
+          <div><dt>লিখেছেন</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>হালনাগাদ</dt><dd><time datetime="2026-11-24">২৪ নভেম্বর, ২০২৬</time></dd></div>
+          <div><dt>প্রয়োজন</dt><dd>যেকোনো আধুনিক ব্রাউজার, iPhone-এর Safari সহ। ঐচ্ছিক: চেকলিস্টের জন্য Obsidian, আর ভয়েসে কাজ ক্যাপচারের জন্য iPhone বা Mac-এ Vox.md।</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Markdown চেকলিস্ট মেকার: যেকোনো তালিকাকে শেষ তারিখসহ কাজে রূপান্তর করুন">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">সংক্ষিপ্ত উত্তর</div>
+        <p>Markdown কাজ হলো একটি হাইফেন, একটি স্পেস, বন্ধনী, একটি স্পেস ও লেখা। লিখুন <code>- [ ] task</code> খোলা কাজের জন্য এবং <code>- [x] done</code> সম্পন্ন কাজের জন্য। পুরো তালিকাকে কাজে রূপান্তর করতে ব্যবহার করুন <a href="#tool">চেকলিস্ট মেকার</a> নিচে।</p>
+      </div>
+      <pre class="guide-code" id="default-checklist"><code>- [ ] buy milk
+	- [ ] oat
+- [ ] call Sam
+- [x] send invoice
+</code></pre>
+      <p>মেকার বিদ্যমান বুলেট, সংখ্যা ও চেকবক্স সরিয়ে দেয় যাতে কিছু দ্বিগুণ না হয়, ইন্ডেন্টেশনকে নেস্টিং হিসেবে রাখে, এবং আপনার Obsidian প্লাগইন যে ফরম্যাটে পড়ে সেই ফরম্যাটে শেষ তারিখ যোগ করতে পারে। এটি পুরোপুরি এই পাতায় চলে: তালিকা কখনো আপলোড হয় না, এবং পাতাটি কোনো নেটওয়ার্ক অনুরোধ করে না।</p>
+      <nav class="toc" aria-label="এই গাইডে"><div class="toc-title">এই গাইডে</div><ol>
+        <li><a href="#tool">আপনার চেকলিস্ট বানান</a></li>
+        <li><a href="#syntax">Markdown চেকলিস্টের সিনট্যাক্স</a></li>
+        <li><a href="#obsidian">Obsidian-এ চেকলিস্ট</a></li>
+        <li><a href="#due-dates">শেষ তারিখ: Tasks বনাম Dataview বনাম Reminder</a></li>
+        <li><a href="#github">GitHub ও Obsidian-এর পার্থক্য</a></li>
+        <li><a href="#capture">Vox.md দিয়ে ভয়েস বা টেক্সটে কাজ ক্যাপচার করুন</a></li>
+        <li><a href="#faq">প্রশ্ন</a></li>
+      </ol></nav>
+
+      <h2 id="tool">1. আপনার চেকলিস্ট বানান</h2>
+      <p class="mt-nojs" id="cl-nojs">চেকলিস্ট মেকার চালাতে JavaScript লাগে। এটি ছাড়াও নিচের সিনট্যাক্স রেফারেন্স হিসেবে কাজ করে।</p>
+      <form class="cl-tool" id="cl-tool" aria-label="Markdown চেকলিস্ট মেকার" hidden>
+        <fieldset class="mt-group">
+          <legend>আপনার তালিকা</legend>
+          <label class="mt-field" for="cl-input">লাইন, বুলেট, ক্রমিক আইটেম বা কাজ পেস্ট করুন <textarea id="cl-input" rows="9" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></label>
+          <div class="mt-actions">
+            <button type="button" class="btn-secondary" id="cl-example">উদাহরণ লোড করুন</button>
+            <button type="button" class="btn-secondary" id="cl-clear">মুছুন</button>
+          </div>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>কী করবেন</legend>
+          <label class="mt-option"><input type="radio" name="mode" value="make" checked> <span>চেকলিস্ট বানান</span></label>
+          <label class="mt-option"><input type="radio" name="mode" value="strip"> <span>চেকবক্স সরান</span></label>
+          <label class="mt-option" data-show="make"><input type="checkbox" name="resetall"> <span>প্রতিটি কাজ [ ]-এ রিসেট করুন</span></label>
+          <label class="mt-field" data-show="strip" for="cl-strip-to">কাজগুলোকে রূপান্তর করুন <select id="cl-strip-to" name="stripto">
+            <option value="bullets" selected>সাধারণ বুলেট (- লেখা)</option>
+            <option value="plain">সাধারণ লাইন (বুলেট নেই, নেস্টিং নেই)</option>
+          </select></label>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>নেস্টিং</legend>
+          <label class="mt-field" for="cl-unit">আপনার তালিকায় প্রতি স্তরে স্পেস <select id="cl-unit" name="unit">
+            <option value="auto" selected>আমার তালিকা থেকে শনাক্ত করুন</option>
+            <option value="2">2টি স্পেস</option>
+            <option value="4">4টি স্পেস</option>
+          </select></label>
+          <label class="mt-field" for="cl-indent">ফলাফল ইনডেন্ট করুন <select id="cl-indent" name="indent">
+            <option value="tab" selected>প্রতি স্তরে একটি ট্যাব</option>
+            <option value="2">প্রতি স্তরে 2টি স্পেস</option>
+            <option value="4">প্রতি স্তরে 4টি স্পেস</option>
+          </select></label>
+          <p class="mt-hint">আপনার তালিকার একটি ট্যাব সবসময় এক স্তর গণ্য হয়। শিরোনাম শিরোনামই থাকে।</p>
+        </fieldset>
+        <fieldset class="mt-group" data-show="make">
+          <legend>প্রতিটি কাজের জন্য শেষ তারিখ</legend>
+          <label class="mt-field" for="cl-due">তারিখের ফরম্যাট <select id="cl-due" name="due">
+            <option value="none" selected>কিছু নয়</option>
+            <option value="tasks-due">Tasks প্লাগইন: শেষ তারিখ (📅 2026-11-25)</option>
+            <option value="tasks-scheduled">Tasks প্লাগইন: সময়সূচি (⏳ 2026-11-25)</option>
+            <option value="tasks-start">Tasks প্লাগইন: শুরু (🛫 2026-11-25)</option>
+            <option value="dataview">Dataview ইনলাইন ফিল্ড ([due:: 2026-11-25])</option>
+            <option value="reminder">Reminder প্লাগইন / Vox.md ((@2026-11-25))</option>
+            <option value="reminder-time">Reminder প্লাগইন, সময়সহ ((@2026-11-25 09:30))</option>
+          </select></label>
+          <label class="mt-field" for="cl-date">তারিখ <input type="date" id="cl-date" name="date"></label>
+          <label class="mt-field" id="cl-time-field" for="cl-time" hidden>সময় <input type="time" id="cl-time" name="time" value="09:00"></label>
+        </fieldset>
+      </form>
+      <p class="mt-status" id="cl-progress" role="status"></p>
+      <div class="mt-output-head" id="cl-output-head" hidden>
+        <h3 id="cl-output-title">আপনার চেকলিস্ট</h3>
+        <div class="mt-actions">
+          <button type="button" class="btn-primary" id="cl-copy">কপি করুন</button>
+        </div>
+      </div>
+      <p class="mt-status" id="cl-status" role="status"></p>
+      <p class="mt-hint" id="cl-warning" role="status" hidden></p>
+      <pre class="guide-code cl-output" id="cl-output" aria-labelledby="cl-output-title" tabindex="0" hidden><code id="cl-output-code"></code></pre>
+      <h3 id="cl-preview-title" hidden>প্রিভিউ</h3>
+      <div class="cl-preview" id="cl-preview" role="group" aria-labelledby="cl-preview-title" hidden></div>
+      <div hidden id="cl-messages">
+        <span data-message="waiting">ফলাফল দেখতে একটি তালিকা পেস্ট করুন।</span>
+        <span data-message="progress">{total}-এর মধ্যে {done} সম্পন্ন</span>
+        <span data-message="no-tasks">এই তালিকায় কোনো কাজ নেই।</span>
+        <span data-message="copied">ক্লিপবোর্ডে কপি হয়েছে।</span>
+        <span data-message="copy-failed">কপি করা যায়নি। টেক্সট নির্বাচন করে নিজে কপি করুন।</span>
+        <span data-message="loaded">উদাহরণ লোড হয়েছে।</span>
+        <span data-message="cleared">মুছে ফেলা হয়েছে।</span>
+        <span data-message="title-make">আপনার চেকলিস্ট</span>
+        <span data-message="title-strip">চেকবক্স ছাড়া আপনার তালিকা</span>
+        <span data-message="bad-date">শেষ তারিখ যোগ করতে একটি বৈধ তারিখ বেছে নিন। কোনো তারিখ যোগ হয়নি।</span>
+        <span data-message="bad-time">09:30-এর মতো একটি সময় দিন। তারিখটি সময় ছাড়াই যোগ হয়েছে।</span>
+        <span data-message="skipped">যেসব কাজে আগে থেকেই এই ধরনের তারিখ আছে সেগুলো যেমন ছিল তেমনই রাখা হয়েছে।</span>
+        <span data-message="paren">GitHub-এ বন্ধনী দিয়ে শুরু হওয়া কাজের বিবরণের আগে একটি ব্যাকস্ল্যাশ লাগে।</span>
+      </div>
+
+      <h2 id="syntax">2. Markdown চেকলিস্টের সিনট্যাক্স</h2>
+      <pre class="guide-code"><code>- [ ] unchecked task
+- [x] checked task
+- [ ] parent task
+	- [ ] nested task</code></pre>
+      <p>প্রতিটি কাজ একটি তালিকা আইটেম: একটি হাইফেন ও একটি স্পেস, তারপর <code>[ ]</code> বন্ধনীর মাঝে একটি স্পেস দিয়ে, তারপর লেখা। <a href="https://obsidian.md/help/syntax" target="_blank" rel="noopener">Obsidian Help পৃষ্ঠা</a> এবং <a href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#task-lists" target="_blank" rel="noopener">GitHub Docs পৃষ্ঠা</a> দুটিই এটিকে বর্ণনা করে একটি হাইফেন ও একটি স্পেস, তারপর <code>[ ]</code>। কোনো কাজ সম্পন্ন চিহ্নিত করতে GitHub Docs ব্যবহার করতে বলে <code>[x]</code>.</p>
+      <p>স্পেসগুলো গুরুত্বপূর্ণ। <a href="https://github.github.com/gfm/#task-list-items-extension-" target="_blank" rel="noopener">GitHub Flavored Markdown স্পেসিফিকেশন</a> চেকবক্স মার্কারকে সংজ্ঞায়িত করে একটি বাম বন্ধনী, একটি ফাঁকা স্থানের অক্ষর বা অক্ষর <code>x</code>এবং একটি ডান বন্ধনী, আর এর পরের লেখার আগে ফাঁকা স্থান লাগে। তাই <code>[]</code> যার ভেতরে কিছু নেই, অথবা <code>- [ ]text</code> বন্ধনীর পরে স্পেস না থাকলে সংজ্ঞার সঙ্গে মেলে না। হাইফেন ও তার স্পেসই লাইনটিকে তালিকা আইটেম বানায়।</p>
+      <p>কাজের তালিকা মূল Markdown-এর অংশ নয়। একই স্পেসিফিকেশন এগুলোকে CommonMark-এর এক্সটেনশন হিসেবে চিহ্নিত করে, এবং এর ভূমিকায় বলা আছে মূল CommonMark স্পেসিফিকেশনে নেই এমন ফিচার এক্সটেনশন হিসেবে চিহ্নিত। যে রেন্ডারার এক্সটেনশনটি বাস্তবায়ন করে না, সেটি বন্ধনীগুলো হুবহু লেখা হিসেবে দেখায়, আর এটিই সাধারণত চেকবক্সের বদলে <code>[ ]</code> পাতায় দেখা যাওয়ার কারণ।</p>
+
+      <h2 id="obsidian">3. Obsidian-এ চেকলিস্ট</h2>
+      <p>Obsidian Help-এর <a href="https://obsidian.md/help/syntax" target="_blank" rel="noopener">মৌলিক ফরম্যাটিং সিনট্যাক্স</a> পাতায় কাজের তালিকা নিয়ে আলোচনা আছে:</p>
+      <ul>
+        <li>কাজ শুরু হয় একটি হাইফেন ও একটি স্পেস দিয়ে, তারপর <code>[ ]</code>.</li>
+        <li>কাজটি সম্পন্ন চিহ্নিত করতে বন্ধনীর ভেতরে যেকোনো অক্ষর ব্যবহার করতে পারেন, তাই <code>[x]</code>, <code>[-]</code> এবং <code>[?]</code> সবই গণ্য হয়।</li>
+        <li>তালিকা আইটেম ইনডেন্ট করে কাজের তালিকা নেস্ট করেন। ব্যবহার করুন <code>Tab</code> অথবা <code>Shift+Tab</code> নির্বাচিত আইটেম ইনডেন্ট বা আনইনডেন্ট করতে।</li>
+        <li>Reading view-এ কাজের চেকবক্স নির্বাচন করে সেটি টগল করতে পারেন।</li>
+      </ul>
+      <p>সহায়তা পাতায় বলা আছে যেকোনো অক্ষরই কাজ সম্পন্ন করে। প্রতিটি অক্ষরের আলাদা চেহারার কথা সেখানে নেই। যদি <code>[-]</code> অথবা <code>[?]</code> দেখতে <code>[x]</code> থেকে আপনার ভল্টে আলাদা দেখালে, তা আসে আপনার ইনস্টল করা থিম বা CSS স্নিপেট থেকে, Markdown থেকে নয়।</p>
+      <p>মেকারের অগ্রগতির লাইনও একইভাবে গোনে: বন্ধনীর ভেতরে স্পেস ছাড়া যেকোনো অক্ষর থাকলে কাজটি সম্পন্ন ধরা হয়, তাই <code>[x]</code>, <code>[X]</code>, <code>[-]</code> এবং <code>[?]</code> সম্পন্ন, আর <code>[ ]</code> খোলা। যে লাইন “done:” বা “x ” দিয়ে শুরু হয় তা সাধারণ লেখা; টুলটি অনুমান করে না যে সেগুলো সম্পন্ন কাজ বোঝায়।</p>
+
+      <h2 id="due-dates">4. শেষ তারিখ: Tasks বনাম Dataview বনাম Reminder</h2>
+      <p>Obsidian-এর কাজের তালিকার সিনট্যাক্সে নিজস্ব শেষ তারিখ নেই: সহায়তা পাতায় এর কোনো উল্লেখ নেই। তিনটি প্লাগইন কাজের লেখায় লেখা তারিখ পড়ে, প্রতিটির নিজস্ব ফরম্যাটে। জেনারেটর তারিখটি লেখে ISO <code>YYYY-MM-DD</code> তিনটিতেই। প্লাগইন ছাড়া তারিখ শুধু লেখা।</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th>তারিখের ফরম্যাট</th><th>যা পড়ে</th><th>উদাহরণ লাইন</th></tr></thead>
+          <tbody>
+            <tr><td>শেষ তারিখ: <code>📅 YYYY-MM-DD</code></td><td><a href="https://publish.obsidian.md/tasks/Getting+Started/Dates" target="_blank" rel="noopener">Tasks প্লাগইন</a>, যেখানে বলা আছে তারিখ অবশ্যই <code>YYYY-MM-DD</code> ফরম্যাটে হতে হবে</td><td><code>- [ ] send invoice 📅 2026-11-25</code></td></tr>
+            <tr><td>সময়সূচি: <code>⏳ YYYY-MM-DD</code></td><td>Tasks প্লাগইন</td><td><code>- [ ] send invoice ⏳ 2026-11-25</code></td></tr>
+            <tr><td>শুরু: <code>🛫 YYYY-MM-DD</code></td><td>Tasks প্লাগইন</td><td><code>- [ ] send invoice 🛫 2026-11-25</code></td></tr>
+            <tr><td>ইনলাইন ফিল্ড: <code>[due:: YYYY-MM-DD]</code></td><td><a href="https://blacksmithgu.github.io/obsidian-dataview/annotation/metadata-tasks/" target="_blank" rel="noopener">Dataview ডকুমেন্টেশন</a>, যা কাজের গায়ে লেখা ফিল্ড পড়ে, যেমন <code>[completion:: 2021-08-15]</code></td><td><code>- [ ] send invoice [due:: 2026-11-25]</code></td></tr>
+            <tr><td>রিমাইন্ডার: <code>(@YYYY-MM-DD)</code> অথবা <code>(@YYYY-MM-DD HH:mm)</code></td><td><a href="https://github.com/uphy/obsidian-reminder" target="_blank" rel="noopener">obsidian-reminder প্লাগইন</a>, যার README দেখায় <code>(@2021-08-14)</code> এবং <code>(@2021-08-14 09:37)</code> টিক না দেওয়া কাজে</td><td><code>- [ ] send invoice (@2026-11-25 09:30)</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>আপনি যে প্লাগইনটি ব্যবহার করেন সেটিই বেছে নিন। Dataview-এর পাতায় তারিখের জন্য নিজস্ব ইমোজি শর্টহ্যান্ডও তালিকাভুক্ত, এবং সেখানে বলা আছে কেবল সেগুলোই সমর্থিত; মেকার তার বদলে Dataview-এর বন্ধনী ফর্ম লেখে। Reminder-এর README বলে, আপনি যেসব কাজ ইতিমধ্যে টিক দিয়েছেন সেগুলোর রিমাইন্ডারের নোটিফিকেশন পাবেন না।</p>
+
+      <h2 id="github">5. GitHub ও Obsidian-এর পার্থক্য</h2>
+      <p>GitHub Docs বর্ণনা করে <code>[ ]</code> খোলা কাজের জন্য এবং <code>[x]</code> সম্পন্ন চিহ্নিত করতে। GFM স্পেসিফিকেশন মার্কারকে সংজ্ঞায়িত করে ফাঁকা স্থান বা অক্ষর <code>x</code> বন্ধনীর মধ্যে। Obsidian যেকোনো অক্ষর মেনে নেয়। তাই এমন কাজ, <code>- [-] skipped</code> অথবা <code>- [?] unsure</code> Obsidian-এ সম্পন্ন, কিন্তু এটি স্পেসিফিকেশনের মার্কার সংজ্ঞার বাইরে, এবং স্পেসিফিকেশন মেনে চলা রেন্ডারার এটি হুবহু লেখা হিসেবে দেখাতে পারে। ফাইলটি GitHub-এও পড়া হলে ব্যবহার করুন <code>[ ]</code> এবং <code>[x]</code> শুধু।</p>
+      <p>GitHub Docs একটি অতিরিক্ত নিয়ম দেয়: কাজের বিবরণ বন্ধনী দিয়ে শুরু হলে তার আগে ব্যাকস্ল্যাশ বসান, যেমন <code>- [ ] \(Optional) Open a followup issue</code>। মেকার আপনার জন্য ব্যাকস্ল্যাশ যোগ করে না; কোনো কাজ বন্ধনী দিয়ে শুরু হলে সতর্ক করে।</p>
+
+      <h2 id="capture">6. iPhone ও Mac-এ Vox.md দিয়ে ভয়েস বা টেক্সটে কাজ ক্যাপচার করুন</h2>
+      <p>Vox.md-এর Todo Checklist প্রসেসিং মোড ক্যাপচার থেকে Markdown <code>- [ ]</code> কাজের আইটেম তৈরি করে, এবং এর বিকল্প হলো একটি ডিটারমিনিস্টিক চেকলিস্ট ফরম্যাটার। ভয়েস আপনার ডিভাইসেই ট্রান্সক্রাইব হয়। Capture Bar-এ, <strong>চেকলাইজ</strong> প্রিফিক্স হিসেবে <code>- [ ]</code> প্রয়োগ করে, আর <strong>দুই তারিখের</strong> যোগ করে: <code>(@yyyy-MM-dd)</code> বা সময়সহ রূপ। দেখুন <a href="/bn/docs/#quick-capture">দ্রুত আটকে</a> এবং <a href="/bn/docs/#presets">Routes ও প্রসেসিং মোড</a> ডকুমেন্টেশন।</p>
+      <p>একটি Route আইটেমগুলো আপনার দৈনিক নোটের এমন শিরোনামের নিচে যোগ করতে পারে, যেমন <code>## Tasks</code>; <a href="/bn/blog/append-to-obsidian-daily-note-iphone/">Obsidian দৈনিক নোটে যোগ করুন</a> সেটআপ ধাপে ধাপে দেখায়, আর <a href="/bn/blog/obsidian-daily-note-template/">দৈনিক নোট টেমপ্লেট জেনারেটর</a> নোটের কাঠামো লেখে। মিটিংয়ের অ্যাকশন আইটেমের জন্য দেখুন <a href="/bn/blog/obsidian-meeting-notes-template/">মিটিং নোট টেমপ্লেট</a>; কাজের তালিকার প্রিফিক্স রেসিপির জন্য দেখুন <a href="/bn/blog/obsidian-capture-templates/">ক্যাপচার টেমপ্লেট</a>.</p>
+      <p>Vox.md লেখে <code>(@yyyy-MM-dd)</code> রূপ, যা এর ডকুমেন্টেশনে দেখানো আছে। এটি Tasks প্লাগইনের ইমোজি তারিখ বা Dataview ফিল্ড লেখে না। এগুলোর কোনোটি ব্যবহার করলে ক্যাপচার করা কাজগুলো উপরের মেকারে পেস্ট করে সেই ফরম্যাট বেছে নিন, অথবা পরে তারিখ সম্পাদনা করুন। নোটের শুরুর প্রপার্টি বানাতে ব্যবহার করুন <a href="/bn/blog/obsidian-properties-generator/">প্রপার্টি জেনারেটর</a>.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">iPhone, iPad বা Mac-এ ভয়েসে কাজ ক্যাপচার করুন।</h2>
+        <p>Vox.md আপনার বলা কথাকে ডিভাইসেই Markdown চেকলিস্টে রূপান্তর করে আপনার Obsidian নোটে যোগ করে। বিনামূল্যের সীমায় আছে 15 মিনিট ট্রান্সক্রিপশন ও 10টি সফল Capture ডেলিভারি; সীমাহীন ব্যবহার একবারের লাইফটাইম আনলক, কোনো সাবস্ক্রিপশন ছাড়াই।</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_bn_7d9ef8e50226">ভয়েসে কাজ ক্যাপচার করুন</a></p>
+        <p>উপরের চেকলিস্ট মেকার অ্যাপ ছাড়াই পুরোপুরি কাজ করে।</p>
+      </section>
+
+      <h2 id="faq">৭. প্রশ্ন</h2>
+      <h3>আমার চেকবক্স [ ] লেখা হিসেবে দেখাচ্ছে কেন?</h3>
+      <p>রেন্ডারার কাজের তালিকা আঁকছে না। কাজের তালিকা CommonMark-এর একটি এক্সটেনশন, তাই এটি ছাড়া রেন্ডারার বন্ধনীগুলো যেমন আছে তেমনই দেখায়। যাচাই করুন লাইনটি হাইফেন ও স্পেস দিয়ে শুরু হয়েছে, একটি স্পেস বা <code>x</code> বন্ধনীর মধ্যে আছে এবং বন্ধ বন্ধনীর পরে একটি স্পেস আছে কিনা। Obsidian-এ কোড ব্লক বা টেবিলের ঘরের ভেতরের কাজ তালিকার আইটেমের মতো চেকবক্স হিসেবে নাও দেখা যেতে পারে।</p>
+      <h3>কাজ কীভাবে নেস্ট করব?</h3>
+      <p>সন্তান কাজটি ইনডেন্ট করুন। Obsidian-এ চাপুন <code>Tab</code> নির্বাচিত আইটেম ইনডেন্ট করতে এবং <code>Shift+Tab</code> আনইনডেন্ট করতে। মেকার আপনার তালিকার 2 বা 4টি স্পেসকে প্রতি স্তরে একটি ট্যাবে রূপান্তর করে, অথবা আপনি চাইলে 2 বা 4টি স্পেসে।</p>
+      <h3>x ছাড়া অন্য অক্ষর দিয়ে কীভাবে বক্স টিক দেব?</h3>
+      <p>Obsidian Help বলে বন্ধনীর ভেতরে যেকোনো অক্ষর কাজটিকে সম্পন্ন চিহ্নিত করে, তাই <code>- [-] task</code> এবং <code>- [?] task</code> সম্পন্ন। তালিকা রিসেট না করলে মেকার আপনার পেস্ট করা অক্ষর রেখে দেয়। যেসব ফাইল GitHub-এও পড়া হয়, সেগুলোতে ব্যবহার করুন <code>[x]</code>.</p>
+      <h3>Tasks প্লাগইন পড়তে পারে এমন শেষ তারিখ কীভাবে যোগ করব?</h3>
+      <p>কাজের শেষে <code>📅</code> এবং একটি <code>YYYY-MM-DD</code> তারিখ বসান, যেমন <code>- [ ] send invoice 📅 2026-11-25</code>। প্রতিটি কাজে যোগ করতে উপরে “Tasks প্লাগইন: শেষ তারিখ” বেছে নিন। ব্যবহার করুন <code>⏳</code> সময়সূচির তারিখের জন্য এবং <code>🛫</code> শুরুর তারিখের জন্য।</p>
+      <h3>মেকার কি আমার তালিকা আপলোড করে?</h3>
+      <p>না। তালিকাটি এই পাতার একটি স্ক্রিপ্ট আপনার ডিভাইসেই রূপান্তর করে, এবং পাতাটি কোনো নেটওয়ার্ক অনুরোধ করে না। এটি আপনার তালিকা সংরক্ষণ করে না: পাতা বন্ধ করলে বা রিলোড করলে তা মুছে যায়।</p>
+
+      <nav class="toc" aria-label="সম্পর্কিত গাইড" id="related"><div class="toc-title">সেটআপ চালিয়ে যান</div><ul>
+        <li><a href="/bn/blog/append-to-obsidian-daily-note-iphone/">Obsidian দৈনিক নোটে যোগ করুন</a></li>
+        <li><a href="/bn/blog/obsidian-daily-note-template/">Obsidian দৈনিক নোট টেমপ্লেট জেনারেটর</a></li>
+        <li><a href="/bn/blog/obsidian-meeting-notes-template/">Obsidian মিটিং নোট টেমপ্লেট জেনারেটর</a></li>
+        <li><a href="/bn/blog/obsidian-capture-templates/">পাথ ও টেমপ্লেটের রেসিপি</a></li>
+        <li><a href="/bn/blog/obsidian-properties-generator/">Obsidian প্রপার্টি জেনারেটর ও চেকার</a></li>
+        <li><a href="/bn/docs/#quick-capture">Quick Capture রেফারেন্স</a></li>
+        <li><a href="/bn/docs/#presets">রুটের রেফারেন্স</a></li>
+      </ul></nav>
+<style>
+.cl-tool:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.cl-tool [hidden] { display: none; }
+.mt-output-head[hidden], .cl-output[hidden], #cl-preview-title[hidden] { display: none; }
+.cl-tool .mt-field input, .cl-tool .mt-field textarea, .cl-tool .mt-field select { font: inherit; font-family: var(--font-mono); font-size: 16px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; padding: 8px 10px; width: 100%; box-sizing: border-box; min-height: 44px; }
+.cl-tool .mt-field textarea { resize: vertical; min-height: 160px; }
+.cl-tool input:focus-visible, .cl-tool textarea:focus-visible, .cl-tool select:focus-visible, .cl-output:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.cl-tool .mt-option { min-height: 44px; }
+.cl-tool .mt-option input { width: 22px; height: 22px; }
+.mt-actions button { font: inherit; font-size: 15px; min-height: 44px; padding: 0 18px; cursor: pointer; }
+.cl-output { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 28rem; overflow: auto; tab-size: 4; }
+.cl-preview { padding: 14px 18px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; display: flex; flex-direction: column; gap: 4px; overflow-wrap: anywhere; }
+.cl-preview[hidden] { display: none; }
+.cl-row { display: flex; align-items: flex-start; gap: 10px; }
+.cl-row input { width: 18px; height: 18px; margin: 3px 0 0; flex: none; accent-color: var(--accent); }
+.cl-row.is-heading { font-weight: 700; margin-top: 6px; }
+</style>
+<script>
+/* Markdown checklist maker. Runs locally: no network requests. */
+(function () {
+  var HEADING = /^#{1,6}(?:\s|$)/;
+  var RULE = /^(?:-{3,}|\*{3,}|_{3,})$/;
+  var DONE_ITEM = /^\s*(?:[-*+]|\d+[.)])\s+\[(.)\](?:\s|$)/;
+  var DUE = {
+    'tasks-due': { mark: '📅', has: /📅/ },
+    'tasks-scheduled': { mark: '⏳', has: /⏳/ },
+    'tasks-start': { mark: '🛫', has: /🛫/ },
+    'dataview': { has: /\[due::/ },
+    'reminder': { has: /\(@\d{4}-\d{2}-\d{2}/ },
+    'reminder-time': { has: /\(@\d{4}-\d{2}-\d{2}/ }
+  };
+
+  function pad(n, len) { var s = String(n); while (s.length < len) s = '0' + s; return s; }
+  function isoDate(d) { return pad(d.getFullYear(), 4) + '-' + pad(d.getMonth() + 1, 2) + '-' + pad(d.getDate(), 2); }
+  function validDate(value) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || '');
+    if (!m) return false;
+    var d = new Date(+m[1], +m[2] - 1, +m[3], 12);
+    return d.getFullYear() === +m[1] && d.getMonth() === +m[2] - 1 && d.getDate() === +m[3];
+  }
+  function validTime(value) { return /^([01]\d|2[0-3]):[0-5]\d$/.test(value || ''); }
+  function isDone(mark) { return mark !== null && /\S/.test(mark); }
+
+  /* Remove bullets, numbers and checkboxes from the start of a line. */
+  function peel(s) {
+    var state = null, m;
+    for (;;) {
+      m = /^(?:[-*+]|\d+[.)])(?:\s+|$)/.exec(s);
+      if (m) { s = s.slice(m[0].length); continue; }
+      m = /^\[(.)\](?:\s+|$)/.exec(s);
+      if (m) { if (state === null) state = m[1]; s = s.slice(m[0].length); continue; }
+      break;
+    }
+    return { state: state, text: s.trim() };
+  }
+
+  function progress(text) {
+    var done = 0, total = 0;
+    String(text || '').replace(/\r\n?/g, '\n').split('\n').forEach(function (line) {
+      var m = DONE_ITEM.exec(line);
+      if (!m) return;
+      total++;
+      if (/\S/.test(m[1])) done++;
+    });
+    return { done: done, total: total };
+  }
+
+  function dateText(opts, warnings) {
+    var kind = opts.due || 'none';
+    if (kind === 'none' || !DUE[kind]) return null;
+    if (!validDate(opts.date)) { warnings.push('bad-date'); return null; }
+    if (kind === 'dataview') return '[due:: ' + opts.date + ']';
+    if (kind === 'reminder') return '(@' + opts.date + ')';
+    if (kind === 'reminder-time') {
+      if (validTime(opts.time)) return '(@' + opts.date + ' ' + opts.time + ')';
+      warnings.push('bad-time');
+      return '(@' + opts.date + ')';
+    }
+    return DUE[kind].mark + ' ' + opts.date;
+  }
+
+  /* Convert pasted text. Returns {output, items, progress, warnings}. */
+  function run(input, opts) {
+    opts = opts || {};
+    var strip = opts.mode === 'strip';
+    var lines = String(input || '').replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n').split('\n');
+    var parsed = [];
+    var minSpaces = 0;
+    lines.forEach(function (raw) {
+      if (!raw.trim()) return;
+      var lead = /^[ \t]*/.exec(raw)[0];
+      var rest = raw.slice(lead.length).replace(/\s+$/, '');
+      if (HEADING.test(rest)) { parsed.push({ heading: true, text: rest }); return; }
+      if (RULE.test(rest)) return;
+      var p = peel(rest);
+      if (!p.text) return;
+      var tabs = lead.replace(/ /g, '').length;
+      var spaces = lead.length - tabs;
+      if (spaces && (!minSpaces || spaces < minSpaces)) minSpaces = spaces;
+      parsed.push({ heading: false, tabs: tabs, spaces: spaces, state: p.state, text: p.text });
+    });
+    var unit = opts.unit === '2' ? 2 : opts.unit === '4' ? 4 : (minSpaces || 2);
+    var step = opts.indent === '2' ? '  ' : opts.indent === '4' ? '    ' : '\t';
+    var warnings = [];
+    var suffix = strip ? null : dateText(opts, warnings);
+    var dueKind = opts.due || 'none';
+    var prev = -1, skipped = false, paren = false;
+    var items = [];
+    parsed.forEach(function (p) {
+      if (p.heading) { items.push({ kind: 'heading', level: 0, mark: null, text: p.text }); prev = -1; return; }
+      var level = p.tabs + (p.spaces ? Math.max(1, Math.floor(p.spaces / unit)) : 0);
+      level = Math.min(level, prev + 1);
+      prev = level;
+      var text = p.text;
+      if (suffix) {
+        if (DUE[dueKind].has.test(text)) skipped = true; else text += ' ' + suffix;
+      }
+      var mark = null;
+      if (!strip) mark = opts.reset || p.state === null || !/\S/.test(p.state) ? ' ' : p.state;
+      if (!strip && /^\(/.test(p.text)) paren = true;
+      items.push({ kind: 'item', level: level, mark: mark, text: text, had: p.state });
+    });
+    if (skipped) warnings.push('skipped');
+    if (paren) warnings.push('paren');
+    var output = items.map(function (it) {
+      if (it.kind === 'heading') return it.text;
+      var indent = new Array(it.level + 1).join(step);
+      if (strip) return opts.stripto === 'plain' ? it.text : indent + '- ' + it.text;
+      return indent + '- [' + it.mark + '] ' + it.text;
+    }).join('\n');
+    var done = 0, total = 0;
+    items.forEach(function (it) {
+      if (it.kind !== 'item') return;
+      var mark = strip ? it.had : it.mark;
+      if (mark === null || mark === undefined) return;
+      total++;
+      if (isDone(mark)) done++;
+    });
+    return { output: output, items: items, progress: { done: done, total: total }, warnings: warnings };
+  }
+
+  if (typeof window !== 'undefined') {
+    window.voxChecklist = { run: run, progress: progress, isoDate: isoDate };
+  }
+
+  var form = document.getElementById('cl-tool');
+  if (!form) return;
+  var input = document.getElementById('cl-input');
+  var code = document.getElementById('cl-output-code');
+  var pre = document.getElementById('cl-output');
+  var head = document.getElementById('cl-output-head');
+  var title = document.getElementById('cl-output-title');
+  var preview = document.getElementById('cl-preview');
+  var previewTitle = document.getElementById('cl-preview-title');
+  var progressEl = document.getElementById('cl-progress');
+  var status = document.getElementById('cl-status');
+  var warning = document.getElementById('cl-warning');
+  var dateInput = document.getElementById('cl-date');
+  var timeField = document.getElementById('cl-time-field');
+  var EXAMPLE = '- buy milk\n  - oat\n  - bread\n1. call Sam\n* [x] send invoice\n\n## Later\nbook flights\n- [ ] renew passport';
+
+  function message(name, fill) {
+    var el = document.querySelector('#cl-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : '';
+    if (fill) Object.keys(fill).forEach(function (key) { text = text.split('{' + key + '}').join(fill[key]); });
+    return text;
+  }
+  function say(text) {
+    status.textContent = '';
+    window.setTimeout(function () { status.textContent = text; }, 30);
+  }
+  function options() {
+    return {
+      mode: form.elements.mode.value, reset: form.elements.resetall.checked, stripto: form.elements.stripto.value,
+      unit: form.elements.unit.value, indent: form.elements.indent.value,
+      due: form.elements.due.value, date: dateInput.value, time: form.elements.time.value
+    };
+  }
+
+  function renderPreview(result, strip) {
+    preview.textContent = '';
+    result.items.forEach(function (it) {
+      var row = document.createElement('div');
+      row.className = 'cl-row' + (it.kind === 'heading' ? ' is-heading' : '');
+      if (!(strip && form.elements.stripto.value === 'plain')) row.style.paddingInlineStart = (it.level * 1.6) + 'em';
+      if (it.kind === 'item' && !strip) {
+        var box = document.createElement('input');
+        box.type = 'checkbox';
+        box.disabled = true;
+        box.checked = isDone(it.mark);
+        box.setAttribute('aria-label', isDone(it.mark) ? '[' + it.mark + ']' : '[ ]');
+        row.appendChild(box);
+      } else if (it.kind === 'item' && form.elements.stripto.value === 'bullets') {
+        var dot = document.createElement('span');
+        dot.setAttribute('aria-hidden', 'true');
+        dot.textContent = '•';
+        row.appendChild(dot);
+      }
+      var label = document.createElement('span');
+      label.textContent = it.kind === 'heading' ? it.text.replace(/^#{1,6}\s*/, '') : it.text;
+      row.appendChild(label);
+      preview.appendChild(row);
+    });
+  }
+
+  function update() {
+    var opts = options();
+    var strip = opts.mode === 'strip';
+    Array.prototype.forEach.call(form.querySelectorAll('[data-show]'), function (el) {
+      el.hidden = el.getAttribute('data-show') !== opts.mode;
+    });
+    timeField.hidden = strip || opts.due !== 'reminder-time';
+    var empty = !input.value.trim();
+    var result = run(input.value, opts);
+    code.textContent = result.output;
+    title.textContent = message(strip ? 'title-strip' : 'title-make');
+    var has = !empty && result.items.length > 0;
+    head.hidden = pre.hidden = preview.hidden = previewTitle.hidden = !has;
+    if (has) renderPreview(result, strip);
+    if (!has) progressEl.textContent = message('waiting');
+    else if (!result.progress.total) progressEl.textContent = message('no-tasks');
+    else progressEl.textContent = message('progress', { done: result.progress.done, total: result.progress.total });
+    warning.textContent = result.warnings.map(function (w) { return message(w); }).join(' ');
+    warning.hidden = !result.warnings.length;
+  }
+
+  dateInput.value = isoDate(new Date());
+  form.addEventListener('input', update);
+  form.addEventListener('change', update);
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+  document.getElementById('cl-example').addEventListener('click', function () {
+    input.value = EXAMPLE;
+    update();
+    say(message('loaded'));
+  });
+  document.getElementById('cl-clear').addEventListener('click', function () {
+    input.value = '';
+    update();
+    input.focus();
+    say(message('cleared'));
+  });
+  document.getElementById('cl-copy').addEventListener('click', function () {
+    var text = code.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(code);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+
+  document.getElementById('cl-nojs').hidden = true;
+  form.hidden = false;
+  update();
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/bn/">হোম</a></li>
+        <li><a href="/bn/docs/">নথি</a></li>
+        <li><a href="/bn/blog/">গাইড</a></li>
+        <li><a href="/bn/compare/">তুলনা করুন</a></li>
+        <li><a href="/bn/privacy.html">গোপনীয়তা</a></li>
+        <li><a href="/bn/terms.html">শর্তাবলি</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">সহায়তা</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_bn_7d9ef8e50226">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© ২০২৬ Vox.md · স্থানীয় নোটের দ্রুত ক্যাপচার · বিষয়বস্তু আপলোড নেই।</div>
+    </div>
+  <details class="language-switcher"><summary>ভাষা</summary><ul><li><a href="/blog/markdown-checklist-maker/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/markdown-checklist-maker/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/markdown-checklist-maker/" lang="bn" hreflang="bn" aria-current="page">বাংলা</a></li><li><a href="/de/blog/markdown-checklist-maker/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/markdown-checklist-maker/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/markdown-checklist-maker/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/markdown-checklist-maker/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/markdown-checklist-maker/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/markdown-checklist-maker/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/markdown-checklist-maker/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/markdown-checklist-maker/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/markdown-checklist-maker/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/markdown-checklist-maker/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/markdown-checklist-maker/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/markdown-checklist-maker/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/markdown-checklist-maker/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/markdown-checklist-maker/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/markdown-checklist-maker/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/markdown-checklist-maker/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/markdown-checklist-maker/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/markdown-checklist-maker/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/markdown-checklist-maker/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/markdown-checklist-maker/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

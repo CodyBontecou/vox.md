@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="it" dir="ltr" data-search-section="Sezione" data-search-guide="Guida" data-search-empty="Nessun risultato per «{query}»">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Convertitore da SRT e VTT a testo o Markdown | Vox.md</title>
+  <meta name="description" content="Convertitore gratuito nel browser per file di sottotitoli .srt e .vtt. Ottieni testo semplice senza timecode, Markdown con i turni di parola in grassetto per Obsidian, oppure converti da SRT a VTT e da VTT a SRT. Non viene caricato nulla.">
+  <link rel="canonical" href="https://vox.isolated.tech/it/blog/srt-vtt-to-text-markdown/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Documentazione Vox.md per modelli linguistici">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Convertitore da SRT e VTT a testo o Markdown">
+  <meta property="og:description" content="Convertitore gratuito nel browser per file di sottotitoli .srt e .vtt. Ottieni testo semplice senza timecode, Markdown con i turni di parola in grassetto per Obsidian, oppure converti da SRT a VTT e da VTT a SRT. Non viene caricato nulla.">
+  <meta property="og:url" content="https://vox.isolated.tech/it/blog/srt-vtt-to-text-markdown/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-23">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Convertitore da SRT e VTT a testo o Markdown">
+  <meta name="twitter:description" content="Convertitore gratuito nel browser per file di sottotitoli .srt e .vtt. Ottieni testo semplice senza timecode, Markdown con i turni di parola in grassetto per Obsidian, oppure converti da SRT a VTT e da VTT a SRT. Non viene caricato nulla.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Convertitore da SRT e VTT a testo o Markdown",
+  "description": "Convertitore gratuito nel browser per file di sottotitoli .srt e .vtt. Ottieni testo semplice senza timecode, Markdown con i turni di parola in grassetto per Obsidian, oppure converti da SRT a VTT e da VTT a SRT. Non viene caricato nulla.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-23",
+  "dateModified": "2026-11-23",
+  "mainEntityOfPage": "https://vox.isolated.tech/it/blog/srt-vtt-to-text-markdown/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "it",
+  "name": "Convertitore da SRT e VTT a testo o Markdown | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/it/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Guide",
+      "item": "https://vox.isolated.tech/it/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Convertitore da SRT e VTT a testo o Markdown",
+      "item": "https://vox.isolated.tech/it/blog/srt-vtt-to-text-markdown/"
+    }
+  ],
+  "inLanguage": "it",
+  "name": "Convertitore da SRT e VTT a testo o Markdown | Vox.md",
+  "description": "Convertitore gratuito nel browser per file di sottotitoli .srt e .vtt. Ottieni testo semplice senza timecode, Markdown con i turni di parola in grassetto per Obsidian, oppure converti da SRT a VTT e da VTT a SRT. Non viene caricato nulla."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/srt-vtt-to-text-markdown/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/srt-vtt-to-text-markdown/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Vai alla guida</a>
+<nav aria-label="Navigazione principale">
+  <div class="nav-inner">
+    <a href="/it/" class="logo" aria-label="home Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/it/#how">Come funziona</a></li>
+      <li><a href="/it/docs/">Documentazione</a></li>
+      <li><a href="/it/blog/">Guide</a></li>
+      <li><a href="/it/compare/">Confronta</a></li>
+      <li><a href="/it/privacy.html">Privacy</a></li>
+      <li><a href="/it/terms.html">Termini</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_it_4a73ac82f5c3">Scarica Vox.md</a>
+  <details class="language-switcher"><summary>Lingua</summary><ul><li><a href="/blog/srt-vtt-to-text-markdown/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/srt-vtt-to-text-markdown/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/srt-vtt-to-text-markdown/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/srt-vtt-to-text-markdown/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/srt-vtt-to-text-markdown/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/srt-vtt-to-text-markdown/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/srt-vtt-to-text-markdown/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/srt-vtt-to-text-markdown/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/srt-vtt-to-text-markdown/" lang="it" hreflang="it" aria-current="page">Italiano</a></li><li><a href="/ja/blog/srt-vtt-to-text-markdown/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/srt-vtt-to-text-markdown/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/srt-vtt-to-text-markdown/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/srt-vtt-to-text-markdown/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/srt-vtt-to-text-markdown/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/srt-vtt-to-text-markdown/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/srt-vtt-to-text-markdown/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/srt-vtt-to-text-markdown/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/srt-vtt-to-text-markdown/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/srt-vtt-to-text-markdown/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/srt-vtt-to-text-markdown/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/srt-vtt-to-text-markdown/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/srt-vtt-to-text-markdown/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/srt-vtt-to-text-markdown/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Strumento gratuito</div>
+        <h1 class="hero-title">Convertitore da SRT e VTT a testo o Markdown</h1>
+        <p class="hero-subtitle">Incolla o apri un file di sottotitoli da Zoom, Microsoft Teams, YouTube o da un servizio di trascrizione e ottieni testo leggibile, una trascrizione Markdown o l’altro formato di sottotitoli. Il file viene letto sul tuo dispositivo e non viene mai caricato.</p>
+      </div>
+      <aside class="meta-card" aria-label="Informazioni sulla guida">
+        <dl>
+          <div><dt>Di</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Aggiornato</dt><dd><time datetime="2026-11-23">23 novembre 2026</time></dd></div>
+          <div><dt>Richiede</dt><dd>Qualsiasi browser moderno, incluso Safari su iPhone. Facoltativo: Obsidian per l’output Markdown e Vox.md per iPhone o Mac se parti dall’audio.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Convertitore da SRT e VTT a testo o Markdown">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">La risposta breve</div>
+        <p>Incolla o apri un file .srt o .vtt, scegli Testo semplice o Markdown, poi copia o scarica. Il file resta sul tuo dispositivo.</p>
+      </div>
+      <p>Il convertitore rimuove numeri dei cue e timecode, unisce le righe in paragrafi e trasforma i nomi di chi parla in turni di parola in grassetto per una nota. Converte anche da SRT a VTT e da VTT a SRT. Legge il file con la FileReader API del browser, e questa pagina non effettua richieste di rete, quindi nulla di ciò che incolli o apri viene inviato altrove.</p>
+      <nav class="toc" aria-label="In questa guida"><div class="toc-title">In questa guida</div><ol>
+        <li><a href="#how-to-use">Usa il convertitore</a></li>
+        <li><a href="#srt-vs-vtt">SRT e VTT: cosa sono e in cosa differiscono</a></li>
+        <li><a href="#zoom-teams-youtube">Dove trovare il file: Zoom, Teams e YouTube</a></li>
+        <li><a href="#markdown-obsidian">Inserisci la trascrizione in una nota Obsidian</a></li>
+        <li><a href="#skip-subtitles">Partire dall’audio invece che da un file di sottotitoli</a></li>
+        <li><a href="#faq">Domande</a></li>
+      </ol></nav>
+
+      <h2 id="how-to-use">1. Usa il convertitore</h2>
+      <ol>
+        <li><strong>Aggiungi il file.</strong> Incolla il contenuto nella casella, oppure scegli un <code>.srt</code>, <code>.vtt</code> oppure <code>.txt</code> file. Lo strumento rileva il formato e mostra il numero di cue.</li>
+        <li><strong>Scegli un output.</strong> Testo semplice, Markdown, SRT o VTT.</li>
+        <li><strong>Regola le opzioni di pulizia.</strong> Unisci le righe in paragrafi, inizia un nuovo paragrafo dopo una pausa, rimuovi le righe ripetute a scorrimento, elimina i tag e mantieni o elimina i cue sonori come <code>[Music]</code>.</li>
+        <li><strong>Copia o scarica.</strong> Il download usa l’estensione corretta: <code>.txt</code>, <code>.md</code>, <code>.srt</code> oppure <code>.vtt</code>.</li>
+      </ol>
+      <p class="mt-nojs" id="sv-nojs">Il convertitore richiede JavaScript. Senza, le spiegazioni qui sotto restano valide come riferimento.</p>
+      <form class="sv-tool" id="sv-tool" aria-label="Convertitore di sottotitoli" hidden>
+        <fieldset class="mt-group">
+          <legend>Dati di input</legend>
+          <label class="mt-field" for="sv-file">Apri un file (.srt, .vtt o .txt) <input type="file" id="sv-file" accept=".srt,.vtt,.txt,text/vtt,text/plain"></label>
+          <label class="mt-field" for="sv-input">Oppure incolla il testo dei sottotitoli <textarea id="sv-input" rows="9" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="WEBVTT
+
+00:00:01.000 --&gt; 00:00:03.000
+Ciao."></textarea></label>
+          <div class="mt-actions">
+            <button type="button" class="btn-secondary" id="sv-example">Carica esempio</button>
+            <button type="button" class="btn-secondary" id="sv-clear">Cancella</button>
+          </div>
+          <p class="mt-status sv-detected" id="sv-detected" role="status"></p>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>Risultato</legend>
+          <label class="mt-option"><input type="radio" name="output" value="text" checked> <span>Testo semplice</span></label>
+          <label class="mt-option"><input type="radio" name="output" value="md"> <span>Markdown</span></label>
+          <label class="mt-option"><input type="radio" name="output" value="srt"> <span>file SRT</span></label>
+          <label class="mt-option"><input type="radio" name="output" value="vtt"> <span>file VTT</span></label>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>Pulizia</legend>
+          <label class="mt-option" data-show="text md"><input type="checkbox" name="merge" checked> <span>Unisci le righe in paragrafi</span></label>
+          <label class="mt-field" data-show="text md" for="sv-gap">Nuovo paragrafo dopo una pausa di (secondi, 0 per mai) <input type="number" id="sv-gap" name="gap" value="2" min="0" step="0.5" inputmode="decimal"></label>
+          <label class="mt-option"><input type="checkbox" name="strip" checked> <span>Rimuovi i tag come &lt;i&gt;, &lt;b&gt;, &lt;c&gt; e &lt;v&gt;</span></label>
+          <label class="mt-option"><input type="checkbox" name="dedupe"> <span>Rimuovi le righe ripetute a scorrimento</span></label>
+          <label class="mt-option"><input type="checkbox" name="dropsound"> <span>Elimina i cue sonori come [Music]</span></label>
+        </fieldset>
+        <fieldset class="mt-group" data-show="text md">
+          <legend>Interlocutori e timestamp</legend>
+          <label class="mt-option"><input type="checkbox" name="names" checked> <span>Mostra i nomi di chi parla</span></label>
+          <label class="mt-option"><input type="checkbox" name="prefix" checked> <span>Leggi un “Name:” a inizio riga come chi parla</span></label>
+          <label class="mt-option"><input type="checkbox" name="timestamps"> <span>Aggiungi un timestamp [mm:ss] a ogni paragrafo</span></label>
+        </fieldset>
+        <fieldset class="mt-group" data-show="md">
+          <legend>Nota Markdown</legend>
+          <label class="mt-option"><input type="checkbox" name="heading" checked> <span>Aggiungi un titolo</span></label>
+          <label class="mt-option"><input type="checkbox" name="properties"> <span>Aggiungi proprietà Obsidian</span></label>
+          <label class="mt-field" for="sv-title">Titolo <input type="text" id="sv-title" name="title" placeholder="Trascrizione" autocomplete="off"></label>
+          <label class="mt-field" for="sv-date">Data <input type="date" id="sv-date" name="date"></label>
+          <label class="mt-field" for="sv-source">Fonte <input type="text" id="sv-source" name="source" placeholder="Da dove proviene il file" autocomplete="off"></label>
+          <label class="mt-field" for="sv-tags">Tag (separati da virgole) <input type="text" id="sv-tags" name="tags" value="transcript" autocomplete="off" autocapitalize="off"></label>
+        </fieldset>
+      </form>
+      <div class="mt-output-head" id="sv-output-head" hidden>
+        <h3 id="sv-output-title">Risultato</h3>
+        <div class="mt-actions">
+          <button type="button" class="btn-primary" id="sv-copy">Copia</button>
+          <button type="button" class="btn-secondary" id="sv-download">Scarica</button>
+        </div>
+      </div>
+      <p class="mt-status" id="sv-status" role="status"></p>
+      <p class="sv-error" id="sv-error" role="alert" hidden></p>
+      <pre class="guide-code sv-output" id="sv-output" aria-labelledby="sv-output-title" aria-live="polite" tabindex="0" hidden><code id="sv-output-code"></code></pre>
+      <div hidden id="sv-messages">
+        <span data-message="format-srt">un file SRT</span>
+        <span data-message="format-vtt">un file WebVTT</span>
+        <span data-message="detected">Rilevato {format} con {count} cue.</span>
+        <span data-message="detected-one">Rilevato {format} con 1 cue.</span>
+        <span data-message="waiting">Incolla un file di sottotitoli o aprine uno per vedere il risultato.</span>
+        <span data-message="err-no-cues">Nessun cue trovato. Un cue ha una riga di tempi come 00:00:01,000 --&gt; 00:00:04,000 (SRT) o 00:00:01.000 --&gt; 00:00:04.000 (VTT). Questo non sembra un file SRT o VTT.</span>
+        <span data-message="err-read">Impossibile leggere il file. Prova a incollarne il testo.</span>
+        <span data-message="err-empty-output">Tutti i cue sono stati rimossi dalle opzioni di pulizia. Disattivane una per vedere il testo.</span>
+        <span data-message="copied">Copiato negli appunti.</span>
+        <span data-message="copy-failed">Copia non riuscita. Seleziona il testo e copialo tu.</span>
+        <span data-message="downloaded">Scaricato {name}.</span>
+        <span data-message="loaded">Esempio caricato.</span>
+        <span data-message="cleared">Cancellato.</span>
+        <span data-message="title-text">Testo semplice</span>
+        <span data-message="title-md">Markdown</span>
+        <span data-message="title-srt">sottotitoli SRT</span>
+        <span data-message="title-vtt">sottotitoli VTT</span>
+      </div>
+
+      <section class="cta" aria-labelledby="guide-cta-tool">
+        <h2 id="guide-cta-tool">Parti invece da una registrazione?</h2>
+        <p>Vox.md trascrive sul tuo iPhone o Mac e salva il Markdown in Obsidian. Nessun caricamento, nessun file di sottotitoli.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_it_4a73ac82f5c3">Scarica Vox.md gratis</a></p>
+        <p>Il convertitore qui sopra funziona interamente senza l’app.</p>
+      </section>
+
+      <h2 id="srt-vs-vtt">2. SRT e VTT: cosa sono e in cosa differiscono</h2>
+      <p>Sono entrambi formati di sottotitoli in testo semplice: un elenco di cue, ciascuno con un’ora di inizio, un’ora di fine e del testo. La Biblioteca del Congresso descrive <a href="https://www.loc.gov/preservation/digital/formats/fdd/fdd000569.shtml" target="_blank" rel="noopener">il formato SubRip (SRT)</a> come un semplice formato di testo in cui ogni sottotitolo ha un numero progressivo, ora di inizio e di fine separate da <code>--&gt;</code>, una o più righe di testo e una riga vuota. Il suo timecode è <code>hours:minutes:seconds,milliseconds</code>. La <a href="https://www.w3.org/TR/webvtt1/" target="_blank" rel="noopener">specifica WebVTT del W3C</a> definisce il formato più recente usato dai browser per i sottotitoli.</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th></th><th><code>.srt</code></th><th><code>.vtt</code></th></tr></thead>
+          <tbody>
+            <tr><td>Prima riga</td><td>Il numero del primo cue</td><td><code>WEBVTT</code></td></tr>
+            <tr><td>Separatore dei millisecondi</td><td>Virgola: <code>00:00:01,000</code></td><td>Punto: <code>00:00:01.000</code></td></tr>
+            <tr><td>Ore</td><td>Sempre scritto</td><td>Facoltativo: <code>00:01.000</code> è consentito</td></tr>
+            <tr><td>Numeri dei cue</td><td>Un numero progressivo per ogni cue</td><td>Identificatore facoltativo</td></tr>
+            <tr><td>Impostazioni dei cue</td><td>Nessuno</td><td>Posizione e allineamento possono seguire il timestamp, ad esempio <code>align:start</code></td></tr>
+            <tr><td>Interlocutore</td><td>Nessun marcatore standard; si scrive <code>Name:</code></td><td>Intervallo vocale: <code>&lt;v Name&gt;text&lt;/v&gt;</code></td></tr>
+            <tr><td>Commenti</td><td>Nessuno</td><td><code>NOTE</code>, <code>STYLE</code> e <code>REGION</code> blocchi</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Cosa fa il convertitore quando cambia formato:</p>
+      <ul>
+        <li><strong>Da SRT a VTT:</strong> aggiunge il <code>WEBVTT</code> l’intestazione e cambia ogni virgola in un timestamp in un punto.</li>
+        <li><strong>Da VTT a SRT:</strong> elimina l’intestazione, <code>NOTE</code>, <code>STYLE</code> e <code>REGION</code> e le impostazioni dei cue, cambia i punti in virgole e rinumera i cue da 1. SRT non ha il voice span, quindi <code>&lt;v Name&gt;text&lt;/v&gt;</code> diventa <code>Name: text</code>.</li>
+        <li><strong>Codifica del testo:</strong> la Biblioteca del Congresso osserva che SRT non ha uno standard di codifica dei caratteri e i parser devono rilevarla. Il convertitore legge i file come UTF-8. Se le lettere accentate sembrano sbagliate, apri il file in un editor di testo e salvalo prima come UTF-8.</li>
+      </ul>
+
+      <h2 id="zoom-teams-youtube">3. Dove trovare il file: Zoom, Teams e YouTube</h2>
+      <p>Controlla la pagina di ciascun fornitore per il tuo piano e le tue impostazioni, perché amministratori e tipi di account cambiano ciò che puoi scaricare.</p>
+      <h3>Registrazioni cloud di Zoom</h3>
+      <p>La pagina di supporto di Zoom <a href="https://support.zoom.com/hc/en/article?id=zm_kb&amp;sysparm_article=KB0064927" target="_blank" rel="noopener">sulla trascrizione audio delle registrazioni nel cloud</a> indica che, una volta elaborata la trascrizione, appare come file VTT separato insieme alla registrazione. Vale per le registrazioni cloud, e la trascrizione audio deve essere attivata per queste. I formati di file che una registrazione può produrre sono elencati in <a href="https://support.zoom.com/hc/en/article?id=zm_kb&amp;sysparm_article=KB0064394" target="_blank" rel="noopener">la guida di Zoom ai formati dei file di registrazione</a>.</p>
+      <h3>trascrizioni di Microsoft Teams</h3>
+      <p><a href="https://support.microsoft.com/en-us/teams/meetings/start-stop-and-download-live-transcripts-in-microsoft-teams-meetings" target="_blank" rel="noopener">l’articolo di supporto di Microsoft sul download delle trascrizioni di Teams</a> indica che, per impostazione predefinita, organizzatori e co-organizzatori possono scaricare la trascrizione come <code>.docx</code> oppure <code>.vtt</code> file, e che le policy del tuo amministratore IT possono cambiare chi può scaricarla. Scegli <code>.vtt</code> e aprilo qui. Per correggere gli errori prima di convertire, vedi <a href="https://support.microsoft.com/en-us/office/edit-or-delete-a-meeting-transcript-in-microsoft-teams-2f461386-e39a-4444-b9e2-5787da1da11b" target="_blank" rel="noopener">la guida di Microsoft alla modifica di una trascrizione di Teams</a>.</p>
+      <h3>sottotitoli di YouTube</h3>
+      <p>La pagina della guida di YouTube <a href="https://support.google.com/youtube/answer/2734705" target="_blank" rel="noopener">sulla modifica e la rimozione dei sottotitoli</a> descrive come scaricare una traccia di sottotitoli da YouTube Studio per un video del proprio canale. Non indica il formato del file scaricato, quindi incolla o apri il file e lascia che il convertitore lo rilevi. La pagina di YouTube <a href="https://support.google.com/youtube/answer/2734698" target="_blank" rel="noopener">elenco dei tipi di file di sottotitoli supportati</a> include SubRip (.srt) e WebVTT (.vtt).</p>
+      <p>Scarica solo sottotitoli che hai il diritto di usare. Questa pagina non riguarda i video di altre persone.</p>
+
+      <h2 id="markdown-obsidian">4. Inserisci la trascrizione in una nota Obsidian</h2>
+      <ol>
+        <li><strong>Scegli Markdown.</strong> I nomi di chi parla diventano <code>**Name:**</code>, e i cue consecutivi dello stesso interlocutore si uniscono in un solo turno. Attiva <strong>Aggiungi un timestamp [mm:ss]</strong> se vuoi ritrovare in seguito il punto nella registrazione.</li>
+        <li><strong>Attiva le proprietà Obsidian</strong> per aggiungere in alto un blocco con <code>title</code>, <code>date</code>, <code>source</code> e <code>tags</code>. È YAML valido, scritto come fa <a href="/it/blog/obsidian-properties-generator/">generatore di proprietà</a> lo scrive. Obsidian legge le righe tra i due <code>---</code> all’inizio di una nota come proprietà; vedi <a href="https://obsidian.md/help/properties" target="_blank" rel="noopener">la pagina della guida di Obsidian sulle proprietà</a>.</li>
+        <li><strong>Incolla in una nuova nota</strong> nel tuo vault, per esempio in una <code>Meetings</code> cartella. Se scarichi il <code>.md</code> file, spostalo nella cartella del vault.</li>
+        <li><strong>Collegala alla nota della riunione.</strong> Crea una nota con il <a href="/it/blog/obsidian-meeting-notes-template/">generatore di modelli per note di riunione</a>, poi aggiungi una riga come <code>Transcript: [[Team sync transcript]]</code> ad essa. Se colleghi da una proprietà, il link deve essere tra virgolette: <code>transcript: "[[Team sync transcript]]"</code>.</li>
+      </ol>
+      <p>Il testo viene sottoposto a escape in modo che caratteri come <code>*</code>, <code>$</code> e un <code>#</code> non diventino formattazione, matematica o tag in Obsidian. I nomi dei partecipanti vengono dal file, quindi controllali prima di condividere la nota.</p>
+
+      <h2 id="skip-subtitles">5. Partire dall’audio invece che da un file di sottotitoli</h2>
+      <p>Se hai solo una registrazione, non ti serve alcun file di sottotitoli. Vox.md trascrive sul dispositivo e scrive il Markdown direttamente nel tuo vault. Secondo la <a href="/it/docs/#models">documentazione dei modelli</a>, la trascrizione avviene sul dispositivo Apple con Apple Speech su un dispositivo e una lingua iOS 26 supportati, oppure con un modello Whisper o Parakeet facoltativo che scarichi; vedi <a href="/it/compare/whisper-vs-parakeet/">Whisper o Parakeet</a> per la differenza. Le etichette dei partecipanti sono un passaggio Route facoltativo chiamato <strong>Identificare gli oratori</strong>, e sono anonime e approssimative.</p>
+      <ul>
+        <li><a href="/it/blog/transcribe-audio-file-mac/">Trascrivere un file audio su Mac, in locale, in Markdown</a></li>
+        <li><a href="/it/blog/transcribe-meetings-mac-obsidian/">Trascrivi in locale le riunioni sul Mac in Obsidian</a></li>
+      </ul>
+      <p>La documentazione di Vox.md non descrive l’importazione o l’esportazione di file SRT o VTT, quindi questo convertitore è uno strumento separato e funziona senza l’app. Nessun file di sottotitoli? Puoi <a href="/it/blog/transcribe-video-to-text/">trascrivere il video stesso</a> sul tuo dispositivo.</p>
+      <p>Per controllare quanto velocemente parlavano i relatori, converti qui i sottotitoli in testo semplice, poi incolla il testo e la durata del video nel <a href="/it/blog/speech-time-calculator/">calcolatore della durata di un discorso</a>, che divide le parole per i minuti per ottenere le parole al minuto.</p>
+
+      <h2 id="faq">6. Domande</h2>
+      <h3>Questo carica il mio file?</h3>
+      <p>No. Un file che apri viene letto nel browser con la FileReader API, e un file che incolli resta nella casella di testo. La conversione è uno script in questa pagina, e la pagina non effettua richieste di rete mentre la usi. Quando chiudi o ricarichi la pagina, il testo scompare.</p>
+      <h3>Perché le righe sono ripetute?</h3>
+      <p>I sottotitoli automatici spesso scorrono: ogni nuovo cue ripete la riga precedente e ne aggiunge una nuova, così le stesse parole compaiono due o tre volte. Attiva <strong>Rimuovi le righe ripetute a scorrimento</strong>. Rimuove una riga identica a una riga del cue precedente. Se chi parla ripete davvero la stessa riga due volte di fila, anche quella ripetizione viene rimossa, quindi lascia l’opzione disattivata per i sottotitoli puliti fatti da persone.</p>
+      <h3>Posso mantenere i timestamp?</h3>
+      <p>Sì. Con Testo semplice o Markdown, attiva l’opzione timestamp e ogni paragrafo inizia con l’ora del suo primo cue come <code>[mm:ss]</code>, oppure <code>[h:mm:ss]</code> dopo un’ora. Per l’ora di ogni cue, converti invece in SRT o VTT.</p>
+      <h3>Come riconverto il testo in SRT?</h3>
+      <p>Questo strumento non lo fa. Il testo semplice non ha tempi, quindi per un SRT serve uno strumento che allinei il testo all’audio. La conversione tra SRT e VTT mantiene i tempi, perché entrambi i formati li contengono.</p>
+      <h3>Funziona su iPhone?</h3>
+      <p>Sì. Usa normali controlli di modulo e il selettore di file del browser, ed è stato scritto per funzionare in Safari su iPhone. Copia usa gli appunti quando Safari lo consente, altrimenti ti chiede di selezionare il testo.</p>
+
+      <nav class="toc" aria-label="Guide correlate" id="related"><div class="toc-title">Continua</div><ul>
+        <li><a href="/it/blog/obsidian-meeting-notes-template/">Generatore di modelli di note per riunioni in Obsidian</a></li>
+        <li><a href="/it/blog/obsidian-properties-generator/">Generatore e verificatore di proprietà Obsidian</a></li>
+        <li><a href="/it/blog/transcribe-meetings-mac-obsidian/">Trascrivi in locale le riunioni sul Mac in Obsidian</a></li>
+        <li><a href="/it/blog/transcribe-audio-file-mac/">Trascrivere un file audio su Mac</a></li>
+        <li><a href="/it/compare/whisper-vs-parakeet/">Whisper o Parakeet</a></li>
+        <li><a href="/it/docs/#models">Modelli vocali e lingue</a></li>
+      </ul></nav>
+<style>
+.sv-tool:not([hidden]) { display: flex; flex-direction: column; gap: 16px; }
+.sv-tool [hidden] { display: none; }
+.sv-tool .mt-field input, .sv-tool .mt-field textarea { font: inherit; font-family: var(--font-mono); font-size: 16px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; padding: 8px 10px; width: 100%; box-sizing: border-box; min-height: 44px; }
+.sv-tool .mt-field textarea { resize: vertical; min-height: 160px; }
+.sv-tool .mt-field input[type="number"] { max-width: 8em; }
+.sv-tool input:focus-visible, .sv-tool textarea:focus-visible, .sv-output:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.sv-tool .mt-option { min-height: 44px; }
+.sv-tool .mt-option input { width: 22px; height: 22px; }
+.sv-tool .mt-actions button, .sv-tool + .mt-output-head button, .mt-output-head .mt-actions button { font: inherit; font-size: 15px; min-height: 44px; padding: 0 18px; cursor: pointer; }
+.sv-detected { margin: 0; min-height: 1.5em; }
+.sv-error { margin: 0; padding: 12px 14px; background: var(--card); border: 1.5px solid var(--ink); border-radius: 12px; font-weight: 600; overflow-wrap: anywhere; }
+.sv-error[hidden] { display: none; }
+.sv-output { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 28rem; overflow: auto; }
+.sv-tool input[type="file"] { font-size: 16px; padding: 8px 0; border: 0; min-height: 44px; }
+</style>
+<script>
+/* SRT and VTT converter. Runs locally: no network requests. */
+(function () {
+  var TIMING = /^\s*((?:\d+:)?\d{1,2}:\d{2}[.,]\d{1,3})\s*-->\s*((?:\d+:)?\d{1,2}:\d{2}[.,]\d{1,3})(?:\s+(.*))?\s*$/;
+  var TAGS = /<\/?[a-zA-Z][^>]*>|<\d{1,2}:\d{2}[:.\d]*>/g;
+  var VOICE = /<v(?:\.[^\s>]*)*(?:[ \t]+([^>]*))?>|<\/v>/g;
+  var PREFIX = /^(\p{Lu}[\p{L}\p{N}'’\-]*(?: [\p{L}\p{N}'’\-]+){0,3}):\s+(\S[\s\S]*)$/u;
+  var NUMERIC = /^[-+]?(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?$/;
+  var TAG_BAD = /[^\p{L}\p{N}_\/-]/gu;
+
+  function pad(n, w) { var s = String(n); while (s.length < (w || 2)) s = '0' + s; return s; }
+  function parseTime(s) {
+    var m = /^(?:(\d+):)?(\d{1,2}):(\d{2})[.,](\d{1,3})$/.exec(s);
+    var frac = (m[4] + '00').slice(0, 3);
+    return ((Number(m[1] || 0) * 60 + Number(m[2])) * 60 + Number(m[3])) * 1000 + Number(frac);
+  }
+  function stamp(ms, sep) {
+    var t = Math.max(0, Math.round(ms));
+    var h = Math.floor(t / 3600000), m = Math.floor(t / 60000) % 60, s = Math.floor(t / 1000) % 60;
+    return pad(h) + ':' + pad(m) + ':' + pad(s) + sep + pad(t % 1000, 3);
+  }
+  function clock(ms) {
+    var total = Math.floor(ms / 1000), h = Math.floor(total / 3600), m = Math.floor(total / 60) % 60, s = total % 60;
+    return h > 0 ? h + ':' + pad(m) + ':' + pad(s) : pad(m) + ':' + pad(s);
+  }
+
+  /* Parse SRT or WebVTT. Returns {ok, format, cues} or {ok: false, error}. */
+  function parse(input) {
+    var text = String(input || '').replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
+    if (!text.trim()) return { ok: false, error: 'empty' };
+    var lines = text.split('\n');
+    var header = /^\s*WEBVTT(?:[ \t\n]|$)/.test(text);
+    var cues = [], cur = null, comma = false;
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i];
+      var m = TIMING.exec(line);
+      if (m) {
+        var id = '';
+        if (cur) {
+          var last = cur.lines[cur.lines.length - 1];
+          if (cur.lines.length > 1 && /^\s*\d+\s*$/.test(last)) { id = last.trim(); cur.lines.pop(); }
+        } else if (i > 0 && lines[i - 1].trim() !== '') {
+          id = lines[i - 1].trim();
+        }
+        if (/,/.test(m[1] + m[2])) comma = true;
+        cur = { start: parseTime(m[1]), end: parseTime(m[2]), settings: (m[3] || '').trim(), id: id, lines: [] };
+        cues.push(cur);
+      } else if (cur) {
+        if (line.trim() === '') cur = null; else cur.lines.push(line.trim());
+      }
+    }
+    if (!cues.length) return { ok: false, error: 'no-cues' };
+    var format = header ? 'vtt' : (comma ? 'srt' : 'vtt');
+    if (format === 'srt') cues.forEach(function (c) { c.id = ''; c.settings = ''; });
+    return { ok: true, format: format, cues: cues };
+  }
+
+  function plain(t) { return t.replace(TAGS, ''); }
+  function decode(s) {
+    return s.replace(/&nbsp;/g, ' ').replace(/&lrm;|&rlm;/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"').replace(/&#39;|&apos;/g, "'").replace(/&amp;/g, '&');
+  }
+
+  /* One entry per line segment: {speaker, text}. A <v Name> span can run across lines. */
+  function entriesOf(lines) {
+    var out = [], speaker = null;
+    lines.forEach(function (line) {
+      var last = 0, m;
+      VOICE.lastIndex = 0;
+      function push(t) { t = t.trim(); if (t) out.push({ speaker: speaker, text: t }); }
+      while ((m = VOICE.exec(line))) {
+        push(line.slice(last, m.index));
+        speaker = m[0] === '</v>' ? null : ((m[1] || '').trim() || null);
+        last = VOICE.lastIndex;
+      }
+      push(line.slice(last));
+    });
+    return out;
+  }
+
+  function dropSound(t) {
+    var u = t.replace(/\[[^\]]*\]/g, '');
+    var p = plain(u).trim();
+    return /^\(.*\)$/.test(p) || /[♪♫]/.test(p) ? '' : u;
+  }
+
+  /* Apply clean-up (sound cues, rolling duplicates) and return cues with entries. */
+  function prepare(cues, o) {
+    var out = [], prev = {};
+    cues.forEach(function (c) {
+      var entries = entriesOf(c.lines);
+      if (o.dropSound) entries.forEach(function (e) { e.text = dropSound(e.text); });
+      entries = entries.filter(function (e) { return plain(e.text).trim() !== ''; });
+      var keys = {};
+      entries.forEach(function (e) { keys[(e.speaker || '') + '|' + plain(e.text).replace(/\s+/g, ' ').trim()] = true; });
+      var kept = o.dedupe ? entries.filter(function (e) { return !prev[(e.speaker || '') + '|' + plain(e.text).replace(/\s+/g, ' ').trim()]; }) : entries;
+      if (o.dedupe && entries.length) prev = keys;
+      if (!kept.length) {
+        if (entries.length && out.length) out[out.length - 1].end = Math.max(out[out.length - 1].end, c.end);
+        return;
+      }
+      out.push({ start: c.start, end: c.end, id: c.id, settings: c.settings, entries: kept });
+    });
+    return out;
+  }
+
+  function cueBody(cue, vtt, strip) {
+    var groups = [];
+    cue.entries.forEach(function (e) {
+      var g = groups[groups.length - 1];
+      if (g && g.speaker === e.speaker) g.lines.push(e.text); else groups.push({ speaker: e.speaker, lines: [e.text] });
+    });
+    return groups.map(function (g) {
+      var ls = g.lines.map(function (l) { return strip ? plain(l).trim() : l; });
+      if (!g.speaker) return ls.join('\n');
+      if (vtt && !strip) return '<v ' + g.speaker + '>' + ls.join('\n') + '</v>';
+      return g.speaker + ': ' + ls.join('\n');
+    }).join('\n').replace(/-->/g, '--&gt;');
+  }
+  function toSrt(cues, strip) {
+    return cues.map(function (c, i) {
+      return (i + 1) + '\n' + stamp(c.start, ',') + ' --> ' + stamp(c.end, ',') + '\n' + cueBody(c, false, strip);
+    }).join('\n\n') + '\n';
+  }
+  function toVtt(cues, strip) {
+    return 'WEBVTT\n\n' + cues.map(function (c) {
+      return (c.id ? c.id.replace(/-->/g, '--&gt;') + '\n' : '') + stamp(c.start, '.') + ' --> ' + stamp(c.end, '.') + (c.settings ? ' ' + c.settings : '') + '\n' + cueBody(c, true, strip);
+    }).join('\n\n') + '\n';
+  }
+
+  /* Text and Markdown. */
+  function turnsOf(cues, o) {
+    var items = [];
+    cues.forEach(function (c) {
+      c.entries.forEach(function (e) {
+        var t = decode(plain(e.text)).replace(/\s+/g, ' ').trim();
+        if (t) items.push({ speaker: e.speaker ? decode(plain(e.speaker)).trim() : null, text: t, start: c.start, end: c.end });
+      });
+    });
+    if (o.prefix) {
+      var found = items.filter(function (it) { return !it.speaker && PREFIX.test(it.text); });
+      if (found.length >= 2) found.forEach(function (it) { var m = PREFIX.exec(it.text); it.speaker = m[1]; it.text = m[2]; });
+    }
+    var turns = [], t = null, gap = (o.gap || 0) * 1000;
+    items.forEach(function (it) {
+      var sp = it.speaker || (t ? t.speaker : null);
+      if (!t || sp !== t.speaker) { t = { speaker: sp, paras: [] }; turns.push(t); }
+      var p = t.paras[t.paras.length - 1];
+      if (!p || !o.merge || (gap > 0 && it.start - p.end >= gap)) {
+        t.paras.push({ start: it.start, end: it.end, text: it.text });
+      } else {
+        p.text += ' ' + it.text;
+        p.end = Math.max(p.end, it.end);
+      }
+    });
+    return turns;
+  }
+  function escMd(s) {
+    return s.replace(/[\\*`<$]/g, '\\$&')
+      .replace(/(^|[^\p{L}\p{N}])_/gu, '$1\\_').replace(/_([^\p{L}\p{N}]|$)/gu, '\\_$1')
+      .replace(/(^|\s)#(?=\S)/g, '$1\\#');
+  }
+  function escLead(s) {
+    return s.replace(/^(\d+)([.)])/, '$1\\$2').replace(/^([#>+\-])/, '\\$1');
+  }
+  function renderTurns(turns, o, md) {
+    return turns.map(function (t) {
+      return t.paras.map(function (p, i) {
+        var pre = '';
+        if (o.timestamps) pre += '[' + clock(p.start) + '] ';
+        if (i === 0 && t.speaker && o.names) pre += md ? '**' + escMd(t.speaker) + ':** ' : t.speaker + ': ';
+        var body = md ? escMd(p.text) : p.text;
+        if (md && !pre) body = escLead(body);
+        return pre + body;
+      }).join(o.merge ? '\n\n' : '\n');
+    }).join('\n\n');
+  }
+
+  function needsQuote(s) {
+    if (s === '') return false;
+    if (/^\[\[/.test(s)) return true;
+    if (/^[#\[\]{}*&!%@`'"|>?,]/.test(s)) return true;
+    if (/^[-:]( |$)/.test(s)) return true;
+    if (/:(\s|$)/.test(s) || /\s#/.test(s)) return true;
+    if (/^\s|\s$/.test(s)) return true;
+    if (/^(yes|no|true|false|null|on|off|y|n|~)$/i.test(s)) return true;
+    if (NUMERIC.test(s) || /^0x[0-9a-f]+$/i.test(s)) return true;
+    if (/^\d{4}-\d{2}-\d{2}/.test(s)) return true;
+    return false;
+  }
+  function scalar(v) {
+    var s = String(v).replace(/[\r\n]+/g, ' ').trim();
+    return needsQuote(s) ? '"' + s.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"' : s;
+  }
+  function cleanTag(value) {
+    var t = String(value).trim().replace(/^#+/, '').replace(/\s+/g, '-').replace(TAG_BAD, '').replace(/^\/+|\/+$/g, '');
+    return /[^\d\/_-]/.test(t) || /\p{L}/u.test(t) ? t : '';
+  }
+  function properties(o) {
+    var lines = ['---', 'title: ' + scalar(o.title)];
+    if (/^\d{4}-\d{2}-\d{2}$/.test(o.date || '')) lines.push('date: ' + o.date);
+    if (String(o.source || '').trim()) lines.push('source: ' + scalar(o.source));
+    var tags = String(o.tags || '').split(/[\r\n,]+/).map(cleanTag).filter(Boolean);
+    if (tags.length) { lines.push('tags:'); tags.forEach(function (t) { lines.push('  - ' + t); }); }
+    lines.push('---');
+    return lines.join('\n');
+  }
+
+  var EXT = { text: 'txt', md: 'md', srt: 'srt', vtt: 'vtt' };
+  var DEFAULTS = { output: 'text', merge: true, gap: 2, strip: true, dedupe: false, dropSound: false, names: true, prefix: true,
+    timestamps: false, heading: true, properties: false, title: '', date: '', source: '', tags: 'transcript' };
+
+  /* Convert input text. Returns {ok, format, count, output, ext} or {ok: false, error}. */
+  function convert(input, options) {
+    var o = {};
+    Object.keys(DEFAULTS).forEach(function (k) { o[k] = options && options[k] !== undefined ? options[k] : DEFAULTS[k]; });
+    var parsed = parse(input);
+    if (!parsed.ok) return parsed;
+    var cues = prepare(parsed.cues, o);
+    var result = { ok: true, format: parsed.format, count: parsed.cues.length, ext: EXT[o.output] || 'txt' };
+    if (!cues.length) { result.ok = false; result.error = 'empty-output'; return result; }
+    if (o.output === 'srt') result.output = toSrt(cues, o.strip);
+    else if (o.output === 'vtt') result.output = toVtt(cues, o.strip);
+    else {
+      var body = renderTurns(turnsOf(cues, o), o, o.output === 'md');
+      if (o.output === 'md') {
+        var title = String(o.title || '').trim() || 'Transcript';
+        var head = [];
+        if (o.properties) head.push(properties({ title: title, date: o.date, source: o.source, tags: o.tags }));
+        if (o.heading) head.push('# ' + title.replace(/^#+\s*/, ''));
+        head.push(body);
+        body = head.join('\n\n');
+      }
+      result.output = body + '\n';
+    }
+    return result;
+  }
+
+  var SAMPLE = [
+    'WEBVTT', '',
+    'NOTE Invented example for the converter. Not a real meeting.', '',
+    '1', '00:00:01.000 --> 00:00:04.200 align:start position:10%',
+    '<v Host>Welcome, everyone. Today we are planning</v>', '',
+    '2', '00:00:04.200 --> 00:00:06.500',
+    '<v Host>the spring newsletter.</v>', '',
+    '3', '00:00:07.000 --> 00:00:10.000',
+    '<v Guest>I can draft the <i>intro</i> by Friday.</v>', '',
+    '4', '00:00:10.000 --> 00:00:12.000',
+    '[Music]', '',
+    '5', '00:00:15.500 --> 00:00:19.000',
+    '<v Host>Great. Please share it in the team notes.</v>', '',
+    '6', '00:00:19.500 --> 00:00:21.000',
+    '<v Guest>Will do.</v>', ''
+  ].join('\n');
+
+  if (typeof window !== 'undefined') window.voxSubtitles = { parse: parse, convert: convert, sample: SAMPLE, cleanTag: cleanTag };
+
+  var form = document.getElementById('sv-tool');
+  if (!form) return;
+  var input = document.getElementById('sv-input');
+  var fileInput = document.getElementById('sv-file');
+  var detected = document.getElementById('sv-detected');
+  var status = document.getElementById('sv-status');
+  var errorEl = document.getElementById('sv-error');
+  var head = document.getElementById('sv-output-head');
+  var pre = document.getElementById('sv-output');
+  var code = document.getElementById('sv-output-code');
+  var title = document.getElementById('sv-output-title');
+  var baseName = 'transcript';
+  var last = null;
+
+  function message(name, params) {
+    var el = document.querySelector('#sv-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : '';
+    Object.keys(params || {}).forEach(function (k) { text = text.split('{' + k + '}').join(params[k]); });
+    return text;
+  }
+  function say(text) { status.textContent = text; }
+  function checked(name) { return form.elements[name].checked; }
+  function read() {
+    var output = 'text';
+    Array.prototype.forEach.call(form.elements.output, function (r) { if (r.checked) output = r.value; });
+    return { output: output, merge: checked('merge'), gap: Math.max(0, parseFloat(form.elements.gap.value) || 0), strip: checked('strip'),
+      dedupe: checked('dedupe'), dropSound: checked('dropsound'), names: checked('names'), prefix: checked('prefix'),
+      timestamps: checked('timestamps'), heading: checked('heading'), properties: checked('properties'),
+      title: form.elements.title.value, date: form.elements.date.value, source: form.elements.source.value, tags: form.elements.tags.value };
+  }
+  function toggle(o) {
+    Array.prototype.forEach.call(form.querySelectorAll('[data-show]'), function (el) {
+      el.hidden = el.getAttribute('data-show').split(' ').indexOf(o.output) === -1;
+    });
+    form.elements.gap.disabled = !o.merge;
+  }
+  function show(el, on) { el.hidden = !on; }
+
+  function update() {
+    var o = read();
+    toggle(o);
+    last = null;
+    say('');
+    show(errorEl, false); show(pre, false); show(head, false);
+    if (!input.value.trim()) { detected.textContent = message('waiting'); return; }
+    var r = convert(input.value, o);
+    if (r.format) {
+      detected.textContent = r.count === 1 ? message('detected-one', { format: message('format-' + r.format) })
+        : message('detected', { format: message('format-' + r.format), count: r.count });
+    } else detected.textContent = '';
+    if (!r.ok) {
+      errorEl.textContent = message('err-' + r.error);
+      show(errorEl, true);
+      return;
+    }
+    last = r;
+    code.textContent = r.output;
+    title.textContent = message('title-' + o.output);
+    show(pre, true); show(head, true);
+  }
+
+  form.addEventListener('input', update);
+  form.addEventListener('change', update);
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+
+  fileInput.addEventListener('change', function () {
+    var file = fileInput.files && fileInput.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      baseName = file.name.replace(/\.[^.]*$/, '') || 'transcript';
+      if (!form.elements.title.value) form.elements.title.value = baseName;
+      input.value = String(reader.result || '');
+      update();
+    };
+    reader.onerror = function () {
+      show(errorEl, true); show(pre, false); show(head, false);
+      errorEl.textContent = message('err-read');
+    };
+    reader.readAsText(file);
+  });
+  document.getElementById('sv-example').addEventListener('click', function () {
+    input.value = SAMPLE; baseName = 'example'; fileInput.value = '';
+    update(); say(message('loaded'));
+  });
+  document.getElementById('sv-clear').addEventListener('click', function () {
+    input.value = ''; baseName = 'transcript'; fileInput.value = '';
+    update(); say(message('cleared'));
+  });
+
+  document.getElementById('sv-copy').addEventListener('click', function () {
+    if (!last) return;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(code);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(last.output).then(function () { say(message('copied')); }, fallback);
+    } else fallback();
+  });
+  document.getElementById('sv-download').addEventListener('click', function () {
+    if (!last) return;
+    var name = baseName + '.' + last.ext;
+    var blob = new Blob([last.output], { type: 'text/plain;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = name;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    say(message('downloaded', { name: name }));
+  });
+
+  var today = new Date();
+  form.elements.date.value = today.getFullYear() + '-' + pad(today.getMonth() + 1) + '-' + pad(today.getDate());
+  document.getElementById('sv-nojs').hidden = true;
+  form.hidden = false;
+  update();
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/it/">Pagina iniziale</a></li>
+        <li><a href="/it/docs/">Documentazione</a></li>
+        <li><a href="/it/blog/">Guide</a></li>
+        <li><a href="/it/compare/">Confronta</a></li>
+        <li><a href="/it/privacy.html">Privacy</a></li>
+        <li><a href="/it/terms.html">Termini</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Supporto</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_it_4a73ac82f5c3">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Acquisizione rapida per note locali · Nessun caricamento di contenuti.</div>
+    </div>
+  <details class="language-switcher"><summary>Lingua</summary><ul><li><a href="/blog/srt-vtt-to-text-markdown/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/srt-vtt-to-text-markdown/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/srt-vtt-to-text-markdown/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/srt-vtt-to-text-markdown/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/srt-vtt-to-text-markdown/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/srt-vtt-to-text-markdown/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/srt-vtt-to-text-markdown/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/srt-vtt-to-text-markdown/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/srt-vtt-to-text-markdown/" lang="it" hreflang="it" aria-current="page">Italiano</a></li><li><a href="/ja/blog/srt-vtt-to-text-markdown/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/srt-vtt-to-text-markdown/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/srt-vtt-to-text-markdown/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/srt-vtt-to-text-markdown/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/srt-vtt-to-text-markdown/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/srt-vtt-to-text-markdown/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/srt-vtt-to-text-markdown/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/srt-vtt-to-text-markdown/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/srt-vtt-to-text-markdown/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/srt-vtt-to-text-markdown/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/srt-vtt-to-text-markdown/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/srt-vtt-to-text-markdown/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/srt-vtt-to-text-markdown/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/srt-vtt-to-text-markdown/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

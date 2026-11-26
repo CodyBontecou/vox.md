@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="nl" dir="ltr" data-search-section="Sectie" data-search-guide="Handleiding" data-search-empty="Geen resultaten voor ‘{query}’">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generator en controle voor Obsidian-notitie-eigenschappen (YAML-frontmatter) | Vox.md</title>
+  <meta name="description" content="Gratis browsertool voor Obsidian-notitie-eigenschappen. Maak geldige YAML-frontmatter voor elk eigenschapstype, of plak bestaande frontmatter en krijg correcties met regelnummers op basis van de regels in Obsidian Help.">
+  <link rel="canonical" href="https://vox.isolated.tech/nl/blog/obsidian-properties-generator/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Vox.md-documentatie voor taalmodellen">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Generator en controle voor Obsidian-notitie-eigenschappen (YAML-frontmatter)">
+  <meta property="og:description" content="Gratis browsertool voor Obsidian-notitie-eigenschappen. Maak geldige YAML-frontmatter voor elk eigenschapstype, of plak bestaande frontmatter en krijg correcties met regelnummers op basis van de regels in Obsidian Help.">
+  <meta property="og:url" content="https://vox.isolated.tech/nl/blog/obsidian-properties-generator/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-11-22">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Generator en controle voor Obsidian-notitie-eigenschappen (YAML-frontmatter)">
+  <meta name="twitter:description" content="Gratis browsertool voor Obsidian-notitie-eigenschappen. Maak geldige YAML-frontmatter voor elk eigenschapstype, of plak bestaande frontmatter en krijg correcties met regelnummers op basis van de regels in Obsidian Help.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Generator en controle voor Obsidian-notitie-eigenschappen (YAML-frontmatter)",
+  "description": "Gratis browsertool voor Obsidian-notitie-eigenschappen. Maak geldige YAML-frontmatter voor elk eigenschapstype, of plak bestaande frontmatter en krijg correcties met regelnummers op basis van de regels in Obsidian Help.",
+  "image": "https://vox.isolated.tech/screenshots/01-route-heading-light.png",
+  "datePublished": "2026-11-22",
+  "dateModified": "2026-11-22",
+  "mainEntityOfPage": "https://vox.isolated.tech/nl/blog/obsidian-properties-generator/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "nl",
+  "name": "Generator en controle voor Obsidian-notitie-eigenschappen (YAML-frontmatter) | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/nl/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Handleidingen",
+      "item": "https://vox.isolated.tech/nl/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Generator en controle voor Obsidian-notitie-eigenschappen (YAML-frontmatter)",
+      "item": "https://vox.isolated.tech/nl/blog/obsidian-properties-generator/"
+    }
+  ],
+  "inLanguage": "nl",
+  "name": "Generator en controle voor Obsidian-notitie-eigenschappen (YAML-frontmatter) | Vox.md",
+  "description": "Gratis browsertool voor Obsidian-notitie-eigenschappen. Maak geldige YAML-frontmatter voor elk eigenschapstype, of plak bestaande frontmatter en krijg correcties met regelnummers op basis van de regels in Obsidian Help."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/obsidian-properties-generator/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/obsidian-properties-generator/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Naar de handleiding</a>
+<nav aria-label="Hoofdnavigatie">
+  <div class="nav-inner">
+    <a href="/nl/" class="logo" aria-label="Vox.md-startpagina">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/nl/#how">Zo werkt het</a></li>
+      <li><a href="/nl/docs/">Documentatie</a></li>
+      <li><a href="/nl/blog/">Handleidingen</a></li>
+      <li><a href="/nl/compare/">Vergelijken</a></li>
+      <li><a href="/nl/privacy.html">Privacy</a></li>
+      <li><a href="/nl/terms.html">Voorwaarden</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_nl_292ad7cca3ec">Vox.md downloaden</a>
+  <details class="language-switcher"><summary>Taal</summary><ul><li><a href="/blog/obsidian-properties-generator/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-properties-generator/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-properties-generator/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-properties-generator/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-properties-generator/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-properties-generator/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-properties-generator/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-properties-generator/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-properties-generator/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-properties-generator/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-properties-generator/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-properties-generator/" lang="nl" hreflang="nl" aria-current="page">Nederlands</a></li><li><a href="/pl/blog/obsidian-properties-generator/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-properties-generator/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-properties-generator/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-properties-generator/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-properties-generator/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-properties-generator/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-properties-generator/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-properties-generator/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-properties-generator/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-properties-generator/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-properties-generator/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Gratis hulpmiddel</div>
+        <h1 class="hero-title">Generator en controle voor Obsidian-notitie-eigenschappen (YAML-frontmatter)</h1>
+        <p class="hero-subtitle">Maak eigenschappen in het formaat dat Obsidian verwacht, of controleer frontmatter die je al hebt en zie waarom een eigenschap niet wordt getoond als het type dat je bedoelde.</p>
+      </div>
+      <aside class="meta-card" aria-label="Over deze handleiding">
+        <dl>
+          <div><dt>Door</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Bijgewerkt</dt><dd><time datetime="2026-11-22">22 november 2026</time></dd></div>
+          <div><dt>Vereist</dt><dd>Obsidian (op elk platform). Optioneel: Vox.md voor iPhone, Apple Watch of Mac om eigenschappen aan vastgelegde notities toe te voegen.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Generator en controle voor Obsidian-notitie-eigenschappen (YAML-frontmatter)">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Het korte antwoord</div>
+        <p>Obsidian-notitie-eigenschappen zijn YAML helemaal bovenaan een notitie, tussen twee <code>---</code> -regels. Elke eigenschap is een <code>name: value</code> -paar, een lijst heeft één <code>- value</code> regel per item, en een interne link moet tussen aanhalingstekens staan. Dit voorbeeld is geldig:</p>
+      </div>
+      <pre class="guide-code" id="default-properties"><code>---
+tags:
+  - journal
+  - idea
+aliases:
+  - Weekly review
+date: 2026-11-21
+project: "[[Vox.md launch]]"
+published: true
+---
+</code></pre>
+      <p>Heb je andere eigenschappen nodig, of wil je weten waarom er een niet als het bedoelde type wordt getoond? De generator hieronder schrijft de YAML en de controle toont problemen met regelnummers en een oplossing. Beide draaien volledig op deze pagina: wat je typt wordt nergens naartoe gestuurd. De regels komen uit Obsidian Help, <a href="https://obsidian.md/help/properties" target="_blank" rel="noopener">Eigenschappen</a> en <a href="https://obsidian.md/help/tags" target="_blank" rel="noopener">Labels</a>.</p>
+      <nav class="toc" aria-label="In deze handleiding"><div class="toc-title">In deze handleiding</div><ol>
+        <li><a href="#generator">Eigenschappen genereren</a></li>
+        <li><a href="#checker">Controleer frontmatter die je al hebt</a></li>
+        <li><a href="#types">Eigenschapstypen en hoe elk wordt geschreven</a></li>
+        <li><a href="#rules">De regels die eigenschappen het vaakst breken</a></li>
+        <li><a href="#templates">Eigenschappen gebruiken in sjablonen</a></li>
+        <li><a href="#vox">Eigenschappen toevoegen aan notities die je vastlegt</a></li>
+        <li><a href="#faq">Vragen</a></li>
+      </ol></nav>
+
+      <h2 id="generator">1. Eigenschappen genereren</h2>
+      <p class="mt-nojs" id="pg-nojs">De generator en de controle hebben JavaScript nodig. Zonder werken het voorbeeld hierboven, de typetabel en de regels hieronder nog steeds als naslag.</p>
+      <form class="pg-tool" id="pg-tool" aria-label="Eigenschappengenerator" hidden>
+        <div class="pg-bar">
+          <button type="button" class="btn-secondary" id="pg-add">Eigenschap toevoegen</button>
+          <button type="button" class="btn-secondary" data-default="tags">Tags toevoegen</button>
+          <button type="button" class="btn-secondary" data-default="aliases">Aliassen toevoegen</button>
+          <button type="button" class="btn-secondary" data-default="cssclasses">cssclasses toevoegen</button>
+        </div>
+        <ol class="pg-rows" id="pg-rows"></ol>
+        <fieldset class="mt-group">
+          <legend>Tokens van sjabloonplug-ins</legend>
+          <label class="mt-option"><input type="radio" name="tokens" value="none" checked> <span>Schrijf de datums die ik invoer</span></label>
+          <label class="mt-option"><input type="radio" name="tokens" value="core"> <span>Kernsjablonen: datumvelden worden <code>{{date:YYYY-MM-DD}}</code></span></label>
+          <label class="mt-option"><input type="radio" name="tokens" value="templater"> <span>Templater: datumvelden worden <code>&lt;% tp.date.now("YYYY-MM-DD") %&gt;</code></span></label>
+          <p class="mt-hint">Met een token aan worden velden voor Datum en Datum en tijd ingevuld wanneer het sjabloon wordt gebruikt. Andere waarden worden geschreven zoals getypt.</p>
+        </fieldset>
+      </form>
+      <div class="mt-output-head" id="pg-output-head" hidden>
+        <h3 id="pg-output-title">Jouw eigenschappen</h3>
+        <div class="mt-actions">
+          <button type="button" class="btn-primary" id="pg-copy">Kopiëren</button>
+          <button type="button" class="btn-secondary" id="pg-download">Downloaden als .md</button>
+        </div>
+      </div>
+      <p class="mt-status" id="pg-status" role="status"></p>
+      <pre class="guide-code" id="pg-output" aria-labelledby="pg-output-title" aria-live="polite" tabindex="0" hidden><code id="pg-output-code"></code></pre>
+      <p class="mt-hint" id="pg-warnings" role="status" hidden></p>
+      <div class="mt-output-head" id="pg-route-head" hidden>
+        <h3 id="pg-route-title">Voor een Vox.md-route</h3>
+        <div class="mt-actions"><button type="button" class="btn-secondary" id="pg-route-copy">Kopiëren als metagegevens van een Vox.md-route</button></div>
+      </div>
+      <pre class="guide-code" id="pg-route" aria-labelledby="pg-route-title" tabindex="0" hidden><code id="pg-route-code"></code></pre>
+
+      <h2 id="checker">2. Controleer frontmatter die je al hebt</h2>
+      <p>Plak de bovenkant van een notitie, inclusief de <code>---</code> -regels. De controle leest het blok regel voor regel en toont elk probleem met het regelnummer en een oplossing. Ze gebruikt een vaste set regelregels, geen volledige YAML-parser, dus ze kan een fout missen die een parser wel vindt, en controleert alleen de regels die hier staan.</p>
+      <div class="pg-check" id="pg-check" hidden>
+        <label class="mt-field" for="pg-check-input">Te controleren frontmatter <textarea id="pg-check-input" rows="10" spellcheck="false" autocomplete="off" placeholder="---
+tags:
+  - dagboek
+---"></textarea></label>
+        <div class="mt-actions">
+          <button type="button" class="btn-primary" id="pg-check-run">Frontmatter controleren</button>
+          <button type="button" class="btn-secondary" id="pg-check-example">Plak een voorbeeld met fouten</button>
+        </div>
+        <div id="pg-check-result" role="status" aria-live="polite" tabindex="-1"></div>
+      </div>
+      <p>De controle zoekt naar: tabs als inspringing, een ontbrekende openende of afsluitende <code>---</code>, interne links zonder aanhalingstekens, tags met spaties, een <code>#</code> -voorvoegsel, andere tekens die tags niet mogen bevatten of alleen cijfers, de verouderde namen <code>tag</code>, <code>alias</code> en <code>cssclass</code>, geneste objecten, Markdown-opmaak in waarden, dubbele namen en een paar waarden die YAML zelf anders leest dan bedoeld. Sjabloontokens zoals <code>{{date}}</code> en <code>&lt;% %&gt;</code> worden overgeslagen.</p>
+
+      <div hidden id="pg-messages">
+        <span data-message="name-label">Naam van eigenschap</span>
+        <span data-message="type-label">Soort</span>
+        <span data-message="value-label">Waarde</span>
+        <span data-message="remove">Verwijderen</span>
+        <span data-message="remove-label">Eigenschap {name} verwijderen</span>
+        <span data-message="list-hint">Eén waarde per regel</span>
+        <span data-message="tags-hint">Eén tag per regel, met of zonder #</span>
+        <span data-message="checked">Aangevinkt</span>
+        <span data-message="token-set">Ingevuld door de sjabloonplug-in</span>
+        <span data-message="type-text">Tekst</span>
+        <span data-message="type-list">Lijst</span>
+        <span data-message="type-number">Getal</span>
+        <span data-message="type-checkbox">Selectievakje</span>
+        <span data-message="type-date">Datum</span>
+        <span data-message="type-datetime">Datum en tijd</span>
+        <span data-message="type-tags">Labels</span>
+        <span data-message="copied">Gekopieerd naar het klembord.</span>
+        <span data-message="route-copied">Gekopieerd. Plak het in het veld Metagegevens van de route.</span>
+        <span data-message="copy-failed">Kopiëren mislukt. Selecteer de tekst en kopieer hem zelf.</span>
+        <span data-message="downloaded">properties.md gedownload.</span>
+        <span data-message="added">{name} toegevoegd.</span>
+        <span data-message="exists">{name} staat al in de lijst.</span>
+        <span data-message="w-empty-name">Een eigenschap zonder naam wordt weggelaten.</span>
+        <span data-message="w-duplicate">{name} komt meer dan eens voor. Houd één rij per eigenschap.</span>
+        <span data-message="w-number">{name} is geen getal, dus blijft leeg.</span>
+        <span data-message="w-tag">De tag “{from}” is geschreven als {to}, omdat tags geen spaties of voorvoegsel # mogen bevatten en een niet-numeriek teken nodig hebben.</span>
+        <span data-message="w-tag-empty">Een tag die niet geldig gemaakt kon worden, is weggelaten: {from}</span>
+        <span data-message="w-datetime">{name} heeft zowel een datum als een tijd nodig, dus blijft leeg.</span>
+        <span data-message="c-none">Geen problemen gevonden.</span>
+        <span data-message="c-empty">Plak wat frontmatter om te controleren.</span>
+        <span data-message="c-json">Dit lijkt op JSON. Obsidian leest het en slaat het op als YAML. De regelregels hier gelden voor YAML, dus plak de YAML-versie om te controleren.</span>
+        <span data-message="c-count">Gevonden problemen: {n}</span>
+        <span data-message="c-line">Regel {line}</span>
+        <span data-message="c-fix">Oplossing:</span>
+        <span data-message="m-no-open">Het blok begint niet met een ---regel. Eigenschappen staan tussen twee ---regels bovenaan de notitie.</span>
+        <span data-message="f-no-open">Voeg --- toe op een eigen regel vóór de eerste eigenschap.</span>
+        <span data-message="m-no-close">Na de eigenschappen staat geen afsluitende ---regel.</span>
+        <span data-message="f-no-close">Voeg --- toe op een eigen regel na de laatste eigenschap.</span>
+        <span data-message="m-tabs">Deze regel springt in met een tab. YAML staat geen tabs toe voor inspringing.</span>
+        <span data-message="f-tabs">Vervang elke inspringende tab door spaties, bijvoorbeeld twee.</span>
+        <span data-message="m-not-pair">Deze regel is geen naam: waarde-paar.</span>
+        <span data-message="f-not-pair">Schrijf het als naam: waarde, met een spatie na de dubbele punt.</span>
+        <span data-message="m-duplicate">De eigenschap {key} is al ingesteld op regel {first}.</span>
+        <span data-message="f-duplicate">Houd één regel {key} en voeg de waarden daarin samen.</span>
+        <span data-message="m-deprecated">{key} is een verouderde eigenschapsnaam. Hij is verouderd in Obsidian 1.4 en ondersteuning als standaardeigenschap is in 1.9 vervallen.</span>
+        <span data-message="f-deprecated">Hernoem het naar {fixed}.</span>
+        <span data-message="m-link-unquoted">Een interne link in een eigenschap moet tussen aanhalingstekens staan.</span>
+        <span data-message="f-link-unquoted">Schrijf het als {fixed}</span>
+        <span data-message="m-tag-hash">Tags in eigenschappen worden geschreven zonder het voorvoegsel #.</span>
+        <span data-message="f-tag-hash">Schrijf {fixed}</span>
+        <span data-message="m-tag-space">De tag {tag} bevat een spatie. Tags mogen geen spaties bevatten.</span>
+        <span data-message="f-tag-space">Gebruik een koppelteken, bijvoorbeeld {fixed}, of zet elke tag op een eigen regel.</span>
+        <span data-message="m-tag-numeric">De tag {tag} bevat geen niet-numeriek teken. Een tag moet er minstens één bevatten.</span>
+        <span data-message="f-tag-numeric">Voeg een letter toe, bijvoorbeeld {fixed}</span>
+        <span data-message="m-tag-chars">De tag {tag} bevat een teken dat tags niet mogen bevatten. Tags mogen letters, cijfers, underscore, koppelteken en / voor nesten bevatten.</span>
+        <span data-message="f-tag-chars">Verwijder of vervang het, bijvoorbeeld {fixed}</span>
+        <span data-message="m-nested">{key} bevat een genest object. Eigenschappen ondersteunen geen geneste objecten.</span>
+        <span data-message="f-nested">Maak er aparte eigenschappen op het hoogste niveau van of bewerk het in de bronmodus.</span>
+        <span data-message="m-markdown">De waarde bevat Markdown-opmaak ({sample}). Eigenschappen geven Markdown bewust niet weer.</span>
+        <span data-message="f-markdown">Verwijder de opmaaktekens en houd gewone tekst over.</span>
+        <span data-message="m-bad-colon">Deze waarde zonder aanhalingstekens bevat een dubbele punt gevolgd door een spatie, wat YAML leest als het begin van een andere naam.</span>
+        <span data-message="f-bad-colon">Zet de waarde tussen aanhalingstekens: {fixed}</span>
+        <span data-message="m-bad-start">Deze waarde zonder aanhalingstekens begint met {char}, wat YAML speciaal behandelt.</span>
+        <span data-message="f-bad-start">Zet de waarde tussen aanhalingstekens: {fixed}</span>
+        <span data-message="m-unclosed-quote">Op deze regel is een aanhalingsteken geopend maar niet gesloten.</span>
+        <span data-message="f-unclosed-quote">Voeg het afsluitende aanhalingsteken toe.</span>
+        <span data-message="m-comment">In YAML begint een spatie gevolgd door # een opmerking, dus de rest van de regel maakt geen deel uit van de waarde.</span>
+        <span data-message="f-comment">Hoort de # bij de waarde, zet de waarde dan tussen aanhalingstekens: {fixed}</span>
+        <span data-message="broken-example">Voorbeeld met fouten geladen.</span>
+      </div>
+
+      <h2 id="types">3. Eigenschapstypen en hoe elk wordt geschreven</h2>
+      <p>Obsidian ondersteunt zeven eigenschapstypen. Elk wordt zo in de YAML geschreven:</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th>Soort</th><th>YAML-voorbeeld</th><th>Valkuil</th></tr></thead>
+          <tbody>
+            <tr><td>Tekst</td><td><code>title: Weekly review</code></td><td>Zet een waarde die YAML verkeerd zou lezen tussen aanhalingstekens, zoals een waarde met <code>: </code> erin, of een waarde die begint met <code>#</code>. Interne links moeten tussen aanhalingstekens staan.</td></tr>
+            <tr><td>Lijst</td><td><code>topics:</code><br><code>&nbsp;&nbsp;- sleep</code><br><code>&nbsp;&nbsp;- focus</code></td><td>Elke waarde staat op een eigen regel, voorafgegaan door een koppelteken en een spatie.</td></tr>
+            <tr><td>Getal</td><td><code>rating: 4</code></td><td>Schrijf het getal zonder aanhalingstekens.</td></tr>
+            <tr><td>Selectievakje</td><td><code>published: true</code></td><td>De waarde is <code>true</code> of <code>false</code>.</td></tr>
+            <tr><td>Datum</td><td><code>date: 2026-11-21</code></td><td>Het formaat is <code>YYYY-MM-DD</code>.</td></tr>
+            <tr><td>Datum en tijd</td><td><code>time: 2026-11-21T10:30:00</code></td><td>Het formaat is <code>YYYY-MM-DDTHH:MM:SS</code>.</td></tr>
+            <tr><td>Labels</td><td><code>tags:</code><br><code>&nbsp;&nbsp;- recipe</code><br><code>&nbsp;&nbsp;- cooking</code></td><td>Geschreven zonder <code>#</code>. Geen spaties en minstens één niet-numeriek teken.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Obsidian heeft ook drie standaardeigenschappen: <code>tags</code>, <code>aliases</code> en <code>cssclasses</code>. De generator heeft voor elk een knop.</p>
+
+      <h2 id="rules">4. De regels die eigenschappen het vaakst breken</h2>
+      <ul>
+        <li><strong>Zet interne links tussen aanhalingstekens.</strong> <code>project: "[[Vox.md launch]]"</code>, niet <code>project: [[Vox.md launch]]</code>. Dit geldt voor teksteigenschappen en voor items in een lijst.</li>
+        <li><strong>Eén lijstitem per regel.</strong> Elk item begint met een koppelteken en een spatie, ingesprongen onder de eigenschapsnaam. Gebruik spaties om in te springen, geen tabs.</li>
+        <li><strong>Tags hebben hun eigen regels.</strong> Nee <code>#</code> in de YAML, zonder spaties en met minstens één niet-numeriek teken: <code>1984</code> is geen geldige tag, maar <code>y1984</code> is. Gebruik <code>/</code> voor geneste tags zoals <code>inbox/to-read</code>. Zie <a href="https://obsidian.md/help/tags" target="_blank" rel="noopener">Labels</a> in de Obsidian-help.</li>
+        <li><strong>Schrijf datums in het opgeslagen formaat.</strong> <code>2026-11-21</code> voor een datum en <code>2026-11-21T10:30:00</code> voor een datum en tijd.</li>
+        <li><strong>Gebruik de huidige namen.</strong> <code>tag</code>, <code>alias</code> en <code>cssclass</code> zijn in Obsidian 1.4 verouderd ten gunste van <code>tags</code>, <code>aliases</code> en <code>cssclasses</code>, en ondersteuning als standaardeigenschap is in Obsidian 1.9 vervallen.</li>
+        <li><strong>Niet nesten.</strong> Eigenschappen ondersteunen geen geneste objecten. Obsidian raadt de bronmodus aan om geneste eigenschappen te bekijken, dus maak ze plat tot namen op het hoogste niveau zoals <code>project_status</code>.</li>
+        <li><strong>Gebruik geen Markdown.</strong> Vet, links en andere opmaak worden in eigenschappen niet weergegeven. Obsidian beschrijft dit als bewust, omdat eigenschappen bedoeld zijn voor kleine, atomaire stukjes informatie.</li>
+      </ul>
+
+      <h2 id="templates">5. Eigenschappen gebruiken in sjablonen</h2>
+      <p>Schakel in <strong>Tokens van sjabloonplug-ins</strong> in de generator om datumvelden als token te schrijven in plaats van als vaste datum. De kernplug-in Sjablonen gebruikt <code>{{date:YYYY-MM-DD}}</code>; de communityplug-in Templater gebruikt <code>&lt;% tp.date.now("YYYY-MM-DD") %&gt;</code> (zie de Templater <a href="https://silentvoid13.github.io/Templater/" target="_blank" rel="noopener">documentatie</a>). Velden voor datum en tijd gebruiken <code>YYYY-MM-DD[T]HH:mm:ss</code> in het token, met de <code>T</code> tussen vierkante haken zodat het als letter wordt geschreven.</p>
+      <p>Links vragen hier om aandacht. Obsidian voegt de aanhalingstekens toe voor een link die je in de eigenschappen-UI typt, maar een sjabloonplug-in schrijft tekst ongewijzigd naar het bestand, dus schrijf de aanhalingstekens zelf in het sjabloon: <code>project: "[[Vox.md launch]]"</code>.</p>
+      <p>Voor volledige sjablonen die deze eigenschappen gebruiken, zie de <a href="/nl/blog/obsidian-daily-note-template/">generator voor sjablonen van dagnotities</a> en de <a href="/nl/blog/obsidian-meeting-notes-template/">generator voor sjablonen voor vergadernotities</a>.</p>
+
+      <h2 id="vox">6. Eigenschappen toevoegen aan notities die je vastlegt</h2>
+      <p>In een Vox.md-route accepteert het veld Metagegevens één <code>key: value</code> paar per regel, zoals <code>tags: [journal, idea]</code>. <strong>Frontmatter van de notitie</strong> schrijft de metagegevens op documentniveau. <strong>Inline-invoervelden</strong> schrijft <code>key:: value</code> -velden naast elk item in een doorlopende notitie. Zie <a href="/nl/docs/#preset-metadata">Metagegevens in de Routes-naslag</a>.</p>
+      <p>De <strong>Kopiëren als metagegevens van een Vox.md-route</strong> -knop schrijft je eigenschappen in die vorm, met lijsten als <code>[a, b]</code> en één eigenschap per regel. De documentatie van Vox.md beschrijft het veld als <code>key: value</code> -regels; deze pagina test niet hoe elk eigenschapstype wordt geschreven, dus open de eerste vastgelegde notitie in Obsidian en controleer die. Routes voor een dagelijkse notitie en een inbox staan in <a href="/nl/blog/append-to-obsidian-daily-note-iphone/">Toevoegen aan een Obsidian-dagnotitie</a>, <a href="/nl/blog/obsidian-capture-templates/">capture-sjablonen</a> en <a href="/nl/blog/voice-notes-to-obsidian-iphone/">iPhone-spraaknotities naar Obsidian</a>.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Zet deze eigenschappen op elke vastgelegde notitie.</h2>
+        <p>Wil je deze eigenschappen op elke notitie die je vastlegt vanaf iPhone, Apple Watch of Mac? Plak ze in de Metagegevens van een Vox.md-route en kies Note Frontmatter. De gratis versie bevat 15 minuten transcriptie en 10 geslaagde Capture-leveringen.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_nl_292ad7cca3ec">Vox.md downloaden in de App Store</a></p>
+      </section>
+
+      <h2 id="faq">7. Vragen</h2>
+      <h3>Waarom toont Obsidian mijn eigenschap niet als het type dat ik bedoelde?</h3>
+      <p>Obsidian leest eigenschappen als YAML en een waarde die de regels van het type niet volgt, wordt niet als dat type getoond. De gebruikelijke oorzaken zijn een link zonder aanhalingstekens, een lijst die niet per item op een regel staat, een datum niet in <code>YYYY-MM-DD</code> en tags met spaties. Plak het blok in de controle hierboven om de regel te vinden.</p>
+      <h3>Hebben tags een # nodig in eigenschappen?</h3>
+      <p>Nee. In de YAML worden tags als gewone woorden geschreven, zoals <code>- recipe</code>. De <code>#</code> is voor tags in de hoofdtekst van een notitie.</p>
+      <h3>Kan ik eigenschappen nesten?</h3>
+      <p>Nee. Eigenschappen ondersteunen geen geneste objecten. Gebruik platte namen, of geneste tags met <code>/</code> binnen de <code>tags</code> lijst.</p>
+      <h3>Kan ik eigenschappen als JSON schrijven?</h3>
+      <p>Obsidian kan een JSON-blok lezen, maar leest en bewaart het als YAML. De controle hierboven past haar regelregels alleen op YAML toe.</p>
+
+      <nav class="toc" aria-label="Gerelateerde handleidingen" id="related"><div class="toc-title">Doorgaan met instellen</div><ul>
+        <li><a href="/nl/blog/obsidian-daily-note-template/">Generator voor Obsidian-sjablonen van dagnotities</a></li>
+        <li><a href="/nl/blog/obsidian-meeting-notes-template/">Generator voor Obsidian-sjablonen voor vergadernotities</a></li>
+        <li><a href="/nl/blog/obsidian-capture-templates/">Recepten voor paden en sjablonen</a></li>
+        <li><a href="/nl/blog/append-to-obsidian-daily-note-iphone/">Toevoegen aan een Obsidian-dagnotitie</a></li>
+        <li><a href="/nl/blog/voice-notes-to-obsidian-iphone/">iPhone-spraaknotities in Obsidian opslaan</a></li>
+        <li><a href="/nl/docs/#preset-metadata">Naslag voor routemetagegevens</a></li>
+      </ul></nav>
+<style>
+.pg-tool:not([hidden]) { display: flex; flex-direction: column; gap: 16px; }
+.pg-bar { display: flex; flex-wrap: wrap; gap: 8px; }
+.pg-bar button, .pg-check .mt-actions button { font: inherit; font-size: 15px; min-height: 44px; padding: 0 16px; cursor: pointer; }
+.pg-rows { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.pg-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px 12px; padding: 14px 16px; background: var(--card); border: 1.5px solid var(--ink); border-radius: 16px; }
+.pg-row .mt-field { margin-top: 0; }
+.pg-row .pg-value, .pg-row .pg-remove-cell { grid-column: 1 / -1; }
+.pg-row input[type="text"], .pg-row input[type="number"], .pg-row input[type="date"], .pg-row input[type="datetime-local"], .pg-row select, .pg-row textarea, .pg-check textarea { font: inherit; font-family: var(--font-mono); font-size: 15px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; padding: 8px 10px; min-height: 40px; width: 100%; box-sizing: border-box; }
+.pg-row textarea, .pg-check textarea { resize: vertical; }
+.pg-row input:focus-visible, .pg-row select:focus-visible, .pg-row textarea:focus-visible, .pg-check textarea:focus-visible, #pg-check-result:focus-visible, #pg-route:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.pg-remove { font: inherit; font-size: 14px; min-height: 40px; padding: 0 14px; cursor: pointer; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; }
+.pg-remove:hover { background: var(--lime); }
+.pg-check:not([hidden]) { display: flex; flex-direction: column; gap: 12px; }
+.pg-check .mt-field { color: var(--ink); }
+.pg-problems { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.pg-problems li { padding: 12px 14px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow-wrap: anywhere; }
+.pg-problems .pg-line { display: block; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+.pg-problems .pg-fix { display: block; margin-top: 4px; }
+.pg-ok { font-weight: 600; color: var(--accent-text); }
+@media (min-width: 720px) { .pg-row { grid-template-columns: minmax(0, 1fr) 180px minmax(0, 2fr) auto; align-items: start; } .pg-row .pg-value, .pg-row .pg-remove-cell { grid-column: auto; } .pg-row .pg-remove-cell { align-self: end; } }
+</style>
+<script>
+/* Properties generator and checker. Runs locally: no network requests. */
+(function () {
+  var NUMERIC = /^[-+]?(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?$/;
+  var TOKEN = /^(\{\{[^{}]*\}\}|<%[\s\S]*%>)$/;
+  var TAG_BAD = /[^\p{L}\p{N}_\/-]/gu;
+  var DEFAULTS = { tags: 'tags', aliases: 'list', cssclasses: 'list' };
+  var TOKENS = {
+    core: { date: '{{date:YYYY-MM-DD}}', datetime: '{{date:YYYY-MM-DD[T]HH:mm:ss}}' },
+    templater: { date: '<% tp.date.now("YYYY-MM-DD") %>', datetime: '<% tp.date.now("YYYY-MM-DD[T]HH:mm:ss") %>' }
+  };
+
+  function quote(s) { return '"' + s.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"'; }
+  function stripLinkQuotes(s) {
+    var m = /^"(\[\[.*\]\])"$/.exec(s);
+    return m ? m[1] : s;
+  }
+  /* Does YAML need quotes to read this text value as the text you typed? */
+  function needsQuote(s) {
+    if (s === '') return false;
+    if (/^\[\[/.test(s)) return true;
+    if (/^[#\[\]{}*&!%@`'"|>?,]/.test(s)) return true;
+    if (/^[-:]( |$)/.test(s)) return true;
+    if (/:(\s|$)/.test(s) || /\s#/.test(s)) return true;
+    if (/^\s|\s$/.test(s)) return true;
+    if (/^(yes|no|true|false|null|on|off|y|n|~)$/i.test(s)) return true;
+    if (NUMERIC.test(s) || /^0x[0-9a-f]+$/i.test(s)) return true;
+    if (/^\d{4}-\d{2}-\d{2}/.test(s)) return true;
+    return false;
+  }
+  function textScalar(value, mode) {
+    var s = stripLinkQuotes(String(value).replace(/[\r\n]+/g, ' ').trim());
+    if (mode !== 'none' && TOKEN.test(s)) return s;
+    return needsQuote(s) ? quote(s) : s;
+  }
+  function keyScalar(name) {
+    var odd = /^[#\[\]{}*&!%@`'"|>?,]/.test(name) || /^[-:]( |$)/.test(name) || /:(\s|$)/.test(name) || /\s#/.test(name) || /^\s|\s$/.test(name);
+    return odd ? quote(name) : name;
+  }
+  /* Make a tag valid, or return '' if that is not possible. */
+  function cleanTag(value) {
+    var t = String(value).trim().replace(/^#+/, '').replace(/\s+/g, '-').replace(TAG_BAD, '').replace(/^\/+|\/+$/g, '');
+    return /[^\d\/_-]/.test(t) || /\p{L}/u.test(t) ? t : '';
+  }
+  function lines(value, splitCommas) {
+    return String(value || '').split(splitCommas ? /[\r\n,]+/ : /[\r\n]+/).map(function (s) { return s.trim(); }).filter(Boolean);
+  }
+  function dateTimeValue(v) {
+    var m = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})(?::(\d{2}))?/.exec(v || '');
+    return m ? m[1] + 'T' + m[2] + ':' + (m[3] || '00') : '';
+  }
+  function dateValue(v) { return /^\d{4}-\d{2}-\d{2}$/.test(v || '') ? v : ''; }
+
+  /* rows: [{name, type, value}]. type: text|list|number|checkbox|date|datetime|tags. mode: none|core|templater. */
+  function build(rows, mode) {
+    mode = mode || 'none';
+    var out = [];
+    rows.forEach(function (row) {
+      var name = String(row.name || '').trim();
+      if (!name) return;
+      var key = keyScalar(name) + ':';
+      var v = row.value;
+      switch (row.type) {
+        case 'list':
+        case 'tags':
+          var items = row.type === 'tags'
+            ? lines(v, true).map(cleanTag).filter(Boolean)
+            : lines(v).map(function (s) { return textScalar(s, mode); });
+          if (!items.length) { out.push(key + ' []'); break; }
+          out.push(key);
+          items.forEach(function (item) { out.push('  - ' + item); });
+          break;
+        case 'number': out.push(NUMERIC.test(String(v || '').trim()) ? key + ' ' + String(v).trim() : key); break;
+        case 'checkbox': out.push(key + ' ' + (v === 'true' || v === true ? 'true' : 'false')); break;
+        case 'date':
+          if (mode !== 'none') { out.push(key + ' ' + TOKENS[mode].date); break; }
+          out.push(dateValue(v) ? key + ' ' + dateValue(v) : key); break;
+        case 'datetime':
+          if (mode !== 'none') { out.push(key + ' ' + TOKENS[mode].datetime); break; }
+          out.push(dateTimeValue(v) ? key + ' ' + dateTimeValue(v) : key); break;
+        default: var t = textScalar(v || '', mode); out.push(t ? key + ' ' + t : key);
+      }
+    });
+    return out.length ? '---\n' + out.join('\n') + '\n---\n' : '';
+  }
+  /* Problems with the rows themselves. Each: {id, ...params}. */
+  function warnings(rows, mode) {
+    var found = [], seen = {};
+    rows.forEach(function (row) {
+      var name = String(row.name || '').trim();
+      if (!name) { if (found.every(function (w) { return w.id !== 'w-empty-name'; })) found.push({ id: 'w-empty-name' }); return; }
+      if (seen[name] && found.every(function (w) { return w.id !== 'w-duplicate' || w.name !== name; })) found.push({ id: 'w-duplicate', name: name });
+      seen[name] = true;
+      if (row.type === 'number' && String(row.value || '').trim() && !NUMERIC.test(String(row.value).trim())) found.push({ id: 'w-number', name: name });
+      if (row.type === 'datetime' && mode === 'none' && row.value && !dateTimeValue(row.value)) found.push({ id: 'w-datetime', name: name });
+      if (row.type === 'tags') lines(row.value, true).forEach(function (raw) {
+        var fixed = cleanTag(raw);
+        if (!fixed) found.push({ id: 'w-tag-empty', from: raw });
+        else if (fixed !== raw) found.push({ id: 'w-tag', from: raw, to: fixed });
+      });
+    });
+    return found;
+  }
+  function routeMetadata(rows) {
+    var out = [];
+    rows.forEach(function (row) {
+      var name = String(row.name || '').trim();
+      if (!name) return;
+      var v = row.value, text;
+      if (row.type === 'list' || row.type === 'tags') {
+        var items = row.type === 'tags' ? lines(v, true).map(cleanTag).filter(Boolean) : lines(v).map(function (s) { return textScalar(s, 'none'); });
+        items = items.map(function (s) { return /[,\[\]]/.test(s) && !/^"/.test(s) ? quote(s) : s; });
+        if (!items.length) return;
+        text = '[' + items.join(', ') + ']';
+      } else if (row.type === 'checkbox') text = v === 'true' || v === true ? 'true' : 'false';
+      else if (row.type === 'number') text = NUMERIC.test(String(v || '').trim()) ? String(v).trim() : '';
+      else if (row.type === 'date') text = dateValue(v);
+      else if (row.type === 'datetime') text = dateTimeValue(v);
+      else text = textScalar(v || '', 'none');
+      if (text) out.push(keyScalar(name) + ': ' + text);
+    });
+    return out.join('\n');
+  }
+
+  /* ---- Checker: fixed line rules, not a YAML parser. ---- */
+  var DEPRECATED = { tag: 'tags', alias: 'aliases', cssclass: 'cssclasses' };
+  var PAIR = /^("[^"]*"|'[^']*'|[^\s:#'"\-\[{][^:]*?|-[^\s:][^:]*?):(?:[ ]+(.*)|)$/;
+  var MAP_ITEM = /^[^\s"'\[{#][^:]*:(\s|$)/;
+  var MARKDOWN = [
+    [/\*\*[^*]+\*\*/, 'bold'], [/__[^_]+__/, 'bold'], [/~~[^~]+~~/, 'strikethrough'], [/==[^=]+==/, 'highlight'],
+    [/`[^`]+`/, 'code'], [/\[[^\[\]]+\]\([^)]*\)/, 'link'], [/(^|[^*\w])\*[^*\s][^*]*\*(?!\*)/, 'italic']
+  ];
+  function unquote(s) {
+    var m = /^"(.*)"$|^'(.*)'$/.exec(s);
+    return m ? (m[1] !== undefined ? m[1] : m[2]) : s;
+  }
+
+  function check(text) {
+    var all = String(text).replace(/\r\n?/g, '\n').split('\n');
+    var problems = [];
+    function add(line, rule, params) { problems.push({ line: line, rule: rule, params: params || {} }); }
+    var start = 0;
+    while (start < all.length && all[start].trim() === '') start++;
+    if (start >= all.length) return { empty: true, json: false, problems: [] };
+    if (all[start].trim().charAt(0) === '{' && !TOKEN.test(all[start].trim())) return { empty: false, json: true, problems: [] };
+    var opened = /^---\s*$/.test(all[start]);
+    var first = opened ? start + 1 : start;
+    var end = all.length;
+    for (var c = first; c < all.length; c++) if (/^(---|\.\.\.)\s*$/.test(all[c])) { end = c; break; }
+    if (!opened) add(start + 1, 'no-open');
+    else if (end === all.length) add(start + 1, 'no-close');
+
+    var seen = {}, current = null, block = false, flow = false, nested = {};
+    function quoted(s) { return quote(unquote(s)); }
+    function tagIssues(raw, n) {
+      var t = unquote(raw.trim());
+      if (!t) return;
+      if (t.charAt(0) === '#') { add(n, 'tag-hash', { tag: t, fixed: t.replace(/^#+/, '') }); return; }
+      if (/\s/.test(t)) { add(n, 'tag-space', { tag: t, fixed: t.replace(/\s+/g, '-') }); return; }
+      if (/^\d+$/.test(t)) { add(n, 'tag-numeric', { tag: t, fixed: 'y' + t }); return; }
+      if (TAG_BAD.test(t)) { TAG_BAD.lastIndex = 0; add(n, 'tag-chars', { tag: t, fixed: t.replace(TAG_BAD, '') }); }
+      TAG_BAD.lastIndex = 0;
+    }
+    function value(val, n, key, isItem) {
+      if (TOKEN.test(val)) return;
+      var q = /^"(.*)"$|^'(.*)'$/.exec(val);
+      if (!q && /^["']/.test(val)) { add(n, 'unclosed-quote'); return; }
+      var body = q ? (q[1] !== undefined ? q[1] : q[2]) : val;
+      var comment = false;
+      if (!q) {
+        var hash = val.search(/(^|\s)#/);
+        if (hash !== -1 && !(isItem === false && hash === 0 && !val)) {
+          if (hash === 0 || key === 'tags' || key === 'tag') {
+            if (key === 'tags' || key === 'tag') { tagIssues(val.slice(hash === 0 ? 0 : hash).trim(), n); return; }
+          } else { comment = true; body = val.slice(0, hash).trim(); }
+        }
+      }
+      if (key === 'tags' || key === 'tag') {
+        var parts;
+        if (!q && /^\[/.test(body)) parts = body.replace(/^\[|\]\s*$/g, '').split(',');
+        else parts = isItem || q ? [body] : body.split(',');
+        parts.forEach(function (p) { tagIssues(p, n); });
+        return;
+      }
+      if (!q) {
+        var noQuoted = body.replace(/"[^"]*"|'[^']*'/g, '');
+        if (/^\[\[/.test(body) || (/^\[/.test(body) && /\[\[/.test(noQuoted))) {
+          var fixed = body.replace(/\[\[[^\[\]]*\]\]/g, function (m) { return '"' + m + '"'; });
+          add(n, 'link-unquoted', { fixed: fixed });
+          return;
+        }
+        if (/^\{/.test(body)) { reportNested(n, key); return; }
+        if (!/^\[/.test(body)) {
+          if (/:(\s|$)/.test(body)) { add(n, 'bad-colon', { fixed: quote(body) }); return; }
+          if (/^[@%`*&!]/.test(body)) { add(n, 'bad-start', { char: body.charAt(0), fixed: quote(body) }); return; }
+        }
+        if (comment) { add(n, 'comment', { fixed: quote(val) }); }
+      }
+      var plain = body.replace(/\[\[.*?\]\]/g, '');
+      for (var i = 0; i < MARKDOWN.length; i++) {
+        var m = MARKDOWN[i][0].exec(plain);
+        if (m) { add(n, 'markdown', { sample: m[0].trim() }); break; }
+      }
+    }
+    function reportNested(n, key) {
+      if (nested[key]) return;
+      nested[key] = true;
+      add(n, 'nested', { key: key });
+    }
+
+    for (var i = first; i < end; i++) {
+      var raw = all[i], n = i + 1;
+      if (/^[ ]*\t/.test(raw)) add(n, 'tabs');
+      var line = raw.replace(/^[ \t]+/, function (m) { return m.replace(/\t/g, '  '); });
+      if (line.trim() === '' || /^\s*#/.test(line)) continue;
+      if (block) { if (/^\s/.test(line)) continue; block = false; }
+      if (flow) { if (line.indexOf(']') !== -1) flow = false; continue; }
+      var indent = line.match(/^ */)[0].length;
+      var body = line.trim();
+      if (/^-(\s|$)/.test(body)) {
+        if (!current) { add(n, 'not-pair'); continue; }
+        var item = body.replace(/^-\s*/, '');
+        if (item === '') continue;
+        if (MAP_ITEM.test(item) && !TOKEN.test(item)) { reportNested(n, current); continue; }
+        value(item, n, current, true);
+        continue;
+      }
+      if (indent > 0) {
+        if (current && MAP_ITEM.test(body)) reportNested(n, current);
+        continue;
+      }
+      var m = PAIR.exec(body);
+      if (!m) { add(n, 'not-pair'); continue; }
+      var key = unquote(m[1]), val = (m[2] || '').trim();
+      if (Object.prototype.hasOwnProperty.call(seen, key)) add(n, 'duplicate', { key: key, first: seen[key] });
+      else seen[key] = n;
+      current = key;
+      if (Object.prototype.hasOwnProperty.call(DEPRECATED, key)) add(n, 'deprecated', { key: key, fixed: DEPRECATED[key] });
+      if (val === '') continue;
+      if (/^[|>]/.test(val)) { block = true; continue; }
+      if (/^\[/.test(val) && !/\]\s*(#.*)?$/.test(val)) { flow = true; }
+      value(val, n, key, false);
+    }
+    problems.sort(function (a, b) { return a.line - b.line; });
+    return { empty: false, json: false, problems: problems };
+  }
+
+  var EXAMPLE_BROKEN = '---\ntags:\n\t- #journal\n  - my idea\n  - 2026\nalias: Weekly\nproject: [[Vox.md launch]]\ntitle: Plan: phase 1\nsummary: Done and **dusted**\nsettings:\n  theme: dark\ndate: 2026-11-21\ndate: 2026-11-22\n---\n';
+
+  if (typeof window !== 'undefined') {
+    window.voxProperties = { build: build, warnings: warnings, routeMetadata: routeMetadata, check: check, needsQuote: needsQuote, cleanTag: cleanTag };
+  }
+
+  var form = document.getElementById('pg-tool');
+  if (!form) return;
+  var rowsEl = document.getElementById('pg-rows');
+  var outHead = document.getElementById('pg-output-head');
+  var outPre = document.getElementById('pg-output');
+  var outCode = document.getElementById('pg-output-code');
+  var warnEl = document.getElementById('pg-warnings');
+  var routeHead = document.getElementById('pg-route-head');
+  var routePre = document.getElementById('pg-route');
+  var routeCode = document.getElementById('pg-route-code');
+  var status = document.getElementById('pg-status');
+  var rows = [{ name: 'tags', type: 'tags', value: 'journal\nidea' }, { name: 'date', type: 'date', value: '' }];
+  var TYPES = ['text', 'list', 'number', 'checkbox', 'date', 'datetime', 'tags'];
+  var uid = 0;
+
+  function message(name, fill) {
+    var el = document.querySelector('#pg-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : '';
+    if (fill) Object.keys(fill).forEach(function (k) { text = text.split('{' + k + '}').join(fill[k]); });
+    return text;
+  }
+  function say(text) { status.textContent = ''; window.setTimeout(function () { status.textContent = text; }, 30); }
+  function mode() { return form.elements.tokens.value; }
+  function el(tag, attrs, text) {
+    var e = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) { e.setAttribute(k, attrs[k]); });
+    if (text) e.textContent = text;
+    return e;
+  }
+  function labelled(text, control, id) {
+    var label = el('label', { 'class': 'mt-field', 'for': id });
+    label.appendChild(document.createTextNode(text + ' '));
+    control.id = id;
+    label.appendChild(control);
+    return label;
+  }
+
+  function renderValue(li, row) {
+    var cell = li.querySelector('.pg-value');
+    cell.textContent = '';
+    var id = 'pg-v' + li.getAttribute('data-uid');
+    var control, tokenOn = mode() !== 'none' && (row.type === 'date' || row.type === 'datetime');
+    var label = message('value-label');
+    if (tokenOn) {
+      var note = el('p', { 'class': 'mt-hint' }, message('token-set'));
+      cell.appendChild(note);
+      return;
+    }
+    switch (row.type) {
+      case 'list': case 'tags':
+        control = el('textarea', { rows: '3', spellcheck: 'false', placeholder: message(row.type === 'tags' ? 'tags-hint' : 'list-hint') });
+        break;
+      case 'number': control = el('input', { type: 'number', step: 'any' }); break;
+      case 'checkbox':
+        control = el('input', { type: 'checkbox' });
+        var wrap = el('label', { 'class': 'mt-option', 'for': id });
+        control.id = id;
+        control.checked = row.value === 'true';
+        control.addEventListener('change', function () { row.value = control.checked ? 'true' : 'false'; update(); });
+        wrap.appendChild(control);
+        wrap.appendChild(el('span', {}, message('checked')));
+        cell.appendChild(wrap);
+        return;
+      case 'date': control = el('input', { type: 'date' }); break;
+      case 'datetime': control = el('input', { type: 'datetime-local', step: '1' }); break;
+      default: control = el('input', { type: 'text', autocomplete: 'off', spellcheck: 'false' });
+    }
+    control.value = row.value || '';
+    control.addEventListener('input', function () { row.value = control.value; update(); });
+    cell.appendChild(labelled(label, control, id));
+  }
+  function renderRow(row) {
+    var li = el('li', { 'class': 'pg-row', 'data-uid': String(++uid) });
+    var nameInput = el('input', { type: 'text', autocomplete: 'off', spellcheck: 'false' });
+    nameInput.value = row.name;
+    nameInput.addEventListener('input', function () { row.name = nameInput.value; update(); });
+    li.appendChild(labelled(message('name-label'), nameInput, 'pg-n' + uid));
+    var select = el('select');
+    TYPES.forEach(function (t) { select.appendChild(el('option', { value: t }, message('type-' + t))); });
+    select.value = row.type;
+    select.addEventListener('change', function () {
+      row.type = select.value;
+      row.value = row.type === 'checkbox' ? 'false' : '';
+      renderValue(li, row);
+      update();
+    });
+    li.appendChild(labelled(message('type-label'), select, 'pg-t' + uid));
+    li.appendChild(el('div', { 'class': 'pg-value' }));
+    var removeCell = el('div', { 'class': 'pg-remove-cell' });
+    var remove = el('button', { type: 'button', 'class': 'pg-remove' }, message('remove'));
+    remove.setAttribute('aria-label', message('remove-label', { name: row.name || '' }));
+    remove.addEventListener('click', function () {
+      rows.splice(rows.indexOf(row), 1);
+      li.remove();
+      update();
+    });
+    nameInput.addEventListener('input', function () { remove.setAttribute('aria-label', message('remove-label', { name: row.name })); });
+    removeCell.appendChild(remove);
+    li.appendChild(removeCell);
+    rowsEl.appendChild(li);
+    renderValue(li, row);
+    li._row = row;
+    return li;
+  }
+  function addRow(row) {
+    rows.push(row);
+    var li = renderRow(row);
+    update();
+    return li;
+  }
+
+  function update() {
+    var text = build(rows, mode());
+    outCode.textContent = text;
+    var route = routeMetadata(rows);
+    routeCode.textContent = route;
+    var hasOutput = text !== '';
+    outHead.hidden = !hasOutput; outPre.hidden = !hasOutput;
+    routeHead.hidden = route === ''; routePre.hidden = route === '';
+    var notes = warnings(rows, mode()).map(function (w) { return message(w.id, w); });
+    warnEl.textContent = notes.join(' ');
+    warnEl.hidden = !notes.length;
+  }
+
+  rows.forEach(renderRow);
+  Array.prototype.forEach.call(form.querySelectorAll('[data-default]'), function (button) {
+    button.addEventListener('click', function () {
+      var name = button.getAttribute('data-default');
+      var existing = rows.filter(function (r) { return r.name === name; })[0];
+      if (existing) {
+        var found = Array.prototype.filter.call(rowsEl.children, function (li) { return li._row === existing; })[0];
+        if (found) found.querySelector('input').focus();
+        say(message('exists', { name: name }));
+        return;
+      }
+      var li = addRow({ name: name, type: DEFAULTS[name], value: '' });
+      li.querySelector('textarea').focus();
+      say(message('added', { name: name }));
+    });
+  });
+  document.getElementById('pg-add').addEventListener('click', function () {
+    var li = addRow({ name: '', type: 'text', value: '' });
+    li.querySelector('input').focus();
+  });
+  form.addEventListener('change', function (event) {
+    if (event.target.name !== 'tokens') return;
+    Array.prototype.forEach.call(rowsEl.children, function (li) { renderValue(li, li._row); });
+    update();
+  });
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+
+  function copy(node, okMessage) {
+    var text = node.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(node);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? okMessage : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message(okMessage)); }, fallback);
+    } else fallback();
+  }
+  document.getElementById('pg-copy').addEventListener('click', function () { copy(outCode, 'copied'); });
+  document.getElementById('pg-route-copy').addEventListener('click', function () { copy(routeCode, 'route-copied'); });
+  document.getElementById('pg-download').addEventListener('click', function () {
+    var blob = new Blob([outCode.textContent], { type: 'text/markdown;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = 'properties.md';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    say(message('downloaded'));
+  });
+
+  /* Checker */
+  var checkBox = document.getElementById('pg-check');
+  var checkInput = document.getElementById('pg-check-input');
+  var checkResult = document.getElementById('pg-check-result');
+  function runCheck() {
+    var result = check(checkInput.value);
+    checkResult.textContent = '';
+    if (result.empty) { checkResult.appendChild(el('p', {}, message('c-empty'))); return; }
+    if (result.json) { checkResult.appendChild(el('p', {}, message('c-json'))); return; }
+    if (!result.problems.length) { checkResult.appendChild(el('p', { 'class': 'pg-ok' }, message('c-none'))); return; }
+    checkResult.appendChild(el('p', { 'class': 'pg-ok' }, message('c-count', { n: result.problems.length })));
+    var list = el('ol', { 'class': 'pg-problems' });
+    result.problems.forEach(function (p) {
+      var li = el('li');
+      li.appendChild(el('span', { 'class': 'pg-line' }, message('c-line', { line: p.line })));
+      li.appendChild(document.createTextNode(message('m-' + p.rule, p.params)));
+      li.appendChild(el('span', { 'class': 'pg-fix' }, message('c-fix') + ' ' + message('f-' + p.rule, p.params)));
+      list.appendChild(li);
+    });
+    checkResult.appendChild(list);
+  }
+  document.getElementById('pg-check-run').addEventListener('click', runCheck);
+  document.getElementById('pg-check-example').addEventListener('click', function () {
+    checkInput.value = EXAMPLE_BROKEN;
+    runCheck();
+  });
+
+  document.getElementById('pg-nojs').hidden = true;
+  form.hidden = false;
+  checkBox.hidden = false;
+  update();
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/nl/">Startpagina</a></li>
+        <li><a href="/nl/docs/">Documentatie</a></li>
+        <li><a href="/nl/blog/">Handleidingen</a></li>
+        <li><a href="/nl/compare/">Vergelijken</a></li>
+        <li><a href="/nl/privacy.html">Privacy</a></li>
+        <li><a href="/nl/terms.html">Voorwaarden</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Ondersteuning</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_nl_292ad7cca3ec">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Snel vastleggen voor lokale notities · Geen inhoud uploaden.</div>
+    </div>
+  <details class="language-switcher"><summary>Taal</summary><ul><li><a href="/blog/obsidian-properties-generator/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-properties-generator/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-properties-generator/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-properties-generator/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-properties-generator/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-properties-generator/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-properties-generator/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-properties-generator/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-properties-generator/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-properties-generator/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-properties-generator/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-properties-generator/" lang="nl" hreflang="nl" aria-current="page">Nederlands</a></li><li><a href="/pl/blog/obsidian-properties-generator/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-properties-generator/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-properties-generator/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-properties-generator/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-properties-generator/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-properties-generator/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-properties-generator/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-properties-generator/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-properties-generator/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-properties-generator/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-properties-generator/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

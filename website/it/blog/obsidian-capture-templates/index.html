@@ -183,6 +183,7 @@
       <pre class="guide-code"><code>## Journal
 - **14:05** A short walk helped me settle on the next step.</code></pre>
       <p>Vox.md espande i token ora e minuto nel formato della voce. Il file modello della nota fornisce i titoli; il prefisso formatta ogni acquisizione. Separa i ruoli per non reinserire tutta la struttura nelle voci successive.</p>
+      <p>Per generare il modello della nota giornaliera e controllare il formato della data, usa il <a href="/it/blog/obsidian-daily-note-template/">generatore di modelli per note giornaliere</a>. Per costruire un intero diario vocale con questa ricetta, vedi <a href="/it/blog/private-voice-journal-iphone/">tenere un diario vocale privato su iPhone</a>. Se il tuo diario è su carta, <a href="/it/blog/handwritten-notes-to-obsidian-iphone/">fotografa le pagine e invia il testo alla stessa nota</a>.</p>
       <p>Per configurare il percorso in dettaglio, consulta <a href="/it/blog/append-to-obsidian-daily-note-iphone/">percorsi giornalieri e titoli</a>.</p>
       <figure class="guide-figure">
         <img src="/screenshots/optimized/01-route-heading-light-640.webp" alt="Editor destinazione Vox.md per impostare la nota di destinazione e il posizionamento sotto un titolo" width="1206" height="2622" loading="lazy" decoding="async">
@@ -197,6 +198,7 @@
 - [ ] Review the draft outline
 - [ ] Send the reading list</code></pre>
       <p>Con Elenco attività lascia al trattamento i marcatori. Non configurare un prefisso duplicato. Testo digitato e misto è scelta separata; elaborazione vocale ed editor digitato non sono intercambiabili.</p>
+      <p>Per trasformare un elenco esistente in <code>- [ ]</code> attività, con annidamento e scadenza facoltativa, incollalo nel <a href="/it/blog/markdown-checklist-maker/">Generatore di checklist Markdown</a>.</p>
       <p>Un’attività è utile solo se il testo è corretto. Per le acquisizioni vocali, rileggi quando un errore di riconoscimento può cambiare l’istruzione. La <a href="/it/blog/voice-notes-to-obsidian-iphone/">guida voce iPhone</a> spiega Aggiungi alla bozza e Invia subito.</p>
       <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_it_32fa42cf87f1">Scarica Vox.md gratis</a></p>
       <p>Il download gratuito include 10 invii di acquisizione riusciti e 15 minuti di trascrizione. L’uso illimitato è un acquisto unico a vita.</p>
@@ -205,7 +207,7 @@
       <p>Percorsi e voci Vox.md usano token come <code>{period}</code>, <code>{date}</code>, <code>{hour}</code> e <code>{minute}</code>. Non sono espressioni Obsidian Core Templates o Templater. Usa la sintassi di ogni sistema nelle sue impostazioni.</p>
       <p>Usa <code>{hour}:{minute}</code> per l’orario con due punti mostrato qui. Il token di Vox.md <code>{time}</code> è un orario compatto: non sostituirlo presumendo uguale presentazione.</p>
       <p>Il contenuto non è un editor di template. Un token scritto in un pensiero può restare letterale: configura l’espansione nei formati supportati della destinazione. Consulta la <a href="/it/docs/#placement-templates">riferimento di token e modelli</a> per i campi disponibili.</p>
-      <p>Se aggiungi YAML, distingui i metadati iniziali della nota dai campi delle singole voci periodiche. Una proprietà del file non diventa automaticamente una proprietà distinta per voce. Inizia senza metadati extra e aggiungili quando sai come interrogarli.</p>
+      <p>Se aggiungi metadati YAML, distingui il frontmatter a livello di nota dai campi pensati per ogni voce di una nota continua. Una proprietà sull&#x27;intero file non è automaticamente una proprietà separata per ogni voce del diario. Inizia senza metadati extra, poi aggiungili quando sai come li interrogherai. L&#x27;opzione <a href="/it/blog/obsidian-properties-generator/">generatore e controllo delle proprietà</a> crea YAML valido per i metadati che scegli.</p>
 
       <h2 id="check">Verifica prima di riusare il preset</h2>
       <ol>
@@ -215,6 +217,7 @@
         <li>Invia una seconda acquisizione e verifica ordine, spazi e marcatori ripetuti.</li>
         <li>Solo dopo aggiungi voce, allegati, elaborazione facoltativa o metadati.</li>
       </ol>
+      <p>Per le riunioni, un percorso Nuova nota come <code>Meetings/{date}-{hour}{minute}.md</code> dà a ogni chiamata il proprio file; vedi <a href="/it/blog/transcribe-meetings-mac-obsidian/">trascrivi le riunioni sul Mac in Obsidian</a>. Per aggiungere a queste note titoli per ordine del giorno e decisioni, <a href="/it/blog/obsidian-meeting-notes-template/">genera un modello di note per riunioni</a>.</p>
       <p>Le ricette coesistono nel file giornaliero sotto titoli distinti. Con cartella accessibile, il preset accetta anche la trascrizione dal <a href="/it/blog/apple-watch-obsidian-voice-notes/">Flusso di acquisizione da Watch a iPhone</a>. Considera permessi e provider se l’acquisizione resta pendente.</p>
       <section class="cta" aria-labelledby="guide-cta">
         <h2 id="guide-cta">Mantieni un formato prevedibile.<br>Lascia spazio al pensiero.</h2>

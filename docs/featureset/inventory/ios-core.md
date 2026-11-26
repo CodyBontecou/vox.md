@@ -97,7 +97,7 @@ LID = IC. Every feature below is verified in the root-level files of `Voxboard/`
   - Audio attachment via `CheckpointedAudioDelivery.deliver` with note/audio/audio-reference transaction directories and queue checkpoints (`markExportedNote`, `markExportedAudio`, `markAudioReferenceAttached`); retained audio removed only when safely deliverable.
   - AI enrichment: if `transcriptEnricher` and `flow.usesAIEnrichment` (toggle on + mode ≠ Keep Original), `enrichAndUpdate` runs before export so enriched title/tags land in the exported file.
   - Empty text → "No speech detected" response and origin snapshot removal; origin/location persistence failure aborts with "Shared capture storage is unavailable." while preserving audio.
-  - `ReviewPromptManager.recordSuccessfulTranscription` called after save; onboarding-completed analytics one-shot.
+  - `ReviewPromptManager.recordDeliveredCapture` called once the voice note reached its destination (or keyboard text was returned); only an in-app recording delivered while frontmost publishes `lastInAppVoiceNoteDeliveryID` for the capture screen's review moment.
 - Constraints: paywall (`transcriptionLimitReached`); entitlement state affects queue resumption (see F-IC-24).
 - Evidence: `PersistentRecorder.swift` lines ~2380-2770.
 - Status: shipped
@@ -294,14 +294,15 @@ LID = IC. Every feature below is verified in the root-level files of `Voxboard/`
 - Status: shipped
 
 ### F-IC-23 App Store Review Prompt Manager
-- Surface: StoreKit review prompt after value moments
-- Summary: `ReviewPromptManager` (singleton) triggers `SKStoreReviewController.requestReview` only after real value: ≥3 successful Capture submissions, or ≥5 successful transcriptions across ≥2 distinct local calendar days, with no attempt in the last 90 days.
+- Surface: system review prompt (SwiftUI `requestReview`) after a success the user saw, iOS and Mac
+- Summary: `ReviewPromptManager` (`Voxboard App Shared`, both apps) counts delivered captures from every source and asks only from the capture screen right after an in-app success, when ≥5 captures were delivered on ≥2 distinct local days, the user has active access (subscription, trial or lifetime; never read-only), no request was made for this app version, and none in the last 90 days.
 - Details:
-  - Counters stored in shared defaults (`reviewPrompt.*.v1` keys); usage day identifiers recorded from transcript dates + now, and from `recordAppUsageDay()` on foreground so the two-day guard reflects general usage.
-  - Eligibility sets a persisted `pendingPrompt`; the actual prompt fires only in a foregroundActive scene with a key window, delayed 0.9 s (`promptDelayNanoseconds`); pending prompts retried on foreground via `requestPendingPromptIfPossible`.
-  - Counters use `max(stored+1, total)` to stay consistent with store-driven totals.
-- Constraints: Apple's requestReview throttling still applies; requires a foreground window scene.
-- Evidence: `ReviewPromptManager.swift` (full, 168 lines); triggered from `PersistentRecorder.transcribe` and `VoxboardApp` scene handlers.
+  - Counted: in-app Sends that delivered (`QuickCaptureViewModel.submit`), inbox deliveries (Share Sheet, widget, Shortcut, background drain), delivered voice notes and keyboard dictation. Counting never asks and nothing is queued for a later launch.
+  - Moments: iOS classic Send, Live Notes "New note" (closing a note), and in-app voice notes delivered while frontmost; Mac main capture workspace Send (not the floating Quick Capture panel). The moment waits ~2 s and for the success toast to leave, then asks only if no sheet, alert, paywall, release notes, first-note celebration, recording or half-written next capture is on screen; otherwise it is skipped.
+  - The request date and app version are recorded when the request is actually made (`reviewPrompt.lastPromptAttemptAt.v1`, kept from v1 for the cooldown; `reviewPrompt.lastRequestedVersion.v2`). v1 counters and `pendingPrompt` are removed on first use.
+  - DEBUG `-VoxReviewPromptSeed` leaves one delivery to go for the e2e test.
+- Constraints: Apple's own throttling still decides whether the sheet shows; no custom pre-prompt.
+- Evidence: `Voxboard App Shared/ReviewPromptManager.swift`; `VoxboardTests/ReviewPromptManagerTests.swift`, `VoxboardTests/ReviewPromptDeliveryCountingTests.swift`.
 - Status: shipped
 
 ### F-IC-24 Feedback Helper (Email + Diagnostics)
@@ -437,7 +438,7 @@ LID = IC. Every feature below is verified in the root-level files of `Voxboard/`
 | Voxboard/VoiceAutoStopCoordinator.swift | 129 | ✅ complete |
 | Voxboard/KeyboardRecordingArtifactRetention.swift | 101 | ✅ complete |
 | Voxboard/CaptureInboxBackgroundDrain.swift | 55 | ✅ complete |
-| Voxboard/ReviewPromptManager.swift | 168 | ✅ complete |
+| Voxboard App Shared/ReviewPromptManager.swift | 285 | ✅ complete |
 | Voxboard/FeedbackHelper.swift | 136 | ✅ complete |
 | Voxboard/ReleaseNotes.swift | 418 | ✅ complete |
 | Voxboard/GeistTheme.swift | 434 | ✅ complete |

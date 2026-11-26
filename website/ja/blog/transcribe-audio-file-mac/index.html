@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr" data-search-section="セクション" data-search-guide="ガイド記事" data-search-empty="「{query}」に一致する結果はありません">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mac で音声ファイルをローカルで文字起こしして Markdown に | Vox.md</title>
+  <meta name="description" content="Mac のボイスメモとメモが無料で提供する機能を確認し、そのうえで既存の音声または動画ファイルを Mac 版 Vox.md に読み込み、Mac 上で Whisper または Parakeet により文字起こしして、自分で所有する Markdown ノートとして保存します。">
+  <link rel="canonical" href="https://vox.isolated.tech/ja/blog/transcribe-audio-file-mac/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="言語モデル向けの Vox.md ドキュメント">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Mac で音声ファイルをローカルで文字起こしして Markdown にする">
+  <meta property="og:description" content="Mac のボイスメモとメモが無料で提供する機能を確認し、そのうえで既存の音声または動画ファイルを Mac 版 Vox.md に読み込み、Mac 上で Whisper または Parakeet により文字起こしして、自分で所有する Markdown ノートとして保存します。">
+  <meta property="og:url" content="https://vox.isolated.tech/ja/blog/transcribe-audio-file-mac/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-22">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mac で音声ファイルをローカルで文字起こしして Markdown にする">
+  <meta name="twitter:description" content="Mac のボイスメモとメモが無料で提供する機能を確認し、そのうえで既存の音声または動画ファイルを Mac 版 Vox.md に読み込み、Mac 上で Whisper または Parakeet により文字起こしして、自分で所有する Markdown ノートとして保存します。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Mac で音声ファイルをローカルで文字起こしして Markdown にする",
+  "description": "Mac のボイスメモとメモが無料で提供する機能を確認し、そのうえで既存の音声または動画ファイルを Mac 版 Vox.md に読み込み、Mac 上で Whisper または Parakeet により文字起こしして、自分で所有する Markdown ノートとして保存します。",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-22",
+  "dateModified": "2026-11-22",
+  "mainEntityOfPage": "https://vox.isolated.tech/ja/blog/transcribe-audio-file-mac/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "ja",
+  "name": "Mac で音声ファイルをローカルで文字起こしして Markdown に | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/ja/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "ガイド",
+      "item": "https://vox.isolated.tech/ja/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Mac で音声ファイルをローカルで文字起こしして Markdown にする",
+      "item": "https://vox.isolated.tech/ja/blog/transcribe-audio-file-mac/"
+    }
+  ],
+  "inLanguage": "ja",
+  "name": "Mac で音声ファイルをローカルで文字起こしして Markdown に | Vox.md",
+  "description": "Mac のボイスメモとメモが無料で提供する機能を確認し、そのうえで既存の音声または動画ファイルを Mac 版 Vox.md に読み込み、Mac 上で Whisper または Parakeet により文字起こしして、自分で所有する Markdown ノートとして保存します。"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-audio-file-mac/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">ガイド本文へ</a>
+<nav aria-label="メインナビゲーション">
+  <div class="nav-inner">
+    <a href="/ja/" class="logo" aria-label="Vox.md ホーム">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/ja/#how">動作の仕組み</a></li>
+      <li><a href="/ja/docs/">ドキュメント</a></li>
+      <li><a href="/ja/blog/">ガイド</a></li>
+      <li><a href="/ja/compare/">比較する</a></li>
+      <li><a href="/ja/privacy.html">プライバシー</a></li>
+      <li><a href="/ja/terms.html">利用規約</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_ja_5aaec3f62945">Vox.md をダウンロード</a>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/blog/transcribe-audio-file-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-audio-file-mac/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-audio-file-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-audio-file-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-audio-file-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-audio-file-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-audio-file-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-audio-file-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-audio-file-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-audio-file-mac/" lang="ja" hreflang="ja" aria-current="page">日本語</a></li><li><a href="/ko/blog/transcribe-audio-file-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-audio-file-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-audio-file-mac/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-audio-file-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-audio-file-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-audio-file-mac/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-audio-file-mac/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-audio-file-mac/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-audio-file-mac/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-audio-file-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-audio-file-mac/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-audio-file-mac/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-audio-file-mac/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Mac · 音声ファイル · ローカル文字起こし</div>
+        <h1 class="hero-title">Mac で音声ファイルをローカルで文字起こしして Markdown にする</h1>
+        <p class="hero-subtitle">まず無料の内蔵機能を紹介し、そのあと、手元のファイルから Obsidian や任意のフォルダ内の Markdown ノートまでをローカルで完結させる流れを説明します。</p>
+      </div>
+      <aside class="meta-card" aria-label="このガイドについて">
+        <dl>
+          <div><dt>作成者</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>更新日</dt><dd><time datetime="2026-11-22">2026年11月22日</time></dd></div>
+          <div><dt>必要条件</dt><dd>Vox.md:macOS 14 以降 · ダウンロード済みの音声認識モデル。Apple 内蔵の文字起こし:お使いの Mac と言語については Apple サポートのページをご覧ください。</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Mac で音声ファイルをローカルで文字起こしして Markdown にする">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">短く答えると</div>
+        <p>Apple のボイスメモとメモは、Mac で音声を無料で文字起こしできます。多くの方にはそれで十分です。既存の音声または動画ファイルを Markdown ノートにするには、Mac 版 Vox.md を開き、 <strong>オーディオを読み込む…</strong> をメニューバーから選び(または「キャプチャ」のワークスペースでファイルを読み込み)、ローカルの Whisper または Parakeet モデルで文字起こしし、テキストを確認してから、ルートのノートに送信します。</p>
+      </div>
+      <p>以下の Apple に関する詳細は、Apple サポートのページに基づいています <a href="https://support.apple.com/guide/voice-memos/vm4a03609f0d/mac">Mac のボイスメモで文字起こしを表示する</a> と <a href="https://support.apple.com/guide/notes/apdb5106e334/mac">Mac のメモで音声を録音して文字起こしする</a>(2026年11月22日に確認)。Apple のページは変更されることがあるため、お使いの Mac で確認してください。Vox.md の手順は次に沿っています: <a href="/ja/docs/#mac">Mac のドキュメント</a>.</p>
+      <nav class="toc" aria-label="このガイドの内容"><div class="toc-title">このガイドの内容</div><ol>
+        <li><a href="#built-in">Mac にすでにある無料の方法</a></li>
+        <li><a href="#choose">どの方法が合っているか</a></li>
+        <li><a href="#prepare">Mac 版 Vox.md を準備する</a></li>
+        <li><a href="#import">ファイルを読み込んで文字起こしする</a></li>
+        <li><a href="#verify">Markdown ノートを確認する</a></li>
+        <li><a href="#privacy">Mac から外に出るもの</a></li>
+        <li><a href="#troubleshooting">問題の解決</a></li>
+        <li><a href="#related">関連ガイド</a></li>
+      </ol></nav>
+
+      <p>まだ録音していませんか?次を参照してください: <a href="/ja/blog/record-audio-on-mac/">Mac で音声を録音する方法</a>.</p>
+
+      <h2 id="built-in">Mac にすでにある無料の方法</h2>
+      <h3>ボイスメモ</h3>
+      <p>Apple のボイスメモのページには、次のボタンをクリックできると書かれています: <strong>文字起こし</strong> ボタンを押すとテキストをライブで確認できます。録音済みの項目を選んで同じボタンをクリックすることもできます。録音リストでは、タイトルや文字起こしのテキストを検索できます。文字起こしのテキストは、選択して Control キーを押しながらクリックし、次を選ぶとコピーできます: <strong>コピー</strong>。Apple によると、macOS 14 以前で作成された録音、または文字起こしに対応していないデバイスで作成された録音を開くと、ボイスメモが自動的に文字起こしを行います。また、音声の文字起こしはすべての国や地域で利用できるわけではありません。</p>
+      <h3>メモ</h3>
+      <p>Apple のメモのページには、ノート内で音声を録音する方法が説明されています。「添付ファイル」ボタンをクリックし、 <strong>オーディオを録音</strong>を選んで録音し、「文字起こし」ボタンをクリックして文字起こしを表示します。音声の文字起こしは、そのページに Apple が挙げているデバイス言語について、M1 以降の Mac で利用できると書かれています。「文字起こし」ボタンが表示されない場合、Apple によると、お使いの Mac が最小要件を満たしていないか、対応言語を検出できていません。</p>
+      <h3>制限事項</h3>
+      <p>テキストは、コピーして取り出すまでそれらのアプリ内にとどまります。メモでは、音声録音を削除すると文字起こしも削除されると Apple は説明しています。どちらのアプリでどのファイル形式を読み込めるかは Apple のページからは確認できないため、お手元の録音で確かめてください。このガイドではそれについて何も断定しません。</p>
+      <p>最後の手段として、音声を再生しながらテキストエディタに音声入力する人もいます。これは回避策であり、ファイルの文字起こしではありません。詳しくは <a href="/ja/blog/dictation-on-mac/">Mac の音声入力</a> をご覧ください。音声入力そのものについての説明です。</p>
+
+      <h2 id="choose">どの方法が合っているか</h2>
+      <p>この表には、Apple のページまたは Vox.md のドキュメントに記載されている内容だけを載せています。「記載なし」は、参照元に記載がないという意味です。精度や速度についての主張ではありません。</p>
+      <p class="guide-table-hint">小さな画面では、表を横にスワイプしてください。</p>
+      <div class="guide-comparison" role="region" aria-label="Mac の音声文字起こし方法の比較表。小さい画面では横にスクロールしてください" tabindex="0">
+        <table class="comparison">
+          <caption>Mac の音声文字起こし方法(2026年11月22日確認)</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">ボイスメモ</th><th scope="col">メモ</th><th scope="col">Mac 版 Vox.md</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">テキストの保存先</th><td>ボイスメモの中。コピーして取り出します</td><td>ノートの中。音声録音も一緒</td><td>選んだフォルダまたは Vault 内の Markdown ノート</td></tr>
+            <tr><th scope="row">Mac 上で実行されるもの</th><td>記載なし</td><td>記載なし</td><td>文字起こし。ダウンロードした Whisper または Parakeet モデルを使用</td></tr>
+            <tr><th scope="row">ファイルの読み込み</th><td>記載なし</td><td>記載なし</td><td>「オーディオを読み込む…」は音声ファイルまたはムービーファイルに対応</td></tr>
+            <tr><th scope="row">Markdown 出力</th><td>記載なし</td><td>記載なし</td><td>はい</td></tr>
+            <tr><th scope="row">話者ラベル</th><td>記載なし</td><td>記載なし</td><td>任意。スピーカーの識別を使用( <a href="/ja/blog/transcribe-interview/">インタビューの文字起こし</a>)</td></tr>
+            <tr><th scope="row">費用</th><td>macOS の一部</td><td>macOS の一部</td><td>無料の文字起こし15分と配信成功10回、その後は買い切りの永続アンロック</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>テキストがボイスメモやメモの中にあれば足りる場合は、そちらをお使いください。Vox.md は、自分で所有するプレーンなファイル、特定のローカルモデル、または Vault にテキストを置きたいときに向いています。</p>
+
+      <h2 id="prepare">Mac 版 Vox.md を準備する</h2>
+      <ol>
+        <li><strong>インストール。</strong> Mac 版 Vox.md には macOS 14 以降が必要です。下の App Store のリンクから入手してください。</li>
+        <li><strong>モデルをダウンロード。</strong> よくある <strong>設定 → モデル</strong> を選び、モデルを1つダウンロードします。Whisper は Tiny(75 MB)から Large v3 Turbo(1.6 GB)まで、Parakeet v2(約 800 MB、英語)、Parakeet v3(約 800 MB、25 言語)から選べます。文字起こしの言語は同じ画面で設定します。対応する Mac では、Whisper は Metal アクセラレーションを使います。ネットワークを使うのはモデルのダウンロードだけです。詳しくは <a href="/ja/compare/whisper-vs-parakeet/">Whisper と Parakeet の比較</a> をご覧ください。 <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a> は Whisper モデルを実行し、 <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> は Parakeet を実行します。</li>
+        <li><strong>ルートを選ぶか、新しく作成します。</strong> ルートは、保存先のフォルダまたは Vault と、対象のノートを保持します。対象は、新規ノート、日ごとに追記していくデイリーノート、または既存ノートの見出しの下です。詳しくは <a href="/ja/docs/#presets">ドキュメントのルート</a>.</li>
+      </ol>
+      <p>音声ではなく字幕ファイル(.srt または .vtt)をすでにお持ちですか?文字起こしは不要です: <a href="/ja/blog/srt-vtt-to-text-markdown/">SRT/VTT からテキストまたは Markdown へのコンバーター</a> ブラウザー内で整えます。</p>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">Mac 版 Vox.md を入手しましょう。</h2>
+        <p>無料枠は文字起こし15分と配信成功10回で、1件の録音を試すには十分です。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_5aaec3f62945">Mac 版 Vox.md を入手</a></p>
+      </section>
+
+      <h2 id="import">ファイルを読み込んで文字起こしする</h2>
+      <ol>
+        <li><strong>読み込み。</strong> Vox.md のメニューバーから次を選びます: <strong>オーディオを読み込む…</strong>、またはオーディオをキャプチャのワークスペースに読み込むかドラッグします。ドキュメントによると、オーディオとムービーのファイルが使え、録音と同じローカル文字起こしを通ります。ビデオファイルについては、次を参照してください: <a href="/ja/blog/transcribe-video-to-text/">ビデオをテキストに文字起こしする</a>.</li>
+        <li><strong>「下書きに追加」または「すぐに送信」を選びます。</strong> 次を使って、 <strong>すぐに送信</strong> 文字起こしは完了時に配信されます。 <strong>下書きに追加</strong> 先に内容を確認できます。名前、数字、日付は音声と照らして確認してください。</li>
+        <li><strong>任意:スピーカーの識別。</strong> オンにする項目は、 <strong>スピーカーの識別</strong> をルートで使うと、匿名でベストエフォートの話者ラベルが付きます。初回は別のモデルを準備します。実行できない場合は、プレーンな文字起こしが保持され、理由がライブラリに表示されます。</li>
+        <li><strong>任意:処理モード。</strong> ルートでは、「オリジナルを保持」、「文章を整える」、「会議メモ」、「タスクチェックリスト」、「カスタム指示」を使えます。Apple Intelligence のモードには、macOS 26 対応のハードウェアが必要です。対応していない場合、「タスクチェックリスト」と「会議メモ」は内蔵フォーマッタを使い、「文章を整える」と「カスタム指示」は元のテキストのままになります。</li>
+        <li><strong>送信。</strong> Command-Return を押すと、キャプチャがルートのノートに送信されます。</li>
+      </ol>
+
+      <h2 id="verify">Markdown ノートを確認する</h2>
+      <p>選択 <strong>最後の書き出しを表示</strong> をメニューバーから選ぶか、ライブラリで該当の項目を見つけて Finder で表示し、Obsidian でファイルを開きます。テキストだけが必要な場合は、 <strong>最後の文字起こしをコピー</strong>。録音から埋めるノートの構成については、次をご覧ください: <a href="/ja/blog/obsidian-meeting-notes-template/">会議メモテンプレートジェネレーター</a>.</p>
+      <p>録音が話のリハーサルなら、文字起こしと録音の長さを次に貼り付けます: <a href="/ja/blog/speech-time-calculator/">スピーチ時間計算ツール</a> に貼り付けると、1分あたりの語数と、ご自身のペースでの原稿の話す時間がわかります。</p>
+
+      <h2 id="privacy">Mac から外に出るもの</h2>
+      <p>文字起こしは Mac 上で実行され、Vox.md はキャプチャの内容を Vox.md のサーバーに送信しません。モデルのダウンロードでは Hugging Face または FluidAudio のインフラに接続します。保存先フォルダが iCloud などのサービスで同期される場合、そのファイルは当該サービスの規約に従って扱われます。 <a href="/ja/privacy.html">プライバシーポリシー</a>.</p>
+
+      <h2 id="troubleshooting">問題の解決</h2>
+      <ul>
+        <li><strong>文字起こしがない、または言語が違う。</strong> 「設定 → モデル」で、モデルがダウンロード・選択されていることと、言語が設定されていることを確認してください。</li>
+        <li><strong>ノートが作成されない。</strong> ルートの保存先フォルダを確認し、Vox.md にそのフォルダへのアクセス権があるかも確認してください。</li>
+        <li><strong>長いファイルは時間がかかります。</strong> 大きいモデルほど、長い録音では時間がかかります。まず小さいモデルを試してから、比較してください。</li>
+        <li><strong>無料枠を使い切った。</strong> 文字起こし15分と配信成功10回が含まれ、その後は買い切りの永続アンロックです。正式な価格は App Store に表示されるものです。詳しくは <a href="/ja/docs/#pricing-limits">無料利用と永久ライセンス</a>.</li>
+      </ul>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">録音を、自分で所有するノートに。</h2>
+        <p>まず無料枠で、機密性のない短いクリップから始め、Markdown ファイルを開いてみましょう。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_5aaec3f62945">Mac 版 Vox.md を入手</a></p>
+      </section>
+      <nav class="toc" aria-label="関連ガイド" id="related"><div class="toc-title">続ける</div><ul>
+        <li><a href="/ja/blog/transcribe-meetings-mac-obsidian/">ライブ通話を録音する場合は、こちら:Mac の会議を Obsidian に</a></li>
+        <li><a href="/ja/blog/dictation-on-mac/">Mac で音声入力する</a></li>
+        <li><a href="/ja/compare/whisper-vs-parakeet/">Whisper と Parakeet の比較</a></li>
+        <li><a href="/ja/blog/transcribe-voice-memos-iphone/">iPhone のボイスメモを Markdown に文字起こし</a></li>
+        <li><a href="/ja/blog/obsidian-meeting-notes-template/">Obsidian 議事録テンプレートジェネレーター</a></li>
+        <li><a href="/ja/blog/transcribe-interview/">インタビューをプライベートに文字起こしする(話者ラベル付き)</a></li>
+        <li><a href="/ja/docs/#mac">Mac のドキュメント</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ja/">ホーム</a></li>
+        <li><a href="/ja/docs/">ドキュメント</a></li>
+        <li><a href="/ja/blog/">ガイド</a></li>
+        <li><a href="/ja/compare/">比較する</a></li>
+        <li><a href="/ja/privacy.html">プライバシー</a></li>
+        <li><a href="/ja/terms.html">利用規約</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">サポート</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_5aaec3f62945">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · ローカルノートにクイックキャプチャ · コンテンツのアップロードなし。</div>
+    </div>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/blog/transcribe-audio-file-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-audio-file-mac/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-audio-file-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-audio-file-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-audio-file-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-audio-file-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-audio-file-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-audio-file-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-audio-file-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-audio-file-mac/" lang="ja" hreflang="ja" aria-current="page">日本語</a></li><li><a href="/ko/blog/transcribe-audio-file-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-audio-file-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-audio-file-mac/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-audio-file-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-audio-file-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-audio-file-mac/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-audio-file-mac/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-audio-file-mac/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-audio-file-mac/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-audio-file-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-audio-file-mac/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-audio-file-mac/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-audio-file-mac/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

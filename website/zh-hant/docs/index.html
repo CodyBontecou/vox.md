@@ -247,7 +247,7 @@
           <div><strong>照片與相機</strong><p>選擇照片或截圖，或拍攝新照片。圖片會暫存，並嵌入傳送的筆記。</p></div>
           <div><strong>檔案</strong><p>選擇多個檔案項目。圖片變為嵌入內容，音訊保留為音訊載荷，其他檔案使用 Obsidian 風格連結。</p></div>
           <div><strong>文件掃描</strong><p>用 VisionKit 掃描頁面。Vox.md 保留頁面圖像、建立 PDF，並盡力進行裝置端 OCR。</p></div>
-          <div><strong>日誌 OCR</strong><p>手動按快門擷取最多 10 頁日誌，或選擇日誌照片。準確的 Vision OCR 使用自動語言檢測。</p></div>
+          <div><strong>日誌 OCR</strong><p>最多拍攝 10 頁手動快門日記頁面，或選擇日記照片。精確的 Vision OCR 使用自動語言偵測。請參閱 <a href="/zh-hant/blog/handwritten-notes-to-obsidian-iphone/">把手寫筆記存入 Obsidian</a>.</p></div>
           <div><strong>草圖</strong><p>在白色 PencilKit 畫布上用黑色畫筆繪圖。Vox.md 儲存可編輯繪圖資料和 PNG 預覽。</p></div>
           <div><strong>目前位置操作</strong><p>請求一次位置，並在草稿中插入經過驗證的 Google Maps Markdown 連結。此獨立擷取列操作不更改任何按路線設定的位置控制項。</p></div>
           <div><strong>語音與匯入音訊</strong><p>在編輯器中錄音或匯入音訊/影片，本地轉錄，再將結果加入草稿或立即傳送。</p></div>
@@ -263,7 +263,7 @@
               <tr><td>添加媒體</td><td>打開草圖、相機、照片、截圖和網頁連結選項。</td></tr>
               <tr><td>添加文件</td><td>從檔案中選擇多個檔案，與草稿一同暫存。</td></tr>
               <tr><td>掃描文件</td><td>擷取多頁掃描、PDF、頁面圖像，並盡力進行 OCR。</td></tr>
-              <tr><td>摘取文本</td><td>提供擷取日誌頁面和選擇日誌照片，用於側重 OCR 的擷取。</td></tr>
+              <tr><td>擷取文字</td><td>提供擷取日誌頁面和選擇日誌照片，用於側重 OCR 的擷取。</td></tr>
               <tr><td>九 個</td><td>撤銷上一次編輯器操作。</td></tr>
               <tr><td>格式 Markdown</td><td>套用粗體、斜體、井號標籤，或標題 1 至標題 6。</td></tr>
               <tr><td>Markdown 鏈接</td><td>插入 <code>[link text](url)</code> 並選中可編輯部分。</td></tr>
@@ -312,8 +312,8 @@
           <li>打開設定 → 路線，建立、重命名、啟用、停用自訂路線，為其選擇圖示或刪除。</li>
           <li>可搜尋圖示選擇器將符號分為寫作、語音、任務、個人和工作類別。</li>
           <li>已停用的路線不在常規選擇器中顯示。內置預設路線不可刪除。</li>
-          <li>內置預設路線使用波形符號，提示為 <em>擷取想法、任務、連結、檔案、掃描件或錄音。</em>, <code>type: capture</code> 後設資料、整理行文處理，關閉鍵入文字處理，關閉音訊儲存。</li>
-          <li>新的自訂路線初始為 <em>自訂路線</em>，使用滑塊圖示和 <em>想擷取什麼？</em> 提示，初始選擇自訂指令，但關閉鍵入/混合文字處理。</li>
+          <li>內置預設路線使用波形符號，提示為 <em>擷取想法、任務、連結、檔案、掃描件或錄音。</em>, <code>type: capture</code> 後設資料、潤飾文字處理， <strong>使用 Apple Intelligence</strong> 關閉，音訊儲存關閉。</li>
+          <li>新的自訂路線初始為 <em>自訂路線</em>，使用滑塊圖示和 <em>想擷取什麼？</em> 提示，初始選擇自訂指示，但 <strong>使用 Apple Intelligence</strong> 處於關閉狀態。</li>
         </ul>
 
         <h3 id="processing-modes">處理模式</h3>
@@ -324,16 +324,17 @@
               <tr><td>保留原文</td><td>保留擷取文字，不進行 AI 改寫。</td><td>傳送原始文字。</td></tr>
               <tr><td>潤飾文字</td><td>整理大小寫和標點，同時保留含義與 Markdown。</td><td>裝置端增強不可用時保留原文。</td></tr>
               <tr><td>工作清單</td><td>生成 Markdown <code>- [ ]</code> 任務項。</td><td>確定性的清單格式器。</td></tr>
-              <tr><td>會議記錄</td><td>生成 <code>## Notes</code> 節，以及存在時的 <code>## Action Items</code>.</td><td>確定的會議筆記結構。</td></tr>
+              <tr><td>會議記錄</td><td>生成 <code>## Notes</code> 節，以及存在時的 <code>## Action Items</code>.</td><td>為語音轉錄提供確定的會議記錄結構；擷取的文字原樣傳送。</td></tr>
               <tr><td>自訂指示</td><td>可用時使用裝置端 Apple Intelligence 遵循你的指令。</td><td>指令無法在本地執行時保留原文。</td></tr>
             </tbody>
           </table>
         </div>
-        <p>語音轉錄使用所選路線模式。 <strong>應用於捕捉文本</strong> 是預設關閉、需單獨啟用的選項，允許處理鍵入的 Markdown、OCR 和其他帶文字的混合擷取。保持關閉可防止意外改寫已編寫的 Markdown。傳送前儲存確切的已處理請求，因此重試不會依據變化後的設定重新處理。</p>
+        <p>要在會議記錄輸出的前後加入議程、與會者和決策標題，請 <a href="/zh-hant/blog/obsidian-meeting-notes-template/">產生 Obsidian 會議記錄範本</a>。要把現有清單轉換為 <code>- [ ]</code> 任務,請使用 <a href="/zh-hant/blog/markdown-checklist-maker/">Markdown 清單產生器</a>.</p>
+        <p><strong>使用 Apple Intelligence</strong>，預設關閉，開啟後會啟用路線的處理模式。 <strong>套用於</strong> 接著決定處理哪些內容： <strong>語音和文字</strong> （預設）、 <strong>僅語音</strong> 或 <strong>僅文字</strong>。文字指鍵入的 Markdown、從照片或掃描件擷取的文字，以及其他含文字的擷取；選擇 <strong>僅語音</strong> 可防止已編寫的 Markdown 被改寫。關閉此開關時，語音轉錄仍會取得工作清單和會議記錄的確定結構，擷取的文字則原樣傳送。傳送前儲存確切的已處理請求，因此重試不會依據變化後的設定重新處理。</p>
 
         <h3 id="preset-metadata">元素</h3>
         <ul>
-          <li>將靜態後設資料輸入為一個 <code>key: value</code> 鍵值對，每行一對，例如 <code>tags: [journal, idea]</code>.</li>
+          <li>將靜態後設資料輸入為一個 <code>key: value</code> 鍵值對，每行一對，例如 <code>tags: [journal, idea]</code>。若要為 Note Frontmatter 構建有效的 frontmatter，請使用 <a href="/zh-hant/blog/obsidian-properties-generator/">屬性產生器</a>.</li>
           <li><strong>筆記 frontmatter</strong> 在文件範圍寫入後設資料。</li>
           <li><strong>行內條目欄位</strong> 寫入 <code>key:: value</code> 欄位放在滾動筆記的每個條目旁邊。</li>
           <li>可用時，裝置端增強可在靜態路線後設資料之外添加標題、標籤、類別和整理後文字。</li>
@@ -381,7 +382,7 @@
         <h3 id="placement-templates">放置位置、標題和模板</h3>
         <ul>
           <li><strong>底部</strong> 追加； <strong>頂部</strong> 前置插入； <strong>頭條</strong> 插入到所選的 1 至 6 級標題下。</li>
-          <li>如果缺少標題，請選擇 <strong>顯示錯誤</strong> 或 <strong>創建頭條</strong>.</li>
+          <li>如果缺少標題，請選擇 <strong>顯示錯誤</strong> 或 <strong>建立標題</strong>.</li>
           <li>使用儲存庫中的即時 Markdown 模板檔案、可重複使用條目模板，或自訂前後綴文字。</li>
           <li>條目格式支援 <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>，以及 <code>{location}</code>.</li>
           <li>預設附件子資料夾為 <code>attachments</code>.</li>
@@ -424,6 +425,8 @@
             </tbody>
           </table>
         </div>
+
+        <p>不確定該下載哪個模型？ <a href="/zh-hant/compare/whisper-vs-parakeet/">比較 Whisper 和 Parakeet</a> ，並用你自己的音訊測試兩者。</p>
 
         <h3 id="automatic-model">自動模式如何工作</h3>
         <ul>
@@ -599,8 +602,10 @@
           <li>按 Command-Return 傳送擷取。啟用使用目前位置的路線會在傳送或停止錄音時請求一次 Mac 發起的位置，無論是否啟用後設資料輸出。</li>
           <li>目標位置設定橫幅和路線檢查器顯示所選路線解析出的筆記及放置位置。</li>
         </ul>
+        <p>有關逐步設定，請參閱 <a href="/zh-hant/blog/transcribe-audio-file-mac/">在 Mac 上本地轉錄音訊檔案為 Markdown</a>，或 <a href="/zh-hant/blog/record-audio-on-mac/">如何在 Mac 上錄音</a>.</p>
 
         <h3 id="mac-meeting">分軌擷取會議</h3>
+        <p>如需逐步設定，請參閱 <a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/">在本機將 Mac 會議轉錄到 Obsidian</a>.</p>
         <p>將輸入模式選擇器從 <strong>麥克風</strong> 到 <strong>會議</strong> 將 Mac 上某個App播放的聲音和自己的麥克風錄為兩路清晰分離的音軌。Vox.md 以單App模式使用 ScreenCaptureKit，因此你只選擇一個App，且絕不會擷取 Vox.md 自身。</p>
         <ul>
           <li>錄音時，狀態欄顯示系統和麥克風即時電平表、各來源狀態，以及擷取警告。</li>
@@ -610,6 +615,7 @@
         </ul>
 
         <h3 id="mac-keybinds">全域快速鍵</h3>
+        <p>有關逐步設定，請參閱 <a href="/zh-hant/blog/dictation-on-mac/">在 Mac 上聽寫，並提供私密的本機選項</a>.</p>
         <p>設定 → 全域快速鍵可為以下操作分配快速鍵： <strong>轉載到 Clipboard</strong>, <strong>所選路線</strong>，或任意已啟用路線。快速鍵預設關閉，需要非修飾鍵加 Control、Option 或 Command，也可包含 Shift，且會拒絕衝突。再次按活動快速鍵可停止錄音。</p>
         <div class="docs-callout docs-callout-neutral">
           <p><strong>轉載到 Clipboard</strong> 不建立筆記、資料庫項目或保留音訊。它用於向任意 Mac App快速聽寫。</p>
@@ -670,7 +676,7 @@
           <li>免費使用包含 <strong>15 分鐘轉錄</strong> 和 <strong>10 次成功擷取傳送</strong>.</li>
           <li>已計入轉錄時長的語音轉錄，路線到 Markdown 時不會再消耗單獨的擷取額度。</li>
           <li>失敗寫入和冪等重試不消耗成功擷取傳送次數。</li>
-          <li>無限版為一次購買、終身有效，無訂閱、續費或廣告。以 App Store 本地價格為準；美國價格為個人版 $19.99、家庭版 $39.99、家庭升級 $19.99，其他商店按購買力定價。</li>
+          <li>無限版為一次購買、終身有效，無訂閱、續費或廣告。以 App Store 本地價格為準；美國價格為個人版 $79.99、家庭版 $129.99、家庭升級 $49.99，其他商店按購買力定價。</li>
           <li>恢復購買可恢復符合條件的購買。符合條件的舊付費版本使用者可沿用無限使用權益。</li>
           <li>不含內容的 App Group 台帳可在本地App資料保留期間防止重試重復扣額。它不存於鑰匙圈；移除本地App資料後會重新開始免費額度。</li>
         </ul>

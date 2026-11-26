@@ -842,7 +842,7 @@ final class WatchLocalRecorder: ObservableObject {
 
     #if DEBUG
     @discardableResult
-    func configureLocalizationScreenshotIfNeeded() -> Bool {
+    func configureLocalizationScreenshotIfNeeded(using bridge: WatchPhoneBridge? = nil) -> Bool {
         let arguments = ProcessInfo.processInfo.arguments
         guard let index = arguments.firstIndex(of: "--localization-screenshot"),
               arguments.indices.contains(index + 1) else { return false }
@@ -856,6 +856,9 @@ final class WatchLocalRecorder: ObservableObject {
             )
         case "02-recording":
             resetDemoState(phase: .recording, queuedCount: 0, message: nil)
+            recordingRoute = bridge?.snapshot.availablePresets.first
+            levels = [0.12, 0.3, 0.55, 0.4, 0.22, 0.65, 0.85, 0.5, 0.3, 0.15, 0.42, 0.7, 0.95,
+                      0.6, 0.35, 0.2, 0.5, 0.78, 0.45, 0.25, 0.62, 0.9, 0.55, 0.32, 0.18, 0.4]
             startedAt = Date().addingTimeInterval(-42)
             duration = 42
         case "03-synced":
@@ -1016,13 +1019,18 @@ final class WatchLocalRecorder: ObservableObject {
     }
     #endif
 
+    /// Recording quality synced from iPhone (Speech until the first sync).
+    /// Speech is the original 16 kHz AAC; High is 48 kHz AAC and Lossless is
+    /// 48 kHz ALAC, both still `.m4a`. The iPhone transcribes a 16 kHz copy.
+    /// Steps down when the Watch lacks room for a long High/Lossless take
+    /// (see `RecordingQualityStorageGuard`).
     private var recordingSettings: [String: Any] {
-        [
-            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
-            AVSampleRateKey: 16_000,
-            AVNumberOfChannelsKey: 1,
-            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue,
-        ]
+        let requested = RecordingQuality.load(from: .standard)
+        let quality = RecordingQualityStorageGuard.effectiveQuality(
+            requested: requested,
+            availableBytes: RecordingQualityStorageGuard.availableBytes(at: Self.recordingsDirectoryURL)
+        )
+        return quality.recorderSettings
     }
 
     private func makeRecordingURL(id: String) throws -> URL {

@@ -183,6 +183,7 @@
       <pre class="guide-code"><code>## Journal
 - **14:05** A short walk helped me settle on the next step.</code></pre>
       <p>Trình định dạng mục của Vox.md mở rộng các token giờ và phút. Tệp mẫu cấp ghi chú có thể cung cấp các tiêu đề bao quanh, còn tiền tố mục định dạng từng lần ghi nhanh. Giữ hai nhiệm vụ này riêng biệt để các mục thêm sau không chèn lại toàn bộ cấu trúc ghi chú hằng ngày.</p>
+      <p>Để tạo mẫu ghi chú hằng ngày và kiểm tra định dạng ngày của bạn, hãy dùng <a href="/vi/blog/obsidian-daily-note-template/">trình tạo mẫu ghi chú hằng ngày</a>. Để xây dựng cả một nhật ký giọng nói quanh công thức này, xem <a href="/vi/blog/private-voice-journal-iphone/">ghi nhật ký giọng nói riêng tư trên iPhone</a>. Nếu nhật ký của bạn ở trên giấy, <a href="/vi/blog/handwritten-notes-to-obsidian-iphone/">chụp các trang và gửi văn bản vào cùng một ghi chú</a>.</p>
       <p>Để thiết lập lộ trình chi tiết, xem <a href="/vi/blog/append-to-obsidian-daily-note-iphone/">đường ngày và vị trí tiêu đề</a>.</p>
       <figure class="guide-figure">
         <img src="/screenshots/optimized/01-route-heading-light-640.webp" alt="Trình sửa đích Vox.md đặt mục tiêu và vị trí tiêu đề" width="1206" height="2622" loading="lazy" decoding="async">
@@ -197,6 +198,7 @@
 - [ ] Review the draft outline
 - [ ] Send the reading list</code></pre>
       <p>Nếu bật Danh sách việc cần làm thay thế, để xử lý quản lý dấu kiểm. Không đặt thêm tiền tố ô kiểm trùng. Xử lý gõ và hỗn hợp phải bật riêng; xử lý giọng nói và trình soạn gõ không phải cài đặt thay nhau.</p>
+      <p>Để biến một danh sách có sẵn thành <code>- [ ]</code> kèm cấp lồng nhau và ngày đến hạn tùy chọn, hãy dán nó vào <a href="/vi/blog/markdown-checklist-maker/">Trình tạo danh sách kiểm Markdown</a>.</p>
       <p>Tác vụ chỉ hữu ích khi câu chữ đúng. Với ghi nhanh bằng giọng nói, kiểm tra bản chép lời nếu lỗi nhận dạng có thể đổi chỉ dẫn. Phần <a href="/vi/blog/voice-notes-to-obsidian-iphone/">hướng dẫn giọng nói iPhone</a> giải thích Thêm vào bản nháp và Gửi ngay.</p>
       <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_32fa42cf87f1">Tải Vox.md miễn phí</a></p>
       <p>Bản tải miễn phí gồm 10 lần gửi ghi nhanh thành công và 15 phút chép lời. Dùng không giới hạn là mua một lần trọn đời.</p>
@@ -205,7 +207,7 @@
       <p>Cài đường và mục Vox.md dùng token như <code>{period}</code>, <code>{date}</code>, <code>{hour}</code> và <code>{minute}</code>. Ví dụ không phải biểu thức Obsidian Core Templates hay Templater. Dùng cú pháp riêng trong cài đặt của hệ thống mẫu đó.</p>
       <p>Dùng <code>{hour}:{minute}</code> cho thời gian có dấu hai chấm như ở đây. Trong Vox.md, <code>{time}</code> là token biểu thị thời gian dạng gọn, nên đừng thay nó vào công thức rồi cho rằng cách hiển thị vẫn giống như trên.</p>
       <p>Nội dung ghi nhanh không phải trình sửa mẫu. Token viết trong một ý nghĩ có thể vẫn là văn bản nguyên dạng; hãy cấu hình việc mở rộng token trong các cài đặt định dạng mà đích hỗ trợ. Xem <a href="/vi/docs/#placement-templates">tham chiếu token và mẫu</a> để xem các trường khả dụng.</p>
-      <p>Nếu thêm YAML, phân biệt frontmatter cấp ghi chú và trường cho từng mục ghi chú liên tục. Thuộc tính cả tệp không tự là thuộc tính riêng của mỗi mục nhật ký. Bắt đầu không thêm siêu dữ liệu, rồi thêm khi biết cách truy vấn.</p>
+      <p>Nếu bạn thêm metadata YAML, hãy phân biệt frontmatter của cả ghi chú với các trường dành cho từng mục trong ghi chú cuộn. Một thuộc tính trên toàn bộ tệp không tự động là thuộc tính riêng cho từng mục nhật ký. Hãy bắt đầu mà không có metadata bổ sung, rồi thêm khi bạn biết sẽ truy vấn nó thế nào. <a href="/vi/blog/obsidian-properties-generator/">trình tạo và kiểm tra thuộc tính</a> tạo YAML hợp lệ cho metadata bạn chọn.</p>
 
       <h2 id="check">Kiểm kết quả trước dùng lại cấu hình</h2>
       <ol>
@@ -215,6 +217,7 @@
         <li>Gửi ghi nhanh thứ hai, kiểm tra thứ tự, khoảng cách và dấu lặp.</li>
         <li>Sau đó mới thêm giọng nói, đính kèm, xử lý hoặc siêu dữ liệu tùy chọn.</li>
       </ol>
+      <p>Với cuộc họp, một đường dẫn Note mới như <code>Meetings/{date}-{hour}{minute}.md</code> giúp mỗi cuộc gọi có tệp riêng; xem <a href="/vi/blog/transcribe-meetings-mac-obsidian/">chép lời cuộc họp trên Mac vào Obsidian</a>. Để thêm tiêu đề chương trình họp và quyết định vào các ghi chú đó, <a href="/vi/blog/obsidian-meeting-notes-template/">tạo mẫu ghi chú cuộc họp</a>.</p>
       <p>Các công thức cùng tồn tại trong một tệp hằng ngày dưới tiêu đề riêng. Với thư mục truy cập được, cùng cấu hình cũng nhận bản chép gửi từ <a href="/vi/blog/apple-watch-obsidian-voice-notes/">Quy trình ghi Watch sang iPhone</a>. Nhớ quyền thư mục và nhà tệp khả dụng khi mục còn chờ.</p>
       <section class="cta" aria-labelledby="guide-cta">
         <h2 id="guide-cta">Giữ định dạng nhất quán.<br>Chừa chỗ cho ý nghĩ.</h2>

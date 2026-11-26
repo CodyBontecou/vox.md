@@ -35,7 +35,20 @@ final class QuickCaptureViewModel {
     /// entitlement mirror; injectable for tests.
     @ObservationIgnored private let hasPaidCaptureAccess: @MainActor () -> Bool
     var errorMessage: String?
-    var lastReceipt: CaptureReceipt?
+    var lastReceipt: CaptureReceipt? {
+        // A delivery may have taken the file the preview named; re-resolve.
+        didSet { previewPathGeneration &+= 1 }
+    }
+    /// The latest Capture the user sent from this composer that reached its
+    /// destination. Unlike `lastReceipt`, inbox deliveries (Share Sheet,
+    /// widget, Shortcut) never set it, so it marks a success the user saw.
+    private(set) var lastSentReceipt: CaptureReceipt?
+    /// Counts delivered captures toward the App Store review prompt. Counting
+    /// never asks; the capture screen decides when to ask.
+    @ObservationIgnored private let reviewPrompts: ReviewPromptManager?
+    /// Bumped after each delivery so the route label re-reads the vault.
+    @ObservationIgnored private var previewPathGeneration = 0
+    @ObservationIgnored private var availablePreviewPathCache: (key: AvailablePreviewPathKey, path: String)?
     /// Set when Send held the capture because its vault was unreachable.
     var lastHeldForVaultRequestID: UUID?
     var failedInboxCount = 0
@@ -100,9 +113,11 @@ final class QuickCaptureViewModel {
         requestProcessor: CapturePresetRequestProcessor = CapturePresetRequestProcessor(),
         locationProvider: (any CaptureLocationOutcomeProviding)? = nil,
         urlDeliveryCoordinator: URLDeliveryCoordinator? = nil,
-        hasPaidCaptureAccess: @escaping @MainActor () -> Bool = { !UsageTracker.staticIsAtLimit }
+        hasPaidCaptureAccess: @escaping @MainActor () -> Bool = { !UsageTracker.staticIsAtLimit },
+        reviewPrompts: ReviewPromptManager? = nil
     ) {
         self.hasPaidCaptureAccess = hasPaidCaptureAccess
+        self.reviewPrompts = reviewPrompts ?? defaults.map { ReviewPromptManager(defaults: $0) }
         self.captureRootURL = captureRootURL
         self.defaults = defaults
         self.voxProfiles = CapturePresetProfileStore.enabledProfiles(defaults: defaults)
@@ -205,7 +220,43 @@ final class QuickCaptureViewModel {
             for: request,
             destination: destination
         ) else { return nil }
-        return destination.rootName + " / " + relativePath
+        return destination.rootName + " / "
+            + availablePreviewPath(request: request, destination: destination, renderedPath: relativePath)
+    }
+
+    /// The file a new-note capture will really be written to, with the same
+    /// `-N` suffix delivery picks when today's note already exists. Cached per
+    /// request and rendered path so the vault is read only when either changes.
+    private func availablePreviewPath(
+        request: CaptureRequest,
+        destination: CaptureDestination,
+        renderedPath: String
+    ) -> String {
+        guard case .newNote = destination.noteTarget else { return renderedPath }
+        let key = AvailablePreviewPathKey(
+            requestID: request.id,
+            destinationID: destination.id,
+            renderedPath: renderedPath,
+            deliveryGeneration: previewPathGeneration
+        )
+        if let cached = availablePreviewPathCache, cached.key == key { return cached.path }
+        let path = Self.availableRelativePath(for: request, destination: destination) ?? renderedPath
+        availablePreviewPathCache = (key, path)
+        return path
+    }
+
+    nonisolated static func availableRelativePath(
+        for request: CaptureRequest,
+        destination: CaptureDestination
+    ) -> String? {
+        guard let rootURL = reachableRootURL(for: destination) else { return nil }
+        let didAccess = rootURL.startAccessingSecurityScopedResource()
+        defer { if didAccess { rootURL.stopAccessingSecurityScopedResource() } }
+        return try? CapturePathPlanner().availableRelativePath(
+            for: request,
+            destination: destination,
+            rootURL: rootURL
+        )
     }
 
     var effectivePlacementLabel: String {
@@ -391,6 +442,8 @@ final class QuickCaptureViewModel {
 
     func refreshHistory() async {
         historyRecords = (try? await historyStore?.list()) ?? []
+        // Another surface (watch, keyboard, inbox) may have saved a note.
+        previewPathGeneration &+= 1
     }
 
     /// The Lock Screen "Route Today" widget reads the snapshot the history
@@ -1037,7 +1090,8 @@ final class QuickCaptureViewModel {
     @discardableResult
     func stageRecordedAudio(
         at sourceURL: URL,
-        deliveryID: UUID? = nil
+        deliveryID: UUID? = nil,
+        recordingStartedAt: Date? = nil
     ) async -> CaptureAssetReference? {
         await load()
         let operation = holdCaptureRoute()
@@ -1065,8 +1119,14 @@ final class QuickCaptureViewModel {
             let contentType = UTType(filenameExtension: sourceExtension)?.identifier ?? UTType.audio.identifier
             let asset = try await stager.stageCopy(
                 from: sourceURL,
-                preferredFilename: deliveryID.map { "Recording-\($0.uuidString.lowercased()).\(sourceExtension)" }
-                    ?? "Recording-\(Self.captureFilenameTimestamp()).\(sourceExtension)",
+                preferredFilename: recordedAudioFilename(
+                    sourceURL: sourceURL,
+                    sourceExtension: sourceExtension,
+                    identifier: deliveryID,
+                    createdAt: recordingStartedAt ?? Date(),
+                    legacyFilename: deliveryID.map { "Recording-\($0.uuidString.lowercased()).\(sourceExtension)" }
+                        ?? "Recording-\(Self.captureFilenameTimestamp()).\(sourceExtension)"
+                ),
                 contentTypeIdentifier: contentType
             )
             stagedAsset = asset
@@ -1407,7 +1467,12 @@ final class QuickCaptureViewModel {
         var stagedAsset: CaptureAssetReference?
         do {
             try Task.checkCancellation()
-            let filename = "Recording-\(Self.captureFilenameTimestamp()).m4a"
+            let filename = recordedAudioFilename(
+                sourceURL: sourceURL,
+                sourceExtension: "m4a",
+                identifier: nil,
+                legacyFilename: "Recording-\(Self.captureFilenameTimestamp()).m4a"
+            )
             let asset = try await stager.stageCopy(
                 from: sourceURL,
                 preferredFilename: filename,
@@ -1836,6 +1901,8 @@ final class QuickCaptureViewModel {
                 return
             }
             lastReceipt = receipt
+            lastSentReceipt = receipt
+            reviewPrompts?.recordDeliveredCapture()
             needsCaptureUnlock = false
             try? await draftStore.removePreparedRequest(draftID: submittedDraftID)
             let library = try await libraryStore.load()
@@ -2162,6 +2229,9 @@ final class QuickCaptureViewModel {
             pipeline: pipeline,
             requestProcessor: requestProcessor
         )
+        // Share Sheet, widget and Shortcut captures delivered on foreground
+        // count toward the review prompt but never ask for one.
+        for _ in result.receipts { reviewPrompts?.recordDeliveredCapture() }
         if !result.quotaBlockedRequestIDs.isEmpty {
             needsCaptureUnlock = true
         }
@@ -2631,6 +2701,36 @@ final class QuickCaptureViewModel {
         }
     }
 
+    /// Names composer-recorded audio with the delivering Route's Audio
+    /// Filename Template, rendered by the same `CapturePresetAudioFilename`
+    /// the exporters use. Routes without a template keep the legacy name.
+    /// `createdAt` is the recording start (`{timestamp}`), so names sort in
+    /// the order takes were recorded rather than when they were staged.
+    /// Collisions are resolved by the stager and the capture pipeline.
+    private func recordedAudioFilename(
+        sourceURL: URL,
+        sourceExtension: String,
+        identifier: UUID?,
+        createdAt: Date = Date(),
+        legacyFilename: String
+    ) -> String {
+        guard let presetID = selectedVoxProfile?.id,
+              let preset = CapturePresetStore.loadFlows(defaults: defaults)
+                .first(where: { $0.id == presetID }) else {
+            return legacyFilename
+        }
+        return CapturePresetAudioFilename.preferredFilename(
+            template: preset.audioFilenameTemplate,
+            context: CapturePresetAudioFilenameContext(
+                identifier: (identifier ?? UUID()).uuidString,
+                createdAt: createdAt,
+                presetName: preset.visibleName ?? "",
+                originalFilename: sourceURL.lastPathComponent
+            ),
+            sourceExtension: sourceExtension
+        ) ?? legacyFilename
+    }
+
     nonisolated private static func captureFilenameTimestamp() -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
@@ -2727,6 +2827,8 @@ final class QuickCaptureViewModel {
             )
             try await inbox.complete(requestID: request.id)
             lastReceipt = receipt
+            // Counts toward the review prompt; an inbox delivery never asks.
+            reviewPrompts?.recordDeliveredCapture()
             needsCaptureUnlock = false
             await recordHistory(
                 request: request,
@@ -2811,6 +2913,13 @@ final class QuickCaptureViewModel {
         }
         return resolution.url
     }
+}
+
+private struct AvailablePreviewPathKey: Equatable {
+    var requestID: UUID
+    var destinationID: UUID
+    var renderedPath: String
+    var deliveryGeneration: Int
 }
 
 /// What a composer Send did with the capture.

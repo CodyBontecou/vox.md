@@ -17,6 +17,7 @@ struct ActivityFeedView: View {
     @Environment(TranscriptStore.self) private var transcriptStore
     @Environment(UsageTracker.self) private var usageTracker
     @Environment(StoreManager.self) private var storeManager
+    @Environment(ModelManager.self) private var modelManager
     @Environment(\.dismiss) private var dismiss
     @State private var filter: ActivitySignalFilter = .all
     @State private var problems: [CaptureDeliveryProblem] = []
@@ -254,7 +255,12 @@ struct ActivityFeedView: View {
                 if let queue {
                     ForEach(failedJobs) { job in
                         ActivityTimelineRow(date: job.createdAt, dot: Geist.warning) {
-                            RecordingQueueJobCard(job: job, queue: queue, recoveryPresets: CapturePresetStore.loadFlows())
+                            RecordingQueueJobCard(
+                                job: job,
+                                queue: queue,
+                                recoveryPresets: CapturePresetStore.loadFlows(),
+                                retryOverride: retryWithCurrentModel
+                            )
                         }
                     }
                 }
@@ -267,7 +273,12 @@ struct ActivityFeedView: View {
                 if let queue {
                     ForEach(inFlightJobs) { job in
                         ActivityTimelineRow(date: job.createdAt, dot: Geist.accent) {
-                            RecordingQueueJobCard(job: job, queue: queue, recoveryPresets: CapturePresetStore.loadFlows())
+                            RecordingQueueJobCard(
+                                job: job,
+                                queue: queue,
+                                recoveryPresets: CapturePresetStore.loadFlows(),
+                                retryOverride: retryWithCurrentModel
+                            )
                         }
                     }
                 }
@@ -557,11 +568,28 @@ struct ActivityFeedView: View {
         .buttonStyle(GeistButtonStyle(variant: .primary))
     }
 
+    /// Retries with the model and language selected now, like Settings >
+    /// Activity. A recovered recording has no model of its own to fall back on.
+    private func retryWithCurrentModel(_ job: RecordingJob, _ delivery: RecordingJobDelivery?) async {
+        await persistentRecorder.recordingQueue.retry(
+            job,
+            modelID: modelManager.selectedModelId,
+            fallbackModelID: modelManager.preferredFallbackModelID,
+            replaceFallbackModelID: true,
+            language: modelManager.selectedLanguage,
+            delivery: delivery
+        )
+    }
+
     @ViewBuilder
     private var moreLinks: some View {
         if let queue {
             NavigationLink {
-                RecordingQueueView(queue: queue, recoveryPresets: CapturePresetStore.loadFlows())
+                RecordingQueueView(
+                    queue: queue,
+                    recoveryPresets: CapturePresetStore.loadFlows(),
+                    retryOverride: retryWithCurrentModel
+                )
             } label: {
                 HStack {
                     Label("Recording queue & recovery", systemImage: "waveform")

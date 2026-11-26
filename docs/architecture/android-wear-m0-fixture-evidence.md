@@ -55,7 +55,7 @@ onboarding analytics keys are seeded only as upgrade input and must be erased by
 producer remains. App-hosted tests additionally load the
 committed toolbar bytes through `CaptureToolbarPreferences`, execute review and quote
 state, and Watch-target tests consume the committed preset/defaults corpus. The
-86-key inventory is broader than this main snapshot: completion/migration markers,
+89-key inventory is broader than this main snapshot: completion/migration markers,
 Watch controller state, transport failures, and executable absent/default/invalid
 cases also live in focused package, app-hosted, and Watch tests. Source-inventory
 completeness remains distinct from committed fixture completeness.

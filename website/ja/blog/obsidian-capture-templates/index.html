@@ -183,6 +183,7 @@
       <pre class="guide-code"><code>## Journal
 - **14:05** A short walk helped me settle on the next step.</code></pre>
       <p>時と分のトークンは、Vox.md のエントリー整形機能が展開します。ノート単位のテンプレートファイルで周囲の見出しを用意し、エントリーの接頭辞で各キャプチャを整形できます。後の項目でデイリーノート全体の構造を繰り返し挿入しないよう、役割を分けてください。</p>
+      <p>デイリーノートのテンプレートを生成し、日付フォーマットを確認するには、 <a href="/ja/blog/obsidian-daily-note-template/">デイリーノートテンプレートジェネレーター</a>を使ってください。このレシピを軸に音声ジャーナル全体を作る方法は、 <a href="/ja/blog/private-voice-journal-iphone/">iPhone でプライベートな音声ジャーナルを続ける</a>。ジャーナルが紙の場合は、 <a href="/ja/blog/handwritten-notes-to-obsidian-iphone/">ページを撮影し、同じノートにテキストを送ります</a>.</p>
       <p>ルートの詳しい設定については、次を参照してください。 <a href="/ja/blog/append-to-obsidian-daily-note-iphone/">デイリーノートのパスと見出しの挿入位置</a>.</p>
       <figure class="guide-figure">
         <img src="/screenshots/optimized/01-route-heading-light-640.webp" alt="対象ノートと見出しの挿入位置を指定する Vox.md の保存先エディタ" width="1206" height="2622" loading="lazy" decoding="async">
@@ -197,6 +198,7 @@
 - [ ] Review the draft outline
 - [ ] Send the reading list</code></pre>
       <p>代わりに タスクチェックリスト処理を有効にする場合は、チェックリストの記号を処理側に任せます。チェックボックスの接頭辞を重複して設定しないでください。入力テキストや混在テキストの処理は、別途有効化する必要があります。音声処理と入力画面のテキスト処理は、同じ設定ではありません。</p>
+      <p>既存のリストを <code>- [ ]</code> タスクにするには、入れ子や任意の期限付きで、次に貼り付けます: <a href="/ja/blog/markdown-checklist-maker/">Markdown チェックリストメーカー</a>.</p>
       <p>タスクは言葉が正確であってこそ役立ちます。音声キャプチャでは、認識の誤りで指示が変わり得る場合、文字起こしを確認してください。次の <a href="/ja/blog/voice-notes-to-obsidian-iphone/">iPhone の音声ガイド</a> で「下書きに追加」と「すぐに送信」を説明しています。</p>
       <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_32fa42cf87f1">Vox.md を無料でダウンロード</a></p>
       <p>無料ダウンロードには、10回の成功したキャプチャ配信と15分の文字起こしが含まれます。無制限利用は1回限りの永久ライセンス購入です。</p>
@@ -205,7 +207,7 @@
       <p>Vox.md のパスとエントリー設定は、次のようなトークンを使います。 <code>{period}</code>, <code>{date}</code>, <code>{hour}</code> と <code>{minute}</code>。これらは Obsidian Core Templates や Templater の式ではありません。テンプレートシステムの設定には、そのシステム固有の構文を使ってください。</p>
       <p>使用 <code>{hour}:{minute}</code> で、ここに示すコロン区切りの時刻になります。Vox.md の <code>{time}</code> トークンはコンパクトな時刻値なので、同じ表示形式だと思ってレシピに置き換えてはいけません。</p>
       <p>キャプチャ内容はテンプレートエディタではありません。考えの中に書いたトークンは、そのままのテキストになる場合があります。トークンの展開は、保存先の対応する書式設定で指定してください。次を参照してください。 <a href="/ja/docs/#placement-templates">トークンとテンプレートのリファレンス</a> で利用可能なフィールドを確認してください。</p>
-      <p>YAML メタデータを追加する場合は、ノート全体のフロントマターと、ローリングノートの各項目に付けるフィールドを区別してください。ファイル全体のプロパティが、そのまま日記の各項目の個別プロパティになるわけではありません。最初は追加のメタデータなしで始め、検索や集計の方法が決まってから加えましょう。</p>
+      <p>YAML メタデータを追加する場合は、ノート全体のフロントマターと、ローリングノートの各エントリー用のフィールドを区別してください。ファイル全体のプロパティが、日記の各エントリーごとの別のプロパティになるわけではありません。最初は追加のメタデータなしで始め、どう検索するか決まってから追加してください。次の <a href="/ja/blog/obsidian-properties-generator/">プロパティのジェネレーターとチェッカー</a> は、選んだメタデータから有効な YAML を作成します。</p>
 
       <h2 id="check">プリセットを再利用する前に結果を確認</h2>
       <ol>
@@ -215,6 +217,7 @@
         <li>2件目のキャプチャを送り、順序、空き行、記号の重複を確認します。</li>
         <li>音声、添付ファイル、任意の処理やメタデータを加えるのは、その後です。</li>
       </ol>
+      <p>ミーティングでは、「新しいノート」のパスを <code>Meetings/{date}-{hour}{minute}.md</code> のようにすると、通話ごとに別のファイルになります。詳しくは次を参照してください: <a href="/ja/blog/transcribe-meetings-mac-obsidian/">Mac のミーティングを文字起こしして Obsidian へ</a>。これらのノートに議題と決定事項の見出しを追加するには、 <a href="/ja/blog/obsidian-meeting-notes-template/">議事録テンプレートを生成してください</a>.</p>
       <p>これらのレシピは、1つのデイリーファイル内で別々の見出しに共存できます。アクセス可能なフォルダであれば、同じプリセットで次から配信された文字起こしも受け取れます。 <a href="/ja/blog/apple-watch-obsidian-voice-notes/">Watch から iPhone へのキャプチャ手順</a>。キャプチャが保留中のままなら、フォルダの権限とファイルプロバイダの利用可否を確認してください。</p>
       <section class="cta" aria-labelledby="guide-cta">
         <h2 id="guide-cta">書式を一定に保つ。<br>考えのための余白を。</h2>

@@ -1,0 +1,125 @@
+# Issue #116: the iPhone composer's route label names the real file a new-note
+# capture will be written to, including the `-N` suffix, before the first save,
+# and keeps that name after the save.
+#
+# Prerequisites: iOS simulator with a DEBUG build of Vox.md (bontecou.Voxboard)
+#   installed. `-VoxAdaptiveSeedDemo` creates the local "Vox Notes" demo vault and
+#   the starter routes on first launch; no folder picker or account is needed.
+# Side effects: writes two notes, Inbox/Groceries*.md, into the simulator's demo
+#   vault on every run (Groceries.md, Groceries-2.md, then -3, -4 on reruns), and
+#   appends the seed draft to today's Meetings note. Uninstall the app to reset.
+# Selectors: taps are documented coordinates for an iPhone 17 simulator (see the
+#   comments on each); the runner tree lacks the composer controls. The route label is read through the accessibility tree, which the
+#   runner's directive tree does not carry, so its checks stay raw
+#   `tool: await-ui-element` steps. The label check matches "Groceries-" (any
+#   suffix) so reruns, which already hold earlier Groceries files, still pass;
+#   without the fix the second capture's label read "Groceries.md".
+version: 1
+requires:
+  platform: ios
+steps:
+  - echo: Launch Vox.md (DEBUG) with the seeded demo vault. Expect the composer
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+          - --localization-screenshot
+          - 01-quick-capture
+          - -VoxScreenshotUnlocked
+          - -VoxAdaptiveSeedDemo
+          - -VoxAdaptiveNoAutofocus
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_new_note
+      timeoutMs: 20000
+  # The debug seed fills the draft ~2 s after launch and Live Notes saves it;
+  # wait for both so New note never races the seed text.
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Project sync
+      timeoutMs: 15000
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: live_note_status
+      expectedText: Saved
+      textMatch: equals
+      timeoutMs: 15000
+  - echo: Composer shows the seeded Meeting Notes note. Tap New note, then pick the
+      Inbox route (one new file per capture, Inbox/{title}.md)
+  # Coordinate taps (fallback): on this app the runner's directive tree holds
+  # none of the composer controls (selector taps on id/text "New note" failed
+  # with "no visible element"), while the raw accessibility waits resolve.
+  # Points are frame centres from `describe` on an iPhone 17 simulator.
+  # New note button, keyboard hidden: frame (0.831,0.886,0.129,0.059)
+  - tap:
+      x: 0.895
+      y: 0.915
+  # Inbox route pill: frame (0.464,0.082,0.095,0.046)
+  - tap:
+      x: 0.511
+      y: 0.105
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Capture route Vox Notes, Bottom
+      timeoutMs: 10000
+  # Note editor body (quick_capture_text), below the properties line
+  - tap:
+      x: 0.5
+      y: 0.25
+  - tool: keyboard
+    args:
+      text: Groceries
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Groceries
+      timeoutMs: 5000
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: live_note_status
+      expectedText: Saved
+      textMatch: equals
+      timeoutMs: 15000
+  - echo: First Groceries capture saved. Tap New note and type the same title; the
+      route label must name a -N file, not Groceries.md
+  # New note button, keyboard shown: frame (0.831,0.540,0.129,0.059)
+  - tap:
+      x: 0.895
+      y: 0.570
+  - tool: keyboard
+    args:
+      text: Groceries
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Groceries-
+      timeoutMs: 5000
+  - echo: Wait for the autosave; the label keeps naming the same suffixed file
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: live_note_status
+      expectedText: Saved
+      textMatch: equals
+      timeoutMs: 15000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Groceries-
+      timeoutMs: 5000

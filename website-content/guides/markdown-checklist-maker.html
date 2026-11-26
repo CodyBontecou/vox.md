@@ -1,0 +1,446 @@
+<!--{
+  "slug": "markdown-checklist-maker",
+  "title": "Markdown checklist maker: turn any list into tasks, with due dates",
+  "description": "Free in-browser tool that turns a pasted list into a Markdown task list for Obsidian or GitHub, with optional due dates in Tasks, Dataview or Reminder format. Nothing is uploaded.",
+  "subtitle": "Paste plain lines, bullets, numbered items or an existing task list and copy valid - [ ] tasks, with nesting kept, an optional due date, and a count of what is done.",
+  "eyebrow": "Free tool",
+  "requirements": "Any modern browser, including Safari on iPhone. Optional: Obsidian for the checklists, and Vox.md for iPhone or Mac to capture tasks by voice.",
+  "published": "2026-11-24",
+  "modified": "2026-11-24",
+  "image": "/screenshots/01-route-heading-light.png"
+}-->
+<div class="answer-box" id="short-answer"><div class="label">The short answer</div>
+        <p>A Markdown task is a hyphen, a space, brackets, a space and the text. Write <code>- [ ] task</code> for an open task and <code>- [x] done</code> for a finished one. To turn a whole list into tasks, paste it into the <a href="#tool">checklist maker</a> below.</p>
+      </div>
+      <pre class="guide-code" id="default-checklist"><code>- [ ] buy milk
+	- [ ] oat
+- [ ] call Sam
+- [x] send invoice
+</code></pre>
+      <p>The maker strips existing bullets, numbers and checkboxes so nothing is doubled, keeps indentation as nesting, and can add a due date in the format your Obsidian plugin reads. It runs entirely in this page: the list is never uploaded, and the page makes no network requests.</p>
+      <nav class="toc" aria-label="In this guide"><div class="toc-title">In this guide</div><ol>
+        <li><a href="#tool">Make your checklist</a></li>
+        <li><a href="#syntax">Markdown checklist syntax</a></li>
+        <li><a href="#obsidian">Checklists in Obsidian</a></li>
+        <li><a href="#due-dates">Due dates: Tasks vs Dataview vs Reminder</a></li>
+        <li><a href="#github">GitHub vs Obsidian differences</a></li>
+        <li><a href="#capture">Capture tasks by voice or text with Vox.md</a></li>
+        <li><a href="#faq">Questions</a></li>
+      </ol></nav>
+
+      <h2 id="tool">1. Make your checklist</h2>
+      <p class="mt-nojs" id="cl-nojs">The checklist maker needs JavaScript. Without it, the syntax below still works as a reference.</p>
+      <form class="cl-tool" id="cl-tool" aria-label="Markdown checklist maker" hidden>
+        <fieldset class="mt-group">
+          <legend>Your list</legend>
+          <label class="mt-field" for="cl-input">Paste lines, bullets, numbered items or tasks <textarea id="cl-input" rows="9" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></label>
+          <div class="mt-actions">
+            <button type="button" class="btn-secondary" id="cl-example">Load example</button>
+            <button type="button" class="btn-secondary" id="cl-clear">Clear</button>
+          </div>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>What to do</legend>
+          <label class="mt-option"><input type="radio" name="mode" value="make" checked> <span>Make a checklist</span></label>
+          <label class="mt-option"><input type="radio" name="mode" value="strip"> <span>Strip checkboxes</span></label>
+          <label class="mt-option" data-show="make"><input type="checkbox" name="resetall"> <span>Reset every task to [ ]</span></label>
+          <label class="mt-field" data-show="strip" for="cl-strip-to">Turn tasks into <select id="cl-strip-to" name="stripto">
+            <option value="bullets" selected>Plain bullets (- text)</option>
+            <option value="plain">Plain lines (no bullets, no nesting)</option>
+          </select></label>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>Nesting</legend>
+          <label class="mt-field" for="cl-unit">Spaces per level in your list <select id="cl-unit" name="unit">
+            <option value="auto" selected>Detect from my list</option>
+            <option value="2">2 spaces</option>
+            <option value="4">4 spaces</option>
+          </select></label>
+          <label class="mt-field" for="cl-indent">Indent the result with <select id="cl-indent" name="indent">
+            <option value="tab" selected>One tab per level</option>
+            <option value="2">2 spaces per level</option>
+            <option value="4">4 spaces per level</option>
+          </select></label>
+          <p class="mt-hint">A tab in your list always counts as one level. Headings stay headings.</p>
+        </fieldset>
+        <fieldset class="mt-group" data-show="make">
+          <legend>Due date for every task</legend>
+          <label class="mt-field" for="cl-due">Format <select id="cl-due" name="due">
+            <option value="none" selected>None</option>
+            <option value="tasks-due">Tasks plugin: due (📅 2026-11-25)</option>
+            <option value="tasks-scheduled">Tasks plugin: scheduled (⏳ 2026-11-25)</option>
+            <option value="tasks-start">Tasks plugin: start (🛫 2026-11-25)</option>
+            <option value="dataview">Dataview inline field ([due:: 2026-11-25])</option>
+            <option value="reminder">Reminder plugin / Vox.md ((@2026-11-25))</option>
+            <option value="reminder-time">Reminder plugin with a time ((@2026-11-25 09:30))</option>
+          </select></label>
+          <label class="mt-field" for="cl-date">Date <input type="date" id="cl-date" name="date"></label>
+          <label class="mt-field" id="cl-time-field" for="cl-time" hidden>Time <input type="time" id="cl-time" name="time" value="09:00"></label>
+        </fieldset>
+      </form>
+      <p class="mt-status" id="cl-progress" role="status"></p>
+      <div class="mt-output-head" id="cl-output-head" hidden>
+        <h3 id="cl-output-title">Your checklist</h3>
+        <div class="mt-actions">
+          <button type="button" class="btn-primary" id="cl-copy">Copy</button>
+        </div>
+      </div>
+      <p class="mt-status" id="cl-status" role="status"></p>
+      <p class="mt-hint" id="cl-warning" role="status" hidden></p>
+      <pre class="guide-code cl-output" id="cl-output" aria-labelledby="cl-output-title" tabindex="0" hidden><code id="cl-output-code"></code></pre>
+      <h3 id="cl-preview-title" hidden>Preview</h3>
+      <div class="cl-preview" id="cl-preview" role="group" aria-labelledby="cl-preview-title" hidden></div>
+      <div hidden id="cl-messages">
+        <span data-message="waiting">Paste a list to see the result.</span>
+        <span data-message="progress">{done} of {total} done</span>
+        <span data-message="no-tasks">No tasks in this list.</span>
+        <span data-message="copied">Copied to the clipboard.</span>
+        <span data-message="copy-failed">Copying failed. Select the text and copy it yourself.</span>
+        <span data-message="loaded">Example loaded.</span>
+        <span data-message="cleared">Cleared.</span>
+        <span data-message="title-make">Your checklist</span>
+        <span data-message="title-strip">Your list without checkboxes</span>
+        <span data-message="bad-date">Choose a valid date to add due dates. No date was added.</span>
+        <span data-message="bad-time">Enter a time such as 09:30. The date was added without a time.</span>
+        <span data-message="skipped">Tasks that already carry this kind of date were left as they are.</span>
+        <span data-message="paren">On GitHub, a task description that starts with a parenthesis needs a backslash before it.</span>
+      </div>
+
+      <h2 id="syntax">2. Markdown checklist syntax</h2>
+      <pre class="guide-code"><code>- [ ] unchecked task
+- [x] checked task
+- [ ] parent task
+	- [ ] nested task</code></pre>
+      <p>Each task is a list item: a hyphen and a space, then <code>[ ]</code> with a space between the brackets, then the text. <a href="https://obsidian.md/help/syntax" target="_blank" rel="noopener">Obsidian Help page</a> and <a href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#task-lists" target="_blank" rel="noopener">GitHub Docs page</a> both describe it as a hyphen and a space followed by <code>[ ]</code>. To mark a task complete, GitHub Docs says to use <code>[x]</code>.</p>
+      <p>The spaces matter. The <a href="https://github.github.com/gfm/#task-list-items-extension-" target="_blank" rel="noopener">GitHub Flavored Markdown spec</a> defines the checkbox marker as a left bracket, a whitespace character or the letter <code>x</code>, and a right bracket, and it needs whitespace before the text after it. So <code>[]</code> with nothing inside, or <code>- [ ]text</code> with no space after the bracket, does not match the definition. The hyphen and its space are what make the line a list item at all.</p>
+      <p>Task lists are not part of core Markdown. The same spec marks them as an extension to CommonMark, and its introduction says features that are not in the original CommonMark spec are marked as extensions. A renderer that does not implement the extension shows the brackets as literal text, which is the usual reason a checkbox shows as <code>[ ]</code> on the page.</p>
+
+      <h2 id="obsidian">3. Checklists in Obsidian</h2>
+      <p>Obsidian Help’s <a href="https://obsidian.md/help/syntax" target="_blank" rel="noopener">basic formatting syntax</a> page covers task lists:</p>
+      <ul>
+        <li>A task starts with a hyphen and a space followed by <code>[ ]</code>.</li>
+        <li>You can use any character inside the brackets to mark the task as complete, so <code>[x]</code>, <code>[-]</code> and <code>[?]</code> all count.</li>
+        <li>You nest a task list by indenting list items. Use <code>Tab</code> or <code>Shift+Tab</code> to indent or unindent the selected items.</li>
+        <li>You can toggle a task in Reading view by selecting its checkbox.</li>
+      </ul>
+      <p>The Help page documents that any character completes a task. It does not describe a different look for each character. If <code>[-]</code> or <code>[?]</code> looks different from <code>[x]</code> in your vault, that comes from a theme or CSS snippet you have installed, not from the Markdown itself.</p>
+      <p>The progress line in the maker counts the same way: any character inside the brackets other than a space is done, so <code>[x]</code>, <code>[X]</code>, <code>[-]</code> and <code>[?]</code> are done and <code>[ ]</code> is open. Lines that start with “done:” or “x ” are ordinary text; the tool does not guess that they mean a finished task.</p>
+
+      <h2 id="due-dates">4. Due dates: Tasks vs Dataview vs Reminder</h2>
+      <p>Obsidian’s task list syntax has no due date of its own: the Help page documents none. Three plugins read a date written in the task text, each in its own format. The maker writes the date as ISO <code>YYYY-MM-DD</code> in all of them. Without the plugin, the date is just text.</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th>Format</th><th>Read by</th><th>Example line</th></tr></thead>
+          <tbody>
+            <tr><td>Due: <code>📅 YYYY-MM-DD</code></td><td><a href="https://publish.obsidian.md/tasks/Getting+Started/Dates" target="_blank" rel="noopener">Tasks plugin</a>, which says the date must be in <code>YYYY-MM-DD</code> format</td><td><code>- [ ] send invoice 📅 2026-11-25</code></td></tr>
+            <tr><td>Scheduled: <code>⏳ YYYY-MM-DD</code></td><td>Tasks plugin</td><td><code>- [ ] send invoice ⏳ 2026-11-25</code></td></tr>
+            <tr><td>Start: <code>🛫 YYYY-MM-DD</code></td><td>Tasks plugin</td><td><code>- [ ] send invoice 🛫 2026-11-25</code></td></tr>
+            <tr><td>Inline field: <code>[due:: YYYY-MM-DD]</code></td><td><a href="https://blacksmithgu.github.io/obsidian-dataview/annotation/metadata-tasks/" target="_blank" rel="noopener">Dataview documentation</a>, which reads fields written on a task, such as <code>[completion:: 2021-08-15]</code></td><td><code>- [ ] send invoice [due:: 2026-11-25]</code></td></tr>
+            <tr><td>Reminder: <code>(@YYYY-MM-DD)</code> or <code>(@YYYY-MM-DD HH:mm)</code></td><td><a href="https://github.com/uphy/obsidian-reminder" target="_blank" rel="noopener">obsidian-reminder plugin</a>, whose README shows <code>(@2021-08-14)</code> and <code>(@2021-08-14 09:37)</code> on unchecked tasks</td><td><code>- [ ] send invoice (@2026-11-25 09:30)</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Pick the one plugin you use. Dataview’s page also lists its own emoji shorthands for dates, and says those are the only shorthands it supports; the maker writes Dataview’s bracket form instead. The Reminder README says you are not notified about reminders on tasks you have already checked.</p>
+
+      <h2 id="github">5. GitHub vs Obsidian differences</h2>
+      <p>GitHub Docs describes <code>[ ]</code> for an open task and <code>[x]</code> to mark one complete. The GFM spec defines the marker as whitespace or the letter <code>x</code> between the brackets. Obsidian accepts any character. So a task such as <code>- [-] skipped</code> or <code>- [?] unsure</code> is complete in Obsidian, but it is outside the spec’s marker definition, and a renderer that follows the spec may show it as literal text. If the file is also read on GitHub, use <code>[ ]</code> and <code>[x]</code> only.</p>
+      <p>GitHub Docs adds one rule: if a task description begins with a parenthesis, escape it with a backslash, as in <code>- [ ] \(Optional) Open a followup issue</code>. The maker does not add the backslash for you; it warns when a task starts with a parenthesis.</p>
+
+      <h2 id="capture">6. Capture tasks by voice or text on iPhone and Mac with Vox.md</h2>
+      <p>Vox.md’s Todo Checklist processing mode produces Markdown <code>- [ ]</code> task items from a capture, and its fallback is a deterministic checklist formatter. Voice is transcribed on your device. In the Capture Bar, <strong>Checklist</strong> applies the <code>- [ ]</code> prefix, and <strong>Set Due Date</strong> inserts <code>(@yyyy-MM-dd)</code> or a timed form. See the <a href="../../docs/#quick-capture">Quick Capture</a> and <a href="../../docs/#presets">Routes and processing modes</a> docs.</p>
+      <p>A Route can add the items to your daily note under a heading such as <code>## Tasks</code>; <a href="../append-to-obsidian-daily-note-iphone/">Append to an Obsidian daily note</a> walks through the setup, and the <a href="../obsidian-daily-note-template/">daily note template generator</a> writes the note’s structure. For action items from a meeting, see the <a href="../obsidian-meeting-notes-template/">meeting notes template</a>; for a task list prefix recipe, see <a href="../obsidian-capture-templates/">capture templates</a>.</p>
+      <p>Vox.md writes the <code>(@yyyy-MM-dd)</code> form shown in its docs. It does not write Tasks plugin emoji dates or Dataview fields. If you use one of those, paste the captured tasks into the maker above and pick that format, or edit the date afterwards. To build the properties at the top of a note, use the <a href="../obsidian-properties-generator/">properties generator</a>.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Capture tasks by voice on iPhone, iPad or Mac.</h2>
+        <p>Vox.md turns what you say into a Markdown checklist on device and adds it to your Obsidian note. The free allowance is 15 minutes of transcription and 10 successful Capture deliveries; unlimited use is a one-time lifetime unlock with no subscription.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Capture tasks by voice</a></p>
+        <p>The checklist maker above works fully without the app.</p>
+      </section>
+
+      <h2 id="faq">7. Questions</h2>
+      <h3>Why does my checkbox show as [ ] text?</h3>
+      <p>The renderer is not drawing task lists. Task lists are an extension to CommonMark, so a renderer without it shows the brackets. Check that the line starts with a hyphen and a space, that there is a space or <code>x</code> between the brackets, and that a space follows the closing bracket. In Obsidian, a task in a code block or a table cell may not draw as a checkbox the way a list item does.</p>
+      <h3>How do I nest tasks?</h3>
+      <p>Indent the child task. In Obsidian, press <code>Tab</code> to indent the selected items and <code>Shift+Tab</code> to unindent them. The maker turns 2 or 4 spaces in your list into one tab per level, or into 2 or 4 spaces if you prefer.</p>
+      <h3>How do I check a box with a character other than x?</h3>
+      <p>Obsidian Help says any character inside the brackets marks the task complete, so <code>- [-] task</code> and <code>- [?] task</code> are done. The maker keeps the character you pasted unless you reset the list. For files that are also read on GitHub, use <code>[x]</code>.</p>
+      <h3>How do I add a due date the Tasks plugin reads?</h3>
+      <p>Put <code>📅</code> and a <code>YYYY-MM-DD</code> date at the end of the task, for example <code>- [ ] send invoice 📅 2026-11-25</code>. Choose “Tasks plugin: due” above to add it to every task. Use <code>⏳</code> for a scheduled date and <code>🛫</code> for a start date.</p>
+      <h3>Does the maker upload my list?</h3>
+      <p>No. The list is converted by a script in this page, on your device, and the page makes no network requests. It does not save your list: closing or reloading the page clears it.</p>
+
+      <nav class="toc" aria-label="Related guides" id="related"><div class="toc-title">Continue your setup</div><ul>
+        <li><a href="../append-to-obsidian-daily-note-iphone/">Append to an Obsidian daily note</a></li>
+        <li><a href="../obsidian-daily-note-template/">Obsidian daily note template generator</a></li>
+        <li><a href="../obsidian-meeting-notes-template/">Obsidian meeting notes template generator</a></li>
+        <li><a href="../obsidian-capture-templates/">Path and template recipes</a></li>
+        <li><a href="../obsidian-properties-generator/">Obsidian properties generator and checker</a></li>
+        <li><a href="../../docs/#quick-capture">Quick Capture reference</a></li>
+        <li><a href="../../docs/#presets">Routes reference</a></li>
+      </ul></nav>
+<style>
+.cl-tool:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.cl-tool [hidden] { display: none; }
+.mt-output-head[hidden], .cl-output[hidden], #cl-preview-title[hidden] { display: none; }
+.cl-tool .mt-field input, .cl-tool .mt-field textarea, .cl-tool .mt-field select { font: inherit; font-family: var(--font-mono); font-size: 16px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; padding: 8px 10px; width: 100%; box-sizing: border-box; min-height: 44px; }
+.cl-tool .mt-field textarea { resize: vertical; min-height: 160px; }
+.cl-tool input:focus-visible, .cl-tool textarea:focus-visible, .cl-tool select:focus-visible, .cl-output:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.cl-tool .mt-option { min-height: 44px; }
+.cl-tool .mt-option input { width: 22px; height: 22px; }
+.mt-actions button { font: inherit; font-size: 15px; min-height: 44px; padding: 0 18px; cursor: pointer; }
+.cl-output { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 28rem; overflow: auto; tab-size: 4; }
+.cl-preview { padding: 14px 18px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; display: flex; flex-direction: column; gap: 4px; overflow-wrap: anywhere; }
+.cl-preview[hidden] { display: none; }
+.cl-row { display: flex; align-items: flex-start; gap: 10px; }
+.cl-row input { width: 18px; height: 18px; margin: 3px 0 0; flex: none; accent-color: var(--accent); }
+.cl-row.is-heading { font-weight: 700; margin-top: 6px; }
+</style>
+<script>
+/* Markdown checklist maker. Runs locally: no network requests. */
+(function () {
+  var HEADING = /^#{1,6}(?:\s|$)/;
+  var RULE = /^(?:-{3,}|\*{3,}|_{3,})$/;
+  var DONE_ITEM = /^\s*(?:[-*+]|\d+[.)])\s+\[(.)\](?:\s|$)/;
+  var DUE = {
+    'tasks-due': { mark: '📅', has: /📅/ },
+    'tasks-scheduled': { mark: '⏳', has: /⏳/ },
+    'tasks-start': { mark: '🛫', has: /🛫/ },
+    'dataview': { has: /\[due::/ },
+    'reminder': { has: /\(@\d{4}-\d{2}-\d{2}/ },
+    'reminder-time': { has: /\(@\d{4}-\d{2}-\d{2}/ }
+  };
+
+  function pad(n, len) { var s = String(n); while (s.length < len) s = '0' + s; return s; }
+  function isoDate(d) { return pad(d.getFullYear(), 4) + '-' + pad(d.getMonth() + 1, 2) + '-' + pad(d.getDate(), 2); }
+  function validDate(value) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || '');
+    if (!m) return false;
+    var d = new Date(+m[1], +m[2] - 1, +m[3], 12);
+    return d.getFullYear() === +m[1] && d.getMonth() === +m[2] - 1 && d.getDate() === +m[3];
+  }
+  function validTime(value) { return /^([01]\d|2[0-3]):[0-5]\d$/.test(value || ''); }
+  function isDone(mark) { return mark !== null && /\S/.test(mark); }
+
+  /* Remove bullets, numbers and checkboxes from the start of a line. */
+  function peel(s) {
+    var state = null, m;
+    for (;;) {
+      m = /^(?:[-*+]|\d+[.)])(?:\s+|$)/.exec(s);
+      if (m) { s = s.slice(m[0].length); continue; }
+      m = /^\[(.)\](?:\s+|$)/.exec(s);
+      if (m) { if (state === null) state = m[1]; s = s.slice(m[0].length); continue; }
+      break;
+    }
+    return { state: state, text: s.trim() };
+  }
+
+  function progress(text) {
+    var done = 0, total = 0;
+    String(text || '').replace(/\r\n?/g, '\n').split('\n').forEach(function (line) {
+      var m = DONE_ITEM.exec(line);
+      if (!m) return;
+      total++;
+      if (/\S/.test(m[1])) done++;
+    });
+    return { done: done, total: total };
+  }
+
+  function dateText(opts, warnings) {
+    var kind = opts.due || 'none';
+    if (kind === 'none' || !DUE[kind]) return null;
+    if (!validDate(opts.date)) { warnings.push('bad-date'); return null; }
+    if (kind === 'dataview') return '[due:: ' + opts.date + ']';
+    if (kind === 'reminder') return '(@' + opts.date + ')';
+    if (kind === 'reminder-time') {
+      if (validTime(opts.time)) return '(@' + opts.date + ' ' + opts.time + ')';
+      warnings.push('bad-time');
+      return '(@' + opts.date + ')';
+    }
+    return DUE[kind].mark + ' ' + opts.date;
+  }
+
+  /* Convert pasted text. Returns {output, items, progress, warnings}. */
+  function run(input, opts) {
+    opts = opts || {};
+    var strip = opts.mode === 'strip';
+    var lines = String(input || '').replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n').split('\n');
+    var parsed = [];
+    var minSpaces = 0;
+    lines.forEach(function (raw) {
+      if (!raw.trim()) return;
+      var lead = /^[ \t]*/.exec(raw)[0];
+      var rest = raw.slice(lead.length).replace(/\s+$/, '');
+      if (HEADING.test(rest)) { parsed.push({ heading: true, text: rest }); return; }
+      if (RULE.test(rest)) return;
+      var p = peel(rest);
+      if (!p.text) return;
+      var tabs = lead.replace(/ /g, '').length;
+      var spaces = lead.length - tabs;
+      if (spaces && (!minSpaces || spaces < minSpaces)) minSpaces = spaces;
+      parsed.push({ heading: false, tabs: tabs, spaces: spaces, state: p.state, text: p.text });
+    });
+    var unit = opts.unit === '2' ? 2 : opts.unit === '4' ? 4 : (minSpaces || 2);
+    var step = opts.indent === '2' ? '  ' : opts.indent === '4' ? '    ' : '\t';
+    var warnings = [];
+    var suffix = strip ? null : dateText(opts, warnings);
+    var dueKind = opts.due || 'none';
+    var prev = -1, skipped = false, paren = false;
+    var items = [];
+    parsed.forEach(function (p) {
+      if (p.heading) { items.push({ kind: 'heading', level: 0, mark: null, text: p.text }); prev = -1; return; }
+      var level = p.tabs + (p.spaces ? Math.max(1, Math.floor(p.spaces / unit)) : 0);
+      level = Math.min(level, prev + 1);
+      prev = level;
+      var text = p.text;
+      if (suffix) {
+        if (DUE[dueKind].has.test(text)) skipped = true; else text += ' ' + suffix;
+      }
+      var mark = null;
+      if (!strip) mark = opts.reset || p.state === null || !/\S/.test(p.state) ? ' ' : p.state;
+      if (!strip && /^\(/.test(p.text)) paren = true;
+      items.push({ kind: 'item', level: level, mark: mark, text: text, had: p.state });
+    });
+    if (skipped) warnings.push('skipped');
+    if (paren) warnings.push('paren');
+    var output = items.map(function (it) {
+      if (it.kind === 'heading') return it.text;
+      var indent = new Array(it.level + 1).join(step);
+      if (strip) return opts.stripto === 'plain' ? it.text : indent + '- ' + it.text;
+      return indent + '- [' + it.mark + '] ' + it.text;
+    }).join('\n');
+    var done = 0, total = 0;
+    items.forEach(function (it) {
+      if (it.kind !== 'item') return;
+      var mark = strip ? it.had : it.mark;
+      if (mark === null || mark === undefined) return;
+      total++;
+      if (isDone(mark)) done++;
+    });
+    return { output: output, items: items, progress: { done: done, total: total }, warnings: warnings };
+  }
+
+  if (typeof window !== 'undefined') {
+    window.voxChecklist = { run: run, progress: progress, isoDate: isoDate };
+  }
+
+  var form = document.getElementById('cl-tool');
+  if (!form) return;
+  var input = document.getElementById('cl-input');
+  var code = document.getElementById('cl-output-code');
+  var pre = document.getElementById('cl-output');
+  var head = document.getElementById('cl-output-head');
+  var title = document.getElementById('cl-output-title');
+  var preview = document.getElementById('cl-preview');
+  var previewTitle = document.getElementById('cl-preview-title');
+  var progressEl = document.getElementById('cl-progress');
+  var status = document.getElementById('cl-status');
+  var warning = document.getElementById('cl-warning');
+  var dateInput = document.getElementById('cl-date');
+  var timeField = document.getElementById('cl-time-field');
+  var EXAMPLE = '- buy milk\n  - oat\n  - bread\n1. call Sam\n* [x] send invoice\n\n## Later\nbook flights\n- [ ] renew passport';
+
+  function message(name, fill) {
+    var el = document.querySelector('#cl-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : '';
+    if (fill) Object.keys(fill).forEach(function (key) { text = text.split('{' + key + '}').join(fill[key]); });
+    return text;
+  }
+  function say(text) {
+    status.textContent = '';
+    window.setTimeout(function () { status.textContent = text; }, 30);
+  }
+  function options() {
+    return {
+      mode: form.elements.mode.value, reset: form.elements.resetall.checked, stripto: form.elements.stripto.value,
+      unit: form.elements.unit.value, indent: form.elements.indent.value,
+      due: form.elements.due.value, date: dateInput.value, time: form.elements.time.value
+    };
+  }
+
+  function renderPreview(result, strip) {
+    preview.textContent = '';
+    result.items.forEach(function (it) {
+      var row = document.createElement('div');
+      row.className = 'cl-row' + (it.kind === 'heading' ? ' is-heading' : '');
+      if (!(strip && form.elements.stripto.value === 'plain')) row.style.paddingInlineStart = (it.level * 1.6) + 'em';
+      if (it.kind === 'item' && !strip) {
+        var box = document.createElement('input');
+        box.type = 'checkbox';
+        box.disabled = true;
+        box.checked = isDone(it.mark);
+        box.setAttribute('aria-label', isDone(it.mark) ? '[' + it.mark + ']' : '[ ]');
+        row.appendChild(box);
+      } else if (it.kind === 'item' && form.elements.stripto.value === 'bullets') {
+        var dot = document.createElement('span');
+        dot.setAttribute('aria-hidden', 'true');
+        dot.textContent = '•';
+        row.appendChild(dot);
+      }
+      var label = document.createElement('span');
+      label.textContent = it.kind === 'heading' ? it.text.replace(/^#{1,6}\s*/, '') : it.text;
+      row.appendChild(label);
+      preview.appendChild(row);
+    });
+  }
+
+  function update() {
+    var opts = options();
+    var strip = opts.mode === 'strip';
+    Array.prototype.forEach.call(form.querySelectorAll('[data-show]'), function (el) {
+      el.hidden = el.getAttribute('data-show') !== opts.mode;
+    });
+    timeField.hidden = strip || opts.due !== 'reminder-time';
+    var empty = !input.value.trim();
+    var result = run(input.value, opts);
+    code.textContent = result.output;
+    title.textContent = message(strip ? 'title-strip' : 'title-make');
+    var has = !empty && result.items.length > 0;
+    head.hidden = pre.hidden = preview.hidden = previewTitle.hidden = !has;
+    if (has) renderPreview(result, strip);
+    if (!has) progressEl.textContent = message('waiting');
+    else if (!result.progress.total) progressEl.textContent = message('no-tasks');
+    else progressEl.textContent = message('progress', { done: result.progress.done, total: result.progress.total });
+    warning.textContent = result.warnings.map(function (w) { return message(w); }).join(' ');
+    warning.hidden = !result.warnings.length;
+  }
+
+  dateInput.value = isoDate(new Date());
+  form.addEventListener('input', update);
+  form.addEventListener('change', update);
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+  document.getElementById('cl-example').addEventListener('click', function () {
+    input.value = EXAMPLE;
+    update();
+    say(message('loaded'));
+  });
+  document.getElementById('cl-clear').addEventListener('click', function () {
+    input.value = '';
+    update();
+    input.focus();
+    say(message('cleared'));
+  });
+  document.getElementById('cl-copy').addEventListener('click', function () {
+    var text = code.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(code);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+
+  document.getElementById('cl-nojs').hidden = true;
+  form.hidden = false;
+  update();
+})();
+</script>

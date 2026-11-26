@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="vi" dir="ltr" data-search-section="Mục" data-search-guide="Hướng dẫn" data-search-empty="Không khớp “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trình tạo mẫu ghi chú hằng ngày Obsidian | Vox.md</title>
+  <meta name="description" content="Tạo mẫu ghi chú hằng ngày Obsidian ngay trong trình duyệt cho Templates lõi hoặc Templater, xem trước tên tệp và thư mục mà định dạng ngày của bạn tạo ra, rồi sao chép hoặc tải xuống dưới dạng .md.">
+  <link rel="canonical" href="https://vox.isolated.tech/vi/blog/obsidian-daily-note-template/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Tài liệu Vox.md về mô hình ngôn ngữ">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Trình tạo mẫu ghi chú hằng ngày Obsidian">
+  <meta property="og:description" content="Tạo mẫu ghi chú hằng ngày Obsidian ngay trong trình duyệt cho Templates lõi hoặc Templater, xem trước tên tệp và thư mục mà định dạng ngày của bạn tạo ra, rồi sao chép hoặc tải xuống dưới dạng .md.">
+  <meta property="og:url" content="https://vox.isolated.tech/vi/blog/obsidian-daily-note-template/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-11-22">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Trình tạo mẫu ghi chú hằng ngày Obsidian">
+  <meta name="twitter:description" content="Tạo mẫu ghi chú hằng ngày Obsidian ngay trong trình duyệt cho Templates lõi hoặc Templater, xem trước tên tệp và thư mục mà định dạng ngày của bạn tạo ra, rồi sao chép hoặc tải xuống dưới dạng .md.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Trình tạo mẫu ghi chú hằng ngày Obsidian",
+  "description": "Tạo mẫu ghi chú hằng ngày Obsidian ngay trong trình duyệt cho Templates lõi hoặc Templater, xem trước tên tệp và thư mục mà định dạng ngày của bạn tạo ra, rồi sao chép hoặc tải xuống dưới dạng .md.",
+  "image": "https://vox.isolated.tech/screenshots/01-route-heading-light.png",
+  "datePublished": "2026-11-22",
+  "dateModified": "2026-11-22",
+  "mainEntityOfPage": "https://vox.isolated.tech/vi/blog/obsidian-daily-note-template/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "vi",
+  "name": "Trình tạo mẫu ghi chú hằng ngày Obsidian | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/vi/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Hướng dẫn",
+      "item": "https://vox.isolated.tech/vi/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Trình tạo mẫu ghi chú hằng ngày Obsidian",
+      "item": "https://vox.isolated.tech/vi/blog/obsidian-daily-note-template/"
+    }
+  ],
+  "inLanguage": "vi",
+  "name": "Trình tạo mẫu ghi chú hằng ngày Obsidian | Vox.md",
+  "description": "Tạo mẫu ghi chú hằng ngày Obsidian ngay trong trình duyệt cho Templates lõi hoặc Templater, xem trước tên tệp và thư mục mà định dạng ngày của bạn tạo ra, rồi sao chép hoặc tải xuống dưới dạng .md."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/obsidian-daily-note-template/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/obsidian-daily-note-template/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Đến hướng dẫn</a>
+<nav aria-label="Điều hướng chính">
+  <div class="nav-inner">
+    <a href="/vi/" class="logo" aria-label="trang chủ Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/vi/#how">Cách hoạt động</a></li>
+      <li><a href="/vi/docs/">Tài liệu</a></li>
+      <li><a href="/vi/blog/">Hướng dẫn</a></li>
+      <li><a href="/vi/compare/">So sánh</a></li>
+      <li><a href="/vi/privacy.html">Quyền riêng tư</a></li>
+      <li><a href="/vi/terms.html">Điều khoản</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_vi_de230f3c515d">Tải Vox.md</a>
+  <details class="language-switcher"><summary>Ngôn ngữ</summary><ul><li><a href="/blog/obsidian-daily-note-template/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-daily-note-template/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-daily-note-template/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-daily-note-template/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-daily-note-template/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-daily-note-template/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-daily-note-template/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-daily-note-template/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-daily-note-template/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-daily-note-template/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-daily-note-template/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-daily-note-template/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-daily-note-template/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-daily-note-template/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-daily-note-template/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-daily-note-template/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-daily-note-template/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-daily-note-template/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-daily-note-template/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-daily-note-template/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-daily-note-template/" lang="vi" hreflang="vi" aria-current="page">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-daily-note-template/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-daily-note-template/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Công cụ miễn phí</div>
+        <h1 class="hero-title">Trình tạo mẫu ghi chú hằng ngày Obsidian</h1>
+        <p class="hero-subtitle">Chọn thuộc tính và các phần, đặt định dạng ngày và thư mục, rồi sao chép mẫu viết theo cú pháp của plugin bạn dùng.</p>
+      </div>
+      <aside class="meta-card" aria-label="Về hướng dẫn này">
+        <dl>
+          <div><dt>Bởi</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Cập nhật</dt><dd><time datetime="2026-11-22">22 tháng 11, 2026</time></dd></div>
+          <div><dt>Yêu cầu</dt><dd>Obsidian (mọi nền tảng). Tùy chọn: Vox.md cho iPhone hoặc Mac để thêm vào ghi chú hôm nay từ điện thoại.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Trình tạo mẫu ghi chú hằng ngày Obsidian">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Trả lời ngắn</div>
+        <p>Lưu nội dung này thành <code>Daily.md</code> trong thư mục mẫu của bạn, rồi mở Cài đặt → Ghi chú hằng ngày và đặt <strong>Vị trí tệp mẫu</strong> cho ghi chú đó. Obsidian áp dụng mẫu vào lần tiếp theo nó tạo ghi chú hằng ngày. Mẫu dùng cú pháp Templates lõi, nên ngày và tiêu đề được điền khi ghi chú được tạo.</p>
+      </div>
+      <pre class="guide-code" id="default-template"><code>---
+date: {{date:YYYY-MM-DD}}
+weekday: {{date:dddd}}
+tags:
+  - daily
+---
+# {{title}}
+
+## Top 3
+- [ ]&#32;
+- [ ]&#32;
+- [ ]&#32;
+
+## Tasks
+- [ ]&#32;
+
+## Journal
+
+
+## Inbox
+-&#32;
+</code></pre>
+      <p>Dùng Templater, định dạng ngày khác hoặc các phần khác? Trình tạo bên dưới viết mẫu và hiển thị các cài đặt Ghi chú hằng ngày đi kèm. Nó chạy hoàn toàn trong trang này: không có lựa chọn nào của bạn được gửi đi đâu cả.</p>
+      <nav class="toc" aria-label="Trong hướng dẫn này"><div class="toc-title">Trong hướng dẫn này</div><ol>
+        <li><a href="#generator">Tạo mẫu của bạn</a></li>
+        <li><a href="#settings">Cho Ghi chú hằng ngày dùng mẫu</a></li>
+        <li><a href="#date-format">Định dạng ngày và thư mục</a></li>
+        <li><a href="#templater">Core Templates so với Templater</a></li>
+        <li><a href="#capture">Thêm vào ghi chú hôm nay từ iPhone hoặc Mac</a></li>
+        <li><a href="#faq">Câu hỏi</a></li>
+      </ol></nav>
+
+      <h2 id="generator">1. Tạo mẫu của bạn</h2>
+      <p class="mt-nojs" id="mt-nojs">Trình tạo cần JavaScript. Nếu không có, mẫu mặc định ở trên vẫn dùng được nguyên như vậy.</p>
+      <form class="mt-tool" id="mt-tool" aria-label="Trình tạo mẫu ghi chú hằng ngày">
+        <fieldset class="mt-group">
+          <legend>Hệ thống mẫu</legend>
+          <label class="mt-option"><input type="radio" name="system" value="core" checked> <span>Plugin Templates lõi của Obsidian</span></label>
+          <label class="mt-option"><input type="radio" name="system" value="templater"> <span>Plugin cộng đồng Templater</span></label>
+          <label class="mt-option"><input type="radio" name="system" value="plain"> <span>Markdown thuần (không điền gì)</span></label>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>Thuộc tính (frontmatter YAML)</legend>
+          <label class="mt-option"><input type="checkbox" name="prop" value="date" checked> <span>Ngày</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="weekday" checked> <span>Thứ trong tuần</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="tags" checked> <span>Thẻ</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="mood"> <span>Tâm trạng (để trống)</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="energy"> <span>Năng lượng (để trống)</span></label>
+          <label class="mt-field" for="mt-tag">Tên thẻ <input type="text" id="mt-tag" name="tag" value="daily" autocomplete="off" spellcheck="false"></label>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>Các phần</legend>
+          <p class="mt-hint" id="mt-order-hint">Dùng nút Lên và Xuống để đổi thứ tự.</p>
+          <ol class="mt-sections" id="mt-sections" aria-describedby="mt-order-hint">
+            <li data-section="focus"><label class="mt-option"><input type="checkbox" name="section" value="focus" checked> <span>Top 3 / Trọng tâm</span></label></li>
+            <li data-section="tasks"><label class="mt-option"><input type="checkbox" name="section" value="tasks" checked> <span>Tasks</span></label></li>
+            <li data-section="journal"><label class="mt-option"><input type="checkbox" name="section" value="journal" checked> <span>Nhật ký / Ghi chú</span></label></li>
+            <li data-section="inbox"><label class="mt-option"><input type="checkbox" name="section" value="inbox" checked> <span>Inbox (cho ghi nhanh)</span></label></li>
+            <li data-section="meetings"><label class="mt-option"><input type="checkbox" name="section" value="meetings"> <span>Cuộc họp</span></label></li>
+            <li data-section="gratitude"><label class="mt-option"><input type="checkbox" name="section" value="gratitude"> <span>Lòng biết ơn</span></label></li>
+            <li data-section="log"><label class="mt-option"><input type="checkbox" name="section" value="log"> <span>Nhật ký sự kiện / Dòng thời gian</span></label></li>
+            <li data-section="review"><label class="mt-option"><input type="checkbox" name="section" value="review"> <span>Tổng kết cuối ngày</span></label></li>
+          </ol>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>Ngày và liên kết</legend>
+          <label class="mt-option"><input type="checkbox" name="nav" value="nav"> <span>Liên kết ngày trước và ngày sau</span></label>
+          <label class="mt-option"><input type="checkbox" name="titledate" value="titledate"> <span>Đọc ngày từ tên tệp</span></label>
+          <p class="mt-hint" data-system-note="core">Liên kết ngày trước và ngày sau cùng việc đọc ngày từ tên tệp cần Templater. Trang Core Templates không có tài liệu về độ lệch ngày, nên các tùy chọn này bị tắt cho Core Templates.</p>
+          <p class="mt-hint" data-system-note="templater" hidden>Với Templater, các thuộc tính ngày có thể lấy từ tên tệp của ghi chú thay vì ngày bạn tạo ghi chú. Cả hai tùy chọn đều giả định tên tệp khớp với định dạng ngày bên dưới.</p>
+          <p class="mt-hint" data-system-note="plain" hidden>Markdown thuần không có biến, nên các tùy chọn này bị tắt và các thuộc tính ngày để trống cho bạn tự điền.</p>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>Định dạng ngày và thư mục</legend>
+          <label class="mt-field" for="mt-format">Định dạng ngày (token Moment) <input type="text" id="mt-format" name="dateformat" value="YYYY-MM-DD" autocomplete="off" spellcheck="false"></label>
+          <label class="mt-field" for="mt-folder">Vị trí tệp mới (tùy chọn) <input type="text" id="mt-folder" name="folder" value="" placeholder="Nhật ký" autocomplete="off" spellcheck="false"></label>
+          <label class="mt-field" for="mt-preview-date">Ngày xem trước <input type="date" id="mt-preview-date" name="previewdate"></label>
+        </fieldset>
+      </form>
+      <div class="mt-output-head">
+        <h3 id="mt-output-title">Mẫu của bạn</h3>
+        <div class="mt-actions" id="mt-actions" hidden>
+          <button type="button" class="btn-primary" id="mt-copy">Sao chép</button>
+          <button type="button" class="btn-secondary" id="mt-download">Tải .md</button>
+          <button type="button" class="btn-secondary" id="mt-reset">Đặt lại</button>
+        </div>
+      </div>
+      <p class="mt-status" id="mt-status" role="status"></p>
+      <pre class="guide-code" id="mt-output" aria-labelledby="mt-output-title" aria-live="polite" tabindex="0"><code id="mt-output-code">---
+date: {{date:YYYY-MM-DD}}
+weekday: {{date:dddd}}
+tags:
+  - daily
+---
+# {{title}}
+
+## Top 3
+- [ ]&#32;
+- [ ]&#32;
+- [ ]&#32;
+
+## Tasks
+- [ ]&#32;
+
+## Journal
+
+
+## Inbox
+-&#32;
+</code></pre>
+      <div class="mt-notes">
+        <p data-system-note="core"><strong>Plugin Core Templates:</strong> <code>{{date}}</code> và <code>{{title}}</code> được điền khi áp dụng mẫu, theo ngày bạn tạo ghi chú. Định dạng ngày sau dấu hai chấm dùng token Moment.js.</p>
+        <p data-system-note="templater" hidden><strong>Plugin Templater:</strong> Các lệnh <code>&lt;% %&gt;</code> chạy khi Templater xử lý ghi chú. Plugin Templates lõi không chạy chúng, vì vậy hãy dùng thư mục mẫu riêng của Templater, hoặc bật trình kích hoạt khi tạo tệp mới của Templater, cho các ghi chú do Daily notes tạo.</p>
+        <p data-system-note="plain" hidden><strong>Markdown thuần:</strong> chỉ có tiêu đề và thuộc tính trống. Không có gì được điền tự động.</p>
+        <p class="mt-hint" id="mt-warning" role="status" hidden></p>
+      </div>
+      <dl class="mt-filenames">
+        <div><dt>Xem trước đường dẫn ghi chú hằng ngày</dt><dd><code id="mt-path">2026-11-22.md</code></dd></div>
+        <div><dt>Ghi chú hằng ngày → Định dạng ngày</dt><dd><code id="mt-out-format">YYYY-MM-DD</code></dd></div>
+        <div><dt>Ghi chú hằng ngày → Vị trí tệp mới</dt><dd id="mt-out-folder">Chưa đặt ở đây</dd></div>
+        <div><dt>Ghi chú hằng ngày → Vị trí tệp mẫu</dt><dd>Ghi chú mà bạn lưu mẫu thành, ví dụ <code>Templates/Daily</code></dd></div>
+        <div><dt>Đường dẫn Rolling Note của Vox.md (chu kỳ hằng ngày)</dt><dd id="mt-out-vox"><code>{period}.md</code></dd></div>
+      </dl>
+      <p class="mt-hint" id="mt-vox-hint" hidden>Định dạng ngày của bạn không phải dạng đơn giản <code>YYYY-MM-DD</code>. Một Rolling Note của Vox.md với chu kỳ hằng ngày chuyển <code>{period}</code> thành một ngày như <code>2026-11-21</code>, nên đường dẫn của nó phải trỏ đúng tệp mà Obsidian tạo. Cách đơn giản nhất là giữ tên tệp <code>YYYY-MM-DD</code> . Nếu không, hãy kiểm tra các token đường dẫn được hỗ trợ trong <a href="/vi/docs/#presets">tài liệu Lộ trình</a> trước khi bạn dựa vào một định dạng khác.</p>
+      <div hidden id="mt-messages">
+        <span data-message="copied">Đã sao chép mẫu vào bộ nhớ tạm.</span>
+        <span data-message="copy-failed">Sao chép thất bại. Hãy chọn mẫu và tự sao chép.</span>
+        <span data-message="downloaded">Đã tải daily-template.md.</span>
+        <span data-message="reset">Đã đặt lại lựa chọn về mẫu mặc định.</span>
+        <span data-message="moved-up">Đã chuyển {section} lên.</span>
+        <span data-message="moved-down">Đã chuyển {section} xuống.</span>
+        <span data-message="up">Chuyển {section} lên</span>
+        <span data-message="down">Chuyển {section} xuống</span>
+        <span data-message="up-text">Lên</span>
+        <span data-message="down-text">Xuống</span>
+        <span data-message="not-previewed">Không xem trước ở đây: {tokens}. Hãy kiểm tra chúng trong tài liệu định dạng Moment.js.</span>
+        <span data-message="bad-chars">Các ký tự này không được phép trong tên tệp trên mọi hệ thống: {chars}</span>
+        <span data-message="subfolders">Dấu gạch chéo trong định dạng ngày tạo ra thư mục con.</span>
+        <span data-message="folder-none">Chưa đặt ở đây</span>
+        <span data-message="vox-differs">Không phải cùng tệp mà Obsidian tạo. Xem ghi chú bên dưới.</span>
+      </div>
+
+      <h2 id="settings">2. Cho Ghi chú hằng ngày dùng mẫu</h2>
+      <p>Lưu văn bản đã tạo thành một ghi chú trong thư mục mẫu của bạn, ví dụ <code>Templates/Daily.md</code>. Sau đó mở <strong>Cài đặt → Ghi chú hằng ngày</strong> và trong phần tùy chọn plugin, đặt ba mục:</p>
+      <ol>
+        <li><strong>Định dạng ngày</strong>: cách Obsidian đặt tên ghi chú hằng ngày và tạo đường dẫn của chúng. Hãy sao chép giá trị hiển thị phía trên phần xem trước.</li>
+        <li><strong>Vị trí tệp mới</strong>: thư mục nơi Obsidian tạo ghi chú hằng ngày mới, nếu bạn muốn tách chúng khỏi các ghi chú khác.</li>
+        <li><strong>Vị trí tệp mẫu</strong>: ghi chú bạn vừa lưu.</li>
+      </ol>
+      <p>Obsidian chỉ dùng mẫu khi nó tạo ghi chú hằng ngày mới sau khi bạn đặt, nên các ghi chú đã có không bị thay đổi. Để thử, hãy mở một ngày chưa có ghi chú. Xem <a href="https://obsidian.md/help/plugins/daily-notes" target="_blank" rel="noopener">Ghi chú hằng ngày</a> trong Trợ giúp Obsidian.</p>
+      <p>Ngày, thứ và thẻ nằm giữa các dòng <code>---</code> trở thành thuộc tính của ghi chú; xem <a href="https://obsidian.md/help/properties" target="_blank" rel="noopener">Thuộc tính</a>. Mood và energy để trống để bạn điền dưới dạng văn bản. Để kiểm tra hoặc tạo thuộc tính khác, hãy dùng <a href="/vi/blog/obsidian-properties-generator/">trình tạo và kiểm tra thuộc tính</a>. Để điền mục Tasks từ một danh sách bạn đã có, hãy dùng <a href="/vi/blog/markdown-checklist-maker/">Trình tạo danh sách kiểm Markdown</a>.</p>
+
+      <h2 id="date-format">3. Định dạng ngày và thư mục</h2>
+      <p>Định dạng ngày dùng <a href="https://momentjs.com/docs/#/displaying/format/" target="_blank" rel="noopener">token định dạng Moment.js</a>. Trình tạo xem trước các token phổ biến sau, bằng tiếng Anh:</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th>Mã giữ chỗ</th><th>Ý nghĩa</th><th>Ví dụ</th></tr></thead>
+          <tbody>
+            <tr><td><code>YYYY</code></td><td>Năm bốn chữ số</td><td>2026</td></tr>
+            <tr><td><code>YY</code></td><td>Năm hai chữ số</td><td>26</td></tr>
+            <tr><td><code>MM</code></td><td>Số tháng, hai chữ số</td><td>11</td></tr>
+            <tr><td><code>M</code></td><td>Số tháng</td><td>11</td></tr>
+            <tr><td><code>MMM</code></td><td>Tên tháng viết tắt</td><td>Thg 11</td></tr>
+            <tr><td><code>MMMM</code></td><td>Tên đầy đủ của tháng</td><td>Tháng 11</td></tr>
+            <tr><td><code>DD</code></td><td>Ngày trong tháng, hai chữ số</td><td>21</td></tr>
+            <tr><td><code>D</code></td><td>Ngày trong tháng</td><td>21</td></tr>
+            <tr><td><code>ddd</code></td><td>Tên thứ viết tắt</td><td>T7</td></tr>
+            <tr><td><code>dddd</code></td><td>Tên đầy đủ của thứ trong tuần</td><td>Thứ Bảy</td></tr>
+            <tr><td><code>ww</code></td><td>Tuần trong năm, hai chữ số (quy tắc tuần tiếng Anh: tuần bắt đầu vào Chủ nhật và tuần 1 chứa ngày 1 tháng 1)</td><td>47</td></tr>
+            <tr><td><code>Q</code></td><td>Quý</td><td>4</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Văn bản trong dấu ngoặc vuông, như <code>[Week]</code>, được ghi nguyên văn. Mọi token Moment khác không được xem trước; trình tạo sẽ liệt kê nó, và tài liệu Moment.js có giải thích.</p>
+      <p>Dấu gạch chéo trong định dạng ngày tạo ra thư mục con. Ví dụ của chính Obsidian là <code>YYYY/MMMM/YYYY-MMM-DD</code>, tạo ra các ghi chú như <code>2023/January/2023-Jan-01</code>: thư mục năm, thư mục tháng, rồi đến tên tệp. Nếu bạn cũng đặt Vị trí tệp mới, các thư mục ngày nằm bên trong đó, nên <code>Journal</code> với <code>YYYY/MM/YYYY-MM-DD</code> cho ra <code>Journal/2026/11/2026-11-21.md</code>.</p>
+      <p>Tên ngày và tháng trong phần xem trước là tiếng Anh. Obsidian có thể hiển thị chúng bằng ngôn ngữ của bạn, và số tuần có thể theo quy tắc tuần của vùng bạn.</p>
+
+      <h2 id="templater">4. Core Templates so với Templater</h2>
+      <p><strong>Templates lõi</strong> đi kèm với Obsidian. Nó hỗ trợ <code>{{title}}</code>, <code>{{date}}</code> và <code>{{time}}</code>, và định dạng sau dấu hai chấm, chẳng hạn <code>{{date:YYYY-MM-DD}}</code>. <code>{{date}}</code> là ngày mẫu được chèn vào, không phải ngày đọc từ tên ghi chú. <a href="https://obsidian.md/help/plugins/templates" target="_blank" rel="noopener">trang trợ giúp Templates</a> không có tài liệu về độ lệch ngày, nên liên kết ngày trước và ngày sau không được tạo cho Core Templates.</p>
+      <p><strong>Plugin Templater</strong> là một plugin cộng đồng. Hàm <code>tp.date.now</code> nhận một định dạng, độ lệch tùy chọn tính bằng ngày, ngày tham chiếu tùy chọn như tiêu đề ghi chú, và định dạng dùng để đọc ngày tham chiếu đó. Liên kết ngày trước và ngày sau của trình tạo dùng dạng này:</p>
+      <pre class="guide-code"><code>[[&lt;% tp.date.now("YYYY-MM-DD", -1, tp.file.title, "YYYY-MM-DD") %&gt;]]
+[[&lt;% tp.date.now("YYYY-MM-DD", 1, tp.file.title, "YYYY-MM-DD") %&gt;]]</code></pre>
+      <p>Vì đọc tên tệp, chúng khớp với ngày của ghi chú, kể cả khi bạn tạo nó cho một ngày khác. Định dạng ở đối số cuối phải khớp với định dạng tên tệp của bạn. Nếu định dạng ngày có dấu gạch chéo, trình tạo dùng phần sau dấu gạch chéo cuối cùng, tức là tên tệp. Xem <a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html" target="_blank" rel="noopener">mô-đun ngày</a>.</p>
+
+      <h2 id="capture">5. Thêm vào ghi chú hôm nay từ iPhone hoặc Mac</h2>
+      <p>Mẫu cho ghi chú hình dạng của nó. Vox.md có thể thêm vào đó trong ngày: nói hoặc gõ một ý nghĩ và nó được lưu vào ghi chú của ngày. Giọng nói được chép lời ngay trên thiết bị của bạn. Trong một Cấu hình ghi nhanh, hãy chọn <strong>Rolling Note</strong> với <strong>Hằng ngày</strong> và một đường dẫn như <code>Journal/{period}.md</code>. Với chu kỳ hằng ngày, <code>{period}</code> phân giải thành ngày như <code>2026-11-21</code>.</p>
+      <p>Chọn <strong>hướng dẫn</strong> và tiêu đề lấy từ mẫu của bạn, chẳng hạn <code>## Inbox</code>, và các mục mới nằm bên dưới. Nếu thiếu tiêu đề, hãy chọn <strong>Hiển thị lỗi</strong> hoặc <strong>Tạo tiêu đề</strong>. Thêm tiền tố mục như <code>- </code> để mỗi lần ghi nhanh thành một mục danh sách; phần Inbox trong trình tạo dùng cùng dấu đầu dòng này.</p>
+      <p>Vox.md không áp dụng mẫu Obsidian của bạn khi ghi vào tệp. Nếu muốn dùng mẫu, hãy mở ghi chú hôm nay trong Obsidian trước, rồi mới gửi ghi nhanh. Đường dẫn phải trỏ đúng tệp mà Obsidian dùng, nên hãy giữ tên tệp <code>YYYY-MM-DD</code> trừ khi bạn đã kiểm tra sự trùng khớp. <a href="/vi/blog/append-to-obsidian-daily-note-iphone/">Nối văn bản và giọng nói vào ghi chú hằng ngày Obsidian</a> hướng dẫn toàn bộ cách thiết lập, và <a href="/vi/docs/#presets">Tài liệu Lộ trình</a> liệt kê các tùy chọn.</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_de230f3c515d">Thêm vào ghi chú hôm nay từ điện thoại</a></p>
+
+      <h2 id="faq">6. Câu hỏi</h2>
+      <h3>Vì sao mẫu của tôi không được áp dụng?</h3>
+      <p>Obsidian chỉ dùng mẫu khi nó tạo ghi chú hằng ngày mới, nên các ghi chú đã có không thay đổi. Hãy kiểm tra rằng <strong>Vị trí tệp mẫu</strong> trong Cài đặt → Ghi chú hằng ngày trỏ đúng ghi chú. Nếu mẫu có các lệnh <code>&lt;% %&gt;</code> vẫn hiện dưới dạng văn bản, thì đó là lệnh Templater: hãy dùng mẫu thư mục của Templater cho thư mục ghi chú hằng ngày, hoặc tạo phiên bản Core Templates.</p>
+      <h3>Vì sao ghi chú hằng ngày của tôi nằm sai thư mục?</h3>
+      <p>Hai cài đặt quyết định đường dẫn: <strong>Vị trí tệp mới</strong> và dấu gạch chéo trong <strong>Định dạng ngày</strong>. Phần xem trước ở trên hiển thị cả hai cùng lúc. Nếu một định dạng như <code>YYYY/MM/YYYY-MM-DD</code> tạo ra thư mục năm và tháng mà bạn không muốn, hãy dùng định dạng đơn giản và chỉ đặt thư mục.</p>
+      <h3>Tôi có dùng được Dataview không?</h3>
+      <p>Mẫu là Markdown thuần, nên sau khi dán bạn có thể tự thêm khối mã cho bất kỳ plugin nào. Trình tạo không viết mã plugin cho bạn.</p>
+      <h3>Trình tạo có gửi lựa chọn của tôi đi đâu không?</h3>
+      <p>Không. Mẫu được tạo bởi một script trong trang này. Script lưu lựa chọn gần nhất của bạn trong bộ nhớ cục bộ của trình duyệt, nên lần sau vẫn còn, và Đặt lại sẽ xóa chúng.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Điền vào ghi chú suốt cả ngày.</h2>
+        <p>Ghi nhanh một ý nghĩ bằng giọng nói hoặc văn bản và Vox.md thêm nó vào ghi chú Markdown của ngày.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_de230f3c515d">Thêm vào ghi chú hôm nay từ điện thoại</a></p>
+      </section>
+      <nav class="toc" aria-label="Hướng dẫn liên quan" id="related"><div class="toc-title">Tiếp tục thiết lập</div><ul>
+        <li><a href="/vi/blog/append-to-obsidian-daily-note-iphone/">Nối vào ghi chú hằng ngày Obsidian</a></li>
+        <li><a href="/vi/blog/obsidian-capture-templates/">Công thức đường dẫn và mẫu</a></li>
+        <li><a href="/vi/blog/obsidian-meeting-notes-template/">Trình tạo mẫu ghi chú cuộc họp Obsidian</a></li>
+        <li><a href="/vi/blog/private-voice-journal-iphone/">Giữ nhật ký giọng nói riêng tư trên iPhone</a></li>
+        <li><a href="/vi/blog/voice-notes-to-obsidian-iphone/">Lưu giọng nói iPhone vào Obsidian</a></li>
+        <li><a href="/vi/docs/#presets">Tài liệu Lộ trình</a></li>
+      </ul></nav>
+<script>
+/* Daily note template generator. Runs locally: no network requests. */
+(function () {
+  var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  var TOKEN = /\[[^\]]*\]|Do|DDDD|DDD|Mo|Qo|wo|YYYY|YY|MMMM|MMM|MM|M|DD|D|dddd|ddd|ww|Q|[A-Za-z]+/g;
+
+  function pad(n, len) { var s = String(n); while (s.length < len) s = '0' + s; return s; }
+  function parseDate(value) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || '');
+    if (!m) return null;
+    var d = new Date(+m[1], +m[2] - 1, +m[3], 12);
+    return d.getFullYear() === +m[1] && d.getMonth() === +m[2] - 1 && d.getDate() === +m[3] ? d : null;
+  }
+  function isoDate(d) { return pad(d.getFullYear(), 4) + '-' + pad(d.getMonth() + 1, 2) + '-' + pad(d.getDate(), 2); }
+  /* English (US) week rules: weeks start on Sunday and week 1 contains January 1. */
+  function weekOfYear(d) {
+    var saturday = new Date(d.getFullYear(), d.getMonth(), d.getDate() + (6 - d.getDay()), 12);
+    var days = Math.round((Date.UTC(saturday.getFullYear(), saturday.getMonth(), saturday.getDate()) - Date.UTC(saturday.getFullYear(), 0, 1)) / 86400000);
+    return Math.floor(days / 7) + 1;
+  }
+  function formatMoment(format, d) {
+    var unsupported = [];
+    var text = format.replace(TOKEN, function (token) {
+      switch (token) {
+        case 'YYYY': return pad(d.getFullYear(), 4);
+        case 'YY': return pad(d.getFullYear() % 100, 2);
+        case 'MMMM': return MONTHS[d.getMonth()];
+        case 'MMM': return MONTHS[d.getMonth()].slice(0, 3);
+        case 'MM': return pad(d.getMonth() + 1, 2);
+        case 'M': return String(d.getMonth() + 1);
+        case 'DD': return pad(d.getDate(), 2);
+        case 'D': return String(d.getDate());
+        case 'dddd': return DAYS[d.getDay()];
+        case 'ddd': return DAYS[d.getDay()].slice(0, 3);
+        case 'ww': return pad(weekOfYear(d), 2);
+        case 'Q': return String(Math.floor(d.getMonth() / 3) + 1);
+      }
+      if (token.charAt(0) === '[' && token.charAt(token.length - 1) === ']') return token.slice(1, -1);
+      if (unsupported.indexOf(token) === -1) unsupported.push(token);
+      return token;
+    });
+    return { text: text, unsupported: unsupported };
+  }
+  function cleanFolder(value) { return value.trim().replace(/\\/g, '/').replace(/^\/+|\/+$/g, ''); }
+  function fileTitleFormat(format) { var parts = format.split('/'); return parts[parts.length - 1]; }
+  function previewPath(folder, format, d) {
+    var name = formatMoment(format, d).text;
+    var dir = cleanFolder(folder);
+    return (dir ? dir + '/' : '') + name + '.md';
+  }
+  function cleanTag(value) {
+    var tag = value.trim().replace(/^#+/, '').replace(/\s+/g, '-').replace(/[^\w\/-]/g, '');
+    return tag || 'daily';
+  }
+  function quote(value) { return value.replace(/\\/g, '\\\\').replace(/"/g, '\\"'); }
+
+  var HEADINGS = {
+    focus: ['## Top 3', '- [ ] \n- [ ] \n- [ ] '],
+    tasks: ['## Tasks', '- [ ] '],
+    journal: ['## Journal', ''],
+    inbox: ['## Inbox', '- '],
+    meetings: ['## Meetings', '- '],
+    gratitude: ['## Gratitude', '- '],
+    log: ['## Log', '- '],
+    review: ['## End-of-day review', '- Went well: \n- To change: \n- Tomorrow: ']
+  };
+
+  function build(state) {
+    var system = state.system;
+    var fromTitle = system === 'templater' && state.titledate;
+    var titleFormat = quote(fileTitleFormat(state.format || 'YYYY-MM-DD'));
+    function dateExpr(fmt) {
+      if (system === 'core') return '{{date:' + fmt + '}}';
+      if (system === 'plain') return '';
+      return fromTitle
+        ? '<% tp.date.now("' + fmt + '", 0, tp.file.title, "' + titleFormat + '") %>'
+        : '<% tp.date.now("' + fmt + '") %>';
+    }
+    var lines = [];
+    if (state.props.length) {
+      lines.push('---');
+      ['date', 'weekday', 'tags', 'mood', 'energy'].forEach(function (p) {
+        if (state.props.indexOf(p) === -1) return;
+        if (p === 'date') lines.push('date: ' + dateExpr('YYYY-MM-DD'));
+        if (p === 'weekday') lines.push('weekday: ' + dateExpr('dddd'));
+        if (p === 'tags') { lines.push('tags:'); lines.push('  - ' + cleanTag(state.tag)); }
+        if (p === 'mood') lines.push('mood: ');
+        if (p === 'energy') lines.push('energy: ');
+      });
+      lines.push('---');
+    }
+    lines.push(system === 'core' ? '# {{title}}' : system === 'templater' ? '# <% tp.file.title %>' : '# Daily note');
+    if (system === 'templater' && state.nav) {
+      var link = function (n) {
+        return '[[<% tp.date.now("' + titleFormat + '", ' + n + ', tp.file.title, "' + titleFormat + '") %>]]';
+      };
+      lines.push('');
+      lines.push('Previous: ' + link(-1) + ' | Next: ' + link(1));
+    }
+    state.order.forEach(function (id) {
+      if (state.sections.indexOf(id) === -1) return;
+      lines.push('');
+      lines.push(HEADINGS[id][0]);
+      lines.push(HEADINGS[id][1]);
+    });
+    while (lines.length && lines[lines.length - 1] === '') lines.pop();
+    return lines.join('\n') + '\n';
+  }
+
+  if (typeof window !== 'undefined') {
+    window.voxDailyTemplate = { formatMoment: formatMoment, previewPath: previewPath, build: build, weekOfYear: weekOfYear, parseDate: parseDate, fileTitleFormat: fileTitleFormat };
+  }
+
+  var form = document.getElementById('mt-tool');
+  if (!form) return;
+  var STORAGE_KEY = 'vox-daily-template-v1';
+  var list = document.getElementById('mt-sections');
+  var code = document.getElementById('mt-output-code');
+  var status = document.getElementById('mt-status');
+  var tagInput = document.getElementById('mt-tag');
+  var formatInput = document.getElementById('mt-format');
+  var folderInput = document.getElementById('mt-folder');
+  var previewInput = document.getElementById('mt-preview-date');
+  var navBox = form.elements.nav;
+  var titleBox = form.elements.titledate;
+  var defaultOrder = Array.prototype.map.call(list.children, function (li) { return li.getAttribute('data-section'); });
+  previewInput.value = isoDate(new Date());
+  var defaults = snapshot();
+
+  function message(name, fill) {
+    var el = document.querySelector('#mt-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : '';
+    if (fill) Object.keys(fill).forEach(function (key) { text = text.split('{' + key + '}').join(fill[key]); });
+    return text;
+  }
+  function sectionName(li) { return li.querySelector('label span').textContent; }
+  function checked(name) {
+    return Array.prototype.filter.call(form.elements[name], function (i) { return i.checked; }).map(function (i) { return i.value; });
+  }
+  function radio(name) { return checked(name)[0]; }
+
+  function snapshot() {
+    return {
+      system: radio('system'), props: checked('prop'), tag: tagInput.value,
+      sections: checked('section'), nav: navBox.checked, titledate: titleBox.checked,
+      format: formatInput.value, folder: folderInput.value,
+      order: Array.prototype.map.call(list.children, function (li) { return li.getAttribute('data-section'); })
+    };
+  }
+  function apply(state) {
+    Array.prototype.forEach.call(form.elements.system, function (i) { i.checked = i.value === state.system; });
+    Array.prototype.forEach.call(form.elements.prop, function (i) { i.checked = state.props.indexOf(i.value) !== -1; });
+    Array.prototype.forEach.call(form.elements.section, function (i) { i.checked = state.sections.indexOf(i.value) !== -1; });
+    navBox.checked = state.nav;
+    titleBox.checked = state.titledate;
+    tagInput.value = state.tag;
+    formatInput.value = state.format;
+    folderInput.value = state.folder;
+    state.order.forEach(function (id) {
+      var li = list.querySelector('[data-section="' + id + '"]');
+      if (li) list.appendChild(li);
+    });
+  }
+  function valid(state) {
+    return state && (state.system === 'core' || state.system === 'templater' || state.system === 'plain') &&
+      Array.isArray(state.props) && Array.isArray(state.sections) && typeof state.tag === 'string' &&
+      typeof state.format === 'string' && typeof state.folder === 'string' &&
+      typeof state.nav === 'boolean' && typeof state.titledate === 'boolean' &&
+      Array.isArray(state.order) && state.order.length === defaultOrder.length &&
+      defaultOrder.every(function (id) { return state.order.indexOf(id) !== -1; });
+  }
+  function save(state) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* storage unavailable */ }
+  }
+
+  function update(store) {
+    var state = snapshot();
+    var format = state.format.trim() || 'YYYY-MM-DD';
+    state.format = format;
+    var templater = state.system === 'templater';
+    navBox.disabled = !templater;
+    titleBox.disabled = !templater;
+    code.textContent = build(state);
+    Array.prototype.forEach.call(document.querySelectorAll('[data-system-note]'), function (p) {
+      p.hidden = p.getAttribute('data-system-note') !== state.system;
+    });
+
+    var day = parseDate(previewInput.value) || new Date();
+    var result = formatMoment(format, day);
+    document.getElementById('mt-path').textContent = previewPath(state.folder, format, day);
+    document.getElementById('mt-out-format').textContent = format;
+    var folder = cleanFolder(state.folder);
+    var folderCell = document.getElementById('mt-out-folder');
+    folderCell.textContent = '';
+    if (folder) {
+      var folderCode = document.createElement('code');
+      folderCode.textContent = folder;
+      folderCell.appendChild(folderCode);
+    } else {
+      folderCell.textContent = message('folder-none');
+    }
+    var plainFormat = format === 'YYYY-MM-DD';
+    var voxCell = document.getElementById('mt-out-vox');
+    voxCell.textContent = '';
+    if (plainFormat) {
+      var voxCode = document.createElement('code');
+      voxCode.textContent = (folder ? folder + '/' : '') + '{period}.md';
+      voxCell.appendChild(voxCode);
+    } else {
+      voxCell.textContent = message('vox-differs');
+    }
+    document.getElementById('mt-vox-hint').hidden = plainFormat;
+
+    var warnings = [];
+    if (result.unsupported.length) warnings.push(message('not-previewed', { tokens: result.unsupported.join(', ') }));
+    var bad = format.replace(/\[[^\]]*\]/g, '').match(/[\\:*?"<>|]/g);
+    if (bad) warnings.push(message('bad-chars', { chars: bad.filter(function (c, i) { return bad.indexOf(c) === i; }).join(' ') }));
+    if (format.indexOf('/') !== -1) warnings.push(message('subfolders'));
+    var warning = document.getElementById('mt-warning');
+    warning.textContent = warnings.join(' ');
+    warning.hidden = !warnings.length;
+
+    Array.prototype.forEach.call(list.children, function (li, index) {
+      var name = sectionName(li);
+      var up = li.querySelector('.mt-up');
+      var down = li.querySelector('.mt-down');
+      up.setAttribute('aria-label', message('up', { section: name }));
+      down.setAttribute('aria-label', message('down', { section: name }));
+      up.disabled = index === 0;
+      down.disabled = index === list.children.length - 1;
+    });
+    if (store) save(snapshot());
+  }
+  function say(text) {
+    status.textContent = '';
+    window.setTimeout(function () { status.textContent = text; }, 30);
+  }
+
+  Array.prototype.forEach.call(list.children, function (li) {
+    var controls = document.createElement('span');
+    controls.className = 'mt-move';
+    [['mt-up', 'up-text', -1], ['mt-down', 'down-text', 1]].forEach(function (spec) {
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'mt-move-button ' + spec[0];
+      button.textContent = message(spec[1]);
+      button.addEventListener('click', function () {
+        var sibling = spec[2] < 0 ? li.previousElementSibling : li.nextElementSibling;
+        if (!sibling) return;
+        list.insertBefore(li, spec[2] < 0 ? sibling : sibling.nextElementSibling);
+        update(true);
+        var target = button.disabled ? li.querySelector(spec[2] < 0 ? '.mt-down' : '.mt-up') : button;
+        target.focus();
+        say(message(spec[2] < 0 ? 'moved-up' : 'moved-down', { section: sectionName(li) }));
+      });
+      controls.appendChild(button);
+    });
+    li.appendChild(controls);
+  });
+
+  try {
+    var stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+    if (valid(stored)) apply(stored);
+  } catch (e) { /* ignore unreadable saved choices */ }
+
+  form.addEventListener('change', function () { update(true); });
+  form.addEventListener('input', function () { update(true); });
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+
+  document.getElementById('mt-copy').addEventListener('click', function () {
+    var text = code.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(code);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+  document.getElementById('mt-download').addEventListener('click', function () {
+    var blob = new Blob([code.textContent], { type: 'text/markdown;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = 'daily-template.md';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    say(message('downloaded'));
+  });
+  document.getElementById('mt-reset').addEventListener('click', function () {
+    apply(defaults);
+    previewInput.value = isoDate(new Date());
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* storage unavailable */ }
+    update(false);
+    say(message('reset'));
+  });
+
+  document.getElementById('mt-nojs').hidden = true;
+  document.getElementById('mt-actions').hidden = false;
+  form.classList.add('is-ready');
+  update(false);
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/vi/">Trang chủ</a></li>
+        <li><a href="/vi/docs/">Tài liệu</a></li>
+        <li><a href="/vi/blog/">Hướng dẫn</a></li>
+        <li><a href="/vi/compare/">So sánh</a></li>
+        <li><a href="/vi/privacy.html">Quyền riêng tư</a></li>
+        <li><a href="/vi/terms.html">Điều khoản</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Hỗ trợ</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_de230f3c515d">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Ghi nhanh cho ghi chú cục bộ · Không tải nội dung lên.</div>
+    </div>
+  <details class="language-switcher"><summary>Ngôn ngữ</summary><ul><li><a href="/blog/obsidian-daily-note-template/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-daily-note-template/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-daily-note-template/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-daily-note-template/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-daily-note-template/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-daily-note-template/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-daily-note-template/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-daily-note-template/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-daily-note-template/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-daily-note-template/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-daily-note-template/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-daily-note-template/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-daily-note-template/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-daily-note-template/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-daily-note-template/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-daily-note-template/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-daily-note-template/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-daily-note-template/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-daily-note-template/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-daily-note-template/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-daily-note-template/" lang="vi" hreflang="vi" aria-current="page">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-daily-note-template/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-daily-note-template/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

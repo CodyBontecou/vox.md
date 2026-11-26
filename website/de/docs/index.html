@@ -247,7 +247,7 @@
           <div><strong>Fotos und Kamera</strong><p>Wähle Fotos oder Screenshots oder nimm ein neues Foto auf. Bilder werden bereitgestellt und in die zugestellte Notiz eingebettet.</p></div>
           <div><strong>Dateien</strong><p>Wähle mehrere Elemente aus Dateien. Bilder werden eingebettet, Audio bleibt als Audiodaten erhalten, und andere Dateien verwenden Links im Obsidian-Stil.</p></div>
           <div><strong>Dokumentenscans</strong><p>Scanne Seiten mit VisionKit. Vox.md behält Seitenbilder bei, erstellt eine PDF und ergänzt die bestmögliche OCR auf dem Gerät.</p></div>
-          <div><strong>Journal-OCR</strong><p>Erfasse bis zu 10 Journalseiten mit manuellem Auslösen oder wähle Journalfotos. Präzise Vision OCR verwendet automatische Spracherkennung.</p></div>
+          <div><strong>Journal-OCR</strong><p>Erfasse bis zu 10 Tagebuchseiten mit manuellem Auslöser oder wähle Tagebuchfotos aus. Die genaue Vision-OCR nutzt automatische Spracherkennung. Siehe <a href="/de/blog/handwritten-notes-to-obsidian-iphone/">handschriftliche Notizen in Obsidian</a>.</p></div>
           <div><strong>Skizzen</strong><p>Zeichne mit schwarzem Stift auf einer weißen PencilKit-Fläche. Vox.md speichert bearbeitbare Zeichnungsdaten und eine PNG-Vorschau.</p></div>
           <div><strong>Aktion „Aktueller Standort“</strong><p>Fordere einmalig einen Standort an und füge einen validierten Google Maps-Markdown-Link in den Entwurf ein. Diese unabhängige Aktion der Erfassungsleiste ändert keines der beiden Standort-Steuerelemente pro Route.</p></div>
           <div><strong>Sprache und importiertes Audio</strong><p>Nimm im Editor auf oder importiere Audio/Video, transkribiere lokal und füge das Ergebnis dem Entwurf hinzu oder sende es sofort.</p></div>
@@ -312,8 +312,8 @@
           <li>Öffne Einstellungen → Routen, um eine eigene Route zu erstellen, umzubenennen, zu aktivieren, zu deaktivieren, mit einem Symbol zu versehen oder zu löschen.</li>
           <li>Die durchsuchbare Symbolauswahl gruppiert Symbole unter Schreiben, Sprache, Aufgaben, Persönlich und Arbeit.</li>
           <li>Deaktivierte Routen sind in normalen Auswahlmenüs verborgen. Die integrierte Route „Standard“ lässt sich nicht löschen.</li>
-          <li>Die integrierte Route „Standard“ verwendet das Wellenformsymbol und die Anweisung <em>Eine Idee, Aufgabe, einen Link, eine Datei, einen Scan oder eine Aufnahme erfassen.</em>, <code>type: capture</code> Metadaten, Verarbeitung „Überarbeiteter Text“, Verarbeitung von getipptem Text aus und Audiospeicherung aus.</li>
-          <li>Eine neue eigene Route beginnt als <em>Benutzerdefinierte Route</em>verwendet das Schieberegler-Symbol und <em>Was möchtest du erfassen?</em> Anweisung und startet mit ausgewählter Benutzerdefinierter Anweisung, aber ohne Verarbeitung von getipptem/gemischtem Text.</li>
+          <li>Die integrierte Route „Standard“ verwendet das Wellenformsymbol und die Anweisung <em>Eine Idee, Aufgabe, einen Link, eine Datei, einen Scan oder eine Aufnahme erfassen.</em>, <code>type: capture</code> Metadaten, Verarbeitung „Überarbeiteter Text“ mit <strong>Apple Intelligence verwenden</strong> aus und Audiospeicherung aus.</li>
+          <li>Eine neue eigene Route beginnt als <em>Benutzerdefinierte Route</em>verwendet das Schieberegler-Symbol und <em>Was möchtest du erfassen?</em> Anweisung und startet mit ausgewählter „Eigene Anweisung“, aber <strong>Apple Intelligence verwenden</strong> aus.</li>
         </ul>
 
         <h3 id="processing-modes">Verarbeitungsmodi</h3>
@@ -324,16 +324,17 @@
               <tr><td>Original behalten</td><td>Behält erfassten Text ohne KI-Umschreiben bei.</td><td>Der Originaltext wird zugestellt.</td></tr>
               <tr><td>Überarbeiteter Text</td><td>Bereinigt Groß- und Kleinschreibung und Zeichensetzung und erhält Bedeutung und Markdown.</td><td>Originaltext, wenn die Anreicherung auf dem Gerät nicht verfügbar ist.</td></tr>
               <tr><td>Todo-Checkliste</td><td>Erzeugt Markdown <code>- [ ]</code> Aufgabeneinträge.</td><td>Ein deterministischer Checklisten-Formatierer.</td></tr>
-              <tr><td>Besprechungsnotizen</td><td>Erzeugt einen <code>## Notes</code> Abschnitt und, falls vorhanden, <code>## Action Items</code>.</td><td>Deterministische Struktur für Meeting-Notizen.</td></tr>
+              <tr><td>Besprechungsnotizen</td><td>Erzeugt einen <code>## Notes</code> Abschnitt und, falls vorhanden, <code>## Action Items</code>.</td><td>Deterministische Struktur für Meeting-Notizen bei Sprachtranskripten; erfasster Text wird unverändert zugestellt.</td></tr>
               <tr><td>Benutzerdefinierte Anweisung</td><td>Folgt deiner Anweisung mit Apple Intelligence auf dem Gerät, falls verfügbar.</td><td>Originaltext, wenn die Anweisung nicht lokal ausgeführt werden kann.</td></tr>
             </tbody>
           </table>
         </div>
-        <p>Sprachtranskripte verwenden den gewählten Routenmodus. <strong>Auf Erfassungstext anwenden</strong> ist eine separate, standardmäßig ausgeschaltete Aktivierung für die Verarbeitung von getipptem Markdown, OCR und anderen texttragenden gemischten Erfassungen. Ausgeschaltet verhindert sie unerwartetes Umschreiben selbst verfassten Markdown. Die genaue verarbeitete Anfrage wird vor Zustellung gespeichert, sodass Wiederholungsversuche nicht mit geänderten Einstellungen erneut verarbeiten.</p>
+        <p>Um Überschriften für Tagesordnung, Teilnehmende und Entscheidungen rund um die Ausgabe von Besprechungsnotizen hinzuzufügen, <a href="/de/blog/obsidian-meeting-notes-template/">erstelle eine Obsidian-Vorlage für Besprechungsnotizen</a>. Um eine vorhandene Liste in <code>- [ ]</code> -Aufgaben umzuwandeln, verwende den <a href="/de/blog/markdown-checklist-maker/">Markdown-Checklisten-Generator</a>.</p>
+        <p><strong>Apple Intelligence verwenden</strong>, standardmäßig aus, schaltet den Verarbeitungsmodus der Route ein. <strong>Anwenden auf</strong> legt dann fest, was verarbeitet wird: <strong>Sprache &amp; Text</strong> (Standard), <strong>Nur Sprache</strong> oder <strong>Nur Text</strong>. Text meint getipptes Markdown, aus Fotos oder Scans extrahierten Text und andere texthaltige Erfassungen; wähle <strong>Nur Sprache</strong> aus, damit selbst verfasstes Markdown nicht umgeschrieben wird. Mit ausgeschaltetem Schalter erhalten Sprachtranskripte trotzdem die deterministische Struktur von „To-do-Checkliste“ und „Meeting-Notizen“, und erfasster Text wird unverändert zugestellt. Die genaue verarbeitete Anfrage wird vor der Zustellung gespeichert, sodass Wiederholungsversuche nicht mit geänderten Einstellungen erneut verarbeiten.</p>
 
         <h3 id="preset-metadata">Metadaten</h3>
         <ul>
-          <li>Gib statische Metadaten jeweils als ein <code>key: value</code> Paar pro Zeile, etwa <code>tags: [journal, idea]</code>.</li>
+          <li>Gib statische Metadaten jeweils als ein <code>key: value</code> Paar pro Zeile, etwa <code>tags: [journal, idea]</code>. Um gültiges Frontmatter für Note Frontmatter zu erstellen, verwende den <a href="/de/blog/obsidian-properties-generator/">Properties-Generator</a>.</li>
           <li><strong>Notiz-Frontmatter</strong> schreibt Metadaten auf Dokumentebene.</li>
           <li><strong>Inline-Eintragsfelder</strong> schreibt <code>key:: value</code> Felder neben jedem Eintrag einer Rolling Note.</li>
           <li>Falls verfügbar, kann die Anreicherung auf dem Gerät Titel, Tags, Kategorie und überarbeiteten Text neben statischen Routenmetadaten ergänzen.</li>
@@ -424,6 +425,8 @@
             </tbody>
           </table>
         </div>
+
+        <p>Unsicher, welches Modell du herunterladen sollst? <a href="/de/compare/whisper-vs-parakeet/">Whisper und Parakeet vergleichen</a> und teste beide mit deinem eigenen Audio.</p>
 
         <h3 id="automatic-model">So funktioniert „Automatisch“</h3>
         <ul>
@@ -599,8 +602,10 @@
           <li>Drücke Command-Return für „Erfassung senden“. Eine Route mit aktiviertem „Aktuellen Standort verwenden“ fordert beim Senden oder Aufnahmestopp einen Standort vom Mac an, unabhängig davon, ob die Metadatenausgabe aktiviert ist.</li>
           <li>Ein Banner zur Zieleinrichtung und ein Routeninspektor zeigen die aufgelöste Notiz und Platzierung der gewählten Route.</li>
         </ul>
+        <p>Eine Schritt-für-Schritt-Anleitung findest du in <a href="/de/blog/transcribe-audio-file-mac/">Audiodatei auf dem Mac lokal in Markdown transkribieren</a>oder <a href="/de/blog/record-audio-on-mac/">Audio am Mac aufnehmen</a>.</p>
 
         <h3 id="mac-meeting">Meeting-Erfassung mit getrennten Audiospuren</h3>
+        <p>Eine Schritt-für-Schritt-Einrichtung findest du unter <a href="/de/blog/transcribe-meetings-mac-obsidian/">Mac-Besprechungen lokal in Obsidian transkribieren</a>.</p>
         <p>Wechsle die Eingabemodusauswahl von <strong>Mikrofon</strong> an <strong>Besprechung</strong> um die Wiedergabe einer Anwendung auf deinem Mac und dein eigenes Mikrofon als zwei sauber getrennte Audiospuren aufzunehmen. Vox.md verwendet ScreenCaptureKit im Einzelanwendungsmodus: Du wählst genau eine App, und Vox.md selbst wird niemals erfasst.</p>
         <ul>
           <li>Während der Aufnahme zeigt die Statusleiste Live-Pegelanzeigen für System und Mikrofon, Status pro Quelle und etwaige Erfassungswarnungen.</li>
@@ -610,6 +615,7 @@
         </ul>
 
         <h3 id="mac-keybinds">Globale Tastenkürzel</h3>
+        <p>Eine Schritt-für-Schritt-Anleitung findest du in <a href="/de/blog/dictation-on-mac/">auf dem Mac diktieren, privat mit einer lokalen Option</a>.</p>
         <p>Unter Einstellungen → Globale Tastenkürzel kannst du Tastenkürzel zuweisen für <strong>In die Zwischenablage transkribieren</strong>, <strong>Ausgewählte Route</strong>oder jeder aktivierten Route. Tastenkürzel sind standardmäßig aus, benötigen eine Nicht-Modifikatortaste plus Control, Option oder Command, können auch Shift enthalten und lehnen Konflikte ab. Drücke das aktive Tastenkürzel erneut, um die Aufnahme zu stoppen.</p>
         <div class="docs-callout docs-callout-neutral">
           <p><strong>In die Zwischenablage transkribieren</strong> erstellt weder Notiz noch Mediathek-Eintrag oder aufbewahrte Audiodatei. Es ist für schnelles Diktieren in jede Mac-App gedacht.</p>
@@ -670,7 +676,7 @@
           <li>Kostenlose Nutzung enthält <strong>15 Minuten Transkription</strong> und <strong>10 erfolgreiche Erfassungszustellungen</strong>.</li>
           <li>Ein Sprachtranskript, das bereits auf die Transkriptionszeit angerechnet wurde, verbraucht bei der Weiterleitung nach Markdown nicht zusätzlich das separate Erfassungskontingent.</li>
           <li>Fehlgeschlagene Schreibvorgänge und idempotente Wiederholungsversuche verbrauchen keine erfolgreiche Erfassungszustellung.</li>
-          <li>Unlimited ist ein einmaliger Kauf auf Lebenszeit ohne Abo, Verlängerung oder Werbung. Maßgeblich ist der lokalisierte App Store-Preis; die US-Preise sind 19,99 US$ für Einzelpersonen, 39,99 US$ für Familien und 19,99 US$ für das Familien-Upgrade, mit kaufkraftangepassten Preisen in anderen Storefronts.</li>
+          <li>Unlimited ist ein einmaliger Kauf auf Lebenszeit ohne Abo, Verlängerung oder Werbung. Maßgeblich ist der lokalisierte App Store-Preis; die US-Preise sind 79,99 US$ für Einzelpersonen, 129,99 US$ für Familien und 49,99 US$ für das Familien-Upgrade, mit kaufkraftangepassten Preisen in anderen Storefronts.</li>
           <li>„Kauf wiederherstellen“ stellt einen berechtigten Kauf wieder her. Nutzer qualifizierter älterer kostenpflichtiger Versionen behalten unbegrenzte Nutzung durch Bestandsschutz.</li>
           <li>Ein inhaltsfreies App Group-Protokoll verhindert doppelte Anrechnung bei Wiederholungsversuchen, solange lokale App-Daten bestehen. Es wird nicht im Schlüsselbund gespeichert; das Entfernen lokaler App-Daten startet ein neues Freikontingent.</li>
         </ul>

@@ -84,19 +84,17 @@ final class LiveActivityController {
     private var destinationPath: String?
     private var destinationTask: Task<Void, Never>?
 
-    // Waveform + pause sampling. Levels are bucketed (peak per bucket) and
-    // pushed to ActivityKit at most once per `pushInterval` to respect the
-    // system's update budget while keeping the bars visibly live.
-    private var levelSampler: Timer?
-    private var levelHistory: [UInt8] = []
-    private var bucketPeak: Float = 0
-    private var lastBucketAt: TimeInterval = 0
-    private var lastPushAt: TimeInterval = 0
-    private var levelsDirty = false
+    // Pause watching. The recorder can pause or resume without going through
+    // `update(...)` (e.g. an audio interruption), so poll its pause flag and push
+    // only when it flips.
+    //
+    // Microphone levels are deliberately not streamed to the Live Activity:
+    // iOS re-animates the whole Dynamic Island on every ActivityKit update, so
+    // a once-a-second waveform push made the compact island jump every second
+    // even though nothing in it had changed (#180).
+    private var pauseWatcher: Timer?
     private var lastPausedState: Bool?
-    private static let sampleInterval: TimeInterval = 0.15
-    private static let bucketInterval: TimeInterval = 0.5
-    private static let pushInterval: TimeInterval = 1.0
+    private static let pauseWatchInterval: TimeInterval = 0.15
     #endif
 
     private init() {}
@@ -224,9 +222,9 @@ final class LiveActivityController {
         )
         if isSegmentActive {
             prepareRouteContext(requestId: requestId)
-            startLevelSampler()
+            startPauseWatcher()
         } else {
-            stopLevelSampler()
+            stopPauseWatcher()
             if !isTranscribing { clearRouteContext() }
         }
         if wasTranscribing, !isSegmentActive, !isTranscribing {
@@ -257,7 +255,7 @@ final class LiveActivityController {
         }
         activity = nil
         desiredState = .idle
-        stopLevelSampler()
+        stopPauseWatcher()
         clearRouteContext()
         shouldStartAfterPendingEnd = false
         presentationReason = .monitor
@@ -293,9 +291,6 @@ final class LiveActivityController {
     private func prepareRouteContext(requestId: String?) {
         guard routeRequestID != requestId || routeRequestID == nil else { return }
         routeRequestID = requestId
-        levelHistory = []
-        bucketPeak = 0
-        levelsDirty = false
         lastPausedState = nil
         destinationTask?.cancel()
         destinationPath = nil
@@ -319,7 +314,6 @@ final class LiveActivityController {
         routeName = nil
         routeMonogram = nil
         destinationPath = nil
-        levelHistory = []
     }
 
     /// Preview of where this segment will land, e.g. `Meetings/2026-11-01.md`.
@@ -341,11 +335,31 @@ final class LiveActivityController {
             payloads: [],
             voxProfile: flow.captureProfile
         )
-        if let path = try? CapturePathPlanner().relativePath(for: request, destination: destination) {
+        // Name the real file, with the `-N` suffix delivery adds when the
+        // rendered note already exists.
+        if let path = availableRelativePath(for: request, destination: destination)
+            ?? (try? CapturePathPlanner().relativePath(for: request, destination: destination)) {
             return path
         }
         let name = destination.name.trimmingCharacters(in: .whitespacesAndNewlines)
         return name.isEmpty ? nil : name
+    }
+
+    private static func availableRelativePath(
+        for request: CaptureRequest,
+        destination: CaptureDestination
+    ) -> String? {
+        guard let resolution = try? CaptureBookmarkResolver.resolve(destination.rootBookmark),
+              !resolution.isStale else { return nil }
+        let rootURL = resolution.url
+        let didAccess = rootURL.startAccessingSecurityScopedResource()
+        defer { if didAccess { rootURL.stopAccessingSecurityScopedResource() } }
+        guard FileManager.default.fileExists(atPath: rootURL.path) else { return nil }
+        return try? CapturePathPlanner().availableRelativePath(
+            for: request,
+            destination: destination,
+            rootURL: rootURL
+        )
     }
 
     private func decorated(_ base: VoxboardLiveActivityState) -> VoxboardLiveActivityState {
@@ -361,7 +375,6 @@ final class LiveActivityController {
             state.pausedElapsed = context.isPaused ? context.elapsed : nil
             state.canPause = context.canPause
         }
-        state.audioLevels = levelHistory.isEmpty ? nil : levelHistory
         return state
     }
 
@@ -369,63 +382,34 @@ final class LiveActivityController {
         guard #available(iOS 16.1, *) else { return }
         let state = decorated(desiredState)
         desiredState = state
-        lastPushAt = Date().timeIntervalSince1970
-        levelsDirty = false
         guard presentationReason.isAllowed, let activity else { return }
         enqueueUpdate(activity, state: state)
     }
 
-    // MARK: - Level sampling
+    // MARK: - Pause watching
 
-    private func startLevelSampler() {
-        guard levelSampler == nil else { return }
-        let now = Date().timeIntervalSince1970
-        lastBucketAt = now
-        lastPushAt = now
-        let timer = Timer(timeInterval: Self.sampleInterval, repeats: true) { _ in
-            Task { @MainActor in LiveActivityController.shared.sampleLevel() }
+    private func startPauseWatcher() {
+        guard pauseWatcher == nil else { return }
+        let timer = Timer(timeInterval: Self.pauseWatchInterval, repeats: true) { _ in
+            Task { @MainActor in LiveActivityController.shared.checkPauseState() }
         }
-        levelSampler = timer
+        pauseWatcher = timer
         RunLoop.main.add(timer, forMode: .common)
     }
 
-    private func stopLevelSampler() {
-        levelSampler?.invalidate()
-        levelSampler = nil
-        bucketPeak = 0
-        levelsDirty = false
+    private func stopPauseWatcher() {
+        pauseWatcher?.invalidate()
+        pauseWatcher = nil
     }
 
-    private func sampleLevel() {
+    private func checkPauseState() {
         guard desiredState.isSegmentActive else {
-            stopLevelSampler()
+            stopPauseWatcher()
             return
         }
-        let context = PersistentRecorder.active?.liveActivitySegmentContext
-        let paused = context?.isPaused ?? false
+        let paused = PersistentRecorder.active?.liveActivitySegmentContext?.isPaused ?? false
+        defer { lastPausedState = paused }
         if let lastPausedState, lastPausedState != paused {
-            self.lastPausedState = paused
-            pushDecoratedState()
-            return
-        }
-        lastPausedState = paused
-
-        let now = Date().timeIntervalSince1970
-        if !paused {
-            bucketPeak = max(bucketPeak, TranscriptionIPC.readAudioLevel() ?? 0)
-            if now - lastBucketAt >= Self.bucketInterval {
-                levelHistory.append(VoxboardLiveActivityState.encodedLevel(bucketPeak))
-                if levelHistory.count > VoxboardLiveActivityState.maximumAudioLevelCount {
-                    levelHistory.removeFirst(levelHistory.count - VoxboardLiveActivityState.maximumAudioLevelCount)
-                }
-                bucketPeak = 0
-                lastBucketAt = now
-                levelsDirty = true
-            }
-        } else {
-            lastBucketAt = now
-        }
-        if levelsDirty, now - lastPushAt >= Self.pushInterval {
             pushDecoratedState()
         }
     }
@@ -446,6 +430,9 @@ final class LiveActivityController {
     ) {
         enqueueActivityMutation {
             if #available(iOS 16.2, *) {
+                // Every update re-animates the Dynamic Island, so skip ones
+                // that would not change what it shows.
+                guard activity.content.state != state else { return }
                 await activity.update(ActivityContent(state: state, staleDate: nil))
             } else {
                 await activity.update(using: state)

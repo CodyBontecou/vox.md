@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-Hans" dir="ltr" data-search-section="部分" data-search-guide="指南" data-search-empty="没有与“{query}”匹配的结果">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>如何在 Mac 上听写，以及一个私密的本地选项 | Vox.md</title>
+  <meta name="description" content="在 System Settings 中开启 Apple Dictation，了解快捷键、语言和麦克风选项，然后与在你的 Mac 上用 Whisper 或 Parakeet 转录并复制文字的 Vox.md 全局快捷键做比较。">
+  <link rel="canonical" href="https://vox.isolated.tech/zh-hans/blog/dictation-on-mac/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="供语言模型使用的 Vox.md 文档">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="如何在 Mac 上听写，以及一个私密的本地选项">
+  <meta property="og:description" content="在 System Settings 中开启 Apple Dictation，了解快捷键、语言和麦克风选项，然后与在你的 Mac 上用 Whisper 或 Parakeet 转录并复制文字的 Vox.md 全局快捷键做比较。">
+  <meta property="og:url" content="https://vox.isolated.tech/zh-hans/blog/dictation-on-mac/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-22">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="如何在 Mac 上听写，以及一个私密的本地选项">
+  <meta name="twitter:description" content="在 System Settings 中开启 Apple Dictation，了解快捷键、语言和麦克风选项，然后与在你的 Mac 上用 Whisper 或 Parakeet 转录并复制文字的 Vox.md 全局快捷键做比较。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "如何在 Mac 上听写，以及一个私密的本地选项",
+  "description": "在 System Settings 中开启 Apple Dictation，了解快捷键、语言和麦克风选项，然后与在你的 Mac 上用 Whisper 或 Parakeet 转录并复制文字的 Vox.md 全局快捷键做比较。",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-22",
+  "dateModified": "2026-11-22",
+  "mainEntityOfPage": "https://vox.isolated.tech/zh-hans/blog/dictation-on-mac/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "zh-Hans",
+  "name": "如何在 Mac 上听写，以及一个私密的本地选项 | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/zh-hans/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "指南",
+      "item": "https://vox.isolated.tech/zh-hans/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "如何在 Mac 上听写，以及一个私密的本地选项",
+      "item": "https://vox.isolated.tech/zh-hans/blog/dictation-on-mac/"
+    }
+  ],
+  "inLanguage": "zh-Hans",
+  "name": "如何在 Mac 上听写，以及一个私密的本地选项 | Vox.md",
+  "description": "在 System Settings 中开启 Apple Dictation，了解快捷键、语言和麦克风选项，然后与在你的 Mac 上用 Whisper 或 Parakeet 转录并复制文字的 Vox.md 全局快捷键做比较。"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/dictation-on-mac/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/dictation-on-mac/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳至指南</a>
+<nav aria-label="主导航">
+  <div class="nav-inner">
+    <a href="/zh-hans/" class="logo" aria-label="Vox.md 首页">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/zh-hans/#how">工作原理</a></li>
+      <li><a href="/zh-hans/docs/">文档</a></li>
+      <li><a href="/zh-hans/blog/">指南</a></li>
+      <li><a href="/zh-hans/compare/">比较</a></li>
+      <li><a href="/zh-hans/privacy.html">隐私</a></li>
+      <li><a href="/zh-hans/terms.html">条款</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_a0e7bb45fc7a">下载 Vox.md</a>
+  <details class="language-switcher"><summary>语言</summary><ul><li><a href="/blog/dictation-on-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/dictation-on-mac/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/dictation-on-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/dictation-on-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/dictation-on-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/dictation-on-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/dictation-on-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/dictation-on-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/dictation-on-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/dictation-on-mac/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/dictation-on-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/dictation-on-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/dictation-on-mac/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/dictation-on-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/dictation-on-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/dictation-on-mac/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/dictation-on-mac/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/dictation-on-mac/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/dictation-on-mac/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/dictation-on-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/dictation-on-mac/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/dictation-on-mac/" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a></li><li><a href="/zh-hant/blog/dictation-on-mac/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Mac · 听写 · 本地转录</div>
+        <h1 class="hero-title">如何在 Mac 上听写，以及一个私密的本地选项</h1>
+        <p class="hero-subtitle">几步设置 Dictation，不工作时修复它，并决定你是想要本地模型还是 Markdown 笔记。</p>
+      </div>
+      <aside class="meta-card" aria-label="关于本指南">
+        <dl>
+          <div><dt>作者：</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>更新于</dt><dd><time datetime="2026-11-22">2026年11月22日</time></dd></div>
+          <div><dt>需要</dt><dd>Vox.md：macOS 14 或更高版本。Apple Dictation 的可用性取决于你的 Mac、macOS 版本和语言。</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="如何在 Mac 上听写，以及一个私密的本地选项">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">简短回答</div>
+        <p>在 System Settings &gt; Keyboard 中开启 Apple Dictation，然后在任何文本栏中按 Dictation 快捷键。如果你想选择本地 Whisper 或 Parakeet 模型，或将听写内容发送到 Markdown 笔记，请分配一个 Vox.md 全局快捷键。</p>
+      </div>
+      <p>下面的 Apple 步骤取自 Apple 支持页面 <a href="https://support.apple.com/guide/mac-help/use-dictation-mh40584/mac">在 Mac 上使用 Dictation</a>，阅读于 2026 年 11 月 22 日。不同 macOS 版本的菜单名称可能不同，请查看该页面以获取你的版本。Vox.md 的步骤遵循 <a href="/zh-hans/docs/#mac-keybinds">全局快捷键</a> 和 <a href="/zh-hans/docs/#models">模型</a> 文档。</p>
+      <nav class="toc" aria-label="本指南中"><div class="toc-title">本指南中</div><ol>
+        <li><a href="#apple-dictation">如何在 Mac 上开启听写</a></li>
+        <li><a href="#which-to-use">Apple Dictation 或本地听写应用</a></li>
+        <li><a href="#transcribe-to-clipboard">用 Vox.md 在任何 Mac 应用中听写</a></li>
+        <li><a href="#dictate-to-notes">听写到 Obsidian 笔记或 Markdown 文件中</a></li>
+        <li><a href="#privacy">留在 Mac 上的内容</a></li>
+        <li><a href="#troubleshooting">Mac 听写不工作</a></li>
+        <li><a href="#faq">常见问题</a></li>
+      </ol></nav>
+
+      <h2 id="apple-dictation">如何在 Mac 上开启听写</h2>
+      <ol>
+        <li>选择 <strong>苹果菜单 &gt; 系统设置</strong>，然后点击 <strong>键盘</strong> 在侧边栏中。</li>
+        <li>前往 <strong>听写</strong> 并将其开启。</li>
+        <li><strong>快捷键：</strong> 在同一位置，点击 <strong>快捷键</strong> 弹出菜单，选择启动 Dictation 的快捷键。Apple 的页面没有给出默认值，所以请查看你的 Mac 上的设置。</li>
+        <li><strong>语言：</strong> 点击 <strong>编辑</strong> 旁边的 Languages，然后选择语言和地区。听写时，你可以点击光标旁的语言来切换，或者如果键盘上有 Globe 键，也可以按它。</li>
+        <li><strong>麦克风：</strong> 使用 <strong>麦克风来源</strong> 弹出菜单，选择 Dictation 使用的麦克风。选择 Automatic 时，Apple 表示你的 Mac 会监听你最可能使用的设备。</li>
+        <li><strong>开始听写：</strong> 点击文本栏，然后按麦克风键（如果你的功能键行有），使用 Dictation 快捷键，或选择 <strong>编辑 &gt; 开始听写</strong>.</li>
+        <li><strong>停止：</strong> 按 Escape 键、麦克风键（如果有）或 Dictation 快捷键。</li>
+      </ol>
+      <p><strong>Apple 对处理和限制的说明。</strong> Apple 说你可以在 Keyboard 设置中查看常规文本 Dictation 是否“在你的设备上处理，而不发送到 Siri 服务器”。该页面没有说明 Dictation 可以离线使用。Apple 还说你可以听写任意长度的文本而没有超时，并且在 30 秒内检测不到语音时 Dictation 会自动停止。与 Apple 共享音频录音是可选的（<strong>共享音频录音</strong>）。Apple 指出 Dictation 并非在所有语言或地区都可用，功能可能有所不同；请参阅 Apple 的 <a href="https://support.apple.com/guide/mac-help/use-dictation-mh40584/mac">Dictation 页面</a> 以及它所链接的 macOS 功能可用性页面。开启 Voice Control 后，Apple 表示标准的 macOS Dictation 不可用。</p>
+
+      <h2 id="which-to-use">Apple Dictation 或本地听写应用</h2>
+      <p>Apple Dictation 已经在你的 Mac 上，对很多人来说足够了。当你想选择语音模型、从设计上不让转录文字进入 Apple 的服务器，或将语音保存为 Markdown 时，再考虑其他方案。该表按文档所述比较三种设置；不涉及准确度或速度方面的说法。</p>
+      <p class="guide-table-hint">在小屏幕上，请左右滑动表格。</p>
+      <div class="guide-comparison" role="region" aria-label="听写选项对比；在小屏幕上请横向滚动" tabindex="0">
+        <table class="comparison">
+          <caption>Mac 听写选项，核查于 2026 年 11 月 22 日</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">Apple 听写</th><th scope="col">Vox.md Transcribe to Clipboard 操作</th><th scope="col">Vox.md 路线快捷键</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">文字去向</th><td>进入你所在的文本栏</td><td>剪贴板；用 Command-V 粘贴</td><td>一条笔记或 Markdown 文件，取决于你的路线设置</td></tr>
+            <tr><th scope="row">语音在哪里处理</th><td>据 Apple 称，取决于你的设置；请查看 Keyboard 设置</td><td>在你的 Mac 上</td><td>在你的 Mac 上</td></tr>
+            <tr><th scope="row">模型选择</th><td>无；由你选择语言和麦克风</td><td>你下载的 Whisper 或 Parakeet 模型</td><td>你下载的 Whisper 或 Parakeet 模型</td></tr>
+            <tr><th scope="row">实时或在停止之后</th><td>Apple 的页面未涉及；请在你的 Mac 上试试</td><td>停止之后</td><td>停止之后</td></tr>
+            <tr><th scope="row">需要账户</th><td>Apple 的页面未说明</td><td>否</td><td>否</td></tr>
+            <tr><th scope="row">费用</th><td>macOS 的一部分</td><td>15 分钟免费转录，之后一次性终身解锁</td><td>15 分钟免费转录和 10 次成功的 Capture 送达，之后是一次性终身解锁</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>如果你只是偶尔需要对着电子邮件或文档说话，内置 Dictation 就够用了。当你想用特定的本地模型，或希望文字直接进入你的笔记时，值得试试 Vox.md 快捷键。</p>
+
+      <h2 id="transcribe-to-clipboard">用 Vox.md 在任何 Mac 应用中听写</h2>
+      <p><strong>转载到 Clipboard</strong> 是一个全局快捷键。你按下它，说话，再按一次。Vox.md 在你的 Mac 上转录，并把文字放到剪贴板，你用 Command-V 粘贴。它不会自动输入到最前面的应用中。它不会创建笔记和 Library 项目，也不保留音频。</p>
+      <ol>
+        <li><strong>安装并下载一个模型。</strong> 安装适用于 Mac 的 Vox.md（macOS 14 或更高版本）。在 <strong>模特</strong> 屏幕上，下载一个模型：从 Tiny（75 MB）到 Large v3 Turbo（1.6 GB）的 Whisper、适用于英语的 Parakeet v2，或支持 25 种语言的 Parakeet v3（各约 800 MB）。每次下载都由你发起，之后也可以删除模型。Whisper 在受支持的 Mac 上使用 Metal 加速。在同一屏幕上选择转录语言。请参阅 <a href="/zh-hans/compare/whisper-vs-parakeet/">Whisper 与 Parakeet</a> 了解如何选择。</li>
+        <li><strong>分配快捷键。</strong> 开放 <strong>设置 &gt; 全局快捷键</strong> 并分配 <strong>转载到 Clipboard</strong>。快捷键默认关闭。快捷键需要一个非修饰键，加上 Control、Option 或 Command，也可以包含 Shift，Vox.md 会拒绝冲突的快捷键。</li>
+        <li><strong>录音。</strong> 点击你想放置文字的位置，按下快捷键，然后说话。</li>
+        <li><strong>停止。</strong> 再次按下同一个快捷键。等待菜单栏显示转录已完成。</li>
+        <li><strong>粘贴。</strong> 按 Command-V。</li>
+      </ol>
+      <p>如果你需要再次获取文字，请选择 <strong>复制上次转录</strong> 从 Vox.md 菜单栏。菜单栏操作列在 <a href="/zh-hans/docs/#mac-menu-bar">菜单栏文档</a>。iPhone 上的对应方式是键盘；请参阅 <a href="/zh-hans/blog/best-voice-to-text-keyboard-iphone/">iPhone 语音转文字键盘指南</a> 和 <a href="/zh-hans/blog/speech-to-text-iphone/">如何在 iPhone 上使用语音转文字</a> 或 <a href="/zh-hans/blog/speech-to-text-ipad/">在 iPad 上</a>.</p>
+
+      <h2 id="dictate-to-notes">听写到 Obsidian 笔记或 Markdown 文件中</h2>
+      <p>当文字应该进入笔记而不是另一个应用时选择它。在 <strong>设置 &gt; 全局快捷键</strong>，为以下操作分配快捷键 <strong>所选路线</strong> 或指定的路线。之后转录文字会遵循该路线：每日笔记、标题位置以及你在那里设置的处理模式。这不是粘贴；Vox.md 会把文字送达路线的目的地。在以下位置设置路线 <a href="/zh-hans/blog/obsidian-daily-note-template/">每日笔记模板指南</a> 和 <a href="/zh-hans/blog/obsidian-capture-templates/">采集模板指南</a>。如需录制通话而不是听写，请参阅 <a href="/zh-hans/blog/transcribe-meetings-mac-obsidian/">将 Mac 会议录入 Obsidian</a>。免费额度包含 10 次成功的 Capture 送达。</p>
+      <p>听写也是大声排练演讲的快速方式：听写一遍完整演讲，记下所用时间，然后把文本和时间粘贴到 <a href="/zh-hans/blog/speech-time-calculator/">演讲时长计算器</a> 以找出你的真实语速。</p>
+
+      <h2 id="privacy">留在 Mac 上的内容</h2>
+      <p>Vox.md 不会把采集内容发送到 Vox.md 服务器。转录在你的 Mac 上运行。唯一的网络使用是你自己发起的模型下载，它使用 Hugging Face 或 FluidAudio 的基础设施。转录本身在 Mac 上运行。如果笔记落在通过 iCloud 或其他服务同步的文件夹中，该服务会按自己的条款处理该文件。请参阅 <a href="/zh-hans/privacy.html">隐私政策</a> 和 <a href="/zh-hans/blog/offline-transcription-iphone-markdown/">离线转录设置</a>。Vox.md 使用 <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a> 用于 Whisper，以及 <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> 用于 Parakeet。</p>
+
+      <h2 id="troubleshooting">Mac 听写不工作</h2>
+      <h3>Apple Dictation 检查项</h3>
+      <p>Apple 的页面 <a href="https://support.apple.com/guide/mac-help/if-dictation-on-mac-doesnt-work-as-expected-mchlc480652b/27/mac/27">如果 Mac 上的 Dictation 未按预期工作</a> 列出了这些：</p>
+      <ul>
+        <li>确保在 Keyboard 设置中已开启 Dictation。</li>
+        <li>选择正确的语言和地区。Dictation 并非在所有语言或地区都可用。</li>
+        <li>请确保使用了正确的 Dictation 键盘快捷键。如果其他快捷键使用了相同的按键，请在 Keyboard &gt; Dictation 中更改 Dictation 快捷键。</li>
+        <li>如果你的 Mac 没有内置麦克风，请确保已连接外接麦克风，并在 Sound 或 Keyboard 设置中选中，且输入音量足够。</li>
+        <li>确保麦克风没有被遮挡，以不太小也不太大的音量清晰说话，并避免背景噪音。</li>
+        <li>你可能需要互联网连接；请在 Keyboard 设置中查看听写是否在你的设备上处理。</li>
+      </ul>
+      <h3>Vox.md 检查</h3>
+      <ul>
+        <li><strong>快捷键没有反应。</strong> 快捷键默认关闭。请在 Settings &gt; Global Keybinds 中分配一个。Vox.md 会拒绝冲突的快捷键，所以请选择其他按键组合。</li>
+        <li><strong>没有转录文字。</strong> 确保已在 Models 屏幕上下载并选择了模型。</li>
+        <li><strong>语言错误。</strong> 在 Models 屏幕上选择语言。</li>
+        <li><strong>没有可粘贴的内容。</strong> 等菜单栏显示转录已完成，然后按 Command-V，或选择 Copy Last Transcript。</li>
+      </ul>
+
+      <h2 id="faq">常见问题</h2>
+      <h3>Mac 听写可以离线使用吗？</h3>
+      <p>Apple 的 Use Dictation 页面没有这样说。它说你可以在 Keyboard 设置中查看常规文本 Dictation 是否在你的设备上处理，而不发送到 Siri 服务器。其故障排除页面说你可能需要互联网连接。下载模型后，Vox.md 在你的 Mac 上转录。</p>
+      <h3>有时间限制吗？</h3>
+      <p>Apple 表示你可以听写任意长度的文本而没有超时，并且 30 秒没有语音时 Dictation 会停止。对于 Vox.md，免费层包含 15 分钟转录，之后是一次性终身解锁。</p>
+      <h3>我可以更改快捷键吗？</h3>
+      <p>可以，两者都可以。对于 Apple Dictation，请使用 System Settings &gt; Keyboard &gt; Dictation 中的 Shortcut 弹出菜单。对于 Vox.md，请在 Settings &gt; Global Keybinds 中分配，使用非修饰键加 Control、Option 或 Command。</p>
+      <h3>Vox.md 需要账户吗？</h3>
+      <p>否。</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">在你的 Mac 上用本地模型听写。</h2>
+        <p>免费额度为 15 分钟转录和 10 次成功的 Capture 送达。之后，一次性终身解锁（按你当地的 App Store 价格显示）会移除限制。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_a0e7bb45fc7a">免费下载 Vox.md</a></p>
+      </section>
+      <nav class="toc" aria-label="相关指南" id="related"><div class="toc-title">继续</div><ul>
+        <li><a href="/zh-hans/docs/#mac-keybinds">文档中的全局快捷键</a></li>
+        <li><a href="/zh-hans/blog/transcribe-audio-file-mac/">在 Mac 上转录音频文件</a></li>
+        <li><a href="/zh-hans/blog/record-audio-on-mac/">如何在 Mac 上录音：你的声音或某个 App 的声音</a></li>
+        <li><a href="/zh-hans/blog/transcribe-meetings-mac-obsidian/">在本地将 Mac 会议转录到 Obsidian</a></li>
+        <li><a href="/zh-hans/blog/best-voice-to-text-keyboard-iphone/">适用于 iPhone 的最佳语音转文字键盘</a></li>
+        <li><a href="/zh-hans/blog/obsidian-daily-note-template/">Obsidian 每日笔记模板生成器</a></li>
+        <li><a href="/zh-hans/blog/obsidian-capture-templates/">Obsidian 采集模板</a></li>
+        <li><a href="/zh-hans/blog/offline-transcription-iphone-markdown/">在 iPhone 上离线将音频转录为 Markdown</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/zh-hans/">首页</a></li>
+        <li><a href="/zh-hans/docs/">文档</a></li>
+        <li><a href="/zh-hans/blog/">指南</a></li>
+        <li><a href="/zh-hans/compare/">比较</a></li>
+        <li><a href="/zh-hans/privacy.html">隐私</a></li>
+        <li><a href="/zh-hans/terms.html">条款</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">支持</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_a0e7bb45fc7a">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · 本地笔记快速采集 · 不上传内容。</div>
+    </div>
+  <details class="language-switcher"><summary>语言</summary><ul><li><a href="/blog/dictation-on-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/dictation-on-mac/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/dictation-on-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/dictation-on-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/dictation-on-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/dictation-on-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/dictation-on-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/dictation-on-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/dictation-on-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/dictation-on-mac/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/dictation-on-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/dictation-on-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/dictation-on-mac/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/dictation-on-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/dictation-on-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/dictation-on-mac/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/dictation-on-mac/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/dictation-on-mac/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/dictation-on-mac/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/dictation-on-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/dictation-on-mac/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/dictation-on-mac/" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a></li><li><a href="/zh-hant/blog/dictation-on-mac/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

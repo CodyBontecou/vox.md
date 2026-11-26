@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pl" dir="ltr" data-search-section="Sekcja" data-search-guide="Poradnik" data-search-empty="Brak wyników dla „{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transkrypcja pliku audio na Macu lokalnie do Markdown | Vox.md</title>
+  <meta name="description" content="Zobacz, co za darmo oferują Dyktafon i Notatki na Macu, a potem zaimportuj istniejący plik audio lub wideo do Vox.md na Maca, przetranskrybuj go na Macu za pomocą Whisper lub Parakeet i zapisz jako notatkę Markdown na własność.">
+  <link rel="canonical" href="https://vox.isolated.tech/pl/blog/transcribe-audio-file-mac/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Dokumentacja Vox.md dla modeli językowych">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Transkrypcja pliku audio na Macu lokalnie do Markdown">
+  <meta property="og:description" content="Zobacz, co za darmo oferują Dyktafon i Notatki na Macu, a potem zaimportuj istniejący plik audio lub wideo do Vox.md na Maca, przetranskrybuj go na Macu za pomocą Whisper lub Parakeet i zapisz jako notatkę Markdown na własność.">
+  <meta property="og:url" content="https://vox.isolated.tech/pl/blog/transcribe-audio-file-mac/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-22">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Transkrypcja pliku audio na Macu lokalnie do Markdown">
+  <meta name="twitter:description" content="Zobacz, co za darmo oferują Dyktafon i Notatki na Macu, a potem zaimportuj istniejący plik audio lub wideo do Vox.md na Maca, przetranskrybuj go na Macu za pomocą Whisper lub Parakeet i zapisz jako notatkę Markdown na własność.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Transkrypcja pliku audio na Macu lokalnie do Markdown",
+  "description": "Zobacz, co za darmo oferują Dyktafon i Notatki na Macu, a potem zaimportuj istniejący plik audio lub wideo do Vox.md na Maca, przetranskrybuj go na Macu za pomocą Whisper lub Parakeet i zapisz jako notatkę Markdown na własność.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-22",
+  "dateModified": "2026-11-22",
+  "mainEntityOfPage": "https://vox.isolated.tech/pl/blog/transcribe-audio-file-mac/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "pl",
+  "name": "Transkrypcja pliku audio na Macu lokalnie do Markdown | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/pl/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Poradniki",
+      "item": "https://vox.isolated.tech/pl/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Transkrypcja pliku audio na Macu lokalnie do Markdown",
+      "item": "https://vox.isolated.tech/pl/blog/transcribe-audio-file-mac/"
+    }
+  ],
+  "inLanguage": "pl",
+  "name": "Transkrypcja pliku audio na Macu lokalnie do Markdown | Vox.md",
+  "description": "Zobacz, co za darmo oferują Dyktafon i Notatki na Macu, a potem zaimportuj istniejący plik audio lub wideo do Vox.md na Maca, przetranskrybuj go na Macu za pomocą Whisper lub Parakeet i zapisz jako notatkę Markdown na własność."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-audio-file-mac/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-audio-file-mac/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Przejdź do poradnika</a>
+<nav aria-label="Główna nawigacja">
+  <div class="nav-inner">
+    <a href="/pl/" class="logo" aria-label="Główna Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/pl/#how">Jak to działa</a></li>
+      <li><a href="/pl/docs/">Dokumentacja</a></li>
+      <li><a href="/pl/blog/">Poradniki</a></li>
+      <li><a href="/pl/compare/">Porównaj</a></li>
+      <li><a href="/pl/privacy.html">Prywatność</a></li>
+      <li><a href="/pl/terms.html">Warunki</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_pl_5aaec3f62945">Pobierz Vox.md</a>
+  <details class="language-switcher"><summary>Język</summary><ul><li><a href="/blog/transcribe-audio-file-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-audio-file-mac/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-audio-file-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-audio-file-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-audio-file-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-audio-file-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-audio-file-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-audio-file-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-audio-file-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-audio-file-mac/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-audio-file-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-audio-file-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-audio-file-mac/" lang="pl" hreflang="pl" aria-current="page">Polski</a></li><li><a href="/pt-br/blog/transcribe-audio-file-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-audio-file-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-audio-file-mac/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-audio-file-mac/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-audio-file-mac/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-audio-file-mac/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-audio-file-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-audio-file-mac/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-audio-file-mac/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-audio-file-mac/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Mac · Pliki audio · Transkrypcja lokalna</div>
+        <h1 class="hero-title">Transkrypcja pliku audio na Macu lokalnie do Markdown</h1>
+        <p class="hero-subtitle">Najpierw bezpłatne wbudowane opcje, potem lokalna droga od pliku, który już masz, do notatki Markdown w Obsidianie lub w dowolnym folderze.</p>
+      </div>
+      <aside class="meta-card" aria-label="O poradniku">
+        <dl>
+          <div><dt>Autor:</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Aktualizacja</dt><dd><time datetime="2026-11-22">22 listopada 2026</time></dd></div>
+          <div><dt>Wymaga</dt><dd>Vox.md: macOS 14 lub nowszy · pobrany model mowy. Wbudowana transkrypcja Apple: zobacz strony Pomocy technicznej Apple dla swojego Maca i języka.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Transkrypcja pliku audio na Macu lokalnie do Markdown">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Krótka odpowiedź</div>
+        <p>Aplikacje Apple Dyktafon i Notatki potrafią za darmo transkrybować dźwięk na Macu i dla wielu osób to wystarczy. Aby zamienić istniejący plik audio lub wideo w notatkę Markdown, otwórz Vox.md na Maca i wybierz <strong>Importowanie audio…</strong> z paska menu (lub zaimportuj plik w obszarze przechwytywania), pozwól lokalnemu modelowi Whisper albo Parakeet go przetranskrybować, sprawdź tekst, a potem wyślij go do notatki swojej Trasy.</p>
+      </div>
+      <p>Poniższe informacje o Apple pochodzą ze stron Pomocy technicznej Apple <a href="https://support.apple.com/guide/voice-memos/vm4a03609f0d/mac">Wyświetlanie transkrypcji w Dyktafonie na Macu</a> i <a href="https://support.apple.com/guide/notes/apdb5106e334/mac">Nagrywanie i transkrypcja dźwięku w Notatkach na Macu</a>, odczytane 22 listopada 2026. Strony Apple mogą się zmieniać, więc sprawdź je dla swojego Maca. Kroki Vox.md opierają się na <a href="/pl/docs/#mac">Dokumentacja Maca</a>.</p>
+      <nav class="toc" aria-label="W poradniku"><div class="toc-title">W poradniku</div><ol>
+        <li><a href="#built-in">Bezpłatne opcje, które masz już na Macu</a></li>
+        <li><a href="#choose">Która metoda pasuje?</a></li>
+        <li><a href="#prepare">Przygotuj Vox.md na Maca</a></li>
+        <li><a href="#import">Zaimportuj i przetranskrybuj plik</a></li>
+        <li><a href="#verify">Sprawdź notatkę Markdown</a></li>
+        <li><a href="#privacy">Co opuszcza Twojego Maca</a></li>
+        <li><a href="#troubleshooting">Rozwiązywanie problemów</a></li>
+        <li><a href="#related">Powiązane poradniki</a></li>
+      </ol></nav>
+
+      <p>Nie masz jeszcze nagrania? Zobacz <a href="/pl/blog/record-audio-on-mac/">jak nagrywać dźwięk na Macu</a>.</p>
+
+      <h2 id="built-in">Bezpłatne opcje, które masz już na Macu</h2>
+      <h3>Dyktafon</h3>
+      <p>Strona Apple o Dyktafonie podaje, że możesz kliknąć przycisk <strong>Transkrypcja</strong> podczas nagrywania, aby widzieć tekst na żywo, albo zaznacz zakończone nagranie i kliknij ten sam przycisk. Możesz przeszukiwać listę nagrań pod kątem tekstu w tytule lub w transkrypcji i kopiować tekst transkrypcji, zaznaczając go, klikając z klawiszem Control i wybierając <strong>Kopiuj</strong>. Apple podaje, że jeśli otworzysz nagranie wykonane w macOS 14 lub wcześniejszym albo na urządzeniu, które nie obsługuje transkrypcji, Dyktafon automatycznie je przetranskrybuje, oraz że transkrypcja dźwięku nie jest dostępna we wszystkich krajach i regionach.</p>
+      <h3>Notatki</h3>
+      <p>Strona Apple o Notatkach opisuje nagrywanie dźwięku w notatce: kliknij przycisk Załącznik, wybierz <strong>Nagraj dźwięk</strong>, nagraj i kliknij przycisk Transkrypcja, aby zobaczyć transkrypcję. Strona podaje, że transkrypcja dźwięku jest dostępna na komputerach Mac z M1 lub nowszym, dla języka urządzenia wymienionego przez Apple na tej stronie. Jeśli przycisk Transkrypcja się nie pojawia, Apple pisze, że Mac nie spełnia minimalnych wymagań albo nie wykrywa obsługiwanego języka.</p>
+      <h3>Ograniczenia</h3>
+      <p>Tekst pozostaje w tych aplikacjach, dopóki go nie skopiujesz. W Notatkach Apple pisze, że usunięcie nagrania dźwiękowego usuwa też transkrypcję. Nie możemy ustalić ze stron Apple, jakie typy plików potrafią zaimportować te aplikacje, więc sprawdź to dla swojego nagrania; ten przewodnik niczego w tej sprawie nie twierdzi.</p>
+      <p>W ostateczności niektórzy odtwarzają nagranie i dyktują je do edytora tekstu. To obejście, a nie transkrypcja pliku; zobacz <a href="/pl/blog/dictation-on-mac/">dyktowanie na Macu</a> o samym dyktowaniu.</p>
+
+      <h2 id="choose">Która metoda pasuje?</h2>
+      <p>Tabela zawiera tylko to, co podają strony Apple lub dokumentacja Vox.md. „Brak dokumentacji” oznacza, że cytowane źródło tego nie podaje. Nie jest to twierdzenie o dokładności ani szybkości.</p>
+      <p class="guide-table-hint">Na małym ekranie przesuń tabelę na bok.</p>
+      <div class="guide-comparison" role="region" aria-label="Porównanie opcji transkrypcji audio na Macu; na małych ekranach przewiń w poziomie" tabindex="0">
+        <table class="comparison">
+          <caption>Opcje transkrypcji audio na Macu, sprawdzone 22 listopada 2026</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">Dyktafon</th><th scope="col">Notatki</th><th scope="col">Vox.md na Maca</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Gdzie zapisywany jest tekst</th><td>W Dyktafonie; kopiujesz tekst samodzielnie</td><td>W notatce, razem z nagraniem dźwiękowym</td><td>Notatka Markdown w wybranym folderze lub vaulcie</td></tr>
+            <tr><th scope="row">Co działa na Macu</th><td>Brak dokumentacji</td><td>Brak dokumentacji</td><td>Transkrypcja, z pobranym modelem Whisper lub Parakeet</td></tr>
+            <tr><th scope="row">Import pliku</th><td>Brak dokumentacji</td><td>Brak dokumentacji</td><td>Importowanie audio… przyjmuje pliki audio lub wideo</td></tr>
+            <tr><th scope="row">Wynik w Markdown</th><td>Brak dokumentacji</td><td>Brak dokumentacji</td><td>Tak</td></tr>
+            <tr><th scope="row">Etykiety mówców</th><td>Brak dokumentacji</td><td>Brak dokumentacji</td><td>Opcjonalnie, z Identyfikacja mówców (zobacz <a href="/pl/blog/transcribe-interview/">transkrypcja wywiadu</a>)</td></tr>
+            <tr><th scope="row">Koszt</th><td>Część macOS</td><td>Część macOS</td><td>15 bezpłatnych minut transkrypcji i 10 udanych dostaw, potem jednorazowe odblokowanie na całe życie</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Jeśli tekst ma zostać tylko w Dyktafonie lub Notatkach, korzystaj z nich. Vox.md przydaje się, gdy chcesz mieć zwykły plik na własność, konkretny model lokalny albo tekst w swoim vaulcie.</p>
+
+      <h2 id="prepare">Przygotuj Vox.md na Maca</h2>
+      <ol>
+        <li><strong>Instalacja.</strong> Vox.md na Maca wymaga macOS 14 lub nowszego. Pobierz go z linku App Store poniżej.</li>
+        <li><strong>Pobierz model.</strong> Otwarte <strong>Ustawienia → Modele</strong> i pobierz jeden: Whisper od Tiny (75 MB) do Large v3 Turbo (1,6 GB), Parakeet v2 (około 800 MB, angielski) lub Parakeet v3 (około 800 MB, 25 języków). Język transkrypcji ustawisz na tym samym ekranie. Whisper korzysta z przyspieszenia Metal na obsługiwanych Macach. Pobranie modelu to jedyny krok wymagający sieci. Zobacz <a href="/pl/compare/whisper-vs-parakeet/">Whisper kontra Parakeet</a> aby wybrać. <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a> uruchamia modele Whisper, a <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> uruchamia Parakeet.</li>
+        <li><strong>Wybierz lub utwórz Trasę.</strong> Trasa przechowuje folder docelowy lub vault oraz notatkę docelową: nową notatkę, bieżącą notatkę dzienną albo istniejącą notatkę pod nagłówkiem. Zobacz <a href="/pl/docs/#presets">Trasy w dokumentacji</a>.</li>
+      </ol>
+      <p>Masz już plik napisów (.srt lub .vtt) zamiast nagrania? Nie musisz nic transkrybować: <a href="/pl/blog/srt-vtt-to-text-markdown/">Konwerter SRT i VTT na tekst lub Markdown</a> czyści go w przeglądarce.</p>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">Pobierz Vox.md na Maca.</h2>
+        <p>Bezpłatny limit to 15 minut transkrypcji i 10 udanych dostaw, wystarczająco, by wypróbować jedno nagranie.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_pl_5aaec3f62945">Pobierz Vox.md na Maca</a></p>
+      </section>
+
+      <h2 id="import">Zaimportuj i przetranskrybuj plik</h2>
+      <ol>
+        <li><strong>Importuj.</strong> Z paska menu Vox.md wybierz <strong>Importowanie audio…</strong>, albo zaimportuj lub przeciągnij audio do obszaru przechwytywania. Dokumentacja podaje, że pliki audio i wideo są akceptowane i przechodzą tę samą lokalną transkrypcję co nagranie. W przypadku plików wideo zobacz <a href="/pl/blog/transcribe-video-to-text/">zamienić wideo na tekst</a>.</li>
+        <li><strong>Wybierz Dodaj do wersji roboczej lub Wyślij natychmiast.</strong> Z <strong>Wyślij natychmiast</strong> transkrypcja zostaje dostarczona po zakończeniu. Przy <strong>Dodaj do wersji roboczej</strong> możesz ją najpierw sprawdzić. Porównaj imiona, liczby i daty z nagraniem.</li>
+        <li><strong>Opcjonalnie: Identyfikacja mówców.</strong> Włącz <strong>Identyfikacja mówców</strong> na Trasie, aby uzyskać anonimowe etykiety mówców w trybie best-effort. Za pierwszym razem przygotowuje osobny model. Jeśli nie może działać, zachowana zostaje zwykła transkrypcja, a przyczyna pojawia się w Bibliotece.</li>
+        <li><strong>Opcjonalnie: tryb przetwarzania.</strong> Trasa może używać trybów Zachowaj oryginał, Uporządkowany tekst, Notatki ze spotkania, Lista zadań lub Własna instrukcja. Tryby Apple Intelligence wymagają zgodnego sprzętu z macOS 26. Bez niego Lista zadań i Notatki ze spotkania używają wbudowanych formaterów, a Uporządkowany tekst i Własna instrukcja zachowują oryginalny tekst.</li>
+        <li><strong>Wyślij.</strong> Naciśnij Command-Return, aby wysłać przechwycenie do notatki Trasy.</li>
+      </ol>
+
+      <h2 id="verify">Sprawdź notatkę Markdown</h2>
+      <p>Wybierz <strong>Pokaż ostatni eksport</strong> z paska menu albo znajdź wpis w Bibliotece i pokaż go w Finderze, a potem otwórz plik w Obsidianie. Jeśli potrzebujesz tylko tekstu, wybierz <strong>Kopiuj ostatnią transkrypcję</strong>. Strukturę notatki do wypełnienia z nagrania znajdziesz w <a href="/pl/blog/obsidian-meeting-notes-template/">generator szablonów notatek ze spotkań</a>.</p>
+      <p>Jeśli nagranie to próba wystąpienia, wklej transkrypcję i długość nagrania do <a href="/pl/blog/speech-time-calculator/">kalkulator czasu przemówienia</a> , aby zmierzyć liczbę słów na minutę i czas mówienia skryptu we własnym tempie.</p>
+
+      <h2 id="privacy">Co opuszcza Twojego Maca</h2>
+      <p>Transkrypcja działa na Macu, a Vox.md nie wysyła treści przechwyceń na serwery Vox.md. Pobieranie modeli łączy się z infrastrukturą Hugging Face lub FluidAudio. Jeśli folder docelowy synchronizuje się przez iCloud lub inną usługę, ta usługa obsługuje plik na własnych zasadach. Zobacz <a href="/pl/privacy.html">politykę prywatności</a>.</p>
+
+      <h2 id="troubleshooting">Rozwiązywanie problemów</h2>
+      <ul>
+        <li><strong>Brak transkrypcji lub zły język.</strong> Sprawdź w Ustawienia → Modele, czy model jest pobrany i wybrany oraz czy ustawiono język.</li>
+        <li><strong>Notatka się nie pojawia.</strong> Sprawdź folder docelowy Trasy i czy Vox.md ma do niego dostęp.</li>
+        <li><strong>Długi plik trwa dłużej.</strong> Większe modele potrzebują więcej czasu przy długim nagraniu. Najpierw wypróbuj mniejszy model, a potem porównaj.</li>
+        <li><strong>Bezpłatny limit wykorzystany.</strong> Obejmuje 15 minut transkrypcji i 10 udanych dostaw, potem jednorazowe odblokowanie na całe życie. Wiążąca jest cena w App Store; zobacz <a href="/pl/docs/#pricing-limits">bezpłatne użycie i dożywotnie odblokowanie</a>.</li>
+      </ul>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Zamień nagranie w notatkę na własność.</h2>
+        <p>Zacznij od krótkiego, niewrażliwego nagrania w ramach bezpłatnego limitu, a potem otwórz plik Markdown.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_pl_5aaec3f62945">Pobierz Vox.md na Maca</a></p>
+      </section>
+      <nav class="toc" aria-label="Powiązane poradniki" id="related"><div class="toc-title">Dalej</div><ul>
+        <li><a href="/pl/blog/transcribe-meetings-mac-obsidian/">Zamiast tego nagraj rozmowę na żywo: spotkania na Macu w Obsidianie</a></li>
+        <li><a href="/pl/blog/dictation-on-mac/">Dyktowanie na Macu</a></li>
+        <li><a href="/pl/compare/whisper-vs-parakeet/">Whisper kontra Parakeet</a></li>
+        <li><a href="/pl/blog/transcribe-voice-memos-iphone/">Transkrybuj Dyktafon iPhone do Markdown</a></li>
+        <li><a href="/pl/blog/obsidian-meeting-notes-template/">Generator szablonów notatek ze spotkań dla Obsidian</a></li>
+        <li><a href="/pl/blog/transcribe-interview/">Prywatna transkrypcja wywiadu z etykietami mówców</a></li>
+        <li><a href="/pl/docs/#mac">Dokumentacja Maca</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/pl/">Strona główna</a></li>
+        <li><a href="/pl/docs/">Dokumentacja</a></li>
+        <li><a href="/pl/blog/">Poradniki</a></li>
+        <li><a href="/pl/compare/">Porównaj</a></li>
+        <li><a href="/pl/privacy.html">Prywatność</a></li>
+        <li><a href="/pl/terms.html">Warunki</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Wsparcie</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_pl_5aaec3f62945">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Szybki zapis lokalnych notatek · Bez wysyłania treści.</div>
+    </div>
+  <details class="language-switcher"><summary>Język</summary><ul><li><a href="/blog/transcribe-audio-file-mac/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-audio-file-mac/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-audio-file-mac/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-audio-file-mac/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-audio-file-mac/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-audio-file-mac/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-audio-file-mac/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-audio-file-mac/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-audio-file-mac/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-audio-file-mac/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-audio-file-mac/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-audio-file-mac/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-audio-file-mac/" lang="pl" hreflang="pl" aria-current="page">Polski</a></li><li><a href="/pt-br/blog/transcribe-audio-file-mac/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-audio-file-mac/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-audio-file-mac/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-audio-file-mac/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-audio-file-mac/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-audio-file-mac/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-audio-file-mac/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-audio-file-mac/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-audio-file-mac/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-audio-file-mac/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

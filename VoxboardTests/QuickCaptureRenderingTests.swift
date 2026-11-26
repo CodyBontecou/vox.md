@@ -407,6 +407,38 @@ final class QuickCaptureRenderingTests: XCTestCase {
         )
     }
 
+    /// #115: the waiting row for a Lock Screen/widget "Add to Draft" launch
+    /// keeps its message readable and its Cancel button on screen at large
+    /// Dynamic Type on the narrowest iPhone width.
+    func testWidgetRecordWaitingBannerKeepsMessageAndCancelOnScreen() async throws {
+        for size in [DynamicTypeSize.large, .accessibility3, .accessibility5] {
+            let content = WidgetRecordLaunchWaitingBanner(cancel: {})
+                .background { RenderProbe(id: "waiting-banner") }
+                .environment(\.dynamicTypeSize, size)
+            let host = UIHostingController(rootView: content)
+            let window = show(host, size: CGSize(width: 320, height: 568))
+            defer { window.isHidden = true }
+            try await settle(window)
+            let banner = try XCTUnwrap(find("waiting-banner", in: host.view))
+            let frame = banner.convert(banner.bounds, to: window)
+            XCTAssertGreaterThanOrEqual(frame.minX, 0)
+            XCTAssertLessThanOrEqual(frame.maxX, window.bounds.width + 0.5)
+            XCTAssertGreaterThanOrEqual(frame.height, 32, "Message and Cancel need a full row")
+            // The row spans the screen at every size; it must not collapse
+            // into a narrow pill that wraps the message mid-word.
+            XCTAssertGreaterThanOrEqual(frame.width, window.bounds.width * 0.85)
+            let image = UIGraphicsImageRenderer(bounds: host.view.bounds).image { _ in
+                host.view.drawHierarchy(in: host.view.bounds, afterScreenUpdates: true)
+            }
+            let attachment = XCTAttachment(image: image)
+            attachment.name = "widget-record-waiting-\(size)"
+            attachment.lifetime = .keepAlways
+            add(attachment)
+            try? image.pngData()?.write(to: FileManager.default.temporaryDirectory
+                .appendingPathComponent("widget-record-waiting-\(size).png"))
+        }
+    }
+
     private func slot(_ id: String, expands: Bool = false) -> CaptureViewSection {
         CaptureViewSection {
             RenderProbe(id: id).frame(height: expands ? nil : 36)

@@ -8,6 +8,28 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.sp
+import androidx.wear.compose.foundation.lazy.itemsIndexed
+import androidx.wear.compose.foundation.rotary.RotaryScrollableDefaults
+import androidx.wear.compose.foundation.rotary.rotaryScrollable
+import androidx.wear.compose.material.ListHeader
+import androidx.wear.compose.material.TimeText
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,6 +58,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -74,17 +97,16 @@ private fun WearRecorderScreen() {
     val presets by WearPresetStore.presets.collectAsStateWithLifecycle()
     val selectedPresetID by WearPresetStore.selection.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
-    var showsPresets by remember { mutableStateOf(false) }
     var showsQueue by remember { mutableStateOf(false) }
-    var syncMessage by remember { mutableStateOf<String?>(null) }
     var isSyncing by remember { mutableStateOf(false) }
     var isStarting by remember { mutableStateOf(false) }
     var unavailableMessage by remember { mutableStateOf<String?>(null) }
     var pendingRecordingPreset by remember { mutableStateOf<CapturePreset?>(null) }
-    val syncingLabel = stringResource(R.string.wear_syncing)
-    val queuedLabel = stringResource(R.string.wear_queued)
-    val nothingToSyncLabel = stringResource(R.string.wear_nothing_to_sync)
-    val savedOnWatchLabel = stringResource(R.string.wear_saved_watch)
+    var result by remember { mutableStateOf<WearRecordingResult?>(null) }
+    // The status registry keeps the last session's terminal phase across launches; only a session
+    // this screen saw recording may produce a result screen.
+    var observedSessionID by remember { mutableStateOf<String?>(null) }
+    val levels = remember { mutableStateListOf<Float>().apply { repeat(WEAR_LEVEL_BARS) { add(0f) } } }
     val pauseActionLabel = stringResource(R.string.wear_pause_action)
     val resumeActionLabel = stringResource(R.string.wear_resume_action)
     val stopActionLabel = stringResource(R.string.wear_stop_action)
@@ -110,9 +132,10 @@ private fun WearRecorderScreen() {
         pendingRecordingPreset = null
     }
 
-    fun start() {
+    fun start(preset: WearPreset) {
+        WearPresetStore.select(context, preset.id)
         val selected = WearPresetStore.selected()
-        val preset = RecordingPresetSnapshotCodec.decode(selected.snapshot.toString(Charsets.UTF_8))
+        val capturePreset = RecordingPresetSnapshotCodec.decode(selected.snapshot.toString(Charsets.UTF_8))
             ?: CapturePreset(
                 id = selected.id,
                 name = selected.name,
@@ -122,11 +145,12 @@ private fun WearRecorderScreen() {
                 noteNameTemplate = "daily-{uuid}.md",
                 metadataFields = emptyList(),
             )
-        pendingRecordingPreset = preset
+        result = null
+        pendingRecordingPreset = capturePreset
         isStarting = true
         unavailableMessage = null
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
-            client.start(preset)
+            client.start(capturePreset)
             pendingRecordingPreset = null
         } else {
             permissionLauncher.launch(permissions)
@@ -137,21 +161,35 @@ private fun WearRecorderScreen() {
         WearPresetStore.load(context)
         WearQueueStore.load(context)
     }
+    LaunchedEffect(status.sessionID) {
+        for (index in levels.indices) levels[index] = 0f
+    }
+    LaunchedEffect(status.elapsedMillis, status.level) {
+        if (status.phase == RecordingPhase.RECORDING) {
+            levels.removeAt(0)
+            levels.add(status.level)
+        }
+    }
     LaunchedEffect(status.sessionID, status.phase, status.chunkCount) {
         if (status.phase != RecordingPhase.IDLE) isStarting = false
         WearSystemSurfaces.requestRefresh(context)
         val id = status.sessionID ?: return@LaunchedEffect
         when (status.phase) {
             RecordingPhase.RECORDING, RecordingPhase.PAUSED -> {
+                observedSessionID = id
                 WearQueueStore.begin(context, id, status.createdAtEpochMillis, WearPresetStore.selected())
             }
             RecordingPhase.COMPLETED, RecordingPhase.INTERRUPTED, RecordingPhase.FAILED -> {
                 if (status.chunkCount > 0) {
                     WearQueueStore.finish(context, id, status.elapsedMillis, status.chunkCount)
-                    if (status.phase == RecordingPhase.COMPLETED) {
+                    if (status.phase == RecordingPhase.COMPLETED && id == observedSessionID) {
+                        observedSessionID = null
+                        val preset = WearPresetStore.selected()
+                        val duration = status.elapsedMillis
                         scope.launch {
                             val synced = WearDataBridge.syncAll(context)
-                            syncMessage = if (synced > 0) queuedLabel else savedOnWatchLabel
+                            val reachable = WearDataBridge.isPhoneConnected(context)
+                            result = WearRecordingResult(preset.id, preset.name, duration, sentToPhone = synced > 0 && reachable)
                         }
                     }
                 }
@@ -165,71 +203,59 @@ private fun WearRecorderScreen() {
     }
     LaunchedEffect(queue) { WearSystemSurfaces.requestRefresh(context) }
 
-    Scaffold {
-        if (showsPresets) {
-            PresetPicker(
-                presets = presets,
-                selectedPresetID = selectedPresetID,
-                select = { preset ->
-                    WearPresetStore.select(context, preset.id)
-                    showsPresets = false
-                },
-                close = { showsPresets = false },
-            )
-        } else if (showsQueue) {
-            WearQueueScreen(
-                queue = queue,
-                retry = { recordingID ->
-                    scope.launch {
-                        WearQueueStore.prepareRetry(context, recordingID)
-                        isSyncing = true
-                        syncMessage = syncingLabel
-                        val count = WearDataBridge.syncAll(context)
-                        syncMessage = if (count > 0) queuedLabel else nothingToSyncLabel
-                        isSyncing = false
-                    }
-                },
-                discard = { recordingID ->
-                    if (WearQueueStore.discard(context, recordingID)) {
-                        syncMessage = nothingToSyncLabel
-                    }
-                },
-                close = { showsQueue = false },
-            )
-        } else {
-            WearRecorderContent(
-                status = status,
-                queue = queue,
-                selectedPreset = WearPresetStore.selected(),
-                syncMessage = syncMessage,
-                isStarting = isStarting,
-                isSyncing = isSyncing,
-                unavailableMessage = unavailableMessage,
-                pauseActionLabel = pauseActionLabel,
-                resumeActionLabel = resumeActionLabel,
-                stopActionLabel = stopActionLabel,
-                cancelActionLabel = cancelActionLabel,
-                startActionLabel = startActionLabel,
-                start = ::start,
-                pause = client::pause,
-                resume = client::resume,
-                stop = client::stop,
-                cancel = client::cancel,
-                showPresets = { showsPresets = true },
-                showQueue = { showsQueue = true },
-                sync = {
-                    scope.launch {
-                        isSyncing = true
-                        syncMessage = syncingLabel
-                        val count = WearDataBridge.syncAll(context)
-                        syncMessage = if (count > 0) queuedLabel else nothingToSyncLabel
-                        isSyncing = false
-                    }
-                },
-            )
-        }
+    if (showsQueue) {
+        WearQueueScreen(
+            queue = queue,
+            retry = { recordingID ->
+                scope.launch {
+                    WearQueueStore.prepareRetry(context, recordingID)
+                    isSyncing = true
+                    WearDataBridge.syncAll(context)
+                    isSyncing = false
+                }
+            },
+            discard = { recordingID -> WearQueueStore.discard(context, recordingID) },
+            close = { showsQueue = false },
+        )
+    } else {
+        WearRecorderContent(
+            status = status,
+            queue = queue,
+            presets = presets,
+            recordingPreset = presets.firstOrNull { it.id == selectedPresetID } ?: WearPresetStore.selected(),
+            levels = levels,
+            result = result,
+            isStarting = isStarting,
+            isSyncing = isSyncing,
+            unavailableMessage = unavailableMessage,
+            pauseActionLabel = pauseActionLabel,
+            resumeActionLabel = resumeActionLabel,
+            stopActionLabel = stopActionLabel,
+            cancelActionLabel = cancelActionLabel,
+            startActionLabel = startActionLabel,
+            start = ::start,
+            pause = client::pause,
+            resume = client::resume,
+            stop = client::stop,
+            cancel = client::cancel,
+            showQueue = { showsQueue = true },
+            speakAgain = { finished ->
+                start(presets.firstOrNull { it.id == finished.presetID } ?: WearPresetStore.selected())
+            },
+            dismissResult = { result = null },
+        )
     }
 }
+
+internal const val WEAR_LEVEL_BARS = 26
+
+/** What the watch shows after Stop: handed to the phone, or kept on the watch until it is reachable. */
+internal data class WearRecordingResult(
+    val presetID: String,
+    val presetName: String,
+    val durationMillis: Long,
+    val sentToPhone: Boolean,
+)
 
 internal enum class WearDisplayPhase {
     IDLE,
@@ -272,8 +298,10 @@ internal fun resolveWearDisplayPhase(
 internal fun WearRecorderContent(
     status: RecordingStatus,
     queue: List<WearQueueItem>,
-    selectedPreset: WearPreset,
-    syncMessage: String?,
+    presets: List<WearPreset>,
+    recordingPreset: WearPreset,
+    levels: List<Float>,
+    result: WearRecordingResult?,
     isStarting: Boolean,
     isSyncing: Boolean,
     unavailableMessage: String?,
@@ -282,111 +310,294 @@ internal fun WearRecorderContent(
     stopActionLabel: String,
     cancelActionLabel: String,
     startActionLabel: String,
-    start: () -> Unit,
+    start: (WearPreset) -> Unit,
     pause: () -> Unit,
     resume: () -> Unit,
     stop: () -> Unit,
     cancel: () -> Unit,
-    showPresets: () -> Unit,
     showQueue: () -> Unit,
-    sync: () -> Unit,
+    speakAgain: (WearRecordingResult) -> Unit,
+    dismissResult: () -> Unit,
 ) {
-    val displayPhase = resolveWearDisplayPhase(status, queue, isStarting, isSyncing, unavailableMessage)
-    val listState = rememberScalingLazyListState(initialCenterItemIndex = 0)
-    LaunchedEffect(status.phase) {
-        if (status.isActive) listState.scrollToItem(0)
+    Scaffold(timeText = { TimeText() }) {
+        when {
+            status.isActive -> WearRecordingScreen(
+                status = status,
+                preset = recordingPreset,
+                presetIndex = presets.indexOfFirst { it.id == recordingPreset.id }.coerceAtLeast(0),
+                levels = levels,
+                pauseActionLabel = pauseActionLabel,
+                resumeActionLabel = resumeActionLabel,
+                stopActionLabel = stopActionLabel,
+                cancelActionLabel = cancelActionLabel,
+                pause = pause,
+                resume = resume,
+                stop = stop,
+                cancel = cancel,
+            )
+            result != null -> WearResultScreen(
+                result = result,
+                speakAgain = { speakAgain(result) },
+                dismiss = dismissResult,
+            )
+            else -> WearHomeScreen(
+                presets = presets,
+                displayPhase = resolveWearDisplayPhase(status, queue, isStarting, isSyncing, unavailableMessage),
+                queue = queue,
+                isStarting = isStarting,
+                unavailableMessage = unavailableMessage,
+                startActionLabel = startActionLabel,
+                start = start,
+                showQueue = showQueue,
+            )
+        }
     }
+}
+
+/** "Speak to…": one tap on a preset starts recording to it. */
+@Composable
+private fun WearHomeScreen(
+    presets: List<WearPreset>,
+    displayPhase: WearDisplayPhase,
+    queue: List<WearQueueItem>,
+    isStarting: Boolean,
+    unavailableMessage: String?,
+    startActionLabel: String,
+    start: (WearPreset) -> Unit,
+    showQueue: () -> Unit,
+) {
+    val listState = rememberScalingLazyListState(initialCenterItemIndex = 1)
     ScalingLazyColumn(
         modifier = Modifier.fillMaxSize(),
         state = listState,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         item {
-            Column(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-            ) {
-                Text(stringResource(R.string.wear_brand), style = MaterialTheme.typography.caption1)
-                Text(wearDisplayTitle(displayPhase), style = MaterialTheme.typography.title3)
+            ListHeader {
                 Text(
-                    formatWearDuration(status.elapsedMillis),
-                    style = MaterialTheme.typography.display2.copy(fontFamily = WearGeistMonoFontFamily),
+                    stringResource(R.string.wear_speak_to),
+                    color = WearSignal.accent,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
                 )
-                if (status.isActive) {
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Button(
-                            onClick = if (status.phase == RecordingPhase.PAUSED) resume else pause,
-                            modifier = Modifier.size(52.dp).semantics {
-                                contentDescription = if (status.phase == RecordingPhase.PAUSED) resumeActionLabel else pauseActionLabel
-                                role = Role.Button
-                            },
-                        ) { Text(if (status.phase == RecordingPhase.PAUSED) "▶" else "Ⅱ") }
-                        Button(
-                            onClick = stop,
-                            modifier = Modifier.size(52.dp).semantics {
-                                contentDescription = stopActionLabel
-                                role = Role.Button
-                            },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFFF6B6B)),
-                        ) { Text("■") }
-                        Button(
-                            onClick = cancel,
-                            modifier = Modifier.size(52.dp).semantics {
-                                contentDescription = cancelActionLabel
-                                role = Role.Button
-                            },
-                        ) { Text("×") }
+            }
+        }
+        itemsIndexed(presets, key = { _, preset -> preset.id }) { index, preset ->
+            Chip(
+                onClick = { start(preset) },
+                enabled = !isStarting,
+                label = {
+                    Text(
+                        preset.name,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                },
+                icon = { WearPresetTile(preset.name, index) },
+                colors = ChipDefaults.chipColors(backgroundColor = WearSignal.surface, contentColor = WearSignal.text),
+                modifier = Modifier.fillMaxWidth().semantics { contentDescription = startActionLabel },
+            )
+        }
+        if (displayPhase != WearDisplayPhase.IDLE) {
+            item {
+                WearStatusCard(
+                    phase = displayPhase,
+                    queuedCount = queue.size,
+                    message = unavailableMessage,
+                    onClick = showQueue.takeIf { queue.isNotEmpty() },
+                )
+            }
+        }
+    }
+}
+
+/** Compact pipeline status under the presets; hidden when there is nothing to report. */
+@Composable
+private fun WearStatusCard(phase: WearDisplayPhase, queuedCount: Int, message: String?, onClick: (() -> Unit)?) {
+    val isProblem = phase == WearDisplayPhase.ERROR || phase == WearDisplayPhase.UNAVAILABLE
+    val detail = when {
+        message != null -> message
+        queuedCount > 0 -> savedRecordingsLabel(queuedCount)
+        else -> null
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(WearSignal.surface)
+            .then(if (onClick != null) Modifier.clickable(role = Role.Button, onClick = onClick) else Modifier)
+            .padding(horizontal = 14.dp, vertical = 10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        Text(
+            wearDisplayTitle(phase),
+            color = if (isProblem) WearSignal.redText else WearSignal.text,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.SemiBold,
+            textAlign = TextAlign.Center,
+        )
+        if (detail != null) {
+            Text(detail, color = WearSignal.muted, fontSize = 12.sp, textAlign = TextAlign.Center, maxLines = 3)
+        }
+    }
+}
+
+/** Preset, timer and live levels above one Stop button; Pause/Resume and Cancel sit below the fold. */
+@Composable
+private fun WearRecordingScreen(
+    status: RecordingStatus,
+    preset: WearPreset,
+    presetIndex: Int,
+    levels: List<Float>,
+    pauseActionLabel: String,
+    resumeActionLabel: String,
+    stopActionLabel: String,
+    cancelActionLabel: String,
+    pause: () -> Unit,
+    resume: () -> Unit,
+    stop: () -> Unit,
+    cancel: () -> Unit,
+) {
+    val isPaused = status.phase == RecordingPhase.PAUSED
+    WearFoldedScreen(
+        primary = {
+            Column(
+                modifier = Modifier.align(Alignment.TopCenter).padding(top = 34.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(6.dp),
+            ) {
+                Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
+                    WearPresetTile(preset.name, presetIndex, size = 15.dp)
+                    Text(preset.name, color = WearSignal.text, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, maxLines = 1)
+                    if (isPaused) {
+                        Text("· " + stringResource(R.string.wear_paused), color = WearSignal.muted, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
                     }
-                } else {
-                    Button(
-                        onClick = start,
-                        enabled = !isStarting,
-                        modifier = Modifier.size(72.dp).semantics {
-                            contentDescription = startActionLabel
-                            role = Role.Button
-                        },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFBEC2FF), contentColor = Color(0xFF0E1690)),
-                    ) { Text("REC") }
                 }
                 Text(
-                    unavailableMessage ?: wearDisplayDetail(displayPhase, queue.size),
-                    style = MaterialTheme.typography.caption1,
+                    formatWearDuration(status.elapsedMillis),
+                    color = if (isPaused) WearSignal.muted else WearSignal.text,
+                    fontFamily = WearGeistMonoFontFamily,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 46.sp,
+                )
+                WearLevelWaveform(levels, isPaused, Modifier.width(148.dp).height(26.dp))
+            }
+            WearEdgeButton(
+                label = stringResource(R.string.wear_stop),
+                description = stopActionLabel,
+                background = WearSignal.red,
+                onClick = stop,
+                glyph = WearGlyph.STOP,
+                modifier = Modifier.align(Alignment.BottomCenter),
+            )
+        },
+        secondary = {
+            if (isPaused) {
+                WearPillButton(stringResource(R.string.wear_resume), resumeActionLabel, WearGlyph.PLAY, resume)
+            } else {
+                WearPillButton(stringResource(R.string.wear_pause), pauseActionLabel, WearGlyph.PAUSE, pause)
+            }
+            WearPillButton(
+                stringResource(R.string.wear_cancel),
+                cancelActionLabel,
+                WearGlyph.CANCEL,
+                cancel,
+                contentColor = WearSignal.redText,
+            )
+        },
+    )
+}
+
+/** After Stop: handed to the phone, or kept on the watch until the phone is reachable. */
+@Composable
+private fun WearResultScreen(result: WearRecordingResult, speakAgain: () -> Unit, dismiss: () -> Unit) {
+    val speakAgainLabel = stringResource(R.string.wear_speak_again)
+    val doneLabel = stringResource(R.string.wear_done)
+    WearFoldedScreen(
+        primary = {
+            Column(
+                modifier = Modifier.align(Alignment.TopCenter).padding(top = 32.dp, start = 20.dp, end = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(6.dp),
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(52.dp)
+                        .clip(CircleShape)
+                        .background(if (result.sentToPhone) WearSignal.greenBackground else WearSignal.surface),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    WearGlyphIcon(
+                        if (result.sentToPhone) WearGlyph.CHECK else WearGlyph.SAVED,
+                        if (result.sentToPhone) WearSignal.green else WearSignal.accent,
+                        22.dp,
+                    )
+                }
+                Text(
+                    if (result.sentToPhone) stringResource(R.string.wear_sent_to, result.presetName)
+                    else stringResource(R.string.wear_saved_on_watch),
+                    color = WearSignal.text,
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    textAlign = TextAlign.Center,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(
+                    if (result.sentToPhone) formatWearDuration(result.durationMillis)
+                    else formatWearDuration(result.durationMillis) + " · " + stringResource(R.string.wear_remote_waiting),
+                    color = WearSignal.muted,
+                    fontSize = 13.sp,
+                    textAlign = TextAlign.Center,
                 )
             }
-        }
-        item {
-            Chip(
-                label = { Text(selectedPreset.name) },
-                secondaryLabel = { Text(stringResource(R.string.wear_capture_preset)) },
-                onClick = showPresets,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
-                colors = ChipDefaults.secondaryChipColors(),
+            WearEdgeButton(
+                label = speakAgainLabel,
+                description = speakAgainLabel,
+                background = WearSignal.accentFill,
+                onClick = speakAgain,
+                modifier = Modifier.align(Alignment.BottomCenter),
+            )
+        },
+        secondary = {
+            WearPillButton(doneLabel, doneLabel, WearGlyph.CHECK, dismiss)
+        },
+    )
+}
+
+/**
+ * A full-screen first page (content plus its edge button), then secondary actions reached by scrolling
+ * or the crown, matching the Apple Watch recording screen's fold.
+ */
+@Composable
+private fun WearFoldedScreen(
+    primary: @Composable BoxScope.() -> Unit,
+    secondary: @Composable ColumnScope.() -> Unit,
+) {
+    val scrollState = rememberScrollState()
+    val focusRequester = remember { FocusRequester() }
+    BoxWithConstraints(Modifier.fillMaxSize()) {
+        val screenHeight = maxHeight
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .rotaryScrollable(RotaryScrollableDefaults.behavior(scrollableState = scrollState), focusRequester)
+                .verticalScroll(scrollState),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Box(Modifier.fillMaxWidth().height(screenHeight), content = primary)
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(start = 30.dp, end = 30.dp, top = 8.dp, bottom = 40.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                content = secondary,
             )
         }
-        if (queue.isNotEmpty()) {
-            item {
-                Chip(
-                    label = { Text(stringResource(R.string.wear_review_recordings)) },
-                    secondaryLabel = { Text(savedRecordingsLabel(queue.size)) },
-                    onClick = showQueue,
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
-                    colors = ChipDefaults.secondaryChipColors(),
-                )
-            }
-        }
-        item {
-            Chip(
-                label = { Text(if (queue.isEmpty()) stringResource(R.string.wear_sync_status) else stringResource(R.string.wear_sync)) },
-                secondaryLabel = { Text(syncMessage ?: queueSummary(queue)) },
-                onClick = sync,
-                enabled = !isSyncing && !status.isActive,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
-            )
-        }
-        item { Spacer(Modifier.height(20.dp)) }
     }
+    LaunchedEffect(Unit) { focusRequester.requestFocus() }
 }
 
 @Composable
@@ -479,28 +690,6 @@ internal fun WearQueueScreen(
 }
 
 @Composable
-internal fun PresetPicker(
-    presets: List<WearPreset>,
-    selectedPresetID: String,
-    select: (WearPreset) -> Unit,
-    close: () -> Unit,
-) {
-    ScalingLazyColumn(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        item { Spacer(Modifier.height(28.dp)) }
-        item { Text(stringResource(R.string.wear_capture_preset), style = MaterialTheme.typography.title3) }
-        items(presets, key = WearPreset::id) { preset ->
-            Chip(
-                label = { Text(preset.name) },
-                secondaryLabel = if (preset.id == selectedPresetID) ({ Text(stringResource(R.string.wear_selected)) }) else null,
-                onClick = { select(preset) },
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
-            )
-        }
-        item { Chip(label = { Text(stringResource(R.string.wear_done)) }, onClick = close, modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) }
-    }
-}
-
-@Composable
 private fun wearDisplayTitle(phase: WearDisplayPhase): String = when (phase) {
     WearDisplayPhase.IDLE -> stringResource(R.string.wear_ready)
     WearDisplayPhase.LISTENING -> stringResource(R.string.wear_listening)
@@ -516,21 +705,6 @@ private fun wearDisplayTitle(phase: WearDisplayPhase): String = when (phase) {
 }
 
 @Composable
-private fun wearDisplayDetail(phase: WearDisplayPhase, queuedCount: Int): String = when (phase) {
-    WearDisplayPhase.RECORDING -> stringResource(R.string.wear_recording_detail)
-    WearDisplayPhase.PAUSED -> stringResource(R.string.wear_paused_detail)
-    WearDisplayPhase.LISTENING -> stringResource(R.string.wear_listening_detail)
-    WearDisplayPhase.TRANSCRIBING -> stringResource(R.string.wear_remote_transcribing)
-    WearDisplayPhase.DELIVERING -> stringResource(R.string.wear_remote_saving)
-    WearDisplayPhase.ERROR -> stringResource(R.string.wear_failure_detail)
-    WearDisplayPhase.UNAVAILABLE -> stringResource(R.string.wear_unavailable_detail)
-    WearDisplayPhase.SYNCING -> stringResource(R.string.wear_syncing_detail)
-    WearDisplayPhase.PENDING -> stringResource(R.string.wear_pending_detail)
-    WearDisplayPhase.DELIVERED -> stringResource(R.string.wear_delivery_complete)
-    WearDisplayPhase.IDLE -> if (queuedCount > 0) savedRecordingsLabel(queuedCount) else stringResource(R.string.wear_ready_detail)
-}
-
-@Composable
 private fun wearQueuePhaseLabel(phase: WearQueuePhase): String = when (phase) {
     WearQueuePhase.LOCAL -> stringResource(R.string.wear_saved_watch)
     WearQueuePhase.SYNC_QUEUED -> stringResource(R.string.wear_syncing)
@@ -543,22 +717,9 @@ private fun wearQueuePhaseLabel(phase: WearQueuePhase): String = when (phase) {
     WearQueuePhase.TRANSPORT_FAILED -> stringResource(R.string.wear_remote_transport_failed)
 }
 
-@Composable
-private fun queueSummary(queue: List<WearQueueItem>): String = when {
-    queue.isEmpty() -> stringResource(R.string.wear_nothing_to_sync)
-    queue.any { it.phase == WearQueuePhase.PHONE_DELIVERING } -> stringResource(R.string.wear_remote_saving)
-    queue.any { it.phase == WearQueuePhase.PHONE_TRANSCRIBING } -> stringResource(R.string.wear_remote_transcribing)
-    queue.any { it.phase in setOf(WearQueuePhase.PHONE_RECEIVING, WearQueuePhase.PHONE_QUEUED, WearQueuePhase.PHONE_INGESTED) } ->
-        stringResource(R.string.wear_remote_waiting)
-    queue.any { it.phase == WearQueuePhase.FAILED } -> stringResource(R.string.wear_remote_failed)
-    queue.any { it.phase == WearQueuePhase.TRANSPORT_FAILED } -> stringResource(R.string.wear_remote_transport_failed)
-    else -> stringResource(R.string.wear_queue_preserved)
-}
 
 @Composable
-private fun savedRecordingsLabel(count: Int): String = if (count == 1) {
-    stringResource(R.string.wear_one_recording_saved)
-} else stringResource(R.string.wear_recordings_saved_count, count)
+private fun savedRecordingsLabel(count: Int): String = pluralStringResource(R.plurals.wear_recordings_saved, count, count)
 
 private fun formatWearDuration(milliseconds: Long): String {
     val seconds = milliseconds.coerceAtLeast(0) / 1_000

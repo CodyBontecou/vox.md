@@ -10,9 +10,6 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import androidx.compose.ui.test.onRoot
-import androidx.compose.ui.test.performTouchInput
-import androidx.compose.ui.test.swipeUp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.wear.compose.material.MaterialTheme
 import md.vox.android.platformservices.RecordingPhase
@@ -59,9 +56,9 @@ class WearRecorderUiInstrumentationTest {
         }
 
         val stories = listOf(
-            model() to "Ready",
+            model() to "Speak to…",
             model(isStarting = true) to "Listening",
-            model(status = status(RecordingPhase.RECORDING)) to "Recording",
+            model(status = status(RecordingPhase.RECORDING)) to "Stop",
             model(status = status(RecordingPhase.PAUSED)) to "Paused",
             model(queue = listOf(queue(WearQueuePhase.LOCAL))) to "Pending",
             model(queue = listOf(queue(WearQueuePhase.SYNC_QUEUED))) to "Syncing",
@@ -74,72 +71,90 @@ class WearRecorderUiInstrumentationTest {
         stories.forEach { (story, title) ->
             compose.runOnIdle { model.value = story }
             compose.waitForIdle()
-            compose.onAllNodesWithText(title).onFirst().assertExists()
+            compose.onAllNodesWithText(title, substring = true).onFirst().assertExists()
         }
     }
 
     @Test
-    fun recorderControlsAndPresetEntryDispatchThroughTheProductionSurface() {
-        var starts = 0
+    fun recorderControlsDispatchThroughTheProductionSurface() {
+        val started = mutableListOf<WearPreset>()
         var pauses = 0
         var resumes = 0
         var stops = 0
         var cancels = 0
-        var presets = 0
         val model = mutableStateOf(model())
         compose.setContent {
             WearVoxTheme {
                 val current = model.value
                 recorder(
                     current,
-                    start = { starts += 1 },
+                    start = { started += it },
                     pause = { pauses += 1 },
                     resume = { resumes += 1 },
                     stop = { stops += 1 },
                     cancel = { cancels += 1 },
-                    showPresets = { presets += 1 },
                 )
             }
         }
 
         compose.onNodeWithContentDescription("Start Watch recording").performClick()
-        compose.onRoot().performTouchInput { swipeUp() }
-        compose.onNodeWithText("Daily").performClick()
         compose.runOnIdle { model.value = model(status = status(RecordingPhase.RECORDING)) }
         compose.waitForIdle()
-        compose.onNodeWithContentDescription("Pause Watch recording").performClick()
-        compose.onNodeWithContentDescription("Stop Watch recording").performClick()
-        compose.onNodeWithContentDescription("Cancel and delete Watch recording").performClick()
+        compose.onNodeWithText("Daily").assertExists()
+        compose.onNodeWithContentDescription("Pause Watch recording").performScrollTo().performClick()
+        compose.onNodeWithContentDescription("Cancel and delete Watch recording").performScrollTo().performClick()
+        compose.onNodeWithContentDescription("Stop Watch recording").performScrollTo().performClick()
         compose.runOnIdle { model.value = model(status = status(RecordingPhase.PAUSED)) }
         compose.waitForIdle()
-        compose.onNodeWithContentDescription("Resume Watch recording").performClick()
+        compose.onNodeWithContentDescription("Resume Watch recording").performScrollTo().performClick()
 
         compose.runOnIdle {
-            assertEquals(1, starts)
+            assertEquals("Daily", started.single().name)
             assertEquals(1, pauses)
             assertEquals(1, resumes)
             assertEquals(1, stops)
             assertEquals(1, cancels)
-            assertEquals(1, presets)
         }
     }
 
     @Test
-    fun presetPickerSelectsACompleteSnapshotAndRecoveryRequiresConfirmedDiscard() {
-        val selected = mutableListOf<WearPreset>()
+    fun speakToListStartsTheTappedPresetWithItsCompleteSnapshot() {
+        val started = mutableListOf<WearPreset>()
         val presets = listOf(
             preset("11111111-1111-4111-8111-111111111111", "Daily"),
             preset("22222222-2222-4222-8222-222222222222", "Meetings"),
         )
         compose.setContent {
             WearVoxTheme {
-                PresetPicker(presets, presets.first().id, { selected += it }, {})
+                recorder(model(), presets = presets, start = { started += it })
             }
         }
         compose.onNodeWithText("Meetings").performScrollTo().performClick()
         compose.runOnIdle {
-            assertEquals("Meetings", selected.single().name)
-            assertEquals(presets[1].snapshot.toList(), selected.single().snapshot.toList())
+            assertEquals("Meetings", started.single().name)
+            assertEquals(presets[1].snapshot.toList(), started.single().snapshot.toList())
+        }
+    }
+
+    @Test
+    fun resultScreensOfferSpeakAgainAndDone() {
+        val again = mutableListOf<WearRecordingResult>()
+        var dismissals = 0
+        val result = mutableStateOf(WearRecordingResult("11111111-1111-4111-8111-111111111111", "Daily", 42_000, sentToPhone = true))
+        compose.setContent {
+            WearVoxTheme {
+                recorder(model(), result = result.value, speakAgain = { again += it }, dismissResult = { dismissals += 1 })
+            }
+        }
+        compose.onNodeWithText("Sent to Daily").assertExists()
+        compose.onNodeWithText("Speak again").performClick()
+        compose.onNodeWithText("Done").performScrollTo().performClick()
+        compose.runOnIdle { result.value = result.value.copy(sentToPhone = false) }
+        compose.waitForIdle()
+        compose.onNodeWithText("Saved on Watch").assertExists()
+        compose.runOnIdle {
+            assertEquals("Daily", again.single().presetName)
+            assertEquals(1, dismissals)
         }
     }
 
@@ -172,17 +187,22 @@ class WearRecorderUiInstrumentationTest {
     @Composable
     private fun recorder(
         model: UiModel,
-        start: () -> Unit = {},
+        presets: List<WearPreset> = listOf(preset("11111111-1111-4111-8111-111111111111", "Daily")),
+        result: WearRecordingResult? = null,
+        start: (WearPreset) -> Unit = {},
         pause: () -> Unit = {},
         resume: () -> Unit = {},
         stop: () -> Unit = {},
         cancel: () -> Unit = {},
-        showPresets: () -> Unit = {},
+        speakAgain: (WearRecordingResult) -> Unit = {},
+        dismissResult: () -> Unit = {},
     ) = WearRecorderContent(
         status = model.status,
         queue = model.queue,
-        selectedPreset = preset("11111111-1111-4111-8111-111111111111", "Daily"),
-        syncMessage = null,
+        presets = presets,
+        recordingPreset = presets.first(),
+        levels = List(WEAR_LEVEL_BARS) { 0.4f },
+        result = result,
         isStarting = model.isStarting,
         isSyncing = false,
         unavailableMessage = model.unavailableMessage,
@@ -196,9 +216,9 @@ class WearRecorderUiInstrumentationTest {
         resume = resume,
         stop = stop,
         cancel = cancel,
-        showPresets = showPresets,
         showQueue = {},
-        sync = {},
+        speakAgain = speakAgain,
+        dismissResult = dismissResult,
     )
 
     private fun model(

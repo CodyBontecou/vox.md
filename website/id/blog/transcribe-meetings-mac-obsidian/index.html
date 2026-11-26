@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="id" dir="ltr" data-search-section="Bagian" data-search-guide="Panduan" data-search-empty="Tidak ada hasil untuk “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transkripsikan rapat Mac secara lokal ke Obsidian | Vox.md</title>
+  <meta name="description" content="Rekam audio satu aplikasi dan mikrofon Anda sebagai trek terpisah dengan Vox.md untuk Mac, transkripsikan keduanya di perangkat, lalu simpan catatan Markdown berlabel pembicara ke Obsidian. Tanpa bot rapat atau akun.">
+  <link rel="canonical" href="https://vox.isolated.tech/id/blog/transcribe-meetings-mac-obsidian/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Dokumentasi Vox.md untuk model bahasa">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Transkripsikan rapat Mac secara lokal ke Obsidian">
+  <meta property="og:description" content="Rekam audio satu aplikasi dan mikrofon Anda sebagai trek terpisah dengan Vox.md untuk Mac, transkripsikan keduanya di perangkat, lalu simpan catatan Markdown berlabel pembicara ke Obsidian. Tanpa bot rapat atau akun.">
+  <meta property="og:url" content="https://vox.isolated.tech/id/blog/transcribe-meetings-mac-obsidian/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-18">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Transkripsikan rapat Mac secara lokal ke Obsidian">
+  <meta name="twitter:description" content="Rekam audio satu aplikasi dan mikrofon Anda sebagai trek terpisah dengan Vox.md untuk Mac, transkripsikan keduanya di perangkat, lalu simpan catatan Markdown berlabel pembicara ke Obsidian. Tanpa bot rapat atau akun.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Transkripsikan rapat Mac secara lokal ke Obsidian",
+  "description": "Rekam audio satu aplikasi dan mikrofon Anda sebagai trek terpisah dengan Vox.md untuk Mac, transkripsikan keduanya di perangkat, lalu simpan catatan Markdown berlabel pembicara ke Obsidian. Tanpa bot rapat atau akun.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-18",
+  "dateModified": "2026-11-18",
+  "mainEntityOfPage": "https://vox.isolated.tech/id/blog/transcribe-meetings-mac-obsidian/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "id",
+  "name": "Transkripsikan rapat Mac secara lokal ke Obsidian | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/id/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Panduan",
+      "item": "https://vox.isolated.tech/id/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Transkripsikan rapat Mac secara lokal ke Obsidian",
+      "item": "https://vox.isolated.tech/id/blog/transcribe-meetings-mac-obsidian/"
+    }
+  ],
+  "inLanguage": "id",
+  "name": "Transkripsikan rapat Mac secara lokal ke Obsidian | Vox.md",
+  "description": "Rekam audio satu aplikasi dan mikrofon Anda sebagai trek terpisah dengan Vox.md untuk Mac, transkripsikan keduanya di perangkat, lalu simpan catatan Markdown berlabel pembicara ke Obsidian. Tanpa bot rapat atau akun."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-meetings-mac-obsidian/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-meetings-mac-obsidian/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Lewati ke panduan</a>
+<nav aria-label="Navigasi utama">
+  <div class="nav-inner">
+    <a href="/id/" class="logo" aria-label="Beranda Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/id/#how">Cara Kerjanya</a></li>
+      <li><a href="/id/docs/">Dokumentasi</a></li>
+      <li><a href="/id/blog/">Panduan</a></li>
+      <li><a href="/id/compare/">Bandingkan</a></li>
+      <li><a href="/id/privacy.html">Privasi</a></li>
+      <li><a href="/id/terms.html">Ketentuan</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_id_f0ba2ed6ae97">Unduh Vox.md</a>
+  <details class="language-switcher"><summary>Bahasa</summary><ul><li><a href="/blog/transcribe-meetings-mac-obsidian/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-meetings-mac-obsidian/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-meetings-mac-obsidian/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-meetings-mac-obsidian/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-meetings-mac-obsidian/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-meetings-mac-obsidian/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-meetings-mac-obsidian/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-meetings-mac-obsidian/" lang="id" hreflang="id" aria-current="page">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-meetings-mac-obsidian/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-meetings-mac-obsidian/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-meetings-mac-obsidian/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-meetings-mac-obsidian/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-meetings-mac-obsidian/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-meetings-mac-obsidian/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-meetings-mac-obsidian/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-meetings-mac-obsidian/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-meetings-mac-obsidian/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-meetings-mac-obsidian/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-meetings-mac-obsidian/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-meetings-mac-obsidian/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-meetings-mac-obsidian/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Mac · Rapat · Markdown</div>
+        <h1 class="hero-title">Transkripsikan rapat Mac secara lokal ke Obsidian</h1>
+        <p class="hero-subtitle">Pilih aplikasi panggilan, rekam, hentikan, dan dapatkan catatan Markdown di vault Anda. Ketahui apa yang tetap di Mac Anda dan apa yang tidak.</p>
+      </div>
+      <aside class="meta-card" aria-label="Tentang panduan ini">
+        <dl>
+          <div><dt>Oleh</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Diperbarui</dt><dd><time datetime="2026-11-18">18 November 2026</time></dd></div>
+          <div><dt>Memerlukan</dt><dd>macOS 14+ · model ucapan yang sudah diunduh · folder vault yang dapat ditulisi</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Transkripsikan rapat Mac secara lokal ke Obsidian">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Jawaban singkat</div>
+        <p>Vox.md untuk Mac dapat merekam audio satu aplikasi dan mikrofon Anda sebagai trek terpisah, mentranskripsikan keduanya di Mac Anda, dan menyimpan catatan Markdown berlabel pembicara ke vault Obsidian atau folder mana pun. Tidak ada bot rapat dan tidak perlu akun.</p>
+      </div>
+      <p>Panduan ini menunjukkan satu penyiapan yang berfungsi, dari Rute yang menulis ke <code>Meetings/</code> di vault Anda hingga catatan jadi. Langkah-langkahnya mengikuti <a href="/id/docs/#mac-meeting">dokumentasi tangkapan rapat Mac</a> dan perilaku aplikasi yang sudah dirilis. Markdown di bawah adalah contoh ilustrasi, bukan rekaman panggilan sungguhan.</p>
+      <nav class="toc" aria-label="Dalam panduan ini"><div class="toc-title">Dalam panduan ini</div><ol>
+        <li><a href="#requirements">Yang Anda perlukan</a></li>
+        <li><a href="#prepare-route">Siapkan Rute rapat</a></li>
+        <li><a href="#record">Rekam panggilan</a></li>
+        <li><a href="#stop-transcribe">Hentikan, transkripsikan, dan kirim</a></li>
+        <li><a href="#recovery">Jika rekaman terputus</a></li>
+        <li><a href="#consent">Beri tahu orang lain bahwa Anda merekam</a></li>
+        <li><a href="#compare">Bandingkan pendekatan catatan rapat</a></li>
+        <li><a href="#limitations">Batasan yang perlu diketahui sebelum panggilan panjang</a></li>
+      </ol></nav>
+
+      <h2 id="requirements">1. Yang Anda perlukan</h2>
+      <ul>
+        <li><strong>Mac dengan macOS 14 atau lebih baru</strong> dan aplikasi Vox.md untuk Mac, yang dipasang dari listing App Store yang sama dengan aplikasi iPhone.</li>
+        <li><strong>Akses mikrofon</strong> untuk Vox.md, agar suara Anda sendiri terekam.</li>
+        <li><strong>Akses perekaman layar dan audio sistem.</strong> Tangkapan rapat menggunakan <a href="https://developer.apple.com/documentation/screencapturekit" target="_blank" rel="noopener">framework ScreenCaptureKit</a> milik Apple untuk merekam audio aplikasi yang Anda pilih. Jika macOS meminta, izinkan. Anda dapat meninjau kedua izin di Pengaturan Sistem → Privasi &amp; Keamanan; Apple menjelaskan pengaturan ini di <a href="https://support.apple.com/guide/mac-help/control-access-screen-system-audio-recording-mchld6aa7d23/mac" target="_blank" rel="noopener">Mengontrol akses ke perekaman layar dan audio sistem di Mac</a>.</li>
+        <li><strong>Model Whisper atau Parakeet yang sudah diunduh.</strong> Buka layar Modelnya di Mac, unduh model, dan atur bahasa transkripsi. Halaman <a href="/id/docs/#models">referensi model</a> mencantumkan ukuran dan bahasa, dan <a href="/id/compare/whisper-vs-parakeet/">Whisper atau Parakeet</a> membantu Anda memilih. Whisper berjalan melalui <a href="https://github.com/ggml-org/whisper.cpp" target="_blank" rel="noopener">whisper.cpp</a> dan Parakeet melalui <a href="https://github.com/FluidInference/FluidAudio" target="_blank" rel="noopener">FluidAudio</a>.</li>
+        <li><strong>Folder yang dapat ditulisi</strong>, misalnya vault Obsidian Anda atau folder <code>Meetings</code> di dalamnya.</li>
+        <li>Hanya butuh rekaman biasa? Lihat <a href="/id/blog/record-audio-on-mac/">cara merekam audio di Mac</a>.</li>
+      </ul>
+      <p>Pemrosesan Apple Intelligence opsional, yang digunakan mode Catatan Rapat untuk menyusun ulang transkrip, memerlukan Mac yang kompatibel dengan macOS 26. Tanpanya, Vox.md memakai pemformat deterministik, sehingga Rute tetap berfungsi.</p>
+
+      <h2 id="prepare-route">2. Siapkan Rute rapat</h2>
+      <p>Rute menentukan cara tangkapan diproses dan di mana Markdown-nya ditulis. Beberapa versi Mac menamai Rute sebagai Preset Tangkapan di Pengaturan.</p>
+      <ol>
+        <li>Buka Pengaturan di aplikasi Mac dan buat Rute baru dengan nama seperti <em>Rapat</em>.</li>
+        <li>Di tujuannya, pilih vault Anda sebagai folder. Untuk target catatan, pilih <strong>Catatan Baru</strong> agar setiap rapat mendapat file sendiri.</li>
+        <li>Masukkan templat jalur seperti <code>Meetings/{date}-{hour}{minute}.md</code>. Menyertakan waktu membuat dua rapat di hari yang sama tersimpan di catatan terpisah. Lihat <a href="/id/blog/obsidian-capture-templates/">templat tangkapan Obsidian</a> untuk resep jalur dan token lainnya.</li>
+        <li>Untuk pemrosesan, pilih <strong>Mode</strong>. <strong>Pertahankan Asli</strong> mengirim transkrip berlabel apa adanya sesuai hasil pengenalan. <strong>Catatan Rapat</strong> menghasilkan bagian <code>## Notes</code> dan, jika teks berisi butir tindakan, bagian <code>## Action Items</code> berupa daftar periksa. Ingin judul untuk agenda dan keputusan juga? <a href="/id/blog/obsidian-meeting-notes-template/">Buat templat catatan rapat</a>.</li>
+        <li>Opsional: aktifkan <strong>Identifikasi Pembicara</strong> jika ada beberapa orang jarak jauh yang berbicara. Model pembicara diunduh saat Rute ini pertama kali menggunakannya.</li>
+        <li>Opsional: atur <strong>Menyelamatkan Audio</strong> untuk menyimpan rekaman di samping catatan atau di folder lampiran. Biarkan nonaktif jika Anda hanya ingin teksnya.</li>
+      </ol>
+
+      <h2 id="record">3. Rekam panggilan</h2>
+      <ol>
+        <li>Bergabunglah ke panggilan di aplikasinya sendiri: Zoom, Microsoft Teams, FaceTime, atau browser yang menjalankan Google Meet.</li>
+        <li>Di jendela Tangkapan Vox.md, pilih Rute <em>Rapat</em> yang tadi dibuat.</li>
+        <li>Ubah sumber audio ke <strong>Rapat</strong>; bawaannya adalah <strong>Mikrofon</strong>. Tergantung versi aplikasi Anda, kontrol itu ada di jendela Tangkapan atau di Tangkapan → Sumber Audio pada bilah menu.</li>
+        <li>Mulai merekam. macOS menampilkan pemilih kontennya; pilih tepat satu aplikasi. Vox.md tidak pernah merekam audionya sendiri. Untuk panggilan di browser, pilih browser tersebut. Audionya direkam secara keseluruhan, jadi bisukan tab lain yang memutar suara.</li>
+        <li>Selama merekam, bilah status menampilkan meter level Sistem dan Mik secara langsung, status setiap sumber, dan peringatan tangkapan apa pun. Pastikan kedua meter bergerak saat orang berbicara.</li>
+      </ol>
+      <p>Tangkapan rapat tidak dapat dijeda. Rekaman mikrofon memiliki Jeda dan Lanjutkan, tetapi rapat berjalan dari awal hingga dihentikan. Anda juga tidak dapat beralih ke aplikasi lain di tengah jalan; sebagai gantinya, hentikan lalu mulai rekaman baru.</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_id_f0ba2ed6ae97">Unduh Vox.md gratis</a></p>
+      <p>Unduhan gratis mencakup 15 menit transkripsi. Penggunaan tanpa batas adalah pembelian sekali untuk seumur hidup.</p>
+
+      <h2 id="stop-transcribe">4. Hentikan, transkripsikan, dan kirim</h2>
+      <p>Tekan Hentikan saat panggilan selesai. Vox.md mentranskripsikan kedua trek secara terpisah di Mac Anda dengan model yang Anda pilih, lalu menyelangnya pada satu linimasa bersama. Trek mikrofon Anda diberi label <code>You</code>, dan trek aplikasi diberi label sebagai pembicara jarak jauh, misalnya <code>Speaker 2</code>. Dengan Pertahankan Asli, rapat singkat dapat menghasilkan isi catatan seperti contoh ilustrasi ini:</p>
+      <pre class="guide-code"><code>You:
+Thanks for joining. Can we start with the launch checklist?
+
+Speaker 2:
+Sure. The release notes are ready, but we still need screenshots.
+
+You:
+I’ll take the screenshots by Friday.</code></pre>
+      <p>Dengan Identifikasi Pembicara aktif, Vox.md mencoba membagi trek jarak jauh menjadi lebih banyak label, misalnya <code>Speaker 2</code> dan <code>Speaker 3</code>. Label ini anonim dan bersifat upaya terbaik. Jika identifikasi tidak dapat berjalan, Anda tetap mendapat transkrip biasa dan aplikasi menunjukkan alasannya.</p>
+      <p>Trek terpisah adalah alasan label <code>You</code> berfungsi. Suara Anda berasal dari trek mikrofon dan peserta lain berasal dari trek aplikasi, sehingga Vox.md tidak perlu menebak dari satu rekaman campuran pihak mana dalam panggilan yang mengatakan apa. Label tetap bisa salah. Misalnya, mikrofon dapat menangkap audio dari speaker Anda jika Anda tidak memakai headphone.</p>
+      <p>Apa yang terjadi selanjutnya bergantung pada opsi rekaman yang Anda pilih sebelum mulai:</p>
+      <ul>
+        <li><strong>Tambahkan ke Draf</strong> menaruh transkrip di komposer Tangkapan. Tinjau dan edit, lalu tekan Command-Return untuk mengirimnya melalui Rute.</li>
+        <li><strong>Kirim Sekarang</strong> mengirim catatan melalui Rute segera setelah transkripsi selesai.</li>
+      </ul>
+      <p>Transkrip juga mengikuti pengaturan clipboard Anda, seperti rekaman lainnya. Campuran pemutaran dari kedua trek disimpan sebagai audio rekaman, dan audio itu disimpan bersama catatan hanya jika pengaturan Menyelamatkan Audio pada Rute menyimpan audio. Buka catatan di Obsidian sekali untuk memastikan jalur dan labelnya sesuai harapan.</p>
+
+      <h2 id="recovery">5. Jika rekaman terputus</h2>
+      <p>Kedua trek ditulis ke disk dalam potongan yang tahan lama beserta manifes pemulihan. Jika aliran berhenti, mikrofon dicabut, atau Vox.md ditutup paksa, potongan yang sudah terekam tetap dapat difinalisasi dan ditranskripsikan. Pemulihan berjalan saat antrean rekaman dilanjutkan, misalnya saat berikutnya Anda membuka Vox.md.</p>
+      <p>Catatan dari tangkapan yang tidak lengkap diawali baris peringatan yang menyebutkan bagian mana yang hilang, sehingga Anda tahu transkripnya mungkin memiliki celah.</p>
+
+      <h2 id="consent">6. Beri tahu orang lain bahwa Anda merekam</h2>
+      <p>Hukum perekaman dan kebijakan tempat kerja berbeda menurut tempat dan organisasi. Sebagian mewajibkan persetujuan semua orang. Beri tahu peserta lain bahwa Anda merekam dan mentranskripsikan, dan dapatkan persetujuan mereka sebelum mulai. Ini bukan nasihat hukum; periksa aturan yang berlaku bagi Anda.</p>
+
+      <h2 id="compare">7. Bandingkan pendekatan catatan rapat</h2>
+      <p>Alat catatan rapat secara garis besar terbagi menjadi tiga kelompok. Produk berbeda-beda dan terus berubah, jadi tabel ini menjelaskan pendekatannya, bukan produk tertentu. Jika Anda membandingkan aplikasi seperti Granola, Otter, atau Fireflies, periksa dokumentasi masing-masing vendor tentang di mana audio diproses dan di mana catatan disimpan.</p>
+      <p class="guide-table-hint">Di layar kecil, geser tabel ke samping untuk membandingkan pendekatannya.</p>
+      <div class="guide-comparison" role="region" aria-label="Perbandingan pendekatan catatan rapat; gulir mendatar di layar kecil" tabindex="0">
+        <table class="comparison">
+          <caption>Pendekatan umum, ditinjau 18 November 2026</caption>
+          <thead><tr><th scope="col">Pertanyaan</th><th scope="col">Bot pencatat</th><th scope="col">Aplikasi cloud tanpa bot</th><th scope="col">Tangkapan lokal Vox.md</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Cara bergabung</th><td>Bot bergabung ke panggilan sebagai peserta</td><td>Aplikasi di komputer Anda merekam panggilan</td><td>Aplikasi Mac merekam audio satu aplikasi dan mikrofon Anda</td></tr>
+            <tr><th scope="row">Tempat audio diproses</td><td>Biasanya di server vendor</td><td>Biasanya di server vendor</td><td>Di Mac Anda</td></tr>
+            <tr><th scope="row">Tempat catatan disimpan</td><td>Biasanya di workspace vendor</td><td>Biasanya di workspace vendor</td><td>File Markdown di folder pilihan Anda</td></tr>
+            <tr><th scope="row">Akun</th><td>Biasanya wajib</td><td>Biasanya wajib</td><td>Tidak diperlukan</td></tr>
+            <tr><th scope="row">Model harga</td><td>Periksa halaman harga vendor</td><td>Periksa halaman harga vendor</td><td>15 menit transkripsi gratis, lalu buka kunci seumur hidup sekali bayar</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Alat cloud dapat menawarkan fitur yang tidak dimiliki aplikasi lokal, seperti workspace bersama atau ringkasan lintas banyak rapat. Pilih berdasarkan di mana Anda ingin audio diproses dan di mana Anda ingin catatan akhirnya disimpan.</p>
+
+      <h2 id="limitations">8. Batasan yang perlu diketahui sebelum panggilan panjang</h2>
+      <ul>
+        <li><strong>Satu aplikasi per rekaman.</strong> Tangkapan rapat merekam satu aplikasi ditambah mikrofon Anda.</li>
+        <li><strong>Label bersifat upaya terbaik.</strong> Label pembicara bergantung pada audio yang bersih dan terpisah, dan identifikasi pembicara dapat menggabungkan atau memisahkan suara.</li>
+        <li><strong>Kualitas bergantung pada model dan bahasa.</strong> Model yang lebih besar memakai lebih banyak penyimpanan dan waktu. Periksa kata-kata penting terhadap audionya sebelum Anda mengandalkannya.</li>
+        <li><strong>Tingkat gratis berisi 15 menit transkripsi.</strong> Satu rapat panjang bisa menghabiskannya. Penggunaan tanpa batas adalah pembelian sekali untuk seumur hidup; lihat <a href="/id/docs/#pricing-limits">penggunaan gratis dan buka kunci seumur hidup</a>.</li>
+        <li><strong>Beberapa hal keluar dari Mac Anda.</strong> Perekaman dan transkripsi tetap di perangkat, dan audio tidak diunggah untuk transkripsi. Mengunduh model Whisper atau Parakeet akan menghubungi Hugging Face, seperti dijelaskan dalam <a href="/id/privacy.html#third-party-services">kebijakan privasi</a>, dan model pembicara juga merupakan unduhan satu kali. Jika vault Anda disinkronkan dengan iCloud Drive atau Obsidian Sync, catatan jadi disinkronkan sesuai ketentuan layanan tersebut. Vox.md menulis file; sinkronisasi adalah pilihan Anda.</li>
+      </ul>
+      <p>Ingin cara cepat mengetik dengan suara saja? Pintasan <strong>Menulis dengan Clipboard</strong> keybind menyalin transkrip lokal sehingga Anda dapat menempelkannya ke aplikasi mana pun, tanpa membuat catatan; lihat <a href="/id/blog/dictation-on-mac/">dikte di Mac</a> dan <a href="/id/docs/#mac-keybinds">pintasan global</a>.</p>
+      <p>Sudah punya rekaman? <a href="/id/blog/transcribe-audio-file-mac/">Transkripsikan file audio di Mac.</a> Sudah punya transkrip dari Zoom atau Teams sebagai file .srt atau .vtt? <a href="/id/blog/srt-vtt-to-text-markdown/">Konverter SRT dan VTT ke Markdown</a> mengubahnya menjadi catatan di browser Anda.</p>
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Rapat Anda,<br>sebagai file milik Anda.</h2>
+        <p>Coba panggilan uji singkat dengan rekan kerja yang sudah setuju, lalu periksa catatan Markdown di vault Anda.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_id_f0ba2ed6ae97">Unduh Vox.md gratis</a></p>
+        <p>15 menit transkripsi gratis · tanpa akun · satu kali buka kunci seumur hidup</p>
+      </section>
+      <nav class="toc" aria-label="Panduan terkait" id="related"><div class="toc-title">Lanjutkan penyiapan</div><ul>
+        <li><a href="/id/blog/transcribe-interview/">Merekam wawancara empat mata? Metode, persetujuan, dan peninjauan</a></li>
+        <li><a href="/id/docs/#mac-meeting">Referensi tangkapan rapat Mac</a></li>
+        <li><a href="/id/docs/#models">Model ucapan dan bahasa</a></li>
+        <li><a href="/id/blog/obsidian-capture-templates/">Resep jalur dan templat</a></li>
+        <li><a href="/id/blog/voice-notes-to-obsidian-iphone/">Simpan catatan suara iPhone ke Obsidian</a></li>
+        <li><a href="/id/blog/offline-transcription-iphone-markdown/">Siapkan transkripsi lokal dan tujuan Markdown</a></li>
+        <li><a href="/id/compare/vox-md-vs-obsidian-quick-capture/">Bandingkan Vox.md dengan Obsidian Quick Capture</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/id/">Beranda</a></li>
+        <li><a href="/id/docs/">Dokumentasi</a></li>
+        <li><a href="/id/blog/">Panduan</a></li>
+        <li><a href="/id/compare/">Bandingkan</a></li>
+        <li><a href="/id/privacy.html">Privasi</a></li>
+        <li><a href="/id/terms.html">Ketentuan</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Dukungan</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_id_f0ba2ed6ae97">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Pencatatan cepat untuk catatan lokal · Tanpa unggahan konten.</div>
+    </div>
+  <details class="language-switcher"><summary>Bahasa</summary><ul><li><a href="/blog/transcribe-meetings-mac-obsidian/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-meetings-mac-obsidian/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-meetings-mac-obsidian/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-meetings-mac-obsidian/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-meetings-mac-obsidian/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-meetings-mac-obsidian/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-meetings-mac-obsidian/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-meetings-mac-obsidian/" lang="id" hreflang="id" aria-current="page">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-meetings-mac-obsidian/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-meetings-mac-obsidian/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-meetings-mac-obsidian/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-meetings-mac-obsidian/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-meetings-mac-obsidian/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-meetings-mac-obsidian/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-meetings-mac-obsidian/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-meetings-mac-obsidian/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-meetings-mac-obsidian/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-meetings-mac-obsidian/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-meetings-mac-obsidian/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-meetings-mac-obsidian/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-meetings-mac-obsidian/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-meetings-mac-obsidian/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

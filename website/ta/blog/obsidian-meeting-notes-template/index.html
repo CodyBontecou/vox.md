@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ta" dir="ltr" data-search-section="பிரிவு" data-search-guide="வழிகாட்டி" data-search-empty="“{query}” என்பதற்குப் பொருத்தங்கள் இல்லை">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obsidian கூட்டக் குறிப்பு வார்ப்புரு ஜெனரேட்டர் | Vox.md</title>
+  <meta name="description" content="உங்கள் உலாவியிலேயே Obsidian கூட்டக் குறிப்பு வார்ப்புருவை உருவாக்குங்கள். பணிகளாக வரும் செயல் உருப்படிகள் உட்படப் பண்புகளையும் பகுதிகளையும் தேர்ந்தெடுத்து, Core Templates, Templater அல்லது எளிய Markdown-க்கு நகலெடுக்கவும்.">
+  <link rel="canonical" href="https://vox.isolated.tech/ta/blog/obsidian-meeting-notes-template/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="மொழி மாதிரிகளுக்கான Vox.md ஆவணங்கள்">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Obsidian கூட்டக் குறிப்பு வார்ப்புரு ஜெனரேட்டர்">
+  <meta property="og:description" content="உங்கள் உலாவியிலேயே Obsidian கூட்டக் குறிப்பு வார்ப்புருவை உருவாக்குங்கள். பணிகளாக வரும் செயல் உருப்படிகள் உட்படப் பண்புகளையும் பகுதிகளையும் தேர்ந்தெடுத்து, Core Templates, Templater அல்லது எளிய Markdown-க்கு நகலெடுக்கவும்.">
+  <meta property="og:url" content="https://vox.isolated.tech/ta/blog/obsidian-meeting-notes-template/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-19">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Obsidian கூட்டக் குறிப்பு வார்ப்புரு ஜெனரேட்டர்">
+  <meta name="twitter:description" content="உங்கள் உலாவியிலேயே Obsidian கூட்டக் குறிப்பு வார்ப்புருவை உருவாக்குங்கள். பணிகளாக வரும் செயல் உருப்படிகள் உட்படப் பண்புகளையும் பகுதிகளையும் தேர்ந்தெடுத்து, Core Templates, Templater அல்லது எளிய Markdown-க்கு நகலெடுக்கவும்.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Obsidian கூட்டக் குறிப்பு வார்ப்புரு ஜெனரேட்டர்",
+  "description": "உங்கள் உலாவியிலேயே Obsidian கூட்டக் குறிப்பு வார்ப்புருவை உருவாக்குங்கள். பணிகளாக வரும் செயல் உருப்படிகள் உட்படப் பண்புகளையும் பகுதிகளையும் தேர்ந்தெடுத்து, Core Templates, Templater அல்லது எளிய Markdown-க்கு நகலெடுக்கவும்.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-19",
+  "dateModified": "2026-11-19",
+  "mainEntityOfPage": "https://vox.isolated.tech/ta/blog/obsidian-meeting-notes-template/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "ta",
+  "name": "Obsidian கூட்டக் குறிப்பு வார்ப்புரு ஜெனரேட்டர் | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/ta/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "வழிகாட்டிகள்",
+      "item": "https://vox.isolated.tech/ta/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Obsidian கூட்டக் குறிப்பு வார்ப்புரு ஜெனரேட்டர்",
+      "item": "https://vox.isolated.tech/ta/blog/obsidian-meeting-notes-template/"
+    }
+  ],
+  "inLanguage": "ta",
+  "name": "Obsidian கூட்டக் குறிப்பு வார்ப்புரு ஜெனரேட்டர் | Vox.md",
+  "description": "உங்கள் உலாவியிலேயே Obsidian கூட்டக் குறிப்பு வார்ப்புருவை உருவாக்குங்கள். பணிகளாக வரும் செயல் உருப்படிகள் உட்படப் பண்புகளையும் பகுதிகளையும் தேர்ந்தெடுத்து, Core Templates, Templater அல்லது எளிய Markdown-க்கு நகலெடுக்கவும்."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/obsidian-meeting-notes-template/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/obsidian-meeting-notes-template/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">வழிகாட்டிக்குச் செல்லவும்</a>
+<nav aria-label="முதன்மை வழிசெலுத்தல்">
+  <div class="nav-inner">
+    <a href="/ta/" class="logo" aria-label="Vox.md முகப்பு">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/ta/#how">இயங்கும் விதம்</a></li>
+      <li><a href="/ta/docs/">ஆவணங்கள்</a></li>
+      <li><a href="/ta/blog/">வழிகாட்டிகள்</a></li>
+      <li><a href="/ta/compare/">ஒப்பிடவும்</a></li>
+      <li><a href="/ta/privacy.html">தனியுரிமை</a></li>
+      <li><a href="/ta/terms.html">விதிமுறைகள்</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_ta_f599543e8b13">Vox.md பதிவிறக்கவும்</a>
+  <details class="language-switcher"><summary>மொழி</summary><ul><li><a href="/blog/obsidian-meeting-notes-template/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-meeting-notes-template/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-meeting-notes-template/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-meeting-notes-template/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-meeting-notes-template/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-meeting-notes-template/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-meeting-notes-template/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-meeting-notes-template/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-meeting-notes-template/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-meeting-notes-template/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-meeting-notes-template/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-meeting-notes-template/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-meeting-notes-template/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-meeting-notes-template/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-meeting-notes-template/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-meeting-notes-template/" lang="ta" hreflang="ta" aria-current="page">தமிழ்</a></li><li><a href="/th/blog/obsidian-meeting-notes-template/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-meeting-notes-template/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-meeting-notes-template/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-meeting-notes-template/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-meeting-notes-template/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-meeting-notes-template/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-meeting-notes-template/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">இலவசக் கருவி</div>
+        <h1 class="hero-title">Obsidian கூட்டக் குறிப்பு வார்ப்புரு ஜெனரேட்டர்</h1>
+        <p class="hero-subtitle">உங்களுக்கு வேண்டிய பண்புகளையும் பகுதிகளையும் தேர்ந்தெடுத்து, நீங்கள் பயன்படுத்தும் வார்ப்புரு அமைப்பின் தொடரியலில் எழுதிய வார்ப்புருவை நகலெடுக்கவும் அல்லது பதிவிறக்கவும்.</p>
+      </div>
+      <aside class="meta-card" aria-label="இவ்வழிகாட்டி பற்றி">
+        <dl>
+          <div><dt>எழுதியவர்</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>புதுப்பிப்பு</dt><dd><time datetime="2026-11-19">நவம்பர் 19, 2026</time></dd></div>
+          <div><dt>தேவை</dt><dd>Obsidian (எந்தத் தளமும்). விருப்பத்தேர்வு: பதிவிலிருந்து குறிப்புகளை நிரப்ப iPhone, iPad அல்லது Mac-க்கான Vox.md.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Obsidian கூட்டக் குறிப்பு வார்ப்புரு ஜெனரேட்டர்">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">சுருக்கமான பதில்</div>
+        <p>இதை <code>Meeting.md</code> என்ற பெயரில் உங்கள் வார்ப்புருக் கோப்புறையில் சேமித்து, பிறகு Templates சொருகி மூலம் புதிய குறிப்பில் செருகவும். இது core Templates தொடரியலைப் பயன்படுத்துவதால், செருகும்போது தேதியும் தலைப்பும் நிரம்பும்.</p>
+      </div>
+      <pre class="guide-code" id="default-template"><code>---
+date: {{date:YYYY-MM-DD}}
+type: meeting
+attendees: []
+tags:
+  - meeting
+---
+# {{title}}
+
+## Agenda
+-&#32;
+
+## Notes
+
+
+## Decisions
+-&#32;
+
+## Action Items
+- [ ]&#32;
+</code></pre>
+      <p>Templater பயன்படுத்துகிறீர்களா, அல்லது வேறு பகுதிகள் வேண்டுமா? கீழே உள்ள ஜெனரேட்டர் அதே கட்டமைப்பை core Templates சொருகிக்கு, Templater-க்கு, அல்லது Vox.md-க்கான எளிய Markdown-ஆக எழுதுகிறது. இது முழுவதும் இந்தப் பக்கத்திலேயே இயங்குகிறது: நீங்கள் தேர்வு செய்வது எதுவும் எங்கும் அனுப்பப்படாது.</p>
+      <nav class="toc" aria-label="இவ்வழிகாட்டியில்"><div class="toc-title">இவ்வழிகாட்டியில்</div><ol>
+        <li><a href="#generator">உங்கள் வார்ப்புருவை உருவாக்கவும்</a></li>
+        <li><a href="#install">வார்ப்புருவை Obsidian-ல் சேர்க்கவும்</a></li>
+        <li><a href="#one-note-per-meeting">ஒவ்வொரு கூட்டத்துக்கும் ஒரு குறிப்பு</a></li>
+        <li><a href="#action-items">செயல் உருப்படிகளும் பின்தொடர்தலும்</a></li>
+        <li><a href="#fill-automatically">பதிவிலிருந்து குறிப்பை நிரப்புங்கள்</a></li>
+        <li><a href="#faq">கேள்விகள்</a></li>
+      </ol></nav>
+
+      <h2 id="generator">1. உங்கள் வார்ப்புருவை உருவாக்கவும்</h2>
+      <p class="mt-nojs" id="mt-nojs">ஜெனரேட்டருக்கு JavaScript தேவை. அது இல்லாமல், மேலும் கீழும் உள்ள இயல்பு வார்ப்புரு அப்படியே வேலை செய்யும்.</p>
+      <form class="mt-tool" id="mt-tool" aria-label="கூட்டக் குறிப்பு வார்ப்புரு ஜெனரேட்டர்">
+        <fieldset class="mt-group">
+          <legend>வார்ப்புரு அமைப்பு</legend>
+          <label class="mt-option"><input type="radio" name="system" value="core" checked> <span>Obsidian core Templates சொருகி</span></label>
+          <label class="mt-option"><input type="radio" name="system" value="templater"> <span>Templater சமூகச் சொருகி</span></label>
+          <label class="mt-option"><input type="radio" name="system" value="plain"> <span>Vox.md அல்லது எந்தச் செயலிக்குமான எளிய Markdown</span></label>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>பண்புகள் (YAML முன்தரவு)</legend>
+          <label class="mt-option"><input type="checkbox" name="prop" value="date" checked> <span>தேதி</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="time"> <span>நேரம்</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="type" checked> <span><code>type: meeting</code></span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="attendees" checked> <span>பங்கேற்பாளர்கள் (பட்டியல்)</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="project"> <span>திட்டம் (ஒரு குறிப்புக்கான இணைப்பு)</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="tags" checked> <span>குறிச்சொற்கள்</span></label>
+          <label class="mt-option"><input type="checkbox" name="prop" value="status"> <span>நிலை</span></label>
+          <label class="mt-field" for="mt-tag">குறிச்சொல் பெயர் <input type="text" id="mt-tag" name="tag" value="meeting" autocomplete="off" spellcheck="false"></label>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>பகுதிகள்</legend>
+          <p class="mt-hint" id="mt-order-hint">வரிசையை மாற்ற மேலே, கீழே பொத்தான்களைப் பயன்படுத்தவும்.</p>
+          <ol class="mt-sections" id="mt-sections" aria-describedby="mt-order-hint">
+            <li data-section="agenda"><label class="mt-option"><input type="checkbox" name="section" value="agenda" checked> <span>நிகழ்ச்சி நிரல்</span></label></li>
+            <li data-section="attendees"><label class="mt-option"><input type="checkbox" name="section" value="attendees"> <span>பங்கேற்பாளர்கள்</span></label></li>
+            <li data-section="notes"><label class="mt-option"><input type="checkbox" name="section" value="notes" checked> <span>குறிப்புகள்</span></label></li>
+            <li data-section="decisions"><label class="mt-option"><input type="checkbox" name="section" value="decisions" checked> <span>முடிவுகள்</span></label></li>
+            <li data-section="actions"><label class="mt-option"><input type="checkbox" name="section" value="actions" checked> <span>செயல் உருப்படிகள் பணிகளாக</span></label></li>
+            <li data-section="questions"><label class="mt-option"><input type="checkbox" name="section" value="questions"> <span>கேள்விகளும் பின்தொடர்தல்களும்</span></label></li>
+            <li data-section="daily"><label class="mt-option"><input type="checkbox" name="section" value="daily"> <span>தினக்குறிப்புக்கான இணைப்பு</span></label></li>
+            <li data-section="transcript"><label class="mt-option"><input type="checkbox" name="section" value="transcript"> <span>உரைப்பதிவு (பதிவுக்கான வெற்றுத் தலைப்பு)</span></label></li>
+          </ol>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>செயல் உருப்படி பாணி</legend>
+          <label class="mt-option"><input type="radio" name="actions" value="plain" checked> <span>எளிய பணி</span></label>
+          <label class="mt-option"><input type="radio" name="actions" value="owner"> <span>பொறுப்பாளர், பணி, Tasks சொருகிக் கெடுதேதி (விருப்பம்)</span></label>
+        </fieldset>
+      </form>
+      <div class="mt-output-head">
+        <h3 id="mt-output-title">உங்கள் வார்ப்புரு</h3>
+        <div class="mt-actions" id="mt-actions" hidden>
+          <button type="button" class="btn-primary" id="mt-copy">நகலெடு</button>
+          <button type="button" class="btn-secondary" id="mt-download">.md பதிவிறக்கவும்</button>
+          <button type="button" class="btn-secondary" id="mt-reset">மீட்டமை</button>
+        </div>
+      </div>
+      <p class="mt-status" id="mt-status" role="status"></p>
+      <pre class="guide-code" id="mt-output" aria-labelledby="mt-output-title" aria-live="polite" tabindex="0"><code id="mt-output-code">---
+date: {{date:YYYY-MM-DD}}
+type: meeting
+attendees: []
+tags:
+  - meeting
+---
+# {{title}}
+
+## Agenda
+-&#32;
+
+## Notes
+
+
+## Decisions
+-&#32;
+
+## Action Items
+- [ ]&#32;
+</code></pre>
+      <div class="mt-notes">
+        <p data-system-note="core"><strong>Core Templates சொருகி:</strong> கோப்பை உங்கள் வார்ப்புருக் கோப்புறையில் சேமித்து, இதன் மூலம் செருகவும்: <code>Templates: Insert template</code>. <code>{{title}}</code> குறிப்பின் பெயராகிறது; தேதிகள் அடைப்புக்குறிகளில் உள்ள Moment.js வடிவங்களைப் பயன்படுத்துகின்றன.</p>
+        <p data-system-note="templater" hidden><strong>Templater சொருகி:</strong> கோப்பை Templater-ன் வார்ப்புருக் கோப்புறையில் சேமித்து, இதன் மூலம் செருகவும்: <code>Templater: Open insert template modal</code>, அல்லது இதைக் கோப்புறை வார்ப்புருவாகப் பயன்படுத்தவும். core Templates சொருகி இவற்றை இயக்காது: <code>&lt;% %&gt;</code> கட்டளைகள்.</p>
+        <p data-system-note="plain" hidden><strong>எளிய Markdown:</strong> ஒற்றை அடைப்புக்குறிகளில் Vox.md டோக்கன்களுடன் தலைப்புகளும் புலங்களும். Obsidian இந்த டோக்கன்களைத் தட்டச்சு செய்தபடியே விடுகிறது. ஒரு வழித்தடம் இந்தக் கோப்பைப் பெட்டக வார்ப்புருவாகப் பயன்படுத்தும்போது Vox.md அவற்றை நிரப்புகிறது; பார்க்கவும்: <a href="#fill-automatically">பதிவிலிருந்து குறிப்பை நிரப்புங்கள்</a>.</p>
+        <p>இந்தப் பக்கத்தின் எடுத்துக்காட்டுகளுடன் பொருந்த, தலைப்புகளும் பண்புப் பெயர்களும் ஆங்கிலத்திலேயே இருக்கும். ஒட்டிய பிறகு அவற்றின் பெயரை மாற்றலாம்.</p>
+      </div>
+      <dl class="mt-filenames">
+        <div><dt>Obsidian-ல் பரிந்துரைக்கப்படும் கோப்புப் பெயர்</dt><dd><code>Meetings/YYYY-MM-DD HHmm Title.md</code></dd></div>
+        <div><dt>Vox.md புதிய பதிவு பாதை</dt><dd><code>Meetings/{date}-{hour}{minute}.md</code></dd></div>
+      </dl>
+      <div hidden id="mt-messages">
+        <span data-message="copied">வார்ப்புரு கிளிப்போர்டுக்கு நகலெடுக்கப்பட்டது.</span>
+        <span data-message="copy-failed">நகலெடுக்க முடியவில்லை. வார்ப்புருவைத் தேர்ந்தெடுத்து நீங்களே நகலெடுக்கவும்.</span>
+        <span data-message="downloaded">meeting-template.md பதிவிறக்கப்பட்டது.</span>
+        <span data-message="reset">தேர்வுகள் இயல்பு வார்ப்புருவுக்கு மீட்டமைக்கப்பட்டன.</span>
+        <span data-message="moved-up">{section} மேலே நகர்த்தப்பட்டது.</span>
+        <span data-message="moved-down">{section} கீழே நகர்த்தப்பட்டது.</span>
+        <span data-message="up">{section} மேலே நகர்த்து</span>
+        <span data-message="down">{section} கீழே நகர்த்து</span>
+        <span data-message="up-text">மேலே</span>
+        <span data-message="down-text">கீழே</span>
+      </div>
+
+      <h2 id="install">2. வார்ப்புருவை Obsidian-ல் சேர்க்கவும்</h2>
+      <p><strong>Core Templates சொருகி.</strong> Settings → Core plugins-ல் Templates-ஐ இயக்கி, பிறகு இதை அமைக்கவும்: <code>Template folder location</code>, எடுத்துக்காட்டாக <code>Templates</code>. வார்ப்புருவை அங்கே ஒரு <code>.md</code> கோப்பாகச் சேமிக்கவும். புதிய குறிப்பில், <code>Templates: Insert template</code> என்பதைக் கட்டளைத் தட்டிலிருந்து இயக்கி இதைத் தேர்ந்தெடுக்கவும். Obsidian <code>{{title}}</code>, <code>{{date}}</code> மற்றும் <code>{{time}}</code> ஆகியவற்றை நீங்கள் வார்ப்புருவைச் செருகும்போது மாற்றுகிறது. முக்காற்புள்ளிக்குப் பின் வரும் வடிவம், எடுத்துக்காட்டாக <code>{{date:YYYY-MM-DD}}</code>, Moment.js டோக்கன்களைப் பயன்படுத்துகிறது. பார்க்கவும்: <a href="https://obsidian.md/help/plugins/templates" target="_blank" rel="noopener">Templates சொருகி உதவி</a> மேலும் <a href="https://momentjs.com/docs/#/displaying/format/" target="_blank" rel="noopener">Moment.js வடிவ டோக்கன்கள்</a>.</p>
+      <p><strong>Templater சொருகி.</strong> Community plugins-லிருந்து Templater-ஐ நிறுவி, அதன் இந்த அமைப்பை அமைக்கவும்: <code>Template folder location</code>. வார்ப்புருவைச் செருக இயக்கவும்: <code>Templater: Open insert template modal</code>. கோப்புறை <code>Meetings/</code> -ல் உருவாகும் ஒவ்வொரு புதிய குறிப்புக்கும் இந்த வார்ப்புருவைத் தர, <code>Trigger Templater on new file creation</code>என்பதை இயக்கி, <code>Template matching mode</code> என்பதைக் கோப்புறை வார்ப்புருக்களுக்கு அமைத்து, <code>Meetings</code> கோப்புறையை அந்தக் கோப்புடன் இணைக்கவும். <a href="https://silentvoid13.github.io/Templater/settings.html" target="_blank" rel="noopener">Templater அமைப்புகள் ஆவணம்</a> கோப்புறை வார்ப்புருக்களை விளக்குகிறது; <a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html" target="_blank" rel="noopener">தேதி தொகுதி</a> இதை ஆவணப்படுத்துகிறது: <code>tp.date.now</code>.</p>
+      <p><strong>பண்புகள்.</strong> இந்த <code>---</code> வரிகளுக்கு இடையிலான முன்தரவு குறிப்பின் பண்புகளாகிறது. பண்பில் உள்ள இணைப்பு மேற்கோள் குறிகளுக்குள் இருக்க வேண்டும்; அதனால்தான் திட்டப் புலம் இவ்வாறு எழுதப்பட்டுள்ளது: <code>"[[Project name]]"</code>. பார்க்கவும் <a href="https://obsidian.md/help/properties" target="_blank" rel="noopener">பண்புகள்</a> Obsidian Help-இல். ஏற்கனவே உள்ள frontmatter-ஐச் சரிபார்க்க, இதைப் பயன்படுத்தவும்: <a href="/ta/blog/obsidian-properties-generator/">பண்புகள் உருவாக்கியும் சரிபார்ப்பியும்</a>.</p>
+
+      <h2 id="one-note-per-meeting">3. ஒவ்வொரு கூட்டத்துக்கும் ஒரு குறிப்பு</h2>
+      <p>கூட்டங்களை ஒரே கோப்புறையில் வைக்கவும், எடுத்துக்காட்டாக <code>Meetings/</code>, கோப்புப் பெயரில் தேதியையும் தொடக்க நேரத்தையும் வையுங்கள்: <code>Meetings/2026-11-19 1430 Design review.md</code>. இந்த வரிசையிலான பெயர்கள் தேதிப்படி வரிசைப்படும்; ஒரே நாளின் இரண்டு கூட்டங்கள் ஒருபோதும் ஒரே கோப்பைப் பகிராது.</p>
+      <p>இயக்கவும் <strong>தினக்குறிப்புக்கான இணைப்பு</strong> (ஜெனரேட்டரில்). இது ஒரு <code>Daily note:</code> வரியைச் சேர்க்கும்; அது அந்த நாளின் குறிப்புடன் இணைக்கிறது. இணைப்பு இந்த வடிவத்தைப் பயன்படுத்துகிறது: <code>YYYY-MM-DD</code>; உங்கள் தினசரிக் குறிப்புகள் வேறு தேதி வடிவத்தைப் பயன்படுத்தினால், அதைப் பொருத்த மாற்றவும்; <a href="/ta/blog/obsidian-daily-note-template/">தினசரிக் குறிப்பு வார்ப்புரு உருவாக்கி</a> ஒரு வடிவம் தரும் கோப்புப் பெயரை முன்னோட்டமிடும். அந்த நாளின் சந்திப்புகளையும் தினசரிக் குறிப்பில் பட்டியலிட, அங்கிருந்து இணைக்கவும்; <a href="/ta/blog/append-to-obsidian-daily-note-iphone/">Obsidian தினக்குறிப்பில் சேர்க்கவும்</a> அதில் Vox.md எப்படி உள்ளீடுகளைச் சேர்க்கும் என்பதைக் காட்டுகிறது.</p>
+
+      <h2 id="action-items">4. செயல் உருப்படிகளும் பின்தொடர்தலும்</h2>
+      <p>ஒவ்வொரு செயல் உருப்படியையும் Obsidian பணியாக எழுதுங்கள், <code>- [ ] Send the release notes</code>; முடிந்ததும் அதை <code>- [x]</code> எனக் குறியிடவும்; பார்க்கவும் <a href="https://obsidian.md/help/syntax" target="_blank" rel="noopener">அடிப்படை வடிவமைப்பு தொடரியல்</a>. யார் என்ன செய்கிறார் என்று ஒவ்வொரு வரியும் சொல்லும்படி, பொறுப்பாளரை முதலில் எழுதுங்கள்.</p>
+      <p>உங்கள் செயல் உருப்படிகள் ஏற்கெனவே எளிய பட்டியலாக இருந்தால், <a href="/ta/blog/markdown-checklist-maker/">Markdown சரிபார்ப்புப் பட்டியல் உருவாக்கி</a> அவற்றைப் பணிகளாக மாற்றி, Tasks, Dataview அல்லது Reminder வடிவத்தில் நிறைவு தேதியைச் சேர்க்கும்.</p>
+      <p>விருப்பப் பாணி ஒரு கெடுதேதியைச் சேர்க்கிறது, சமூக <a href="https://publish.obsidian.md/tasks/Getting+Started/Dates" target="_blank" rel="noopener">Tasks சொருகி</a>: <code>📅</code> அதைத் தொடர்ந்து <code>YYYY-MM-DD</code>. ஜெனரேட்டர் கூட்டத் தேதியை நிரப்புகிறது; அதை உண்மையான கெடுதேதியாக மாற்றவும். Tasks சொருகி இல்லாமல், எமோஜியும் தேதியும் எளிய உரையாக இருக்கும்; பணி அப்போதும் வேலை செய்யும்.</p>
+      <p>எல்லாக் கூட்டங்களின் முடிக்காத உருப்படிகளையும் ஒரே இடத்தில் சேகரிக்க, ஒரு குறிப்பில் Tasks வினவலைச் சேர்க்கவும்:</p>
+      <pre class="guide-code"><code>```tasks
+not done
+path includes Meetings
+```</code></pre>
+      <p>இந்த வினவல், பாதையில் இது உள்ள குறிப்புகளின் முடிக்காத பணிகளைப் பட்டியலிடுகிறது: <code>Meetings</code>. நீங்கள் ஏற்கெனவே Dataview பயன்படுத்தினால், அதுவும் இதுபோன்ற பட்டியல்களை உருவாக்கலாம்.</p>
+
+      <h2 id="fill-automatically">5. பதிவிலிருந்து குறிப்பை நிரப்புங்கள்</h2>
+      <p>வார்ப்புரு உங்களுக்குத் தலைப்புகளைத் தருகிறது. Vox.md குறிப்பையே எழுதலாம்: அது கூட்டத்தைப் பதிவுசெய்து, உங்கள் சாதனத்திலேயே உரைமாற்றம் செய்து, ஒரு வழித்தடம் வழியாக உங்கள் பெட்டகத்தில் Markdown கோப்பைச் சேமிக்கிறது.</p>
+      <ol>
+        <li><strong>பதிவுசெய்யுங்கள்.</strong> Mac-ல் Vox.md ஒரு அழைப்புச் செயலியையும் உங்கள் மைக்ரோஃபோனையும் தனித்தனி டிராக்குகளாகப் பதிவுசெய்யும்; பின்பற்றவும்: <a href="/ta/blog/transcribe-meetings-mac-obsidian/">Mac கூட்டங்களை உள்ளூரிலேயே உரைமாற்றம் செய்து Obsidian-ல் சேமிக்கவும்</a>. அறையில் நடக்கும் கூட்டத்துக்கு, iPhone அல்லது iPad மைக்ரோஃபோனில் பதிவுசெய்யவும்; பார்க்கவும்: <a href="/ta/blog/voice-notes-to-obsidian-iphone/">iPhone குரல் குறிப்புகளை Obsidian-ல் சேமிக்கவும்</a>.</li>
+        <li><strong>சேருமிடத்தைத் தேர்ந்தெடுக்கவும்.</strong> வழித்தடத்தில் உங்கள் பெட்டகத்தைத் தேர்ந்தெடுத்து, <strong>புதிய பதிவு</strong>என்பதைத் தேர்ந்தெடுத்து, இதுபோன்ற பாதையை உள்ளிடவும்: <code>Meetings/{date}-{hour}{minute}.md</code>. <code>{date}</code> என்பது <code>2026-11-19</code> மற்றும் <code>{hour}{minute}</code> என்பது <code>1430</code>என எழுதப்படும். இவை Vox.md டோக்கன்கள், Moment.js வடிவங்கள் அல்ல. மேலும் பாதை செய்முறைகளுக்கு <a href="/ta/blog/obsidian-capture-templates/">Obsidian பிடிப்பு வார்ப்புருக்கள்</a> பார்க்கவும்.</li>
+        <li><strong>பயன்முறையைத் தேர்ந்தெடுக்கவும்.</strong> வழித்தடத்தின் செயலாக்கப் பயன்முறையை இதற்கு அமைக்கவும்: <strong>கூட்டக் குறிப்புகள்</strong>. இது ஒரு <code>## Notes</code> பிரிவையும், உரைப்பதிவில் செயல் உருப்படிகள் இருந்தால் ஒரு <code>## Action Items</code> சரிபார்ப்புப் பட்டியலையும் உருவாக்குகிறது. macOS 26 அல்லது iOS 26 உள்ள இணக்கமான வன்பொருளில் இது Apple Intelligence-ஐப் பயன்படுத்துகிறது; இல்லையெனில் ஒரு நிர்ணய வடிவமைப்பி கட்டமைப்பை உருவாக்குகிறது.</li>
+      </ol>
+      <p>கூட்டக் குறிப்புகள் நிகழ்ச்சி நிரல், பங்கேற்பாளர்கள், முடிவுகளை உங்களுக்காக நிரப்பாது. குறிப்புகளுக்கு மேலே அந்தத் தலைப்புகள் வேண்டுமென்றால், ஜெனரேட்டரில் <strong>எளிய Markdown</strong> என்பதைத் தேர்ந்தெடுத்து, குறிப்புகள், செயல் உருப்படிகள் ஆகியவற்றின் தேர்வை நீக்கி, முடிவை உங்கள் பெட்டகத்தில் சேமிக்கவும். பிறகு அந்தக் கோப்பை வழித்தடத்தின் பெட்டக வார்ப்புருவாகத் தேர்ந்தெடுக்கவும். Vox.md வார்ப்புருவில் தனது ஒற்றை அடைப்புக்குறி டோக்கன்களை நிரப்பி, அதன் கீழே செயலாக்கிய உரைப்பதிவை எழுதுகிறது. அமைப்பை நம்புவதற்கு முன் முதல் குறிப்பைச் சரிபார்க்கவும்; <a href="/ta/docs/#presets">வழித்தட ஆவணங்கள்</a> சேருமிடங்களையும் வார்ப்புருக்களையும் விளக்குகிறது.</p>
+      <p>கூட்டம் Zoom அல்லது Teams-இல் நடந்து, அதன் டிரான்ஸ்கிரிப்டை .srt அல்லது .vtt கோப்பாகப் பதிவிறக்கியிருந்தால், பேச்சாளர் வரிசைகளுடன் Markdown-ஆக மாற்ற பயன்படுத்தவும் <a href="/ta/blog/srt-vtt-to-text-markdown/">SRT மற்றும் VTT மாற்றி</a>, பின்னர் அதை இதன் கீழ் ஒட்டவும் <code>## Transcript</code> இந்த டெம்ப்ளேட்டின் தலைப்பு.</p>
+      <p>நீங்கள் பதிவுசெய்து உரைமாற்றம் செய்வதைக் கூட்டத்தில் உள்ள அனைவரிடமும் சொல்லி, முதலில் அவர்களின் ஒப்புதலைப் பெறுங்கள். விதிகள் இடத்துக்கும் பணியிடத்துக்கும் ஏற்ப வேறுபடும்; பார்க்கவும்: <a href="/ta/blog/transcribe-meetings-mac-obsidian/#consent">பதிவுசெய்வதை மற்றவர்களிடம் சொல்லுங்கள்</a>.</p>
+
+      <h2 id="faq">6. கேள்விகள்</h2>
+      <h3>Core Templates-ஐப் பயன்படுத்தவா, Templater-ஐப் பயன்படுத்தவா?</h3>
+      <p>Core Templates, Obsidian-உடன் வருகிறது; தலைப்பு, தேதி, நேரத்தைக் கையாளுகிறது. Templater ஒரு சமூகச் சொருகி; அது ஸ்கிரிப்டிங், தேதி இடைவெளிகள், கோப்புறை வார்ப்புருக்களைச் சேர்க்கிறது, அதனால் <code>Meetings/</code> -ல் உருவாகும் புதிய குறிப்புக்கு வார்ப்புரு தானாகக் கிடைக்கும். இந்தப் பக்கத்தின் புலங்கள் மட்டும் போதுமென்றால் Core Templates போதும்.</p>
+      <h3>வார்ப்புருவின் <code>{{date}}</code> ஏன் பிறகு மாறுவதில்லை?</h3>
+      <p>நீங்கள் வார்ப்புருவைச் செருகும்போது ஒருமுறை மட்டுமே Obsidian வார்ப்புரு மாறிகளை மாற்றுகிறது. பிறகு குறிப்பில் எளிய உரை இருக்கும், எடுத்துக்காட்டாக <code>2026-11-19</code>, அதையே வைத்திருக்கும். கூட்டப் பதிவுக்கு வேண்டியது இதுதான்.</p>
+      <h3>Vox.md என் Obsidian வார்ப்புருவைப் பயன்படுத்துமா?</h3>
+      <p>ஓரளவு. ஒரு வழித்தடம் உங்கள் பெட்டகத்திலுள்ள Markdown கோப்பை வார்ப்புருவாகப் பயன்படுத்தலாம். Vox.md தனது ஒற்றை அடைப்புக்குறி டோக்கன்களை நிரப்புகிறது, எடுத்துக்காட்டாக <code>{date}</code>, மேலும் Templater தேதிக் கட்டளைகள் <code>tp.date.now</code> மற்றும் <code>tp.file.creation_date</code>. இது மற்ற Templater கட்டளைகளை இயக்காது, எடுத்துக்காட்டாக <code>tp.file.title</code>, மேலும் core Templates மாறிகளையும் விரிவாக்காது, எடுத்துக்காட்டாக <code>{{title}}</code>, எனவே அவற்றை வழித்தடத்தின் வார்ப்புருவில் சேர்க்க வேண்டாம். Vox.md வழித்தடத்துக்கு எளிய Markdown வெளியீட்டைப் பயன்படுத்தவும்.</p>
+      <h3>ஜெனரேட்டர் என் தேர்வுகளை எங்காவது அனுப்புகிறதா?</h3>
+      <p>இல்லை. இந்தப் பக்கத்திலுள்ள ஒரு ஸ்கிரிப்ட் வார்ப்புருவை உருவாக்குகிறது. அது உங்கள் கடைசித் தேர்வுகளை உலாவியின் உள்ளூர்ச் சேமிப்பில் சேமிப்பதால் அடுத்த முறையும் அவை இருக்கும்; மீட்டமை அவற்றை அழிக்கும்.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">தட்டச்சைத் தவிர்க்கவும்.</h2>
+        <p>கூட்டத்தைப் பதிவுசெய்யுங்கள்; Vox.md குறிப்பை உங்கள் பெட்டகத்தில் எழுதட்டும்.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ta_f599543e8b13">Vox.md இலவசமாகப் பதிவிறக்கவும்</a></p>
+        <p>15 இலவச உரைமாற்ற நிமிடங்கள் · கணக்கு தேவையில்லை · ஒருமுறை வாழ்நாள் திறப்பு. Mac-ல் அழைப்பை அமைக்கிறீர்களா? பார்க்கவும்: <a href="/ta/blog/transcribe-meetings-mac-obsidian/">Mac கூட்ட வழிகாட்டி</a>.</p>
+      </section>
+      <nav class="toc" aria-label="தொடர்புடைய வழிகாட்டிகள்" id="related"><div class="toc-title">அமைப்பைத் தொடரவும்</div><ul>
+        <li><a href="/ta/blog/transcribe-meetings-mac-obsidian/">Mac கூட்டங்களை உள்ளூரிலேயே உரைமாற்றம் செய்து Obsidian-ல் சேமிக்கவும்</a></li>
+        <li><a href="/ta/blog/obsidian-capture-templates/">பாதை, வார்ப்புரு செய்முறைகள்</a></li>
+        <li><a href="/ta/blog/voice-notes-to-obsidian-iphone/">iPhone குரல் குறிப்புகளை Obsidian-ல் சேமிக்கவும்</a></li>
+        <li><a href="/ta/blog/append-to-obsidian-daily-note-iphone/">Obsidian தினக்குறிப்பில் சேர்க்கவும்</a></li>
+        <li><a href="/ta/docs/#presets">வழித்தடக் குறிப்புதவி</a></li>
+        <li><a href="/ta/docs/#mac">Mac செயலி குறிப்புதவி</a></li>
+      </ul></nav>
+<script>
+/* Meeting notes template generator. Runs locally: no network requests. */
+(function () {
+  var form = document.getElementById('mt-tool');
+  if (!form) return;
+  var STORAGE_KEY = 'vox-meeting-template-v1';
+  var list = document.getElementById('mt-sections');
+  var code = document.getElementById('mt-output-code');
+  var status = document.getElementById('mt-status');
+  var tagInput = document.getElementById('mt-tag');
+  var defaultOrder = Array.prototype.map.call(list.children, function (li) { return li.getAttribute('data-section'); });
+  var defaults = snapshot();
+
+  var SYNTAX = {
+    core: { date: '{{date:YYYY-MM-DD}}', time: '{{time:HH:mm}}', title: '# {{title}}' },
+    templater: { date: '<% tp.date.now("YYYY-MM-DD") %>', time: "<% tp.date.now('HH:mm') %>", title: '# <% tp.file.title %>' },
+    plain: { date: '{date}', time: '{hour}:{minute}', title: '# Meeting {date}' }
+  };
+  var HEADINGS = {
+    agenda: ['## Agenda', '- '],
+    attendees: ['## Attendees', '- '],
+    notes: ['## Notes', ''],
+    decisions: ['## Decisions', '- '],
+    questions: ['## Questions and Follow-ups', '- '],
+    transcript: ['## Transcript', '']
+  };
+
+  function message(name, section) {
+    var el = document.querySelector('#mt-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : '';
+    return section === undefined ? text : text.split('{section}').join(section);
+  }
+  function sectionName(li) { return li.querySelector('label span').textContent; }
+  function checked(name) {
+    return Array.prototype.filter.call(form.elements[name], function (i) { return i.checked; }).map(function (i) { return i.value; });
+  }
+  function radio(name) { return checked(name)[0]; }
+  function cleanTag(value) {
+    var tag = value.trim().replace(/^#+/, '').replace(/\s+/g, '-').replace(/[^\w\/-]/g, '');
+    return tag || 'meeting';
+  }
+
+  function build(state) {
+    var s = SYNTAX[state.system];
+    var lines = [];
+    var props = state.props;
+    if (props.length) {
+      lines.push('---');
+      props.forEach(function (p) {
+        if (p === 'date') lines.push('date: ' + s.date);
+        if (p === 'time') lines.push('time: "' + s.time + '"');
+        if (p === 'type') lines.push('type: meeting');
+        if (p === 'attendees') lines.push('attendees: []');
+        if (p === 'project') lines.push('project: "[[Project name]]"');
+        if (p === 'tags') { lines.push('tags:'); lines.push('  - ' + cleanTag(state.tag)); }
+        if (p === 'status') lines.push('status: open');
+      });
+      lines.push('---');
+    }
+    lines.push(s.title);
+    state.order.forEach(function (id) {
+      if (state.sections.indexOf(id) === -1) return;
+      lines.push('');
+      if (id === 'daily') { lines.push('Daily note: [[' + s.date + ']]'); return; }
+      if (id === 'actions') {
+        lines.push('## Action Items');
+        lines.push(state.actions === 'owner' ? '- [ ] Owner — task 📅 ' + s.date : '- [ ] ');
+        return;
+      }
+      lines.push(HEADINGS[id][0]);
+      lines.push(HEADINGS[id][1]);
+    });
+    while (lines.length && lines[lines.length - 1] === '') lines.pop();
+    return lines.join('\n') + '\n';
+  }
+
+  function snapshot() {
+    return {
+      system: radio('system'), props: checked('prop'), tag: tagInput.value,
+      sections: checked('section'), actions: radio('actions'),
+      order: Array.prototype.map.call(list.children, function (li) { return li.getAttribute('data-section'); })
+    };
+  }
+  function apply(state) {
+    Array.prototype.forEach.call(form.elements.system, function (i) { i.checked = i.value === state.system; });
+    Array.prototype.forEach.call(form.elements.actions, function (i) { i.checked = i.value === state.actions; });
+    Array.prototype.forEach.call(form.elements.prop, function (i) { i.checked = state.props.indexOf(i.value) !== -1; });
+    Array.prototype.forEach.call(form.elements.section, function (i) { i.checked = state.sections.indexOf(i.value) !== -1; });
+    tagInput.value = state.tag;
+    state.order.forEach(function (id) {
+      var li = list.querySelector('[data-section="' + id + '"]');
+      if (li) list.appendChild(li);
+    });
+  }
+  function valid(state) {
+    return state && SYNTAX[state.system] && (state.actions === 'plain' || state.actions === 'owner') &&
+      Array.isArray(state.props) && Array.isArray(state.sections) && typeof state.tag === 'string' &&
+      Array.isArray(state.order) && state.order.length === defaultOrder.length &&
+      defaultOrder.every(function (id) { return state.order.indexOf(id) !== -1; });
+  }
+  function save(state) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* storage unavailable */ }
+  }
+
+  function update(store) {
+    var state = snapshot();
+    code.textContent = build(state);
+    Array.prototype.forEach.call(document.querySelectorAll('[data-system-note]'), function (p) {
+      p.hidden = p.getAttribute('data-system-note') !== state.system;
+    });
+    Array.prototype.forEach.call(list.children, function (li, index) {
+      var name = sectionName(li);
+      var up = li.querySelector('.mt-up');
+      var down = li.querySelector('.mt-down');
+      up.setAttribute('aria-label', message('up', name));
+      down.setAttribute('aria-label', message('down', name));
+      up.disabled = index === 0;
+      down.disabled = index === list.children.length - 1;
+    });
+    if (store) save(state);
+  }
+  function say(text) {
+    status.textContent = '';
+    window.setTimeout(function () { status.textContent = text; }, 30);
+  }
+
+  Array.prototype.forEach.call(list.children, function (li) {
+    var controls = document.createElement('span');
+    controls.className = 'mt-move';
+    [['mt-up', 'up-text', -1], ['mt-down', 'down-text', 1]].forEach(function (spec) {
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'mt-move-button ' + spec[0];
+      button.textContent = message(spec[1]);
+      button.addEventListener('click', function () {
+        var sibling = spec[2] < 0 ? li.previousElementSibling : li.nextElementSibling;
+        if (!sibling) return;
+        list.insertBefore(li, spec[2] < 0 ? sibling : sibling.nextElementSibling);
+        update(true);
+        var target = button.disabled ? li.querySelector(spec[2] < 0 ? '.mt-down' : '.mt-up') : button;
+        target.focus();
+        say(message(spec[2] < 0 ? 'moved-up' : 'moved-down', sectionName(li)));
+      });
+      controls.appendChild(button);
+    });
+    li.appendChild(controls);
+  });
+
+  try {
+    var stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+    if (valid(stored)) apply(stored);
+  } catch (e) { /* ignore unreadable saved choices */ }
+
+  form.addEventListener('change', function () { update(true); });
+  form.addEventListener('input', function () { update(true); });
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+
+  document.getElementById('mt-copy').addEventListener('click', function () {
+    var text = code.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(code);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+  document.getElementById('mt-download').addEventListener('click', function () {
+    var blob = new Blob([code.textContent], { type: 'text/markdown;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = 'meeting-template.md';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    say(message('downloaded'));
+  });
+  document.getElementById('mt-reset').addEventListener('click', function () {
+    apply(defaults);
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* storage unavailable */ }
+    update(false);
+    say(message('reset'));
+  });
+
+  document.getElementById('mt-nojs').hidden = true;
+  document.getElementById('mt-actions').hidden = false;
+  form.classList.add('is-ready');
+  update(false);
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ta/">முகப்பு</a></li>
+        <li><a href="/ta/docs/">ஆவணங்கள்</a></li>
+        <li><a href="/ta/blog/">வழிகாட்டிகள்</a></li>
+        <li><a href="/ta/compare/">ஒப்பிடவும்</a></li>
+        <li><a href="/ta/privacy.html">தனியுரிமை</a></li>
+        <li><a href="/ta/terms.html">விதிமுறைகள்</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">ஆதரவு</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ta_f599543e8b13">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · உள்ளூர் குறிப்புகளுக்கு விரைவான பிடிப்பு · பதிவேற்றமில்லை.</div>
+    </div>
+  <details class="language-switcher"><summary>மொழி</summary><ul><li><a href="/blog/obsidian-meeting-notes-template/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-meeting-notes-template/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-meeting-notes-template/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-meeting-notes-template/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-meeting-notes-template/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-meeting-notes-template/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-meeting-notes-template/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-meeting-notes-template/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-meeting-notes-template/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-meeting-notes-template/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-meeting-notes-template/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-meeting-notes-template/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-meeting-notes-template/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-meeting-notes-template/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-meeting-notes-template/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-meeting-notes-template/" lang="ta" hreflang="ta" aria-current="page">தமிழ்</a></li><li><a href="/th/blog/obsidian-meeting-notes-template/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-meeting-notes-template/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-meeting-notes-template/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-meeting-notes-template/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-meeting-notes-template/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-meeting-notes-template/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-meeting-notes-template/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
