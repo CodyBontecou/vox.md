@@ -88,11 +88,30 @@ jobs:
           test -f "$ndk_path/source.properties"
           echo "ANDROID_NDK_HOME=$ndk_path" >> "$GITHUB_ENV"
           echo "ANDROID_NDK_ROOT=$ndk_path" >> "$GITHUB_ENV"
+      - name: Resolve Gradle plugins (retried on transient network failures)
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Every run resolves plugins cold from the Gradle Plugin Portal (no Gradle cache),
+          # and the portal intermittently fails to serve org.gradle.kotlin.kotlin-dsl for
+          # build-logic ("Plugin ... was not found"); a re-run always succeeded. Retry this
+          # first resolution with backoff; later Gradle steps reuse ~/.gradle from this job.
+          for attempt in 1 2 3; do
+            if ./apps/android/gradlew -p apps/android help; then
+              exit 0
+            fi
+            if [ "$attempt" -lt 3 ]; then
+              delay=$((attempt * 20))
+              echo "::warning::Gradle plugin resolution failed (attempt $attempt of 3); retrying in ${delay}s"
+              sleep "$delay"
+            fi
+          done
+          echo "::error::Gradle plugin resolution failed after 3 attempts"
+          exit 1
       - name: Validate wrapper, toolchain, contracts, and project gates
         shell: bash
         run: |
           set -euo pipefail
-          ./apps/android/gradlew -p apps/android help
           python3 Packages/contracts/scripts/validate_toolchain.py
           python3 Packages/contracts/scripts/validate.py
           ./scripts/test-project-contracts.sh
