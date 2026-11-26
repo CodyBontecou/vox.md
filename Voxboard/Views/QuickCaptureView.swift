@@ -348,6 +348,16 @@ struct QuickCaptureView: View {
         }
     }
 
+    /// The rail is the route switcher when it is drawn (it needs 2+ routes),
+    /// so the header stops repeating every route and only names the active one.
+    private var routeRailReplacesHeaderPills: Bool {
+        Self.routeRailReplacesHeaderPills(railShown: showsRouteSideRail, routeCount: enabledFlows.count)
+    }
+
+    static func routeRailReplacesHeaderPills(railShown: Bool, routeCount: Int) -> Bool {
+        railShown && routeCount > 1
+    }
+
     private var showsRouteSideRail: Bool {
         layout == .compact
             && captureToolbarPreferences.routeRailPlacement != .off
@@ -1364,6 +1374,21 @@ struct QuickCaptureView: View {
 
     private var voiceCaptureButton: CaptureViewSection {
         CaptureViewSection {
+            // The record-new-note icon sits on top of the capsule's trailing
+            // end, outside the press gesture, so a tap there never also
+            // records into the open note.
+            ZStack(alignment: .trailing) {
+                voiceCapturePressArea
+                if showsSpeakNewNoteButton {
+                    speakNewNoteButton
+                        .transition(.opacity)
+                }
+            }
+        }
+    }
+
+    private var voiceCapturePressArea: CaptureViewSection {
+        CaptureViewSection {
             // One container keeps the press gesture alive while the label swaps
             // between idle, push-to-talk and recording presentations.
             ZStack {
@@ -1410,8 +1435,12 @@ struct QuickCaptureView: View {
                     ? String(localized: "Transcribing")
                     : String(localized: "Speak"),
                 systemImage: isCaptureReadOnly ? "lock.fill" : "mic",
-                modeSymbol: persistentRecorder.isAppRecordingTranscribing || isCaptureReadOnly
+                // With Live Notes speech always goes into the note, so the
+                // what-Stop-does glyph only shows without them; the trailing
+                // end is then free for the record-new-note icon.
+                modeSymbol: viewModel.liveNotesEnabled || persistentRecorder.isAppRecordingTranscribing || isCaptureReadOnly
                     ? nil : recordingResultModeSymbol,
+                contentTrailingInset: showsSpeakNewNoteButton ? Self.speakNewNoteButtonWidth / 2 : 0,
                 isDimmed: (isMicrophoneDenied || isCaptureReadOnly) && !isLocalizationScreenshot,
                 showsProgress: persistentRecorder.isAppRecordingTranscribing
             )
@@ -1439,6 +1468,52 @@ struct QuickCaptureView: View {
     /// will do before pressing it.
     private var recordingResultModeSymbol: String {
         recordingMode == .draft ? "text.badge.plus" : "paperplane.fill"
+    }
+
+    static let speakNewNoteButtonWidth: CGFloat = 52
+
+    /// Live Notes, note open: the trailing end of Speak is a one-tap "record
+    /// into a new note" (Hans, 2026-11-26: the separate mic-plus button read
+    /// as a second Speak button). Tapping the rest of Speak still records
+    /// into the open note.
+    private var showsSpeakNewNoteButton: Bool {
+        guard !persistentRecorder.isAppRecordingSegmentActive,
+              !persistentRecorder.isAppRecordingTranscribing,
+              !isCaptureReadOnly else { return false }
+        return Self.speakOffersNewNote(
+            liveNotesEnabled: viewModel.liveNotesEnabled,
+            canRecordNewNote: viewModel.canRecordNewNote
+        )
+    }
+
+    /// Only while a note is open to leave; on a blank note Speak already
+    /// records into a new note, and without Live Notes there are no notes.
+    static func speakOffersNewNote(liveNotesEnabled: Bool, canRecordNewNote: Bool) -> Bool {
+        liveNotesEnabled && canRecordNewNote
+    }
+
+    private var speakNewNoteButton: CaptureViewSection {
+        CaptureViewSection {
+            Button(action: recordNewNote) {
+                HStack(spacing: 0) {
+                    Rectangle()
+                        .fill(Geist.bg.opacity(0.25))
+                        .frame(width: 1, height: 22)
+                    Image(systemName: "note.text.badge.plus")
+                        .font(.system(size: 17, weight: .semibold))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                .foregroundStyle(isMicrophoneDenied ? Geist.muted : Geist.bg)
+                .frame(width: Self.speakNewNoteButtonWidth, height: Geist.ControlHeight.hero)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .disabled(isProcessingMedia || persistentRecorder.ownsCaptureRoute)
+            .accessibilityLabel("Record into a new note")
+            .accessibilityHint(Text("Closes this file, starts a blank note and starts recording"))
+            .accessibilityIdentifier("capture_speak_record_new_note")
+            .keyboardShortcut("n", modifiers: [.command, .shift])
+        }
     }
 
     /// Tap starts or stops recording; a long press opens the detailed
@@ -2568,30 +2643,9 @@ struct QuickCaptureView: View {
         }
     }
 
-    /// Live Notes, from an open note: one tap closes it like New note, opens
-    /// a blank note and starts recording into it through the regular Speak
-    /// path (permission prompt, paywall, Live Activity).
-    private var recordNewNoteControl: CaptureViewSection {
-        CaptureViewSection {
-            Button(action: recordNewNote) {
-                Image(systemName: "mic.badge.plus")
-                    .accessibilityLabel("Record new note")
-            }
-            .buttonStyle(SignalCircleButtonStyle(diameter: Geist.ControlHeight.large))
-            .disabled(isProcessingMedia || persistentRecorder.ownsCaptureRoute)
-            .accessibilityHint(Text("Closes this file, starts a blank note and starts recording"))
-            .accessibilityIdentifier("capture_record_new_note")
-            .keyboardShortcut("n", modifiers: [.command, .shift])
-            .transition(.scale.combined(with: .opacity))
-        }
-    }
-
-    /// Shown only while there is a note to leave; on a blank note Speak
-    /// already records into a new note.
-    private var showsRecordNewNote: Bool {
-        viewModel.canRecordNewNote && !persistentRecorder.isAppRecordingSegmentActive
-    }
-
+    /// Live Notes, from an open note (Speak's options menu): closes it like
+    /// New note, opens a blank note and starts recording into it through the
+    /// regular Speak path (permission prompt, paywall, Live Activity).
     private func recordNewNote() {
         guard microphonePermissionTask == nil, !persistentRecorder.ownsCaptureRoute else { return }
         if usageTracker.isAtLimit {
@@ -2715,7 +2769,6 @@ struct QuickCaptureView: View {
 
                     // Remote only has no note to keep editing; it always Sends.
                     if viewModel.liveNotesEnabled, !viewModel.selectedRouteIsRemoteOnly {
-                        if showsRecordNewNote { recordNewNoteControl }
                         if footerShowsSend { newNoteControl }
                     } else if captureFooterIsVaultUnreachable {
                         queueSaveControl
@@ -2723,7 +2776,7 @@ struct QuickCaptureView: View {
                         sendRouteControl
                     }
                 }
-                .animation(reduceMotion ? nil : .easeInOut(duration: 0.18), value: showsRecordNewNote)
+                .animation(reduceMotion ? nil : .easeInOut(duration: 0.18), value: showsSpeakNewNoteButton)
             }
             .padding(.horizontal, Geist.Spacing.four)
             .padding(.top, Geist.Spacing.three)
@@ -3696,6 +3749,7 @@ struct QuickCaptureView: View {
                 selectedID: viewModel.draft.voxID ?? selectedFlow.id,
                 isEnabled: viewModel.canSelectCapturePreset,
                 pillHeight: isCoverScreen ? 44 : 40,
+                showsOnlySelected: routeRailReplacesHeaderPills,
                 select: { id in
                     guard let flow = flows.first(where: { $0.id == id }) else { return }
                     selectFlow(flow)

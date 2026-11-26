@@ -1,0 +1,85 @@
+# Device QA for PR #175 (owner's iPhone 17 Pro, owner-approved): with Live
+# Notes on and a note open, the trailing icon on Speak ("Record into a new
+# note") closes the note, opens a new one and starts recording into it.
+#
+# Contract:
+#  - Blank note: the icon is hidden (Speak already records into a new note).
+#  - Note with text: the icon is shown.
+#  - Tapping it starts a recording that saves to a NEW note when stopped
+#    (dock line "... when you stop"); the recording is discarded at once.
+#  - Back on the blank new note the icon is hidden again.
+#
+# Prerequisites: physical iPhone with a DEBUG build, unlocked, Live Notes on,
+#   Vox.md able to run UI automation; the relaunch autofocuses the editor.
+# Side effects (owner-approved): New note closes whatever note is open (its
+#   file stays), then each run writes one note containing "Vox QA speak menu"
+#   to the owner's vault; delete it afterwards. The microphone runs ~1-2 s and
+#   the recording is discarded (audio and live transcript deleted).
+version: 1
+requires:
+  platform: ios
+steps:
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_voice_recording
+      timeoutMs: 20000
+  - tap:
+      id: capture_new_note
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: capture_speak_record_new_note
+      timeoutMs: 10000
+  - tool: keyboard
+    args:
+      text: Vox QA speak menu
+  - tap:
+      id: capture_done_typing
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: live_note_status
+      expectedText: Saved
+      textMatch: equals
+      timeoutMs: 20000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_speak_record_new_note
+      timeoutMs: 10000
+  - tap:
+      id: capture_speak_record_new_note
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: live_note_recording_line
+      expectedText: when you stop
+      timeoutMs: 10000
+  - tap:
+      id: capture_recording_discard
+  - tap:
+      text: Discard Recording
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: capture_live_recording_dock
+      timeoutMs: 10000
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: capture_speak_record_new_note
+      timeoutMs: 5000
