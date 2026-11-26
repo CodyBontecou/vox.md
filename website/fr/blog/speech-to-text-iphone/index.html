@@ -205,11 +205,11 @@
             <tr><th scope="row">Choix du modèle</th><td>Aucun indiqué sur la page d’Apple</td><td>Automatique, ou un modèle Whisper ou Parakeet que vous téléchargez</td><td>Automatique, ou un modèle Whisper ou Parakeet que vous téléchargez</td></tr>
             <tr><th scope="row">En direct ou après l’arrêt</th><td>Non couvert par la page d’Apple ; essayez sur votre iPhone</td><td>Automatique : le texte finalisé est inséré pendant que vous parlez. Whisper ou Parakeet : la transcription est insérée une fois que vous avez arrêté</td><td>Une fois l’enregistrement transcrit et livré</td></tr>
             <tr><th scope="row">Nécessite l’accès complet</th><td>Non</td><td>Oui, Autoriser l’accès complet</td><td>Pas besoin de clavier</td></tr>
-            <tr><th scope="row">Coût</th><td>Intégré à iOS</td><td>15 minutes de transcription gratuites, puis un déblocage unique à vie</td><td>15 minutes de transcription gratuites et 10 envois de Capture réussis, puis un déverrouillage unique à vie</td></tr>
+            <tr><th scope="row">Coût</th><td>Intégré à iOS</td><td>Abonnement hebdomadaire ou annuel avec essai gratuit de 7 jours, ou achat unique à vie</td><td>Abonnement hebdomadaire ou annuel avec essai gratuit de 7 jours, ou achat unique à vie</td></tr>
           </tbody>
         </table>
       </div>
-      <p>Automatique utilise le moteur de reconnaissance vocale d’Apple sur l’appareil, sur les appareils iOS 26 et les langues compatibles. Il n’y a aucun abonnement.</p>
+      <p>Automatique utilise la reconnaissance vocale d’Apple sur l’appareil, sur les appareils et langues compatibles avec iOS 26.</p>
 
       <h2 id="vox-keyboard">Utilisez un modèle local dans n’importe quelle app avec le clavier Vox.md</h2>
       <ol>
@@ -221,7 +221,7 @@
       <p>Pour le guide complet, consultez <a href="/fr/blog/best-voice-to-text-keyboard-iphone/">le guide du clavier de dictée vocale pour iPhone</a>. Pour choisir un modèle, lisez <a href="/fr/compare/whisper-vs-parakeet/">Whisper ou Parakeet</a>.</p>
 
       <h2 id="dictate-to-notes">La saisie vocale directement dans Obsidian ou un fichier Markdown</h2>
-      <p>Choisissez cette option quand les mots doivent aller dans une note plutôt que dans une autre app. Enregistrez dans Vox.md et un Parcours envoie la transcription dans une note quotidienne, sous un titre, ou dans une nouvelle note. Commencez par <a href="/fr/blog/voice-notes-to-obsidian-iphone/">notes vocales vers Obsidian</a>, puis consultez <a href="/fr/blog/append-to-obsidian-daily-note-iphone/">ajout à une note quotidienne</a> ou <a href="/fr/blog/private-voice-journal-iphone/">un journal vocal privé</a>. Pour de longs enregistrements ou de l’audio existant, consultez <a href="/fr/blog/transcribe-voice-memos-iphone/">la transcription de mémos vocaux</a> et <a href="/fr/blog/offline-transcription-iphone-markdown/">transcription hors ligne vers Markdown</a>. Le quota gratuit inclut 10 envois de Capture réussis.</p>
+      <p>Choisissez cette option quand les mots doivent aller dans une note plutôt que dans une autre app. Enregistrez dans Vox.md et un Parcours envoie la transcription dans une note quotidienne, sous un titre, ou dans une nouvelle note. Commencez par <a href="/fr/blog/voice-notes-to-obsidian-iphone/">notes vocales vers Obsidian</a>, puis consultez <a href="/fr/blog/append-to-obsidian-daily-note-iphone/">ajout à une note quotidienne</a> ou <a href="/fr/blog/private-voice-journal-iphone/">un journal vocal privé</a>. Pour de longs enregistrements ou de l’audio existant, consultez <a href="/fr/blog/transcribe-voice-memos-iphone/">la transcription de mémos vocaux</a> et <a href="/fr/blog/offline-transcription-iphone-markdown/">transcription hors ligne vers Markdown</a>. Les comptes admissibles bénéficient d’un essai gratuit de 7 jours.</p>
 
       <h2 id="privacy">Ce qui reste sur l’iPhone</h2>
       <p>Vox.md n’envoie pas le contenu des captures aux serveurs de Vox.md. La transcription s’exécute sur votre iPhone. La seule utilisation du réseau est le téléchargement de modèle que vous lancez vous-même, qui passe par l’infrastructure de Hugging Face ou de FluidAudio. Si une note arrive dans un dossier synchronisé via iCloud ou un autre service, ce service traite le fichier selon ses propres conditions. Consultez la <a href="/fr/privacy.html">politique de confidentialité</a>. Vox.md utilise <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a> pour Whisper et <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> pour Parakeet.</p>
@@ -246,7 +246,7 @@
 
       <h2 id="faq">Questions fréquentes</h2>
       <h3>La dictée iPhone est-elle gratuite ?</h3>
-      <p>La page d’Apple ne mentionne aucun frais, tout en indiquant que des frais de données cellulaires peuvent s’appliquer. Vox.md inclut 15 minutes de transcription, puis un déblocage à vie en un seul paiement, sans abonnement.</p>
+      <p>La page d’Apple ne mentionne aucun frais, mais indique que des frais de données cellulaires peuvent s’appliquer. Vox.md nécessite Vox.md Unlimited : un abonnement hebdomadaire ou annuel avec un essai gratuit de 7 jours pour les comptes admissibles, ou un achat unique à vie.</p>
       <h3>Fonctionne-t-elle hors ligne ?</h3>
       <p>Apple indique que la dictée est traitée sur l’iPhone dans de nombreuses langues, sans connexion Internet, sauf que le texte dicté dans un champ de recherche peut être envoyé au moteur de recherche. Une fois un modèle téléchargé, Vox.md transcrit sur l’iPhone.</p>
       <h3>Y a-t-il une limite de durée ?</h3>
@@ -258,7 +258,7 @@
 
       <section class="cta" aria-labelledby="guide-cta">
         <h2 id="guide-cta">Choisissez un modèle local ou dictez dans vos notes.</h2>
-        <p>Le quota gratuit est de 15 minutes de transcription et 10 envois de Capture réussis. Ensuite, un déverrouillage unique à vie, affiché au tarif local de l’App Store, lève les limites. <a href="/fr/docs/#keyboard-setup">documentation de configuration du clavier</a>.</p>
+        <p>L’enregistrement, la transcription et Capture nécessitent Vox.md Unlimited : un abonnement hebdomadaire ou annuel avec un essai gratuit de 7 jours pour les comptes admissibles, ou un achat unique à vie. L’App Store affiche votre prix local. <a href="/fr/docs/#keyboard-setup">documentation de configuration du clavier</a>.</p>
         <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_fr_9b6a0975c35f">Télécharger Vox.md gratuitement</a></p>
       </section>
       <nav class="toc" aria-label="Guides associés" id="related"><div class="toc-title">Continuer</div><ul>

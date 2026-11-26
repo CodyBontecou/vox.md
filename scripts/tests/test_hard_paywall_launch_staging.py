@@ -27,7 +27,9 @@ class WebsiteStagingTests(unittest.TestCase):
             for name in names:
                 dest = source / name
                 dest.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copyfile(ROOT / 'website' / name, dest)
+                # The live site now carries the subscription copy, so stage from the
+                # pre-launch snapshot the bundle was generated against.
+                shutil.copyfile(ROOT / 'docs/launch/hard-paywall/website-source' / name, dest)
             output.mkdir(parents=True)
             shutil.copyfile(ROOT / 'docs/launch/hard-paywall/privacy-policy-proposed.html', output / 'privacy-policy-proposed.html')
             before = {n: hashlib.sha256((source / n).read_bytes()).hexdigest() for n in names}
