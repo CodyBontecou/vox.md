@@ -4336,6 +4336,7 @@ final class PersistentRecorder {
         guard let percent = progress.wholePercentCompleted,
               percent != lastPublishedTranscriptionPercent,
               let fraction = progress.exactFractionCompleted else { return }
+        let previousPercent = lastPublishedTranscriptionPercent
         lastPublishedTranscriptionPercent = percent
 
         if completionMode == .keyboardTranscription {
@@ -4347,7 +4348,11 @@ final class PersistentRecorder {
                 transcriptionProgress: fraction
             ))
         }
-        if !isSegmentActive {
+        // Every Live Activity update re-animates the Dynamic Island, so move
+        // its percentage in 5% steps rather than on every whole percent (#180).
+        let step = Self.liveActivityProgressStep
+        if !isSegmentActive,
+           previousPercent.map({ $0 / step != percent / step }) ?? true {
             LiveActivityController.shared.update(
                 isSegmentActive: false,
                 isTranscribing: true,
@@ -4356,6 +4361,8 @@ final class PersistentRecorder {
             )
         }
     }
+
+    private static let liveActivityProgressStep = 5
 
     @MainActor
     private func stopAcceptingTranscriptionProgress(requestId: String) {
