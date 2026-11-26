@@ -74,6 +74,7 @@ class CaptureRoutePillsInstrumentationTest {
         onSelectPreset: (String) -> Unit = {},
         openPresets: () -> Unit = {},
         cancelRecording: () -> Unit = {},
+        discardRecording: (() -> Unit)? = null,
         startRecording: () -> Unit = {},
         onNewNote: () -> Unit = {},
     ) {
@@ -112,6 +113,7 @@ class CaptureRoutePillsInstrumentationTest {
                             resumeRecording = {},
                             stopRecording = {},
                             cancelRecording = cancelRecording,
+                            discardRecording = discardRecording ?: cancelRecording,
                             dismissRecording = {},
                             processRecording = {},
                             cancelRecordingProcessing = {},
@@ -201,6 +203,21 @@ class CaptureRoutePillsInstrumentationTest {
         render(draftText = "")
         compose.onNodeWithTag("capture-speak").assertExists()
         compose.onNodeWithTag("capture-speak-record-new-note").assertDoesNotExist()
+    }
+
+    @Test
+    fun confirmedDiscardUsesTheDeletingDiscardNotPlainCancel() {
+        val recording = mutableStateOf(RecordingStatus(sessionID = sessionID, phase = RecordingPhase.RECORDING))
+        var cancelled = 0
+        var discarded = 0
+        render(recording = recording, cancelRecording = { cancelled += 1 }, discardRecording = { discarded += 1 })
+
+        compose.onNodeWithTag("capture-recording-discard").performClick()
+        compose.onNodeWithTag("capture-recording-discard-confirm").performClick()
+        compose.runOnIdle {
+            assertEquals(1, discarded)
+            assertEquals(0, cancelled)
+        }
     }
 
     @Test

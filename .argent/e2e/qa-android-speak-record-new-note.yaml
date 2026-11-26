@@ -21,9 +21,10 @@
 #    "Reopen" toast lasts 6 s, which a replay can't reach before the discard,
 #    and argent's tree goes stale on Files on this phone, so the reset is not
 #    automated.
-#  - Known app bug (pre-existing, not from this change): a discarded session's
-#    PCM chunks stay in no_backup/recordings/<id>/ despite the dialog's "The
-#    audio ... deleted".
+#  - Discard deletes the session's audio chunks (ConfirmedRecordingDiscard);
+#    its small manifest stays in no_backup/recordings/<id>/ as a cancelled
+#    recording without audio. Check with `adb shell run-as md.vox.android ls`
+#    after a run; remove that folder to leave no trace.
 # Selectors: "Discard Recording" is matched by its label because the confirm
 #   dialog is a separate window whose test tags are not exposed.
 version: 1

@@ -698,6 +698,8 @@ internal fun VoxNavigation(
     billingManager: PlayBillingManager,
     transcriptionUsage: TranscriptionUsageState,
 ) {
+    // Outlives the dock: the confirmed Discard deletes the audio after the recorder stops.
+    val discardScope = rememberCoroutineScope()
     val context = LocalContext.current
     val navController = rememberNavController()
     val snackbarHost = remember { SnackbarHostState() }
@@ -834,6 +836,17 @@ internal fun VoxNavigation(
                     resumeRecording = recordingClient::resume,
                     stopRecording = recordingClient::stop,
                     cancelRecording = recordingClient::cancel,
+                    discardRecording = {
+                        val sessionID = recordingStatus.sessionID
+                        discardScope.launch {
+                            ConfirmedRecordingDiscard.discard(
+                                sessionID = sessionID,
+                                cancel = recordingClient::cancel,
+                                status = RecordingStatusRegistry.status,
+                                deleteAudio = recordingClient::deleteRetainedAudio,
+                            )
+                        }
+                    },
                     dismissRecording = recordingClient::dismissResult,
                     processRecording = { recordingStatus.sessionID?.let(transcriptionClient::process) },
                     cancelRecordingProcessing = { recordingStatus.sessionID?.let(transcriptionClient::cancel) },
