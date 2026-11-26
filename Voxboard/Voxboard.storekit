@@ -3,7 +3,7 @@
   "nonRenewingSubscriptions": [],
   "products": [
     {
-      "displayPrice": "19.99",
+      "displayPrice": "79.99",
       "familyShareable": false,
       "internalID": "bontecou.Voxboard.unlock",
       "localizations": [{"description": "Unlimited Capture and transcription for one user. Pay once.", "displayName": "Individual Lifetime", "locale": "en_US"}],
@@ -12,7 +12,7 @@
       "type": "NonConsumable"
     },
     {
-      "displayPrice": "39.99",
+      "displayPrice": "129.99",
       "familyShareable": true,
       "internalID": "bontecou.Voxboard.family",
       "localizations": [{"description": "Unlimited lifetime access with Apple Family Sharing.", "displayName": "Family Lifetime", "locale": "en_US"}],
@@ -21,7 +21,7 @@
       "type": "NonConsumable"
     },
     {
-      "displayPrice": "19.99",
+      "displayPrice": "49.99",
       "familyShareable": true,
       "internalID": "bontecou.Voxboard.familyUpgrade",
       "localizations": [{"description": "Add Family Sharing to an existing lifetime purchase.", "displayName": "Legacy Family Upgrade", "locale": "en_US"}],
@@ -38,7 +38,7 @@
       "name": "Vox.md Unlimited",
       "subscriptions": [
         {
-          "adHocOffers": [], "codeOffers": [], "displayPrice": "0.99", "familyShareable": false,
+          "adHocOffers": [], "codeOffers": [], "displayPrice": "2.99", "familyShareable": false,
           "groupNumber": 2, "internalID": "individual-weekly",
           "introductoryOffer": {"internalID": "individual-weekly-trial", "numberOfPeriods": 1, "paymentMode": "free", "subscriptionPeriod": "P1W"},
           "localizations": [{"description": "Unlimited individual access, billed weekly after a 7-day trial.", "displayName": "Individual Weekly", "locale": "en_US"}],
@@ -54,7 +54,7 @@
           "referenceName": "Individual Yearly", "subscriptionGroupID": "voxboard-unlimited", "type": "RecurringSubscription"
         },
         {
-          "adHocOffers": [], "codeOffers": [], "displayPrice": "1.99", "familyShareable": true,
+          "adHocOffers": [], "codeOffers": [], "displayPrice": "4.99", "familyShareable": true,
           "groupNumber": 1, "internalID": "family-weekly",
           "introductoryOffer": {"internalID": "family-weekly-trial", "numberOfPeriods": 1, "paymentMode": "free", "subscriptionPeriod": "P1W"},
           "localizations": [{"description": "Unlimited Family Sharing access, billed weekly after a 7-day trial.", "displayName": "Family Weekly", "locale": "en_US"}],
