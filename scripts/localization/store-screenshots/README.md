@@ -34,6 +34,13 @@ python3 scripts/localization/store-screenshots/contact-sheet.py ja
 
 Output: `artifacts/localization/store-signal/<locale>/<iphone|ipad|duo-inner|duo-cover|mac>/NN-name.png`
 (iPhone 1206×2622, iPad 2752×2064, Duo inner 2853×2007, Duo outer 1398×2034, Mac 2880×1800).
+
+Product page creative assets (App Store Connect › Product Page Information › Header and Search Results) render
+from `P2_Header` / `P2_Search`: `header/01-header.png` (3840×1646, 21:9; art safe area 1646×661 at 1097,493) and
+`search/01-search-results.png` (3840×2560, 3:2; art safe area 2168×1030 at 836,765). The headline sits in a
+`data-fit` box over the safe area; the renderer shrinks its type (to 70% at most) until every locale fits without
+extra line breaks. Devices and chips outside the safe area are bleed: they're cropped away on narrow screens.
+Google Fonts responses are cached in `node_modules/.cache/store-screenshots-fonts/` (headless loads were stalling).
 Arabic renders right-to-left. Scripts Geist lacks (CJK, Arabic, Thai, Devanagari) fall back to the macOS system fonts.
 
 When the design changes: re-export the changed `.dc.html` files from the artifact into `templates/`, run `--extract`,
