@@ -76,9 +76,9 @@ final class HardPaywallStoreKitTests: XCTestCase {
         await store.loadProducts()
         // Parse exact decimal prices rather than round-tripping binary floats.
         let prices: [VoxboardPurchaseProduct: String] = [
-            .individualWeekly: "0.99", .individualYearly: "29.99", .individual: "19.99",
-            .familyWeekly: "1.99", .familyYearly: "49.99", .family: "39.99",
-            .familyUpgrade: "19.99",
+            .individualWeekly: "2.99", .individualYearly: "29.99", .individual: "79.99",
+            .familyWeekly: "4.99", .familyYearly: "49.99", .family: "129.99",
+            .familyUpgrade: "49.99",
         ]
         for (id, price) in prices {
             let product = try XCTUnwrap(store.product(for: id))
