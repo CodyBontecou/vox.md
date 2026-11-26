@@ -57,7 +57,7 @@ Local automated evidence already covers core entitlement, expiration/fallback, p
 
 `scripts/stage-hard-paywall-website.py` generates `website.patch`, five staged files, and source/staged hashes here. It never edits `website/` or invokes deployment. The patch was generated against the pre-launch site, saved in `website-source/`; its test stages from that snapshot.
 
-Update 2026-11-26: the live website sources now describe the subscription, trial and lifetime model directly (pricing copy only, all locales). The pricing parts of this bundle are superseded and no longer apply to `website/`. Its Terms and Privacy changes were not published by that update.
+Update 2026-11-26: the live website sources now describe the subscription, trial and lifetime model directly (pricing copy only, all locales). The pricing parts of this bundle are superseded and no longer apply to `website/`. Its Terms and Privacy changes were not published by that update. Later on 2026-11-26, the Terms and Privacy updates were published from the current page sources rather than this snapshot, adapted to current naming (Route instead of Capture Preset) and facts: URL delivery, Apple and Google Play billing, Android's free allowance, and exact analytics-free version cutoffs (iOS and iPadOS 3.0, macOS 3.0.4, current Android). This staged bundle is now fully superseded; keep it only as launch history.
 
 The staged copy removes obsolete free allowances/no-subscription claims, describes all plan types and eligible trials, adds billing/cancellation information, preserves old purchases, and explains unpaid history access. New numeric lifetime targets are deliberately absent. Support responses below are also drafts until release.
 
