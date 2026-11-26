@@ -105,6 +105,18 @@ public struct VoxboardLiveActivityState: Codable, Hashable, Sendable {
         return effectiveStartedAt + index * window
     }
 
+    /// True when the shown line window must be replaced: recorded time has
+    /// moved into a later window, or no window was sent yet (e.g. the first
+    /// state went out before the recorder's segment context existed).
+    public static func lineWindowNeedsUpdate(
+        shown: TimeInterval?,
+        current: TimeInterval?
+    ) -> Bool {
+        guard let current else { return false }
+        guard let shown else { return true }
+        return current > shown + 0.5
+    }
+
     /// Fraction (0..<1) of the current window filled after `elapsed` recorded seconds.
     public static func lineWindowFraction(elapsed: TimeInterval, window: TimeInterval) -> Double {
         guard elapsed.isFinite, window.isFinite, window > 0 else { return 0 }

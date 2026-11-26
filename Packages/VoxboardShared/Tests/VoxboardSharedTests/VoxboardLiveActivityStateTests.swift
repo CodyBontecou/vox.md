@@ -166,4 +166,16 @@ final class VoxboardLiveActivityStateTests: XCTestCase {
         XCTAssertNil(VoxboardLiveActivityState(isSegmentActive: true, segmentStartedAt: 1).pausedLineFraction)
         XCTAssertNil(VoxboardLiveActivityState(lineWindowDuration: -1).lineWindowDuration)
     }
+
+    func test_lineWindowNeedsUpdate_onceWhenMissingOrNextWindow() {
+        // Missing window (first state sent before the segment context): push once.
+        XCTAssertTrue(VoxboardLiveActivityState.lineWindowNeedsUpdate(shown: nil, current: 1_000))
+        // Same window: no update.
+        XCTAssertFalse(VoxboardLiveActivityState.lineWindowNeedsUpdate(shown: 1_000, current: 1_000))
+        XCTAssertFalse(VoxboardLiveActivityState.lineWindowNeedsUpdate(shown: 1_000, current: 1_000.3))
+        // Next window: one update.
+        XCTAssertTrue(VoxboardLiveActivityState.lineWindowNeedsUpdate(shown: 1_000, current: 1_300))
+        // No computable window: nothing to send.
+        XCTAssertFalse(VoxboardLiveActivityState.lineWindowNeedsUpdate(shown: nil, current: nil))
+    }
 }

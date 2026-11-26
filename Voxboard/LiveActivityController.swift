@@ -440,17 +440,21 @@ final class LiveActivityController {
         }
     }
 
-    /// True once recorded time has moved past the shown line window, so the
-    /// next window must start. Paused time never counts.
+    /// True once recorded time has moved past the shown line window (or none
+    /// was sent yet), so the next window must start. Paused time never counts.
     private func lineWindowEnded(_ context: LiveActivitySegmentContext) -> Bool {
-        guard context.requestId == nil || context.requestId == desiredState.segmentRequestId,
-              let shown = desiredState.lineWindowStart,
-              let current = VoxboardLiveActivityState.lineWindowStart(
-                effectiveStartedAt: context.effectiveStartedAt,
-                elapsed: context.elapsed,
-                window: Self.lineWindowDuration
-              ) else { return false }
-        return current > shown + 0.5
+        guard context.requestId == nil || context.requestId == desiredState.segmentRequestId else {
+            return false
+        }
+        let current = VoxboardLiveActivityState.lineWindowStart(
+            effectiveStartedAt: context.effectiveStartedAt,
+            elapsed: context.elapsed,
+            window: Self.lineWindowDuration
+        )
+        return VoxboardLiveActivityState.lineWindowNeedsUpdate(
+            shown: desiredState.lineWindowStart,
+            current: current
+        )
     }
 
     private func reloadRouteWidgets() {
