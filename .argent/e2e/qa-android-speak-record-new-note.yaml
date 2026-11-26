@@ -1,0 +1,50 @@
+# Speak options > "Record into a new note" (Android parity for iOS #175):
+# from an open Live Note it closes that note like New, opens a blank note and
+# starts recording into it. The recording is then discarded, so nothing is
+# transcribed or written to the vault.
+#
+# Contract:
+#  - Baseline: the Vox QA note capture-c2d2e1cc-….md is open (path shown).
+#  - The chevron offers "Record into a new note"; choosing it shows the blank
+#    note's planned path (capture-{id}.md) and the recording dock.
+#  - Discard → confirm: the dock goes away and Speak is idle again.
+#
+# Prerequisites: the owner's Pixel 7 (debug md.vox.android) with the Vox QA
+#   vault, whose composer reopens Inbox/capture-c2d2e1cc-a45e-4818-80df-
+#   2a9d3d3581ed.md on launch; microphone permission granted; English UI.
+# Side effects:
+#  - RECORDS a few seconds of microphone audio, then discards it.
+#  - Leaves the composer on a blank note. The original note is released (not
+#    modified); reopen it from Files before running again (a second run needs
+#    it open). The released-note "Reopen" toast lasts 6 s, which a replay
+#    can't reach before the discard, and the Files tree is unreliable on this
+#    phone (argent's tree goes stale on pushed screens), so the reset is not
+#    automated.
+#  - Known app bug (pre-existing, not from this change): a discarded session's
+#    PCM chunks stay in no_backup/recordings/<id>/ despite the dialog's "The
+#    audio ... deleted".
+# Coordinate exception: none. "Discard Recording" is matched by its label
+# because the confirm dialog is a separate window whose test tags are not
+# exposed (same popup issue fixed for the Speak menu in this PR).
+version: 1
+requires:
+  platform: android
+steps:
+  - echo: Restart Vox.md; expect the composer on the Vox QA note with Speak's options
+      chevron
+  - launch: md.vox.android
+  - await: { visible: { id: capture-speak-options }, timeout: 15000 }
+  - await: { idle: true }
+  - await: { text: { in: { id: live-note-path }, contains: capture-c2d2e1cc-a45e-4818-80df-2a9d3d3581ed.md } }
+  - echo: Open Speak's options and choose Record into a new note
+  - tap: { id: capture-speak-options }
+  - await: { visible: { id: capture-speak-record-new-note } }
+  - tap: { id: capture-speak-record-new-note }
+  - echo: Expect a blank note recording; then discard the recording
+  - await: { visible: { id: capture-recording-discard }, timeout: 8000 }
+  - await: { idle: true }
+  - await: { text: { in: { id: live-note-path }, contains: "capture-{id}.md" } }
+  - tap: { id: capture-recording-discard }
+  - tap: { text: Discard Recording }
+  - await: { hidden: { id: capture-recording-discard }, timeout: 8000 }
+  - await: { text: { in: { id: capture-speak }, contains: Start voice capture }, timeout: 8000 }
