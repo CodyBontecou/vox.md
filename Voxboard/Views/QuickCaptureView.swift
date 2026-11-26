@@ -348,6 +348,16 @@ struct QuickCaptureView: View {
         }
     }
 
+    /// The rail is the route switcher when it is drawn (it needs 2+ routes),
+    /// so the header stops repeating every route and only names the active one.
+    private var routeRailReplacesHeaderPills: Bool {
+        Self.routeRailReplacesHeaderPills(railShown: showsRouteSideRail, routeCount: enabledFlows.count)
+    }
+
+    static func routeRailReplacesHeaderPills(railShown: Bool, routeCount: Int) -> Bool {
+        railShown && routeCount > 1
+    }
+
     private var showsRouteSideRail: Bool {
         layout == .compact
             && captureToolbarPreferences.routeRailPlacement != .off
@@ -1364,6 +1374,20 @@ struct QuickCaptureView: View {
 
     private var voiceCaptureButton: CaptureViewSection {
         CaptureViewSection {
+            // The options chevron sits on top of the capsule's trailing end,
+            // outside the press gesture, so tapping it never starts recording.
+            ZStack(alignment: .trailing) {
+                voiceCapturePressArea
+                if showsSpeakOptionsMenu {
+                    speakOptionsMenu
+                        .transition(.opacity)
+                }
+            }
+        }
+    }
+
+    private var voiceCapturePressArea: CaptureViewSection {
+        CaptureViewSection {
             // One container keeps the press gesture alive while the label swaps
             // between idle, push-to-talk and recording presentations.
             ZStack {
@@ -1410,8 +1434,10 @@ struct QuickCaptureView: View {
                     ? String(localized: "Transcribing")
                     : String(localized: "Speak"),
                 systemImage: isCaptureReadOnly ? "lock.fill" : "mic",
-                modeSymbol: persistentRecorder.isAppRecordingTranscribing || isCaptureReadOnly
-                    ? nil : recordingResultModeSymbol,
+                // What Speak does is chosen in the options menu (the
+                // chevron), so the capsule no longer carries a mode glyph.
+                modeSymbol: nil,
+                contentTrailingInset: showsSpeakOptionsMenu ? Self.speakOptionsMenuWidth / 2 : 0,
                 isDimmed: (isMicrophoneDenied || isCaptureReadOnly) && !isLocalizationScreenshot,
                 showsProgress: persistentRecorder.isAppRecordingTranscribing
             )
@@ -1432,13 +1458,79 @@ struct QuickCaptureView: View {
         AVAudioApplication.shared.recordPermission == .denied
     }
 
-    /// Compact indicator pinned to the mic control showing the persisted
-    /// recording result mode — `text.badge.plus` when stopping adds the
-    /// transcript to the Capture draft, `paperplane.fill` when it runs the
-    /// selected preset and sends immediately — so users can see what stop
-    /// will do before pressing it.
-    private var recordingResultModeSymbol: String {
-        recordingMode == .draft ? "text.badge.plus" : "paperplane.fill"
+    static let speakOptionsMenuWidth: CGFloat = 52
+
+    /// Speak's options (Hans, 2026-11-26: the separate mic-plus "Record new
+    /// note" button read as a second Speak button). The chevron holds the
+    /// choices Speak itself can't show: recording into a new note (Live
+    /// Notes, with a note open) or what Stop does (without Live Notes; with
+    /// Live Notes speech always goes into the note).
+    private var showsSpeakOptionsMenu: Bool {
+        guard !persistentRecorder.isAppRecordingSegmentActive,
+              !persistentRecorder.isAppRecordingTranscribing,
+              !isCaptureReadOnly else { return false }
+        return Self.speakOptionsMenuOffers(
+            liveNotesEnabled: viewModel.liveNotesEnabled,
+            canRecordNewNote: viewModel.canRecordNewNote
+        )
+    }
+
+    /// With Live Notes the only choice is which note to record into, so the
+    /// menu shows only while a note is open to leave; on a blank note Speak
+    /// already records into a new note.
+    static func speakOptionsMenuOffers(liveNotesEnabled: Bool, canRecordNewNote: Bool) -> Bool {
+        liveNotesEnabled ? canRecordNewNote : true
+    }
+
+    private var speakOptionsMenu: CaptureViewSection {
+        CaptureViewSection {
+            Menu {
+                if viewModel.liveNotesEnabled {
+                    Button(action: handleVoiceCaptureTap) {
+                        Label("Record into this note", systemImage: "mic")
+                    }
+                    .accessibilityIdentifier("capture_speak_record_this_note")
+                    Button(action: recordNewNote) {
+                        Label("Record into a new note", systemImage: "square.and.pencil")
+                    }
+                    .disabled(persistentRecorder.ownsCaptureRoute)
+                    .keyboardShortcut("n", modifiers: [.command, .shift])
+                    .accessibilityIdentifier("capture_speak_record_new_note")
+                } else {
+                    Picker(selection: recordingModeSelection) {
+                        Label("Add to draft", systemImage: "text.badge.plus")
+                            .tag(CaptureRecordingMode.draft)
+                        Label("Send on stop", systemImage: "paperplane")
+                            .tag(CaptureRecordingMode.preset)
+                    } label: {
+                        Text("When you stop")
+                    }
+                    .pickerStyle(.inline)
+                }
+            } label: {
+                HStack(spacing: 0) {
+                    Rectangle()
+                        .fill(Geist.bg.opacity(0.25))
+                        .frame(width: 1, height: 22)
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: 13, weight: .semibold))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                .foregroundStyle(isMicrophoneDenied ? Geist.muted : Geist.bg)
+                .frame(width: Self.speakOptionsMenuWidth, height: Geist.ControlHeight.hero)
+                .contentShape(Rectangle())
+            }
+            .menuOrder(.fixed)
+            .disabled(isProcessingMedia)
+            .accessibilityLabel("Recording options")
+            .accessibilityValue(speakOptionsAccessibilityValue)
+            .accessibilityIdentifier("capture_speak_options")
+        }
+    }
+
+    private var speakOptionsAccessibilityValue: Text {
+        if viewModel.liveNotesEnabled { return Text("Records into this note") }
+        return recordingMode == .draft ? Text("Add to draft") : Text("Send on stop")
     }
 
     /// Tap starts or stops recording; a long press opens the detailed
@@ -2568,30 +2660,9 @@ struct QuickCaptureView: View {
         }
     }
 
-    /// Live Notes, from an open note: one tap closes it like New note, opens
-    /// a blank note and starts recording into it through the regular Speak
-    /// path (permission prompt, paywall, Live Activity).
-    private var recordNewNoteControl: CaptureViewSection {
-        CaptureViewSection {
-            Button(action: recordNewNote) {
-                Image(systemName: "mic.badge.plus")
-                    .accessibilityLabel("Record new note")
-            }
-            .buttonStyle(SignalCircleButtonStyle(diameter: Geist.ControlHeight.large))
-            .disabled(isProcessingMedia || persistentRecorder.ownsCaptureRoute)
-            .accessibilityHint(Text("Closes this file, starts a blank note and starts recording"))
-            .accessibilityIdentifier("capture_record_new_note")
-            .keyboardShortcut("n", modifiers: [.command, .shift])
-            .transition(.scale.combined(with: .opacity))
-        }
-    }
-
-    /// Shown only while there is a note to leave; on a blank note Speak
-    /// already records into a new note.
-    private var showsRecordNewNote: Bool {
-        viewModel.canRecordNewNote && !persistentRecorder.isAppRecordingSegmentActive
-    }
-
+    /// Live Notes, from an open note (Speak's options menu): closes it like
+    /// New note, opens a blank note and starts recording into it through the
+    /// regular Speak path (permission prompt, paywall, Live Activity).
     private func recordNewNote() {
         guard microphonePermissionTask == nil, !persistentRecorder.ownsCaptureRoute else { return }
         if usageTracker.isAtLimit {
@@ -2715,7 +2786,6 @@ struct QuickCaptureView: View {
 
                     // Remote only has no note to keep editing; it always Sends.
                     if viewModel.liveNotesEnabled, !viewModel.selectedRouteIsRemoteOnly {
-                        if showsRecordNewNote { recordNewNoteControl }
                         if footerShowsSend { newNoteControl }
                     } else if captureFooterIsVaultUnreachable {
                         queueSaveControl
@@ -2723,7 +2793,7 @@ struct QuickCaptureView: View {
                         sendRouteControl
                     }
                 }
-                .animation(reduceMotion ? nil : .easeInOut(duration: 0.18), value: showsRecordNewNote)
+                .animation(reduceMotion ? nil : .easeInOut(duration: 0.18), value: showsSpeakOptionsMenu)
             }
             .padding(.horizontal, Geist.Spacing.four)
             .padding(.top, Geist.Spacing.three)
@@ -3696,6 +3766,7 @@ struct QuickCaptureView: View {
                 selectedID: viewModel.draft.voxID ?? selectedFlow.id,
                 isEnabled: viewModel.canSelectCapturePreset,
                 pillHeight: isCoverScreen ? 44 : 40,
+                showsOnlySelected: routeRailReplacesHeaderPills,
                 select: { id in
                     guard let flow = flows.first(where: { $0.id == id }) else { return }
                     selectFlow(flow)
