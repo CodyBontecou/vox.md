@@ -255,6 +255,7 @@ public final class RecordingJobQueue {
         draftRequestID: UUID? = nil,
         liveSessionID: UUID? = nil,
         captureSource: CaptureSource? = nil,
+        recordingStartedAt: Date? = nil,
         duration: TimeInterval,
         source: RecordingJobSource,
         delivery: RecordingJobDelivery,
@@ -267,7 +268,8 @@ public final class RecordingJobQueue {
         let resolved = configuration ?? RecordingQueuePreferences.load()
         let job = try await store.enqueueBundle(
             sources: sources, id: id, draftRequestID: draftRequestID, liveSessionID: liveSessionID,
-            captureSource: captureSource, duration: duration, source: source, delivery: delivery,
+            captureSource: captureSource, recordingStartedAt: recordingStartedAt,
+            duration: duration, source: source, delivery: delivery,
             modelID: modelID, fallbackModelID: fallbackModelID, language: language, configuration: resolved,
             removeSourcesAfterCommit: removeSourcesAfterCommit
         )
@@ -293,6 +295,7 @@ public final class RecordingJobQueue {
         locationOutcome: CaptureLocationOutcome? = nil,
         originalFilename: String? = nil,
         createdAt: Date = Date(),
+        recordingStartedAt: Date? = nil,
         duration: TimeInterval,
         source: RecordingJobSource,
         delivery: RecordingJobDelivery,
@@ -317,6 +320,7 @@ public final class RecordingJobQueue {
             locationOutcome: locationOutcome,
             originalFilename: originalFilename,
             createdAt: createdAt,
+            recordingStartedAt: recordingStartedAt,
             duration: duration,
             source: source,
             delivery: delivery,

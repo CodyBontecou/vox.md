@@ -39,15 +39,18 @@ enum MacPresetAudioFilenameContextFactory {
     /// Keeps direct legacy delivery on the same immutable transcript/preset
     /// identity used by the recording queue. The caller supplies the original
     /// app-owned source name before any temporary retention copy is created.
+    /// `{timestamp}` is the recording start; the transcript date is only the
+    /// fallback for jobs queued before the start time was recorded.
     nonisolated static func make(
         transcriptID: UUID,
         transcriptDate: Date,
+        recordingStartedAt: Date? = nil,
         presetName: String,
         originalFilename: String
     ) -> CapturePresetAudioFilenameContext {
         CapturePresetAudioFilenameContext(
             identifier: transcriptID.uuidString,
-            createdAt: transcriptDate,
+            createdAt: recordingStartedAt ?? transcriptDate,
             presetName: presetName,
             originalFilename: originalFilename
         )
@@ -69,7 +72,7 @@ enum MacCaptureDraftRecordingEvent: Sendable {
     case clearOrigin(profileID: String)
     case audio(URL)
     case transcript(String)
-    case audio(URL, draftRequestID: UUID?, deliveryID: UUID)
+    case audio(URL, draftRequestID: UUID?, deliveryID: UUID, recordingStartedAt: Date?)
     case transcript(String, draftRequestID: UUID?, liveSessionID: UUID?, deliveryID: UUID)
     case liveTranscript(sessionID: UUID, finalizedText: String, volatileText: String?)
     case cancelLiveTranscript(sessionID: UUID?)
@@ -139,6 +142,8 @@ final class MacRecorder {
     private var activeVoiceProcessingConfiguration: RecordingVoiceProcessingConfiguration?
     private var activeDraftRequestID: UUID?
     private var activeRecordingJobID: UUID?
+    /// When the active microphone take began: the `{timestamp}` of its audio.
+    private var activeRecordingStartedAt: Date?
     private var liveRecognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var liveRecognitionTask: SFSpeechRecognitionTask?
     private var livePreviewSessionID: UUID?
@@ -276,6 +281,7 @@ final class MacRecorder {
             activeDraftRequestID = draftRequestID
             let recordingJobID = UUID()
             activeRecordingJobID = recordingJobID
+            activeRecordingStartedAt = Date()
             isRecording = true
             activeCaptureLease = recordingQueue.beginCaptureLease()
             recordingDuration = 0
@@ -333,6 +339,8 @@ final class MacRecorder {
         let voiceProcessingConfiguration = activeVoiceProcessingConfiguration
         let draftRequestID = activeDraftRequestID
         let recordingJobID = activeRecordingJobID ?? UUID()
+        let recordingStartedAt = activeRecordingStartedAt
+        activeRecordingStartedAt = nil
         let captureLease = activeCaptureLease
         activeCaptureLease = nil
         activeCompletionMode = nil
@@ -372,6 +380,7 @@ final class MacRecorder {
                       preset.locationPolicy.isEnabled else { return nil }
                 return .unavailable(.unavailable, attemptedAt: Date())
             }(),
+            recordingStartedAt: recordingStartedAt,
             duration: duration,
             source: source,
             delivery: delivery,
@@ -422,6 +431,7 @@ final class MacRecorder {
                     draftRequestID: draftRequestID,
                     jobID: recordingJobID,
                     liveSessionID: recordingJobID,
+                    recordingStartedAt: recordingStartedAt,
                     captureSource: originSnapshot?.source,
                     locationOutcome: originSnapshot?.outcome,
                     voiceProcessingConfiguration: voiceProcessingConfiguration,
@@ -1098,7 +1108,8 @@ final class MacRecorder {
         if let systemURL = normalized.systemURL { sources.append((.meetingSystem, systemURL)) }
         _ = try await recordingQueue.enqueueBundle(
             sources: sources, id: manifest.sessionID, draftRequestID: manifest.draftRequestID,
-            liveSessionID: manifest.sessionID, captureSource: .mac, duration: manifest.duration,
+            liveSessionID: manifest.sessionID, captureSource: .mac,
+            recordingStartedAt: manifest.createdAt, duration: manifest.duration,
             source: .macApp, delivery: delivery, modelID: modelID,
             fallbackModelID: manifest.fallbackModelID, language: language,
             removeSourcesAfterCommit: false
@@ -1127,6 +1138,7 @@ final class MacRecorder {
         draftRequestID: UUID? = nil,
         jobID: UUID = UUID(),
         liveSessionID: UUID? = nil,
+        recordingStartedAt: Date? = nil,
         captureSource: CaptureSource? = nil,
         locationOutcome: CaptureLocationOutcome? = nil,
         voiceProcessingConfiguration: RecordingVoiceProcessingConfiguration? = nil,
@@ -1151,6 +1163,7 @@ final class MacRecorder {
                     liveSessionID: liveSessionID,
                     captureSource: captureSource,
                     locationOutcome: locationOutcome,
+                    recordingStartedAt: recordingStartedAt,
                     duration: duration,
                     source: source,
                     delivery: completionMode.recordingJobDelivery,
@@ -1193,7 +1206,8 @@ final class MacRecorder {
             hasDurableAudioCopy = await captureDraftEventHandler?(.audio(
                 audioURL,
                 draftRequestID: job.draftRequestID,
-                deliveryID: job.id
+                deliveryID: job.id,
+                recordingStartedAt: job.recordingStartedAt
             )) ?? false
             guard hasDurableAudioCopy else { throw MacRecordingHandoffError.audioStagingFailed }
         }
@@ -1260,6 +1274,7 @@ final class MacRecorder {
                 modelName: result.backendName,
                 language: result.language,
                 transcriptDate: job.createdAt,
+                recordingStartedAt: job.recordingStartedAt,
                 completionMode: completionMode,
                 audioURL: audioURL,
                 sourceAudioURL: audioURL,
@@ -1378,7 +1393,7 @@ final class MacRecorder {
         if shouldCopyAutomatically { try await recordingQueue.markAutomaticClipboardDeliveryAttempted(id: job.id) }
         try await finishSuccessfulTranscription(
             text: text, duration: job.duration, modelName: backendNames.joined(separator: " + "), language: language,
-            transcriptDate: job.createdAt,
+            transcriptDate: job.createdAt, recordingStartedAt: job.recordingStartedAt,
             completionMode: completionMode, audioURL: mixURL, sourceAudioURL: mixURL,
             originalAudioFilename: job.originalFilename, locationOutcome: job.locationOutcome,
             captureSource: .mac, cleanupWorkingAudio: false, copiesToClipboard: shouldCopyAutomatically, transcriptID: job.id,
@@ -1465,7 +1480,8 @@ final class MacRecorder {
                     .audio(
                         sourceAudioURL ?? audioURL,
                         draftRequestID: nil,
-                        deliveryID: UUID()
+                        deliveryID: UUID(),
+                        recordingStartedAt: nil
                     )
                 ) ?? false
                 guard hasDurableAudioCopy else { throw MacRecordingHandoffError.audioStagingFailed }
@@ -1541,6 +1557,7 @@ final class MacRecorder {
         modelName: String,
         language: String,
         transcriptDate: Date = Date(),
+        recordingStartedAt: Date? = nil,
         completionMode: MacRecordingCompletionMode,
         audioURL: URL,
         sourceAudioURL: URL?,
@@ -1748,7 +1765,16 @@ final class MacRecorder {
                         destinationID: captureDestinationID,
                         audioSourceURL: retainedAudioURL,
                         locationOutcome: locationOutcome,
-                        source: captureSource
+                        source: captureSource,
+                        audioFilenameContext: retainedAudioURL.flatMap { audioURL in
+                            captureSource == .fileImport ? nil : MacPresetAudioFilenameContextFactory.make(
+                                transcriptID: latest.id,
+                                transcriptDate: latest.date,
+                                recordingStartedAt: recordingStartedAt,
+                                presetName: flowForExport.visibleName ?? "",
+                                originalFilename: audioURL.lastPathComponent
+                            )
+                        }
                     )
                     canRemoveRetainedAudio = true
                     canRemoveOriginSnapshot = true
@@ -1890,6 +1916,7 @@ final class MacRecorder {
                     : MacPresetAudioFilenameContextFactory.make(
                         transcriptID: latest.id,
                         transcriptDate: latest.date,
+                        recordingStartedAt: recordingStartedAt,
                         presetName: flowForExport.visibleName ?? "",
                         originalFilename: audioFilenameOriginal
                     )

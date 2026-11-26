@@ -174,7 +174,9 @@ enum CaptureDraftRecordingEvent: Sendable {
         profileSnapshot: CapturePresetProfile
     )
     case clearOrigin(profileID: String)
-    case audio(URL, draftRequestID: UUID?, deliveryID: UUID)
+    /// `recordingStartedAt` names the staged file's `{timestamp}`; nil for
+    /// imports, which fall back to the staging time.
+    case audio(URL, draftRequestID: UUID?, deliveryID: UUID, recordingStartedAt: Date?)
     case liveTranscript(sessionID: UUID, finalizedText: String, volatileText: String?)
     case cancelLiveTranscript(sessionID: UUID)
     case transcript(String, draftRequestID: UUID?, liveSessionID: UUID?, deliveryID: UUID)
@@ -192,16 +194,19 @@ struct RecordingSegmentHandoffSnapshot: Equatable, Sendable {
 /// iOS's legacy direct voice-note route. Unified Capture stages its own named
 /// asset earlier; imported user media deliberately keeps its existing naming.
 enum IOSLegacyVoiceAudioDelivery {
+    /// `{timestamp}` is the recording start; the transcript date (when
+    /// transcription finished) is only the fallback for legacy queued jobs.
     static func audioFilenameContext(
         transcript: Transcript,
         flowSnapshot: CapturePreset,
         originalAudioFilename: String,
-        captureSource: CaptureSource
+        captureSource: CaptureSource,
+        recordingStartedAt: Date? = nil
     ) -> CapturePresetAudioFilenameContext? {
         guard captureSource != .fileImport else { return nil }
         return CapturePresetAudioFilenameContext(
             identifier: transcript.id.uuidString,
-            createdAt: transcript.date,
+            createdAt: recordingStartedAt ?? transcript.date,
             presetName: flowSnapshot.visibleName ?? "",
             originalFilename: originalAudioFilename
         )
@@ -215,6 +220,7 @@ enum IOSLegacyVoiceAudioDelivery {
         transcript: Transcript,
         originalAudioFilename: String,
         captureSource: CaptureSource,
+        recordingStartedAt: Date? = nil,
         transcriptFolderScopeURL: URL? = nil,
         previouslyExportedURL: URL? = nil,
         audioReferenceAlreadyAttached: Bool = false,
@@ -236,7 +242,8 @@ enum IOSLegacyVoiceAudioDelivery {
                 transcript: transcript,
                 flowSnapshot: flowSnapshot,
                 originalAudioFilename: originalAudioFilename,
-                captureSource: captureSource
+                captureSource: captureSource,
+                recordingStartedAt: recordingStartedAt
             ),
             checkpointExport: checkpointExport,
             checkpointReference: checkpointReference
@@ -479,6 +486,14 @@ final class PersistentRecorder {
     /// Pre-roll plus headroom for the main-queue hop before the journal opens.
     private var keptAudioPreRollSeconds: Double { preRollSeconds + 2 }
     private var segmentStartedAt: TimeInterval = 0
+
+    /// The recording-start clock as a date, or nil when no take has started.
+    /// Every audio filename built for an app recording reads its `{timestamp}`
+    /// from this, never from when the file is staged or exported.
+    nonisolated static func recordingStartDate(_ startedAt: TimeInterval?) -> Date? {
+        guard let startedAt, startedAt > 0 else { return nil }
+        return Date(timeIntervalSince1970: startedAt)
+    }
     private var liveTranscriptionSetupTask: Task<LiveSegmentTranscriptionCoordinator?, Never>?
     private var endOfSpeechSetupTask: Task<VoiceAutoStopCoordinator?, Never>?
     /// Non-nil while end-of-speech commits segments instead of ending the
@@ -2236,6 +2251,8 @@ final class PersistentRecorder {
         let modelId = segmentModelId ?? AppConstants.defaultTranscriptionBackendID
         let language = segmentLanguage ?? "auto"
         let duration = TimeInterval(samples.count) / whisperSampleRate
+        // Read before rearm resets the clock for the next span.
+        let recordingStartedAt = Self.recordingStartDate(segmentStartedAt)
         let originLocationTask = beginOriginLocationResolution(
             requestID: deliveryRequestId,
             completionMode: completionMode,
@@ -2271,6 +2288,7 @@ final class PersistentRecorder {
                 locationOutcome: presetSnapshot?.locationPolicy.isEnabled == true
                     ? .unavailable(.unavailable, attemptedAt: Date())
                     : nil,
+                recordingStartedAt: recordingStartedAt,
                 duration: duration,
                 source: .iOSApp,
                 delivery: delivery,
@@ -2318,6 +2336,7 @@ final class PersistentRecorder {
                 jobID: commitID,
                 draftRequestID: draftRequestID,
                 liveSessionID: nil,
+                recordingStartedAt: recordingStartedAt,
                 fallbackRecoveryURL: journalURL,
                 captureSource: originSnapshot?.source,
                 locationOutcome: originSnapshot?.outcome,
@@ -2586,6 +2605,7 @@ final class PersistentRecorder {
                 )
             }
             let jobID = captureSessionID ?? UUID()
+            let recordingStartedAt = Self.recordingStartDate(segmentStartedAt)
             let delivery: RecordingJobDelivery = {
                 if case .runVox = completionMode, let presetSnapshot {
                     return .preset(presetSnapshot)
@@ -2618,6 +2638,7 @@ final class PersistentRecorder {
                     locationOutcome: presetSnapshot?.locationPolicy.isEnabled == true
                         ? .unavailable(.unavailable, attemptedAt: Date())
                         : nil,
+                    recordingStartedAt: recordingStartedAt,
                     duration: duration,
                     source: .iOSApp,
                     delivery: delivery,
@@ -2677,6 +2698,7 @@ final class PersistentRecorder {
                     jobID: jobID,
                     draftRequestID: draftRequestID,
                     liveSessionID: captureSessionID,
+                    recordingStartedAt: recordingStartedAt,
                     fallbackRecoveryURL: segmentJournalURL,
                     captureSource: originSnapshot?.source,
                     locationOutcome: originSnapshot?.outcome,
@@ -3193,6 +3215,7 @@ final class PersistentRecorder {
         jobID: UUID = UUID(),
         draftRequestID: UUID? = nil,
         liveSessionID: UUID? = nil,
+        recordingStartedAt: Date? = nil,
         fallbackRecoveryURL: URL? = nil,
         captureSource: CaptureSource? = nil,
         locationOutcome: CaptureLocationOutcome? = nil,
@@ -3223,6 +3246,7 @@ final class PersistentRecorder {
                     liveSessionID: liveSessionID,
                     captureSource: captureSource,
                     locationOutcome: locationOutcome,
+                    recordingStartedAt: recordingStartedAt,
                     duration: duration,
                     source: source,
                     delivery: delivery,
@@ -3337,6 +3361,7 @@ final class PersistentRecorder {
                 completionMode: completionMode,
                 sourceAudioURL: audioURL,
                 originalAudioFilename: job.originalFilename,
+                recordingStartedAt: job.recordingStartedAt?.timeIntervalSince1970,
                 captureSource: job.captureSource,
                 selectedFlowOverride: flowSnapshot,
                 voiceProcessingConfiguration: job.effectiveVoiceProcessingConfiguration,
@@ -3590,7 +3615,8 @@ final class PersistentRecorder {
             let staged = await captureDraftEventHandler?(.audio(
                 sourceAudioURL ?? audioURL,
                 draftRequestID: draftRequestID,
-                deliveryID: transcriptID
+                deliveryID: transcriptID,
+                recordingStartedAt: Self.recordingStartDate(recordingStartedAt)
             )) ?? false
             guard staged else { throw PersistentRecordingJobError.audioStagingFailed }
         }
@@ -4022,7 +4048,16 @@ final class PersistentRecorder {
                                 destinationID: captureDestinationID,
                                 audioSourceURL: audioSourceForExport,
                                 locationOutcome: originLocationOutcome,
-                                source: originCaptureSource
+                                source: originCaptureSource,
+                                audioFilenameContext: audioSourceForExport.flatMap { audioURL in
+                                    IOSLegacyVoiceAudioDelivery.audioFilenameContext(
+                                        transcript: latest,
+                                        flowSnapshot: flowForExport,
+                                        originalAudioFilename: audioURL.lastPathComponent,
+                                        captureSource: originCaptureSource,
+                                        recordingStartedAt: Self.recordingStartDate(recordingStartedAt)
+                                    )
+                                }
                             )
                             if let transcriptID {
                                 try await self.recordingQueue.markExportedNote(
@@ -4167,6 +4202,7 @@ final class PersistentRecorder {
                                 transcript: latest,
                                 originalAudioFilename: originalAudioFilenameForExport,
                                 captureSource: originCaptureSource,
+                                recordingStartedAt: Self.recordingStartDate(recordingStartedAt),
                                 transcriptFolderScopeURL: noteFolderScopeURL,
                                 previouslyExportedURL: checkpointedAudioURL,
                                 audioReferenceAlreadyAttached: audioReferenceAttachedAt != nil,

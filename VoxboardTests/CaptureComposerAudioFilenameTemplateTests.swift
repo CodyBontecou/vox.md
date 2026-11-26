@@ -21,6 +21,64 @@ final class CaptureComposerAudioFilenameTemplateTests: XCTestCase {
         XCTAssertEqual(asset.originalFilename, asset.relativePath)
     }
 
+    /// Issue #176: `{timestamp}` is when recording started, not when the
+    /// file was staged after Stop. 10:34:00 → 10:39:03 is named 103400.
+    func test_timestampTemplateUsesRecordingStartTime() async throws {
+        let fixture = try await makeFixture(template: "{timestamp}")
+        var components = DateComponents()
+        components.year = 2026
+        components.month = 11
+        components.day = 26
+        components.hour = 10
+        components.minute = 34
+        components.second = 0
+        let calendar = Calendar(identifier: .gregorian)
+        let startedAt = try XCTUnwrap(calendar.date(from: components))
+        let sourceURL = try fixture.makeAudio()
+
+        let staged = await fixture.model.stageRecordedAudio(
+            at: sourceURL,
+            deliveryID: UUID(),
+            recordingStartedAt: startedAt
+        )
+        let asset = try XCTUnwrap(staged, fixture.model.errorMessage ?? "staging failed")
+
+        XCTAssertEqual(asset.relativePath, "2026-11-26-103400.m4a")
+    }
+
+    /// The recorder's draft event carries the start time to the staged name.
+    func test_recordedAudioEventNamesFileByRecordingStart() async throws {
+        let fixture = try await makeFixture(template: "take-{timestamp}")
+        let startedAt = Date(timeIntervalSince1970: 1_795_000_000)
+        let expected = try XCTUnwrap(CapturePresetAudioFilename.preferredFilename(
+            template: "take-{timestamp}",
+            context: CapturePresetAudioFilenameContext(
+                identifier: UUID().uuidString,
+                createdAt: startedAt,
+                presetName: "",
+                originalFilename: ""
+            ),
+            sourceExtension: "m4a"
+        ))
+
+        let delivered = await CaptureDraftRecordingEventDelivery.deliver(
+            .audio(
+                try fixture.makeAudio(),
+                draftRequestID: nil,
+                deliveryID: UUID(),
+                recordingStartedAt: startedAt
+            ),
+            to: fixture.model
+        )
+
+        XCTAssertTrue(delivered, fixture.model.errorMessage ?? "staging failed")
+        let names = fixture.model.draft.additionalPayloads.compactMap { payload -> String? in
+            guard case .audio(let asset, _) = payload else { return nil }
+            return asset.relativePath
+        }
+        XCTAssertEqual(names, [expected])
+    }
+
     func test_emptyTemplateKeepsLegacyRecordingName() async throws {
         let fixture = try await makeFixture(template: "")
         let deliveryID = UUID()
