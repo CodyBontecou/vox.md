@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="vi" dir="ltr" data-search-section="Mục" data-search-guide="Hướng dẫn" data-search-empty="Không khớp “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Công cụ tạo bảng Markdown cho Obsidian: dán từ Excel, Sheets hoặc CSV | Vox.md</title>
+  <meta name="description" content="Công cụ miễn phí chạy ngay trong trình duyệt, biến ô bảng tính, CSV hoặc TSV đã dán thành bảng Markdown, escape dấu gạch đứng trong bí danh wikilink và kích thước ảnh của Obsidian, xử lý ngắt dòng trong ô, và căn lại bảng có sẵn. Không có gì được tải lên.">
+  <link rel="canonical" href="https://vox.isolated.tech/vi/blog/markdown-table-maker/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Tài liệu Vox.md về mô hình ngôn ngữ">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Công cụ tạo bảng Markdown cho Obsidian: dán từ Excel, Sheets hoặc CSV">
+  <meta property="og:description" content="Công cụ miễn phí chạy ngay trong trình duyệt, biến ô bảng tính, CSV hoặc TSV đã dán thành bảng Markdown, escape dấu gạch đứng trong bí danh wikilink và kích thước ảnh của Obsidian, xử lý ngắt dòng trong ô, và căn lại bảng có sẵn. Không có gì được tải lên.">
+  <meta property="og:url" content="https://vox.isolated.tech/vi/blog/markdown-table-maker/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-11-26">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Công cụ tạo bảng Markdown cho Obsidian: dán từ Excel, Sheets hoặc CSV">
+  <meta name="twitter:description" content="Công cụ miễn phí chạy ngay trong trình duyệt, biến ô bảng tính, CSV hoặc TSV đã dán thành bảng Markdown, escape dấu gạch đứng trong bí danh wikilink và kích thước ảnh của Obsidian, xử lý ngắt dòng trong ô, và căn lại bảng có sẵn. Không có gì được tải lên.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Công cụ tạo bảng Markdown cho Obsidian: dán từ Excel, Sheets hoặc CSV",
+  "description": "Công cụ miễn phí chạy ngay trong trình duyệt, biến ô bảng tính, CSV hoặc TSV đã dán thành bảng Markdown, escape dấu gạch đứng trong bí danh wikilink và kích thước ảnh của Obsidian, xử lý ngắt dòng trong ô, và căn lại bảng có sẵn. Không có gì được tải lên.",
+  "image": "https://vox.isolated.tech/screenshots/01-route-heading-light.png",
+  "datePublished": "2026-11-26",
+  "dateModified": "2026-11-26",
+  "mainEntityOfPage": "https://vox.isolated.tech/vi/blog/markdown-table-maker/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "vi",
+  "name": "Công cụ tạo bảng Markdown cho Obsidian: dán từ Excel, Sheets hoặc CSV | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/vi/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Hướng dẫn",
+      "item": "https://vox.isolated.tech/vi/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Công cụ tạo bảng Markdown cho Obsidian: dán từ Excel, Sheets hoặc CSV",
+      "item": "https://vox.isolated.tech/vi/blog/markdown-table-maker/"
+    }
+  ],
+  "inLanguage": "vi",
+  "name": "Công cụ tạo bảng Markdown cho Obsidian: dán từ Excel, Sheets hoặc CSV | Vox.md",
+  "description": "Công cụ miễn phí chạy ngay trong trình duyệt, biến ô bảng tính, CSV hoặc TSV đã dán thành bảng Markdown, escape dấu gạch đứng trong bí danh wikilink và kích thước ảnh của Obsidian, xử lý ngắt dòng trong ô, và căn lại bảng có sẵn. Không có gì được tải lên."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/markdown-table-maker/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Đến hướng dẫn</a>
+<nav aria-label="Điều hướng chính">
+  <div class="nav-inner">
+    <a href="/vi/" class="logo" aria-label="trang chủ Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/vi/#how">Cách hoạt động</a></li>
+      <li><a href="/vi/docs/">Tài liệu</a></li>
+      <li><a href="/vi/blog/">Hướng dẫn</a></li>
+      <li><a href="/vi/compare/">So sánh</a></li>
+      <li><a href="/vi/privacy.html">Quyền riêng tư</a></li>
+      <li><a href="/vi/terms.html">Điều khoản</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_vi_7732b417b3db">Tải Vox.md</a>
+  <details class="language-switcher"><summary>Ngôn ngữ</summary><ul><li><a href="/blog/markdown-table-maker/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/markdown-table-maker/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/markdown-table-maker/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/markdown-table-maker/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/markdown-table-maker/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/markdown-table-maker/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/markdown-table-maker/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/markdown-table-maker/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/markdown-table-maker/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/markdown-table-maker/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/markdown-table-maker/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/markdown-table-maker/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/markdown-table-maker/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/markdown-table-maker/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/markdown-table-maker/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/markdown-table-maker/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/markdown-table-maker/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/markdown-table-maker/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/markdown-table-maker/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/markdown-table-maker/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/markdown-table-maker/" lang="vi" hreflang="vi" aria-current="page">Tiếng Việt</a></li><li><a href="/zh-hans/blog/markdown-table-maker/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/markdown-table-maker/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Công cụ miễn phí</div>
+        <h1 class="hero-title">Công cụ tạo bảng Markdown cho Obsidian: dán từ Excel, Sheets hoặc CSV</h1>
+        <p class="hero-subtitle">Dán các hàng từ Excel, Google Sheets, Numbers, CSV hoặc TSV rồi sao chép bảng pipe hợp lệ, với dấu gạch đứng trong [[Note|Alias]] và ![[image.png|300]] được escape, xử lý ngắt dòng và căn lề theo từng cột.</p>
+      </div>
+      <aside class="meta-card" aria-label="Về hướng dẫn này">
+        <dl>
+          <div><dt>Bởi</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Cập nhật</dt><dd><time datetime="2026-11-26">26 tháng 11, 2026</time></dd></div>
+          <div><dt>Yêu cầu</dt><dd>Bất kỳ trình duyệt hiện đại nào, kể cả Safari trên iPhone. Tùy chọn: Obsidian để dùng bảng, và Vox.md cho iPhone hoặc Mac để ghi nhận văn bản vào ghi chú.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Công cụ tạo bảng Markdown cho Obsidian: dán từ Excel, Sheets hoặc CSV">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Trả lời ngắn</div>
+        <p>Bảng Markdown gồm một hàng tiêu đề, một hàng phân cách bằng dấu gạch ngang, rồi mỗi dòng một hàng, với các ô được phân tách bằng <code>|</code>. Dán các ô của bạn vào <a href="#tool">công cụ tạo bảng</a> bên dưới để tạo một bảng, hoặc bắt đầu từ ví dụ này.</p>
+      </div>
+      <pre class="guide-code" id="default-table"><code>| Name | Owner | Status |
+| --- | --- | --- |
+| Draft | Ana | Done |
+| Review | Lee | Open |
+</code></pre>
+      <p>Công cụ cũng xử lý những điều mà các trình tạo thông thường bỏ qua trong Obsidian: nó escape dấu gạch đứng bên trong <code>[[Note|Alias]]</code> và <code>![[image.png|300]]</code> thành <code>\|</code>, và chuyển ngắt dòng trong ô thành <code>&lt;br&gt;</code> hoặc dấu cách. Công cụ chạy hoàn toàn trong trang này: dữ liệu của bạn không bao giờ được tải lên, và trang không gửi yêu cầu mạng nào.</p>
+      <nav class="toc" aria-label="Trong hướng dẫn này"><div class="toc-title">Trong hướng dẫn này</div><ol>
+        <li><a href="#tool">Tạo bảng của bạn</a></li>
+        <li><a href="#syntax">Cú pháp bảng Markdown</a></li>
+        <li><a href="#obsidian">Bảng trong Obsidian</a></li>
+        <li><a href="#spreadsheet">Từ Excel, Google Sheets hoặc CSV</a></li>
+        <li><a href="#github">Khác biệt giữa GitHub và Obsidian</a></li>
+        <li><a href="#capture">Đưa bảng và ghi chú vào vault với Vox.md</a></li>
+        <li><a href="#faq">Câu hỏi</a></li>
+      </ol></nav>
+
+      <h2 id="tool">1. Tạo bảng của bạn</h2>
+      <p class="mt-nojs" id="tb-nojs">Công cụ tạo bảng cần JavaScript. Nếu không có, phần cú pháp bên dưới vẫn dùng được để tham khảo.</p>
+      <form class="tb-tool" id="tb-tool" aria-label="Công cụ tạo bảng Markdown" hidden>
+        <fieldset class="mt-group">
+          <legend>Dữ liệu của bạn</legend>
+          <label class="mt-field" for="tb-input">Dán ô từ bảng tính, CSV, TSV hoặc một bảng Markdown có sẵn <textarea id="tb-input" rows="9" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></label>
+          <div class="mt-actions">
+            <button type="button" class="btn-secondary" id="tb-example">Tải ví dụ</button>
+            <button type="button" class="btn-secondary" id="tb-clear">Xóa</button>
+          </div>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>Đầu vào</legend>
+          <label class="mt-field" for="tb-delimiter">Dấu phân tách <select id="tb-delimiter" name="delimiter">
+            <option value="auto" selected>Tự nhận diện từ nội dung dán</option>
+            <option value="markdown">Bảng Markdown</option>
+            <option value="tab">Tab (sao chép từ bảng tính, TSV)</option>
+            <option value="comma">Dấu phẩy (CSV)</option>
+            <option value="semicolon">Dấu chấm phẩy</option>
+            <option value="pipe">Dấu gạch đứng</option>
+          </select></label>
+          <label class="mt-option"><input type="checkbox" name="header" checked> <span>Hàng đầu tiên là tiêu đề</span></label>
+          <p class="mt-hint" id="tb-detected" role="status"></p>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>Đầu ra</legend>
+          <label class="mt-field" for="tb-out">Xuất dưới dạng <select id="tb-out" name="out">
+            <option value="md" selected>Bảng Markdown</option>
+            <option value="csv">Tệp CSV</option>
+            <option value="tsv">Tệp TSV</option>
+          </select></label>
+          <label class="mt-field" data-show="md" for="tb-pad">Bố cục <select id="tb-pad" name="pad">
+            <option value="pad" selected>Căn đệm các cột để phần nguồn thẳng hàng</option>
+            <option value="compact">Gọn (Compact)</option>
+          </select></label>
+          <label class="mt-field" data-show="md" for="tb-breaks">Ngắt dòng trong ô <select id="tb-breaks" name="breaks">
+            <option value="br" selected>Viết &lt;br&gt;</option>
+            <option value="space">Nối các dòng bằng dấu cách</option>
+          </select></label>
+        </fieldset>
+        <fieldset class="mt-group" id="tb-aligns-group" data-show="md" hidden>
+          <legend>Căn lề cột</legend>
+          <div class="tb-aligns" id="tb-aligns"></div>
+        </fieldset>
+      </form>
+      <div class="mt-output-head" id="tb-output-head" hidden>
+        <h3 id="tb-output-title">Bảng của bạn</h3>
+        <div class="mt-actions">
+          <button type="button" class="btn-primary" id="tb-copy">Sao chép</button>
+          <button type="button" class="btn-secondary" id="tb-download">Tải xuống</button>
+        </div>
+      </div>
+      <p class="mt-status" id="tb-status" role="status"></p>
+      <p class="mt-hint" id="tb-info" role="status" hidden></p>
+      <ul class="mt-hint tb-warnings" id="tb-warnings" role="status" hidden></ul>
+      <pre class="guide-code tb-output" id="tb-output" aria-labelledby="tb-output-title" tabindex="0" hidden><code id="tb-output-code"></code></pre>
+      <h3 id="tb-preview-title" hidden>Xem trước</h3>
+      <div class="tb-preview" id="tb-preview" role="group" aria-labelledby="tb-preview-title" tabindex="0" hidden></div>
+      <p class="mt-hint" id="tb-waiting" role="status">Hãy dán dữ liệu của bạn để xem bảng.</p>
+      <div hidden id="tb-messages">
+        <span data-message="copied">Đã sao chép vào clipboard.</span>
+        <span data-message="copy-failed">Sao chép không thành công. Hãy chọn văn bản và tự sao chép.</span>
+        <span data-message="loaded">Đã tải ví dụ.</span>
+        <span data-message="cleared">Đã xóa.</span>
+        <span data-message="downloaded">Đã bắt đầu tải xuống.</span>
+        <span data-message="title-md">Bảng Markdown của bạn</span>
+        <span data-message="title-csv">CSV của bạn</span>
+        <span data-message="title-tsv">TSV của bạn</span>
+        <span data-message="detected">Đã nhận diện: {format}. {rows} hàng, {cols} cột.</span>
+        <span data-message="fmt-markdown">Bảng Markdown</span>
+        <span data-message="fmt-tab">phân tách bằng tab</span>
+        <span data-message="fmt-comma">phân tách bằng dấu phẩy</span>
+        <span data-message="fmt-semicolon">phân tách bằng dấu chấm phẩy</span>
+        <span data-message="fmt-pipe">phân tách bằng dấu gạch đứng</span>
+        <span data-message="fmt-single">một cột</span>
+        <span data-message="escaped">Dấu gạch đứng đã escape thành \|: {n}, trong đó {m} nằm trong wikilink hoặc liên kết ảnh.</span>
+        <span data-message="no-delimiter">Dòng {line}: thiếu hàng phân cách, nên một hàng phân cách đã được thêm sau tiêu đề.</span>
+        <span data-message="delim-count">Dòng {line}: hàng phân cách có {found} ô nhưng tiêu đề có {expected}. Đặc tả GFM không coi đó là bảng. Kết quả đầu ra dùng {expected}.</span>
+        <span data-message="short">Dòng {line}: {found} ô, trong khi tiêu đề có {expected}. Đã thêm các ô trống.</span>
+        <span data-message="long">Dòng {line}: {found} ô, trong khi tiêu đề có {expected}. Bảng đã được mở rộng thành {max} cột.</span>
+        <span data-message="blank">Dòng {line} bị trống. Bảng kết thúc ở dòng trống đầu tiên, nên các hàng phía sau sẽ không thuộc bảng.</span>
+        <span data-message="more">Và {n} hàng nữa có số ô khác.</span>
+        <span data-message="align-label">Cột {n}: {name}</span>
+        <span data-message="align-none">Không</span>
+        <span data-message="align-left">Trái</span>
+        <span data-message="align-center">Giữa</span>
+        <span data-message="align-right">Phải</span>
+        <span data-message="empty-header">(không có tiêu đề)</span>
+      </div>
+
+      <h2 id="syntax">2. Cú pháp bảng Markdown</h2>
+      <pre class="guide-code"><code>| Name   | Qty | Price |
+| :----- | :-: | ----: |
+| Apple  |   3 |  1.20 |
+| Pear   |  12 |  0.80 |</code></pre>
+      <p>Phần <a href="https://github.github.com/gfm/#tables-extension-" target="_blank" rel="noopener">đặc tả GitHub Flavored Markdown</a> định nghĩa bảng gồm một hàng tiêu đề, một hàng phân cách ngăn tiêu đề với dữ liệu, và không hoặc nhiều hàng dữ liệu. Các ô được phân tách bằng dấu gạch đứng.</p>
+      <ul>
+        <li><strong>Hàng phân cách.</strong> Các ô của hàng này chỉ chứa dấu gạch ngang, có thể kèm dấu hai chấm ở bên trái, bên phải hoặc cả hai đầu để căn trái, căn phải hoặc căn giữa. <a href="https://obsidian.md/help/advanced-syntax" target="_blank" rel="noopener">Trợ giúp Obsidian</a> cho biết bạn thêm dấu hai chấm vào hàng tiêu đề để căn văn bản, và hàng tiêu đề phải chứa ít nhất hai dấu gạch ngang.</li>
+        <li><strong>Dấu gạch đứng ngoài cùng.</strong> Theo đặc tả, các dấu gạch đứng ở hai bên là tùy chọn. Obsidian Help khuyên nên thêm để dễ đọc, và công cụ này luôn ghi chúng.</li>
+        <li><strong>Căn đệm.</strong> Theo Obsidian Help, các ô không cần căn thẳng hàng hoàn hảo. Bố cục “Pad columns” chỉ căn phần nguồn cho dễ đọc hơn; “Compact” bỏ qua việc này.</li>
+        <li><strong>Số ô khớp nhau.</strong> Đặc tả quy định hàng tiêu đề phải có cùng số ô với hàng phân cách. Nếu không, các dòng đó không phải là bảng và sẽ hiển thị như một đoạn văn. Hàng dữ liệu có ít ô hơn sẽ được thêm ô trống, còn ô thừa sẽ bị bỏ qua.</li>
+        <li><strong>Bên trong ô.</strong> Đặc tả cho phép định dạng nội tuyến nhưng không cho nội dung cấp khối, nên danh sách hay đề mục không thể nằm trong ô. Obsidian Help cho biết bạn có thể dùng cú pháp định dạng cơ bản của nó để tạo kiểu cho nội dung trong bảng.</li>
+        <li><strong>Phần kết thúc của bảng.</strong> Theo đặc tả, bảng bị ngắt tại dòng trống đầu tiên, hoặc tại phần đầu của một cấu trúc cấp khối khác.</li>
+      </ul>
+      <p>Công cụ ghi ít nhất ba dấu gạch ngang trong mỗi ô phân cách. Như vậy đáp ứng mức tối thiểu hai của Obsidian và ba mà <a href="https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-tables" target="_blank" rel="noopener">Tài liệu GitHub</a> yêu cầu.</p>
+
+      <h2 id="obsidian">3. Bảng trong Obsidian</h2>
+      <ul>
+        <li><strong>Lệnh Insert Table.</strong> Obsidian Help cho biết bạn có thể chèn bảng bằng lệnh Insert Table trong Command Palette. Để tạo bảng từ dữ liệu bạn đã có, hãy dán dữ liệu vào công cụ ở trên.</li>
+        <li><strong>Bí danh và kích thước ảnh.</strong> Một bí danh wikilink như <code>[[Note|Alias]]</code> và kích thước ảnh như <code>![[image.png|300]]</code> đều chứa một dấu gạch đứng. Obsidian Help cho biết trong bảng bạn cần thêm một <code>\</code> trước dấu gạch đứng, nên hãy viết <code>[[Note\|Alias]]</code> và <code>![[image.png\|300]]</code>. Công cụ tự làm việc này cho bạn; dấu escape bạn đã viết sẵn sẽ không bị nhân đôi.</li>
+        <li><strong>Mọi dấu gạch đứng khác.</strong> Đặc tả GFM quy định dấu gạch đứng trong ô phải được escape bằng dấu gạch chéo ngược, kể cả trong đoạn mã. Công cụ escape mọi dấu gạch đứng chưa được escape thành <code>\|</code>.</li>
+        <li><strong>Ngắt dòng.</strong> Mỗi hàng được viết trên một dòng, nên ngắt dòng trong ô phải được thay bằng thứ khác. Công cụ ghi một thẻ HTML <code>&lt;br&gt;</code> hoặc nối các dòng bằng dấu cách nếu bạn chọn như vậy. Cả phần Tables của Obsidian Help lẫn GitHub Docs đều không mô tả ngắt dòng trong ô, nên hãy kiểm tra rằng <code>&lt;br&gt;</code> hiển thị trong vault của bạn, và chọn tùy chọn dấu cách nếu bạn không muốn có thẻ trong phần nguồn.</li>
+        <li><strong>Plugin.</strong> Có các plugin cộng đồng hỗ trợ chỉnh sửa bảng. Trang này không đánh giá hay quảng bá plugin nào trong số đó.</li>
+      </ul>
+      <p>Về danh sách việc cần làm, xem <a href="/vi/blog/markdown-checklist-maker/">Trình tạo danh sách kiểm Markdown</a>; với các thuộc tính ở đầu ghi chú, <a href="/vi/blog/obsidian-properties-generator/">trình tạo thuộc tính</a>. Bảng rất phù hợp cho danh sách các quyết định và người phụ trách trong ghi chú từ <a href="/vi/blog/obsidian-meeting-notes-template/">mẫu ghi chú cuộc họp</a>.</p>
+
+      <h2 id="spreadsheet">4. Từ Excel, Google Sheets hoặc CSV</h2>
+      <p>Chọn các ô trong bảng tính, sao chép rồi dán vào ô nhập ở trên. Nếu các ô được dán có tab ngăn cách, công cụ sẽ tự nhận ra. Nó cũng nhận ra dấu phẩy, dấu chấm phẩy và dấu gạch đứng, và đọc được các trường CSV có dấu ngoặc kép, nên <code>"Lee, Sam"</code> vẫn là một ô và <code>""</code> bên trong dấu ngoặc kép sẽ thành một dấu ngoặc kép. Dùng menu Separator nếu nhận diện sai. Chọn hoặc bỏ chọn “The first row is the header” để quyết định hàng đầu tiên có thành hàng tiêu đề hay không; nếu bỏ chọn, một hàng tiêu đề trống sẽ được thêm vào, vì bảng Markdown cần có tiêu đề.</p>
+      <ul>
+        <li><strong>Ô gộp.</strong> Đặc tả và cả hai trang trợ giúp đều mô tả một hàng là danh sách các ô phân tách bằng dấu gạch đứng, và không trang nào mô tả cách gộp ô. Hãy điền giá trị vào mọi ô mà phần gộp bao phủ trước khi sao chép.</li>
+        <li><strong>Công thức.</strong> Công cụ chỉ đọc văn bản bạn dán. Nếu các ô được dán hiển thị công thức thay vì kết quả, hãy sao chép giá trị trong ứng dụng bảng tính rồi dán lại.</li>
+        <li><strong>Các hàng không đều.</strong> Nếu một hàng có số ô khác với tiêu đề, công cụ sẽ cảnh báo kèm số dòng của hàng đó và bù thêm ô trống cho bảng. Hàng có nhiều ô hơn tiêu đề sẽ làm bảng rộng ra thay vì bỏ mất dữ liệu.</li>
+        <li><strong>Đảo ngược và sửa lại.</strong> Dán một bảng Markdown có sẵn để căn lại, hoặc đặt Output as thành CSV hoặc TSV để xuất. Công cụ cảnh báo kèm số dòng khi thiếu hàng phân cách, khi số ô của nó không khớp với tiêu đề, hoặc khi một dòng trống sẽ làm bảng kết thúc.</li>
+      </ul>
+      <p>Dấu hai chấm căn lề từ bảng Markdown đã dán được giữ lại, và bạn có thể đổi từng cột bằng các menu Column alignment.</p>
+
+      <h2 id="github">5. Khác biệt giữa GitHub và Obsidian</h2>
+      <p>Obsidian Help và GitHub Docs đều mô tả bảng pipe với hàng tiêu đề, dấu gạch ngang và dấu hai chấm căn lề tùy chọn. Những khác biệt mà các trang nêu ra là nhỏ:</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th>Chủ đề</th><th>Trợ giúp Obsidian</th><th>GitHub Docs và đặc tả GFM</th></tr></thead>
+          <tbody>
+            <tr><td>Dấu gạch ngang</td><td>Hàng tiêu đề phải chứa ít nhất hai dấu gạch ngang</td><td>GitHub Docs: ít nhất ba dấu gạch ngang trong mỗi cột tiêu đề</td></tr>
+            <tr><td>Dòng trống trước bảng</td><td>Phần Tables không đề cập đến điều này</td><td>GitHub Docs: bạn phải để một dòng trống trước bảng</td></tr>
+            <tr><td>Dấu gạch đứng nguyên văn trong ô</td><td>Thêm một <code>\</code> trước dấu gạch đứng trong bí danh và kích thước ảnh</td><td>Escape nó thành <code>\|</code>, kể cả trong đoạn mã</td></tr>
+            <tr><td>Dấu gạch đứng ngoài cùng</td><td>Tùy chọn, nên có để dễ đọc</td><td>Tùy chọn</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Để an toàn ở cả hai nơi, hãy viết ba dấu gạch ngang trở lên, để một dòng trống phía trên bảng và escape mọi dấu gạch đứng. Công cụ này làm đúng như vậy. Bí danh wikilink là cú pháp của Obsidian; trên GitHub nó chỉ là văn bản có chứa dấu gạch đứng. Hướng dẫn công cụ tạo danh sách việc cần làm có đề cập đến <a href="/vi/blog/markdown-checklist-maker/#github">khác biệt về danh sách việc cần làm</a> theo cách tương tự.</p>
+
+      <h2 id="capture">6. Đưa bảng và ghi chú vào vault với Vox.md</h2>
+      <p>Vox.md không tự tạo bảng, và công cụ ở trên hoạt động mà không cần ứng dụng. Vox.md làm việc ghi nhận văn bản vào Obsidian: Quick Capture cho phép bạn dán văn bản có sẵn, và một Route chuyển nó đến đích Markdown. Xem <a href="/vi/docs/#quick-capture">nhanh capture</a> và <a href="/vi/docs/#presets">Lộ trình</a> tài liệu.</p>
+      <ol>
+        <li>Hãy tạo bảng của bạn ở trên rồi nhấn Copy.</li>
+        <li>Trong Vox.md trên iPhone, iPad hoặc Mac, mở Quick Capture và dán bảng vào trình soạn thảo văn bản.</li>
+        <li>Gửi bằng một Route giữ nguyên văn bản gốc. Tài liệu liệt kê <strong>Giữ nguyên bản</strong> là chế độ xử lý giữ nguyên văn bản đã ghi nhận mà không dùng AI viết lại, và cho biết văn bản được chuyển đi nguyên vẹn khi <strong>Dùng Apple Intelligence</strong> đang tắt, đây là mặc định. Xử lý văn bản đã nhập là một cài đặt tự chọn trên từng Route.</li>
+        <li>Đích của Route quyết định nơi văn bản được đưa vào: ghi chú mới, ghi chú liên tục như ghi chú hằng ngày, hoặc ghi chú có sẵn, ở cuối, ở đầu hoặc bên dưới một đề mục đã chọn.</li>
+      </ol>
+      <p>Hãy để một dòng trống phía trên bảng đã dán nếu nơi đến đã có văn bản ở trên. Về công thức Route, xem <a href="/vi/blog/obsidian-capture-templates/">mẫu ghi nhanh</a>, và để biến tệp phụ đề Zoom, Teams hoặc YouTube thành ghi chú bản chép lời trước, xem <a href="/vi/blog/srt-vtt-to-text-markdown/">Chuyển SRT và VTT sang Markdown</a>.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Capture vào Obsidian từ iPhone, iPad hoặc Mac với Vox.md</h2>
+        <p>Vox.md ghi giọng nói và văn bản vào ghi chú Obsidian của bạn. Ghi âm, chép lời và Capture cần Vox.md Unlimited: gói đăng ký theo tuần hoặc theo năm với 7 ngày dùng thử miễn phí cho tài khoản đủ điều kiện, hoặc mua một lần vĩnh viễn. App Store hiển thị giá theo khu vực của bạn.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_7732b417b3db">Capture vào Obsidian</a></p>
+        <p>Công cụ tạo bảng ở trên hoạt động đầy đủ mà không cần ứng dụng.</p>
+      </section>
+
+      <h2 id="faq">7. Câu hỏi thường gặp</h2>
+      <h3>Vì sao bảng của tôi không hiển thị trong Obsidian?</h3>
+      <p>Hãy kiểm tra ba điều. Phải có một hàng phân cách gồm các dấu gạch ngang ngay dưới tiêu đề, và hàng tiêu đề với hàng phân cách phải có cùng số ô, nếu không đặc tả sẽ hiển thị các dòng đó như một đoạn văn. Obsidian Help cho biết hàng tiêu đề phải chứa ít nhất hai dấu gạch ngang. Và hãy để một dòng trống trước bảng, điều GitHub Docs yêu cầu và không gây hại gì trong Obsidian. Dán bảng vào công cụ: nó sẽ cảnh báo kèm số dòng khi thiếu hàng phân cách hoặc số ô không khớp.</p>
+      <h3>Làm sao để ngắt dòng trong một ô?</h3>
+      <p>Giữ hàng trên một dòng và dùng thẻ HTML <code>&lt;br&gt;</code> bên trong ô, đây là điều công cụ ghi cho ô nhiều dòng. Các trang được dẫn nguồn không mô tả ngắt dòng trong ô, nên hãy thử trong vault của bạn. Lựa chọn còn lại là nối các dòng bằng dấu cách.</p>
+      <h3>Làm sao để đặt dấu gạch đứng hoặc bí danh wikilink vào một ô?</h3>
+      <p>Đặt dấu gạch chéo ngược trước dấu gạch đứng: <code>[[Note\|Alias]]</code>, <code>![[image.png\|300]]</code> hoặc <code>a \| b</code>. Obsidian Help yêu cầu điều này cho bí danh và việc đổi kích thước ảnh trong bảng, còn đặc tả GFM yêu cầu cho mọi dấu gạch đứng trong ô.</p>
+      <h3>Tôi có thể gộp ô không?</h3>
+      <p>Không có cú pháp nào cho việc này trong đặc tả hay trong Obsidian Help. Hãy lặp lại giá trị trong từng ô.</p>
+      <h3>Bảng có thể rộng đến mức nào?</h3>
+      <p>Không trang nào được dẫn nguồn nêu số cột hay số hàng tối đa, và công cụ cũng không đặt giới hạn. Bảng quá rộng khó đọc trong phần nguồn, vì vậy hãy dùng bố cục Compact, hoặc tách thành hai bảng.</p>
+      <h3>Công cụ có tải dữ liệu của tôi lên không?</h3>
+      <p>Không. Bảng được tạo bằng một đoạn script trong trang này, ngay trên thiết bị của bạn, và trang không gửi yêu cầu mạng nào. Trang không lưu dữ liệu của bạn: đóng hoặc tải lại trang sẽ xóa dữ liệu. Nút Download lưu một tệp từ trang về thiết bị của bạn.</p>
+
+      <nav class="toc" aria-label="Hướng dẫn liên quan" id="related"><div class="toc-title">Tiếp tục thiết lập</div><ul>
+        <li><a href="/vi/blog/markdown-checklist-maker/">Trình tạo danh sách kiểm Markdown</a></li>
+        <li><a href="/vi/blog/obsidian-properties-generator/">Trình tạo và kiểm tra thuộc tính Obsidian</a></li>
+        <li><a href="/vi/blog/srt-vtt-to-text-markdown/">Chuyển SRT và VTT sang văn bản và Markdown</a></li>
+        <li><a href="/vi/blog/obsidian-meeting-notes-template/">Trình tạo mẫu ghi chú cuộc họp Obsidian</a></li>
+        <li><a href="/vi/blog/obsidian-capture-templates/">Công thức đường dẫn và mẫu</a></li>
+        <li><a href="/vi/docs/#quick-capture">tài liệu tham khảo Quick Capture</a></li>
+      </ul></nav>
+<style>
+.tb-tool:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.tb-tool [hidden] { display: none; }
+.mt-output-head[hidden], .tb-output[hidden], #tb-preview-title[hidden], .tb-preview[hidden], .tb-warnings[hidden] { display: none; }
+.tb-tool .mt-field input, .tb-tool .mt-field textarea, .tb-tool .mt-field select { font: inherit; font-family: var(--font-mono); font-size: 16px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; padding: 8px 10px; width: 100%; box-sizing: border-box; min-height: 44px; }
+.tb-tool .mt-field textarea { resize: vertical; min-height: 160px; white-space: pre; overflow: auto; }
+.tb-tool input:focus-visible, .tb-tool textarea:focus-visible, .tb-tool select:focus-visible, .tb-output:focus-visible, .tb-preview:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.tb-tool .mt-option { min-height: 44px; }
+.tb-tool .mt-option input { width: 22px; height: 22px; }
+.tb-aligns { display: flex; flex-direction: column; gap: 8px; }
+.tb-aligns .mt-field { margin-top: 0; overflow-wrap: anywhere; }
+.tb-warnings { margin: 0; padding-inline-start: 1.2em; }
+.tb-output { white-space: pre; overflow: auto; max-height: 28rem; tab-size: 4; }
+.tb-preview { overflow: auto; max-width: 100%; background: var(--card); border: 1px solid var(--line); border-radius: 16px; }
+.tb-preview table { border-collapse: collapse; min-width: 100%; font-size: 14.5px; line-height: 1.5; }
+.tb-preview th, .tb-preview td { padding: 8px 12px; border: 1px solid var(--line); vertical-align: top; min-width: 5em; overflow-wrap: break-word; }
+.tb-preview th { font-weight: 700; background: var(--paper); }
+</style>
+<script>
+/* Markdown table maker. Runs locally: no network requests. */
+(function () {
+  var CANDIDATES = [['tab', '\t'], ['comma', ','], ['semicolon', ';'], ['pipe', '|']];
+  var DELIM_ROW = /^\|?\s*:?-+:?\s*(?:\|\s*:?-+:?\s*)*\|?$/;
+
+  function chars(s) { return Array.from(s).length; }
+  function normalise(text) { return String(text || '').replace(/^﻿/, '').replace(/\r\n?/g, '\n'); }
+  function isDelimiterRow(line) {
+    var t = line.trim();
+    return t.indexOf('|') !== -1 && t.indexOf('-') !== -1 && DELIM_ROW.test(t);
+  }
+
+  /* Split one Markdown row on unescaped pipes. Cells keep their backslashes. */
+  function splitRow(line) {
+    var t = line.trim();
+    if (t.charAt(0) === '|') t = t.slice(1);
+    var cells = [], cur = '';
+    for (var i = 0; i < t.length; i++) {
+      var c = t.charAt(i);
+      if (c === '\\' && t.charAt(i + 1) === '|') { cur += '\\|'; i++; continue; }
+      if (c === '|') { cells.push(cur); cur = ''; continue; }
+      cur += c;
+    }
+    cells.push(cur);
+    /* A real trailing pipe leaves one empty last cell that is not a cell. */
+    if (cells.length > 1 && !cells[cells.length - 1].trim() && /\|\s*$/.test(t)) cells.pop();
+    return cells;
+  }
+  function mdCellToPlain(s) {
+    return s.replace(/\\\|/g, '|').replace(/<br\s*\/?>/gi, '\n').trim();
+  }
+  function alignOf(cell) {
+    var t = cell.trim(), l = t.charAt(0) === ':', r = t.charAt(t.length - 1) === ':';
+    return l && r ? 'center' : l ? 'left' : r ? 'right' : 'none';
+  }
+
+  /* Parse delimiter-separated text with quoted fields. Returns [{cells, line}]. */
+  function parseDelimited(text, delim) {
+    var rows = [], cells = [], field = '', quoted = false, atStart = true;
+    var line = 1, rowLine = 1;
+    var hadQuote = false;
+    for (var i = 0; i < text.length; i++) {
+      var c = text.charAt(i);
+      if (quoted) {
+        if (c === '"') {
+          if (text.charAt(i + 1) === '"') { field += '"'; i++; } else { quoted = false; }
+        } else { field += c; if (c === '\n') line++; }
+        continue;
+      }
+      if (c === '"' && atStart && field === '') { quoted = true; hadQuote = true; atStart = false; continue; }
+      if (delim && c === delim) { cells.push(field); field = ''; atStart = true; continue; }
+      if (c === '\n') {
+        var blank = cells.length === 0 && field === '' && !hadQuote;
+        if (blank) { rowLine = line + 1; line++; continue; }
+        cells.push(field); field = ''; atStart = true;
+        rows.push({ cells: cells, line: rowLine });
+        cells = []; hadQuote = false; line++; rowLine = line;
+        continue;
+      }
+      atStart = false;
+      field += c;
+    }
+    if (field !== '' || cells.length || hadQuote) { cells.push(field); rows.push({ cells: cells, line: rowLine }); }
+    return rows;
+  }
+
+  function detect(text) {
+    var lines = text.split('\n').filter(function (l) { return l.trim(); });
+    if (!lines.length) return 'single';
+    if (lines.length > 1 && isDelimiterRow(lines[1]) && lines[0].indexOf('|') !== -1) return 'markdown';
+    if (lines.length > 1 && lines.every(function (l) { var t = l.trim(); return t.charAt(0) === '|' && t.charAt(t.length - 1) === '|'; })) return 'markdown';
+    var best = null;
+    CANDIDATES.forEach(function (cand) {
+      var rows = parseDelimited(text, cand[1]).slice(0, 5);
+      if (!rows.length || rows[0].cells.length < 2) return;
+      var n = rows[0].cells.length;
+      var same = rows.filter(function (r) { return r.cells.length === n; }).length;
+      if (!best || same > best.same) best = { name: cand[0], same: same };
+    });
+    return best ? best.name : 'single';
+  }
+
+  function plainFromText(s) { return s.replace(/^\n+|\n+$/g, '').split('\n').map(function (l) { return l.replace(/\s+$/, ''); }).join('\n').replace(/^\s+/, ''); }
+
+  /* Escape unescaped pipes. Returns {text, n}. */
+  function escapePipes(s) {
+    var out = '', n = 0, slashes = 0;
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charAt(i);
+      if (c === '|' && slashes % 2 === 0) { out += '\\|'; n++; } else out += c;
+      slashes = c === '\\' ? slashes + 1 : 0;
+    }
+    return { text: out, n: n };
+  }
+  function wikiPipes(s) {
+    var m = s.match(/\[\[[^\[\]\n]*\]\]/g) || [], n = 0;
+    m.forEach(function (w) { n += escapePipes(w).n; });
+    return n;
+  }
+  function mdCell(s, breaks) {
+    var lines = s.split('\n').map(function (l) { return l.trim(); });
+    var joined;
+    if (breaks === 'space') joined = lines.filter(Boolean).join(' ');
+    else joined = lines.join('<br>');
+    return escapePipes(joined);
+  }
+  function quote(s, delim) {
+    if (/["\n]/.test(s) || s.indexOf(delim) !== -1 || /^\s|\s$/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+    return s;
+  }
+  function padCell(s, width, align) {
+    var gap = width - chars(s);
+    if (gap <= 0) return s;
+    if (align === 'right') return new Array(gap + 1).join(' ') + s;
+    if (align === 'center') { var l = Math.floor(gap / 2); return new Array(l + 1).join(' ') + s + new Array(gap - l + 1).join(' '); }
+    return s + new Array(gap + 1).join(' ');
+  }
+  function delimCell(width, align) {
+    var colons = align === 'center' ? 2 : align === 'none' ? 0 : 1;
+    var dashes = new Array(Math.max(3, width - colons) + 1).join('-');
+    return align === 'center' ? ':' + dashes + ':' : align === 'left' ? ':' + dashes : align === 'right' ? dashes + ':' : dashes;
+  }
+
+  /* Convert pasted text. Returns {output, format, rows, cols, aligns, warnings, escaped, wiki}. */
+  function run(input, opts) {
+    opts = opts || {};
+    var text = normalise(input);
+    var empty = { output: '', format: 'single', rows: [], cols: 0, aligns: [], warnings: [], escaped: 0, wiki: 0, header: [] };
+    if (!text.trim()) return empty;
+    var format = !opts.delimiter || opts.delimiter === 'auto' ? detect(text) : opts.delimiter;
+    var hasHeader = opts.header !== false;
+    var warnings = [];
+    var raw = [], found = null, i;
+
+    if (format === 'markdown') {
+      var physical = text.split('\n');
+      var entries = [];
+      physical.forEach(function (l, idx) { if (l.trim()) entries.push({ text: l, line: idx + 1 }); });
+      var lastLine = 0, firstBlank = null;
+      entries.forEach(function (e) {
+        if (lastLine && e.line > lastLine + 1 && firstBlank === null) firstBlank = lastLine + 1;
+        lastLine = e.line;
+      });
+      var body = entries.slice();
+      var headerCells = null;
+      if (body.length) {
+        headerCells = splitRow(body[0].text);
+        if (body.length > 1 && isDelimiterRow(body[1].text)) {
+          var dcells = splitRow(body[1].text);
+          found = dcells.map(alignOf);
+          if (dcells.length !== headerCells.length) warnings.push({ type: 'delim-count', line: body[1].line, found: dcells.length, expected: headerCells.length });
+          body.splice(1, 1);
+        } else {
+          warnings.push({ type: 'no-delimiter', line: body.length > 1 ? body[1].line : body[0].line });
+        }
+      }
+      if (firstBlank !== null) warnings.push({ type: 'blank', line: firstBlank });
+      body.forEach(function (e) { raw.push({ cells: splitRow(e.text).map(mdCellToPlain), line: e.line }); });
+    } else {
+      var delim = { tab: '\t', comma: ',', semicolon: ';', pipe: '|' }[format] || null;
+      parseDelimited(text, delim).forEach(function (r) {
+        if (r.cells.length === 1 && !r.cells[0].trim()) return;
+        raw.push({ cells: r.cells.map(plainFromText), line: r.line });
+      });
+    }
+    if (!raw.length) return empty;
+
+    var expected = raw[0].cells.length, max = expected;
+    raw.forEach(function (r) { if (r.cells.length > max) max = r.cells.length; });
+    var uneven = [];
+    raw.forEach(function (r, idx) {
+      if (idx === 0 || r.cells.length === expected) return;
+      uneven.push({ type: r.cells.length < expected ? 'short' : 'long', line: r.line, found: r.cells.length, expected: expected, max: max });
+    });
+    uneven.slice(0, 5).forEach(function (w) { warnings.push(w); });
+    if (uneven.length > 5) warnings.push({ type: 'more', n: uneven.length - 5 });
+
+    var cols = max;
+    /* The delimiter row's cell count wins when it disagrees with the header. */
+    var rows = raw.map(function (r) {
+      var cells = r.cells.slice();
+      while (cells.length < cols) cells.push('');
+      return cells;
+    });
+    var blankHeader = !hasHeader;
+    if (blankHeader) { var blankRow = []; for (i = 0; i < cols; i++) blankRow.push(''); rows.unshift(blankRow); }
+    var aligns = [];
+    var given = opts.aligns || found || [];
+    for (i = 0; i < cols; i++) aligns.push(given[i] || 'none');
+
+    var escaped = 0, wiki = 0, output;
+    if (opts.out === 'csv' || opts.out === 'tsv') {
+      var d = opts.out === 'csv' ? ',' : '\t';
+      output = rows.slice(blankHeader ? 1 : 0).map(function (r) {
+        return r.map(function (c) { return quote(c, d); }).join(d);
+      }).join('\n');
+    } else {
+      var md = rows.map(function (r) {
+        return r.map(function (c) {
+          if (format !== 'markdown') wiki += wikiPipes(c);
+          var e = mdCell(c, opts.breaks);
+          if (format !== 'markdown') escaped += e.n;
+          return e.text;
+        });
+      });
+      var widths = [];
+      for (i = 0; i < cols; i++) {
+        var w = 3 + (aligns[i] === 'none' ? 0 : aligns[i] === 'center' ? 2 : 1);
+        if (opts.pad !== 'compact') md.forEach(function (r) { w = Math.max(w, chars(r[i])); });
+        widths.push(w);
+      }
+      var compact = opts.pad === 'compact';
+      var fmtRow = function (r) {
+        return '| ' + r.map(function (c, k) { return compact ? c : padCell(c, widths[k], aligns[k]); }).join(' | ') + ' |';
+      };
+      var lines = [fmtRow(md[0])];
+      lines.push('| ' + aligns.map(function (a, k) { return delimCell(compact ? 3 + (a === 'none' ? 0 : a === 'center' ? 2 : 1) : widths[k], a); }).join(' | ') + ' |');
+      md.slice(1).forEach(function (r) { lines.push(fmtRow(r)); });
+      output = lines.join('\n');
+    }
+    return { output: output, format: format, rows: rows, cols: cols, aligns: aligns, warnings: warnings, escaped: escaped, wiki: wiki, header: blankHeader ? null : rows[0] };
+  }
+
+  if (typeof window !== 'undefined') {
+    window.voxTable = { run: run, detect: detect, parseDelimited: parseDelimited, splitRow: splitRow, isDelimiterRow: isDelimiterRow };
+  }
+
+  var form = document.getElementById('tb-tool');
+  if (!form) return;
+  var input = document.getElementById('tb-input');
+  var code = document.getElementById('tb-output-code');
+  var pre = document.getElementById('tb-output');
+  var head = document.getElementById('tb-output-head');
+  var title = document.getElementById('tb-output-title');
+  var preview = document.getElementById('tb-preview');
+  var previewTitle = document.getElementById('tb-preview-title');
+  var status = document.getElementById('tb-status');
+  var info = document.getElementById('tb-info');
+  var warn = document.getElementById('tb-warnings');
+  var detected = document.getElementById('tb-detected');
+  var waiting = document.getElementById('tb-waiting');
+  var alignBox = document.getElementById('tb-aligns');
+  var alignGroup = document.getElementById('tb-aligns-group');
+  var EXAMPLE = 'Page,Owner,Preview,Notes\n[[Project plan|Plan]],"Lee, Sam",![[img.png|200]],"Draft done\nReview on Friday"\n"Say ""hello""",Ana,,Ready to ship';
+  var userAligns = null;
+  var builtFor = '';
+
+  function message(name, fill) {
+    var el = document.querySelector('#tb-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : '';
+    if (fill) Object.keys(fill).forEach(function (key) { text = text.split('{' + key + '}').join(fill[key]); });
+    return text;
+  }
+  function say(text) {
+    status.textContent = '';
+    window.setTimeout(function () { status.textContent = text; }, 30);
+  }
+  function options() {
+    return {
+      delimiter: form.elements.delimiter.value, header: form.elements.header.checked,
+      out: form.elements.out.value, pad: form.elements.pad.value, breaks: form.elements.breaks.value,
+      aligns: userAligns
+    };
+  }
+
+  function buildAligns(result, force) {
+    var key = result.cols + '|' + (result.header || []).join('\u0001');
+    if (!force && key === builtFor) return;
+    builtFor = key;
+    alignBox.textContent = '';
+    var names = ['none', 'left', 'center', 'right'];
+    for (var i = 0; i < result.cols; i++) {
+      var label = document.createElement('label');
+      label.className = 'mt-field';
+      var name = result.header && result.header[i] ? result.header[i].split('\n')[0] : message('empty-header');
+      label.appendChild(document.createTextNode(message('align-label', { n: i + 1, name: name }) + ' '));
+      var select = document.createElement('select');
+      select.setAttribute('data-col', String(i));
+      names.forEach(function (n) {
+        var o = document.createElement('option');
+        o.value = n;
+        o.textContent = message('align-' + n);
+        if (n === result.aligns[i]) o.selected = true;
+        select.appendChild(o);
+      });
+      label.appendChild(select);
+      alignBox.appendChild(label);
+    }
+  }
+
+  function renderPreview(result) {
+    preview.textContent = '';
+    var table = document.createElement('table');
+    var breaks = form.elements.breaks.value;
+    function fill(cell, text, i) {
+      cell.style.textAlign = result.aligns[i] === 'none' ? '' : result.aligns[i];
+      var lines = text.split('\n').map(function (l) { return l.trim(); });
+      if (breaks === 'space') lines = [lines.filter(Boolean).join(' ')];
+      lines.forEach(function (l, k) {
+        if (k) cell.appendChild(document.createElement('br'));
+        cell.appendChild(document.createTextNode(l));
+      });
+    }
+    var thead = document.createElement('thead'), tr = document.createElement('tr');
+    result.rows[0].forEach(function (c, i) { var th = document.createElement('th'); th.scope = 'col'; fill(th, c, i); tr.appendChild(th); });
+    thead.appendChild(tr);
+    table.appendChild(thead);
+    var tbody = document.createElement('tbody');
+    result.rows.slice(1).forEach(function (r) {
+      var row = document.createElement('tr');
+      r.forEach(function (c, i) { var td = document.createElement('td'); fill(td, c, i); row.appendChild(td); });
+      tbody.appendChild(row);
+    });
+    table.appendChild(tbody);
+    preview.appendChild(table);
+  }
+
+  function update(force) {
+    var opts = options();
+    Array.prototype.forEach.call(form.querySelectorAll('[data-show]'), function (el) {
+      el.hidden = el.getAttribute('data-show') !== opts.out;
+    });
+    var result = run(input.value, opts);
+    var has = result.rows.length > 0;
+    head.hidden = pre.hidden = preview.hidden = previewTitle.hidden = !has;
+    alignGroup.hidden = !has || opts.out !== 'md';
+    waiting.hidden = has;
+    warn.textContent = '';
+    info.hidden = true;
+    if (!has) {
+      code.textContent = '';
+      detected.textContent = '';
+      warn.hidden = true;
+      alignBox.textContent = '';
+      builtFor = '';
+      return;
+    }
+    code.textContent = result.output;
+    title.textContent = message('title-' + opts.out);
+    renderPreview(result);
+    buildAligns(result, force);
+    detected.textContent = message('detected', { format: message('fmt-' + result.format), rows: result.rows.length - (opts.header ? 0 : 1), cols: result.cols });
+    result.warnings.forEach(function (w) {
+      var li = document.createElement('li');
+      li.textContent = message(w.type, w);
+      warn.appendChild(li);
+    });
+    warn.hidden = !result.warnings.length;
+    if (opts.out === 'md' && result.escaped) {
+      info.textContent = message('escaped', { n: result.escaped, m: result.wiki });
+      info.hidden = false;
+    }
+  }
+
+  input.addEventListener('input', function () { userAligns = null; update(true); });
+  form.addEventListener('change', function (event) {
+    var t = event.target;
+    if (t && t.getAttribute && t.getAttribute('data-col') !== null) {
+      userAligns = Array.prototype.map.call(alignBox.querySelectorAll('select'), function (s) { return s.value; });
+      update(false);
+    } else if (t === input) {
+      return;
+    } else {
+      update(!!t && (t.name === 'delimiter' || t.name === 'header'));
+    }
+  });
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+  document.getElementById('tb-example').addEventListener('click', function () {
+    input.value = EXAMPLE;
+    userAligns = null;
+    update(true);
+    say(message('loaded'));
+  });
+  document.getElementById('tb-clear').addEventListener('click', function () {
+    input.value = '';
+    userAligns = null;
+    update(true);
+    input.focus();
+    say(message('cleared'));
+  });
+  document.getElementById('tb-copy').addEventListener('click', function () {
+    var text = code.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(code);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+  document.getElementById('tb-download').addEventListener('click', function () {
+    var out = form.elements.out.value;
+    var types = { md: 'text/markdown', csv: 'text/csv', tsv: 'text/tab-separated-values' };
+    var blob = new Blob([code.textContent + '\n'], { type: types[out] + ';charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'table.' + out;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    say(message('downloaded'));
+  });
+
+  document.getElementById('tb-nojs').hidden = true;
+  form.hidden = false;
+  update(true);
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/vi/">Trang chủ</a></li>
+        <li><a href="/vi/docs/">Tài liệu</a></li>
+        <li><a href="/vi/blog/">Hướng dẫn</a></li>
+        <li><a href="/vi/compare/">So sánh</a></li>
+        <li><a href="/vi/privacy.html">Quyền riêng tư</a></li>
+        <li><a href="/vi/terms.html">Điều khoản</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Hỗ trợ</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_7732b417b3db">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Ghi nhanh cho ghi chú cục bộ · Không tải nội dung lên.</div>
+    </div>
+  <details class="language-switcher"><summary>Ngôn ngữ</summary><ul><li><a href="/blog/markdown-table-maker/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/markdown-table-maker/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/markdown-table-maker/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/markdown-table-maker/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/markdown-table-maker/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/markdown-table-maker/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/markdown-table-maker/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/markdown-table-maker/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/markdown-table-maker/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/markdown-table-maker/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/markdown-table-maker/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/markdown-table-maker/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/markdown-table-maker/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/markdown-table-maker/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/markdown-table-maker/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/markdown-table-maker/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/markdown-table-maker/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/markdown-table-maker/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/markdown-table-maker/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/markdown-table-maker/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/markdown-table-maker/" lang="vi" hreflang="vi" aria-current="page">Tiếng Việt</a></li><li><a href="/zh-hans/blog/markdown-table-maker/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/markdown-table-maker/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

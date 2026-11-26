@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="ta" dir="ltr" data-search-section="பிரிவு" data-search-guide="வழிகாட்டி" data-search-empty="“{query}” என்பதற்குப் பொருத்தங்கள் இல்லை">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obsidian-க்கான Markdown அட்டவணை உருவாக்கி: Excel, Sheets அல்லது CSV-இலிருந்து ஒட்டுங்கள் | Vox.md</title>
+  <meta name="description" content="ஒட்டிய விரிதாள் கலங்கள், CSV அல்லது TSV-ஐ Markdown அட்டவணையாக மாற்றும், Obsidian விக்கிஇணைப்பு மாற்றுப்பெயர்கள் மற்றும் பட அளவுகளில் பைப்புகளைத் தப்பிக்கும், கலங்களில் வரி முறிவுகளைக் கையாளும், ஏற்கனவே உள்ள அட்டவணையை மீண்டும் சீரமைக்கும் இலவச உலாவி கருவி. எதுவும் பதிவேற்றப்படாது.">
+  <link rel="canonical" href="https://vox.isolated.tech/ta/blog/markdown-table-maker/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="மொழி மாதிரிகளுக்கான Vox.md ஆவணங்கள்">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Obsidian-க்கான Markdown அட்டவணை உருவாக்கி: Excel, Sheets அல்லது CSV-இலிருந்து ஒட்டுங்கள்">
+  <meta property="og:description" content="ஒட்டிய விரிதாள் கலங்கள், CSV அல்லது TSV-ஐ Markdown அட்டவணையாக மாற்றும், Obsidian விக்கிஇணைப்பு மாற்றுப்பெயர்கள் மற்றும் பட அளவுகளில் பைப்புகளைத் தப்பிக்கும், கலங்களில் வரி முறிவுகளைக் கையாளும், ஏற்கனவே உள்ள அட்டவணையை மீண்டும் சீரமைக்கும் இலவச உலாவி கருவி. எதுவும் பதிவேற்றப்படாது.">
+  <meta property="og:url" content="https://vox.isolated.tech/ta/blog/markdown-table-maker/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-11-26">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Obsidian-க்கான Markdown அட்டவணை உருவாக்கி: Excel, Sheets அல்லது CSV-இலிருந்து ஒட்டுங்கள்">
+  <meta name="twitter:description" content="ஒட்டிய விரிதாள் கலங்கள், CSV அல்லது TSV-ஐ Markdown அட்டவணையாக மாற்றும், Obsidian விக்கிஇணைப்பு மாற்றுப்பெயர்கள் மற்றும் பட அளவுகளில் பைப்புகளைத் தப்பிக்கும், கலங்களில் வரி முறிவுகளைக் கையாளும், ஏற்கனவே உள்ள அட்டவணையை மீண்டும் சீரமைக்கும் இலவச உலாவி கருவி. எதுவும் பதிவேற்றப்படாது.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Obsidian-க்கான Markdown அட்டவணை உருவாக்கி: Excel, Sheets அல்லது CSV-இலிருந்து ஒட்டுங்கள்",
+  "description": "ஒட்டிய விரிதாள் கலங்கள், CSV அல்லது TSV-ஐ Markdown அட்டவணையாக மாற்றும், Obsidian விக்கிஇணைப்பு மாற்றுப்பெயர்கள் மற்றும் பட அளவுகளில் பைப்புகளைத் தப்பிக்கும், கலங்களில் வரி முறிவுகளைக் கையாளும், ஏற்கனவே உள்ள அட்டவணையை மீண்டும் சீரமைக்கும் இலவச உலாவி கருவி. எதுவும் பதிவேற்றப்படாது.",
+  "image": "https://vox.isolated.tech/screenshots/01-route-heading-light.png",
+  "datePublished": "2026-11-26",
+  "dateModified": "2026-11-26",
+  "mainEntityOfPage": "https://vox.isolated.tech/ta/blog/markdown-table-maker/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "ta",
+  "name": "Obsidian-க்கான Markdown அட்டவணை உருவாக்கி: Excel, Sheets அல்லது CSV-இலிருந்து ஒட்டுங்கள் | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/ta/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "வழிகாட்டிகள்",
+      "item": "https://vox.isolated.tech/ta/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Obsidian-க்கான Markdown அட்டவணை உருவாக்கி: Excel, Sheets அல்லது CSV-இலிருந்து ஒட்டுங்கள்",
+      "item": "https://vox.isolated.tech/ta/blog/markdown-table-maker/"
+    }
+  ],
+  "inLanguage": "ta",
+  "name": "Obsidian-க்கான Markdown அட்டவணை உருவாக்கி: Excel, Sheets அல்லது CSV-இலிருந்து ஒட்டுங்கள் | Vox.md",
+  "description": "ஒட்டிய விரிதாள் கலங்கள், CSV அல்லது TSV-ஐ Markdown அட்டவணையாக மாற்றும், Obsidian விக்கிஇணைப்பு மாற்றுப்பெயர்கள் மற்றும் பட அளவுகளில் பைப்புகளைத் தப்பிக்கும், கலங்களில் வரி முறிவுகளைக் கையாளும், ஏற்கனவே உள்ள அட்டவணையை மீண்டும் சீரமைக்கும் இலவச உலாவி கருவி. எதுவும் பதிவேற்றப்படாது."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/markdown-table-maker/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">வழிகாட்டிக்குச் செல்லவும்</a>
+<nav aria-label="முதன்மை வழிசெலுத்தல்">
+  <div class="nav-inner">
+    <a href="/ta/" class="logo" aria-label="Vox.md முகப்பு">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/ta/#how">இயங்கும் விதம்</a></li>
+      <li><a href="/ta/docs/">ஆவணங்கள்</a></li>
+      <li><a href="/ta/blog/">வழிகாட்டிகள்</a></li>
+      <li><a href="/ta/compare/">ஒப்பிடவும்</a></li>
+      <li><a href="/ta/privacy.html">தனியுரிமை</a></li>
+      <li><a href="/ta/terms.html">விதிமுறைகள்</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_ta_7732b417b3db">Vox.md பதிவிறக்கவும்</a>
+  <details class="language-switcher"><summary>மொழி</summary><ul><li><a href="/blog/markdown-table-maker/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/markdown-table-maker/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/markdown-table-maker/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/markdown-table-maker/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/markdown-table-maker/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/markdown-table-maker/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/markdown-table-maker/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/markdown-table-maker/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/markdown-table-maker/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/markdown-table-maker/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/markdown-table-maker/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/markdown-table-maker/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/markdown-table-maker/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/markdown-table-maker/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/markdown-table-maker/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/markdown-table-maker/" lang="ta" hreflang="ta" aria-current="page">தமிழ்</a></li><li><a href="/th/blog/markdown-table-maker/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/markdown-table-maker/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/markdown-table-maker/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/markdown-table-maker/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/markdown-table-maker/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/markdown-table-maker/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/markdown-table-maker/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">இலவசக் கருவி</div>
+        <h1 class="hero-title">Obsidian-க்கான Markdown அட்டவணை உருவாக்கி: Excel, Sheets அல்லது CSV-இலிருந்து ஒட்டுங்கள்</h1>
+        <p class="hero-subtitle">Excel, Google Sheets, Numbers, CSV அல்லது TSV-இலிருந்து வரிசைகளை ஒட்டி, [[Note|Alias]] மற்றும் ![[image.png|300]] இல் உள்ள பைப் குறி தப்பிக்கப்பட்டு, வரி முறிவுகள் கையாளப்பட்டு, ஒவ்வொரு நெடுவரிசைக்கும் சீரமைப்புடன் சரியான பைப் அட்டவணையை நகலெடுக்கவும்.</p>
+      </div>
+      <aside class="meta-card" aria-label="இவ்வழிகாட்டி பற்றி">
+        <dl>
+          <div><dt>எழுதியவர்</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>புதுப்பிப்பு</dt><dd><time datetime="2026-11-26">நவம்பர் 26, 2026</time></dd></div>
+          <div><dt>தேவை</dt><dd>எந்த நவீன உலாவியும், iPhone-இல் Safari உட்பட. விருப்பத்தேர்வு: அட்டவணைகளுக்கு Obsidian, உரையைக் குறிப்பில் பதிவு செய்ய iPhone அல்லது Mac-க்கான Vox.md.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Obsidian-க்கான Markdown அட்டவணை உருவாக்கி: Excel, Sheets அல்லது CSV-இலிருந்து ஒட்டுங்கள்">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">சுருக்கமான பதில்</div>
+        <p>Markdown அட்டவணை என்பது தலைப்பு வரிசை, ஹைபன்களாலான பிரிப்பான் வரிசை, பின்னர் ஒரு வரிக்கு ஒரு வரிசை என்ற வடிவம்; கலங்கள் இவற்றால் பிரிக்கப்படுகின்றன: <code>|</code>. உங்கள் கலங்களை இதில் ஒட்டுங்கள்: <a href="#tool">அட்டவணை உருவாக்கி</a> ஒன்றைப் பெற கீழே உள்ளதைப் பயன்படுத்துங்கள், அல்லது இந்த எடுத்துக்காட்டிலிருந்து தொடங்குங்கள்.</p>
+      </div>
+      <pre class="guide-code" id="default-table"><code>| Name | Owner | Status |
+| --- | --- | --- |
+| Draft | Ana | Done |
+| Review | Lee | Open |
+</code></pre>
+      <p>பொதுவான உருவாக்கிகள் தவிர்ப்பதையும் இந்த உருவாக்கி Obsidian-க்காகச் சரிசெய்கிறது: இதில் உள்ள பைப் குறியைத் தப்பிக்கிறது: <code>[[Note|Alias]]</code> மற்றும் <code>![[image.png|300]]</code> என்பது <code>\|</code>, மேலும் கலத்திற்குள் உள்ள வரி முறிவை இவ்வாறு மாற்றுகிறது: <code>&lt;br&gt;</code> அல்லது இடைவெளி. இது முழுவதும் இந்தப் பக்கத்திலேயே இயங்குகிறது: உங்கள் தரவு ஒருபோதும் பதிவேற்றப்படாது, பக்கம் எந்த நெட்வொர்க் கோரிக்கையும் செய்யாது.</p>
+      <nav class="toc" aria-label="இவ்வழிகாட்டியில்"><div class="toc-title">இவ்வழிகாட்டியில்</div><ol>
+        <li><a href="#tool">உங்கள் அட்டவணையை உருவாக்குங்கள்</a></li>
+        <li><a href="#syntax">Markdown அட்டவணை தொடரியல்</a></li>
+        <li><a href="#obsidian">Obsidian-இல் அட்டவணைகள்</a></li>
+        <li><a href="#spreadsheet">Excel, Google Sheets அல்லது CSV-இலிருந்து</a></li>
+        <li><a href="#github">GitHub மற்றும் Obsidian வேறுபாடுகள்</a></li>
+        <li><a href="#capture">Vox.md மூலம் அட்டவணைகளையும் குறிப்புகளையும் உங்கள் vault-இல் சேருங்கள்</a></li>
+        <li><a href="#faq">கேள்விகள்</a></li>
+      </ol></nav>
+
+      <h2 id="tool">1. உங்கள் அட்டவணையை உருவாக்குங்கள்</h2>
+      <p class="mt-nojs" id="tb-nojs">அட்டவணை உருவாக்கிக்கு JavaScript தேவை. அது இல்லாவிட்டாலும், கீழே உள்ள தொடரியல் குறிப்பாக இன்னும் பயன்படும்.</p>
+      <form class="tb-tool" id="tb-tool" aria-label="Markdown அட்டவணை உருவாக்கி" hidden>
+        <fieldset class="mt-group">
+          <legend>உங்கள் தரவு</legend>
+          <label class="mt-field" for="tb-input">விரிதாள், CSV, TSV அல்லது ஏற்கனவே உள்ள Markdown அட்டவணையிலிருந்து கலங்களை ஒட்டுங்கள் <textarea id="tb-input" rows="9" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></label>
+          <div class="mt-actions">
+            <button type="button" class="btn-secondary" id="tb-example">எடுத்துக்காட்டை ஏற்று</button>
+            <button type="button" class="btn-secondary" id="tb-clear">அழி</button>
+          </div>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>உள்ளீடு</legend>
+          <label class="mt-field" for="tb-delimiter">பிரிப்பான் <select id="tb-delimiter" name="delimiter">
+            <option value="auto" selected>நான் ஒட்டியதிலிருந்து கண்டறி</option>
+            <option value="markdown">Markdown அட்டவணை</option>
+            <option value="tab">தத்தல் (விரிதாள் நகல், TSV)</option>
+            <option value="comma">காற்புள்ளி (CSV)</option>
+            <option value="semicolon">அரைப்புள்ளி</option>
+            <option value="pipe">பைப்</option>
+          </select></label>
+          <label class="mt-option"><input type="checkbox" name="header" checked> <span>முதல் வரிசை தலைப்பு</span></label>
+          <p class="mt-hint" id="tb-detected" role="status"></p>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>வெளியீடு</legend>
+          <label class="mt-field" for="tb-out">வெளியீட்டு வடிவம் <select id="tb-out" name="out">
+            <option value="md" selected>Markdown அட்டவணை</option>
+            <option value="csv">CSV வடிவம்</option>
+            <option value="tsv">TSV வடிவம்</option>
+          </select></label>
+          <label class="mt-field" data-show="md" for="tb-pad">அமைப்பு <select id="tb-pad" name="pad">
+            <option value="pad" selected>மூலம் வரிசையாகத் தெரிய நெடுவரிசைகளை இடைவெளியால் நிரப்பவும்</option>
+            <option value="compact">சுருக்கம்</option>
+          </select></label>
+          <label class="mt-field" data-show="md" for="tb-breaks">கலத்திற்குள் வரி முறிவு <select id="tb-breaks" name="breaks">
+            <option value="br" selected>எழுதுங்கள் &lt;br&gt;</option>
+            <option value="space">வரிகளை இடைவெளியால் இணைக்கவும்</option>
+          </select></label>
+        </fieldset>
+        <fieldset class="mt-group" id="tb-aligns-group" data-show="md" hidden>
+          <legend>நெடுவரிசை சீரமைப்பு</legend>
+          <div class="tb-aligns" id="tb-aligns"></div>
+        </fieldset>
+      </form>
+      <div class="mt-output-head" id="tb-output-head" hidden>
+        <h3 id="tb-output-title">உங்கள் அட்டவணை</h3>
+        <div class="mt-actions">
+          <button type="button" class="btn-primary" id="tb-copy">நகலெடு</button>
+          <button type="button" class="btn-secondary" id="tb-download">பதிவிறக்கம்</button>
+        </div>
+      </div>
+      <p class="mt-status" id="tb-status" role="status"></p>
+      <p class="mt-hint" id="tb-info" role="status" hidden></p>
+      <ul class="mt-hint tb-warnings" id="tb-warnings" role="status" hidden></ul>
+      <pre class="guide-code tb-output" id="tb-output" aria-labelledby="tb-output-title" tabindex="0" hidden><code id="tb-output-code"></code></pre>
+      <h3 id="tb-preview-title" hidden>முன்னோட்டம்</h3>
+      <div class="tb-preview" id="tb-preview" role="group" aria-labelledby="tb-preview-title" tabindex="0" hidden></div>
+      <p class="mt-hint" id="tb-waiting" role="status">அட்டவணையைக் காண உங்கள் தரவை ஒட்டுங்கள்.</p>
+      <div hidden id="tb-messages">
+        <span data-message="copied">கிளிப்போர்டுக்குப் பிரதியெடுக்கப்பட்டது.</span>
+        <span data-message="copy-failed">பிரதியெடுக்க இயலவில்லை. உரையைத் தேர்ந்தெடுத்து நீங்களே பிரதியெடுக்கவும்.</span>
+        <span data-message="loaded">எடுத்துக்காட்டு ஏற்றப்பட்டது.</span>
+        <span data-message="cleared">அழிக்கப்பட்டது.</span>
+        <span data-message="downloaded">பதிவிறக்கம் தொடங்கியது.</span>
+        <span data-message="title-md">உங்கள் Markdown அட்டவணை</span>
+        <span data-message="title-csv">உங்கள் CSV</span>
+        <span data-message="title-tsv">உங்கள் TSV</span>
+        <span data-message="detected">கண்டறிந்தது: {format}. {rows} வரிசைகள், {cols} நெடுவரிசைகள்.</span>
+        <span data-message="fmt-markdown">Markdown அட்டவணை</span>
+        <span data-message="fmt-tab">தத்தலால் பிரிக்கப்பட்ட</span>
+        <span data-message="fmt-comma">காற்புள்ளியால் பிரிக்கப்பட்ட</span>
+        <span data-message="fmt-semicolon">அரைப்புள்ளியால் பிரிக்கப்பட்ட</span>
+        <span data-message="fmt-pipe">பைப்பால் பிரிக்கப்பட்ட</span>
+        <span data-message="fmt-single">ஒரு நெடுவரிசை</span>
+        <span data-message="escaped">\| ஆகத் தப்பிக்கப்பட்ட பைப்புகள்: {n}, அவற்றில் {m} விக்கிஇணைப்புகள் அல்லது பட இணைப்புகளுக்குள்.</span>
+        <span data-message="no-delimiter">வரி {line}: பிரிப்பான் வரிசை இல்லை, எனவே தலைப்புக்குப் பிறகு ஒரு பிரிப்பான் வரிசை சேர்க்கப்பட்டது.</span>
+        <span data-message="delim-count">வரி {line}: பிரிப்பான் வரிசையில் {found} கலங்கள் உள்ளன, ஆனால் தலைப்பில் {expected} உள்ளன. GFM விவரக்குறிப்பு இதை அட்டவணையாகக் கருதாது. வெளியீடு {expected} என்பதைப் பயன்படுத்துகிறது.</span>
+        <span data-message="short">வரி {line}: {found} கலங்கள், தலைப்பில் {expected} உள்ளன. வெற்றுக் கலங்கள் சேர்க்கப்பட்டன.</span>
+        <span data-message="long">வரி {line}: {found} கலங்கள், தலைப்பில் {expected} உள்ளன. அட்டவணை {max} நெடுவரிசைகளாக விரிவாக்கப்பட்டது.</span>
+        <span data-message="blank">வரி {line} வெற்றாக உள்ளது. முதல் வெற்று வரியில் அட்டவணை முடிவடையும், எனவே அதற்குப் பிறகு உள்ள வரிசைகள் அட்டவணையின் பகுதியாக இருக்காது.</span>
+        <span data-message="more">மேலும் {n} வரிசைகளில் கலங்களின் எண்ணிக்கை வேறுபடுகிறது.</span>
+        <span data-message="align-label">நெடுவரிசை {n}: {name}</span>
+        <span data-message="align-none">இல்லை</span>
+        <span data-message="align-left">இடது</span>
+        <span data-message="align-center">நடு</span>
+        <span data-message="align-right">வலது</span>
+        <span data-message="empty-header">(தலைப்பு இல்லை)</span>
+      </div>
+
+      <h2 id="syntax">2. Markdown அட்டவணை தொடரியல்</h2>
+      <pre class="guide-code"><code>| Name   | Qty | Price |
+| :----- | :-: | ----: |
+| Apple  |   3 |  1.20 |
+| Pear   |  12 |  0.80 |</code></pre>
+      <p>இந்த <a href="https://github.github.com/gfm/#tables-extension-" target="_blank" rel="noopener">GitHub Flavored Markdown விவரக்குறிப்பு</a> அட்டவணையை ஒரு தலைப்பு வரிசை, தலைப்பை தரவிலிருந்து பிரிக்கும் ஒரு பிரிப்பான் வரிசை, மற்றும் பூஜ்யம் அல்லது அதற்கு மேற்பட்ட தரவு வரிசைகள் என வரையறுக்கிறது. கலங்கள் பைப்புகளால் பிரிக்கப்படுகின்றன.</p>
+      <ul>
+        <li><strong>பிரிப்பான் வரிசை.</strong> இதன் கலங்களில் ஹைபன்கள் மட்டுமே இருக்கும்; இடது, வலது அல்லது நடு சீரமைப்பை அமைக்க இடது, வலது அல்லது இரு முனைகளிலும் விருப்பமாக ஒரு முக்காற்புள்ளி இருக்கலாம். <a href="https://obsidian.md/help/advanced-syntax" target="_blank" rel="noopener">Obsidian Help ஆவணம்</a> உரையை சீரமைக்க தலைப்பு வரிசையில் முக்காற்புள்ளிகளைச் சேர்க்க வேண்டும் என்றும், தலைப்பு வரிசையில் குறைந்தது இரண்டு ஹைபன்கள் இருக்க வேண்டும் என்றும் கூறுகிறது.</li>
+        <li><strong>வெளிப்புற பைப்புகள்.</strong> இருபுறமும் உள்ள பைப்புகள் விவரக்குறிப்பில் விருப்பத்தேர்வு. படிக்க எளிதாக இருக்க அவற்றைச் சேர்ப்பது நல்லது என்று Obsidian Help கூறுகிறது; உருவாக்கி எப்போதும் அவற்றை எழுதுகிறது.</li>
+        <li><strong>இடைவெளி நிரப்புதல்.</strong> Obsidian Help கூற்றுப்படி, கலங்கள் முழுமையாக சீரமைக்கப்பட வேண்டியதில்லை. உருவாக்கியின் “நெடுவரிசைகளை நிரப்பு” அமைப்பு மூலத்தை படிக்க எளிதாக்க மட்டுமே வரிசைப்படுத்துகிறது; “சுருக்கம்” அதைத் தவிர்க்கிறது.</li>
+        <li><strong>பொருந்தும் எண்ணிக்கைகள்.</strong> தலைப்பு வரிசையில் உள்ள கலங்களின் எண்ணிக்கை பிரிப்பான் வரிசையில் உள்ளதற்குச் சமமாக இருக்க வேண்டும் என்று விவரக்குறிப்பு கூறுகிறது. இல்லையெனில் அந்த வரிகள் அட்டவணை அல்ல; அவை ஒரு பத்தியாகக் காட்டப்படும். குறைவான கலங்கள் உள்ள தரவு வரிசைக்கு வெற்றுக் கலங்கள் சேர்க்கப்படும், கூடுதல் கலங்கள் புறக்கணிக்கப்படும்.</li>
+        <li><strong>கலத்திற்குள்.</strong> விவரக்குறிப்பு இன்லைன் வடிவமைப்பை அனுமதிக்கிறது, ஆனால் தொகுதி நிலை உள்ளடக்கத்தை அனுமதிக்காது; எனவே கலத்தில் பட்டியலோ தலைப்போ வைக்க முடியாது. அட்டவணையில் உள்ளடக்கத்தை அலங்கரிக்க அதன் அடிப்படை வடிவமைப்பு தொடரியலைப் பயன்படுத்தலாம் என்று Obsidian Help கூறுகிறது.</li>
+        <li><strong>அட்டவணையின் முடிவு.</strong> முதல் வெற்று வரியில் அல்லது வேறொரு தொகுதி நிலை அமைப்பின் தொடக்கத்தில் அட்டவணை முடிவடையும் என்று விவரக்குறிப்பு கூறுகிறது.</li>
+      </ul>
+      <p>உருவாக்கி ஒவ்வொரு பிரிப்பான் கலத்திலும் குறைந்தது மூன்று ஹைபன்களை எழுதுகிறது. அது Obsidian-இன் குறைந்தபட்சம் இரண்டையும், இது கோரும் மூன்றையும் பூர்த்தி செய்கிறது: <a href="https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-tables" target="_blank" rel="noopener">GitHub Docs ஆவணம்</a> என்பதைக் கோருகிறது.</p>
+
+      <h2 id="obsidian">3. Obsidian-இல் அட்டவணைகள்</h2>
+      <ul>
+        <li><strong>Insert Table கட்டளை.</strong> Command Palette-இலிருந்து Insert Table கட்டளையைப் பயன்படுத்தி அட்டவணையைச் செருகலாம் என்று Obsidian Help கூறுகிறது. உங்களிடம் ஏற்கனவே உள்ள தரவிலிருந்து ஒன்றை உருவாக்க, மேலே உள்ள உருவாக்கியில் அதை ஒட்டுங்கள்.</li>
+        <li><strong>மாற்றுப்பெயர்கள் மற்றும் பட அளவுகள்.</strong> விக்கிஇணைப்பு மாற்றுப்பெயர், எடுத்துக்காட்டாக <code>[[Note|Alias]]</code> மற்றும் படத்தின் அளவு, எடுத்துக்காட்டாக <code>![[image.png|300]]</code> இரண்டிலும் செங்குத்துக் கோடு உள்ளது. அட்டவணைக்குள் இதைச் சேர்க்க வேண்டும் என்று Obsidian Help கூறுகிறது: <code>\</code> பைப் குறிக்கு முன், எனவே இவ்வாறு எழுதுங்கள்: <code>[[Note\|Alias]]</code> மற்றும் <code>![[image.png\|300]]</code>. உருவாக்கி இதை உங்களுக்காகச் செய்கிறது; நீங்கள் ஏற்கனவே எழுதிய தப்பிப்பு இரட்டிப்பாகாது.</li>
+        <li><strong>வேறு எந்த பைப்பும்.</strong> GFM விவரக்குறிப்பு, கலத்தில் உள்ள பைப் குறியை, குறியீட்டுப் பகுதிக்குள்ளும் கூட, பின்சாய்வுக்கோட்டால் தப்பிக்க வேண்டும் என்கிறது. உருவாக்கி தப்பிக்கப்படாத ஒவ்வொரு பைப்பையும் இவ்வாறு தப்பிக்கிறது: <code>\|</code>.</li>
+        <li><strong>வரி முறிவுகள்.</strong> வரிசை ஒரே வரியில் எழுதப்படுகிறது, எனவே கலத்திற்குள் உள்ள வரி முறிவு வேறொன்றாக மாற வேண்டும். உருவாக்கி ஒரு HTML ஐ எழுதுகிறது <code>&lt;br&gt;</code> குறிச்சொல்லாக மாற்றுகிறது, அல்லது நீங்கள் தேர்ந்தால் வரிகளை இடைவெளியால் இணைக்கிறது. Obsidian Help-இன் Tables பகுதியோ GitHub Docs-ஓ கலங்களில் வரி முறிவுகளை விவரிக்கவில்லை, எனவே இதைச் சரிபார்க்கவும்: <code>&lt;br&gt;</code> உங்கள் சொந்த vault-இல் எப்படிக் காட்டப்படுகிறது என்று பாருங்கள்; மூலத்தில் குறிச்சொற்கள் வேண்டாமென்றால் இடைவெளி விருப்பத்தைத் தேர்ந்தெடுக்கவும்.</li>
+        <li><strong>செருகுநிரல்கள்.</strong> அட்டவணைகளைத் திருத்த உதவும் சமூக செருகுநிரல்கள் உள்ளன. இந்தப் பக்கம் அவற்றில் எதையும் மதிப்பிடவோ பரிந்துரைக்கவோ இல்லை.</li>
+      </ul>
+      <p>சரிபார்ப்புப் பட்டியல்களுக்கு இதைப் பாருங்கள்: <a href="/ta/blog/markdown-checklist-maker/">Markdown சரிபார்ப்புப் பட்டியல் உருவாக்கி</a>; குறிப்பின் மேலே உள்ள பண்புகளுக்கு, <a href="/ta/blog/obsidian-properties-generator/">பண்புகள் உருவாக்கி</a>. முடிவுகள் மற்றும் உரிமையாளர்களின் பட்டியலுக்கு அட்டவணை நன்றாகப் பொருந்தும், குறிப்பாக இதிலிருந்து வரும் குறிப்பில்: <a href="/ta/blog/obsidian-meeting-notes-template/">கூட்டக் குறிப்புகள் வார்ப்புரு</a>.</p>
+
+      <h2 id="spreadsheet">4. Excel, Google Sheets அல்லது CSV-இலிருந்து</h2>
+      <p>விரிதாளில் கலங்களைத் தேர்ந்தெடுத்து, நகலெடுத்து, மேலே உள்ள பெட்டியில் ஒட்டுங்கள். கலங்கள் தத்தல்களுடன் ஒட்டப்பட்டால் உருவாக்கி அதைக் கண்டறியும். காற்புள்ளிகள், அரைப்புள்ளிகள், பைப்புகளையும் கண்டறியும், மேலும் மேற்கோள் இட்ட CSV புலங்களையும் படிக்கும், எனவே <code>"Lee, Sam"</code> ஒரே கலமாக இருக்கும், மேலும் <code>""</code> மேற்கோளுக்குள் இருந்தால் மேற்கோளாக மாறும். ஊகம் தவறாக இருந்தால் பிரிப்பான் பட்டியலைப் பயன்படுத்துங்கள். முதல் வரிசை தலைப்பு வரிசையாக ஆகுமா என்பதைத் தீர்மானிக்க “முதல் வரிசை தலைப்பு” என்பதைத் தேர்ந்தெடுக்கவும் அல்லது நீக்கவும்; அது இல்லையெனில், Markdown அட்டவணைக்கு ஒன்று தேவைப்படுவதால் வெற்றுத் தலைப்பு வரிசை சேர்க்கப்படும்.</p>
+      <ul>
+        <li><strong>இணைக்கப்பட்ட கலங்கள்.</strong> வரிசை என்பது பைப்புகளால் பிரிக்கப்பட்ட கலங்களின் பட்டியல் என்று விவரக்குறிப்பும் இரு உதவிப் பக்கங்களும் கூறுகின்றன; கலங்களை இணைக்க எந்த வழியையும் அவை விவரிக்கவில்லை. நகலெடுக்கும் முன் இணைப்பு உள்ளடக்கிய ஒவ்வொரு கலத்திலும் மதிப்பை இடுங்கள்.</li>
+        <li><strong>சூத்திரங்கள்.</strong> நீங்கள் ஒட்டும் உரையை மட்டுமே உருவாக்கி படிக்கிறது. ஒட்டிய கலங்கள் முடிவுகளுக்குப் பதிலாக சூத்திரங்களைக் காட்டினால், உங்கள் விரிதாள் செயலியில் மதிப்புகளை நகலெடுத்து மீண்டும் ஒட்டுங்கள்.</li>
+        <li><strong>சமமற்ற வரிசைகள்.</strong> ஒரு வரிசையில் தலைப்பை விட வேறுபட்ட எண்ணிக்கையிலான கலங்கள் இருந்தால், உருவாக்கி அந்த வரிசையின் வரி எண்ணுடன் எச்சரித்து, அட்டவணையை வெற்றுக் கலங்களால் நிரப்புகிறது. தலைப்பை விட அதிக கலங்கள் உள்ள வரிசை தரவை நீக்காமல் அட்டவணையை அகலமாக்குகிறது.</li>
+        <li><strong>மாற்றியமைத்தல் மற்றும் சீரமைத்தல்.</strong> ஏற்கனவே உள்ள Markdown அட்டவணையை மீண்டும் சீரமைக்க ஒட்டுங்கள், அல்லது அதை ஏற்றுமதி செய்ய வெளியீட்டை CSV அல்லது TSV ஆக அமையுங்கள். பிரிப்பான் வரிசை இல்லாதபோது, அதன் கலங்களின் எண்ணிக்கை தலைப்புடன் பொருந்தாதபோது, அல்லது வெற்று வரி அட்டவணையை முடிக்கும்போது உருவாக்கி வரி எண்ணுடன் எச்சரிக்கும்.</li>
+      </ul>
+      <p>ஒட்டிய Markdown அட்டவணையில் உள்ள சீரமைப்பு முக்காற்புள்ளிகள் வைக்கப்படும், மேலும் நெடுவரிசை சீரமைப்பு பட்டியல்கள் மூலம் ஒவ்வொரு நெடுவரிசையையும் மாற்றலாம்.</p>
+
+      <h2 id="github">5. GitHub மற்றும் Obsidian வேறுபாடுகள்</h2>
+      <p>Obsidian Help மற்றும் GitHub Docs இரண்டும் தலைப்பு வரிசை, ஹைபன்கள் மற்றும் விருப்பமான சீரமைப்பு முக்காற்புள்ளிகளுடன் பைப் அட்டவணைகளை விவரிக்கின்றன. அந்தப் பக்கங்கள் குறிப்பிடும் வேறுபாடுகள் சிறியவை:</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th>தலைப்பு</th><th>Obsidian Help ஆவணம்</th><th>GitHub Docs மற்றும் GFM விவரக்குறிப்பு</th></tr></thead>
+          <tbody>
+            <tr><td>ஹைபன்கள்</td><td>தலைப்பு வரிசையில் குறைந்தது இரண்டு ஹைபன்கள் இருக்க வேண்டும்</td><td>GitHub Docs: ஒவ்வொரு தலைப்பு நெடுவரிசையிலும் குறைந்தது மூன்று ஹைபன்கள்</td></tr>
+            <tr><td>அட்டவணைக்கு முன் வெற்று வரி</td><td>Tables பகுதி ஒன்றைக் குறிப்பிடவில்லை</td><td>GitHub Docs: உங்கள் அட்டவணைக்கு முன் ஒரு வெற்று வரி சேர்க்க வேண்டும்</td></tr>
+            <tr><td>கலத்தில் நேரடி பைப் குறி</td><td>சேர்க்கவும்: <code>\</code> மாற்றுப்பெயர்கள் மற்றும் பட அளவுகளில் பைப் குறிக்கு முன்</td><td>இவ்வாறு தப்பிக்கவும்: <code>\|</code>, குறியீட்டுப் பகுதிக்குள்ளும் கூட</td></tr>
+            <tr><td>வெளிப்புற பைப்புகள்</td><td>விருப்பத்தேர்வு, படிக்க எளிதாக இருக்க பரிந்துரைக்கப்படுகிறது</td><td>விருப்பத்தேர்வு</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>இரண்டு இடங்களிலும் பாதுகாப்பாக இருக்க, மூன்று அல்லது அதற்கு மேற்பட்ட ஹைபன்களை எழுதுங்கள், அட்டவணைக்கு மேலே ஒரு வெற்று வரி விடுங்கள், ஒவ்வொரு பைப்பையும் தப்பிக்கவும். உருவாக்கி இதையே செய்கிறது. விக்கிஇணைப்பு மாற்றுப்பெயர் Obsidian தொடரியல்; GitHub-இல் அது பைப் உள்ள சாதாரண உரை மட்டுமே. சரிபார்ப்புப் பட்டியல் உருவாக்கி வழிகாட்டி இதை விளக்குகிறது: <a href="/ta/blog/markdown-checklist-maker/#github">பணிப்பட்டியல் வேறுபாடுகள்</a> அதே முறையில்.</p>
+
+      <h2 id="capture">6. Vox.md மூலம் அட்டவணைகளையும் குறிப்புகளையும் உங்கள் vault-இல் சேருங்கள்</h2>
+      <p>Vox.md அட்டவணைகளை தானே உருவாக்குவதில்லை, மேலே உள்ள உருவாக்கி செயலி இல்லாமலும் வேலை செய்கிறது. Vox.md செய்வது உரையை Obsidian-இல் பதிவு செய்வதே: Quick Capture ஏற்கனவே உள்ள உரையை ஒட்ட உதவுகிறது, Route அதை Markdown இலக்குக்கு அனுப்புகிறது. இதைப் பாருங்கள்: <a href="/ta/docs/#quick-capture">விரைவான Capture</a> மற்றும் <a href="/ta/docs/#presets">வழித்தடங்கள்</a> ஆவணங்களில்.</p>
+      <ol>
+        <li>மேலே உங்கள் அட்டவணையை உருவாக்கி Copy அழுத்துங்கள்.</li>
+        <li>iPhone, iPad அல்லது Mac-இல் உள்ள Vox.md-இல் Quick Capture-ஐத் திறந்து, அட்டவணையை உரை திருத்தியில் ஒட்டுங்கள்.</li>
+        <li>அசல் உரையை வைத்திருக்கும் Route மூலம் அனுப்புங்கள். ஆவணங்கள் பட்டியலிடுவது: <strong>மூலத்தை வைத்திரு</strong> என்பதை AI மாற்றி எழுதாமல் பதிவு செய்த உரையைப் பாதுகாக்கும் செயலாக்க முறையாகப் பட்டியலிடுகின்றன, மேலும் இது இருக்கும்போது பதிவு செய்த உரை மாறாமல் வழங்கப்படும் என்கின்றன: <strong>Apple Intelligence ஐப் பயன்படுத்து</strong> அணைக்கப்பட்டிருக்கும்போது, அதுவே இயல்புநிலை. தட்டச்சு செய்த உரையைச் செயலாக்குவது ஒவ்வொரு Route-இலும் விருப்ப அமைப்பாகும்.</li>
+        <li>Route-இன் இலக்கு அது எங்கு சேரும் என்பதை முடிவு செய்கிறது: புதிய குறிப்பு, உங்கள் தினசரி குறிப்பு போன்ற தொடர்ந்து வளரும் குறிப்பு, அல்லது ஏற்கனவே உள்ள குறிப்பு; அதன் கீழே, மேலே அல்லது தேர்ந்தெடுத்த தலைப்புக்குக் கீழே.</li>
+      </ol>
+      <p>இலக்கில் ஏற்கனவே மேலே உரை இருந்தால், ஒட்டிய அட்டவணைக்கு மேலே ஒரு வெற்று வரி விடுங்கள். Route செய்முறைக்கு, இதைப் பாருங்கள்: <a href="/ta/blog/obsidian-capture-templates/">capture வார்ப்புருக்கள்</a>, மேலும் Zoom, Teams அல்லது YouTube வசனக் கோப்பை முதலில் ஒரு Transcription குறிப்பாக மாற்ற, இதைப் பாருங்கள்: <a href="/ta/blog/srt-vtt-to-text-markdown/">SRT மற்றும் VTT-இலிருந்து Markdown-க்கு</a>.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">iPhone, iPad அல்லது Mac-இலிருந்து Vox.md மூலம் Obsidian-இல் பதிவு செய்யுங்கள்</h2>
+        <p>Vox.md குரலையும் உரையையும் உங்கள் Obsidian குறிப்புகளில் பதிவு செய்கிறது. பதிவு, Transcription மற்றும் Capture ஆகியவற்றுக்கு Vox.md Unlimited தேவை: தகுதியுள்ள கணக்குகளுக்கு 7 நாள் இலவச சோதனையுடன் வாராந்திர அல்லது ஆண்டு சந்தா, அல்லது ஒருமுறை செலுத்தும் ஆயுள்கால வாங்குதல். App Store உங்கள் உள்ளூர் விலையைக் காட்டும்.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ta_7732b417b3db">Obsidian-இல் பதிவு செய்யுங்கள்</a></p>
+        <p>மேலே உள்ள அட்டவணை உருவாக்கி செயலி இல்லாமலும் முழுமையாக வேலை செய்யும்.</p>
+      </section>
+
+      <h2 id="faq">7. கேள்விகள்</h2>
+      <h3>Obsidian-இல் என் அட்டவணை ஏன் சரியாகக் காட்டப்படவில்லை?</h3>
+      <p>மூன்றைச் சரிபாருங்கள். தலைப்புக்குக் கீழே நேரடியாக ஹைபன்களாலான பிரிப்பான் வரிசை இருக்க வேண்டும்; தலைப்பு மற்றும் பிரிப்பான் வரிசைகளில் கலங்களின் எண்ணிக்கை சமமாக இருக்க வேண்டும், இல்லையெனில் விவரக்குறிப்பு அந்த வரிகளை பத்தியாகக் காட்டும். தலைப்பு வரிசையில் குறைந்தது இரண்டு ஹைபன்கள் இருக்க வேண்டும் என்று Obsidian Help கூறுகிறது. மேலும் அட்டவணைக்கு முன் ஒரு வெற்று வரி விடுங்கள்; அதை GitHub Docs கோருகிறது, Obsidian-இல் அதற்குச் செலவு எதுவும் இல்லை. அட்டவணையை உருவாக்கியில் ஒட்டுங்கள்: பிரிப்பான் வரிசை இல்லாதபோது அல்லது எண்ணிக்கைகள் வேறுபடும்போது வரி எண்ணுடன் எச்சரிக்கும்.</p>
+      <h3>கலத்தில் வரி முறிவை எவ்வாறு சேர்ப்பது?</h3>
+      <p>வரிசையை ஒரே வரியில் வைத்து, HTML ஒன்றைப் பயன்படுத்துங்கள் <code>&lt;br&gt;</code> கலத்திற்குள், பல வரிகள் உள்ள கலத்திற்கு உருவாக்கி இதையே எழுதுகிறது. மேற்கோள் காட்டிய பக்கங்கள் கலங்களில் வரி முறிவுகளை விவரிக்கவில்லை, எனவே உங்கள் vault-இல் சோதித்துப் பாருங்கள். மற்றொரு தேர்வு, வரிகளை இடைவெளியால் இணைப்பது.</p>
+      <h3>கலத்தில் பைப் அல்லது விக்கிஇணைப்பு மாற்றுப்பெயரை எவ்வாறு வைப்பது?</h3>
+      <p>பைப்புக்கு முன் பின்சாய்வுக்கோடு இடுங்கள்: <code>[[Note\|Alias]]</code>, <code>![[image.png\|300]]</code> அல்லது <code>a \| b</code>. அட்டவணைகளுக்குள் மாற்றுப்பெயர்கள் மற்றும் பட அளவுமாற்றத்திற்கு Obsidian Help இதைக் கோருகிறது, மேலும் கலத்தில் உள்ள எந்த பைப்புக்கும் GFM விவரக்குறிப்பு இதைக் கோருகிறது.</p>
+      <h3>கலங்களை இணைக்க முடியுமா?</h3>
+      <p>விவரக்குறிப்பிலும் Obsidian Help-இலும் இதற்கான தொடரியல் எதுவும் இல்லை. அதற்குப் பதிலாக ஒவ்வொரு கலத்திலும் மதிப்பை மீண்டும் எழுதுங்கள்.</p>
+      <h3>அட்டவணை எவ்வளவு அகலமாக இருக்கலாம்?</h3>
+      <p>மேற்கோள் காட்டிய பக்கங்கள் எதுவும் நெடுவரிசைகள் அல்லது வரிசைகளின் அதிகபட்ச எண்ணிக்கையைத் தரவில்லை, உருவாக்கியும் வரம்பு எதுவும் வைக்கவில்லை. மிக அகலமான அட்டவணையை மூலத்தில் படிப்பது கடினம், எனவே சுருக்க அமைப்பைப் பயன்படுத்துங்கள், அல்லது அதை இரண்டு அட்டவணைகளாகப் பிரியுங்கள்.</p>
+      <h3>உருவாக்கி எனது தரவை பதிவேற்றுகிறதா?</h3>
+      <p>இல்லை. அட்டவணை இந்தப் பக்கத்தில் உள்ள ஒரு ஸ்கிரிப்டால் உங்கள் சாதனத்திலேயே உருவாக்கப்படுகிறது, பக்கம் எந்த நெட்வொர்க் கோரிக்கையும் செய்வதில்லை. அது உங்கள் தரவைச் சேமிப்பதில்லை: பக்கத்தை மூடினாலோ மீண்டும் ஏற்றினாலோ அது அழிந்துவிடும். Download பொத்தான் பக்கத்திலிருந்து ஒரு கோப்பை உங்கள் சாதனத்தில் சேமிக்கிறது.</p>
+
+      <nav class="toc" aria-label="தொடர்புடைய வழிகாட்டிகள்" id="related"><div class="toc-title">அமைப்பைத் தொடரவும்</div><ul>
+        <li><a href="/ta/blog/markdown-checklist-maker/">Markdown சரிபார்ப்புப் பட்டியல் உருவாக்கி</a></li>
+        <li><a href="/ta/blog/obsidian-properties-generator/">Obsidian பண்புகள் உருவாக்கி மற்றும் சரிபார்ப்பி</a></li>
+        <li><a href="/ta/blog/srt-vtt-to-text-markdown/">SRT மற்றும் VTT-இலிருந்து உரைக்கும் Markdown-க்கும்</a></li>
+        <li><a href="/ta/blog/obsidian-meeting-notes-template/">Obsidian கூட்டக் குறிப்பு வார்ப்புரு ஜெனரேட்டர்</a></li>
+        <li><a href="/ta/blog/obsidian-capture-templates/">பாதை, வார்ப்புரு செய்முறைகள்</a></li>
+        <li><a href="/ta/docs/#quick-capture">Quick Capture குறிப்பு</a></li>
+      </ul></nav>
+<style>
+.tb-tool:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.tb-tool [hidden] { display: none; }
+.mt-output-head[hidden], .tb-output[hidden], #tb-preview-title[hidden], .tb-preview[hidden], .tb-warnings[hidden] { display: none; }
+.tb-tool .mt-field input, .tb-tool .mt-field textarea, .tb-tool .mt-field select { font: inherit; font-family: var(--font-mono); font-size: 16px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; padding: 8px 10px; width: 100%; box-sizing: border-box; min-height: 44px; }
+.tb-tool .mt-field textarea { resize: vertical; min-height: 160px; white-space: pre; overflow: auto; }
+.tb-tool input:focus-visible, .tb-tool textarea:focus-visible, .tb-tool select:focus-visible, .tb-output:focus-visible, .tb-preview:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.tb-tool .mt-option { min-height: 44px; }
+.tb-tool .mt-option input { width: 22px; height: 22px; }
+.tb-aligns { display: flex; flex-direction: column; gap: 8px; }
+.tb-aligns .mt-field { margin-top: 0; overflow-wrap: anywhere; }
+.tb-warnings { margin: 0; padding-inline-start: 1.2em; }
+.tb-output { white-space: pre; overflow: auto; max-height: 28rem; tab-size: 4; }
+.tb-preview { overflow: auto; max-width: 100%; background: var(--card); border: 1px solid var(--line); border-radius: 16px; }
+.tb-preview table { border-collapse: collapse; min-width: 100%; font-size: 14.5px; line-height: 1.5; }
+.tb-preview th, .tb-preview td { padding: 8px 12px; border: 1px solid var(--line); vertical-align: top; min-width: 5em; overflow-wrap: break-word; }
+.tb-preview th { font-weight: 700; background: var(--paper); }
+</style>
+<script>
+/* Markdown table maker. Runs locally: no network requests. */
+(function () {
+  var CANDIDATES = [['tab', '\t'], ['comma', ','], ['semicolon', ';'], ['pipe', '|']];
+  var DELIM_ROW = /^\|?\s*:?-+:?\s*(?:\|\s*:?-+:?\s*)*\|?$/;
+
+  function chars(s) { return Array.from(s).length; }
+  function normalise(text) { return String(text || '').replace(/^﻿/, '').replace(/\r\n?/g, '\n'); }
+  function isDelimiterRow(line) {
+    var t = line.trim();
+    return t.indexOf('|') !== -1 && t.indexOf('-') !== -1 && DELIM_ROW.test(t);
+  }
+
+  /* Split one Markdown row on unescaped pipes. Cells keep their backslashes. */
+  function splitRow(line) {
+    var t = line.trim();
+    if (t.charAt(0) === '|') t = t.slice(1);
+    var cells = [], cur = '';
+    for (var i = 0; i < t.length; i++) {
+      var c = t.charAt(i);
+      if (c === '\\' && t.charAt(i + 1) === '|') { cur += '\\|'; i++; continue; }
+      if (c === '|') { cells.push(cur); cur = ''; continue; }
+      cur += c;
+    }
+    cells.push(cur);
+    /* A real trailing pipe leaves one empty last cell that is not a cell. */
+    if (cells.length > 1 && !cells[cells.length - 1].trim() && /\|\s*$/.test(t)) cells.pop();
+    return cells;
+  }
+  function mdCellToPlain(s) {
+    return s.replace(/\\\|/g, '|').replace(/<br\s*\/?>/gi, '\n').trim();
+  }
+  function alignOf(cell) {
+    var t = cell.trim(), l = t.charAt(0) === ':', r = t.charAt(t.length - 1) === ':';
+    return l && r ? 'center' : l ? 'left' : r ? 'right' : 'none';
+  }
+
+  /* Parse delimiter-separated text with quoted fields. Returns [{cells, line}]. */
+  function parseDelimited(text, delim) {
+    var rows = [], cells = [], field = '', quoted = false, atStart = true;
+    var line = 1, rowLine = 1;
+    var hadQuote = false;
+    for (var i = 0; i < text.length; i++) {
+      var c = text.charAt(i);
+      if (quoted) {
+        if (c === '"') {
+          if (text.charAt(i + 1) === '"') { field += '"'; i++; } else { quoted = false; }
+        } else { field += c; if (c === '\n') line++; }
+        continue;
+      }
+      if (c === '"' && atStart && field === '') { quoted = true; hadQuote = true; atStart = false; continue; }
+      if (delim && c === delim) { cells.push(field); field = ''; atStart = true; continue; }
+      if (c === '\n') {
+        var blank = cells.length === 0 && field === '' && !hadQuote;
+        if (blank) { rowLine = line + 1; line++; continue; }
+        cells.push(field); field = ''; atStart = true;
+        rows.push({ cells: cells, line: rowLine });
+        cells = []; hadQuote = false; line++; rowLine = line;
+        continue;
+      }
+      atStart = false;
+      field += c;
+    }
+    if (field !== '' || cells.length || hadQuote) { cells.push(field); rows.push({ cells: cells, line: rowLine }); }
+    return rows;
+  }
+
+  function detect(text) {
+    var lines = text.split('\n').filter(function (l) { return l.trim(); });
+    if (!lines.length) return 'single';
+    if (lines.length > 1 && isDelimiterRow(lines[1]) && lines[0].indexOf('|') !== -1) return 'markdown';
+    if (lines.length > 1 && lines.every(function (l) { var t = l.trim(); return t.charAt(0) === '|' && t.charAt(t.length - 1) === '|'; })) return 'markdown';
+    var best = null;
+    CANDIDATES.forEach(function (cand) {
+      var rows = parseDelimited(text, cand[1]).slice(0, 5);
+      if (!rows.length || rows[0].cells.length < 2) return;
+      var n = rows[0].cells.length;
+      var same = rows.filter(function (r) { return r.cells.length === n; }).length;
+      if (!best || same > best.same) best = { name: cand[0], same: same };
+    });
+    return best ? best.name : 'single';
+  }
+
+  function plainFromText(s) { return s.replace(/^\n+|\n+$/g, '').split('\n').map(function (l) { return l.replace(/\s+$/, ''); }).join('\n').replace(/^\s+/, ''); }
+
+  /* Escape unescaped pipes. Returns {text, n}. */
+  function escapePipes(s) {
+    var out = '', n = 0, slashes = 0;
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charAt(i);
+      if (c === '|' && slashes % 2 === 0) { out += '\\|'; n++; } else out += c;
+      slashes = c === '\\' ? slashes + 1 : 0;
+    }
+    return { text: out, n: n };
+  }
+  function wikiPipes(s) {
+    var m = s.match(/\[\[[^\[\]\n]*\]\]/g) || [], n = 0;
+    m.forEach(function (w) { n += escapePipes(w).n; });
+    return n;
+  }
+  function mdCell(s, breaks) {
+    var lines = s.split('\n').map(function (l) { return l.trim(); });
+    var joined;
+    if (breaks === 'space') joined = lines.filter(Boolean).join(' ');
+    else joined = lines.join('<br>');
+    return escapePipes(joined);
+  }
+  function quote(s, delim) {
+    if (/["\n]/.test(s) || s.indexOf(delim) !== -1 || /^\s|\s$/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+    return s;
+  }
+  function padCell(s, width, align) {
+    var gap = width - chars(s);
+    if (gap <= 0) return s;
+    if (align === 'right') return new Array(gap + 1).join(' ') + s;
+    if (align === 'center') { var l = Math.floor(gap / 2); return new Array(l + 1).join(' ') + s + new Array(gap - l + 1).join(' '); }
+    return s + new Array(gap + 1).join(' ');
+  }
+  function delimCell(width, align) {
+    var colons = align === 'center' ? 2 : align === 'none' ? 0 : 1;
+    var dashes = new Array(Math.max(3, width - colons) + 1).join('-');
+    return align === 'center' ? ':' + dashes + ':' : align === 'left' ? ':' + dashes : align === 'right' ? dashes + ':' : dashes;
+  }
+
+  /* Convert pasted text. Returns {output, format, rows, cols, aligns, warnings, escaped, wiki}. */
+  function run(input, opts) {
+    opts = opts || {};
+    var text = normalise(input);
+    var empty = { output: '', format: 'single', rows: [], cols: 0, aligns: [], warnings: [], escaped: 0, wiki: 0, header: [] };
+    if (!text.trim()) return empty;
+    var format = !opts.delimiter || opts.delimiter === 'auto' ? detect(text) : opts.delimiter;
+    var hasHeader = opts.header !== false;
+    var warnings = [];
+    var raw = [], found = null, i;
+
+    if (format === 'markdown') {
+      var physical = text.split('\n');
+      var entries = [];
+      physical.forEach(function (l, idx) { if (l.trim()) entries.push({ text: l, line: idx + 1 }); });
+      var lastLine = 0, firstBlank = null;
+      entries.forEach(function (e) {
+        if (lastLine && e.line > lastLine + 1 && firstBlank === null) firstBlank = lastLine + 1;
+        lastLine = e.line;
+      });
+      var body = entries.slice();
+      var headerCells = null;
+      if (body.length) {
+        headerCells = splitRow(body[0].text);
+        if (body.length > 1 && isDelimiterRow(body[1].text)) {
+          var dcells = splitRow(body[1].text);
+          found = dcells.map(alignOf);
+          if (dcells.length !== headerCells.length) warnings.push({ type: 'delim-count', line: body[1].line, found: dcells.length, expected: headerCells.length });
+          body.splice(1, 1);
+        } else {
+          warnings.push({ type: 'no-delimiter', line: body.length > 1 ? body[1].line : body[0].line });
+        }
+      }
+      if (firstBlank !== null) warnings.push({ type: 'blank', line: firstBlank });
+      body.forEach(function (e) { raw.push({ cells: splitRow(e.text).map(mdCellToPlain), line: e.line }); });
+    } else {
+      var delim = { tab: '\t', comma: ',', semicolon: ';', pipe: '|' }[format] || null;
+      parseDelimited(text, delim).forEach(function (r) {
+        if (r.cells.length === 1 && !r.cells[0].trim()) return;
+        raw.push({ cells: r.cells.map(plainFromText), line: r.line });
+      });
+    }
+    if (!raw.length) return empty;
+
+    var expected = raw[0].cells.length, max = expected;
+    raw.forEach(function (r) { if (r.cells.length > max) max = r.cells.length; });
+    var uneven = [];
+    raw.forEach(function (r, idx) {
+      if (idx === 0 || r.cells.length === expected) return;
+      uneven.push({ type: r.cells.length < expected ? 'short' : 'long', line: r.line, found: r.cells.length, expected: expected, max: max });
+    });
+    uneven.slice(0, 5).forEach(function (w) { warnings.push(w); });
+    if (uneven.length > 5) warnings.push({ type: 'more', n: uneven.length - 5 });
+
+    var cols = max;
+    /* The delimiter row's cell count wins when it disagrees with the header. */
+    var rows = raw.map(function (r) {
+      var cells = r.cells.slice();
+      while (cells.length < cols) cells.push('');
+      return cells;
+    });
+    var blankHeader = !hasHeader;
+    if (blankHeader) { var blankRow = []; for (i = 0; i < cols; i++) blankRow.push(''); rows.unshift(blankRow); }
+    var aligns = [];
+    var given = opts.aligns || found || [];
+    for (i = 0; i < cols; i++) aligns.push(given[i] || 'none');
+
+    var escaped = 0, wiki = 0, output;
+    if (opts.out === 'csv' || opts.out === 'tsv') {
+      var d = opts.out === 'csv' ? ',' : '\t';
+      output = rows.slice(blankHeader ? 1 : 0).map(function (r) {
+        return r.map(function (c) { return quote(c, d); }).join(d);
+      }).join('\n');
+    } else {
+      var md = rows.map(function (r) {
+        return r.map(function (c) {
+          if (format !== 'markdown') wiki += wikiPipes(c);
+          var e = mdCell(c, opts.breaks);
+          if (format !== 'markdown') escaped += e.n;
+          return e.text;
+        });
+      });
+      var widths = [];
+      for (i = 0; i < cols; i++) {
+        var w = 3 + (aligns[i] === 'none' ? 0 : aligns[i] === 'center' ? 2 : 1);
+        if (opts.pad !== 'compact') md.forEach(function (r) { w = Math.max(w, chars(r[i])); });
+        widths.push(w);
+      }
+      var compact = opts.pad === 'compact';
+      var fmtRow = function (r) {
+        return '| ' + r.map(function (c, k) { return compact ? c : padCell(c, widths[k], aligns[k]); }).join(' | ') + ' |';
+      };
+      var lines = [fmtRow(md[0])];
+      lines.push('| ' + aligns.map(function (a, k) { return delimCell(compact ? 3 + (a === 'none' ? 0 : a === 'center' ? 2 : 1) : widths[k], a); }).join(' | ') + ' |');
+      md.slice(1).forEach(function (r) { lines.push(fmtRow(r)); });
+      output = lines.join('\n');
+    }
+    return { output: output, format: format, rows: rows, cols: cols, aligns: aligns, warnings: warnings, escaped: escaped, wiki: wiki, header: blankHeader ? null : rows[0] };
+  }
+
+  if (typeof window !== 'undefined') {
+    window.voxTable = { run: run, detect: detect, parseDelimited: parseDelimited, splitRow: splitRow, isDelimiterRow: isDelimiterRow };
+  }
+
+  var form = document.getElementById('tb-tool');
+  if (!form) return;
+  var input = document.getElementById('tb-input');
+  var code = document.getElementById('tb-output-code');
+  var pre = document.getElementById('tb-output');
+  var head = document.getElementById('tb-output-head');
+  var title = document.getElementById('tb-output-title');
+  var preview = document.getElementById('tb-preview');
+  var previewTitle = document.getElementById('tb-preview-title');
+  var status = document.getElementById('tb-status');
+  var info = document.getElementById('tb-info');
+  var warn = document.getElementById('tb-warnings');
+  var detected = document.getElementById('tb-detected');
+  var waiting = document.getElementById('tb-waiting');
+  var alignBox = document.getElementById('tb-aligns');
+  var alignGroup = document.getElementById('tb-aligns-group');
+  var EXAMPLE = 'Page,Owner,Preview,Notes\n[[Project plan|Plan]],"Lee, Sam",![[img.png|200]],"Draft done\nReview on Friday"\n"Say ""hello""",Ana,,Ready to ship';
+  var userAligns = null;
+  var builtFor = '';
+
+  function message(name, fill) {
+    var el = document.querySelector('#tb-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : '';
+    if (fill) Object.keys(fill).forEach(function (key) { text = text.split('{' + key + '}').join(fill[key]); });
+    return text;
+  }
+  function say(text) {
+    status.textContent = '';
+    window.setTimeout(function () { status.textContent = text; }, 30);
+  }
+  function options() {
+    return {
+      delimiter: form.elements.delimiter.value, header: form.elements.header.checked,
+      out: form.elements.out.value, pad: form.elements.pad.value, breaks: form.elements.breaks.value,
+      aligns: userAligns
+    };
+  }
+
+  function buildAligns(result, force) {
+    var key = result.cols + '|' + (result.header || []).join('\u0001');
+    if (!force && key === builtFor) return;
+    builtFor = key;
+    alignBox.textContent = '';
+    var names = ['none', 'left', 'center', 'right'];
+    for (var i = 0; i < result.cols; i++) {
+      var label = document.createElement('label');
+      label.className = 'mt-field';
+      var name = result.header && result.header[i] ? result.header[i].split('\n')[0] : message('empty-header');
+      label.appendChild(document.createTextNode(message('align-label', { n: i + 1, name: name }) + ' '));
+      var select = document.createElement('select');
+      select.setAttribute('data-col', String(i));
+      names.forEach(function (n) {
+        var o = document.createElement('option');
+        o.value = n;
+        o.textContent = message('align-' + n);
+        if (n === result.aligns[i]) o.selected = true;
+        select.appendChild(o);
+      });
+      label.appendChild(select);
+      alignBox.appendChild(label);
+    }
+  }
+
+  function renderPreview(result) {
+    preview.textContent = '';
+    var table = document.createElement('table');
+    var breaks = form.elements.breaks.value;
+    function fill(cell, text, i) {
+      cell.style.textAlign = result.aligns[i] === 'none' ? '' : result.aligns[i];
+      var lines = text.split('\n').map(function (l) { return l.trim(); });
+      if (breaks === 'space') lines = [lines.filter(Boolean).join(' ')];
+      lines.forEach(function (l, k) {
+        if (k) cell.appendChild(document.createElement('br'));
+        cell.appendChild(document.createTextNode(l));
+      });
+    }
+    var thead = document.createElement('thead'), tr = document.createElement('tr');
+    result.rows[0].forEach(function (c, i) { var th = document.createElement('th'); th.scope = 'col'; fill(th, c, i); tr.appendChild(th); });
+    thead.appendChild(tr);
+    table.appendChild(thead);
+    var tbody = document.createElement('tbody');
+    result.rows.slice(1).forEach(function (r) {
+      var row = document.createElement('tr');
+      r.forEach(function (c, i) { var td = document.createElement('td'); fill(td, c, i); row.appendChild(td); });
+      tbody.appendChild(row);
+    });
+    table.appendChild(tbody);
+    preview.appendChild(table);
+  }
+
+  function update(force) {
+    var opts = options();
+    Array.prototype.forEach.call(form.querySelectorAll('[data-show]'), function (el) {
+      el.hidden = el.getAttribute('data-show') !== opts.out;
+    });
+    var result = run(input.value, opts);
+    var has = result.rows.length > 0;
+    head.hidden = pre.hidden = preview.hidden = previewTitle.hidden = !has;
+    alignGroup.hidden = !has || opts.out !== 'md';
+    waiting.hidden = has;
+    warn.textContent = '';
+    info.hidden = true;
+    if (!has) {
+      code.textContent = '';
+      detected.textContent = '';
+      warn.hidden = true;
+      alignBox.textContent = '';
+      builtFor = '';
+      return;
+    }
+    code.textContent = result.output;
+    title.textContent = message('title-' + opts.out);
+    renderPreview(result);
+    buildAligns(result, force);
+    detected.textContent = message('detected', { format: message('fmt-' + result.format), rows: result.rows.length - (opts.header ? 0 : 1), cols: result.cols });
+    result.warnings.forEach(function (w) {
+      var li = document.createElement('li');
+      li.textContent = message(w.type, w);
+      warn.appendChild(li);
+    });
+    warn.hidden = !result.warnings.length;
+    if (opts.out === 'md' && result.escaped) {
+      info.textContent = message('escaped', { n: result.escaped, m: result.wiki });
+      info.hidden = false;
+    }
+  }
+
+  input.addEventListener('input', function () { userAligns = null; update(true); });
+  form.addEventListener('change', function (event) {
+    var t = event.target;
+    if (t && t.getAttribute && t.getAttribute('data-col') !== null) {
+      userAligns = Array.prototype.map.call(alignBox.querySelectorAll('select'), function (s) { return s.value; });
+      update(false);
+    } else if (t === input) {
+      return;
+    } else {
+      update(!!t && (t.name === 'delimiter' || t.name === 'header'));
+    }
+  });
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+  document.getElementById('tb-example').addEventListener('click', function () {
+    input.value = EXAMPLE;
+    userAligns = null;
+    update(true);
+    say(message('loaded'));
+  });
+  document.getElementById('tb-clear').addEventListener('click', function () {
+    input.value = '';
+    userAligns = null;
+    update(true);
+    input.focus();
+    say(message('cleared'));
+  });
+  document.getElementById('tb-copy').addEventListener('click', function () {
+    var text = code.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(code);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+  document.getElementById('tb-download').addEventListener('click', function () {
+    var out = form.elements.out.value;
+    var types = { md: 'text/markdown', csv: 'text/csv', tsv: 'text/tab-separated-values' };
+    var blob = new Blob([code.textContent + '\n'], { type: types[out] + ';charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'table.' + out;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    say(message('downloaded'));
+  });
+
+  document.getElementById('tb-nojs').hidden = true;
+  form.hidden = false;
+  update(true);
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ta/">முகப்பு</a></li>
+        <li><a href="/ta/docs/">ஆவணங்கள்</a></li>
+        <li><a href="/ta/blog/">வழிகாட்டிகள்</a></li>
+        <li><a href="/ta/compare/">ஒப்பிடவும்</a></li>
+        <li><a href="/ta/privacy.html">தனியுரிமை</a></li>
+        <li><a href="/ta/terms.html">விதிமுறைகள்</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">ஆதரவு</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ta_7732b417b3db">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · உள்ளூர் குறிப்புகளுக்கு விரைவான பிடிப்பு · பதிவேற்றமில்லை.</div>
+    </div>
+  <details class="language-switcher"><summary>மொழி</summary><ul><li><a href="/blog/markdown-table-maker/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/markdown-table-maker/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/markdown-table-maker/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/markdown-table-maker/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/markdown-table-maker/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/markdown-table-maker/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/markdown-table-maker/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/markdown-table-maker/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/markdown-table-maker/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/markdown-table-maker/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/markdown-table-maker/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/markdown-table-maker/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/markdown-table-maker/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/markdown-table-maker/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/markdown-table-maker/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/markdown-table-maker/" lang="ta" hreflang="ta" aria-current="page">தமிழ்</a></li><li><a href="/th/blog/markdown-table-maker/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/markdown-table-maker/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/markdown-table-maker/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/markdown-table-maker/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/markdown-table-maker/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/markdown-table-maker/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/markdown-table-maker/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="hi" dir="ltr" data-search-section="सेक्शन" data-search-guide="गाइड" data-search-empty="“{query}” के लिए कोई परिणाम नहीं">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obsidian के लिए Markdown टेबल मेकर: Excel, Sheets या CSV से पेस्ट करें | Vox.md</title>
+  <meta name="description" content="मुफ़्त इन-ब्राउज़र टूल जो चिपकाए गए स्प्रेडशीट सेल, CSV या TSV को Markdown तालिका में बदलता है, Obsidian विकीलिंक एलियास और इमेज आकार के पाइप एस्केप करता है, सेल में लाइन ब्रेक संभालता है, और मौजूदा तालिका को फिर से अलाइन करता है। कुछ भी अपलोड नहीं होता।">
+  <link rel="canonical" href="https://vox.isolated.tech/hi/blog/markdown-table-maker/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="भाषा मॉडलों के लिए Vox.md दस्तावेज़">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Obsidian के लिए Markdown टेबल मेकर: Excel, Sheets या CSV से पेस्ट करें">
+  <meta property="og:description" content="मुफ़्त इन-ब्राउज़र टूल जो चिपकाए गए स्प्रेडशीट सेल, CSV या TSV को Markdown तालिका में बदलता है, Obsidian विकीलिंक एलियास और इमेज आकार के पाइप एस्केप करता है, सेल में लाइन ब्रेक संभालता है, और मौजूदा तालिका को फिर से अलाइन करता है। कुछ भी अपलोड नहीं होता।">
+  <meta property="og:url" content="https://vox.isolated.tech/hi/blog/markdown-table-maker/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-11-26">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Obsidian के लिए Markdown टेबल मेकर: Excel, Sheets या CSV से पेस्ट करें">
+  <meta name="twitter:description" content="मुफ़्त इन-ब्राउज़र टूल जो चिपकाए गए स्प्रेडशीट सेल, CSV या TSV को Markdown तालिका में बदलता है, Obsidian विकीलिंक एलियास और इमेज आकार के पाइप एस्केप करता है, सेल में लाइन ब्रेक संभालता है, और मौजूदा तालिका को फिर से अलाइन करता है। कुछ भी अपलोड नहीं होता।">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Obsidian के लिए Markdown टेबल मेकर: Excel, Sheets या CSV से पेस्ट करें",
+  "description": "मुफ़्त इन-ब्राउज़र टूल जो चिपकाए गए स्प्रेडशीट सेल, CSV या TSV को Markdown तालिका में बदलता है, Obsidian विकीलिंक एलियास और इमेज आकार के पाइप एस्केप करता है, सेल में लाइन ब्रेक संभालता है, और मौजूदा तालिका को फिर से अलाइन करता है। कुछ भी अपलोड नहीं होता।",
+  "image": "https://vox.isolated.tech/screenshots/01-route-heading-light.png",
+  "datePublished": "2026-11-26",
+  "dateModified": "2026-11-26",
+  "mainEntityOfPage": "https://vox.isolated.tech/hi/blog/markdown-table-maker/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "hi",
+  "name": "Obsidian के लिए Markdown टेबल मेकर: Excel, Sheets या CSV से पेस्ट करें | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/hi/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "गाइड",
+      "item": "https://vox.isolated.tech/hi/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Obsidian के लिए Markdown टेबल मेकर: Excel, Sheets या CSV से पेस्ट करें",
+      "item": "https://vox.isolated.tech/hi/blog/markdown-table-maker/"
+    }
+  ],
+  "inLanguage": "hi",
+  "name": "Obsidian के लिए Markdown टेबल मेकर: Excel, Sheets या CSV से पेस्ट करें | Vox.md",
+  "description": "मुफ़्त इन-ब्राउज़र टूल जो चिपकाए गए स्प्रेडशीट सेल, CSV या TSV को Markdown तालिका में बदलता है, Obsidian विकीलिंक एलियास और इमेज आकार के पाइप एस्केप करता है, सेल में लाइन ब्रेक संभालता है, और मौजूदा तालिका को फिर से अलाइन करता है। कुछ भी अपलोड नहीं होता।"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/markdown-table-maker/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/markdown-table-maker/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">सीधे गाइड पर जाएँ</a>
+<nav aria-label="मुख्य नेविगेशन">
+  <div class="nav-inner">
+    <a href="/hi/" class="logo" aria-label="Vox.md मुखपृष्ठ">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/hi/#how">यह कैसे काम करता है</a></li>
+      <li><a href="/hi/docs/">दस्तावेज़</a></li>
+      <li><a href="/hi/blog/">गाइड</a></li>
+      <li><a href="/hi/compare/">तुलना करें</a></li>
+      <li><a href="/hi/privacy.html">गोपनीयता</a></li>
+      <li><a href="/hi/terms.html">शर्तें</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_hi_7732b417b3db">Vox.md डाउनलोड करें</a>
+  <details class="language-switcher"><summary>भाषा</summary><ul><li><a href="/blog/markdown-table-maker/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/markdown-table-maker/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/markdown-table-maker/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/markdown-table-maker/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/markdown-table-maker/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/markdown-table-maker/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/markdown-table-maker/" lang="hi" hreflang="hi" aria-current="page">हिन्दी</a></li><li><a href="/id/blog/markdown-table-maker/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/markdown-table-maker/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/markdown-table-maker/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/markdown-table-maker/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/markdown-table-maker/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/markdown-table-maker/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/markdown-table-maker/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/markdown-table-maker/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/markdown-table-maker/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/markdown-table-maker/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/markdown-table-maker/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/markdown-table-maker/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/markdown-table-maker/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/markdown-table-maker/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/markdown-table-maker/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/markdown-table-maker/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">मुफ़्त टूल</div>
+        <h1 class="hero-title">Obsidian के लिए Markdown टेबल मेकर: Excel, Sheets या CSV से पेस्ट करें</h1>
+        <p class="hero-subtitle">Excel, Google Sheets, Numbers, CSV या TSV से पंक्तियाँ पेस्ट करें और एक मान्य पाइप तालिका कॉपी करें, जिसमें [[Note|Alias]] और ![[image.png|300]] में मौजूद बार एस्केप किया गया हो, लाइन ब्रेक संभाले गए हों और हर कॉलम का अलाइनमेंट तय हो।</p>
+      </div>
+      <aside class="meta-card" aria-label="इस गाइड के बारे में">
+        <dl>
+          <div><dt>लेखक:</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>अपडेट किया गया</dt><dd><time datetime="2026-11-26">26 नवंबर 2026</time></dd></div>
+          <div><dt>आवश्यक है</dt><dd>कोई भी आधुनिक ब्राउज़र, जिसमें iPhone पर Safari भी शामिल है। वैकल्पिक: तालिकाओं के लिए Obsidian, और टेक्स्ट को नोट में कैप्चर करने के लिए iPhone या Mac पर Vox.md।</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Obsidian के लिए Markdown टेबल मेकर: Excel, Sheets या CSV से पेस्ट करें">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">छोटा जवाब</div>
+        <p>Markdown तालिका में एक हेडर पंक्ति, हाइफ़न की एक डिलिमिटर पंक्ति, और फिर हर लाइन में एक पंक्ति होती है, जिसके सेल इनसे अलग किए जाते हैं: <code>|</code>। अपने सेल पेस्ट करें: <a href="#tool">टेबल मेकर</a> नीचे देकर एक तालिका पाएँ, या इस उदाहरण से शुरू करें।</p>
+      </div>
+      <pre class="guide-code" id="default-table"><code>| Name | Owner | Status |
+| --- | --- | --- |
+| Draft | Ana | Done |
+| Review | Lee | Open |
+</code></pre>
+      <p>मेकर वह भी ठीक करता है जिसे सामान्य जनरेटर Obsidian में छोड़ देते हैं: यह इसके अंदर के बार को एस्केप करता है: <code>[[Note|Alias]]</code> और <code>![[image.png|300]]</code> को <code>\|</code>, और सेल के अंदर की लाइन ब्रेक को इसमें बदलता है: <code>&lt;br&gt;</code> या स्पेस। यह पूरी तरह इसी पेज में चलता है: आपका डेटा कभी अपलोड नहीं होता, और पेज कोई नेटवर्क अनुरोध नहीं करता।</p>
+      <nav class="toc" aria-label="इस गाइड में"><div class="toc-title">इस गाइड में</div><ol>
+        <li><a href="#tool">अपनी तालिका बनाएँ</a></li>
+        <li><a href="#syntax">Markdown तालिका सिंटैक्स</a></li>
+        <li><a href="#obsidian">Obsidian में तालिकाएँ</a></li>
+        <li><a href="#spreadsheet">Excel, Google Sheets या CSV से</a></li>
+        <li><a href="#github">GitHub और Obsidian में अंतर</a></li>
+        <li><a href="#capture">Vox.md से तालिकाएँ और नोट्स अपने वॉल्ट में लाएँ</a></li>
+        <li><a href="#faq">प्रश्न</a></li>
+      </ol></nav>
+
+      <h2 id="tool">1. अपनी तालिका बनाएँ</h2>
+      <p class="mt-nojs" id="tb-nojs">टेबल मेकर को JavaScript चाहिए। इसके बिना भी नीचे दिया सिंटैक्स संदर्भ के रूप में काम करता है।</p>
+      <form class="tb-tool" id="tb-tool" aria-label="Markdown टेबल मेकर" hidden>
+        <fieldset class="mt-group">
+          <legend>आपका डेटा</legend>
+          <label class="mt-field" for="tb-input">स्प्रेडशीट, CSV, TSV या मौजूदा Markdown तालिका से सेल पेस्ट करें <textarea id="tb-input" rows="9" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></label>
+          <div class="mt-actions">
+            <button type="button" class="btn-secondary" id="tb-example">उदाहरण लोड करें</button>
+            <button type="button" class="btn-secondary" id="tb-clear">साफ़ करें</button>
+          </div>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>इनपुट</legend>
+          <label class="mt-field" for="tb-delimiter">Separator (विभाजक) <select id="tb-delimiter" name="delimiter">
+            <option value="auto" selected>मेरे पेस्ट से पहचानें</option>
+            <option value="markdown">Markdown तालिका</option>
+            <option value="tab">टैब (स्प्रेडशीट से कॉपी, TSV)</option>
+            <option value="comma">कॉमा (CSV)</option>
+            <option value="semicolon">सेमीकोलन</option>
+            <option value="pipe">पाइप</option>
+          </select></label>
+          <label class="mt-option"><input type="checkbox" name="header" checked> <span>पहली पंक्ति हेडर है</span></label>
+          <p class="mt-hint" id="tb-detected" role="status"></p>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>आउटपुट</legend>
+          <label class="mt-field" for="tb-out">Output as (आउटपुट प्रकार) <select id="tb-out" name="out">
+            <option value="md" selected>Markdown तालिका</option>
+            <option value="csv">CSV फ़ाइल</option>
+            <option value="tsv">TSV फ़ाइल</option>
+          </select></label>
+          <label class="mt-field" data-show="md" for="tb-pad">लेआउट <select id="tb-pad" name="pad">
+            <option value="pad" selected>कॉलम पैड करें ताकि सोर्स सीधा दिखे</option>
+            <option value="compact">Compact (संक्षिप्त)</option>
+          </select></label>
+          <label class="mt-field" data-show="md" for="tb-breaks">सेल के अंदर लाइन ब्रेक <select id="tb-breaks" name="breaks">
+            <option value="br" selected>लिखें &lt;br&gt;</option>
+            <option value="space">पंक्तियों को स्पेस से जोड़ें</option>
+          </select></label>
+        </fieldset>
+        <fieldset class="mt-group" id="tb-aligns-group" data-show="md" hidden>
+          <legend>कॉलम अलाइनमेंट</legend>
+          <div class="tb-aligns" id="tb-aligns"></div>
+        </fieldset>
+      </form>
+      <div class="mt-output-head" id="tb-output-head" hidden>
+        <h3 id="tb-output-title">आपकी तालिका</h3>
+        <div class="mt-actions">
+          <button type="button" class="btn-primary" id="tb-copy">कॉपी करें</button>
+          <button type="button" class="btn-secondary" id="tb-download">डाउनलोड करें</button>
+        </div>
+      </div>
+      <p class="mt-status" id="tb-status" role="status"></p>
+      <p class="mt-hint" id="tb-info" role="status" hidden></p>
+      <ul class="mt-hint tb-warnings" id="tb-warnings" role="status" hidden></ul>
+      <pre class="guide-code tb-output" id="tb-output" aria-labelledby="tb-output-title" tabindex="0" hidden><code id="tb-output-code"></code></pre>
+      <h3 id="tb-preview-title" hidden>पूर्वावलोकन</h3>
+      <div class="tb-preview" id="tb-preview" role="group" aria-labelledby="tb-preview-title" tabindex="0" hidden></div>
+      <p class="mt-hint" id="tb-waiting" role="status">तालिका देखने के लिए अपना डेटा पेस्ट करें।</p>
+      <div hidden id="tb-messages">
+        <span data-message="copied">क्लिपबोर्ड पर कॉपी हो गया।</span>
+        <span data-message="copy-failed">कॉपी नहीं हो सकी। टेक्स्ट चुनकर खुद कॉपी करें।</span>
+        <span data-message="loaded">उदाहरण लोड हो गया।</span>
+        <span data-message="cleared">साफ़ कर दिया।</span>
+        <span data-message="downloaded">डाउनलोड शुरू हो गया।</span>
+        <span data-message="title-md">आपकी Markdown तालिका</span>
+        <span data-message="title-csv">आपका CSV</span>
+        <span data-message="title-tsv">आपका TSV</span>
+        <span data-message="detected">पहचाना गया: {format}। {rows} पंक्तियाँ, {cols} कॉलम।</span>
+        <span data-message="fmt-markdown">Markdown तालिका</span>
+        <span data-message="fmt-tab">टैब से अलग किया हुआ</span>
+        <span data-message="fmt-comma">कॉमा से अलग किया हुआ</span>
+        <span data-message="fmt-semicolon">सेमीकोलन से अलग किया हुआ</span>
+        <span data-message="fmt-pipe">पाइप से अलग किया हुआ</span>
+        <span data-message="fmt-single">एक कॉलम</span>
+        <span data-message="escaped">\| के रूप में एस्केप किए गए पाइप: {n}, जिनमें से {m} विकीलिंक या इमेज लिंक के अंदर हैं।</span>
+        <span data-message="no-delimiter">पंक्ति {line}: डिलिमिटर पंक्ति गायब है, इसलिए हेडर के बाद एक डिलिमिटर पंक्ति जोड़ दी गई।</span>
+        <span data-message="delim-count">पंक्ति {line}: डिलिमिटर पंक्ति में {found} सेल हैं, पर हेडर में {expected} हैं। GFM स्पेक इसे तालिका नहीं मानता। आउटपुट में {expected} का उपयोग किया गया है।</span>
+        <span data-message="short">पंक्ति {line}: {found} सेल हैं, जबकि हेडर में {expected} हैं। खाली सेल जोड़ दिए गए।</span>
+        <span data-message="long">पंक्ति {line}: {found} सेल हैं, जबकि हेडर में {expected} हैं। तालिका को {max} कॉलम तक चौड़ा किया गया।</span>
+        <span data-message="blank">पंक्ति {line} खाली है। तालिका पहली खाली पंक्ति पर समाप्त हो जाती है, इसलिए उसके बाद की पंक्तियाँ तालिका का हिस्सा नहीं होंगी।</span>
+        <span data-message="more">और {n} अन्य पंक्तियाँ, जिनमें सेल की संख्या अलग है।</span>
+        <span data-message="align-label">कॉलम {n}: {name}</span>
+        <span data-message="align-none">कोई नहीं</span>
+        <span data-message="align-left">बाएँ</span>
+        <span data-message="align-center">केंद्र</span>
+        <span data-message="align-right">दाएँ</span>
+        <span data-message="empty-header">(कोई हेडर नहीं)</span>
+      </div>
+
+      <h2 id="syntax">2. Markdown तालिका सिंटैक्स</h2>
+      <pre class="guide-code"><code>| Name   | Qty | Price |
+| :----- | :-: | ----: |
+| Apple  |   3 |  1.20 |
+| Pear   |  12 |  0.80 |</code></pre>
+      <p>यह <a href="https://github.github.com/gfm/#tables-extension-" target="_blank" rel="noopener">GitHub Flavored Markdown स्पेक</a> तालिका को इस रूप में परिभाषित करता है: एक हेडर पंक्ति, हेडर को डेटा से अलग करने वाली एक डिलिमिटर पंक्ति, और शून्य या अधिक डेटा पंक्तियाँ। सेल पाइप से अलग किए जाते हैं।</p>
+      <ul>
+        <li><strong>डिलिमिटर पंक्ति।</strong> इसके सेल में केवल हाइफ़न होते हैं, और बाएँ, दाएँ या दोनों सिरों पर वैकल्पिक कोलन से बाएँ, दाएँ या केंद्र अलाइनमेंट तय होता है। <a href="https://obsidian.md/help/advanced-syntax" target="_blank" rel="noopener">Obsidian सहायता</a> कहता है कि टेक्स्ट अलाइन करने के लिए हेडर पंक्ति में कोलन जोड़ें, और हेडर पंक्ति में कम से कम दो हाइफ़न होने चाहिए।</li>
+        <li><strong>बाहरी पाइप।</strong> स्पेक में दोनों ओर के पाइप वैकल्पिक हैं। Obsidian Help के अनुसार पठनीयता के लिए इन्हें रखना बेहतर है, और मेकर हमेशा इन्हें लिखता है।</li>
+        <li><strong>पैडिंग।</strong> Obsidian Help के अनुसार सेल का पूरी तरह सीधा होना ज़रूरी नहीं है। मेकर का “Pad columns” लेआउट सोर्स को केवल पढ़ने में आसान बनाने के लिए सीधा करता है; “Compact” इसे छोड़ देता है।</li>
+        <li><strong>सेल की संख्या का मेल।</strong> स्पेक के अनुसार हेडर पंक्ति में उतने ही सेल होने चाहिए जितने डिलिमिटर पंक्ति में हैं। यदि ऐसा नहीं है, तो वे पंक्तियाँ तालिका नहीं मानी जातीं और एक अनुच्छेद के रूप में दिखती हैं। कम सेल वाली डेटा पंक्ति में खाली सेल जोड़ दिए जाते हैं, और अतिरिक्त सेल अनदेखे कर दिए जाते हैं।</li>
+        <li><strong>सेल के अंदर।</strong> स्पेक इनलाइन फ़ॉर्मैटिंग की अनुमति देता है, पर ब्लॉक-स्तरीय सामग्री की नहीं, इसलिए सेल में सूची या शीर्षक नहीं रखा जा सकता। Obsidian Help के अनुसार आप तालिका की सामग्री को स्टाइल करने के लिए उसके बुनियादी फ़ॉर्मैटिंग सिंटैक्स का उपयोग कर सकते हैं।</li>
+        <li><strong>तालिका का अंत।</strong> स्पेक के अनुसार तालिका पहली खाली पंक्ति पर, या किसी अन्य ब्लॉक-स्तरीय संरचना की शुरुआत पर टूट जाती है।</li>
+      </ul>
+      <p>मेकर हर डिलिमिटर सेल में कम से कम तीन हाइफ़न लिखता है। यह Obsidian के न्यूनतम दो और इनके तीन हाइफ़न दोनों को पूरा करता है: <a href="https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-tables" target="_blank" rel="noopener">GitHub दस्तावेज़</a> माँगता है।</p>
+
+      <h2 id="obsidian">3. Obsidian में तालिकाएँ</h2>
+      <ul>
+        <li><strong>Insert Table।</strong> Obsidian Help के अनुसार आप Command Palette से Insert Table कमांड द्वारा तालिका जोड़ सकते हैं। पहले से मौजूद डेटा से तालिका बनाने के लिए उसे ऊपर दिए मेकर में पेस्ट करें।</li>
+        <li><strong>एलियास और इमेज आकार।</strong> विकीलिंक एलियास, जैसे <code>[[Note|Alias]]</code> और इमेज का आकार, जैसे <code>![[image.png|300]]</code> दोनों में एक वर्टिकल बार है। Obsidian Help के अनुसार तालिका के अंदर आपको जोड़ना होगा: <code>\</code> बार से पहले, इसलिए लिखें <code>[[Note\|Alias]]</code> और <code>![[image.png\|300]]</code>। मेकर यह आपके लिए करता है; आपने जो एस्केप पहले से लिखा है उसे दोहराया नहीं जाता।</li>
+        <li><strong>कोई भी अन्य पाइप।</strong> GFM स्पेक के अनुसार सेल के अंदर के पाइप को बैकस्लैश से एस्केप करना ज़रूरी है, कोड स्पैन में भी। मेकर हर बिना-एस्केप पाइप को इस रूप में एस्केप करता है: <code>\|</code>.</li>
+        <li><strong>लाइन ब्रेक।</strong> पंक्ति एक ही लाइन में लिखी जाती है, इसलिए सेल के अंदर की लाइन ब्रेक को किसी और रूप में बदलना पड़ता है। मेकर HTML लिखता है: <code>&lt;br&gt;</code> टैग लिखता है, या आपके चुनने पर पंक्तियों को स्पेस से जोड़ देता है। न तो Obsidian Help का Tables अनुभाग और न ही GitHub Docs सेल के अंदर लाइन ब्रेक के बारे में बताते हैं, इसलिए जाँच लें कि <code>&lt;br&gt;</code> आपके अपने वॉल्ट में कैसा दिखता है, और यदि आप सोर्स में टैग नहीं चाहते तो स्पेस वाला विकल्प चुनें।</li>
+        <li><strong>प्लगइन।</strong> तालिकाएँ संपादित करने में मदद करने वाले कम्युनिटी प्लगइन मौजूद हैं। यह पेज उनमें से किसी का मूल्यांकन या समर्थन नहीं करता।</li>
+      </ul>
+      <p>चेकलिस्ट के लिए यह देखें: <a href="/hi/blog/markdown-checklist-maker/">Markdown चेकलिस्ट मेकर</a>; नोट के ऊपर की प्रॉपर्टीज़ के लिए, <a href="/hi/blog/obsidian-properties-generator/">प्रॉपर्टी जनरेटर</a>। निर्णयों और ज़िम्मेदार लोगों की सूची के लिए तालिका अच्छी रहती है, जैसे इस नोट में: <a href="/hi/blog/obsidian-meeting-notes-template/">मीटिंग नोट्स टेम्पलेट</a>.</p>
+
+      <h2 id="spreadsheet">4. Excel, Google Sheets या CSV से</h2>
+      <p>अपनी स्प्रेडशीट में सेल चुनें, कॉपी करें और ऊपर के बॉक्स में पेस्ट करें। यदि सेल के बीच टैब के साथ पेस्ट होता है, तो मेकर उसे पहचान लेता है। यह कॉमा, सेमीकोलन और पाइप भी पहचानता है, और उद्धरण चिह्नों वाले CSV फ़ील्ड पढ़ता है, इसलिए <code>"Lee, Sam"</code> एक ही सेल रहता है और <code>""</code> उद्धरण के अंदर एक उद्धरण चिह्न बन जाता है। यदि अनुमान गलत हो तो Separator मेनू का उपयोग करें। “The first row is the header” को टिक या अनटिक करके तय करें कि पहली पंक्ति हेडर बने या नहीं; इसके बिना एक खाली हेडर पंक्ति जोड़ी जाती है, क्योंकि Markdown तालिका को हेडर चाहिए।</p>
+      <ul>
+        <li><strong>मर्ज किए गए सेल।</strong> स्पेक और दोनों हेल्प पेज पंक्ति को पाइप से अलग किए गए सेल की सूची बताते हैं, और कोई भी सेल मर्ज करने का तरीका नहीं बताता। कॉपी करने से पहले मर्ज में शामिल हर सेल में मान डाल दें।</li>
+        <li><strong>फ़ॉर्मूले।</strong> मेकर केवल आपके चिपकाए टेक्स्ट को पढ़ता है। यदि चिपकाए गए सेल नतीजों के बजाय फ़ॉर्मूले दिखाएँ, तो अपने स्प्रेडशीट ऐप में मान कॉपी करें और दोबारा पेस्ट करें।</li>
+        <li><strong>असमान पंक्तियाँ।</strong> यदि किसी पंक्ति में सेल की संख्या हेडर से अलग हो, तो मेकर उस पंक्ति की संख्या के साथ चेतावनी देता है और तालिका को खाली सेल से भर देता है। हेडर से ज़्यादा सेल वाली पंक्ति डेटा हटाने के बजाय तालिका को चौड़ा कर देती है।</li>
+        <li><strong>उलटना और सुधारना।</strong> किसी मौजूदा Markdown तालिका को फिर से अलाइन करने के लिए पेस्ट करें, या उसे एक्सपोर्ट करने के लिए Output as को CSV या TSV करें। डिलिमिटर पंक्ति गायब होने, उसके सेल की संख्या हेडर से मेल न खाने, या खाली पंक्ति से तालिका समाप्त होने पर मेकर पंक्ति संख्या के साथ चेतावनी देता है।</li>
+      </ul>
+      <p>चिपकाई गई Markdown तालिका के अलाइनमेंट कोलन बने रहते हैं, और आप Column alignment मेनू से हर कॉलम बदल सकते हैं।</p>
+
+      <h2 id="github">5. GitHub और Obsidian में अंतर</h2>
+      <p>Obsidian Help और GitHub Docs दोनों हेडर पंक्ति, हाइफ़न और वैकल्पिक अलाइनमेंट कोलन वाली पाइप तालिकाओं का वर्णन करते हैं। पेजों में बताए गए अंतर छोटे हैं:</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th>विषय</th><th>Obsidian सहायता</th><th>GitHub Docs और GFM स्पेक</th></tr></thead>
+          <tbody>
+            <tr><td>हाइफ़न</td><td>हेडर पंक्ति में कम से कम दो हाइफ़न होने चाहिए</td><td>GitHub Docs: हर हेडर कॉलम में कम से कम तीन हाइफ़न</td></tr>
+            <tr><td>तालिका से पहले खाली पंक्ति</td><td>Tables अनुभाग में इसका उल्लेख नहीं है</td><td>GitHub Docs: तालिका से पहले एक खाली पंक्ति ज़रूर रखें</td></tr>
+            <tr><td>सेल में शाब्दिक पाइप</td><td>जोड़ें: <code>\</code> एलियास और इमेज आकार में बार से पहले</td><td>इसे इस रूप में एस्केप करें: <code>\|</code>, कोड स्पैन में भी</td></tr>
+            <tr><td>बाहरी पाइप</td><td>वैकल्पिक, पठनीयता के लिए अनुशंसित</td><td>वैकल्पिक</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>दोनों जगह सुरक्षित रहने के लिए तीन या अधिक हाइफ़न लिखें, तालिका के ऊपर एक खाली पंक्ति छोड़ें, और हर पाइप को एस्केप करें। मेकर यही करता है। विकीलिंक एलियास Obsidian का सिंटैक्स है; GitHub पर वह पाइप वाला सामान्य टेक्स्ट है। चेकलिस्ट मेकर गाइड में इसके बारे में बताया गया है: <a href="/hi/blog/markdown-checklist-maker/#github">टास्क लिस्ट के अंतर</a> उसी तरह।</p>
+
+      <h2 id="capture">6. Vox.md से तालिकाएँ और नोट्स अपने वॉल्ट में लाएँ</h2>
+      <p>Vox.md खुद तालिकाएँ नहीं बनाता, और ऊपर का मेकर ऐप के बिना भी काम करता है। Vox.md टेक्स्ट को Obsidian में कैप्चर करता है: Quick Capture से आप मौजूदा टेक्स्ट पेस्ट कर सकते हैं, और Route उसे Markdown गंतव्य तक पहुँचाता है। यह देखें: <a href="/hi/docs/#quick-capture">तेजी से पकड़</a> और <a href="/hi/docs/#presets">रूट्स</a> दस्तावेज़।</p>
+      <ol>
+        <li>ऊपर अपनी तालिका बनाएँ और Copy दबाएँ।</li>
+        <li>iPhone, iPad या Mac पर Vox.md में Quick Capture खोलें और तालिका को टेक्स्ट एडिटर में पेस्ट करें।</li>
+        <li>इसे ऐसे Route से भेजें जो मूल टेक्स्ट को बनाए रखता है। डॉक्स में ये सूचीबद्ध हैं: <strong>मूल रखें</strong> को ऐसे प्रोसेसिंग मोड के रूप में बताते हैं जो AI द्वारा बदले बिना कैप्चर किया टेक्स्ट सुरक्षित रखता है, और कहते हैं कि कैप्चर किया टेक्स्ट बिना बदलाव के पहुँचता है जब <strong>Apple Intelligence का उपयोग करें</strong> बंद है, जो इसकी डिफ़ॉल्ट स्थिति है। टाइप किए गए टेक्स्ट की प्रोसेसिंग हर Route पर एक ऑप्ट-इन सेटिंग है।</li>
+        <li>Route का गंतव्य तय करता है कि टेक्स्ट कहाँ पहुँचेगा: नया नोट, कोई रोलिंग नोट जैसे आपका डेली नोट, या कोई मौजूदा नोट, जहाँ वह नीचे, ऊपर या चुने हुए शीर्षक के नीचे जुड़ता है।</li>
+      </ol>
+      <p>यदि गंतव्य में ऊपर पहले से टेक्स्ट है, तो चिपकाई गई तालिका के ऊपर एक खाली पंक्ति छोड़ें। Route की विधि के लिए यह देखें: <a href="/hi/blog/obsidian-capture-templates/">कैप्चर टेम्पलेट</a>, और Zoom, Teams या YouTube की कैप्शन फ़ाइल को पहले ट्रांसक्रिप्ट नोट में बदलने के लिए, यह देखें: <a href="/hi/blog/srt-vtt-to-text-markdown/">SRT और VTT से Markdown</a>.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Vox.md से iPhone, iPad या Mac से Obsidian में कैप्चर करें</h2>
+        <p>Vox.md आपकी आवाज़ और टेक्स्ट को आपके Obsidian नोट्स में कैप्चर करता है। रिकॉर्डिंग, ट्रांसक्रिप्शन और Capture के लिए Vox.md Unlimited चाहिए: साप्ताहिक या वार्षिक सब्सक्रिप्शन, जिसमें पात्र खातों के लिए 7 दिन का मुफ़्त ट्रायल मिलता है, या एक बार का लाइफ़टाइम खरीद। App Store आपकी स्थानीय कीमत दिखाता है।</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_hi_7732b417b3db">Obsidian में कैप्चर</a></p>
+        <p>ऊपर दिया गया टेबल मेकर ऐप के बिना भी पूरी तरह काम करता है।</p>
+      </section>
+
+      <h2 id="faq">7. सवाल</h2>
+      <h3>मेरी तालिका Obsidian में क्यों नहीं दिख रही?</h3>
+      <p>तीन बातें जाँचें। हेडर के ठीक नीचे हाइफ़न की डिलिमिटर पंक्ति होनी चाहिए, और हेडर व डिलिमिटर पंक्तियों में सेल की संख्या बराबर होनी चाहिए, वरना स्पेक उन्हें अनुच्छेद के रूप में दिखाता है। Obsidian Help के अनुसार हेडर पंक्ति में कम से कम दो हाइफ़न होने चाहिए। और तालिका से पहले एक खाली पंक्ति छोड़ें, जो GitHub Docs में ज़रूरी है और Obsidian में इसमें कोई हानि नहीं। तालिका को मेकर में पेस्ट करें: डिलिमिटर पंक्ति गायब होने या संख्या मेल न खाने पर वह पंक्ति संख्या के साथ चेतावनी देता है।</p>
+      <h3>सेल में लाइन ब्रेक कैसे जोड़ूँ?</h3>
+      <p>पंक्ति को एक ही लाइन में रखें और HTML का उपयोग करें: <code>&lt;br&gt;</code> सेल के अंदर, जो मेकर बहु-पंक्ति वाले सेल के लिए लिखता है। उद्धृत पेज सेल में लाइन ब्रेक का वर्णन नहीं करते, इसलिए इसे अपने वॉल्ट में जाँच लें। दूसरा विकल्प पंक्तियों को स्पेस से जोड़ना है।</p>
+      <h3>सेल में पाइप या विकीलिंक एलियास कैसे रखूँ?</h3>
+      <p>पाइप से पहले बैकस्लैश लगाएँ: <code>[[Note\|Alias]]</code>, <code>![[image.png\|300]]</code> या <code>a \| b</code>। Obsidian Help तालिकाओं में एलियास और इमेज रीसाइज़ के लिए यह ज़रूरी बताता है, और GFM स्पेक सेल में किसी भी पाइप के लिए इसे ज़रूरी बताता है।</p>
+      <h3>क्या मैं सेल मर्ज कर सकता हूँ?</h3>
+      <p>स्पेक या Obsidian Help में इसके लिए कोई सिंटैक्स नहीं है। इसके बजाय हर सेल में वही मान दोहराएँ।</p>
+      <h3>तालिका कितनी चौड़ी हो सकती है?</h3>
+      <p>उद्धृत किसी भी पेज में कॉलम या पंक्तियों की अधिकतम संख्या नहीं दी गई है, और मेकर कोई सीमा नहीं लगाता। बहुत चौड़ी तालिका को सोर्स में पढ़ना कठिन होता है, इसलिए Compact लेआउट उपयोग करें, या उसे दो तालिकाओं में बाँट दें।</p>
+      <h3>क्या मेकर मेरा डेटा अपलोड करता है?</h3>
+      <p>नहीं। तालिका इस पेज की एक स्क्रिप्ट द्वारा आपके डिवाइस पर बनती है, और पेज कोई नेटवर्क अनुरोध नहीं करता। यह आपका डेटा सहेजता नहीं है: पेज बंद करने या रीलोड करने पर वह मिट जाता है। Download बटन पेज से एक फ़ाइल आपके डिवाइस पर सहेजता है।</p>
+
+      <nav class="toc" aria-label="संबंधित गाइड" id="related"><div class="toc-title">अपना सेटअप जारी रखें</div><ul>
+        <li><a href="/hi/blog/markdown-checklist-maker/">Markdown चेकलिस्ट मेकर</a></li>
+        <li><a href="/hi/blog/obsidian-properties-generator/">Obsidian प्रॉपर्टी जनरेटर और चेकर</a></li>
+        <li><a href="/hi/blog/srt-vtt-to-text-markdown/">SRT और VTT से टेक्स्ट और Markdown</a></li>
+        <li><a href="/hi/blog/obsidian-meeting-notes-template/">Obsidian मीटिंग नोट्स टेम्पलेट जनरेटर</a></li>
+        <li><a href="/hi/blog/obsidian-capture-templates/">पथ और टेम्पलेट नुस्खे</a></li>
+        <li><a href="/hi/docs/#quick-capture">Quick Capture संदर्भ</a></li>
+      </ul></nav>
+<style>
+.tb-tool:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.tb-tool [hidden] { display: none; }
+.mt-output-head[hidden], .tb-output[hidden], #tb-preview-title[hidden], .tb-preview[hidden], .tb-warnings[hidden] { display: none; }
+.tb-tool .mt-field input, .tb-tool .mt-field textarea, .tb-tool .mt-field select { font: inherit; font-family: var(--font-mono); font-size: 16px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; padding: 8px 10px; width: 100%; box-sizing: border-box; min-height: 44px; }
+.tb-tool .mt-field textarea { resize: vertical; min-height: 160px; white-space: pre; overflow: auto; }
+.tb-tool input:focus-visible, .tb-tool textarea:focus-visible, .tb-tool select:focus-visible, .tb-output:focus-visible, .tb-preview:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.tb-tool .mt-option { min-height: 44px; }
+.tb-tool .mt-option input { width: 22px; height: 22px; }
+.tb-aligns { display: flex; flex-direction: column; gap: 8px; }
+.tb-aligns .mt-field { margin-top: 0; overflow-wrap: anywhere; }
+.tb-warnings { margin: 0; padding-inline-start: 1.2em; }
+.tb-output { white-space: pre; overflow: auto; max-height: 28rem; tab-size: 4; }
+.tb-preview { overflow: auto; max-width: 100%; background: var(--card); border: 1px solid var(--line); border-radius: 16px; }
+.tb-preview table { border-collapse: collapse; min-width: 100%; font-size: 14.5px; line-height: 1.5; }
+.tb-preview th, .tb-preview td { padding: 8px 12px; border: 1px solid var(--line); vertical-align: top; min-width: 5em; overflow-wrap: break-word; }
+.tb-preview th { font-weight: 700; background: var(--paper); }
+</style>
+<script>
+/* Markdown table maker. Runs locally: no network requests. */
+(function () {
+  var CANDIDATES = [['tab', '\t'], ['comma', ','], ['semicolon', ';'], ['pipe', '|']];
+  var DELIM_ROW = /^\|?\s*:?-+:?\s*(?:\|\s*:?-+:?\s*)*\|?$/;
+
+  function chars(s) { return Array.from(s).length; }
+  function normalise(text) { return String(text || '').replace(/^﻿/, '').replace(/\r\n?/g, '\n'); }
+  function isDelimiterRow(line) {
+    var t = line.trim();
+    return t.indexOf('|') !== -1 && t.indexOf('-') !== -1 && DELIM_ROW.test(t);
+  }
+
+  /* Split one Markdown row on unescaped pipes. Cells keep their backslashes. */
+  function splitRow(line) {
+    var t = line.trim();
+    if (t.charAt(0) === '|') t = t.slice(1);
+    var cells = [], cur = '';
+    for (var i = 0; i < t.length; i++) {
+      var c = t.charAt(i);
+      if (c === '\\' && t.charAt(i + 1) === '|') { cur += '\\|'; i++; continue; }
+      if (c === '|') { cells.push(cur); cur = ''; continue; }
+      cur += c;
+    }
+    cells.push(cur);
+    /* A real trailing pipe leaves one empty last cell that is not a cell. */
+    if (cells.length > 1 && !cells[cells.length - 1].trim() && /\|\s*$/.test(t)) cells.pop();
+    return cells;
+  }
+  function mdCellToPlain(s) {
+    return s.replace(/\\\|/g, '|').replace(/<br\s*\/?>/gi, '\n').trim();
+  }
+  function alignOf(cell) {
+    var t = cell.trim(), l = t.charAt(0) === ':', r = t.charAt(t.length - 1) === ':';
+    return l && r ? 'center' : l ? 'left' : r ? 'right' : 'none';
+  }
+
+  /* Parse delimiter-separated text with quoted fields. Returns [{cells, line}]. */
+  function parseDelimited(text, delim) {
+    var rows = [], cells = [], field = '', quoted = false, atStart = true;
+    var line = 1, rowLine = 1;
+    var hadQuote = false;
+    for (var i = 0; i < text.length; i++) {
+      var c = text.charAt(i);
+      if (quoted) {
+        if (c === '"') {
+          if (text.charAt(i + 1) === '"') { field += '"'; i++; } else { quoted = false; }
+        } else { field += c; if (c === '\n') line++; }
+        continue;
+      }
+      if (c === '"' && atStart && field === '') { quoted = true; hadQuote = true; atStart = false; continue; }
+      if (delim && c === delim) { cells.push(field); field = ''; atStart = true; continue; }
+      if (c === '\n') {
+        var blank = cells.length === 0 && field === '' && !hadQuote;
+        if (blank) { rowLine = line + 1; line++; continue; }
+        cells.push(field); field = ''; atStart = true;
+        rows.push({ cells: cells, line: rowLine });
+        cells = []; hadQuote = false; line++; rowLine = line;
+        continue;
+      }
+      atStart = false;
+      field += c;
+    }
+    if (field !== '' || cells.length || hadQuote) { cells.push(field); rows.push({ cells: cells, line: rowLine }); }
+    return rows;
+  }
+
+  function detect(text) {
+    var lines = text.split('\n').filter(function (l) { return l.trim(); });
+    if (!lines.length) return 'single';
+    if (lines.length > 1 && isDelimiterRow(lines[1]) && lines[0].indexOf('|') !== -1) return 'markdown';
+    if (lines.length > 1 && lines.every(function (l) { var t = l.trim(); return t.charAt(0) === '|' && t.charAt(t.length - 1) === '|'; })) return 'markdown';
+    var best = null;
+    CANDIDATES.forEach(function (cand) {
+      var rows = parseDelimited(text, cand[1]).slice(0, 5);
+      if (!rows.length || rows[0].cells.length < 2) return;
+      var n = rows[0].cells.length;
+      var same = rows.filter(function (r) { return r.cells.length === n; }).length;
+      if (!best || same > best.same) best = { name: cand[0], same: same };
+    });
+    return best ? best.name : 'single';
+  }
+
+  function plainFromText(s) { return s.replace(/^\n+|\n+$/g, '').split('\n').map(function (l) { return l.replace(/\s+$/, ''); }).join('\n').replace(/^\s+/, ''); }
+
+  /* Escape unescaped pipes. Returns {text, n}. */
+  function escapePipes(s) {
+    var out = '', n = 0, slashes = 0;
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charAt(i);
+      if (c === '|' && slashes % 2 === 0) { out += '\\|'; n++; } else out += c;
+      slashes = c === '\\' ? slashes + 1 : 0;
+    }
+    return { text: out, n: n };
+  }
+  function wikiPipes(s) {
+    var m = s.match(/\[\[[^\[\]\n]*\]\]/g) || [], n = 0;
+    m.forEach(function (w) { n += escapePipes(w).n; });
+    return n;
+  }
+  function mdCell(s, breaks) {
+    var lines = s.split('\n').map(function (l) { return l.trim(); });
+    var joined;
+    if (breaks === 'space') joined = lines.filter(Boolean).join(' ');
+    else joined = lines.join('<br>');
+    return escapePipes(joined);
+  }
+  function quote(s, delim) {
+    if (/["\n]/.test(s) || s.indexOf(delim) !== -1 || /^\s|\s$/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+    return s;
+  }
+  function padCell(s, width, align) {
+    var gap = width - chars(s);
+    if (gap <= 0) return s;
+    if (align === 'right') return new Array(gap + 1).join(' ') + s;
+    if (align === 'center') { var l = Math.floor(gap / 2); return new Array(l + 1).join(' ') + s + new Array(gap - l + 1).join(' '); }
+    return s + new Array(gap + 1).join(' ');
+  }
+  function delimCell(width, align) {
+    var colons = align === 'center' ? 2 : align === 'none' ? 0 : 1;
+    var dashes = new Array(Math.max(3, width - colons) + 1).join('-');
+    return align === 'center' ? ':' + dashes + ':' : align === 'left' ? ':' + dashes : align === 'right' ? dashes + ':' : dashes;
+  }
+
+  /* Convert pasted text. Returns {output, format, rows, cols, aligns, warnings, escaped, wiki}. */
+  function run(input, opts) {
+    opts = opts || {};
+    var text = normalise(input);
+    var empty = { output: '', format: 'single', rows: [], cols: 0, aligns: [], warnings: [], escaped: 0, wiki: 0, header: [] };
+    if (!text.trim()) return empty;
+    var format = !opts.delimiter || opts.delimiter === 'auto' ? detect(text) : opts.delimiter;
+    var hasHeader = opts.header !== false;
+    var warnings = [];
+    var raw = [], found = null, i;
+
+    if (format === 'markdown') {
+      var physical = text.split('\n');
+      var entries = [];
+      physical.forEach(function (l, idx) { if (l.trim()) entries.push({ text: l, line: idx + 1 }); });
+      var lastLine = 0, firstBlank = null;
+      entries.forEach(function (e) {
+        if (lastLine && e.line > lastLine + 1 && firstBlank === null) firstBlank = lastLine + 1;
+        lastLine = e.line;
+      });
+      var body = entries.slice();
+      var headerCells = null;
+      if (body.length) {
+        headerCells = splitRow(body[0].text);
+        if (body.length > 1 && isDelimiterRow(body[1].text)) {
+          var dcells = splitRow(body[1].text);
+          found = dcells.map(alignOf);
+          if (dcells.length !== headerCells.length) warnings.push({ type: 'delim-count', line: body[1].line, found: dcells.length, expected: headerCells.length });
+          body.splice(1, 1);
+        } else {
+          warnings.push({ type: 'no-delimiter', line: body.length > 1 ? body[1].line : body[0].line });
+        }
+      }
+      if (firstBlank !== null) warnings.push({ type: 'blank', line: firstBlank });
+      body.forEach(function (e) { raw.push({ cells: splitRow(e.text).map(mdCellToPlain), line: e.line }); });
+    } else {
+      var delim = { tab: '\t', comma: ',', semicolon: ';', pipe: '|' }[format] || null;
+      parseDelimited(text, delim).forEach(function (r) {
+        if (r.cells.length === 1 && !r.cells[0].trim()) return;
+        raw.push({ cells: r.cells.map(plainFromText), line: r.line });
+      });
+    }
+    if (!raw.length) return empty;
+
+    var expected = raw[0].cells.length, max = expected;
+    raw.forEach(function (r) { if (r.cells.length > max) max = r.cells.length; });
+    var uneven = [];
+    raw.forEach(function (r, idx) {
+      if (idx === 0 || r.cells.length === expected) return;
+      uneven.push({ type: r.cells.length < expected ? 'short' : 'long', line: r.line, found: r.cells.length, expected: expected, max: max });
+    });
+    uneven.slice(0, 5).forEach(function (w) { warnings.push(w); });
+    if (uneven.length > 5) warnings.push({ type: 'more', n: uneven.length - 5 });
+
+    var cols = max;
+    /* The delimiter row's cell count wins when it disagrees with the header. */
+    var rows = raw.map(function (r) {
+      var cells = r.cells.slice();
+      while (cells.length < cols) cells.push('');
+      return cells;
+    });
+    var blankHeader = !hasHeader;
+    if (blankHeader) { var blankRow = []; for (i = 0; i < cols; i++) blankRow.push(''); rows.unshift(blankRow); }
+    var aligns = [];
+    var given = opts.aligns || found || [];
+    for (i = 0; i < cols; i++) aligns.push(given[i] || 'none');
+
+    var escaped = 0, wiki = 0, output;
+    if (opts.out === 'csv' || opts.out === 'tsv') {
+      var d = opts.out === 'csv' ? ',' : '\t';
+      output = rows.slice(blankHeader ? 1 : 0).map(function (r) {
+        return r.map(function (c) { return quote(c, d); }).join(d);
+      }).join('\n');
+    } else {
+      var md = rows.map(function (r) {
+        return r.map(function (c) {
+          if (format !== 'markdown') wiki += wikiPipes(c);
+          var e = mdCell(c, opts.breaks);
+          if (format !== 'markdown') escaped += e.n;
+          return e.text;
+        });
+      });
+      var widths = [];
+      for (i = 0; i < cols; i++) {
+        var w = 3 + (aligns[i] === 'none' ? 0 : aligns[i] === 'center' ? 2 : 1);
+        if (opts.pad !== 'compact') md.forEach(function (r) { w = Math.max(w, chars(r[i])); });
+        widths.push(w);
+      }
+      var compact = opts.pad === 'compact';
+      var fmtRow = function (r) {
+        return '| ' + r.map(function (c, k) { return compact ? c : padCell(c, widths[k], aligns[k]); }).join(' | ') + ' |';
+      };
+      var lines = [fmtRow(md[0])];
+      lines.push('| ' + aligns.map(function (a, k) { return delimCell(compact ? 3 + (a === 'none' ? 0 : a === 'center' ? 2 : 1) : widths[k], a); }).join(' | ') + ' |');
+      md.slice(1).forEach(function (r) { lines.push(fmtRow(r)); });
+      output = lines.join('\n');
+    }
+    return { output: output, format: format, rows: rows, cols: cols, aligns: aligns, warnings: warnings, escaped: escaped, wiki: wiki, header: blankHeader ? null : rows[0] };
+  }
+
+  if (typeof window !== 'undefined') {
+    window.voxTable = { run: run, detect: detect, parseDelimited: parseDelimited, splitRow: splitRow, isDelimiterRow: isDelimiterRow };
+  }
+
+  var form = document.getElementById('tb-tool');
+  if (!form) return;
+  var input = document.getElementById('tb-input');
+  var code = document.getElementById('tb-output-code');
+  var pre = document.getElementById('tb-output');
+  var head = document.getElementById('tb-output-head');
+  var title = document.getElementById('tb-output-title');
+  var preview = document.getElementById('tb-preview');
+  var previewTitle = document.getElementById('tb-preview-title');
+  var status = document.getElementById('tb-status');
+  var info = document.getElementById('tb-info');
+  var warn = document.getElementById('tb-warnings');
+  var detected = document.getElementById('tb-detected');
+  var waiting = document.getElementById('tb-waiting');
+  var alignBox = document.getElementById('tb-aligns');
+  var alignGroup = document.getElementById('tb-aligns-group');
+  var EXAMPLE = 'Page,Owner,Preview,Notes\n[[Project plan|Plan]],"Lee, Sam",![[img.png|200]],"Draft done\nReview on Friday"\n"Say ""hello""",Ana,,Ready to ship';
+  var userAligns = null;
+  var builtFor = '';
+
+  function message(name, fill) {
+    var el = document.querySelector('#tb-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : '';
+    if (fill) Object.keys(fill).forEach(function (key) { text = text.split('{' + key + '}').join(fill[key]); });
+    return text;
+  }
+  function say(text) {
+    status.textContent = '';
+    window.setTimeout(function () { status.textContent = text; }, 30);
+  }
+  function options() {
+    return {
+      delimiter: form.elements.delimiter.value, header: form.elements.header.checked,
+      out: form.elements.out.value, pad: form.elements.pad.value, breaks: form.elements.breaks.value,
+      aligns: userAligns
+    };
+  }
+
+  function buildAligns(result, force) {
+    var key = result.cols + '|' + (result.header || []).join('\u0001');
+    if (!force && key === builtFor) return;
+    builtFor = key;
+    alignBox.textContent = '';
+    var names = ['none', 'left', 'center', 'right'];
+    for (var i = 0; i < result.cols; i++) {
+      var label = document.createElement('label');
+      label.className = 'mt-field';
+      var name = result.header && result.header[i] ? result.header[i].split('\n')[0] : message('empty-header');
+      label.appendChild(document.createTextNode(message('align-label', { n: i + 1, name: name }) + ' '));
+      var select = document.createElement('select');
+      select.setAttribute('data-col', String(i));
+      names.forEach(function (n) {
+        var o = document.createElement('option');
+        o.value = n;
+        o.textContent = message('align-' + n);
+        if (n === result.aligns[i]) o.selected = true;
+        select.appendChild(o);
+      });
+      label.appendChild(select);
+      alignBox.appendChild(label);
+    }
+  }
+
+  function renderPreview(result) {
+    preview.textContent = '';
+    var table = document.createElement('table');
+    var breaks = form.elements.breaks.value;
+    function fill(cell, text, i) {
+      cell.style.textAlign = result.aligns[i] === 'none' ? '' : result.aligns[i];
+      var lines = text.split('\n').map(function (l) { return l.trim(); });
+      if (breaks === 'space') lines = [lines.filter(Boolean).join(' ')];
+      lines.forEach(function (l, k) {
+        if (k) cell.appendChild(document.createElement('br'));
+        cell.appendChild(document.createTextNode(l));
+      });
+    }
+    var thead = document.createElement('thead'), tr = document.createElement('tr');
+    result.rows[0].forEach(function (c, i) { var th = document.createElement('th'); th.scope = 'col'; fill(th, c, i); tr.appendChild(th); });
+    thead.appendChild(tr);
+    table.appendChild(thead);
+    var tbody = document.createElement('tbody');
+    result.rows.slice(1).forEach(function (r) {
+      var row = document.createElement('tr');
+      r.forEach(function (c, i) { var td = document.createElement('td'); fill(td, c, i); row.appendChild(td); });
+      tbody.appendChild(row);
+    });
+    table.appendChild(tbody);
+    preview.appendChild(table);
+  }
+
+  function update(force) {
+    var opts = options();
+    Array.prototype.forEach.call(form.querySelectorAll('[data-show]'), function (el) {
+      el.hidden = el.getAttribute('data-show') !== opts.out;
+    });
+    var result = run(input.value, opts);
+    var has = result.rows.length > 0;
+    head.hidden = pre.hidden = preview.hidden = previewTitle.hidden = !has;
+    alignGroup.hidden = !has || opts.out !== 'md';
+    waiting.hidden = has;
+    warn.textContent = '';
+    info.hidden = true;
+    if (!has) {
+      code.textContent = '';
+      detected.textContent = '';
+      warn.hidden = true;
+      alignBox.textContent = '';
+      builtFor = '';
+      return;
+    }
+    code.textContent = result.output;
+    title.textContent = message('title-' + opts.out);
+    renderPreview(result);
+    buildAligns(result, force);
+    detected.textContent = message('detected', { format: message('fmt-' + result.format), rows: result.rows.length - (opts.header ? 0 : 1), cols: result.cols });
+    result.warnings.forEach(function (w) {
+      var li = document.createElement('li');
+      li.textContent = message(w.type, w);
+      warn.appendChild(li);
+    });
+    warn.hidden = !result.warnings.length;
+    if (opts.out === 'md' && result.escaped) {
+      info.textContent = message('escaped', { n: result.escaped, m: result.wiki });
+      info.hidden = false;
+    }
+  }
+
+  input.addEventListener('input', function () { userAligns = null; update(true); });
+  form.addEventListener('change', function (event) {
+    var t = event.target;
+    if (t && t.getAttribute && t.getAttribute('data-col') !== null) {
+      userAligns = Array.prototype.map.call(alignBox.querySelectorAll('select'), function (s) { return s.value; });
+      update(false);
+    } else if (t === input) {
+      return;
+    } else {
+      update(!!t && (t.name === 'delimiter' || t.name === 'header'));
+    }
+  });
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+  document.getElementById('tb-example').addEventListener('click', function () {
+    input.value = EXAMPLE;
+    userAligns = null;
+    update(true);
+    say(message('loaded'));
+  });
+  document.getElementById('tb-clear').addEventListener('click', function () {
+    input.value = '';
+    userAligns = null;
+    update(true);
+    input.focus();
+    say(message('cleared'));
+  });
+  document.getElementById('tb-copy').addEventListener('click', function () {
+    var text = code.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(code);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+  document.getElementById('tb-download').addEventListener('click', function () {
+    var out = form.elements.out.value;
+    var types = { md: 'text/markdown', csv: 'text/csv', tsv: 'text/tab-separated-values' };
+    var blob = new Blob([code.textContent + '\n'], { type: types[out] + ';charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'table.' + out;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    say(message('downloaded'));
+  });
+
+  document.getElementById('tb-nojs').hidden = true;
+  form.hidden = false;
+  update(true);
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/hi/">मुखपृष्ठ</a></li>
+        <li><a href="/hi/docs/">दस्तावेज़</a></li>
+        <li><a href="/hi/blog/">गाइड</a></li>
+        <li><a href="/hi/compare/">तुलना करें</a></li>
+        <li><a href="/hi/privacy.html">गोपनीयता</a></li>
+        <li><a href="/hi/terms.html">शर्तें</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">सहायता</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_hi_7732b417b3db">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · स्थानीय नोट के लिए त्वरित कैप्चर · सामग्री अपलोड नहीं होती।</div>
+    </div>
+  <details class="language-switcher"><summary>भाषा</summary><ul><li><a href="/blog/markdown-table-maker/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/markdown-table-maker/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/markdown-table-maker/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/markdown-table-maker/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/markdown-table-maker/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/markdown-table-maker/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/markdown-table-maker/" lang="hi" hreflang="hi" aria-current="page">हिन्दी</a></li><li><a href="/id/blog/markdown-table-maker/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/markdown-table-maker/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/markdown-table-maker/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/markdown-table-maker/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/markdown-table-maker/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/markdown-table-maker/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/markdown-table-maker/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/markdown-table-maker/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/markdown-table-maker/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/markdown-table-maker/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/markdown-table-maker/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/markdown-table-maker/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/markdown-table-maker/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/markdown-table-maker/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/markdown-table-maker/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/markdown-table-maker/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
