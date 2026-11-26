@@ -1,0 +1,104 @@
+# Hans's feedback, 2026-11-26 (PR #175), simulator:
+#  1. With the phone route rail on, the header keeps only the selected route's
+#     pill; the rail is the switcher. Rail off is unchanged.
+#  2. The separate mic-plus button is gone; with Live Notes on and a note open,
+#     Speak's trailing end is a "Record into a new note" icon
+#     (capture_speak_record_new_note). Tapping it is covered on device by
+#     qa-speak-menu-device.
+#
+# Prerequisites: iOS simulator (iPhone 18 Pro Max) with a DEBUG build of Vox.md.
+#   `-VoxAdaptiveSeedDemo` creates the "Vox Notes" demo vault and four routes
+#   and selects Meeting Notes, whose daily note has content.
+#   `-capture.routes.sideRail.v1` sets the rail for that launch only.
+# Side effects: the demo seed appends its "Project sync" entry to today's
+#   Meetings note on every launch. Nothing is recorded. Uninstall to reset.
+# Selectors: raw `tool: await-ui-element` steps; the runner's directive tree
+#   does not carry the capture controls (see ios-route-side-rail).
+version: 1
+requires:
+  platform: ios
+steps:
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+          - -VoxScreenshotUnlocked
+          - -VoxAdaptiveSeedDemo
+          - -VoxAdaptiveNoAutofocus
+          - -capture.routes.sideRail.v1
+          - off
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: live_note_status
+      expectedText: Saved
+      textMatch: equals
+      timeoutMs: 20000
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: capture_route_pill_selected
+      expectedText: Meeting Notes
+      textMatch: equals
+      timeoutMs: 15000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_route_pill_other
+      timeoutMs: 5000
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: capture_route_rail
+      timeoutMs: 3000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_speak_record_new_note
+      timeoutMs: 10000
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+          - -VoxScreenshotUnlocked
+          - -VoxAdaptiveSeedDemo
+          - -VoxAdaptiveNoAutofocus
+          - -capture.routes.sideRail.v1
+          - right
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: capture_route_rail
+      expectedText: Route Meeting Notes
+      textMatch: equals
+      timeoutMs: 20000
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: capture_route_pill_selected
+      expectedText: Meeting Notes
+      textMatch: equals
+      timeoutMs: 10000
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: capture_route_pill_other
+      timeoutMs: 5000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_speak_record_new_note
+      timeoutMs: 10000

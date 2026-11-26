@@ -54,7 +54,7 @@ class CaptureLocationLifecycleTest {
         compose.setContent { VoxTheme { capture(pinned = listOf(other)) { awaitCancellation() } } }
         compose.mainClock.advanceTimeBy(md.vox.android.ui.CaptureViewModel.LIVE_SAVE_DEBOUNCE_MILLIS + 100) // Live Notes: the first write starts after idle
         compose.onNodeWithTag("live-note-new").assertIsNotEnabled()
-        compose.onNodeWithTag("capture-route-pill-${other.id}").assertIsNotEnabled()
+        compose.onNodeWithTag("capture-route-pill-other").assertIsNotEnabled()
         compose.onNodeWithTag("capture-preset-selector").assertIsNotEnabled()
         // The path breadcrumb only opens the route editor while nothing is in flight.
         compose.onNodeWithTag("live-note-path").assert(hasClickAction().not())

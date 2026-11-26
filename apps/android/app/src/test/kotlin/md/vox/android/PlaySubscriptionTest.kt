@@ -23,12 +23,12 @@ class PlaySubscriptionTest {
     /** Mirrors the live catalog: two subscription products, one base plan each, one trial offer each. */
     private fun fakeOffers(trialEligible: Boolean) = buildList {
         add(PlaySubscriptionOffer(yearlyProduct, "yearly", null, "yearly-base", listOf(phase("$29.99", 29_990_000L, "P1Y"))))
-        add(PlaySubscriptionOffer(weeklyProduct, "weekly", null, "weekly-base", listOf(phase("$0.99", 990_000L, "P1W"))))
+        add(PlaySubscriptionOffer(weeklyProduct, "weekly", null, "weekly-base", listOf(phase("$2.99", 2_990_000L, "P1W"))))
         if (trialEligible) {
             add(PlaySubscriptionOffer(yearlyProduct, "yearly", "free-trial-1w", "yearly-trial",
                 listOf(freeWeek, phase("$29.99", 29_990_000L, "P1Y"))))
             add(PlaySubscriptionOffer(weeklyProduct, "weekly", "free-trial-1w", "weekly-trial",
-                listOf(freeWeek, phase("$0.99", 990_000L, "P1W"))))
+                listOf(freeWeek, phase("$2.99", 2_990_000L, "P1W"))))
         }
         // An unrelated base plan Play might return must never become a Vox.md plan.
         add(PlaySubscriptionOffer(yearlyProduct, "legacy-monthly", null, "monthly", listOf(phase("$4.99", 4_990_000L, "P1M"))))
@@ -73,10 +73,10 @@ class PlaySubscriptionTest {
         val plans = subscriptionPlanOptions(fakeOffers(trialEligible = false))
         val weekly = plans.first { it.plan == VoxPlan.WEEKLY }
         val yearly = plans.first { it.plan == VoxPlan.YEARLY }
-        // $29.99 a year against 52 x $0.99 = $51.48 saves 41.7%, shown rounded down.
-        assertEquals(41, yearlySavingsPercent(weekly, yearly))
+        // $29.99 a year against 52 x $2.99 = $155.48 saves 80.7%, shown rounded down.
+        assertEquals(80, yearlySavingsPercent(weekly, yearly))
         assertNull(yearlySavingsPercent(weekly, yearly.copy(currencyCode = "EUR")))
-        assertNull(yearlySavingsPercent(weekly, yearly.copy(priceAmountMicros = 60_000_000L)))
+        assertNull(yearlySavingsPercent(weekly, yearly.copy(priceAmountMicros = 160_000_000L)))
         assertNull(yearlySavingsPercent(null, yearly))
     }
 
@@ -118,7 +118,7 @@ class PlaySubscriptionTest {
             VoxPurchaseRequest.Blocked("alreadySubscribed"),
             voxPurchaseRequest(weekly, false, "weekly-token", false, activeSubscriptionProductID = weeklyProduct),
         )
-        val lifetime = VoxPlanOption(VoxPlan.LIFETIME, "$49.99", 49_990_000L, "USD", null, null, "lifetime")
+        val lifetime = VoxPlanOption(VoxPlan.LIFETIME, "$79.99", 79_990_000L, "USD", null, null, "lifetime")
         assertEquals(VoxPurchaseRequest.NewSubscription("weekly-base"), voxPurchaseRequest(weekly, false, null, false))
         assertEquals(
             VoxPurchaseRequest.ReplaceSubscription("weekly-base", "old-token"),

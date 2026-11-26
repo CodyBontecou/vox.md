@@ -42,11 +42,19 @@ enum InspirationQuotePresentation {
 
     /// The empty editor's line while a recording runs, before any words land:
     /// it sits where the transcript will start. `nil` once there is text.
-    static func recordingStatus(forDraftText text: String, isRecording: Bool, isPaused: Bool) -> String? {
+    /// A take on a route with "Transcribe Recordings" off says it keeps audio
+    /// only, since no words will arrive.
+    static func recordingStatus(
+        forDraftText text: String,
+        isRecording: Bool,
+        isPaused: Bool,
+        transcribes: Bool = true
+    ) -> String? {
         guard isRecording, text.isEmpty else { return nil }
-        return isPaused
-            ? String(localized: "Paused")
-            : String(localized: "Listening for speech…")
+        if isPaused { return String(localized: "Paused") }
+        return transcribes
+            ? String(localized: "Listening for speech…")
+            : String(localized: "Recording audio only")
     }
 }
 

@@ -1253,6 +1253,19 @@ struct CapturePresetEditorView: View {
 
     private var voiceProcessingSection: some View {
         Section {
+            Toggle("Transcribe Recordings", isOn: $flow.transcriptionEnabled)
+                .accessibilityIdentifier("route_transcription_enabled")
+                .tint(Geist.accent)
+                .id("step-capture")
+
+            if !flow.transcriptionEnabled {
+                Label("Recordings keep only the audio, with no transcript. Keyboard dictation still transcribes.", systemImage: "waveform")
+                    .font(Geist.caption())
+                    .foregroundStyle(Geist.muted)
+                    .accessibilityIdentifier("route_transcription_off_note")
+            }
+
+            if flow.transcriptionEnabled {
             Picker("Transcription Model", selection: transcriptionModelOverride) {
                 Text("App Default (\(appDefaultModelName))").tag("")
                 Text("Automatic").tag(TranscriptionBackendID.automatic)
@@ -1265,7 +1278,6 @@ struct CapturePresetEditorView: View {
                 }
             }
             .accessibilityIdentifier("route_transcription_model")
-            .id("step-capture")
 
             Toggle("Identify Speakers", isOn: $flow.speakerDiarizationEnabled)
                 .tint(Geist.accent)
@@ -1274,6 +1286,7 @@ struct CapturePresetEditorView: View {
                 Label("Speaker labels are added after transcription.", systemImage: "person.2.wave.2")
                     .font(Geist.caption())
                     .foregroundStyle(Geist.muted)
+            }
             }
         } header: {
             PresetListSectionHeader(title: "Voice Processing")

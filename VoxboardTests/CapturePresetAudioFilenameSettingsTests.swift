@@ -174,6 +174,46 @@ final class CapturePresetAudioFilenameSettingsTests: XCTestCase {
         ))
     }
 
+    /// Issue #176: route delivery names audio by recording start, falling
+    /// back to the transcript date only for jobs queued without one.
+    func testLegacyVoiceAudioContextUsesRecordingStartTime() throws {
+        let transcript = Transcript(
+            id: UUID(),
+            text: "Started earlier",
+            date: Date(timeIntervalSince1970: 1_795_000_303),
+            duration: 303,
+            modelUsed: "Test",
+            language: "en"
+        )
+        let startedAt = Date(timeIntervalSince1970: 1_795_000_000)
+        let preset = samplePreset(audioSaveMode: .alongsideTranscript)
+
+        let started = try XCTUnwrap(IOSLegacyVoiceAudioDelivery.audioFilenameContext(
+            transcript: transcript,
+            flowSnapshot: preset,
+            originalAudioFilename: "take.wav",
+            captureSource: .voice,
+            recordingStartedAt: startedAt
+        ))
+        XCTAssertEqual(started.createdAt, startedAt)
+
+        let legacy = try XCTUnwrap(IOSLegacyVoiceAudioDelivery.audioFilenameContext(
+            transcript: transcript,
+            flowSnapshot: preset,
+            originalAudioFilename: "take.wav",
+            captureSource: .voice
+        ))
+        XCTAssertEqual(legacy.createdAt, transcript.date)
+        XCTAssertNil(PersistentRecorder.recordingStartDate(0))
+        XCTAssertNil(PersistentRecorder.recordingStartDate(nil))
+        XCTAssertEqual(PersistentRecorder.recordingStartDate(1_795_000_000), startedAt)
+    }
+
+    func testHelpStatesTimestampIsRecordingStart() {
+        XCTAssertTrue(CapturePresetAudioFilenameSettings.timestampHelp.contains("{timestamp}"))
+        XCTAssertTrue(CapturePresetAudioFilenameSettings.timestampHelp.contains("recording started"))
+    }
+
     func testLegacyVoiceDeliveryPassesContextIntoActualCheckpointedExporter() async throws {
         let fixture = try LegacyAudioFixture(noteName: "Legacy Note", sourceName: "retained-copy.wav")
         defer { fixture.cleanup() }

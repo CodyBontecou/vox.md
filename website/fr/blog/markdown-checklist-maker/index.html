@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr" data-search-section="Section" data-search-guide="Guide" data-search-empty="Aucun résultat pour « {query} »">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Générateur de checklist Markdown : transformez n’importe quelle liste en tâches, avec échéances | Vox.md</title>
+  <meta name="description" content="Outil gratuit dans le navigateur qui transforme une liste collée en liste de tâches Markdown pour Obsidian ou GitHub, avec des échéances facultatives au format Tasks, Dataview ou Reminder. Rien n’est envoyé.">
+  <link rel="canonical" href="https://vox.isolated.tech/fr/blog/markdown-checklist-maker/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Documentation Vox.md pour les modèles de langage">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Générateur de checklist Markdown : transformez n’importe quelle liste en tâches, avec échéances">
+  <meta property="og:description" content="Outil gratuit dans le navigateur qui transforme une liste collée en liste de tâches Markdown pour Obsidian ou GitHub, avec des échéances facultatives au format Tasks, Dataview ou Reminder. Rien n’est envoyé.">
+  <meta property="og:url" content="https://vox.isolated.tech/fr/blog/markdown-checklist-maker/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-11-24">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Générateur de checklist Markdown : transformez n’importe quelle liste en tâches, avec échéances">
+  <meta name="twitter:description" content="Outil gratuit dans le navigateur qui transforme une liste collée en liste de tâches Markdown pour Obsidian ou GitHub, avec des échéances facultatives au format Tasks, Dataview ou Reminder. Rien n’est envoyé.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Générateur de checklist Markdown : transformez n’importe quelle liste en tâches, avec échéances",
+  "description": "Outil gratuit dans le navigateur qui transforme une liste collée en liste de tâches Markdown pour Obsidian ou GitHub, avec des échéances facultatives au format Tasks, Dataview ou Reminder. Rien n’est envoyé.",
+  "image": "https://vox.isolated.tech/screenshots/01-route-heading-light.png",
+  "datePublished": "2026-11-24",
+  "dateModified": "2026-11-24",
+  "mainEntityOfPage": "https://vox.isolated.tech/fr/blog/markdown-checklist-maker/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "fr",
+  "name": "Générateur de checklist Markdown : transformez n’importe quelle liste en tâches, avec échéances | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/fr/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Guides",
+      "item": "https://vox.isolated.tech/fr/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Générateur de checklist Markdown : transformez n’importe quelle liste en tâches, avec échéances",
+      "item": "https://vox.isolated.tech/fr/blog/markdown-checklist-maker/"
+    }
+  ],
+  "inLanguage": "fr",
+  "name": "Générateur de checklist Markdown : transformez n’importe quelle liste en tâches, avec échéances | Vox.md",
+  "description": "Outil gratuit dans le navigateur qui transforme une liste collée en liste de tâches Markdown pour Obsidian ou GitHub, avec des échéances facultatives au format Tasks, Dataview ou Reminder. Rien n’est envoyé."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/markdown-checklist-maker/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Aller au guide</a>
+<nav aria-label="Navigation principale">
+  <div class="nav-inner">
+    <a href="/fr/" class="logo" aria-label="accueil Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/fr/#how">Fonctionnement</a></li>
+      <li><a href="/fr/docs/">Documentation</a></li>
+      <li><a href="/fr/blog/">Guides</a></li>
+      <li><a href="/fr/compare/">Comparer</a></li>
+      <li><a href="/fr/privacy.html">Confidentialité</a></li>
+      <li><a href="/fr/terms.html">Conditions</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_fr_7d9ef8e50226">Télécharger Vox.md</a>
+  <details class="language-switcher"><summary>Langue</summary><ul><li><a href="/blog/markdown-checklist-maker/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/markdown-checklist-maker/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/markdown-checklist-maker/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/markdown-checklist-maker/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/markdown-checklist-maker/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/markdown-checklist-maker/" lang="fr" hreflang="fr" aria-current="page">Français</a></li><li><a href="/hi/blog/markdown-checklist-maker/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/markdown-checklist-maker/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/markdown-checklist-maker/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/markdown-checklist-maker/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/markdown-checklist-maker/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/markdown-checklist-maker/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/markdown-checklist-maker/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/markdown-checklist-maker/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/markdown-checklist-maker/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/markdown-checklist-maker/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/markdown-checklist-maker/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/markdown-checklist-maker/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/markdown-checklist-maker/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/markdown-checklist-maker/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/markdown-checklist-maker/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/markdown-checklist-maker/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/markdown-checklist-maker/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Outil gratuit</div>
+        <h1 class="hero-title">Générateur de checklist Markdown : transformez n’importe quelle liste en tâches, avec échéances</h1>
+        <p class="hero-subtitle">Collez des lignes simples, des puces, des éléments numérotés ou une liste de tâches existante et copiez des tâches - [ ] valides, avec l’imbrication conservée, une échéance facultative et le nombre de tâches terminées.</p>
+      </div>
+      <aside class="meta-card" aria-label="À propos de ce guide">
+        <dl>
+          <div><dt>Par</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Mis à jour</dt><dd><time datetime="2026-11-24">24 novembre 2026</time></dd></div>
+          <div><dt>Nécessite</dt><dd>N’importe quel navigateur moderne, y compris Safari sur iPhone. Facultatif : Obsidian pour les checklists, et Vox.md pour iPhone ou Mac pour capturer des tâches à la voix.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Générateur de checklist Markdown : transformez n’importe quelle liste en tâches, avec échéances">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">La réponse courte</div>
+        <p>Une tâche Markdown est un trait d’union, une espace, des crochets, une espace et le texte. Écrivez <code>- [ ] task</code> pour une tâche ouverte et <code>- [x] done</code> pour une tâche terminée. Pour transformer toute une liste en tâches, collez-la dans le <a href="#tool">générateur de checklist</a> ci-dessous.</p>
+      </div>
+      <pre class="guide-code" id="default-checklist"><code>- [ ] buy milk
+	- [ ] oat
+- [ ] call Sam
+- [x] send invoice
+</code></pre>
+      <p>Le générateur retire les puces, numéros et cases existants pour que rien ne soit doublé, conserve l’indentation comme imbrication et peut ajouter une échéance au format lu par votre plugin Obsidian. Il s’exécute entièrement dans cette page : la liste n’est jamais envoyée, et la page n’effectue aucune requête réseau.</p>
+      <nav class="toc" aria-label="Dans ce guide"><div class="toc-title">Dans ce guide</div><ol>
+        <li><a href="#tool">Créer votre checklist</a></li>
+        <li><a href="#syntax">Syntaxe d’une checklist Markdown</a></li>
+        <li><a href="#obsidian">Checklists dans Obsidian</a></li>
+        <li><a href="#due-dates">Échéances : Tasks, Dataview ou Reminder</a></li>
+        <li><a href="#github">Différences entre GitHub et Obsidian</a></li>
+        <li><a href="#capture">Capturez des tâches à la voix ou au texte avec Vox.md</a></li>
+        <li><a href="#faq">Questions fréquentes</a></li>
+      </ol></nav>
+
+      <h2 id="tool">1. Créez votre checklist</h2>
+      <p class="mt-nojs" id="cl-nojs">Le générateur de checklist nécessite JavaScript. Sans lui, la syntaxe ci-dessous reste utilisable comme référence.</p>
+      <form class="cl-tool" id="cl-tool" aria-label="Générateur de checklist Markdown" hidden>
+        <fieldset class="mt-group">
+          <legend>Votre liste</legend>
+          <label class="mt-field" for="cl-input">Collez des lignes, des puces, des éléments numérotés ou des tâches <textarea id="cl-input" rows="9" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></label>
+          <div class="mt-actions">
+            <button type="button" class="btn-secondary" id="cl-example">Charger un exemple</button>
+            <button type="button" class="btn-secondary" id="cl-clear">Effacer</button>
+          </div>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>Que faire</legend>
+          <label class="mt-option"><input type="radio" name="mode" value="make" checked> <span>Créer une checklist</span></label>
+          <label class="mt-option"><input type="radio" name="mode" value="strip"> <span>Retirer les cases</span></label>
+          <label class="mt-option" data-show="make"><input type="checkbox" name="resetall"> <span>Réinitialiser toutes les tâches à [ ]</span></label>
+          <label class="mt-field" data-show="strip" for="cl-strip-to">Transformez des tâches en <select id="cl-strip-to" name="stripto">
+            <option value="bullets" selected>Puces simples (- texte)</option>
+            <option value="plain">Lignes simples (sans puces ni imbrication)</option>
+          </select></label>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>Imbrication</legend>
+          <label class="mt-field" for="cl-unit">Espaces par niveau dans votre liste <select id="cl-unit" name="unit">
+            <option value="auto" selected>Détecter depuis ma liste</option>
+            <option value="2">2 espaces</option>
+            <option value="4">4 espaces</option>
+          </select></label>
+          <label class="mt-field" for="cl-indent">Indentez le résultat avec <select id="cl-indent" name="indent">
+            <option value="tab" selected>Une tabulation par niveau</option>
+            <option value="2">2 espaces par niveau</option>
+            <option value="4">4 espaces par niveau</option>
+          </select></label>
+          <p class="mt-hint">Une tabulation dans votre liste compte toujours pour un niveau. Les titres restent des titres.</p>
+        </fieldset>
+        <fieldset class="mt-group" data-show="make">
+          <legend>Échéance pour chaque tâche</legend>
+          <label class="mt-field" for="cl-due">Format <select id="cl-due" name="due">
+            <option value="none" selected>Aucun</option>
+            <option value="tasks-due">Plugin Tasks : échéance (📅 2026-11-25)</option>
+            <option value="tasks-scheduled">Plugin Tasks : planifiée (⏳ 2026-11-25)</option>
+            <option value="tasks-start">Plugin Tasks : début (🛫 2026-11-25)</option>
+            <option value="dataview">Champ en ligne Dataview ([due:: 2026-11-25])</option>
+            <option value="reminder">Plugin Reminder / Vox.md ((@2026-11-25))</option>
+            <option value="reminder-time">Plugin Reminder avec heure ((@2026-11-25 09:30))</option>
+          </select></label>
+          <label class="mt-field" for="cl-date">Date de la réunion <input type="date" id="cl-date" name="date"></label>
+          <label class="mt-field" id="cl-time-field" for="cl-time" hidden>Heure <input type="time" id="cl-time" name="time" value="09:00"></label>
+        </fieldset>
+      </form>
+      <p class="mt-status" id="cl-progress" role="status"></p>
+      <div class="mt-output-head" id="cl-output-head" hidden>
+        <h3 id="cl-output-title">Votre checklist</h3>
+        <div class="mt-actions">
+          <button type="button" class="btn-primary" id="cl-copy">Copier</button>
+        </div>
+      </div>
+      <p class="mt-status" id="cl-status" role="status"></p>
+      <p class="mt-hint" id="cl-warning" role="status" hidden></p>
+      <pre class="guide-code cl-output" id="cl-output" aria-labelledby="cl-output-title" tabindex="0" hidden><code id="cl-output-code"></code></pre>
+      <h3 id="cl-preview-title" hidden>Aperçu</h3>
+      <div class="cl-preview" id="cl-preview" role="group" aria-labelledby="cl-preview-title" hidden></div>
+      <div hidden id="cl-messages">
+        <span data-message="waiting">Collez une liste pour voir le résultat.</span>
+        <span data-message="progress">{done} sur {total} terminées</span>
+        <span data-message="no-tasks">Aucune tâche dans cette liste.</span>
+        <span data-message="copied">Copié dans le presse-papiers.</span>
+        <span data-message="copy-failed">Échec de la copie. Sélectionnez le texte et copiez-le vous-même.</span>
+        <span data-message="loaded">Exemple chargé.</span>
+        <span data-message="cleared">Effacé.</span>
+        <span data-message="title-make">Votre checklist</span>
+        <span data-message="title-strip">Votre liste sans cases</span>
+        <span data-message="bad-date">Choisissez une date valide pour ajouter des échéances. Aucune date n’a été ajoutée.</span>
+        <span data-message="bad-time">Saisissez une heure comme 09:30. La date a été ajoutée sans heure.</span>
+        <span data-message="skipped">Les tâches qui portent déjà ce type de date ont été laissées telles quelles.</span>
+        <span data-message="paren">Sur GitHub, une description de tâche qui commence par une parenthèse doit être précédée d’une barre oblique inverse.</span>
+      </div>
+
+      <h2 id="syntax">2. Syntaxe d’une checklist Markdown</h2>
+      <pre class="guide-code"><code>- [ ] unchecked task
+- [x] checked task
+- [ ] parent task
+	- [ ] nested task</code></pre>
+      <p>Chaque tâche est un élément de liste : un trait d’union et une espace, puis <code>[ ]</code> avec une espace entre les crochets, puis le texte. <a href="https://obsidian.md/help/syntax" target="_blank" rel="noopener">page Obsidian Help</a> et <a href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#task-lists" target="_blank" rel="noopener">page GitHub Docs</a> les décrivent tous deux comme un trait d’union et une espace suivis de <code>[ ]</code>. Pour marquer une tâche comme terminée, GitHub Docs indique d’utiliser <code>[x]</code>.</p>
+      <p>Les espaces comptent. Le <a href="https://github.github.com/gfm/#task-list-items-extension-" target="_blank" rel="noopener">spécification GitHub Flavored Markdown</a> définit le marqueur de case comme un crochet gauche, un espace blanc ou la lettre <code>x</code>, et un crochet droit, et elle exige un espace blanc avant le texte qui suit. Donc <code>[]</code> sans rien à l’intérieur, ou <code>- [ ]text</code> sans espace après le crochet, ne correspond pas à la définition. Le trait d’union et son espace sont ce qui fait de la ligne un élément de liste.</p>
+      <p>Les listes de tâches ne font pas partie du Markdown de base. La même spécification les présente comme une extension de CommonMark, et son introduction indique que les fonctionnalités absentes de la spécification CommonMark d’origine sont signalées comme extensions. Un moteur qui n’implémente pas l’extension affiche les crochets comme texte brut, ce qui explique en général qu’une case s’affiche comme <code>[ ]</code> sur la page.</p>
+
+      <h2 id="obsidian">3. Checklists dans Obsidian</h2>
+      <p>La documentation Obsidian Help sur la <a href="https://obsidian.md/help/syntax" target="_blank" rel="noopener">mise en forme de base</a> couvre les listes de tâches :</p>
+      <ul>
+        <li>Une tâche commence par un trait d’union et une espace suivis de <code>[ ]</code>.</li>
+        <li>Vous pouvez utiliser n’importe quel caractère entre les crochets pour marquer la tâche comme terminée, donc <code>[x]</code>, <code>[-]</code> et <code>[?]</code> comptent toutes.</li>
+        <li>Pour imbriquer une liste de tâches, indentez les éléments de liste. Utilisez <code>Tab</code> ou <code>Shift+Tab</code> pour indenter ou désindenter les éléments sélectionnés.</li>
+        <li>Vous pouvez cocher ou décocher une tâche en mode Lecture en sélectionnant sa case.</li>
+      </ul>
+      <p>La page d’aide indique que n’importe quel caractère termine une tâche. Elle ne décrit pas d’apparence différente pour chaque caractère. Si <code>[-]</code> ou <code>[?]</code> est différent de <code>[x]</code> dans votre vault, cela vient d’un thème ou d’un extrait CSS que vous avez installé, pas du Markdown lui-même.</p>
+      <p>La ligne de progression du générateur compte de la même façon : tout caractère entre les crochets autre qu’une espace signifie terminé, donc <code>[x]</code>, <code>[X]</code>, <code>[-]</code> et <code>[?]</code> sont terminées et <code>[ ]</code> est ouverte. Les lignes qui commencent par « done: » ou « x » sont du texte ordinaire ; l’outil ne devine pas qu’elles désignent une tâche terminée.</p>
+
+      <h2 id="due-dates">4. Échéances : Tasks, Dataview ou Reminder</h2>
+      <p>La syntaxe des listes de tâches d’Obsidian n’a pas de date d’échéance propre : la page d’aide n’en documente aucune. Trois plugins lisent une date écrite dans le texte de la tâche, chacun dans son propre format. Le générateur écrit la date au format ISO <code>YYYY-MM-DD</code> dans tous. Sans le plugin, la date n’est que du texte.</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th>Format</th><th>Lu par</th><th>Ligne d’exemple</th></tr></thead>
+          <tbody>
+            <tr><td>Échéance : <code>📅 YYYY-MM-DD</code></td><td><a href="https://publish.obsidian.md/tasks/Getting+Started/Dates" target="_blank" rel="noopener">plugin Tasks</a>, qui indique que la date doit s’écrire <code>YYYY-MM-DD</code> en respectant ce format</td><td><code>- [ ] send invoice 📅 2026-11-25</code></td></tr>
+            <tr><td>Planifiée : <code>⏳ YYYY-MM-DD</code></td><td>plugin Tasks</td><td><code>- [ ] send invoice ⏳ 2026-11-25</code></td></tr>
+            <tr><td>Début : <code>🛫 YYYY-MM-DD</code></td><td>plugin Tasks</td><td><code>- [ ] send invoice 🛫 2026-11-25</code></td></tr>
+            <tr><td>Champ en ligne : <code>[due:: YYYY-MM-DD]</code></td><td><a href="https://blacksmithgu.github.io/obsidian-dataview/annotation/metadata-tasks/" target="_blank" rel="noopener">documentation de Dataview</a>, qui lit les champs écrits sur une tâche, comme <code>[completion:: 2021-08-15]</code></td><td><code>- [ ] send invoice [due:: 2026-11-25]</code></td></tr>
+            <tr><td>Reminder : <code>(@YYYY-MM-DD)</code> ou <code>(@YYYY-MM-DD HH:mm)</code></td><td><a href="https://github.com/uphy/obsidian-reminder" target="_blank" rel="noopener">obsidian-reminder extension</a>, dont le README montre <code>(@2021-08-14)</code> et <code>(@2021-08-14 09:37)</code> sur les tâches non cochées</td><td><code>- [ ] send invoice (@2026-11-25 09:30)</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Choisissez le seul plugin que vous utilisez. La page de Dataview liste aussi ses propres raccourcis emoji pour les dates et indique que ce sont les seuls raccourcis pris en charge ; le générateur écrit plutôt la forme à crochets de Dataview. Le README de Reminder indique que vous n’êtes pas notifié des rappels sur des tâches déjà cochées.</p>
+
+      <h2 id="github">5. Différences entre GitHub et Obsidian</h2>
+      <p>GitHub Docs décrit <code>[ ]</code> pour une tâche ouverte et <code>[x]</code> pour en marquer une comme terminée. La spécification GFM définit le marqueur comme un espace blanc ou la lettre <code>x</code> entre les crochets. Obsidian accepte n’importe quel caractère. Ainsi, une tâche telle que <code>- [-] skipped</code> ou <code>- [?] unsure</code> est terminée dans Obsidian, mais sort de la définition du marqueur de la spécification, et un moteur conforme peut l’afficher comme texte brut. Si le fichier est aussi lu sur GitHub, utilisez <code>[ ]</code> et <code>[x]</code> uniquement.</p>
+      <p>GitHub Docs ajoute une règle : si la description d’une tâche commence par une parenthèse, échappez-la avec une barre oblique inverse, comme dans <code>- [ ] \(Optional) Open a followup issue</code>. Le générateur n’ajoute pas la barre oblique inverse à votre place ; il avertit quand une tâche commence par une parenthèse.</p>
+
+      <h2 id="capture">6. Capturez des tâches à la voix ou au texte sur iPhone et Mac avec Vox.md</h2>
+      <p>Le mode de traitement Todo Checklist de Vox.md produit du Markdown <code>- [ ]</code> des éléments de tâche à partir d’une capture, et son repli est un formateur de checklist déterministe. La voix est transcrite sur votre appareil. Dans la Capture Bar, <strong>Checklist</strong> applique le <code>- [ ]</code> préfixe, et <strong>2 Date de mise</strong> insère <code>(@yyyy-MM-dd)</code> ou une forme avec heure. Voir la <a href="/fr/docs/#quick-capture">Capture rapide</a> et <a href="/fr/docs/#presets">Routes et modes de traitement</a> documentation.</p>
+      <p>Une Route peut ajouter les éléments à votre note quotidienne sous un titre tel que <code>## Tasks</code>; <a href="/fr/blog/append-to-obsidian-daily-note-iphone/">Ajouter à une note quotidienne Obsidian</a> explique la configuration, et le <a href="/fr/blog/obsidian-daily-note-template/">générateur de modèle de note quotidienne</a> écrit la structure de la note. Pour les actions d’une réunion, voir le <a href="/fr/blog/obsidian-meeting-notes-template/">modèle de notes de réunion</a>; pour une recette de préfixe de liste de tâches, voir <a href="/fr/blog/obsidian-capture-templates/">modèles de capture</a>.</p>
+      <p>Vox.md écrit le <code>(@yyyy-MM-dd)</code> forme indiquée dans sa documentation. Il n’écrit pas les dates emoji du plugin Tasks ni les champs Dataview. Si vous utilisez l’un d’eux, collez les tâches capturées dans le générateur ci-dessus et choisissez ce format, ou modifiez la date ensuite. Pour construire les propriétés en haut d’une note, utilisez le <a href="/fr/blog/obsidian-properties-generator/">générateur de propriétés</a>.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Capturez des tâches à la voix sur iPhone, iPad ou Mac.</h2>
+        <p>Vox.md transforme ce que vous dites en checklist Markdown sur l’appareil et l’ajoute à votre note Obsidian. L’offre gratuite comprend 15 minutes de transcription et 10 livraisons de Capture réussies ; l’usage illimité est un déblocage unique à vie, sans abonnement.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_fr_7d9ef8e50226">Capturez des tâches à la voix</a></p>
+        <p>Le générateur de checklist ci-dessus fonctionne entièrement sans l’app.</p>
+      </section>
+
+      <h2 id="faq">7. Questions fréquentes</h2>
+      <h3>Pourquoi ma case à cocher s’affiche-t-elle comme du texte [ ] ?</h3>
+      <p>Le moteur de rendu n’affiche pas les listes de tâches. Elles sont une extension de CommonMark ; un moteur sans cette extension affiche les crochets. Vérifiez que la ligne commence par un trait d’union et une espace, qu’il y a une espace ou <code>x</code> entre les crochets, et qu’une espace suit le crochet fermant. Dans Obsidian, une tâche placée dans un bloc de code ou une cellule de tableau peut ne pas s’afficher comme case à cocher, contrairement à un élément de liste.</p>
+      <h3>Comment imbriquer des tâches ?</h3>
+      <p>Indentez la tâche enfant. Dans Obsidian, appuyez sur <code>Tab</code> pour indenter les éléments sélectionnés et <code>Shift+Tab</code> pour les désindenter. Le générateur transforme 2 ou 4 espaces de votre liste en une tabulation par niveau, ou en 2 ou 4 espaces si vous préférez.</p>
+      <h3>Comment cocher une case avec un autre caractère que x ?</h3>
+      <p>L’aide d’Obsidian indique que n’importe quel caractère entre les crochets marque la tâche comme terminée, donc <code>- [-] task</code> et <code>- [?] task</code> sont terminées. Le générateur conserve le caractère que vous avez collé, sauf si vous réinitialisez la liste. Pour les fichiers lus aussi sur GitHub, utilisez <code>[x]</code>.</p>
+      <h3>Comment ajouter une échéance lue par le plugin Tasks ?</h3>
+      <p>Mettez <code>📅</code> et une <code>YYYY-MM-DD</code> date à la fin de la tâche, par exemple <code>- [ ] send invoice 📅 2026-11-25</code>. Choisissez « Plugin Tasks : échéance » ci-dessus pour l’ajouter à chaque tâche. Utilisez <code>⏳</code> pour une date planifiée et <code>🛫</code> pour une date de début.</p>
+      <h3>Le générateur envoie-t-il ma liste ?</h3>
+      <p>Non. La liste est convertie par un script de cette page, sur votre appareil, et la page n’effectue aucune requête réseau. Elle n’enregistre pas votre liste : fermer ou recharger la page l’efface.</p>
+
+      <nav class="toc" aria-label="Guides associés" id="related"><div class="toc-title">Poursuivre la configuration</div><ul>
+        <li><a href="/fr/blog/append-to-obsidian-daily-note-iphone/">Ajouter à une note quotidienne Obsidian</a></li>
+        <li><a href="/fr/blog/obsidian-daily-note-template/">Générateur de modèle de note quotidienne Obsidian</a></li>
+        <li><a href="/fr/blog/obsidian-meeting-notes-template/">Générateur de modèles de notes de réunion Obsidian</a></li>
+        <li><a href="/fr/blog/obsidian-capture-templates/">Recettes de chemins et de modèles</a></li>
+        <li><a href="/fr/blog/obsidian-properties-generator/">Générateur et vérificateur de propriétés Obsidian</a></li>
+        <li><a href="/fr/docs/#quick-capture">référence Quick Capture</a></li>
+        <li><a href="/fr/docs/#presets">Référence des Parcours</a></li>
+      </ul></nav>
+<style>
+.cl-tool:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.cl-tool [hidden] { display: none; }
+.mt-output-head[hidden], .cl-output[hidden], #cl-preview-title[hidden] { display: none; }
+.cl-tool .mt-field input, .cl-tool .mt-field textarea, .cl-tool .mt-field select { font: inherit; font-family: var(--font-mono); font-size: 16px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; padding: 8px 10px; width: 100%; box-sizing: border-box; min-height: 44px; }
+.cl-tool .mt-field textarea { resize: vertical; min-height: 160px; }
+.cl-tool input:focus-visible, .cl-tool textarea:focus-visible, .cl-tool select:focus-visible, .cl-output:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.cl-tool .mt-option { min-height: 44px; }
+.cl-tool .mt-option input { width: 22px; height: 22px; }
+.mt-actions button { font: inherit; font-size: 15px; min-height: 44px; padding: 0 18px; cursor: pointer; }
+.cl-output { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 28rem; overflow: auto; tab-size: 4; }
+.cl-preview { padding: 14px 18px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; display: flex; flex-direction: column; gap: 4px; overflow-wrap: anywhere; }
+.cl-preview[hidden] { display: none; }
+.cl-row { display: flex; align-items: flex-start; gap: 10px; }
+.cl-row input { width: 18px; height: 18px; margin: 3px 0 0; flex: none; accent-color: var(--accent); }
+.cl-row.is-heading { font-weight: 700; margin-top: 6px; }
+</style>
+<script>
+/* Markdown checklist maker. Runs locally: no network requests. */
+(function () {
+  var HEADING = /^#{1,6}(?:\s|$)/;
+  var RULE = /^(?:-{3,}|\*{3,}|_{3,})$/;
+  var DONE_ITEM = /^\s*(?:[-*+]|\d+[.)])\s+\[(.)\](?:\s|$)/;
+  var DUE = {
+    'tasks-due': { mark: '📅', has: /📅/ },
+    'tasks-scheduled': { mark: '⏳', has: /⏳/ },
+    'tasks-start': { mark: '🛫', has: /🛫/ },
+    'dataview': { has: /\[due::/ },
+    'reminder': { has: /\(@\d{4}-\d{2}-\d{2}/ },
+    'reminder-time': { has: /\(@\d{4}-\d{2}-\d{2}/ }
+  };
+
+  function pad(n, len) { var s = String(n); while (s.length < len) s = '0' + s; return s; }
+  function isoDate(d) { return pad(d.getFullYear(), 4) + '-' + pad(d.getMonth() + 1, 2) + '-' + pad(d.getDate(), 2); }
+  function validDate(value) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || '');
+    if (!m) return false;
+    var d = new Date(+m[1], +m[2] - 1, +m[3], 12);
+    return d.getFullYear() === +m[1] && d.getMonth() === +m[2] - 1 && d.getDate() === +m[3];
+  }
+  function validTime(value) { return /^([01]\d|2[0-3]):[0-5]\d$/.test(value || ''); }
+  function isDone(mark) { return mark !== null && /\S/.test(mark); }
+
+  /* Remove bullets, numbers and checkboxes from the start of a line. */
+  function peel(s) {
+    var state = null, m;
+    for (;;) {
+      m = /^(?:[-*+]|\d+[.)])(?:\s+|$)/.exec(s);
+      if (m) { s = s.slice(m[0].length); continue; }
+      m = /^\[(.)\](?:\s+|$)/.exec(s);
+      if (m) { if (state === null) state = m[1]; s = s.slice(m[0].length); continue; }
+      break;
+    }
+    return { state: state, text: s.trim() };
+  }
+
+  function progress(text) {
+    var done = 0, total = 0;
+    String(text || '').replace(/\r\n?/g, '\n').split('\n').forEach(function (line) {
+      var m = DONE_ITEM.exec(line);
+      if (!m) return;
+      total++;
+      if (/\S/.test(m[1])) done++;
+    });
+    return { done: done, total: total };
+  }
+
+  function dateText(opts, warnings) {
+    var kind = opts.due || 'none';
+    if (kind === 'none' || !DUE[kind]) return null;
+    if (!validDate(opts.date)) { warnings.push('bad-date'); return null; }
+    if (kind === 'dataview') return '[due:: ' + opts.date + ']';
+    if (kind === 'reminder') return '(@' + opts.date + ')';
+    if (kind === 'reminder-time') {
+      if (validTime(opts.time)) return '(@' + opts.date + ' ' + opts.time + ')';
+      warnings.push('bad-time');
+      return '(@' + opts.date + ')';
+    }
+    return DUE[kind].mark + ' ' + opts.date;
+  }
+
+  /* Convert pasted text. Returns {output, items, progress, warnings}. */
+  function run(input, opts) {
+    opts = opts || {};
+    var strip = opts.mode === 'strip';
+    var lines = String(input || '').replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n').split('\n');
+    var parsed = [];
+    var minSpaces = 0;
+    lines.forEach(function (raw) {
+      if (!raw.trim()) return;
+      var lead = /^[ \t]*/.exec(raw)[0];
+      var rest = raw.slice(lead.length).replace(/\s+$/, '');
+      if (HEADING.test(rest)) { parsed.push({ heading: true, text: rest }); return; }
+      if (RULE.test(rest)) return;
+      var p = peel(rest);
+      if (!p.text) return;
+      var tabs = lead.replace(/ /g, '').length;
+      var spaces = lead.length - tabs;
+      if (spaces && (!minSpaces || spaces < minSpaces)) minSpaces = spaces;
+      parsed.push({ heading: false, tabs: tabs, spaces: spaces, state: p.state, text: p.text });
+    });
+    var unit = opts.unit === '2' ? 2 : opts.unit === '4' ? 4 : (minSpaces || 2);
+    var step = opts.indent === '2' ? '  ' : opts.indent === '4' ? '    ' : '\t';
+    var warnings = [];
+    var suffix = strip ? null : dateText(opts, warnings);
+    var dueKind = opts.due || 'none';
+    var prev = -1, skipped = false, paren = false;
+    var items = [];
+    parsed.forEach(function (p) {
+      if (p.heading) { items.push({ kind: 'heading', level: 0, mark: null, text: p.text }); prev = -1; return; }
+      var level = p.tabs + (p.spaces ? Math.max(1, Math.floor(p.spaces / unit)) : 0);
+      level = Math.min(level, prev + 1);
+      prev = level;
+      var text = p.text;
+      if (suffix) {
+        if (DUE[dueKind].has.test(text)) skipped = true; else text += ' ' + suffix;
+      }
+      var mark = null;
+      if (!strip) mark = opts.reset || p.state === null || !/\S/.test(p.state) ? ' ' : p.state;
+      if (!strip && /^\(/.test(p.text)) paren = true;
+      items.push({ kind: 'item', level: level, mark: mark, text: text, had: p.state });
+    });
+    if (skipped) warnings.push('skipped');
+    if (paren) warnings.push('paren');
+    var output = items.map(function (it) {
+      if (it.kind === 'heading') return it.text;
+      var indent = new Array(it.level + 1).join(step);
+      if (strip) return opts.stripto === 'plain' ? it.text : indent + '- ' + it.text;
+      return indent + '- [' + it.mark + '] ' + it.text;
+    }).join('\n');
+    var done = 0, total = 0;
+    items.forEach(function (it) {
+      if (it.kind !== 'item') return;
+      var mark = strip ? it.had : it.mark;
+      if (mark === null || mark === undefined) return;
+      total++;
+      if (isDone(mark)) done++;
+    });
+    return { output: output, items: items, progress: { done: done, total: total }, warnings: warnings };
+  }
+
+  if (typeof window !== 'undefined') {
+    window.voxChecklist = { run: run, progress: progress, isoDate: isoDate };
+  }
+
+  var form = document.getElementById('cl-tool');
+  if (!form) return;
+  var input = document.getElementById('cl-input');
+  var code = document.getElementById('cl-output-code');
+  var pre = document.getElementById('cl-output');
+  var head = document.getElementById('cl-output-head');
+  var title = document.getElementById('cl-output-title');
+  var preview = document.getElementById('cl-preview');
+  var previewTitle = document.getElementById('cl-preview-title');
+  var progressEl = document.getElementById('cl-progress');
+  var status = document.getElementById('cl-status');
+  var warning = document.getElementById('cl-warning');
+  var dateInput = document.getElementById('cl-date');
+  var timeField = document.getElementById('cl-time-field');
+  var EXAMPLE = '- buy milk\n  - oat\n  - bread\n1. call Sam\n* [x] send invoice\n\n## Later\nbook flights\n- [ ] renew passport';
+
+  function message(name, fill) {
+    var el = document.querySelector('#cl-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : '';
+    if (fill) Object.keys(fill).forEach(function (key) { text = text.split('{' + key + '}').join(fill[key]); });
+    return text;
+  }
+  function say(text) {
+    status.textContent = '';
+    window.setTimeout(function () { status.textContent = text; }, 30);
+  }
+  function options() {
+    return {
+      mode: form.elements.mode.value, reset: form.elements.resetall.checked, stripto: form.elements.stripto.value,
+      unit: form.elements.unit.value, indent: form.elements.indent.value,
+      due: form.elements.due.value, date: dateInput.value, time: form.elements.time.value
+    };
+  }
+
+  function renderPreview(result, strip) {
+    preview.textContent = '';
+    result.items.forEach(function (it) {
+      var row = document.createElement('div');
+      row.className = 'cl-row' + (it.kind === 'heading' ? ' is-heading' : '');
+      if (!(strip && form.elements.stripto.value === 'plain')) row.style.paddingInlineStart = (it.level * 1.6) + 'em';
+      if (it.kind === 'item' && !strip) {
+        var box = document.createElement('input');
+        box.type = 'checkbox';
+        box.disabled = true;
+        box.checked = isDone(it.mark);
+        box.setAttribute('aria-label', isDone(it.mark) ? '[' + it.mark + ']' : '[ ]');
+        row.appendChild(box);
+      } else if (it.kind === 'item' && form.elements.stripto.value === 'bullets') {
+        var dot = document.createElement('span');
+        dot.setAttribute('aria-hidden', 'true');
+        dot.textContent = '•';
+        row.appendChild(dot);
+      }
+      var label = document.createElement('span');
+      label.textContent = it.kind === 'heading' ? it.text.replace(/^#{1,6}\s*/, '') : it.text;
+      row.appendChild(label);
+      preview.appendChild(row);
+    });
+  }
+
+  function update() {
+    var opts = options();
+    var strip = opts.mode === 'strip';
+    Array.prototype.forEach.call(form.querySelectorAll('[data-show]'), function (el) {
+      el.hidden = el.getAttribute('data-show') !== opts.mode;
+    });
+    timeField.hidden = strip || opts.due !== 'reminder-time';
+    var empty = !input.value.trim();
+    var result = run(input.value, opts);
+    code.textContent = result.output;
+    title.textContent = message(strip ? 'title-strip' : 'title-make');
+    var has = !empty && result.items.length > 0;
+    head.hidden = pre.hidden = preview.hidden = previewTitle.hidden = !has;
+    if (has) renderPreview(result, strip);
+    if (!has) progressEl.textContent = message('waiting');
+    else if (!result.progress.total) progressEl.textContent = message('no-tasks');
+    else progressEl.textContent = message('progress', { done: result.progress.done, total: result.progress.total });
+    warning.textContent = result.warnings.map(function (w) { return message(w); }).join(' ');
+    warning.hidden = !result.warnings.length;
+  }
+
+  dateInput.value = isoDate(new Date());
+  form.addEventListener('input', update);
+  form.addEventListener('change', update);
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+  document.getElementById('cl-example').addEventListener('click', function () {
+    input.value = EXAMPLE;
+    update();
+    say(message('loaded'));
+  });
+  document.getElementById('cl-clear').addEventListener('click', function () {
+    input.value = '';
+    update();
+    input.focus();
+    say(message('cleared'));
+  });
+  document.getElementById('cl-copy').addEventListener('click', function () {
+    var text = code.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(code);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+
+  document.getElementById('cl-nojs').hidden = true;
+  form.hidden = false;
+  update();
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/fr/">Accueil</a></li>
+        <li><a href="/fr/docs/">Documentation</a></li>
+        <li><a href="/fr/blog/">Guides</a></li>
+        <li><a href="/fr/compare/">Comparer</a></li>
+        <li><a href="/fr/privacy.html">Confidentialité</a></li>
+        <li><a href="/fr/terms.html">Conditions</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Assistance</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_fr_7d9ef8e50226">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Capture rapide pour notes locales · Aucun envoi de contenu.</div>
+    </div>
+  <details class="language-switcher"><summary>Langue</summary><ul><li><a href="/blog/markdown-checklist-maker/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/markdown-checklist-maker/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/markdown-checklist-maker/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/markdown-checklist-maker/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/markdown-checklist-maker/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/markdown-checklist-maker/" lang="fr" hreflang="fr" aria-current="page">Français</a></li><li><a href="/hi/blog/markdown-checklist-maker/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/markdown-checklist-maker/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/markdown-checklist-maker/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/markdown-checklist-maker/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/markdown-checklist-maker/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/markdown-checklist-maker/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/markdown-checklist-maker/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/markdown-checklist-maker/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/markdown-checklist-maker/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/markdown-checklist-maker/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/markdown-checklist-maker/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/markdown-checklist-maker/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/markdown-checklist-maker/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/markdown-checklist-maker/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/markdown-checklist-maker/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/markdown-checklist-maker/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/markdown-checklist-maker/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

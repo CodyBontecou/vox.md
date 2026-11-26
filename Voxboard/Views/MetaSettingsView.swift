@@ -28,6 +28,8 @@ struct MetaSettingsView: View {
     @State private var lockScreenQuickRecordEnabled: Bool = AppConstants.lockScreenQuickRecordEnabled
     @State private var recordingQuality = RecordingQuality.load(from: AppConstants.sharedDefaults)
     @State private var recordingStereo = StereoRecordingPreference.load(from: AppConstants.sharedDefaults)
+    @State private var recordingNatural = NaturalRecordingPreference.load(from: AppConstants.sharedDefaults)
+    @State private var recordingLayout = RecordingChannelLayout.load(from: AppConstants.sharedDefaults)
     @State private var vault: VoxVault?
     @State private var isPickingVault = false
     @State private var vaultMessage: String?
@@ -225,6 +227,8 @@ struct MetaSettingsView: View {
                 RecordingQualitySettingsView { quality in
                     recordingQuality = quality
                     recordingStereo = StereoRecordingPreference.load(from: AppConstants.sharedDefaults)
+                    recordingNatural = NaturalRecordingPreference.load(from: AppConstants.sharedDefaults)
+                    recordingLayout = RecordingChannelLayout.load(from: AppConstants.sharedDefaults)
                     persistentRecorder.recordingQualityDidChange()
                     WatchRecordingController.shared.publishState()
                 }
@@ -232,13 +236,18 @@ struct MetaSettingsView: View {
         }
     }
 
-    /// "High · ≈ 0.5 MB/min", or "High · Stereo · ≈ 1 MB/min"
+    /// "High · ≈ 0.5 MB/min", "High · Stereo · ≈ 1 MB/min", or with Natural
+    /// sound on (Mono only), "High · Natural · ≈ 0.5 MB/min".
     private var recordingQualitySummary: String {
+        if let spatial = recordingQuality.spatialSettingsSummary(storedLayout: recordingLayout) { return spatial }
         let storage = recordingQuality.localizedStoragePerMinute(stereo: recordingStereo)
-        guard StereoRecordingPreference.requestsStereo(quality: recordingQuality, enabled: recordingStereo) else {
-            return String(localized: "\(recordingQuality.displayName) · \(storage)")
+        var name = recordingQuality.displayName
+        if StereoRecordingPreference.requestsStereo(quality: recordingQuality, enabled: recordingStereo) {
+            name = String(localized: "\(name) · \(String(localized: "Stereo"))")
         }
-        let name = String(localized: "\(recordingQuality.displayName) · \(String(localized: "Stereo"))")
+        if NaturalRecordingPreference.requestsNatural(quality: recordingQuality, enabled: recordingNatural, layout: recordingLayout) {
+            name = String(localized: "\(name) · \(String(localized: "Natural"))")
+        }
         return String(localized: "\(name) · \(storage)")
     }
 

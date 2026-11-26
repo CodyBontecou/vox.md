@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="zh-Hans" dir="ltr" data-search-section="部分" data-search-guide="指南" data-search-empty="没有与“{query}”匹配的结果">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown 清单生成器:把任意列表变成带截止日期的任务 | Vox.md</title>
+  <meta name="description" content="免费的浏览器内工具,可把粘贴的列表转换为适用于 Obsidian 或 GitHub 的 Markdown 任务列表,并可选添加 Tasks、Dataview 或 Reminder 格式的截止日期。不会上传任何内容。">
+  <link rel="canonical" href="https://vox.isolated.tech/zh-hans/blog/markdown-checklist-maker/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="供语言模型使用的 Vox.md 文档">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Markdown 清单生成器:把任意列表变成带截止日期的任务">
+  <meta property="og:description" content="免费的浏览器内工具,可把粘贴的列表转换为适用于 Obsidian 或 GitHub 的 Markdown 任务列表,并可选添加 Tasks、Dataview 或 Reminder 格式的截止日期。不会上传任何内容。">
+  <meta property="og:url" content="https://vox.isolated.tech/zh-hans/blog/markdown-checklist-maker/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-11-24">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Markdown 清单生成器:把任意列表变成带截止日期的任务">
+  <meta name="twitter:description" content="免费的浏览器内工具,可把粘贴的列表转换为适用于 Obsidian 或 GitHub 的 Markdown 任务列表,并可选添加 Tasks、Dataview 或 Reminder 格式的截止日期。不会上传任何内容。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Markdown 清单生成器:把任意列表变成带截止日期的任务",
+  "description": "免费的浏览器内工具,可把粘贴的列表转换为适用于 Obsidian 或 GitHub 的 Markdown 任务列表,并可选添加 Tasks、Dataview 或 Reminder 格式的截止日期。不会上传任何内容。",
+  "image": "https://vox.isolated.tech/screenshots/01-route-heading-light.png",
+  "datePublished": "2026-11-24",
+  "dateModified": "2026-11-24",
+  "mainEntityOfPage": "https://vox.isolated.tech/zh-hans/blog/markdown-checklist-maker/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "zh-Hans",
+  "name": "Markdown 清单生成器:把任意列表变成带截止日期的任务 | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/zh-hans/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "指南",
+      "item": "https://vox.isolated.tech/zh-hans/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Markdown 清单生成器:把任意列表变成带截止日期的任务",
+      "item": "https://vox.isolated.tech/zh-hans/blog/markdown-checklist-maker/"
+    }
+  ],
+  "inLanguage": "zh-Hans",
+  "name": "Markdown 清单生成器:把任意列表变成带截止日期的任务 | Vox.md",
+  "description": "免费的浏览器内工具,可把粘贴的列表转换为适用于 Obsidian 或 GitHub 的 Markdown 任务列表,并可选添加 Tasks、Dataview 或 Reminder 格式的截止日期。不会上传任何内容。"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/markdown-checklist-maker/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/markdown-checklist-maker/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳至指南</a>
+<nav aria-label="主导航">
+  <div class="nav-inner">
+    <a href="/zh-hans/" class="logo" aria-label="Vox.md 首页">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/zh-hans/#how">工作原理</a></li>
+      <li><a href="/zh-hans/docs/">文档</a></li>
+      <li><a href="/zh-hans/blog/">指南</a></li>
+      <li><a href="/zh-hans/compare/">比较</a></li>
+      <li><a href="/zh-hans/privacy.html">隐私</a></li>
+      <li><a href="/zh-hans/terms.html">条款</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_7d9ef8e50226">下载 Vox.md</a>
+  <details class="language-switcher"><summary>语言</summary><ul><li><a href="/blog/markdown-checklist-maker/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/markdown-checklist-maker/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/markdown-checklist-maker/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/markdown-checklist-maker/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/markdown-checklist-maker/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/markdown-checklist-maker/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/markdown-checklist-maker/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/markdown-checklist-maker/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/markdown-checklist-maker/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/markdown-checklist-maker/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/markdown-checklist-maker/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/markdown-checklist-maker/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/markdown-checklist-maker/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/markdown-checklist-maker/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/markdown-checklist-maker/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/markdown-checklist-maker/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/markdown-checklist-maker/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/markdown-checklist-maker/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/markdown-checklist-maker/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/markdown-checklist-maker/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/markdown-checklist-maker/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/markdown-checklist-maker/" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a></li><li><a href="/zh-hant/blog/markdown-checklist-maker/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">免费工具</div>
+        <h1 class="hero-title">Markdown 清单生成器:把任意列表变成带截止日期的任务</h1>
+        <p class="hero-subtitle">粘贴普通行、项目符号、编号条目或现有任务列表,即可复制有效的 - [ ] 任务,保留嵌套层级,可选添加截止日期,并显示已完成数量。</p>
+      </div>
+      <aside class="meta-card" aria-label="关于本指南">
+        <dl>
+          <div><dt>作者：</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>更新于</dt><dd><time datetime="2026-11-24">2026年11月24日</time></dd></div>
+          <div><dt>需要</dt><dd>任何现代浏览器,包括 iPhone 上的 Safari。可选:用于清单的 Obsidian,以及用于语音捕获任务的 iPhone 或 Mac 版 Vox.md。</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Markdown 清单生成器:把任意列表变成带截止日期的任务">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">简短回答</div>
+        <p>Markdown 任务由一个连字符、一个空格、方括号、一个空格和文本组成。写作 <code>- [ ] task</code> 表示未完成的任务, <code>- [x] done</code> 表示已完成的任务。要把整个列表转换为任务,请粘贴到 <a href="#tool">清单生成器</a> 如下。</p>
+      </div>
+      <pre class="guide-code" id="default-checklist"><code>- [ ] buy milk
+	- [ ] oat
+- [ ] call Sam
+- [x] send invoice
+</code></pre>
+      <p>生成器会移除已有的项目符号、编号和复选框以免重复,把缩进保留为嵌套层级,并能按你的 Obsidian 插件可读取的格式添加截止日期。它完全在本页中运行:列表不会被上传,页面也不会发出任何网络请求。</p>
+      <nav class="toc" aria-label="本指南中"><div class="toc-title">本指南中</div><ol>
+        <li><a href="#tool">生成你的清单</a></li>
+        <li><a href="#syntax">Markdown 清单语法</a></li>
+        <li><a href="#obsidian">Obsidian 中的清单</a></li>
+        <li><a href="#due-dates">截止日期:Tasks、Dataview 与 Reminder 的对比</a></li>
+        <li><a href="#github">GitHub 与 Obsidian 的差异</a></li>
+        <li><a href="#capture">用 Vox.md 语音或文字捕获任务</a></li>
+        <li><a href="#faq">常见问题</a></li>
+      </ol></nav>
+
+      <h2 id="tool">1. 生成你的清单</h2>
+      <p class="mt-nojs" id="cl-nojs">清单生成器需要 JavaScript。没有它时,下面的语法仍可作为参考。</p>
+      <form class="cl-tool" id="cl-tool" aria-label="Markdown 清单生成器" hidden>
+        <fieldset class="mt-group">
+          <legend>你的列表</legend>
+          <label class="mt-field" for="cl-input">粘贴普通行、项目符号、编号条目或任务 <textarea id="cl-input" rows="9" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></label>
+          <div class="mt-actions">
+            <button type="button" class="btn-secondary" id="cl-example">载入示例</button>
+            <button type="button" class="btn-secondary" id="cl-clear">清除</button>
+          </div>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>操作方法</legend>
+          <label class="mt-option"><input type="radio" name="mode" value="make" checked> <span>生成清单</span></label>
+          <label class="mt-option"><input type="radio" name="mode" value="strip"> <span>移除复选框</span></label>
+          <label class="mt-option" data-show="make"><input type="checkbox" name="resetall"> <span>把每个任务重置为 [ ]</span></label>
+          <label class="mt-field" data-show="strip" for="cl-strip-to">把任务变成 <select id="cl-strip-to" name="stripto">
+            <option value="bullets" selected>普通项目符号 (- text)</option>
+            <option value="plain">普通行(无项目符号、无嵌套)</option>
+          </select></label>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>嵌套</legend>
+          <label class="mt-field" for="cl-unit">列表中每一级的空格数 <select id="cl-unit" name="unit">
+            <option value="auto" selected>根据我的列表自动检测</option>
+            <option value="2">2 个空格</option>
+            <option value="4">4 个空格</option>
+          </select></label>
+          <label class="mt-field" for="cl-indent">缩进结果请使用 <select id="cl-indent" name="indent">
+            <option value="tab" selected>每级一个制表符</option>
+            <option value="2">每级 2 个空格</option>
+            <option value="4">每级 4 个空格</option>
+          </select></label>
+          <p class="mt-hint">列表中的制表符始终算作一级。标题仍保持为标题。</p>
+        </fieldset>
+        <fieldset class="mt-group" data-show="make">
+          <legend>为每个任务设置截止日期</legend>
+          <label class="mt-field" for="cl-due">格式 <select id="cl-due" name="due">
+            <option value="none" selected>无</option>
+            <option value="tasks-due">Tasks 插件:截止 (📅 2026-11-25)</option>
+            <option value="tasks-scheduled">Tasks 插件:计划 (⏳ 2026-11-25)</option>
+            <option value="tasks-start">Tasks 插件:开始 (🛫 2026-11-25)</option>
+            <option value="dataview">Dataview 行内字段 ([due:: 2026-11-25])</option>
+            <option value="reminder">Reminder 插件 / Vox.md ((@2026-11-25))</option>
+            <option value="reminder-time">带时间的 Reminder 插件 ((@2026-11-25 09:30))</option>
+          </select></label>
+          <label class="mt-field" for="cl-date">日期 <input type="date" id="cl-date" name="date"></label>
+          <label class="mt-field" id="cl-time-field" for="cl-time" hidden>时间 <input type="time" id="cl-time" name="time" value="09:00"></label>
+        </fieldset>
+      </form>
+      <p class="mt-status" id="cl-progress" role="status"></p>
+      <div class="mt-output-head" id="cl-output-head" hidden>
+        <h3 id="cl-output-title">你的清单</h3>
+        <div class="mt-actions">
+          <button type="button" class="btn-primary" id="cl-copy">复制</button>
+        </div>
+      </div>
+      <p class="mt-status" id="cl-status" role="status"></p>
+      <p class="mt-hint" id="cl-warning" role="status" hidden></p>
+      <pre class="guide-code cl-output" id="cl-output" aria-labelledby="cl-output-title" tabindex="0" hidden><code id="cl-output-code"></code></pre>
+      <h3 id="cl-preview-title" hidden>预览</h3>
+      <div class="cl-preview" id="cl-preview" role="group" aria-labelledby="cl-preview-title" hidden></div>
+      <div hidden id="cl-messages">
+        <span data-message="waiting">粘贴列表即可查看结果。</span>
+        <span data-message="progress">已完成 {done} / {total}</span>
+        <span data-message="no-tasks">此列表中没有任务。</span>
+        <span data-message="copied">已复制到剪贴板。</span>
+        <span data-message="copy-failed">复制失败。请选中文本后自行复制。</span>
+        <span data-message="loaded">已载入示例。</span>
+        <span data-message="cleared">已清除。</span>
+        <span data-message="title-make">你的清单</span>
+        <span data-message="title-strip">不含复选框的列表</span>
+        <span data-message="bad-date">请选择有效日期以添加截止日期。未添加任何日期。</span>
+        <span data-message="bad-time">请输入时间,例如 09:30。日期已添加,但不含时间。</span>
+        <span data-message="skipped">已带有此类日期的任务保持不变。</span>
+        <span data-message="paren">在 GitHub 上,以圆括号开头的任务描述前需要加一个反斜杠。</span>
+      </div>
+
+      <h2 id="syntax">2. Markdown 清单语法</h2>
+      <pre class="guide-code"><code>- [ ] unchecked task
+- [x] checked task
+- [ ] parent task
+	- [ ] nested task</code></pre>
+      <p>每个任务都是一个列表项:一个连字符和一个空格,然后是 <code>[ ]</code> 方括号之间有一个空格,然后是文本。 <a href="https://obsidian.md/help/syntax" target="_blank" rel="noopener">Obsidian Help页面</a> 和 <a href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#task-lists" target="_blank" rel="noopener">GitHub Docs页面</a> 都将其描述为连字符和空格,后面跟着 <code>[ ]</code>。要将任务标记为完成,GitHub Docs 说明应使用 <code>[x]</code>.</p>
+      <p>空格很重要。 <a href="https://github.github.com/gfm/#task-list-items-extension-" target="_blank" rel="noopener">GitHub Flavored Markdown 规范</a> 将复选框标记定义为一个左方括号、一个空白字符或字母 <code>x</code>,以及一个右方括号,并且其后的文本之前需要有空白字符。因此 <code>[]</code> (里面什么都没有),或 <code>- [ ]text</code> (括号后没有空格)不符合定义。连字符及其后的空格才是让这一行成为列表项的关键。</p>
+      <p>任务列表不属于核心 Markdown。同一规范将其标记为 CommonMark 的扩展,其引言也说明,原始 CommonMark 规范中没有的功能会被标记为扩展。未实现该扩展的渲染器会把方括号显示为纯文本,这通常就是复选框显示为 <code>[ ]</code> 页面上。</p>
+
+      <h2 id="obsidian">3. Obsidian 中的清单</h2>
+      <p>Obsidian 帮助中的 <a href="https://obsidian.md/help/syntax" target="_blank" rel="noopener">基本格式语法</a> 页面介绍了任务列表:</p>
+      <ul>
+        <li>任务以连字符和空格开头,后面跟着 <code>[ ]</code>.</li>
+        <li>你可以在方括号内使用任何字符来把任务标记为完成,因此 <code>[x]</code>, <code>[-]</code> 和 <code>[?]</code> 都算。</li>
+        <li>通过缩进列表项来嵌套任务列表。使用 <code>Tab</code> 或 <code>Shift+Tab</code> 来缩进或取消缩进所选条目。</li>
+        <li>在阅读视图中,选中复选框即可切换任务状态。</li>
+      </ul>
+      <p>帮助页面说明任何字符都能完成任务,但并未描述每个字符对应的不同外观。如果 <code>[-]</code> 或 <code>[?]</code> 看起来不同于 <code>[x]</code> 在你的库中,这来自你安装的主题或 CSS 代码片段,而不是 Markdown 本身。</p>
+      <p>生成器中的进度行也按同样方式计数:方括号内除空格以外的任何字符都视为已完成,因此 <code>[x]</code>, <code>[X]</code>, <code>[-]</code> 和 <code>[?]</code> 均为已完成,而 <code>[ ]</code> 表示未完成。以“done:”或“x ”开头的行是普通文本;该工具不会猜测它们表示已完成的任务。</p>
+
+      <h2 id="due-dates">4. 截止日期:Tasks、Dataview 与 Reminder 的对比</h2>
+      <p>Obsidian 的任务列表语法本身没有截止日期:帮助页面中没有相关说明。有三个插件会读取写在任务文本中的日期,各自使用不同的格式。生成器会把日期写成 ISO <code>YYYY-MM-DD</code> 在这三个插件中都是如此。没有插件时,日期只是文本。</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th>格式</th><th>读取者</th><th>示例行</th></tr></thead>
+          <tbody>
+            <tr><td>截止: <code>📅 YYYY-MM-DD</code></td><td><a href="https://publish.obsidian.md/tasks/Getting+Started/Dates" target="_blank" rel="noopener">Tasks 插件</a>,其中说明日期必须采用 <code>YYYY-MM-DD</code> 格式</td><td><code>- [ ] send invoice 📅 2026-11-25</code></td></tr>
+            <tr><td>计划日期: <code>⏳ YYYY-MM-DD</code></td><td>Tasks 插件</td><td><code>- [ ] send invoice ⏳ 2026-11-25</code></td></tr>
+            <tr><td>开始: <code>🛫 YYYY-MM-DD</code></td><td>Tasks 插件</td><td><code>- [ ] send invoice 🛫 2026-11-25</code></td></tr>
+            <tr><td>行内字段: <code>[due:: YYYY-MM-DD]</code></td><td><a href="https://blacksmithgu.github.io/obsidian-dataview/annotation/metadata-tasks/" target="_blank" rel="noopener">Dataview文档</a>,它会读取写在任务上的字段,例如 <code>[completion:: 2021-08-15]</code></td><td><code>- [ ] send invoice [due:: 2026-11-25]</code></td></tr>
+            <tr><td>提醒: <code>(@YYYY-MM-DD)</code> 或 <code>(@YYYY-MM-DD HH:mm)</code></td><td><a href="https://github.com/uphy/obsidian-reminder" target="_blank" rel="noopener">obsidian-reminder 插件</a>,其 README 展示了 <code>(@2021-08-14)</code> 和 <code>(@2021-08-14 09:37)</code> 于未勾选的任务</td><td><code>- [ ] send invoice (@2026-11-25 09:30)</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>请选择你使用的那一个插件。Dataview 的页面还列出了它自己的日期 emoji 简写,并说明只支持这些简写;生成器改用 Dataview 的方括号形式。Reminder 的 README 指出,已勾选的任务不会再发出提醒通知。</p>
+
+      <h2 id="github">5. GitHub 与 Obsidian 的差异</h2>
+      <p>GitHub Docs 将其描述为 <code>[ ]</code> 表示未完成的任务, <code>[x]</code> 来标记完成。GFM 规范将该标记定义为空白字符或字母 <code>x</code> 之间。Obsidian 接受任何字符。因此像这样的任务 <code>- [-] skipped</code> 或 <code>- [?] unsure</code> 在 Obsidian 中算作已完成,但它不在规范的标记定义之内,遵循规范的渲染器可能会将其显示为纯文本。如果该文件也会在 GitHub 上阅读,请使用 <code>[ ]</code> 和 <code>[x]</code> 。</p>
+      <p>GitHub Docs 补充了一条规则:如果任务描述以圆括号开头,需要用反斜杠转义,例如 <code>- [ ] \(Optional) Open a followup issue</code>。生成器不会为你添加反斜杠;当任务以圆括号开头时,它会给出警告。</p>
+
+      <h2 id="capture">6. 在 iPhone 和 Mac 上用 Vox.md 语音或文字捕获任务</h2>
+      <p>Vox.md 的 Todo Checklist 处理模式会生成 Markdown <code>- [ ]</code> 会从捕获内容中提取任务项,其后备方案是确定性的清单格式化器。语音在你的设备上转写。在 Capture Bar 中, <strong>检查名单</strong> 应用 <code>- [ ]</code> 前缀,以及 <strong>两日期设置</strong> 插入 <code>(@yyyy-MM-dd)</code> 或带时间的形式。请参阅 <a href="/zh-hans/docs/#quick-capture">快速捕捉</a> 和 <a href="/zh-hans/docs/#presets">Routes 与处理模式</a> 文档。</p>
+      <p>Route 可以把这些条目添加到你的每日笔记中某个标题之下,例如 <code>## Tasks</code>; <a href="/zh-hans/blog/append-to-obsidian-daily-note-iphone/">追加到 Obsidian 每日笔记</a> 介绍了设置方法,而 <a href="/zh-hans/blog/obsidian-daily-note-template/">每日笔记模板生成器</a> 负责编写笔记的结构。如果是会议中的待办事项,请参阅 <a href="/zh-hans/blog/obsidian-meeting-notes-template/">会议记录模板</a>;关于任务列表前缀的做法,请参阅 <a href="/zh-hans/blog/obsidian-capture-templates/">捕捉模板</a>.</p>
+      <p>Vox.md 会写入 <code>(@yyyy-MM-dd)</code> 形式。它不会写入 Tasks 插件的 emoji 日期或 Dataview 字段。如果你使用其中之一,请把捕获的任务粘贴到上方的生成器中并选择该格式,或之后再编辑日期。要构建笔记顶部的属性,请使用 <a href="/zh-hans/blog/obsidian-properties-generator/">属性生成器</a>.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">在 iPhone、iPad 或 Mac 上用语音捕获任务。</h2>
+        <p>Vox.md 在设备上把你说的话变成 Markdown 清单,并添加到你的 Obsidian 笔记中。免费额度为 15 分钟转写和 10 次成功的 Capture 投递;无限使用是一次性终身解锁,无需订阅。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_7d9ef8e50226">用语音捕获任务</a></p>
+        <p>上面的清单生成器无需 App 即可完整使用。</p>
+      </section>
+
+      <h2 id="faq">7. 常见问题</h2>
+      <h3>为什么我的复选框显示为 [ ] 文本?</h3>
+      <p>渲染器没有绘制任务列表。任务列表是 CommonMark 的扩展,不支持该扩展的渲染器会直接显示方括号。请检查该行是否以连字符和空格开头,方括号之间是否有一个空格或 <code>x</code> 方括号之间,右括号后面还要有一个空格。在 Obsidian 中,代码块或表格单元格里的任务,可能不会像列表项那样显示为复选框。</p>
+      <h3>如何嵌套任务?</h3>
+      <p>缩进子任务。在 Obsidian 中,按 <code>Tab</code> 缩进所选条目, <code>Shift+Tab</code> 来取消缩进。生成器会把你列表中的 2 个或 4 个空格转换为每级一个制表符,你也可以选择转换为 2 个或 4 个空格。</p>
+      <h3>如何用 x 以外的字符勾选复选框?</h3>
+      <p>Obsidian 帮助指出,方括号内的任何字符都会把任务标记为完成,因此 <code>- [-] task</code> 和 <code>- [?] task</code> 均为已完成。除非你重置列表,否则生成器会保留你粘贴的字符。对于也会在 GitHub 上阅读的文件,请使用 <code>[x]</code>.</p>
+      <h3>如何添加 Tasks 插件能读取的截止日期?</h3>
+      <p>把 <code>📅</code> 以及一个 <code>YYYY-MM-DD</code> 日期放在任务末尾,例如 <code>- [ ] send invoice 📅 2026-11-25</code>。在上方选择“Tasks 插件:截止”即可为每个任务添加。使用 <code>⏳</code> 表示计划日期, <code>🛫</code> 表示开始日期。</p>
+      <h3>生成器会上传我的列表吗?</h3>
+      <p>不会。列表由本页中的脚本在你的设备上转换,页面不会发出任何网络请求。它也不会保存你的列表:关闭或重新加载页面后内容即被清除。</p>
+
+      <nav class="toc" aria-label="相关指南" id="related"><div class="toc-title">继续设置</div><ul>
+        <li><a href="/zh-hans/blog/append-to-obsidian-daily-note-iphone/">追加到 Obsidian 每日笔记</a></li>
+        <li><a href="/zh-hans/blog/obsidian-daily-note-template/">Obsidian 每日笔记模板生成器</a></li>
+        <li><a href="/zh-hans/blog/obsidian-meeting-notes-template/">Obsidian 会议记录模板生成器</a></li>
+        <li><a href="/zh-hans/blog/obsidian-capture-templates/">路径与模板示例</a></li>
+        <li><a href="/zh-hans/blog/obsidian-properties-generator/">Obsidian 属性生成与检查工具</a></li>
+        <li><a href="/zh-hans/docs/#quick-capture">Quick Capture 参考</a></li>
+        <li><a href="/zh-hans/docs/#presets">路线参考</a></li>
+      </ul></nav>
+<style>
+.cl-tool:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.cl-tool [hidden] { display: none; }
+.mt-output-head[hidden], .cl-output[hidden], #cl-preview-title[hidden] { display: none; }
+.cl-tool .mt-field input, .cl-tool .mt-field textarea, .cl-tool .mt-field select { font: inherit; font-family: var(--font-mono); font-size: 16px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; padding: 8px 10px; width: 100%; box-sizing: border-box; min-height: 44px; }
+.cl-tool .mt-field textarea { resize: vertical; min-height: 160px; }
+.cl-tool input:focus-visible, .cl-tool textarea:focus-visible, .cl-tool select:focus-visible, .cl-output:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.cl-tool .mt-option { min-height: 44px; }
+.cl-tool .mt-option input { width: 22px; height: 22px; }
+.mt-actions button { font: inherit; font-size: 15px; min-height: 44px; padding: 0 18px; cursor: pointer; }
+.cl-output { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 28rem; overflow: auto; tab-size: 4; }
+.cl-preview { padding: 14px 18px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; display: flex; flex-direction: column; gap: 4px; overflow-wrap: anywhere; }
+.cl-preview[hidden] { display: none; }
+.cl-row { display: flex; align-items: flex-start; gap: 10px; }
+.cl-row input { width: 18px; height: 18px; margin: 3px 0 0; flex: none; accent-color: var(--accent); }
+.cl-row.is-heading { font-weight: 700; margin-top: 6px; }
+</style>
+<script>
+/* Markdown checklist maker. Runs locally: no network requests. */
+(function () {
+  var HEADING = /^#{1,6}(?:\s|$)/;
+  var RULE = /^(?:-{3,}|\*{3,}|_{3,})$/;
+  var DONE_ITEM = /^\s*(?:[-*+]|\d+[.)])\s+\[(.)\](?:\s|$)/;
+  var DUE = {
+    'tasks-due': { mark: '📅', has: /📅/ },
+    'tasks-scheduled': { mark: '⏳', has: /⏳/ },
+    'tasks-start': { mark: '🛫', has: /🛫/ },
+    'dataview': { has: /\[due::/ },
+    'reminder': { has: /\(@\d{4}-\d{2}-\d{2}/ },
+    'reminder-time': { has: /\(@\d{4}-\d{2}-\d{2}/ }
+  };
+
+  function pad(n, len) { var s = String(n); while (s.length < len) s = '0' + s; return s; }
+  function isoDate(d) { return pad(d.getFullYear(), 4) + '-' + pad(d.getMonth() + 1, 2) + '-' + pad(d.getDate(), 2); }
+  function validDate(value) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || '');
+    if (!m) return false;
+    var d = new Date(+m[1], +m[2] - 1, +m[3], 12);
+    return d.getFullYear() === +m[1] && d.getMonth() === +m[2] - 1 && d.getDate() === +m[3];
+  }
+  function validTime(value) { return /^([01]\d|2[0-3]):[0-5]\d$/.test(value || ''); }
+  function isDone(mark) { return mark !== null && /\S/.test(mark); }
+
+  /* Remove bullets, numbers and checkboxes from the start of a line. */
+  function peel(s) {
+    var state = null, m;
+    for (;;) {
+      m = /^(?:[-*+]|\d+[.)])(?:\s+|$)/.exec(s);
+      if (m) { s = s.slice(m[0].length); continue; }
+      m = /^\[(.)\](?:\s+|$)/.exec(s);
+      if (m) { if (state === null) state = m[1]; s = s.slice(m[0].length); continue; }
+      break;
+    }
+    return { state: state, text: s.trim() };
+  }
+
+  function progress(text) {
+    var done = 0, total = 0;
+    String(text || '').replace(/\r\n?/g, '\n').split('\n').forEach(function (line) {
+      var m = DONE_ITEM.exec(line);
+      if (!m) return;
+      total++;
+      if (/\S/.test(m[1])) done++;
+    });
+    return { done: done, total: total };
+  }
+
+  function dateText(opts, warnings) {
+    var kind = opts.due || 'none';
+    if (kind === 'none' || !DUE[kind]) return null;
+    if (!validDate(opts.date)) { warnings.push('bad-date'); return null; }
+    if (kind === 'dataview') return '[due:: ' + opts.date + ']';
+    if (kind === 'reminder') return '(@' + opts.date + ')';
+    if (kind === 'reminder-time') {
+      if (validTime(opts.time)) return '(@' + opts.date + ' ' + opts.time + ')';
+      warnings.push('bad-time');
+      return '(@' + opts.date + ')';
+    }
+    return DUE[kind].mark + ' ' + opts.date;
+  }
+
+  /* Convert pasted text. Returns {output, items, progress, warnings}. */
+  function run(input, opts) {
+    opts = opts || {};
+    var strip = opts.mode === 'strip';
+    var lines = String(input || '').replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n').split('\n');
+    var parsed = [];
+    var minSpaces = 0;
+    lines.forEach(function (raw) {
+      if (!raw.trim()) return;
+      var lead = /^[ \t]*/.exec(raw)[0];
+      var rest = raw.slice(lead.length).replace(/\s+$/, '');
+      if (HEADING.test(rest)) { parsed.push({ heading: true, text: rest }); return; }
+      if (RULE.test(rest)) return;
+      var p = peel(rest);
+      if (!p.text) return;
+      var tabs = lead.replace(/ /g, '').length;
+      var spaces = lead.length - tabs;
+      if (spaces && (!minSpaces || spaces < minSpaces)) minSpaces = spaces;
+      parsed.push({ heading: false, tabs: tabs, spaces: spaces, state: p.state, text: p.text });
+    });
+    var unit = opts.unit === '2' ? 2 : opts.unit === '4' ? 4 : (minSpaces || 2);
+    var step = opts.indent === '2' ? '  ' : opts.indent === '4' ? '    ' : '\t';
+    var warnings = [];
+    var suffix = strip ? null : dateText(opts, warnings);
+    var dueKind = opts.due || 'none';
+    var prev = -1, skipped = false, paren = false;
+    var items = [];
+    parsed.forEach(function (p) {
+      if (p.heading) { items.push({ kind: 'heading', level: 0, mark: null, text: p.text }); prev = -1; return; }
+      var level = p.tabs + (p.spaces ? Math.max(1, Math.floor(p.spaces / unit)) : 0);
+      level = Math.min(level, prev + 1);
+      prev = level;
+      var text = p.text;
+      if (suffix) {
+        if (DUE[dueKind].has.test(text)) skipped = true; else text += ' ' + suffix;
+      }
+      var mark = null;
+      if (!strip) mark = opts.reset || p.state === null || !/\S/.test(p.state) ? ' ' : p.state;
+      if (!strip && /^\(/.test(p.text)) paren = true;
+      items.push({ kind: 'item', level: level, mark: mark, text: text, had: p.state });
+    });
+    if (skipped) warnings.push('skipped');
+    if (paren) warnings.push('paren');
+    var output = items.map(function (it) {
+      if (it.kind === 'heading') return it.text;
+      var indent = new Array(it.level + 1).join(step);
+      if (strip) return opts.stripto === 'plain' ? it.text : indent + '- ' + it.text;
+      return indent + '- [' + it.mark + '] ' + it.text;
+    }).join('\n');
+    var done = 0, total = 0;
+    items.forEach(function (it) {
+      if (it.kind !== 'item') return;
+      var mark = strip ? it.had : it.mark;
+      if (mark === null || mark === undefined) return;
+      total++;
+      if (isDone(mark)) done++;
+    });
+    return { output: output, items: items, progress: { done: done, total: total }, warnings: warnings };
+  }
+
+  if (typeof window !== 'undefined') {
+    window.voxChecklist = { run: run, progress: progress, isoDate: isoDate };
+  }
+
+  var form = document.getElementById('cl-tool');
+  if (!form) return;
+  var input = document.getElementById('cl-input');
+  var code = document.getElementById('cl-output-code');
+  var pre = document.getElementById('cl-output');
+  var head = document.getElementById('cl-output-head');
+  var title = document.getElementById('cl-output-title');
+  var preview = document.getElementById('cl-preview');
+  var previewTitle = document.getElementById('cl-preview-title');
+  var progressEl = document.getElementById('cl-progress');
+  var status = document.getElementById('cl-status');
+  var warning = document.getElementById('cl-warning');
+  var dateInput = document.getElementById('cl-date');
+  var timeField = document.getElementById('cl-time-field');
+  var EXAMPLE = '- buy milk\n  - oat\n  - bread\n1. call Sam\n* [x] send invoice\n\n## Later\nbook flights\n- [ ] renew passport';
+
+  function message(name, fill) {
+    var el = document.querySelector('#cl-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : '';
+    if (fill) Object.keys(fill).forEach(function (key) { text = text.split('{' + key + '}').join(fill[key]); });
+    return text;
+  }
+  function say(text) {
+    status.textContent = '';
+    window.setTimeout(function () { status.textContent = text; }, 30);
+  }
+  function options() {
+    return {
+      mode: form.elements.mode.value, reset: form.elements.resetall.checked, stripto: form.elements.stripto.value,
+      unit: form.elements.unit.value, indent: form.elements.indent.value,
+      due: form.elements.due.value, date: dateInput.value, time: form.elements.time.value
+    };
+  }
+
+  function renderPreview(result, strip) {
+    preview.textContent = '';
+    result.items.forEach(function (it) {
+      var row = document.createElement('div');
+      row.className = 'cl-row' + (it.kind === 'heading' ? ' is-heading' : '');
+      if (!(strip && form.elements.stripto.value === 'plain')) row.style.paddingInlineStart = (it.level * 1.6) + 'em';
+      if (it.kind === 'item' && !strip) {
+        var box = document.createElement('input');
+        box.type = 'checkbox';
+        box.disabled = true;
+        box.checked = isDone(it.mark);
+        box.setAttribute('aria-label', isDone(it.mark) ? '[' + it.mark + ']' : '[ ]');
+        row.appendChild(box);
+      } else if (it.kind === 'item' && form.elements.stripto.value === 'bullets') {
+        var dot = document.createElement('span');
+        dot.setAttribute('aria-hidden', 'true');
+        dot.textContent = '•';
+        row.appendChild(dot);
+      }
+      var label = document.createElement('span');
+      label.textContent = it.kind === 'heading' ? it.text.replace(/^#{1,6}\s*/, '') : it.text;
+      row.appendChild(label);
+      preview.appendChild(row);
+    });
+  }
+
+  function update() {
+    var opts = options();
+    var strip = opts.mode === 'strip';
+    Array.prototype.forEach.call(form.querySelectorAll('[data-show]'), function (el) {
+      el.hidden = el.getAttribute('data-show') !== opts.mode;
+    });
+    timeField.hidden = strip || opts.due !== 'reminder-time';
+    var empty = !input.value.trim();
+    var result = run(input.value, opts);
+    code.textContent = result.output;
+    title.textContent = message(strip ? 'title-strip' : 'title-make');
+    var has = !empty && result.items.length > 0;
+    head.hidden = pre.hidden = preview.hidden = previewTitle.hidden = !has;
+    if (has) renderPreview(result, strip);
+    if (!has) progressEl.textContent = message('waiting');
+    else if (!result.progress.total) progressEl.textContent = message('no-tasks');
+    else progressEl.textContent = message('progress', { done: result.progress.done, total: result.progress.total });
+    warning.textContent = result.warnings.map(function (w) { return message(w); }).join(' ');
+    warning.hidden = !result.warnings.length;
+  }
+
+  dateInput.value = isoDate(new Date());
+  form.addEventListener('input', update);
+  form.addEventListener('change', update);
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+  document.getElementById('cl-example').addEventListener('click', function () {
+    input.value = EXAMPLE;
+    update();
+    say(message('loaded'));
+  });
+  document.getElementById('cl-clear').addEventListener('click', function () {
+    input.value = '';
+    update();
+    input.focus();
+    say(message('cleared'));
+  });
+  document.getElementById('cl-copy').addEventListener('click', function () {
+    var text = code.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(code);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+
+  document.getElementById('cl-nojs').hidden = true;
+  form.hidden = false;
+  update();
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/zh-hans/">首页</a></li>
+        <li><a href="/zh-hans/docs/">文档</a></li>
+        <li><a href="/zh-hans/blog/">指南</a></li>
+        <li><a href="/zh-hans/compare/">比较</a></li>
+        <li><a href="/zh-hans/privacy.html">隐私</a></li>
+        <li><a href="/zh-hans/terms.html">条款</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">支持</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_7d9ef8e50226">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · 本地笔记快速采集 · 不上传内容。</div>
+    </div>
+  <details class="language-switcher"><summary>语言</summary><ul><li><a href="/blog/markdown-checklist-maker/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/markdown-checklist-maker/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/markdown-checklist-maker/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/markdown-checklist-maker/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/markdown-checklist-maker/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/markdown-checklist-maker/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/markdown-checklist-maker/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/markdown-checklist-maker/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/markdown-checklist-maker/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/markdown-checklist-maker/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/markdown-checklist-maker/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/markdown-checklist-maker/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/markdown-checklist-maker/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/markdown-checklist-maker/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/markdown-checklist-maker/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/markdown-checklist-maker/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/markdown-checklist-maker/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/markdown-checklist-maker/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/markdown-checklist-maker/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/markdown-checklist-maker/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/markdown-checklist-maker/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/markdown-checklist-maker/" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a></li><li><a href="/zh-hant/blog/markdown-checklist-maker/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

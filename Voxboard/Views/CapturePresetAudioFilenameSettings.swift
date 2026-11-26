@@ -15,6 +15,9 @@ struct CapturePresetAudioFilenameSettings: View {
     static let tokensHelp = String(
         localized: "Tokens: {timestamp}, {date}, {time}, {YR} (2-digit year), {id}, {id8}, {preset}, {original}."
     )
+    static let timestampHelp = String(
+        localized: "{timestamp} is the time the recording started."
+    )
     static let behaviorHelp = String(
         localized: "Leave blank to keep the existing automatic name. A typed extension is ignored; Vox.md uses the actual encoded or copied audio extension. Unsafe characters and path-like input are sanitized into one filename."
     )
@@ -38,6 +41,7 @@ struct CapturePresetAudioFilenameSettings: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(Self.tokensHelp)
+                Text(Self.timestampHelp)
                 Text(Self.behaviorHelp)
             }
             .font(Geist.caption())

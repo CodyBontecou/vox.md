@@ -1,0 +1,138 @@
+# Spatial Audio on an iPhone that can record it (iPhone 17 Pro, iOS 27.2):
+# Recording Quality offers Spatial Audio, the summary names it, and a one-shot
+# take records through AVCaptureSession and saves an .mp4 attachment.
+#
+# The UI steps prove the take starts, runs, stops and saves an .mp4. Whether it
+# really was spatial is in Settings > View Debug Log, which this test can't
+# read. Expected:
+#   "✅ Spatial Audio capture started (FOA + stereo)"
+#   "Spatial Audio take recording (lossless)"
+#   "[SpatialAudio] Take finished: saved, FOA frames=N, stereo frames=N,
+#    dropped=0, metadata=true, analyzeFailures=0"
+#
+# Prerequisites: a cabled, unlocked iPhone 16 Pro / 17 Pro (Spatial Audio
+#   capture hardware) with a DEBUG build of Vox.md; Recording Quality =
+#   Lossless, layout Mono; built-in microphone, no headset; Keyboard Listening
+#   off; English UI (summary checks match English text).
+# The note must show the take with the audio player
+#   (markdown_audio_embed_play), not an empty video box.
+#   Channel check (not readable here): the log's "[SpatialAudio] Signal check"
+#   and "Take channels" lines must say "FOA multichannel".
+# Side effects: adds a ~13 s .mp4 recording (no transcript in a quiet room) to
+#   the current note of the default route. Restores layout Mono at the end.
+# Selectors: ids, plus the fixed "Speak" label, the "Recording, 00:08" timer
+#   text used as the 8-second wait, and ".mp4" in the attachment's label.
+version: 1
+requires:
+  platform: ios
+steps:
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+          - -VoxScreenshotUnlocked
+          - -VoxAdaptiveNoAutofocus
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_settings
+      timeoutMs: 120000
+  - tap:
+      id: capture_settings
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: settings_recording_quality
+      timeoutMs: 15000
+  - tap:
+      id: settings_recording_quality
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: recording_quality_layout_spatial
+      timeoutMs: 15000
+  - tap:
+      id: recording_quality_layout_spatial
+  - tap:
+      id: BackButton
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: settings_recording_quality
+      expectedText: Lossless · Spatial Audio ·
+      timeoutMs: 10000
+  - tap:
+      id: signal.back
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_voice_recording
+      timeoutMs: 10000
+  - echo: Record about 8 seconds through Spatial Audio capture
+  - tap:
+      text: Speak
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Recording, 00:08
+      timeoutMs: 25000
+  - tap:
+      id: capture_recording_stop_send
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_voice_recording
+      timeoutMs: 30000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: .mp4
+      timeoutMs: 20000
+  - echo: The spatial .mp4 has no video track, so the note shows the audio player (PR #151)
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: markdown_audio_embed_play
+        text: .mp4
+      timeoutMs: 20000
+  - echo: Restore Mono (the layout this test started from)
+  - tap:
+      id: capture_settings
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: settings_recording_quality
+      timeoutMs: 15000
+  - tap:
+      id: settings_recording_quality
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: recording_quality_layout_mono
+      timeoutMs: 15000
+  - await: { idle: true }
+  - tap:
+      id: recording_quality_layout_mono
+  - tap:
+      id: BackButton
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: settings_recording_quality
+      expectedText: Recording Quality, Lossless · ≈ 3 MB/min
+      textMatch: equals
+      timeoutMs: 10000

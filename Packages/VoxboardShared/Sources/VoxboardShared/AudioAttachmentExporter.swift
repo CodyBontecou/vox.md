@@ -41,10 +41,12 @@ public enum AudioAttachmentExporter {
             return resumed.url
         }
 
+        // `.m4a`, except a Spatial Audio recording, which stays `.mp4`.
+        let exportExtension = KeptAudioInspector.exportFileExtension(for: sourceAudioURL)
         let preferredDestination = uniquedURL(audioDestinationURL(
             for: transcriptFileURL,
             flow: flow,
-            preferredExtension: "m4a",
+            preferredExtension: exportExtension,
             audioFolderOverride: audioFolderOverride,
             audioFilenameContext: audioFilenameContext
         ))
@@ -56,7 +58,7 @@ public enum AudioAttachmentExporter {
                 )
                 let convertedURL = deliveryTransactionDirectoryURL
                     .appendingPathComponent("converted", isDirectory: false)
-                    .appendingPathExtension("m4a")
+                    .appendingPathExtension(exportExtension)
                 try? FileManager.default.removeItem(at: convertedURL)
                 defer { try? FileManager.default.removeItem(at: convertedURL) }
                 try await exportM4A(from: sourceAudioURL, to: convertedURL)
@@ -166,7 +168,8 @@ public enum AudioAttachmentExporter {
         )
         // High (48 kHz AAC) and Lossless (ALAC) recordings are already the
         // `.m4a` the user chose. The AAC export preset would re-encode them and
-        // turn Lossless into AAC, so keep their bytes.
+        // turn Lossless into AAC, so keep their bytes. Spatial Audio `.mp4`
+        // files are copied too: re-encoding would drop the ambisonics track.
         if KeptAudioInspector.shouldPreserveEncoding(sourceURL) {
             try atomicCopy(from: sourceURL, to: destinationURL)
             return

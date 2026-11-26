@@ -1,0 +1,134 @@
+<!--{
+  "slug": "speech-to-text-ipad",
+  "title": "How to use speech to text on iPad, with a private local option",
+  "description": "Turn on Dictation in iPad Settings, dictate with a Magic Keyboard or Smart Keyboard, check what Apple says about on-device processing, then compare it with the Vox.md keyboard and Routes that use Whisper or Parakeet and save to Markdown notes.",
+  "subtitle": "Turn on dictation, find the mic key when a keyboard is attached, fix it when it does not work, and decide whether you want a local model or a Markdown note instead.",
+  "eyebrow": "iPad · Speech to text · Local transcription",
+  "requirements": "Vox.md: iOS/iPadOS 17.6 or later. Automatic Apple Speech needs a supported iOS 26 device and language. Apple Dictation availability depends on your device, iPadOS version and language.",
+  "published": "2026-11-24",
+  "modified": "2026-11-24",
+  "image": "/screenshots/00-capture-light.png"
+}-->
+<div class="answer-box" id="short-answer"><div class="label">The short answer</div>
+        <p>Go to Settings &gt; General &gt; Keyboard, turn on Enable Dictation, then tap the Dictate button on the onscreen keyboard. With a Magic Keyboard or Smart Keyboard attached, Apple says to press the Switch Keyboard key and D, or tap the Dictation button in the Shortcuts bar at the bottom of the screen. If you want a local Whisper or Parakeet model, or speech saved to a Markdown note, use the Vox.md keyboard or a Vox.md Route.</p>
+      </div>
+      <p>Apple’s steps below come from the iPad User Guide on Apple Support: <a href="https://support.apple.com/guide/ipad/dictate-text-ipad997d9642/ipados">Dictate text on iPad</a>, <a href="https://support.apple.com/guide/ipad/dictate-text-ipad55d35a41/ipados">Dictate text while using an Apple external keyboard with iPad</a>, <a href="https://support.apple.com/guide/ipad/commands-for-dictating-text-ipad717f4ea4/ipados">Commands for dictating text</a> and <a href="https://support.apple.com/guide/ipad/ipad-magic-keyboard-and-smart-keyboard-ipad4b92bd12/ipados">iPad Magic Keyboard and Smart Keyboard</a>. I read them on November 24, 2026, when the guide listed iPadOS 27 as its newest version. Menu names can differ between iPadOS versions, so check the pages for yours. The Vox.md steps follow the <a href="../../docs/#keyboard">keyboard</a> and <a href="../../docs/#models">models</a> documentation. The general dictation steps are the same as on the phone, so this guide keeps them short and spends its words on what is different on iPad; the full phone walkthrough is <a href="../speech-to-text-iphone/">speech to text on iPhone</a>. On a Mac? See <a href="../dictation-on-mac/">dictation on Mac</a>.</p>
+      <nav class="toc" aria-label="In this guide"><div class="toc-title">In this guide</div><ol>
+        <li><a href="#turn-on-dictation">How to turn on speech to text on iPad</a></li>
+        <li><a href="#external-keyboard">Dictate with a Magic Keyboard, Smart Keyboard or other keyboard</a></li>
+        <li><a href="#commands">Punctuation and formatting</a></li>
+        <li><a href="#on-device">Does iPad dictation work offline?</a></li>
+        <li><a href="#which-to-use">Apple Dictation, the Vox.md keyboard, or a Vox.md Route</a></li>
+        <li><a href="#vox-keyboard">Use a local model in any iPad app with the Vox.md keyboard</a></li>
+        <li><a href="#dictate-to-notes">Speech to text straight into Obsidian or a Markdown file</a></li>
+        <li><a href="#privacy">What stays on the iPad</a></li>
+        <li><a href="#troubleshooting">iPad dictation not working</a></li>
+        <li><a href="#faq">Questions</a></li>
+      </ol></nav>
+
+      <h2 id="turn-on-dictation">How to turn on speech to text on iPad</h2>
+      <ol>
+        <li>Open <strong>Settings</strong>, tap <strong>General</strong>, then tap <strong>Keyboard</strong>.</li>
+        <li>Turn on <strong>Enable Dictation</strong>. If a prompt appears, tap <strong>Enable Dictation</strong> again.</li>
+        <li>In a text field, tap to place the insertion point.</li>
+        <li>Tap the <strong>Dictate</strong> button on the onscreen keyboard. When the Dictate button appears near the insertion point, start speaking.</li>
+        <li><strong>Stop:</strong> tap the Dictate button again, say “Stop dictation,” or stay silent for 30 seconds, after which Apple says Dictation stops automatically.</li>
+      </ol>
+      <p>Apple says the keyboard (or tools palette) can stay open while you dictate, so you can mix typing and speaking. To turn Dictation off, go back to Settings &gt; General &gt; Keyboard and turn off <strong>Enable Dictation</strong>. Apple also says cellular data charges may apply.</p>
+
+      <h2 id="external-keyboard">Dictate with a Magic Keyboard, Smart Keyboard or other keyboard</h2>
+      <p>Apple has a separate page for this, <a href="https://support.apple.com/guide/ipad/dictate-text-ipad55d35a41/ipados">Dictate text while using an Apple external keyboard with iPad</a>. As it reads on November 24, 2026:</p>
+      <ol>
+        <li>Turn on dictation first: Settings &gt; General &gt; Keyboard &gt; <strong>Enable Dictation</strong>.</li>
+        <li>Tap the <strong>Dictation</strong> button in the Shortcuts bar at the bottom of the screen, then speak. Apple says iPad inserts punctuation automatically, and you can add an emoji by saying its name, such as “happy emoji.”</li>
+        <li>When you finish, tap the <strong>Keyboard</strong> button at the bottom of the screen.</li>
+      </ol>
+      <p><strong>The shortcut:</strong> Apple says that on the Magic Keyboard for iPad or the Smart Keyboard, you can press the <strong>Switch Keyboard key and D</strong> to switch to dictation quickly. Apple lists which iPad models each keyboard works with on <a href="https://support.apple.com/guide/ipad/ipad-magic-keyboard-and-smart-keyboard-ipad4b92bd12/ipados">iPad Magic Keyboard and Smart Keyboard</a>.</p>
+      <p>Apple’s page describes the Apple external keyboards only. If you use another brand and the shortcut or the Shortcuts bar button does not appear, use the onscreen keyboard’s Dictate button instead, or try Vox.md Quick Capture, which has its own microphone button (see <a href="#dictate-to-notes">below</a>). Vox.md does not document its keyboard for use while a hardware keyboard is attached.</p>
+
+      <h2 id="commands">Punctuation and formatting</h2>
+      <p>A few examples from Apple’s <a href="https://support.apple.com/guide/ipad/commands-for-dictating-text-ipad717f4ea4/ipados">Commands for dictating text</a>: say the name of a mark such as “comma” or “question mark”; say “new line” or “new paragraph” for breaks; say “cap” to capitalize the next word; say “heart emoji” for an emoji; and say “undo” or “redo.” Apple lists the full set, including editing commands that vary by language and device, on that page. The iPhone commands are covered in the <a href="../speech-to-text-iphone/#commands">iPhone guide</a>.</p>
+
+      <h2 id="on-device">Does iPad dictation work offline?</h2>
+      <p>Apple says Dictation is processed on your iPad in many languages, and no internet connection is required. When you dictate in a search field, Apple says your dictated text may be sent to the search engine to process the search. Apple also says Dictation may not be available in all languages or in all countries or regions, and features may vary. Check Apple’s <a href="https://www.apple.com/ios/feature-availability/#dictation">iOS and iPadOS Feature Availability</a> page for your language.</p>
+      <p>Apple’s page adds that with Apple Intelligence in iPadOS 27, dictation uses an on-device model to improve spelling, punctuation and capitalization, available in English on iPad models with M4 or later and at least 12GB of unified memory. Apple Intelligence is not available in all languages or regions, and usage limits may apply.</p>
+
+      <h2 id="which-to-use">Apple Dictation, the Vox.md keyboard, or a Vox.md Route</h2>
+      <p>Apple Dictation is built in and is enough for many people. Look at the alternatives when you want to choose the speech model or save speech as Markdown. The table compares three setups as documented; it makes no accuracy or speed claim.</p>
+      <p class="guide-table-hint">On a small screen, swipe the table sideways.</p>
+      <div class="guide-comparison" role="region" aria-label="iPad speech to text options comparison; scroll horizontally on small screens" tabindex="0">
+        <table class="comparison">
+          <caption>iPad speech to text options, checked November 24, 2026</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">Apple Dictation</th><th scope="col">Vox.md keyboard</th><th scope="col">Vox.md Route</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Where the text goes</th><td>Into the text field you are in</td><td>Into the text field you are in, in apps that accept a standard iOS keyboard</td><td>A note or Markdown file, as your Route says</td></tr>
+            <tr><th scope="row">Where speech is processed</th><td>Per Apple, on the iPad in many languages; search fields may send text to the search engine</td><td>On the iPad</td><td>On the iPad</td></tr>
+            <tr><th scope="row">Model choice</th><td>None stated on Apple’s page</td><td>Automatic, or a Whisper or Parakeet model you download</td><td>Automatic, or a Whisper or Parakeet model you download</td></tr>
+            <tr><th scope="row">Live or after you stop</th><td>Not covered on Apple’s page; try it on your iPad</td><td>Automatic: finalized text is inserted while you speak. Whisper or Parakeet: the transcript is inserted after you stop</td><td>After the recording is transcribed and delivered</td></tr>
+            <tr><th scope="row">Setup</th><td>Enable Dictation; with a Magic Keyboard, the Switch Keyboard key and D</td><td>Add the keyboard and turn on Allow Full Access</td><td>Create or pick a Route; no keyboard needed</td></tr>
+            <tr><th scope="row">Cost</th><td>Part of iPadOS</td><td>15 free transcription minutes, then a one-time lifetime unlock</td><td>15 free transcription minutes and 10 successful Capture deliveries, then a one-time lifetime unlock</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Automatic uses Apple’s on-device speech recognizer on supported iOS 26 devices and languages. There is no subscription. App Store pricing is authoritative.</p>
+
+      <h2 id="vox-keyboard">Use a local model in any iPad app with the Vox.md keyboard</h2>
+      <p>The <a href="../../docs/#getting-started">getting started docs</a> list the keyboard for both iPhone and iPad.</p>
+      <ol>
+        <li><strong>Prepare transcription.</strong> In Vox.md, keep Automatic on a supported device, or download and select Whisper or Parakeet in <strong>Settings &gt; Models</strong>.</li>
+        <li><strong>Add the keyboard.</strong> In iPadOS Settings, go to General &gt; Keyboard &gt; Keyboards &gt; Add New Keyboard and choose <strong>Vox.md</strong>.</li>
+        <li><strong>Turn on Allow Full Access.</strong> It is required: the current keyboard workflow needs it to use shared App Group state and coordinate recording with the main app. iOS labels the permission broadly; Vox.md uses it for its on-device app and keyboard workflow, shared state and optional haptics, and does not upload keystrokes, dictated text, transcripts or microphone audio to Vox.md servers. See the <a href="../../docs/#keyboard-setup">keyboard setup docs</a>.</li>
+        <li><strong>Switch and dictate.</strong> In a text field, use the globe key to select Vox.md, then tap the microphone.</li>
+      </ol>
+      <p>With Automatic, finalized text is inserted as you speak. With Whisper or Parakeet, the text is inserted after you stop. The docs describe the keyboard for apps that accept a standard iOS keyboard; they do not cover using it with a hardware keyboard attached or in Stage Manager, Split View or Slide Over, so use Apple Dictation or Vox.md Quick Capture in those situations. To pick a model, read <a href="../../compare/whisper-vs-parakeet/">Whisper vs Parakeet</a>.</p>
+
+      <h2 id="dictate-to-notes">Speech to text straight into Obsidian or a Markdown file</h2>
+      <p>Choose this when the words belong in a note rather than another app. Open <a href="../../docs/#quick-capture">Quick Capture</a>, which the docs call the main iOS and iPadOS workspace, and use inline voice. <strong>Add to Draft</strong> appends the finished transcript to your draft; <strong>Send Immediately</strong> runs the selected Route and its destination. A <a href="../../docs/#presets">Route</a> can target a daily or rolling note, a heading and a processing mode. Start with <a href="../voice-notes-to-obsidian-iphone/">voice notes to Obsidian</a> (the steps are the same on iPad), then see <a href="../append-to-obsidian-daily-note-iphone/">appending to a daily note</a>. For existing audio, see <a href="../offline-transcription-iphone-markdown/">offline transcription to Markdown</a>. Quick Capture can also hold a PencilKit sketch; for paper notes, see <a href="../handwritten-notes-to-obsidian-iphone/">handwritten notes to Obsidian</a>. The free allowance includes 10 successful Capture deliveries.</p>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">Get Vox.md on the App Store.</h2>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Get Vox.md on the App Store</a></p>
+      </section>
+
+      <h2 id="privacy">What stays on the iPad</h2>
+      <p>Vox.md does not send capture content to Vox.md servers. Transcription runs on your iPad. The only network use is the model download you start yourself, which uses Hugging Face or FluidAudio infrastructure. If a note lands in a folder that syncs through iCloud or another service, that service handles the file under its own terms. See the <a href="../../privacy.html">privacy policy</a>.</p>
+
+      <h2 id="troubleshooting">iPad dictation not working</h2>
+      <h3>Apple Dictation checks</h3>
+      <ul>
+        <li><strong>No Dictate button.</strong> Go to Settings &gt; General &gt; Keyboard and turn on <strong>Enable Dictation</strong>, as <a href="https://support.apple.com/guide/ipad/dictate-text-ipad997d9642/ipados">Apple’s page</a> says.</li>
+        <li><strong>A keyboard is attached and the onscreen keyboard is gone.</strong> Use the Dictation button in the Shortcuts bar at the bottom of the screen, or the Switch Keyboard key and D on a Magic Keyboard or Smart Keyboard, per <a href="https://support.apple.com/guide/ipad/dictate-text-ipad55d35a41/ipados">Apple’s external-keyboard page</a>. Tap the Keyboard button when you finish.</li>
+        <li><strong>Language.</strong> Dictation may not be available in all languages or regions. See Apple’s <a href="https://www.apple.com/ios/feature-availability/#dictation">feature availability page</a>.</li>
+        <li><strong>It stopped.</strong> Apple says Dictation stops automatically after 30 seconds of silence. Start it again.</li>
+      </ul>
+      <h3>Vox.md checks</h3>
+      <ul>
+        <li><strong>The keyboard says Enable Full Access.</strong> Open Settings &gt; General &gt; Keyboard &gt; Keyboards &gt; Vox.md and turn on Allow Full Access.</li>
+        <li><strong>The keyboard says Open Vox.md.</strong> If listening is not active, the keyboard opens Vox.md once to start listening.</li>
+        <li><strong>No transcript.</strong> Make sure a model is fully downloaded and selected in Settings &gt; Models.</li>
+      </ul>
+      <p>More in the <a href="../../docs/#troubleshooting">Vox.md troubleshooting docs</a>.</p>
+
+      <h2 id="faq">Questions</h2>
+      <h3>Is iPad dictation free?</h3>
+      <p>Apple’s page doesn’t mention a charge, though it says cellular data charges may apply. Vox.md includes 15 minutes of transcription, then a one-time lifetime unlock with no subscription. App Store pricing is authoritative.</p>
+      <h3>Does it need the internet?</h3>
+      <p>Apple says Dictation is processed on the iPad in many languages with no internet connection required, except that text dictated into a search field may be sent to the search engine. Once a model is downloaded, Vox.md transcribes on the iPad.</p>
+      <h3>Can I dictate with the Magic Keyboard?</h3>
+      <p>Yes. Apple says to tap the Dictation button in the Shortcuts bar, or press the Switch Keyboard key and D on a Magic Keyboard or Smart Keyboard. See <a href="#external-keyboard">the section above</a>.</p>
+      <h3>Can I pick Whisper or Parakeet on iPad?</h3>
+      <p>Yes, in Vox.md Settings &gt; Models, for the keyboard and for Routes. See <a href="../../compare/whisper-vs-parakeet/">Whisper vs Parakeet</a>.</p>
+      <h3>Can speech go straight into Obsidian?</h3>
+      <p>Yes. Use inline voice in Quick Capture with a Route that delivers to a note in your vault, as in <a href="../voice-notes-to-obsidian-iphone/">the voice notes guide</a>.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Get Vox.md on the App Store.</h2>
+        <p>The free allowance is 15 minutes of transcription and 10 successful Capture deliveries. After that, a one-time lifetime unlock removes the limits. App Store pricing is authoritative. <a href="../../docs/#keyboard-setup">Keyboard setup docs</a>.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Get Vox.md on the App Store</a></p>
+      </section>
+      <nav class="toc" aria-label="Related guides" id="related"><div class="toc-title">Continue</div><ul>
+        <li><a href="../speech-to-text-iphone/">Speech to text on iPhone</a></li>
+        <li><a href="../voice-notes-to-obsidian-iphone/">Voice notes to Obsidian</a></li>
+        <li><a href="../append-to-obsidian-daily-note-iphone/">Append to an Obsidian daily note</a></li>
+        <li><a href="../offline-transcription-iphone-markdown/">Transcribe audio to Markdown offline</a></li>
+        <li><a href="../dictation-on-mac/">Dictation on a Mac</a></li>
+      </ul></nav>

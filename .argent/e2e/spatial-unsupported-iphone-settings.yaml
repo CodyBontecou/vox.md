@@ -1,0 +1,152 @@
+# Natural sound and Stereo on an iPhone without Spatial Audio capture
+# (iPhone 13 Pro Max). Recording Quality offers only Mono and Stereo with the
+# "Spatial Audio needs an iPhone that can record it" note. Natural sound is
+# Mono-only: with Stereo chosen its switch is disabled with a note, and the
+# Settings summary leaves Natural out. Regression for Natural (`.measurement`
+# mode) silently turning Stereo into mono on this phone.
+#
+# Prerequisites: physical iPhone 13 Pro Max, cabled and unlocked, with a DEBUG
+#   build of Vox.md (`-VoxScreenshotUnlocked` unlocks capture). Recording
+#   Quality = High, layout Stereo, Natural sound off. English UI (the summary
+#   checks match English text).
+# Side effects: none left behind; the last steps restore High · Stereo with
+#   Natural sound off.
+# Selectors: ids, except the Natural switch, which has no id of its own
+#   (coordinate, see its comment).
+version: 1
+requires:
+  platform: ios
+steps:
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+          - -VoxScreenshotUnlocked
+          - -VoxAdaptiveNoAutofocus
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_settings
+      timeoutMs: 60000
+  - tap:
+      id: capture_settings
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: settings_recording_quality
+      timeoutMs: 15000
+  - tap:
+      id: settings_recording_quality
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: recording_quality_spatial_unavailable
+      timeoutMs: 15000
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: recording_quality_layout_spatial
+      timeoutMs: 5000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: recording_quality_natural_mono_only
+      timeoutMs: 5000
+  - tap:
+      id: recording_quality_layout_mono
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: recording_quality_natural_mono_only
+      timeoutMs: 5000
+  # Natural sound switch: the recorder captured `text: "0"` (the switch's
+  # value), which isn't stable. The switch has no id of its own; its row
+  # recording_quality_natural is (0.047,0.852,0.907,0.056) on the iPhone 13 Pro
+  # Max, so this taps the trailing switch.
+  - tap:
+      x: 0.8375
+      y: 0.88
+  - tap:
+      id: BackButton
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: settings_recording_quality
+      expectedText: High · Natural ·
+      timeoutMs: 10000
+  - await: { idle: true }
+  - tap:
+      id: settings_recording_quality
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: recording_quality_layout_stereo
+      timeoutMs: 10000
+  - tap:
+      id: recording_quality_layout_stereo
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: recording_quality_natural_mono_only
+      timeoutMs: 5000
+  - tap:
+      id: BackButton
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: settings_recording_quality
+      expectedText: Recording Quality, High · Stereo · ≈ 1 MB/min
+      textMatch: equals
+      timeoutMs: 10000
+  - echo: Restore the starting state. Mono, Natural sound off, then Stereo
+  - tap:
+      id: settings_recording_quality
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: recording_quality_layout_mono
+      timeoutMs: 10000
+  - await: { idle: true }
+  - tap:
+      id: recording_quality_layout_mono
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: recording_quality_natural_mono_only
+      timeoutMs: 5000
+  # Natural sound switch (coordinate, see above): turns it off again.
+  - tap:
+      x: 0.8375
+      y: 0.88
+  - tap:
+      id: recording_quality_layout_stereo
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: recording_quality_natural_mono_only
+      timeoutMs: 5000
+  - tap:
+      id: BackButton
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: settings_recording_quality
+      expectedText: Recording Quality, High · Stereo · ≈ 1 MB/min
+      textMatch: equals
+      timeoutMs: 10000

@@ -1,0 +1,127 @@
+# Settings → Recording Quality offers a "Natural sound" toggle for High and
+# Lossless (less iPhone input processing: the `.measurement` session mode), with
+# a footer note that iOS 26 AirPods record High and Lossless in full Bluetooth
+# quality. It is hidden for Speech; turning it on makes the Settings summary row
+# read "High · Natural · ≈ … MB/min".
+#
+# Prerequisites: iOS simulator (iPhone 18 Pro Max layout, the Vox.md pool
+#   device) with a DEBUG build of Vox.md (bontecou.Voxboard) installed, starting
+#   with Recording Quality = Speech, layout Mono and Natural sound off (the
+#   defaults). `-VoxAdaptiveSeedDemo` seeds the demo vault so the composer opens
+#   without onboarding.
+# Side effects: none left behind. The test turns Natural sound off and selects
+#   Speech again at the end, so it can be rerun.
+# Selectors: taps are documented coordinates (frame centres from `describe` on
+#   the iPhone 18 Pro Max simulator). As in recording-quality-stereo-toggle, the
+#   runner's directive tree carries none of these SwiftUI controls (the recorder
+#   derived a wrong `quick_capture_text` id and role-only `AXScrollArea` /
+#   `AXAdjustable` targets), while the raw accessibility waits resolve, so every
+#   check stays a raw `tool: await-ui-element` step.
+version: 1
+requires:
+  platform: ios
+steps:
+  - echo: Launch Vox.md (DEBUG) with the seeded demo vault. Expect the composer
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+          - -VoxScreenshotUnlocked
+          - -VoxAdaptiveSeedDemo
+          - -VoxAdaptiveNoAutofocus
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_settings
+      timeoutMs: 20000
+  - await: { idle: true }
+  - echo: Open Settings. Expect the Recording Quality row
+  # Settings button capture_settings: frame (0.855,0.073,0.100,0.046)
+  - tap:
+      x: 0.905
+      y: 0.096
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: settings_recording_quality
+      timeoutMs: 10000
+  - await: { idle: true }
+  - echo: Open Recording Quality. Speech is selected, so Natural sound is hidden
+  # Recording Quality row settings_recording_quality: frame (0.036,0.522,0.927,0.063)
+  - tap:
+      x: 0.5
+      y: 0.553
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: recording_quality_high
+      timeoutMs: 10000
+  - await: { idle: true }
+  - echo: Select High. Expect the Natural sound toggle and the AirPods note to appear
+  # High row recording_quality_high: frame (0.045,0.255,0.909,0.097)
+  - tap:
+      x: 0.5
+      y: 0.303
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: recording_quality_natural
+      timeoutMs: 10000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: recording_quality_airpods_note
+      timeoutMs: 10000
+  - echo: Turn Natural sound on
+  # Switch inside recording_quality_natural: row frame (0.045,0.841,0.909,0.054)
+  # with High · Mono (below the #133 Mono / Stereo / Spatial rows), switch at its
+  # trailing edge
+  - tap:
+      x: 0.85
+      y: 0.868
+  - echo: Back to Settings. Expect the summary to name Natural
+  # Back button BackButton: frame (0.045,0.065,0.100,0.046)
+  - tap:
+      x: 0.095
+      y: 0.088
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: settings_recording_quality
+      expectedText: High · Natural ·
+      timeoutMs: 10000
+  - await: { idle: true }
+  - echo: Restore defaults. Turn Natural sound off, then select Speech. Expect the toggle to hide
+  # Recording Quality row: frame (0.036,0.522,0.927,0.063)
+  - tap:
+      x: 0.5
+      y: 0.553
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: recording_quality_natural
+      timeoutMs: 10000
+  - await: { idle: true }
+  # Natural sound switch: row frame (0.045,0.841,0.909,0.054)
+  - tap:
+      x: 0.85
+      y: 0.868
+  # Speech row recording_quality_speech: frame (0.045,0.158,0.909,0.097)
+  - tap:
+      x: 0.5
+      y: 0.206
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: recording_quality_natural
+      timeoutMs: 10000

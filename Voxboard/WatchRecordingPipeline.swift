@@ -483,7 +483,9 @@ final class WatchRecordingPipeline {
             WatchRecordingController.shared.publishState()
             return
         }
-        if item.capturesRecordingWithoutTranscript {
+        // A route with transcription off captures the audio the same way as
+        // the one-shot "capture without a transcript" fallback.
+        if item.capturesRecordingWithoutTranscript || !flow.transcriptionEnabled {
             try await deliverCaptureRecording(item, flow: flow)
             return
         }

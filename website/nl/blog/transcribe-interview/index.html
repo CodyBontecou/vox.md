@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="nl" dir="ltr" data-search-section="Sectie" data-search-guide="Handleiding" data-search-empty="Geen resultaten voor ‘{query}’">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Een interview privé transcriberen, met sprekerlabels | Vox.md</title>
+  <meta name="description" content="Een praktische methode om een opgenomen interview om te zetten in een controleerbaar transcript: toestemming, opname, letterlijk of opgeschoond, controle en optionele anonieme sprekerlabels. Vox.md transcribeert op je apparaat en bewaart een Markdown-notitie die van jou is.">
+  <link rel="canonical" href="https://vox.isolated.tech/nl/blog/transcribe-interview/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Vox.md-documentatie voor taalmodellen">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Een interview privé transcriberen, met sprekerlabels">
+  <meta property="og:description" content="Een praktische methode om een opgenomen interview om te zetten in een controleerbaar transcript: toestemming, opname, letterlijk of opgeschoond, controle en optionele anonieme sprekerlabels. Vox.md transcribeert op je apparaat en bewaart een Markdown-notitie die van jou is.">
+  <meta property="og:url" content="https://vox.isolated.tech/nl/blog/transcribe-interview/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-11-24">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Een interview privé transcriberen, met sprekerlabels">
+  <meta name="twitter:description" content="Een praktische methode om een opgenomen interview om te zetten in een controleerbaar transcript: toestemming, opname, letterlijk of opgeschoond, controle en optionele anonieme sprekerlabels. Vox.md transcribeert op je apparaat en bewaart een Markdown-notitie die van jou is.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Een interview privé transcriberen, met sprekerlabels",
+  "description": "Een praktische methode om een opgenomen interview om te zetten in een controleerbaar transcript: toestemming, opname, letterlijk of opgeschoond, controle en optionele anonieme sprekerlabels. Vox.md transcribeert op je apparaat en bewaart een Markdown-notitie die van jou is.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-11-24",
+  "dateModified": "2026-11-24",
+  "mainEntityOfPage": "https://vox.isolated.tech/nl/blog/transcribe-interview/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "nl",
+  "name": "Een interview privé transcriberen, met sprekerlabels | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/nl/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Handleidingen",
+      "item": "https://vox.isolated.tech/nl/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Een interview privé transcriberen, met sprekerlabels",
+      "item": "https://vox.isolated.tech/nl/blog/transcribe-interview/"
+    }
+  ],
+  "inLanguage": "nl",
+  "name": "Een interview privé transcriberen, met sprekerlabels | Vox.md",
+  "description": "Een praktische methode om een opgenomen interview om te zetten in een controleerbaar transcript: toestemming, opname, letterlijk of opgeschoond, controle en optionele anonieme sprekerlabels. Vox.md transcribeert op je apparaat en bewaart een Markdown-notitie die van jou is."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-interview/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-interview/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-interview/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-interview/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-interview/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-interview/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-interview/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-interview/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-interview/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-interview/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-interview/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-interview/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-interview/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-interview/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-interview/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-interview/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-interview/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-interview/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-interview/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Naar de handleiding</a>
+<nav aria-label="Hoofdnavigatie">
+  <div class="nav-inner">
+    <a href="/nl/" class="logo" aria-label="Vox.md-startpagina">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/nl/#how">Zo werkt het</a></li>
+      <li><a href="/nl/docs/">Documentatie</a></li>
+      <li><a href="/nl/blog/">Handleidingen</a></li>
+      <li><a href="/nl/compare/">Vergelijken</a></li>
+      <li><a href="/nl/privacy.html">Privacy</a></li>
+      <li><a href="/nl/terms.html">Voorwaarden</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_nl_4113af33d28a">Vox.md downloaden</a>
+  <details class="language-switcher"><summary>Taal</summary><ul><li><a href="/blog/transcribe-interview/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-interview/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-interview/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-interview/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-interview/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-interview/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-interview/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-interview/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-interview/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-interview/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-interview/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-interview/" lang="nl" hreflang="nl" aria-current="page">Nederlands</a></li><li><a href="/pl/blog/transcribe-interview/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-interview/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-interview/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-interview/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-interview/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-interview/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-interview/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-interview/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-interview/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-interview/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-interview/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Interviews · Op het apparaat · Sprekerlabels</div>
+        <h1 class="hero-title">Een interview privé transcriberen, met sprekerlabels</h1>
+        <p class="hero-subtitle">Toestemming, opname, transcriptie en een controleronde, plus een route op het apparaat zodat deelnemersaudio niet naar een transcriptiedienst wordt geüpload.</p>
+      </div>
+      <aside class="meta-card" aria-label="Over deze handleiding">
+        <dl>
+          <div><dt>Door</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Bijgewerkt</dt><dd><time datetime="2026-11-24">24 november 2026</time></dd></div>
+          <div><dt>Vereist</dt><dd>Vox.md: iOS of iPadOS 17.6+ of macOS 14+ · gedownload spraakmodel voor Whisper of Parakeet · beschrijfbare bestemmingsmap</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Een interview privé transcriberen, met sprekerlabels">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Het korte antwoord</div>
+        <p>Vijf stappen: <strong>1) toestemming vragen</strong> en leg uit hoe de audio wordt verwerkt en opgeslagen; <strong>2) neem duidelijk op</strong> eerst met een test; <strong>3) transcribeer</strong>; <strong>4) controleer de tekst aan de hand van de audio</strong>; <strong>5) label de sprekers en sla op</strong>. Je kunt alles op je eigen apparaat doen met Vox.md op iPhone, iPad of Mac, zodat de opname niet naar een transcriptiedienst wordt geüpload. Sprekerlabels zijn optioneel, anoniem en op basis van beste inspanning (“Spreker 1”, “Spreker 2”); je hernoemt ze met de hand.</p>
+      </div>
+      <p>De methode werkt met elk hulpmiddel. De Vox.md-stappen volgen de <a href="/nl/docs/#models">modellen</a> en <a href="/nl/docs/#mac">Mac</a> documentatie en het gedrag van de app. Externe bronnen worden gelinkt waar ze worden gebruikt, en de voorbeeldnotitie is illustratief, geen echt interview.</p>
+      <nav class="toc" aria-label="In deze handleiding"><div class="toc-title">In deze handleiding</div><ol>
+        <li><a href="#before-you-record">Voordat je opneemt</a></li>
+        <li><a href="#verbatim-or-clean">Letterlijk of opgeschoond?</a></li>
+        <li><a href="#options">Manieren om te transcriberen</a></li>
+        <li><a href="#iphone">Persoonlijk op iPhone of iPad</a></li>
+        <li><a href="#mac">Op een Mac</a></li>
+        <li><a href="#review">De controleronde</a></li>
+        <li><a href="#troubleshooting">Problemen oplossen</a></li>
+        <li><a href="#faq">Veelgestelde vragen</a></li>
+      </ol></nav>
+
+      <h2 id="before-you-record">Voordat je opneemt</h2>
+      <p><strong>Toestemming en gegevensverwerking.</strong> Vertel de deelnemer hoe de audio wordt verwerkt en opgeslagen en vraag om instemming voordat je opneemt. De <a href="https://library.centre.edu/oralhistories/standards">Gids voor mondelinge geschiedenis</a> zegt dat interviewers ervoor moeten zorgen dat verteller vrijwillig toestemming geven, het doel van het interview uitleggen en hun opties duidelijk maken, waaronder toegang beperken of anoniem blijven. Check ook je ethische commissie of gegevensbeleid: veel instanties vragen waar deelnemersaudio wordt verwerkt en opgeslagen, dus bepaal je antwoord vóór het eerste interview.</p>
+      <p><strong>Opname-opstelling.</strong> De Harvard Library <a href="https://guides.library.harvard.edu/c.php?g=796889&amp;p=10476360">Opnemen en transcriberen</a> gids raadt aan eerst tijd te besteden aan goede audio-opname, omdat transcriptie dan makkelijker wordt. In de praktijk:</p>
+      <ul>
+        <li>Gebruik indien mogelijk één microfoon per spreker en ga dicht bij iedereen zitten.</li>
+        <li>Kies een stille ruimte en zet alles uit wat rinkelt of zoemt.</li>
+        <li>Maak een korte testopname en luister die terug voordat het echte interview begint.</li>
+      </ul>
+
+      <h2 id="verbatim-or-clean">Letterlijk of opgeschoond?</h2>
+      <p>Bepaal de stijl voordat je transcribeert en houd die in het hele project gelijk. De gids van Centre College <a href="https://library.centre.edu/oralhistories/transcribing">Transcriberen</a> pagina beschrijft letterlijk als woord voor woord, inclusief stopgeluiden, pauzes, onderbrekingen en gelach, en zegt dat historici daaraan de voorkeur geven omdat het de meeste nuance vastlegt. “Opgeschoond letterlijk” en “bewerkt” zijn gangbare namen voor lichtere stijlen; de tabel laat zien hoe ze meestal verschillen. Welke je nodig hebt, wordt bepaald door je project, uitgever of ethische commissie.</p>
+      <p class="guide-table-hint">Veeg de tabel op een klein scherm zijwaarts.</p>
+      <div class="guide-comparison" role="region" aria-label="Vergelijking van transcriptiestijlen; scroll horizontaal op kleine schermen" tabindex="0">
+        <table class="comparison">
+          <caption>Veelgebruikte transcriptiestijlen</caption>
+          <thead><tr><th scope="col">Stijl</th><th scope="col">Wat het behoudt</th><th scope="col">Typische toepassing</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Letterlijk</th><td>Alles wat er gezegd is: stopwoorden, valse starts, pauzes, geluiden die geen spraak zijn</td><td>Oral history en onderzoek waarbij woordkeuze en manier van spreken data zijn</td></tr>
+            <tr><th scope="row">Opgeschoond letterlijk</th><td>De gesproken woorden, zonder stopwoorden en valse starts</td><td>De meeste interviewanalyse en citaten waar de betekenis zwaarder weegt dan de manier van zeggen</td></tr>
+            <tr><th scope="row">Bewerkt</th><td>Herschreven voor leesbaarheid: grammatica opgeschoond, passages geschrapt</td><td>Publicatieconcepten, alleen met goedkeuring van de spreker waar je project dat vereist</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Automatische transcriptie maakt niet voor jou een stijlkeuze. Die pas je zelf toe in de controleronde.</p>
+
+      <h2 id="options">Manieren om te transcriberen</h2>
+      <p>De tabel vergelijkt categorieën, geen specifieke producten, en vermeldt alleen wat gedocumenteerd is. De gegevens over Spraakmemo’s van Apple komen uit de <a href="https://support.apple.com/guide/voice-memos/vm4a03609f0d/mac">Een transcriptie bekijken in Spraakmemo’s op de Mac</a> en de <a href="https://support.apple.com/guide/iphone/view-a-transcription-iph00953a982/ios">iPhone-pagina</a>; controleer ze voor je apparaat, taal en regio.</p>
+      <p class="guide-table-hint">Veeg de tabel op een klein scherm zijwaarts.</p>
+      <div class="guide-comparison" role="region" aria-label="Vergelijking van opties voor interviewtranscriptie; scroll horizontaal op kleine schermen" tabindex="0">
+        <table class="comparison">
+          <caption>Opties voor interviewtranscriptie</caption>
+          <thead><tr><th scope="col">&nbsp;</th><th scope="col">Waar audio wordt verwerkt</th><th scope="col">Sprekerlabels</th><th scope="col">Uitvoer</th><th scope="col">Kostenmodel</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Met de hand</th><td>Je eigen computer</td><td>Je typt ze</td><td>Elk tekstbestand</td><td>Jouw tijd: de <a href="https://www.nps.gov/articles/000/oral-history-resources-interview-transcribing.htm">Nationale Parkendienst</a> zegt ongeveer 6–8 uur per uur opname</td></tr>
+            <tr><th scope="row">Cloudtranscriptiediensten</th><td>De servers van de aanbieder; controleer de voorwaarden van elke aanbieder</td><td>Verschilt per dienst</td><td>Verschilt per dienst</td><td>Verschilt per dienst</td></tr>
+            <tr><th scope="row">Transcripten van Apple Spraakmemo’s</th><td>Niet gedocumenteerd op de aangehaalde pagina’s</td><td>Niet gedocumenteerd op de aangehaalde pagina’s</td><td>Tekst in Spraakmemo’s; je kopieert hem er zelf uit</td><td>Onderdeel van het besturingssysteem</td></tr>
+            <tr><th scope="row">Vox.md</th><td>Op je iPhone, iPad of Mac</td><td>Opt-in, anoniem, beste inspanning</td><td>Een Markdown-notitie in een map naar keuze</td><td>15 gratis transcriptieminuten en 10 geslaagde leveringen, daarna een eenmalige levenslange ontgrendeling</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Als je alleen snel tekst in Spraakmemo’s nodig hebt, gebruik dat dan; zie <a href="/nl/blog/transcribe-voice-memos-iphone/">Spraakmemo’s naar Markdown transcriberen</a> om een opname in een notitie te krijgen. Vox.md is er voor als je het transcript als gewoon bestand wilt dat van jou is, een zelfgekozen lokaal model en optionele sprekerlabels.</p>
+
+      <h2 id="iphone">Persoonlijk op iPhone of iPad</h2>
+      <ol>
+        <li><strong>Kies een transcriptiemodel.</strong> Automatisch geeft de voorkeur aan Apple Speech op een ondersteund iOS 26-apparaat en een ondersteunde taal. Je kunt in plaats daarvan Whisper (Tiny tot Large v3 Turbo), Parakeet v2 (Engels) of Parakeet v3 (25 talen) downloaden. Een model downloaden is jouw keuze en de enige netwerkstap. <a href="/nl/compare/whisper-vs-parakeet/">Whisper versus Parakeet</a> helpt je kiezen, en <a href="/nl/blog/offline-transcription-iphone-markdown/">offline transcriptie op iPhone</a> legt uit hoe je het voorbereidt.</li>
+        <li><strong>Maak een route “Interviews”.</strong> Maak in Instellingen → Routes een route met de naam Interviews. Kies een bestemmingsmap (een Obsidian-vault of een map in Bestanden) en <strong>Nieuwe notitie</strong>, zodat elke opname een eigen bestand wordt. Voeg eventueel vaste frontmatter toe, één <code>key: value</code> per regel, zoals <code>project: housing-study</code>. De <a href="/nl/blog/obsidian-properties-generator/">eigenschappengenerator</a> bouwt geldige frontmatter. Houd deelnemerscodes buiten statische metadata, want die gelden voor elke notitie van de route.</li>
+        <li><strong>Zet Identificatie van sprekers aan.</strong> Het is een opt-in-instelling per route. De eerste keer bereidt het een apart sprekermodel voor, doe dat dus vóór het interview en niet voor de ogen van de deelnemer. Daarna draait het lokaal. De opensource <a href="https://github.com/FluidInference/FluidAudio">FluidAudio</a> wordt gebruikt voor lokale sprekerverwerking.</li>
+        <li><strong>Doe een test van 30 seconden met twee stemmen.</strong> Neem een korte uitwisseling met iemand op en controleer of de notitie in de bestemmingsmap aankomt en twee labels toont.</li>
+        <li><strong>Neem op of importeer.</strong> Neem op vanuit de Vox.md-composer, of gebruik de importknop voor een bestaand audio- of videobestand (<a href="/nl/blog/transcribe-video-to-text/">hoe je een video importeert</a>). Kies <strong>Aan concept toevoegen</strong> als je de tekst wilt lezen voordat die wordt afgeleverd, of <strong>Direct verzenden</strong> om af te leveren wanneer de transcriptie klaar is.</li>
+        <li><strong>Controleer in Bibliotheek.</strong> Bibliotheek toont elke opname en, als sprekeridentificatie niet kon draaien, de reden.</li>
+      </ol>
+      <p>Met Identificatie van sprekers aan krijgt elke beurt in de opgeslagen tekst een eigen labelregel, gevolgd door de tekst van die beurt op de volgende regel, en worden beurten gescheiden door een lege regel:</p>
+<pre class="guide-code"><code>Speaker 1:
+Thanks for agreeing to talk with me today.
+
+Speaker 2:
+Happy to. Where would you like me to start?</code></pre>
+      <p>Labels zijn anoniem en op basis van beste inspanning. Vox.md herkent mensen niet bij naam. Het is ook beschikbaar voor het afleveren van transcripten via Apple Watch en in de Mac-app.</p>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">Probeer het met één korte opname.</h2>
+        <p>Het gratis tegoed is 15 minuten transcriptie en 10 geslaagde leveringen.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_nl_4113af33d28a">Vox.md downloaden</a></p>
+      </section>
+
+      <h2 id="mac">Op een Mac</h2>
+      <ul>
+        <li><strong>Opnemen op een Mac.</strong> Voor de ingebouwde opnameprogramma’s en het vastleggen van het geluid van één app, zie <a href="/nl/blog/record-audio-on-mac/">audio opnemen op een Mac</a>.</li>
+        <li><strong>Een bestaand bestand.</strong> Gebruik <strong>Audio importeren…</strong> in Vox.md voor Mac, dat audio- en filmbestanden accepteert. De stappen staan in <a href="/nl/blog/transcribe-audio-file-mac/">een audiobestand transcriberen op de Mac</a>. Zet Identificatie van sprekers aan op de route voor anonieme labels.</li>
+        <li><strong>Een interview op afstand.</strong> Vergaderopname neemt de audio van één app en je microfoon op als aparte stems. Jij verschijnt als “Jij” en de andere kant wordt gelabeld als externe spreker; sprekeridentificatie kan meerdere externe stemmen verder splitsen. De installatie staat in <a href="/nl/blog/transcribe-meetings-mac-obsidian/">Mac-vergaderingen transcriberen naar Obsidian</a>. Vertel externe deelnemers dat je opneemt, zoals in de toestemmingsstap hierboven.</li>
+        <li><strong>Een ondertitelbestand.</strong> Als Zoom of Teams je al een .srt- of .vtt-bestand heeft gegeven, zet de <a href="/nl/blog/srt-vtt-to-text-markdown/">SRT- en VTT-converter</a> zet het in je browser om in tekst of Markdown.</li>
+      </ul>
+      <p>De verwerkingsmodus Vergadernotities bestaat, maar herstructureert tekst tot notities. Laat de route voor letterlijke onderzoekstranscripten op Origineel behouden staan.</p>
+
+      <h2 id="review">De controleronde</h2>
+      <p>Automatische transcripten moeten worden gecontroleerd. De gids van Harvard zegt dat je, zoals bij elk automatisch gegenereerd transcript, het handmatig moet herzien, en de gids van Centre College zegt dat automatische transcripten het werk van een mens niet vervangen.</p>
+      <ol>
+        <li><strong>Luister opnieuw</strong> op normale of lagere snelheid terwijl je meeleest, en corrigeer namen, termen, getallen en data.</li>
+        <li><strong>Pas je stijl toe</strong> uit de keuze hierboven tussen letterlijk of opgeschoond.</li>
+        <li><strong>Hernoem de sprekers.</strong> Gebruik zoeken en vervangen om <code>Speaker 1</code> in je interviewercode en <code>Speaker 2</code> om in de deelnemerscode, bijvoorbeeld P03.</li>
+        <li><strong>Anonimiseren</strong> namen, plaatsen en andere identificerende gegevens, zoals je toestemming en gegevensplan vereisen.</li>
+        <li><strong>Bewaar de originele audio</strong> volgens je gegevensplan.</li>
+      </ol>
+      <p>Een afgeronde notitie kan er zo uitzien (verzonnen voorbeeldtekst):</p>
+<pre class="guide-code"><code>---
+participant: P03
+date: 2026-11-24
+consent: recorded
+---
+
+Interviewer:
+Thanks for agreeing to talk with me today.
+
+P03:
+Happy to. Where would you like me to start?</code></pre>
+
+      <h2 id="troubleshooting">Problemen oplossen</h2>
+      <ul>
+        <li><strong>Geen sprekerlabels.</strong> Het gewone transcript blijft altijd bewaard en Bibliotheek toont waarom identificatie is overgeslagen. Mogelijke redenen: geen timinginformatie in het transcript; timing die niet het hele transcript beslaat; geen onderscheiden sprekers gevonden; modelopslag niet beschikbaar; het model kon niet worden voorbereid; of de verwerking mislukte. Controleer of Identificatie van sprekers aan staat voor de route en of het sprekermodel is voorbereid.</li>
+        <li><strong>Sprekers onjuist samengevoegd of gesplitst.</strong> Neem dichter bij elke stem op, gebruik indien mogelijk aparte microfoons en corrigeer de labels met de hand.</li>
+        <li><strong>Een lange opname.</strong> Grotere modellen duren langer. Probeer eerst een kleiner model en houd het apparaat opgeladen.</li>
+        <li><strong>Een taal die Parakeet v2 niet dekt.</strong> Parakeet v2 is alleen Engels. Gebruik Parakeet v3 (25 talen) of Whisper; zie <a href="/nl/docs/#models">Modellen</a>.</li>
+        <li><strong>Gratis tegoed opgebruikt.</strong> Het zijn 15 minuten transcriptie en 10 geslaagde leveringen, daarna een eenmalige levenslange ontgrendeling. De prijs in de App Store is leidend.</li>
+      </ul>
+
+      <h2 id="faq">Veelgestelde vragen</h2>
+      <h3>Kan ik een interview offline transcriberen?</h3>
+      <p>Ja, zodra een model klaarstaat. Het downloaden van modellen en het voorbereiden van het sprekermodel vereisen eenmalig een verbinding; daarna draait de transcriptie op het apparaat. Zie <a href="/nl/blog/offline-transcription-iphone-markdown/">offline transcriptie op iPhone</a>.</p>
+      <h3>Uploadt Vox.md mijn opname?</h3>
+      <p>Nee. Transcriptie en sprekerlabeling draaien op je apparaat en het bestand wordt alleen geschreven naar de map die je kiest. Als die map synchroniseert (bijvoorbeeld iCloud Drive), bewaart de synchronisatieaanbieder het bestand onder zijn eigen voorwaarden. Zie de <a href="/nl/privacy.html">privacybeleid</a>.</p>
+      <h3>Kan het zien wie er spreekt, op naam?</h3>
+      <p>Nee. Labels zijn anoniem (“Spreker 1”, “Spreker 2”) en op basis van beste inspanning. Je hernoemt ze zelf.</p>
+      <h3>Hoe lang duurt het om een interview met de hand te transcriberen?</h3>
+      <p>De National Park Service <a href="https://www.nps.gov/articles/000/oral-history-resources-interview-transcribing.htm">Interviews transcriberen</a> zegt dat het gemiddeld 6–8 uur per uur opgenomen interview kost.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Transcribeer je volgende interview op je eigen apparaat.</h2>
+        <p>Test met één kort interview op de gratis 15 minuten transcriptie en open daarna het Markdown-bestand.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_nl_4113af33d28a">Vox.md downloaden</a></p>
+      </section>
+      <nav class="toc" aria-label="Gerelateerde handleidingen" id="related"><div class="toc-title">Doorgaan</div><ul>
+        <li><a href="/nl/blog/transcribe-audio-file-mac/">Een audiobestand transcriberen op de Mac</a></li>
+        <li><a href="/nl/blog/transcribe-meetings-mac-obsidian/">Mac-vergaderingen transcriberen naar Obsidian</a></li>
+        <li><a href="/nl/blog/transcribe-voice-memos-iphone/">iPhone-memo&#x27;s naar Markdown transcriberen</a></li>
+        <li><a href="/nl/blog/offline-transcription-iphone-markdown/">Offline transcriptie op iPhone</a></li>
+        <li><a href="/nl/compare/whisper-vs-parakeet/">Whisper versus Parakeet</a></li>
+        <li><a href="/nl/blog/obsidian-properties-generator/">Obsidian-propertiesgenerator</a></li>
+        <li><a href="/nl/blog/srt-vtt-to-text-markdown/">SRT en VTT naar tekst of Markdown</a></li>
+        <li><a href="/nl/docs/">Documentatie</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/nl/">Startpagina</a></li>
+        <li><a href="/nl/docs/">Documentatie</a></li>
+        <li><a href="/nl/blog/">Handleidingen</a></li>
+        <li><a href="/nl/compare/">Vergelijken</a></li>
+        <li><a href="/nl/privacy.html">Privacy</a></li>
+        <li><a href="/nl/terms.html">Voorwaarden</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Ondersteuning</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_nl_4113af33d28a">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Snel vastleggen voor lokale notities · Geen inhoud uploaden.</div>
+    </div>
+  <details class="language-switcher"><summary>Taal</summary><ul><li><a href="/blog/transcribe-interview/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-interview/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-interview/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-interview/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-interview/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-interview/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-interview/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-interview/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-interview/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-interview/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-interview/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-interview/" lang="nl" hreflang="nl" aria-current="page">Nederlands</a></li><li><a href="/pl/blog/transcribe-interview/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-interview/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-interview/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-interview/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-interview/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-interview/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-interview/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-interview/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-interview/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-interview/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-interview/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

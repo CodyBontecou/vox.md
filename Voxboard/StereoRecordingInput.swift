@@ -57,6 +57,54 @@ enum StereoRecordingInput {
         inputPortTypes.count == 1 && inputPortTypes.first == .builtInMic
     }
 
+    /// Headset microphones that Stereo and Spatial Audio take the input back
+    /// from: a wired headset and Bluetooth hands-free (AirPods). Their output
+    /// stays as it is. A USB or line-in interface, or CarPlay, is a
+    /// microphone someone chose on purpose and is left alone.
+    static let headsetInputs: Set<AVAudioSession.Port> = [.headsetMic, .bluetoothHFP, .bluetoothLE]
+
+    /// True when a Stereo or Spatial take should switch the input from a
+    /// headset microphone to the built-in one.
+    static func shouldPreferBuiltInMicrophone(_ inputPortTypes: [AVAudioSession.Port]) -> Bool {
+        !routeAllowsStereo(inputPortTypes) && inputPortTypes.contains { headsetInputs.contains($0) }
+    }
+
+    /// True while this process pinned the built-in mic as the preferred input.
+    private(set) static var pinnedBuiltInMicrophone = false
+
+    /// Makes the built-in microphone the input when a headset mic is the
+    /// current one (a wired headset; Bluetooth is already output-only in a
+    /// Stereo/Spatial session). Returns a description for the log, or nil
+    /// when nothing had to change. Undone by `releaseBuiltInMicrophone`.
+    @discardableResult
+    static func preferBuiltInMicrophone(session: AVAudioSession = .sharedInstance()) -> String? {
+        MainActor.preconditionIsolated()
+        let before = session.currentRoute.inputs.map(\.portType)
+        guard shouldPreferBuiltInMicrophone(before) else { return nil }
+        guard let builtIn = session.availableInputs?.first(where: { $0.portType == .builtInMic }) else {
+            return "no built-in mic available (input \(before.map(\.rawValue)))"
+        }
+        do {
+            try session.setPreferredInput(builtIn)
+            pinnedBuiltInMicrophone = true
+        } catch {
+            return "could not select the built-in mic: \(error.localizedDescription)"
+        }
+        let switched = waitForRoute(timeout: 0.5) {
+            routeAllowsStereo(session.currentRoute.inputs.map(\.portType))
+        }
+        return "input \(before.map(\.rawValue)) → built-in mic\(switched ? "" : " (route not confirmed yet)")"
+    }
+
+    /// Gives the input choice back to the system (AirPods, a headset plugged
+    /// in later) once the Stereo/Spatial session ends.
+    static func releaseBuiltInMicrophone(session: AVAudioSession = .sharedInstance()) {
+        MainActor.preconditionIsolated()
+        guard pinnedBuiltInMicrophone else { return }
+        try? session.setPreferredInput(nil)
+        pinnedBuiltInMicrophone = false
+    }
+
     /// Stereo input orientation for an interface orientation. Unknown (for
     /// example while the app records in the background) is portrait.
     static func stereoOrientation(for interface: UIInterfaceOrientation) -> AVAudioSession.StereoOrientation {
@@ -115,9 +163,8 @@ enum StereoRecordingInput {
         let source = sources[index]
         do {
             // The built-in mic is already the active input (checked above),
-            // so its data source changes take effect immediately. No
-            // setPreferredInput: pinning the built-in mic would stop iOS from
-            // switching to AirPods or a headset plugged in later.
+            // so its data source changes take effect immediately. Taking the
+            // input back from a headset is `preferBuiltInMicrophone`'s job.
             try source.setPreferredPolarPattern(.stereo)
             try port.setPreferredDataSource(source)
             let interface = orientation ?? currentInterfaceOrientation()

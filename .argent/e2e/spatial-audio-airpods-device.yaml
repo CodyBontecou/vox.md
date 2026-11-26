@@ -1,0 +1,78 @@
+# Spatial Audio with AirPods connected (iPhone 17 Pro, iOS 27.2). Reproduces
+# the 2026-11-24 bug: with AirPods connected, a Spatial take recorded mono from
+# the AirPods mic (.m4a, no notice). Fixed: Stereo/Spatial record from the
+# built-in mics (AirPods stay the output) and a take that can't record its
+# layout shows a notice. Expect no "Recording in mono" notice and an .mp4.
+#
+# The debug log (Settings > View Debug Log) has the proof this test can't
+# read: "Session input: … builtInMic", "[SpatialAudio] First buffers after N s
+# … outputs=["BluetoothA2DPOutput"]", "Spatial Audio capture started".
+#
+# Prerequisites: a cabled, unlocked iPhone 16 Pro / 17 Pro with a DEBUG build;
+#   AirPods connected to it; Recording Quality = Lossless · Spatial Audio;
+#   Keyboard Listening off; the current note has no other .mp4 attachment;
+#   English UI.
+# Side effects: adds a ~10 s .mp4 recording and its transcript to the current
+#   note of the default route. Settings are left unchanged.
+# Selectors: ids, plus the fixed "Speak" label, the "Recording, 00:08" timer
+#   text used as the 8-second wait, the notice text, and ".mp4" in the
+#   attachment's label.
+version: 1
+requires:
+  platform: ios
+steps:
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+          - -VoxScreenshotUnlocked
+          - -VoxAdaptiveNoAutofocus
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_settings
+      timeoutMs: 120000
+  - tap:
+      id: capture_settings
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: settings_recording_quality
+      expectedText: Lossless · Spatial Audio ·
+      timeoutMs: 15000
+  - tap:
+      id: signal.back
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_voice_recording
+      timeoutMs: 10000
+  - echo: Record about 8 seconds with AirPods connected. Expect no mono notice and
+      an .mp4
+  - tap:
+      text: Speak
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Recording, 00:08
+      timeoutMs: 25000
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        text: Recording in mono
+      timeoutMs: 3000
+  - tap:
+      id: capture_recording_stop_send
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: .mp4
+      timeoutMs: 30000

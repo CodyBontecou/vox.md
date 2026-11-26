@@ -167,6 +167,8 @@
         <li><a href="#related">Related guides</a></li>
       </ol></nav>
 
+      <p>Still need to make the recording? See <a href="/blog/record-audio-on-mac/">how to record audio on a Mac</a>.</p>
+
       <h2 id="built-in">Free options already on your Mac</h2>
       <h3>Voice Memos</h3>
       <p>Apple’s Voice Memos page says you can click the <strong>Transcription</strong> button while recording to see the text live, or select a finished recording and click the same button. You can search the recording list for text in a title or in the transcription, and copy transcript text by selecting it, Control-clicking and choosing <strong>Copy</strong>. Apple says that if you open a recording made in macOS 14 or earlier, or on a device that doesn’t support transcription, Voice Memos transcribes it automatically, and that audio transcription isn’t available in all countries or regions.</p>
@@ -188,7 +190,7 @@
             <tr><th scope="row">What runs on the Mac</th><td>Not documented</td><td>Not documented</td><td>Transcription, with a Whisper or Parakeet model you download</td></tr>
             <tr><th scope="row">File import</th><td>Not documented</td><td>Not documented</td><td>Import Audio… accepts audio or movie files</td></tr>
             <tr><th scope="row">Markdown output</th><td>Not documented</td><td>Not documented</td><td>Yes</td></tr>
-            <tr><th scope="row">Speaker labels</th><td>Not documented</td><td>Not documented</td><td>Optional, with Identify Speakers</td></tr>
+            <tr><th scope="row">Speaker labels</th><td>Not documented</td><td>Not documented</td><td>Optional, with Identify Speakers (see <a href="/blog/transcribe-interview/">interview transcription</a>)</td></tr>
             <tr><th scope="row">Cost</th><td>Part of macOS</td><td>Part of macOS</td><td>15 free transcription minutes and 10 successful deliveries, then a one-time lifetime unlock</td></tr>
           </tbody>
         </table>
@@ -210,7 +212,7 @@
 
       <h2 id="import">Import and transcribe the file</h2>
       <ol>
-        <li><strong>Import.</strong> From the Vox.md menu bar choose <strong>Import Audio…</strong>, or import or drag the audio into the Capture workspace. The docs say audio and movie files are accepted, and they go through the same local transcription as a recording.</li>
+        <li><strong>Import.</strong> From the Vox.md menu bar choose <strong>Import Audio…</strong>, or import or drag the audio into the Capture workspace. The docs say audio and movie files are accepted, and they go through the same local transcription as a recording. For video files specifically, see <a href="/blog/transcribe-video-to-text/">transcribe a video to text</a>.</li>
         <li><strong>Choose Add to Draft or Send Immediately.</strong> With <strong>Send Immediately</strong> the transcript is delivered when it finishes. With <strong>Add to Draft</strong> you can review it first. Check names, numbers and dates against the audio.</li>
         <li><strong>Optional: Identify Speakers.</strong> Turn on <strong>Identify Speakers</strong> on the Route for anonymous, best-effort speaker labels. It prepares a separate model the first time. If it can’t run, the plain transcript is kept and the reason shows in Library.</li>
         <li><strong>Optional: processing mode.</strong> A Route can use Keep Original, Clean Prose, Meeting Notes, Todo Checklist or Custom Instruction. Apple Intelligence modes need compatible macOS 26 hardware. Without it, Todo Checklist and Meeting Notes use built-in formatters, and Clean Prose and Custom Instruction keep the original text.</li>
@@ -219,6 +221,7 @@
 
       <h2 id="verify">Check the Markdown note</h2>
       <p>Choose <strong>Reveal Last Export</strong> from the menu bar, or find the entry in Library and reveal it in Finder, then open the file in Obsidian. If you only need the text, choose <strong>Copy Last Transcript</strong>. For a note structure to fill from a recording, see the <a href="/blog/obsidian-meeting-notes-template/">meeting notes template generator</a>.</p>
+      <p>If the recording is a rehearsal of a talk, paste the transcript and the recording length into the <a href="/blog/speech-time-calculator/">speech time calculator</a> to measure your words per minute and the speaking time of your script at your own pace.</p>
 
       <h2 id="privacy">What leaves your Mac</h2>
       <p>Transcription runs on the Mac, and Vox.md does not send capture content to Vox.md servers. Model downloads contact Hugging Face or FluidAudio infrastructure. If the destination folder syncs through iCloud or another service, that service handles the file under its own terms. See the <a href="/privacy.html">privacy policy</a>.</p>
@@ -242,6 +245,7 @@
         <li><a href="/compare/whisper-vs-parakeet/">Whisper vs Parakeet</a></li>
         <li><a href="/blog/transcribe-voice-memos-iphone/">Transcribe iPhone Voice Memos to Markdown</a></li>
         <li><a href="/blog/obsidian-meeting-notes-template/">Obsidian meeting notes template generator</a></li>
+        <li><a href="/blog/transcribe-interview/">Transcribe an interview privately, with speaker labels</a></li>
         <li><a href="/docs/#mac">Mac documentation</a></li>
       </ul></nav>
     </div>

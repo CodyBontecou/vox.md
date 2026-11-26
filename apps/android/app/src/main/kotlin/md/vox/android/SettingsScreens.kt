@@ -727,6 +727,7 @@ internal fun CaptureBarSettingsScreen(
                             onSelect = { setVoiceRecordingResult(VoiceRecordingResult.SEND_IMMEDIATELY) },
                         )
                     }
+                    CaptureRouteRailGroup(busy = isBusy)
                     SignalButton(
                         text = voxString("Reset Capture Bar"),
                         onClick = reset,
@@ -740,6 +741,39 @@ internal fun CaptureBarSettingsScreen(
             }
         }
     }
+}
+
+/**
+ * Route Rail (iOS Settings > Capture Bar, #160): Off, Left or Right. A phone preference,
+ * kept on this device, so it is not part of the capture bar configuration or its reset.
+ */
+@Composable
+private fun CaptureRouteRailGroup(busy: Boolean) {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val placement = CaptureRouteRail.placement()
+    SettingsSignalGroup(voxUiText("Route Rail")) {
+        CaptureRouteRailPlacement.entries.forEachIndexed { index, option ->
+            if (index > 0) SignalRowDivider()
+            CaptureBarRadioRow(
+                title = when (option) {
+                    CaptureRouteRailPlacement.OFF -> voxString("Off")
+                    CaptureRouteRailPlacement.LEFT -> voxString("Left")
+                    CaptureRouteRailPlacement.RIGHT -> voxString("Right")
+                },
+                description = null,
+                selected = placement == option,
+                enabled = !busy,
+                radioTag = "route-rail-${option.persistedName}",
+                onSelect = { CaptureRouteRail.set(context, option) },
+            )
+        }
+    }
+    Text(
+        voxString("On phones, show your routes in a column just above Speak so you can switch with one thumb. The top bar then names only the selected route."),
+        modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 2.dp),
+        style = MaterialTheme.typography.bodySmall,
+        color = Signal.colors.muted,
+    )
 }
 
 /** Timestamp format choice as a Signal radio group. */
@@ -781,6 +815,8 @@ private fun CaptureBarRadioRow(
             .fillMaxWidth()
             .heightIn(min = 52.dp)
             .selectable(selected = selected, enabled = enabled, role = Role.RadioButton, onClick = onSelect)
+            // On the row, which merges the radio and labels into the one node UI tests can reach.
+            .then(if (radioTag != null) Modifier.testTag(radioTag) else Modifier)
             .padding(start = 6.dp, end = 14.dp, top = 8.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -795,7 +831,7 @@ private fun CaptureBarRadioRow(
                 disabledSelectedColor = c.faint,
                 disabledUnselectedColor = c.border,
             ),
-            modifier = Modifier.size(40.dp).then(if (radioTag != null) Modifier.testTag(radioTag) else Modifier),
+            modifier = Modifier.size(40.dp),
         )
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(title, style = SignalType.rowTitle, color = if (enabled) c.text else c.faint)

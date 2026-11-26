@@ -64,7 +64,7 @@ struct VoxboardLiveActivity: Widget {
                         }
                         if context.state.isSegmentActive {
                             HStack(spacing: 12) {
-                                LevelBars(state: context.state, barCount: 32, height: 26, liveTail: 6)
+                                RecordingRule(state: context.state)
                                 if context.state.canPause == true {
                                     PauseButton(state: context.state)
                                 }
@@ -76,43 +76,44 @@ struct VoxboardLiveActivity: Widget {
                     }
                 }
             } compactLeading: {
-                Image(systemName: context.state.activitySymbolName(expanded: false))
-                    .foregroundStyle(context.state.activityTint)
+                CompactSymbol(state: context.state)
             } compactTrailing: {
                 if let paused = context.state.pausedElapsed, context.state.isSegmentActive {
                     Text(ElapsedReadout.format(paused))
                         .monospacedDigit()
                         .font(SignalWidgetFont.mono(17, medium: true))
                         .foregroundStyle(SignalActivity.muted)
-                        .frame(maxWidth: 44)
                         .liveActivitySingleLine(minimumScaleFactor: 0.7)
+                        .compactTrailingSlot()
                 } else if let started = context.state.segmentStartedAt, context.state.isSegmentActive {
                     Text(Date(timeIntervalSince1970: started), style: .timer)
                         .monospacedDigit()
                         .font(SignalWidgetFont.mono(17, medium: true))
                         .foregroundStyle(SignalActivity.red)
-                        .frame(maxWidth: 44)
                         .liveActivitySingleLine(minimumScaleFactor: 0.7)
+                        .compactTrailingSlot()
                 } else if let percent = context.state.transcriptionPercentLabel {
                     Text(percent)
                         .monospacedDigit()
                         .font(SignalWidgetFont.sans(11, .semibold))
                         .foregroundStyle(SignalActivity.text)
                         .liveActivitySingleLine(minimumScaleFactor: 0.7)
+                        .compactTrailingSlot()
                 } else if context.state.isTranscribing {
                     Text("…")
                         .font(SignalWidgetFont.sans(12, .semibold))
                         .foregroundStyle(SignalActivity.muted)
                         .liveActivitySingleLine()
+                        .compactTrailingSlot()
                 } else {
                     Text("Ready")
                         .font(SignalWidgetFont.sans(11))
                         .foregroundStyle(SignalActivity.muted)
                         .liveActivitySingleLine(minimumScaleFactor: 0.7)
+                        .compactTrailingSlot()
                 }
             } minimal: {
-                Image(systemName: context.state.activitySymbolName(expanded: false))
-                    .foregroundStyle(context.state.activityTint)
+                CompactSymbol(state: context.state)
             }
         }
     }
@@ -149,7 +150,7 @@ private struct LockScreenBanner: View {
                     ProgressView(value: progress)
                         .tint(SignalActivity.text)
                 } else if state.isSegmentActive {
-                    LevelBars(state: state)
+                    RecordingRule(state: state)
                 } else {
                     Capsule()
                         .fill(SignalActivity.hairline)
@@ -264,43 +265,34 @@ private struct ElapsedReadout: View {
     }
 }
 
-/// Recent microphone level history. The newest bars are tinted red, matching
-/// the Signal recording waveform; paused audio renders entirely muted.
+/// Steady recording rule shown where a live waveform would go. Live
+/// microphone levels are not streamed to the activity: every ActivityKit
+/// update re-animates the Dynamic Island, which made the compact island jump
+/// once a second (#180). Red while recording, muted while paused.
 @available(iOS 17.0, *)
-private struct LevelBars: View {
+private struct RecordingRule: View {
     let state: VoxboardLiveActivityState
-    var barCount: Int = VoxboardLiveActivityState.maximumAudioLevelCount
-    var height: CGFloat = 30
-    var liveTail: Int = 7
 
     var body: some View {
-        let levels = paddedLevels
-        HStack(alignment: .center, spacing: 2) {
-            ForEach(levels.indices, id: \.self) { index in
-                RoundedRectangle(cornerRadius: 1, style: .continuous)
-                    .fill(color(at: index, count: levels.count))
-                    .frame(height: barHeight(levels[index]))
-                    .frame(maxWidth: .infinity)
-            }
-        }
-        .frame(height: height)
-        .frame(maxWidth: .infinity)
-        .accessibilityHidden(true)
+        Capsule()
+            .fill(state.isPaused ? SignalActivity.bar : SignalActivity.red)
+            .frame(height: 3)
+            .frame(maxWidth: .infinity)
+            .accessibilityHidden(true)
     }
+}
 
-    private var paddedLevels: [UInt8] {
-        let history = Array((state.audioLevels ?? []).suffix(barCount))
-        return Array(repeating: 0, count: max(0, barCount - history.count)) + history
-    }
+/// Fixed-size symbol for the compact leading and minimal regions, so a symbol
+/// swap (record → pause → hourglass) never resizes the island.
+@available(iOS 17.0, *)
+private struct CompactSymbol: View {
+    let state: VoxboardLiveActivityState
 
-    private func barHeight(_ level: UInt8) -> CGFloat {
-        let minimum: CGFloat = 4
-        return minimum + (height - minimum) * CGFloat(min(level, 100)) / 100
-    }
-
-    private func color(at index: Int, count: Int) -> Color {
-        guard !state.isPaused, index >= count - liveTail else { return SignalActivity.bar }
-        return SignalActivity.red
+    var body: some View {
+        Image(systemName: state.activitySymbolName(expanded: false))
+            .foregroundStyle(state.activityTint)
+            .frame(width: 22, height: 22)
+            .contentTransition(.identity)
     }
 }
 
@@ -409,6 +401,14 @@ private enum SignalActivity {
 
 @available(iOS 17.0, *)
 private extension View {
+    /// Fixed-width trailing slot: the island keeps one width whatever the
+    /// text ("0:07", "12:34", "42%", "Ready"), and updates replace the text
+    /// in place instead of cross-fading or sliding it.
+    func compactTrailingSlot() -> some View {
+        frame(width: 48, alignment: .trailing)
+            .contentTransition(.identity)
+    }
+
     func liveActivitySingleLine(minimumScaleFactor: CGFloat = 0.75) -> some View {
         lineLimit(1)
             .minimumScaleFactor(minimumScaleFactor)

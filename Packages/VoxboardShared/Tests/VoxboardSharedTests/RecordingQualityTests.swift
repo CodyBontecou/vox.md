@@ -360,6 +360,94 @@ final class RecordingQualityTests: XCTestCase {
         XCTAssertEqual(KeptAudioInspector.format(of: url)?.formatID, kAudioFormatAppleLossless)
     }
 
+    // MARK: - Natural sound and high-quality AirPods
+
+    func test_naturalPreferenceDefaultsOffAndOnlyAppliesToHighAndLossless() throws {
+        let suite = "RecordingQualityTests-\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+
+        XCTAssertFalse(NaturalRecordingPreference.load(from: defaults))
+        XCTAssertFalse(NaturalRecordingPreference.load(from: nil))
+        NaturalRecordingPreference.save(true, to: defaults)
+        XCTAssertTrue(NaturalRecordingPreference.load(from: defaults))
+        XCTAssertNotEqual(NaturalRecordingPreference.defaultsKey, StereoRecordingPreference.defaultsKey)
+        XCTAssertNotEqual(NaturalRecordingPreference.defaultsKey, RecordingQuality.watchPayloadKey)
+
+        XCTAssertFalse(NaturalRecordingPreference.requestsNatural(quality: .speech, enabled: true))
+        XCTAssertTrue(NaturalRecordingPreference.requestsNatural(quality: .high, enabled: true))
+        XCTAssertTrue(NaturalRecordingPreference.requestsNatural(quality: .lossless, enabled: true))
+        XCTAssertFalse(NaturalRecordingPreference.requestsNatural(quality: .high, enabled: false))
+    }
+
+    func test_naturalOnlyAppliesToMonoBecauseMeasurementModeHasNoStereoPattern() {
+        // On iPhone 13 Pro Max (iOS 27.2) the `.measurement` mode offers no
+        // stereo polar pattern, so Natural would turn Stereo into mono.
+        // Stereo and Spatial Audio win and keep the standard mode.
+        XCTAssertTrue(NaturalRecordingPreference.requestsNatural(quality: .high, enabled: true, layout: .mono))
+        for layout in [RecordingChannelLayout.stereo, .spatial] {
+            for quality in [RecordingQuality.high, .lossless] {
+                XCTAssertFalse(NaturalRecordingPreference.requestsNatural(quality: quality, enabled: true, layout: layout))
+                XCTAssertEqual(
+                    KeptAudioInputOptions.forRecording(quality: quality, eligible: true, naturalEnabled: true, layout: layout),
+                    KeptAudioInputOptions(highQualityBluetooth: false, naturalInput: false, builtInMicrophone: true),
+                    "\(quality) \(layout)"
+                )
+            }
+        }
+        XCTAssertEqual(
+            KeptAudioInputOptions.forRecording(quality: .lossless, eligible: true, naturalEnabled: true, layout: .mono),
+            KeptAudioInputOptions(highQualityBluetooth: true, naturalInput: true)
+        )
+    }
+
+    func test_stereoAndSpatialRecordFromTheBuiltInMicrophonesWithAirPodsConnected() {
+        // 2026-11-24, iPhone 17 Pro with AirPods connected: Spatial Audio was
+        // selected, the input was the AirPods (BluetoothHFP) and the take
+        // silently recorded mono. Stereo and Spatial pin the built-in mics.
+        for layout in [RecordingChannelLayout.stereo, .spatial] {
+            for quality in [RecordingQuality.high, .lossless] {
+                let options = KeptAudioInputOptions.forRecording(
+                    quality: quality, eligible: true, naturalEnabled: false, layout: layout
+                )
+                XCTAssertTrue(options.builtInMicrophone, "\(quality) \(layout)")
+                XCTAssertFalse(options.highQualityBluetooth, "\(quality) \(layout)")
+            }
+        }
+        // Mono keeps recording from AirPods, at high quality.
+        let mono = KeptAudioInputOptions.forRecording(quality: .lossless, eligible: true, naturalEnabled: false, layout: .mono)
+        XCTAssertFalse(mono.builtInMicrophone)
+        XCTAssertTrue(mono.highQualityBluetooth)
+        // Dictation, Keyboard Listening and Speech never change the input.
+        XCTAssertEqual(KeptAudioInputOptions.forRecording(quality: .lossless, eligible: false, naturalEnabled: false, layout: .spatial), .standard)
+        XCTAssertEqual(KeptAudioInputOptions.forRecording(quality: .speech, eligible: true, naturalEnabled: false, layout: .stereo), .standard)
+    }
+
+    func test_inputOptionsOnlyChangeForKeptAudioRecordings() {
+        // Keyboard Listening, dictation and Speech keep the standard input.
+        for quality in RecordingQuality.allCases {
+            XCTAssertEqual(
+                KeptAudioInputOptions.forRecording(quality: quality, eligible: false, naturalEnabled: true),
+                .standard
+            )
+        }
+        XCTAssertEqual(
+            KeptAudioInputOptions.forRecording(quality: .speech, eligible: true, naturalEnabled: true),
+            .standard
+        )
+
+        // High-quality Bluetooth is automatic for High and Lossless; Natural
+        // follows its setting.
+        XCTAssertEqual(
+            KeptAudioInputOptions.forRecording(quality: .high, eligible: true, naturalEnabled: false),
+            KeptAudioInputOptions(highQualityBluetooth: true, naturalInput: false)
+        )
+        XCTAssertEqual(
+            KeptAudioInputOptions.forRecording(quality: .lossless, eligible: true, naturalEnabled: true),
+            KeptAudioInputOptions(highQualityBluetooth: true, naturalInput: true)
+        )
+    }
+
     // MARK: - Stereo (#118)
 
     func test_stereoPreferenceDefaultsOffAndOnlyAppliesToHighAndLossless() throws {

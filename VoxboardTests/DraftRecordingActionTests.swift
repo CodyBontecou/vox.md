@@ -236,7 +236,7 @@ final class DraftRecordingActionTests: XCTestCase {
         )
         XCTAssertTrue(transcriptAccepted, "The durable draft must be loaded before checking its identity")
         let audioAccepted = await CaptureDraftRecordingEventDelivery.deliver(
-            .audio(fixture.audioURL, draftRequestID: draft.requestID, deliveryID: deliveryID), to: model
+            .audio(fixture.audioURL, draftRequestID: draft.requestID, deliveryID: deliveryID, recordingStartedAt: nil), to: model
         )
         XCTAssertTrue(audioAccepted)
         XCTAssertEqual(model.draft.id, draft.id)
@@ -267,7 +267,7 @@ final class DraftRecordingActionTests: XCTestCase {
             .transcript("Wrong target", draftRequestID: mismatchedID, liveSessionID: nil, deliveryID: UUID()), to: fixture.model
         )
         let audioAccepted = await CaptureDraftRecordingEventDelivery.deliver(
-            .audio(fixture.audioURL, draftRequestID: mismatchedID, deliveryID: UUID()), to: fixture.model
+            .audio(fixture.audioURL, draftRequestID: mismatchedID, deliveryID: UUID(), recordingStartedAt: nil), to: fixture.model
         )
         XCTAssertFalse(transcriptAccepted)
         XCTAssertFalse(audioAccepted)

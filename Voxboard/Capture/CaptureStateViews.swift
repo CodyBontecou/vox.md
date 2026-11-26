@@ -717,6 +717,9 @@ struct CaptureRoutePillsRow: View {
     let selectedID: String?
     let isEnabled: Bool
     var pillHeight: CGFloat = 40
+    /// With the phone route rail on (#160) the rail is the switcher, so the
+    /// header keeps only the selected pill as a label of the active route.
+    var showsOnlySelected = false
     let select: (String) -> Void
 
     /// The selected pill sits in a horizontal ScrollView, which offers unlimited
@@ -740,7 +743,7 @@ struct CaptureRoutePillsRow: View {
         ScrollViewReader { proxy in
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 6) {
-                ForEach(Array(profiles.enumerated()), id: \.element.id) { index, profile in
+                ForEach(visibleRoutes, id: \.element.id) { index, profile in
                     let isOn = profile.id == selectedID
                     Button {
                         guard !isOn else { return }
@@ -773,6 +776,9 @@ struct CaptureRoutePillsRow: View {
                     .buttonStyle(.plain)
                     .accessibilityLabel(Text(verbatim: profile.accessibilityName))
                     .accessibilityAddTraits(isOn ? [.isSelected, .isButton] : .isButton)
+                    // Route ids are per-install UUIDs; tests only need to
+                    // tell the selected pill from the others.
+                    .accessibilityIdentifier(isOn ? "capture_route_pill_selected" : "capture_route_pill_other")
                     .id(profile.id)
                 }
             }
@@ -794,6 +800,21 @@ struct CaptureRoutePillsRow: View {
         .accessibilityElement(children: .contain)
         .accessibilityLabel(Text("Route"))
         .accessibilityIdentifier("capture_route_pills")
+    }
+
+    /// Routes shown as pills, keeping each route's position for its tile tone.
+    private var visibleRoutes: [(offset: Int, element: CapturePresetProfile)] {
+        Self.visibleRoutes(profiles, selectedID: selectedID, showsOnlySelected: showsOnlySelected)
+    }
+
+    static func visibleRoutes(
+        _ profiles: [CapturePresetProfile],
+        selectedID: String?,
+        showsOnlySelected: Bool
+    ) -> [(offset: Int, element: CapturePresetProfile)] {
+        let all = Array(profiles.enumerated())
+        guard showsOnlySelected else { return all }
+        return all.filter { $0.element.id == selectedID }
     }
 
     /// Fades an edge only while pills overflow past it. Scroll geometry needs

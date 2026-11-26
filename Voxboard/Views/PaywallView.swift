@@ -663,7 +663,7 @@ struct PaywallView: View {
     }
 
     /// "7 days free · $0.58/wk billed yearly" for Yearly; "7 days free, then
-    /// $0.99/wk" for Weekly; renewal or one-time copy otherwise.
+    /// $2.99/wk" for Weekly; renewal or one-time copy otherwise.
     private func planNote(for product: VoxboardPurchaseProduct) -> String {
         guard product.isSubscription else { return String(localized: "One purchase, no renewals") }
         guard let storeProduct = storeManager.product(for: product) else { return product.billingLabel }

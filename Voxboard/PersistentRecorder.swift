@@ -174,7 +174,9 @@ enum CaptureDraftRecordingEvent: Sendable {
         profileSnapshot: CapturePresetProfile
     )
     case clearOrigin(profileID: String)
-    case audio(URL, draftRequestID: UUID?, deliveryID: UUID)
+    /// `recordingStartedAt` names the staged file's `{timestamp}`; nil for
+    /// imports, which fall back to the staging time.
+    case audio(URL, draftRequestID: UUID?, deliveryID: UUID, recordingStartedAt: Date?)
     case liveTranscript(sessionID: UUID, finalizedText: String, volatileText: String?)
     case cancelLiveTranscript(sessionID: UUID)
     case transcript(String, draftRequestID: UUID?, liveSessionID: UUID?, deliveryID: UUID)
@@ -192,16 +194,19 @@ struct RecordingSegmentHandoffSnapshot: Equatable, Sendable {
 /// iOS's legacy direct voice-note route. Unified Capture stages its own named
 /// asset earlier; imported user media deliberately keeps its existing naming.
 enum IOSLegacyVoiceAudioDelivery {
+    /// `{timestamp}` is the recording start; the transcript date (when
+    /// transcription finished) is only the fallback for legacy queued jobs.
     static func audioFilenameContext(
         transcript: Transcript,
         flowSnapshot: CapturePreset,
         originalAudioFilename: String,
-        captureSource: CaptureSource
+        captureSource: CaptureSource,
+        recordingStartedAt: Date? = nil
     ) -> CapturePresetAudioFilenameContext? {
         guard captureSource != .fileImport else { return nil }
         return CapturePresetAudioFilenameContext(
             identifier: transcript.id.uuidString,
-            createdAt: transcript.date,
+            createdAt: recordingStartedAt ?? transcript.date,
             presetName: flowSnapshot.visibleName ?? "",
             originalFilename: originalAudioFilename
         )
@@ -215,6 +220,7 @@ enum IOSLegacyVoiceAudioDelivery {
         transcript: Transcript,
         originalAudioFilename: String,
         captureSource: CaptureSource,
+        recordingStartedAt: Date? = nil,
         transcriptFolderScopeURL: URL? = nil,
         previouslyExportedURL: URL? = nil,
         audioReferenceAlreadyAttached: Bool = false,
@@ -236,7 +242,8 @@ enum IOSLegacyVoiceAudioDelivery {
                 transcript: transcript,
                 flowSnapshot: flowSnapshot,
                 originalAudioFilename: originalAudioFilename,
-                captureSource: captureSource
+                captureSource: captureSource,
+                recordingStartedAt: recordingStartedAt
             ),
             checkpointExport: checkpointExport,
             checkpointReference: checkpointReference
@@ -307,6 +314,9 @@ final class PersistentRecorder {
     /// unsupported backends intentionally have no exact fraction.
     var transcriptionProgress: TranscriptionProgress?
     var lastError: String?
+    /// Set by `startListening` when a Stereo or Spatial Audio take can't
+    /// record the layout that was chosen; shown when the take starts.
+    private var pendingInputNotice: String?
     /// The backend-preparation failure that `startListening` reports in the
     /// background. It concerns transcribing *this* recording, so discarding
     /// the recording also clears it instead of surfacing a stale
@@ -320,6 +330,16 @@ final class PersistentRecorder {
         isSegmentActive
             && segmentOrigin != .keyboardExtension
             && segmentCompletionMode != .keyboardTranscription
+    }
+
+    /// Whether the running take will be transcribed. False on a route with
+    /// "Transcribe Recordings" off, so the composer can say it records audio only.
+    var activeSegmentTranscribes: Bool {
+        Self.segmentTranscribes(
+            completionMode: segmentCompletionMode,
+            presetSnapshot: segmentPresetSnapshot,
+            draftRoute: Self.draftRoute(for: segmentVoiceProcessingConfiguration)
+        )
     }
 
     var isAppRecordingTranscribing: Bool {
@@ -447,6 +467,14 @@ final class PersistentRecorder {
     /// Guarded by `segmentJournalLock`; nil for Speech, where the 16 kHz
     /// journal is the kept audio as before.
     private var keptAudioWriter: KeptAudioFileWriter?
+    /// Spatial Audio capture (#133), non-nil while a one-shot High/Lossless
+    /// take records through AVCaptureSession instead of the engine tap. It
+    /// feeds the same 16 kHz journal and writes its own kept `.mp4`.
+    private var spatialRecording: SpatialTakeRecording?
+    /// True when the running Spatial capture set up the audio session itself.
+    /// The segment re-assert then leaves the category alone: re-applying the
+    /// app's own would put the mics back in their single-mic setup.
+    private var spatialSessionAutoConfigured = false
     /// Raw (hardware-rate, channel 0) microphone history so the kept file gets
     /// the same pre-roll as the 16 kHz journal. Guarded by `segmentJournalLock`.
     /// nil while Speech is selected. While idle the tap only copies samples
@@ -460,11 +488,29 @@ final class PersistentRecorder {
     private var keptAudioPreRollChannelCount = 1
     /// True when the current tap was installed with stereo built-in mic input.
     private var stereoInputActive = false
+    /// Session configuration chosen when listening started (standard, or a
+    /// High/Lossless recording's AirPods and Natural options). Re-applied at
+    /// each segment start so the re-assert doesn't drop those options.
+    private var activeSessionConfiguration = RecordingAudioSessionConfiguration.standard
     /// The stereo tap's scratch buffer, kept to report dual-mono frames.
     private var activeStereoScratch: StereoInterleaveScratch?
     /// Pre-roll plus headroom for the main-queue hop before the journal opens.
     private var keptAudioPreRollSeconds: Double { preRollSeconds + 2 }
     private var segmentStartedAt: TimeInterval = 0
+    /// Wall-clock moment the current take began. Unlike `segmentStartedAt`,
+    /// which restarts on every resume to drive the elapsed timer, pause and
+    /// resume never touch this: it is the single source of every app
+    /// recording's `{timestamp}` audio filename token.
+    var recordingTakeStartedAt: TimeInterval = 0
+
+    /// The take's start as a date, or nil when no take has started.
+    var recordingTakeStartDate: Date? { Self.recordingStartDate(recordingTakeStartedAt) }
+
+    /// Converts a recording-start clock to a date; nil when unset.
+    nonisolated static func recordingStartDate(_ startedAt: TimeInterval?) -> Date? {
+        guard let startedAt, startedAt > 0 else { return nil }
+        return Date(timeIntervalSince1970: startedAt)
+    }
     private var liveTranscriptionSetupTask: Task<LiveSegmentTranscriptionCoordinator?, Never>?
     private var endOfSpeechSetupTask: Task<VoiceAutoStopCoordinator?, Never>?
     /// Non-nil while end-of-speech commits segments instead of ending the
@@ -669,9 +715,10 @@ final class PersistentRecorder {
     /// `persistPreference: false` so the app returns to a fully idle audio session.
     ///
     /// `stereoEligible` is true only for a one-shot recording that can keep its
-    /// audio (not keyboard dictation or continuous dictation). Everything else,
-    /// including persistent keyboard listening, keeps today's mono input so
-    /// dictation transcripts are unchanged.
+    /// audio (not keyboard dictation or continuous dictation). Only those get
+    /// stereo, high-quality AirPods recording and Natural sound. Everything
+    /// else, including persistent keyboard listening, keeps today's mono input
+    /// so dictation transcripts are unchanged.
     @discardableResult
     func startListening(persistPreference: Bool = true, stereoEligible: Bool = false) -> Bool {
         guard !isListening else {
@@ -695,15 +742,29 @@ final class PersistentRecorder {
             return false
         }
 
+        pendingInputNotice = nil
         let keptQuality = RecordingQuality.load(from: AppConstants.sharedDefaults)
         let stereoRequested = stereoEligible && StereoRecordingPreference.requestsStereo(
             quality: keptQuality,
             enabled: StereoRecordingPreference.load(from: AppConstants.sharedDefaults)
         )
+        let requestedSession = RecordingAudioSessionConfiguration(KeptAudioInputOptions.forRecording(
+            quality: keptQuality,
+            eligible: stereoEligible,
+            naturalEnabled: NaturalRecordingPreference.load(from: AppConstants.sharedDefaults),
+            layout: RecordingChannelLayout.load(from: AppConstants.sharedDefaults)
+        ))
         var stereoOutcome = StereoRecordingInput.Outcome.notRequested
         do {
-            try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth, .mixWithOthers])
+            activeSessionConfiguration = try requestedSession.apply(to: session) { log.log($0) }
             try session.setActive(true)
+            log.log("[PersistentRecorder] Session input: \(activeSessionConfiguration.describe()), bluetoothHighQuality=\(RecordingAudioSessionConfiguration.highQualityBluetoothActive(on: session).map(String.init) ?? "n/a")")
+            // Stereo and Spatial Audio record from the built-in mics, also
+            // with AirPods or a headset connected (they keep playing audio).
+            if activeSessionConfiguration.prefersBuiltInMicrophone,
+               let change = StereoRecordingInput.preferBuiltInMicrophone(session: session) {
+                log.log("[PersistentRecorder] Built-in microphone: \(change)")
+            }
             // Stereo from the built-in mics for High/Lossless. Falls back to
             // mono (never fails listening) on other inputs or devices.
             stereoOutcome = StereoRecordingInput.configure(session: session, requested: stereoRequested)
@@ -716,6 +777,24 @@ final class PersistentRecorder {
             log.log("[PersistentRecorder] ❌ Session setup failed: \(error)")
             lastError = String(localized: "Audio session error")
             return false
+        }
+
+        // Spatial Audio (#133): only for a one-shot take that keeps its audio.
+        // It records through AVCaptureSession instead of the engine; if it
+        // can't start, the take records Stereo from the engine instead.
+        var spatialFellBack = false
+        var layoutRequested = stereoRequested
+        if stereoEligible, keptQuality.supportsStereo,
+           RecordingChannelLayout.load(from: AppConstants.sharedDefaults) == .spatial {
+            if startSpatialListening() {
+                return completeListeningStart(persistPreference: persistPreference)
+            }
+            layoutRequested = true
+            // Only a device that can record Spatial Audio says it fell back
+            // (a stored choice restored onto an older iPhone records Stereo).
+            spatialFellBack = SpatialAudioCaptureSupport.current == .supported
+            stereoOutcome = StereoRecordingInput.configure(session: session, requested: true)
+            log.log("[PersistentRecorder] Stereo input (Spatial Audio fallback): \(stereoOutcome)")
         }
 
         // Set up AVAudioEngine
@@ -733,6 +812,11 @@ final class PersistentRecorder {
         if stereoOutcome.isStereo, keptChannelCount == 1 {
             log.log("[PersistentRecorder] Stereo input reported \(hwFormat.channelCount) ch; keeping mono")
         }
+        pendingInputNotice = Self.channelLayoutNotice(
+            layoutRequested: layoutRequested,
+            spatialFellBack: spatialFellBack,
+            keptChannelCount: keptChannelCount
+        )
 
         // Create converter if needed (hardware format → 16kHz mono)
         let needsConversion = hwFormat.sampleRate != whisperSampleRate || hwFormat.channelCount != 1
@@ -847,6 +931,104 @@ final class PersistentRecorder {
         }
 
         audioEngine = engine
+        return completeListeningStart(persistPreference: persistPreference)
+    }
+
+    /// What to tell the person when a take won't record the chosen layout.
+    /// nil when it records what was asked for (or Mono was asked for).
+    static func channelLayoutNotice(
+        layoutRequested: Bool,
+        spatialFellBack: Bool,
+        keptChannelCount: Int
+    ) -> String? {
+        guard layoutRequested else { return nil }
+        if keptChannelCount < 2 {
+            return String(localized: "Recording in mono: Stereo and Spatial Audio need the iPhone's built-in microphones.")
+        }
+        if spatialFellBack {
+            return String(localized: "Recording in stereo: Spatial Audio couldn't start.")
+        }
+        return nil
+    }
+
+    /// Spatial Audio capture in place of the engine tap. False (and nothing
+    /// left running) when it can't start; the reason is logged.
+    private func startSpatialListening() -> Bool {
+        let support = SpatialAudioCaptureSupport.current
+        guard support == .supported else {
+            log.log("[PersistentRecorder] Spatial Audio unavailable (\(support)); falling back to Stereo")
+            return false
+        }
+        let session = AVAudioSession.sharedInstance()
+        for autoConfigures in SpatialAudioRecording.sessionSetupAttempts() {
+            if !autoConfigures {
+                // The app's session, with the built-in mics' stereo polar
+                // pattern selected (the capture session leaves it as is).
+                let stereo = StereoRecordingInput.configure(session: session, requested: true)
+                log.log("[PersistentRecorder] Spatial Audio on the app's session, stereo input: \(stereo)")
+            }
+            circularBuffer.reset()
+            let started = SpatialAudioRecording.start(
+                preRollSeconds: keptAudioPreRollSeconds,
+                autoConfiguresSession: autoConfigures,
+                onTranscriptionSamples: { [weak self] samples in
+                    guard let self, let base = samples.baseAddress else { return }
+                    self.appendToSegmentJournal(samples)
+                    self.writeAudioLevelIfNeeded(base, frameCount: samples.count)
+                },
+                onInterruption: { [weak self] reason in
+                    self?.handleSpatialCaptureInterruption(reason)
+                }
+            )
+            switch started {
+            case .success(let recording):
+                spatialRecording = recording
+                spatialSessionAutoConfigured = autoConfigures
+                // The engine's kept-audio path stays off for this session.
+                stereoInputActive = false
+                activeStereoScratch = nil
+                configureKeptAudioPreRoll(.speech, inputSampleRate: 0)
+                log.log("[PersistentRecorder] ✅ Spatial Audio capture started (FOA + stereo, \(autoConfigures ? "capture session configured audio" : "app audio session"))")
+                return true
+            case .failure(let failure):
+                circularBuffer.reset()
+                log.log("[PersistentRecorder] Spatial Audio capture failed (\(autoConfigures ? "capture session configured audio" : "app audio session")): \(failure)")
+                // Put the app's session back (category, options, built-in
+                // mic) before the next attempt or the Stereo fallback.
+                if autoConfigures {
+                    do {
+                        activeSessionConfiguration = try activeSessionConfiguration.apply(to: session) { log.log($0) }
+                        try session.setActive(true)
+                    } catch {
+                        log.log("[PersistentRecorder] ⚠️ Could not restore the audio session after Spatial Audio: \(error)")
+                    }
+                    if activeSessionConfiguration.prefersBuiltInMicrophone,
+                       let change = StereoRecordingInput.preferBuiltInMicrophone(session: session) {
+                        log.log("[PersistentRecorder] Built-in microphone: \(change)")
+                    }
+                }
+            }
+        }
+        log.log("[PersistentRecorder] Spatial Audio unavailable; falling back to Stereo")
+        return false
+    }
+
+    /// Capture stopped by itself mid-session (a call, another app taking the
+    /// mic, a media services reset). Same as an audio interruption: the take
+    /// keeps its 16 kHz journal for recovery.
+    private func handleSpatialCaptureInterruption(_ reason: String) {
+        guard spatialRecording != nil else { return }
+        log.log("[PersistentRecorder] ⚠️ Spatial Audio capture stopped: \(reason)")
+        if isSegmentActive {
+            cancelSegment(preserveAudioForRecovery: true)
+            lastError = String(localized: "Recording interrupted — please try again")
+        }
+        stopListening()
+    }
+
+    /// Marks listening as started and arms commands, heartbeats and
+    /// observers. Shared by the engine and Spatial Audio capture paths.
+    private func completeListeningStart(persistPreference: Bool) -> Bool {
         isListening = true
         lastError = nil
         listeningStartedAt = Date().timeIntervalSince1970
@@ -1065,6 +1247,9 @@ final class PersistentRecorder {
             engine.stop()
             audioEngine = nil
         }
+        spatialRecording?.stop()
+        spatialRecording = nil
+        spatialSessionAutoConfigured = false
 
         isListening = false
         stopListeningHeartbeat()
@@ -1076,8 +1261,13 @@ final class PersistentRecorder {
         if stereoInputActive || StereoRecordingInput.hasStereoSelection {
             StereoRecordingInput.configure(session: session, requested: false)
         }
+        StereoRecordingInput.releaseBuiltInMicrophone(session: session)
         stereoInputActive = false
         activeStereoScratch = nil
+        if activeSessionConfiguration.prefersNoSystemAlertInterruptions {
+            try? session.setPrefersNoInterruptionsFromSystemAlerts(false)
+        }
+        activeSessionConfiguration = .standard
         try? session.setActive(false, options: .notifyOthersOnDeactivation)
 
         // Update IPC
@@ -1149,12 +1339,20 @@ final class PersistentRecorder {
 
         lastTranscriptionResult = nil
         lastError = nil
+        let inputNotice = pendingInputNotice
+        pendingInputNotice = nil
         startInAppSegment(
             flowId: requestedFlowId,
             completionMode: completionMode,
             origin: requestedOrigin,
             draftRequestID: draftRequestID
         )
+        // A Stereo/Spatial take that can't record its layout says so instead
+        // of quietly saving mono. Set after startInAppSegment, which clears
+        // lastError.
+        if isSegmentActive, lastError == nil, let inputNotice {
+            lastError = inputNotice
+        }
 
         if !isSegmentActive, startedTemporaryListening {
             stopListening()
@@ -1313,6 +1511,7 @@ final class PersistentRecorder {
     /// noise captured during the pause is neither transcribed nor mistaken
     /// for end-of-speech.
     private func setLiveConsumersPaused(_ paused: Bool) {
+        spatialRecording?.setPaused(paused)
         let liveTask = liveTranscriptionSetupTask
         let autoStopTask = endOfSpeechSetupTask
         guard liveTask != nil || autoStopTask != nil else { return }
@@ -1628,6 +1827,7 @@ final class PersistentRecorder {
             }
             self.segmentOrigin = command.origin
             self.segmentStartedAt = startedAt
+            self.recordingTakeStartedAt = startedAt
             self.isSegmentActive = true
             self.segmentDuration = 0
             self.isSegmentPaused = false
@@ -1680,8 +1880,13 @@ final class PersistentRecorder {
         let session = AVAudioSession.sharedInstance()
         log.log("[PersistentRecorder] Session category=\(session.category.rawValue) isInputAvailable=\(session.isInputAvailable)")
         do {
-            try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth, .mixWithOthers])
-            try session.setActive(true)
+            if spatialRecording != nil, spatialSessionAutoConfigured {
+                // Spatial capture owns the session setup (see the property).
+                try session.setActive(true)
+            } else {
+                activeSessionConfiguration = try activeSessionConfiguration.apply(to: session) { log.log($0) }
+                try session.setActive(true)
+            }
             if stereoInputActive {
                 // Keep the stereo image matched to how the phone is held now.
                 StereoRecordingInput.updateOrientation(session: session)
@@ -1726,6 +1931,7 @@ final class PersistentRecorder {
             lastTranscriptionResult = nil
         }
         segmentStartedAt = Date().timeIntervalSince1970
+        recordingTakeStartedAt = segmentStartedAt
         isSegmentActive = true
         segmentDuration = 0
         isSegmentPaused = false
@@ -1825,6 +2031,15 @@ final class PersistentRecorder {
 
         guard (publishesToKeyboard || publishesToCapture),
               command.modelId == TranscriptionBackendID.automatic else {
+            return
+        }
+        // A route with transcription off records audio only: no live preview.
+        if publishesToCapture,
+           !Self.segmentTranscribes(
+               completionMode: segmentCompletionMode,
+               presetSnapshot: segmentPresetSnapshot,
+               draftRoute: Self.draftRoute(for: segmentVoiceProcessingConfiguration)
+           ) {
             return
         }
 
@@ -2168,6 +2383,8 @@ final class PersistentRecorder {
         segmentPauseStartIndex = nil
         segmentElapsedBeforePause = 0
         segmentStartedAt = Date().timeIntervalSince1970
+        // Each committed dictation span is its own file, named by its start.
+        recordingTakeStartedAt = segmentStartedAt
         startSegmentJournal(requestID: command.requestId)
         startLiveTranscriptionIfSupported(
             command: command,
@@ -2202,6 +2419,8 @@ final class PersistentRecorder {
         let modelId = segmentModelId ?? AppConstants.defaultTranscriptionBackendID
         let language = segmentLanguage ?? "auto"
         let duration = TimeInterval(samples.count) / whisperSampleRate
+        // Read before rearm resets the clock for the next span.
+        let recordingStartedAt = recordingTakeStartDate
         let originLocationTask = beginOriginLocationResolution(
             requestID: deliveryRequestId,
             completionMode: completionMode,
@@ -2237,6 +2456,7 @@ final class PersistentRecorder {
                 locationOutcome: presetSnapshot?.locationPolicy.isEnabled == true
                     ? .unavailable(.unavailable, attemptedAt: Date())
                     : nil,
+                recordingStartedAt: recordingStartedAt,
                 duration: duration,
                 source: .iOSApp,
                 delivery: delivery,
@@ -2284,6 +2504,7 @@ final class PersistentRecorder {
                 jobID: commitID,
                 draftRequestID: draftRequestID,
                 liveSessionID: nil,
+                recordingStartedAt: recordingStartedAt,
                 fallbackRecoveryURL: journalURL,
                 captureSource: originSnapshot?.source,
                 locationOutcome: originSnapshot?.outcome,
@@ -2552,6 +2773,7 @@ final class PersistentRecorder {
                 )
             }
             let jobID = captureSessionID ?? UUID()
+            let recordingStartedAt = recordingTakeStartDate
             let delivery: RecordingJobDelivery = {
                 if case .runVox = completionMode, let presetSnapshot {
                     return .preset(presetSnapshot)
@@ -2584,6 +2806,7 @@ final class PersistentRecorder {
                     locationOutcome: presetSnapshot?.locationPolicy.isEnabled == true
                         ? .unavailable(.unavailable, attemptedAt: Date())
                         : nil,
+                    recordingStartedAt: recordingStartedAt,
                     duration: duration,
                     source: .iOSApp,
                     delivery: delivery,
@@ -2643,6 +2866,7 @@ final class PersistentRecorder {
                     jobID: jobID,
                     draftRequestID: draftRequestID,
                     liveSessionID: captureSessionID,
+                    recordingStartedAt: recordingStartedAt,
                     fallbackRecoveryURL: segmentJournalURL,
                     captureSource: originSnapshot?.source,
                     locationOutcome: originSnapshot?.outcome,
@@ -2665,6 +2889,7 @@ final class PersistentRecorder {
         // the Live Activity visible in a lightweight processing state.
         isTranscribing = true
         let recordingStartedAt = segmentStartedAt
+        let takeStartedAt = recordingTakeStartedAt
         let transcriptionStartedAt = Date().timeIntervalSince1970
         TranscriptionIPC.writeStatus(RecordingStatus(
             requestId: requestId,
@@ -2754,7 +2979,7 @@ final class PersistentRecorder {
                         sourceAudioURL: wavURL,
                         resolvedResult: liveResult,
                         usesLiveDelivery: usesLiveDelivery,
-                        recordingStartedAt: recordingStartedAt,
+                        recordingStartedAt: takeStartedAt,
                         transcriptionStartedAt: transcriptionStartedAt,
                         originLocationTask: originLocationTask,
                         presetSnapshot: presetSnapshot,
@@ -2928,6 +3153,11 @@ final class PersistentRecorder {
             .appendingPathExtension("wav")
         do {
             let writer = try IncrementalWAVWriter(url: url, sampleRate: whisperSampleRate)
+            var journalSeedCount = 0
+            defer {
+                // Outside the journal lock: the capture queue takes that lock.
+                beginSpatialTake(requestID: requestID, directory: directory, journalSeedCount: journalSeedCount)
+            }
             segmentJournalLock.withLock {
                 // Serialize pre-roll seeding with microphone appends. This also
                 // captures audio arriving while a continuous span was delivered.
@@ -2936,6 +3166,7 @@ final class PersistentRecorder {
                     from: circularBuffer, startIndex: segmentStartIndex,
                     endIndex: end, pausedRanges: segmentPausedRanges
                 ) ?? []
+                journalSeedCount = seed.count
                 segmentJournalWriteQueue.async {
                     do { try writer.append(samples: seed) }
                     catch { log.log("[PersistentRecorder] Could not seed recording journal: \(error)") }
@@ -3112,10 +3343,38 @@ final class PersistentRecorder {
         }
     }
 
+    /// Starts the Spatial Audio kept file for a take, on the same timeline
+    /// as the 16 kHz journal. Same eligibility and storage rules as
+    /// `makeKeptAudioWriter`; without it the journal is the take's audio.
+    private func beginSpatialTake(requestID: String, directory: URL, journalSeedCount: Int) {
+        guard let spatialRecording else { return }
+        let quality = RecordingQualityStorageGuard.effectiveQuality(
+            requested: RecordingQuality.load(from: AppConstants.sharedDefaults),
+            availableBytes: RecordingQualityStorageGuard.availableBytes(at: directory),
+            layout: .spatial
+        )
+        guard quality.recordsSeparateKeptAudio,
+              let mode = segmentCompletionMode,
+              mode != .keyboardTranscription,
+              continuousDictationSession == nil else { return }
+        let url = KeptAudioArtifacts.makeURL(
+            in: directory,
+            requestID: requestID,
+            fileExtension: SpatialAudioRecordingFormat.fileExtension
+        )
+        let started = spatialRecording.beginTake(
+            url: url,
+            quality: quality,
+            seedDuration: Double(journalSeedCount) / whisperSampleRate
+        )
+        log.log("[PersistentRecorder] Spatial Audio take \(started ? "recording" : "not started") (\(quality.rawValue))")
+    }
+
     /// Closes the kept recording. Returns nil when High/Lossless was not
     /// recording this segment. The file keeps its unrecoverable `kept_` name;
     /// the handoff intent saved next is what makes it recoverable.
     private func finalizeKeptAudio() -> URL? {
+        if let spatialRecording { return spatialRecording.finishTake() }
         let writer = segmentJournalLock.withLock { () -> KeptAudioFileWriter? in
             let writer = keptAudioWriter
             keptAudioWriter = nil
@@ -3131,6 +3390,7 @@ final class PersistentRecorder {
     }
 
     private func discardKeptAudio() {
+        spatialRecording?.discardTake()
         let writer = segmentJournalLock.withLock { () -> KeptAudioFileWriter? in
             let writer = keptAudioWriter
             keptAudioWriter = nil
@@ -3159,6 +3419,7 @@ final class PersistentRecorder {
         jobID: UUID = UUID(),
         draftRequestID: UUID? = nil,
         liveSessionID: UUID? = nil,
+        recordingStartedAt: Date? = nil,
         fallbackRecoveryURL: URL? = nil,
         captureSource: CaptureSource? = nil,
         locationOutcome: CaptureLocationOutcome? = nil,
@@ -3189,6 +3450,7 @@ final class PersistentRecorder {
                     liveSessionID: liveSessionID,
                     captureSource: captureSource,
                     locationOutcome: locationOutcome,
+                    recordingStartedAt: recordingStartedAt,
                     duration: duration,
                     source: source,
                     delivery: delivery,
@@ -3303,6 +3565,7 @@ final class PersistentRecorder {
                 completionMode: completionMode,
                 sourceAudioURL: audioURL,
                 originalAudioFilename: job.originalFilename,
+                recordingStartedAt: job.recordingStartedAt?.timeIntervalSince1970,
                 captureSource: job.captureSource,
                 selectedFlowOverride: flowSnapshot,
                 voiceProcessingConfiguration: job.effectiveVoiceProcessingConfiguration,
@@ -3326,6 +3589,44 @@ final class PersistentRecorder {
         }
     }
 
+    /// Whether a recording made in `completionMode` runs speech-to-text.
+    /// The route's "Transcribe Recordings" switch applies to recordings that
+    /// keep their audio: route delivery and Add to Draft with the recording
+    /// attached. Keyboard dictation and text-only drafts would produce
+    /// nothing without a transcript, so they always transcribe.
+    nonisolated static func segmentTranscribes(
+        completionMode: RecordingCompletionMode?,
+        presetSnapshot: CapturePreset?,
+        draftRoute: CapturePreset? = nil
+    ) -> Bool {
+        switch completionMode {
+        case .runVox:
+            return presetSnapshot?.transcriptionEnabled ?? true
+        case .captureDraft(attachAudio: true):
+            return draftRoute?.transcriptionEnabled ?? true
+        case .captureDraft(attachAudio: false), .keyboardTranscription, nil:
+            return true
+        }
+    }
+
+    /// The route a draft recording belongs to, from the voice policy the job
+    /// froze at record time. A draft's route can't change while it processes.
+    static func draftRoute(for configuration: RecordingVoiceProcessingConfiguration?) -> CapturePreset? {
+        configuration.flatMap { CapturePresetStore.flow(id: $0.presetID) }
+    }
+
+    /// The empty result an audio-only take is delivered with: no speech
+    /// found, or a route with "Transcribe Recordings" off.
+    nonisolated static func audioOnlyResult(modelId: String, language: String) -> OnDeviceTranscriptionResult {
+        OnDeviceTranscriptionResult(
+            text: "",
+            backendID: modelId,
+            backendName: "Audio recording",
+            backendKind: .appleSpeech,
+            language: language
+        )
+    }
+
     /// The 16 kHz file the transcription engine reads for a queued job.
     /// Returns `audioURL` itself unless it is a High/Lossless app recording,
     /// or a stereo one recovered after a crash. Those get a 16 kHz mono copy
@@ -3338,7 +3639,7 @@ final class PersistentRecorder {
         guard source == .iOSApp || source == .recovered else { return audioURL }
         let task = Task.detached(priority: .userInitiated) { () throws -> URL in
             guard KeptAudioInspector.needsTranscriptionCopy(audioURL),
-                  source == .iOSApp || KeptAudioInspector.isKeptStereoRecording(audioURL) else {
+                  source == .iOSApp || KeptAudioInspector.isKeptMultichannelRecording(audioURL) else {
                 return audioURL
             }
             let copyURL = FileManager.default.temporaryDirectory
@@ -3518,7 +3819,8 @@ final class PersistentRecorder {
             let staged = await captureDraftEventHandler?(.audio(
                 sourceAudioURL ?? audioURL,
                 draftRequestID: draftRequestID,
-                deliveryID: transcriptID
+                deliveryID: transcriptID,
+                recordingStartedAt: Self.recordingStartDate(recordingStartedAt)
             )) ?? false
             guard staged else { throw PersistentRecordingJobError.audioStagingFailed }
         }
@@ -3599,13 +3901,23 @@ final class PersistentRecorder {
 
         let deliversAudioWithoutTranscript = completionMode == .captureDraft(attachAudio: true)
             || selectedFlow != nil
+        // Route with "Transcribe Recordings" off: deliver exactly like a take
+        // with no speech, through the same audio-only path and with no usage.
+        let skipsRecognition = deliversAudioWithoutTranscript && !Self.segmentTranscribes(
+            completionMode: completionMode,
+            presetSnapshot: selectedFlow,
+            draftRoute: Self.draftRoute(for: effectiveVoiceProcessingConfiguration)
+        )
         let result: OnDeviceTranscriptionResult
         do {
             // Live Apple Speech returns text optimized for immediate insertion.
             // An opted-in speaker pass needs batch timestamps, so prefer batch
             // recognition but retain the valid live text if that optional pass
             // fails before diarization can begin.
-            if let resolvedResult {
+            if skipsRecognition {
+                log.log("[PersistentRecorder] Route transcription is off; saving audio only for \(requestId.prefix(8))")
+                result = Self.audioOnlyResult(modelId: modelId, language: language)
+            } else if let resolvedResult {
                 if identifiesSpeakers {
                     do {
                         result = try await transcriptionService.transcribeResult(
@@ -3646,13 +3958,7 @@ final class PersistentRecorder {
             // No speech is a valid audio-only recording. Reuse the configured
             // delivery/checkpoint path so its audio still reaches Files (or
             // the draft) and export failures remain retryable.
-            result = OnDeviceTranscriptionResult(
-                text: "",
-                backendID: modelId,
-                backendName: "Audio recording",
-                backendKind: .appleSpeech,
-                language: language
-            )
+            result = Self.audioOnlyResult(modelId: modelId, language: language)
         } catch {
             log.log("[PersistentRecorder] ❌ Transcription failed: \(error.localizedDescription)")
             if case .captureDraft(let attachAudio) = completionMode,
@@ -3946,7 +4252,16 @@ final class PersistentRecorder {
                                 destinationID: captureDestinationID,
                                 audioSourceURL: audioSourceForExport,
                                 locationOutcome: originLocationOutcome,
-                                source: originCaptureSource
+                                source: originCaptureSource,
+                                audioFilenameContext: audioSourceForExport.flatMap { audioURL in
+                                    IOSLegacyVoiceAudioDelivery.audioFilenameContext(
+                                        transcript: latest,
+                                        flowSnapshot: flowForExport,
+                                        originalAudioFilename: audioURL.lastPathComponent,
+                                        captureSource: originCaptureSource,
+                                        recordingStartedAt: Self.recordingStartDate(recordingStartedAt)
+                                    )
+                                }
                             )
                             if let transcriptID {
                                 try await self.recordingQueue.markExportedNote(
@@ -4091,6 +4406,7 @@ final class PersistentRecorder {
                                 transcript: latest,
                                 originalAudioFilename: originalAudioFilenameForExport,
                                 captureSource: originCaptureSource,
+                                recordingStartedAt: Self.recordingStartDate(recordingStartedAt),
                                 transcriptFolderScopeURL: noteFolderScopeURL,
                                 previouslyExportedURL: checkpointedAudioURL,
                                 audioReferenceAlreadyAttached: audioReferenceAttachedAt != nil,
@@ -4260,6 +4576,7 @@ final class PersistentRecorder {
         guard let percent = progress.wholePercentCompleted,
               percent != lastPublishedTranscriptionPercent,
               let fraction = progress.exactFractionCompleted else { return }
+        let previousPercent = lastPublishedTranscriptionPercent
         lastPublishedTranscriptionPercent = percent
 
         if completionMode == .keyboardTranscription {
@@ -4271,7 +4588,11 @@ final class PersistentRecorder {
                 transcriptionProgress: fraction
             ))
         }
-        if !isSegmentActive {
+        // Every Live Activity update re-animates the Dynamic Island, so move
+        // its percentage in 5% steps rather than on every whole percent (#180).
+        let step = Self.liveActivityProgressStep
+        if !isSegmentActive,
+           previousPercent.map({ $0 / step != percent / step }) ?? true {
             LiveActivityController.shared.update(
                 isSegmentActive: false,
                 isTranscribing: true,
@@ -4280,6 +4601,8 @@ final class PersistentRecorder {
             )
         }
     }
+
+    private static let liveActivityProgressStep = 5
 
     @MainActor
     private func stopAcceptingTranscriptionProgress(requestId: String) {

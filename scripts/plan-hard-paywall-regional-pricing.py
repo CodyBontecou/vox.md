@@ -22,6 +22,11 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUT = ROOT / "docs/evidence/hard-paywall-regional-proposal-20261029"
 APP = "6758967337"
 TIERS = tuple(map(Decimal, ("4.99", "6.99", "7.99", "9.99", "12.99", "14.99", "17.99", "19.99")))
+# US bases as of the 2026-10-29 proposal: the subscription launch prices and the
+# lifetime targets approved then. They are kept because the saved proposal evidence
+# and its tests depend on them; they are not the live prices. Live US prices,
+# verified 2026-11-26: weekly $2.99 / $4.99, yearly $29.99 / $49.99, lifetime
+# $79.99 Individual / $129.99 Family / $49.99 upgrade.
 PRODUCTS = {
     "individual_lifetime": ("6761033996", "bontecou.Voxboard.unlock", Decimal("49.99")),
     "family_lifetime": ("6796785976", "bontecou.Voxboard.family", Decimal("89.99")),

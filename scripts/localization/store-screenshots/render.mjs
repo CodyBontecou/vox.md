@@ -49,6 +49,9 @@ export const SHOTS = [
   ["mac", "02-quick-capture", "Mac2"],
   ["mac", "03-library", "Mac3"],
   ["mac", "04-activity", "Mac4"],
+  // Product page creative assets (App Store Connect › Header and Search Results).
+  ["header", "01-header", "Header"],
+  ["search", "01-search-results", "Search"],
 ];
 
 // App Store locale -> BCP 47 tag for <html lang> (drives CJK glyph choice).
@@ -91,6 +94,8 @@ const CAPTURES = {
   Mac2: { MacWorkspace: "mac/workspace", MacQuickCapture: "mac/quick-capture" },
   Mac3: { MacLibrary: "mac/library" },
   Mac4: { MacActivity: "mac/activity" },
+  Header: { LiveRecording: "iphone/live", iPad: "ipad/capture" },
+  Search: { Main: "iphone/main" },
 };
 
 function pngSize(buf) {
@@ -257,6 +262,25 @@ function pageRuntime() {
     });
   };
 
+  // Text boxes marked data-fit (fixed safe areas) shrink their type, down to 70%, until the text
+  // stays inside the box and each authored headline line stays on one line.
+  window.__fitText = function () {
+    document.querySelectorAll("#root [data-fit]").forEach((box) => {
+      const kids = [...box.children];
+      const b = box.getBoundingClientRect();
+      const inside = (k) => {
+        const r = document.createRange(); r.selectNodeContents(k);
+        return [...r.getClientRects()].every((q) => q.left >= b.left - 1 && q.right <= b.right + 1 && q.top >= b.top - 1 && q.bottom <= b.bottom + 1);
+      };
+      const lines = (k) => Math.round(k.getBoundingClientRect().height / parseFloat(getComputedStyle(k).lineHeight));
+      const authored = (k) => k.textContent.trim().split("\n").length;
+      const spills = () => kids.some((k) => !inside(k)) || kids.some((k) => k.localName === "h1" && lines(k) > authored(k));
+      for (let i = 0; i < 9 && spills(); i++) {
+        kids.forEach((k) => { k.style.fontSize = parseFloat(getComputedStyle(k).fontSize) * 0.96 + "px"; });
+      }
+    });
+  };
+
   const norm = (s) => s.replace(/\s+/g, " ").trim();
   const hasWords = (s) => /\p{L}/u.test(s);
 
@@ -318,6 +342,37 @@ function pageRuntime() {
   };
 }
 
+// Google Fonts responses, kept on disk: hundreds of renders each fetching the same CSS and woff2
+// files from a headless browser get throttled and stall.
+const fontCacheDir = path.join(repoRoot, "node_modules/.cache/store-screenshots-fonts");
+async function cacheFonts(page) {
+  await page.setRequestInterception(true);
+  page.on("request", async (req) => {
+    const url = req.url();
+    if (!/^https:\/\/fonts\.(googleapis|gstatic)\.com\//.test(url)) return req.continue();
+    const key = path.join(fontCacheDir, Buffer.from(url).toString("base64url").slice(0, 200));
+    try {
+      if (!fs.existsSync(key)) {
+        for (let attempt = 1; ; attempt++) {
+          try {
+            const res = await fetch(url, { headers: { "user-agent": req.headers()["user-agent"] }, signal: AbortSignal.timeout(15000) });
+            if (!res.ok) throw new Error(`${res.status} ${url}`);
+            const body = Buffer.from(await res.arrayBuffer());
+            fs.mkdirSync(fontCacheDir, { recursive: true });
+            fs.writeFileSync(key + ".type", res.headers.get("content-type") || "");
+            fs.writeFileSync(key, body);
+            break;
+          } catch (e) { if (attempt >= 5) throw e; }
+        }
+      }
+      await req.respond({ status: 200, contentType: fs.readFileSync(key + ".type", "utf8"), headers: { "access-control-allow-origin": "*" }, body: fs.readFileSync(key) });
+    } catch (e) {
+      console.warn(`  font fetch failed: ${e.message}`);
+      req.abort().catch(() => {});
+    }
+  });
+}
+
 async function renderOne(browser, shot, locale, dict, useCaptures = false, prefix = "P2_") {
   const frame = shot[2];
   let name = prefix + frame;
@@ -325,12 +380,17 @@ async function renderOne(browser, shot, locale, dict, useCaptures = false, prefi
   // A frame can ship a layout variant for real captures (e.g. tabletop is landscape on device).
   if (Object.keys(captures).length && templates[`${name}.capture`]) name = `${name}.capture`;
   const page = await browser.newPage();
+  await cacheFonts(page);
   const m = templates[name].match(/"\$preview":\{"width":(\d+),"height":(\d+)\}/);
   const [width, height] = [Number(m[1]), Number(m[2])];
   const out = OUTPUT_SIZE[shot[0]];
   const scale = out ? out[0] / width : 1;
   await page.setViewport({ width, height, deviceScaleFactor: scale });
-  await page.setContent(SHELL, { waitUntil: "networkidle0" });
+  // The Google Fonts CDN occasionally stalls a headless load: retry rather than abort the batch.
+  for (let attempt = 1; ; attempt++) {
+    try { await page.setContent(SHELL, { waitUntil: "networkidle0", timeout: 45000 }); break; }
+    catch (e) { if (attempt >= 4) throw e; console.warn(`  retrying ${name} (${e.message})`); }
+  }
   await page.evaluate((t, c) => { window.__templates = t; window.__captures = c; }, templates, captures);
   await page.evaluate(pageRuntime);
   await page.evaluate((n, lang, dir) => window.__render(n, lang, dir), name, LOCALES[locale], RTL.has(locale) ? "rtl" : "ltr");
@@ -339,6 +399,7 @@ async function renderOne(browser, shot, locale, dict, useCaptures = false, prefi
   await page.evaluate(() => document.fonts.ready);
   await page.evaluate(() => Promise.all([...document.images].map((i) => i.decode().catch(() => {}))));
   await page.evaluate(() => window.__fitCaptures());
+  await page.evaluate(() => window.__fitText());
   // Fonts are the only network traffic; a slow CDN should not abort a whole locale.
   await page.waitForNetworkIdle({ idleTime: 300, timeout: 60000 }).catch(() => {});
   const overflows = await page.evaluate(() => window.__overflows());

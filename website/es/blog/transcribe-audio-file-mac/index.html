@@ -167,6 +167,8 @@
         <li><a href="#related">Guías relacionadas</a></li>
       </ol></nav>
 
+      <p>¿Aún tienes que hacer la grabación? Consulta <a href="/es/blog/record-audio-on-mac/">cómo grabar audio en un Mac</a>.</p>
+
       <h2 id="built-in">Opciones gratuitas que ya tienes en el Mac</h2>
       <h3>Notas de voz</h3>
       <p>En la página de Apple sobre Notas de voz se indica que puedes hacer clic en el botón <strong>Transcripción</strong> durante la grabación para ver el texto en directo, o seleccionar una grabación terminada y hacer clic en el mismo botón. Puedes buscar en la lista de grabaciones texto de un título o de la transcripción, y copiar el texto de la transcripción seleccionándolo, haciendo clic con Control y eligiendo <strong>Copiar</strong>. Apple indica que, si abres una grabación hecha en macOS 14 o anterior, o en un dispositivo que no admite la transcripción, Notas de voz la transcribe automáticamente, y que la transcripción de audio no está disponible en todos los países o regiones.</p>
@@ -188,7 +190,7 @@
             <tr><th scope="row">Qué se ejecuta en el Mac</th><td>No documentado</td><td>No documentado</td><td>Transcripción, con un modelo de Whisper o Parakeet que descargas</td></tr>
             <tr><th scope="row">Importación de archivos</th><td>No documentado</td><td>No documentado</td><td>Importar audio… acepta archivos de audio o de vídeo</td></tr>
             <tr><th scope="row">Salida en Markdown</th><td>No documentado</td><td>No documentado</td><td>Sí</td></tr>
-            <tr><th scope="row">Etiquetas de orador</th><td>No documentado</td><td>No documentado</td><td>Opcional, con Identificar a los oradores</td></tr>
+            <tr><th scope="row">Etiquetas de orador</th><td>No documentado</td><td>No documentado</td><td>Opcional, con Identificar a los oradores (consulta <a href="/es/blog/transcribe-interview/">transcripción de entrevistas</a>)</td></tr>
             <tr><th scope="row">Costo</th><td>Parte de macOS</td><td>Parte de macOS</td><td>15 minutos de transcripción gratis y 10 entregas correctas, y después un desbloqueo vitalicio de pago único</td></tr>
           </tbody>
         </table>
@@ -210,7 +212,7 @@
 
       <h2 id="import">Importar y transcribir el archivo</h2>
       <ol>
-        <li><strong>Importa.</strong> En la barra de menús de Vox.md elige <strong>Importar audio…</strong>, o importa o arrastra el audio al espacio de trabajo de captura. La documentación indica que se aceptan archivos de audio y de vídeo, y que pasan por la misma transcripción local que una grabación.</li>
+        <li><strong>Importa.</strong> En la barra de menús de Vox.md elige <strong>Importar audio…</strong>, o importa o arrastra el audio al espacio de trabajo de captura. La documentación dice que se aceptan archivos de audio y de película, y pasan por la misma transcripción local que una grabación. Para archivos de vídeo en concreto, consulta <a href="/es/blog/transcribe-video-to-text/">transcribir un vídeo a texto</a>.</li>
         <li><strong>Elige Añadir al borrador o Enviar inmediatamente.</strong> Con <strong>Enviar inmediatamente</strong> la transcripción se entrega al terminar. Con <strong>Añadir al borrador</strong> puedes revisarlo antes. Comprueba nombres, números y fechas con el audio.</li>
         <li><strong>Opcional: Identificar a los oradores.</strong> Activa <strong>Identificar a los oradores</strong> en la Ruta para obtener etiquetas de orador anónimas, con el mejor esfuerzo posible. La primera vez prepara un modelo aparte. Si no puede ejecutarse, se conserva la transcripción simple y el motivo aparece en Biblioteca.</li>
         <li><strong>Opcional: modo de procesamiento.</strong> Una Ruta puede usar Conservar original, Prosa depurada, Notas de reunión, Lista de tareas o Instrucción personalizada. Los modos de Apple Intelligence requieren hardware compatible con macOS 26. Sin él, Lista de tareas y Notas de reunión usan formateadores integrados, y Prosa depurada e Instrucción personalizada conservan el texto original.</li>
@@ -219,6 +221,7 @@
 
       <h2 id="verify">Comprueba la nota Markdown</h2>
       <p>elegir <strong>Mostrar última exportación</strong> en la barra de menús, o busca la entrada en Biblioteca y muéstrala en el Finder; después abre el archivo en Obsidian. Si solo necesitas el texto, elige <strong>Copiar última transcripción</strong>. Para una estructura de nota que rellenar a partir de una grabación, consulta el <a href="/es/blog/obsidian-meeting-notes-template/">generador de plantillas de notas de reunión</a>.</p>
+      <p>Si la grabación es un ensayo de una charla, pega la transcripción y la duración de la grabación en la <a href="/es/blog/speech-time-calculator/">calculadora de tiempo de discurso</a> para medir tus palabras por minuto y el tiempo de habla de tu guion a tu propio ritmo.</p>
 
       <h2 id="privacy">Qué sale de tu Mac</h2>
       <p>La transcripción se ejecuta en el Mac, y Vox.md no envía el contenido de las capturas a servidores de Vox.md. Las descargas de modelos contactan con la infraestructura de Hugging Face o FluidAudio. Si la carpeta de destino se sincroniza mediante iCloud u otro servicio, ese servicio trata el archivo según sus propios términos. Consulta la <a href="/es/privacy.html">política de privacidad</a>.</p>
@@ -242,6 +245,7 @@
         <li><a href="/es/compare/whisper-vs-parakeet/">Whisper frente a Parakeet</a></li>
         <li><a href="/es/blog/transcribe-voice-memos-iphone/">Transcribe Notas de Voz del iPhone a Markdown</a></li>
         <li><a href="/es/blog/obsidian-meeting-notes-template/">Generador de plantillas de notas de reunión para Obsidian</a></li>
+        <li><a href="/es/blog/transcribe-interview/">Transcribe una entrevista de forma privada, con etiquetas de interlocutor</a></li>
         <li><a href="/es/docs/#mac">Documentación para Mac</a></li>
       </ul></nav>
     </div>
