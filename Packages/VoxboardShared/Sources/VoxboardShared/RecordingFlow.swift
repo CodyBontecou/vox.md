@@ -384,6 +384,14 @@ public enum CapturePresetAudioSaveMode: String, Codable, CaseIterable, Sendable,
         case .attachmentsFolder: return "Attachments Folder"
         }
     }
+
+    /// Whether an "Add to Draft" recording keeps its audio: this "Save audio"
+    /// setting unless the person flipped the draft's Audio switch for this preset.
+    /// A route with "Transcribe Recordings" off keeps the audio, since an
+    /// audio-only take is the only thing it can produce.
+    public func draftRecordingAttachesAudio(presetTranscribes: Bool = true, override: Bool?) -> Bool {
+        override ?? (self != .off || !presetTranscribes)
+    }
 }
 
 public enum CapturePresetAudioEmbedPlacement: String, Codable, CaseIterable, Sendable, Identifiable {

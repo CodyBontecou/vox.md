@@ -4011,7 +4011,7 @@ struct QuickCaptureView: View {
         presetTranscribes: Bool = true,
         override: Bool?
     ) -> Bool {
-        override ?? (presetAudioSaveMode != .off || !presetTranscribes)
+        presetAudioSaveMode.draftRecordingAttachesAudio(presetTranscribes: presetTranscribes, override: override)
     }
 
     private var selectedRecordingCompletionMode: RecordingCompletionMode {
