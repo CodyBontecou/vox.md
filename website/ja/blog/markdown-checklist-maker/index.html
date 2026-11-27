@@ -289,6 +289,7 @@
       <p>GitHub Docs では、 <code>[ ]</code> は未完了のタスク、 <code>[x]</code> は完了のタスクを表すとされています。GFM 仕様では、マーカーを括弧の間の空白または文字 <code>x</code> のいずれかと定めています。Obsidian は任意の文字を受け付けるため、次のようなタスクは <code>- [-] skipped</code> または <code>- [?] unsure</code> は Obsidian では完了ですが、仕様のマーカー定義の範囲外であり、仕様に従うレンダラーではそのままの文字として表示されることがあります。ファイルを GitHub でも読む場合は、 <code>[ ]</code> と <code>[x]</code> だけを使ってください。</p>
       <p>GitHub Docs には、もう 1 つルールがあります。タスクの説明が括弧で始まる場合は、バックスラッシュでエスケープします。例: <code>- [ ] \(Optional) Open a followup issue</code>。メーカーはバックスラッシュを自動では追加しません。タスクが括弧で始まる場合は警告が出ます。</p>
       <p>表は、Obsidian と GitHub の違いが影響するもう一つの構文です。スプレッドシートのセルや CSV を、Obsidian と GitHub の両方で使える表に変換するには、次を使います: <a href="/ja/blog/markdown-table-maker/">Markdown 表メーカー</a>.</p>
+      <p>タスクリストの上に置く要約や警告は、コールアウトで目立たせられます。 <a href="/ja/blog/obsidian-callout-generator/">Obsidian コールアウトジェネレーター</a> は <code>&gt; [!type]</code> 形式の Markdown を、折りたたみ可能なものも含めて作成します。</p>
 
       <h2 id="capture">6. Vox.md で iPhone と Mac から音声やテキストでタスクをキャプチャ</h2>
       <p>Vox.md のタスクチェックリスト処理モードは、キャプチャから Markdown の <code>- [ ]</code> タスク項目を作成し、代替手段として決まった形式に整えるチェックリスト整形機能があります。音声はデバイス上で文字起こしされます。キャプチャバーでは、 <strong>チェックリスト</strong> は <code>- [ ]</code> 接頭辞を付け、 <strong>二日目設定</strong> は <code>(@yyyy-MM-dd)</code> 、または時刻付きの形式を挿入します。次を参照してください: <a href="/ja/docs/#quick-capture">速い捕獲</a> と <a href="/ja/docs/#presets">Route と処理モード</a> のドキュメント。</p>

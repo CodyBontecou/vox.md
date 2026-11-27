@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ta" dir="ltr" data-search-section="பிரிவு" data-search-guide="வழிகாட்டி" data-search-empty="“{query}” என்பதற்குப் பொருத்தங்கள் இல்லை">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obsidian callout உருவாக்கி: அனைத்து வகைகள், மாற்றுப் பெயர்கள், மடிப்பு விருப்பங்கள் | Vox.md</title>
+  <meta name="description" content="Obsidian callout Markdown-ஐ உருவாக்கும் இலவச உலாவிக் கருவி: வகை, தலைப்பு, உடல் உரையைத் தேர்ந்து, + அல்லது - மடிப்பையும் உள்ளடுக்கையும் தேர்ந்து, நகலெடுக்கவும். அனைத்து உள்ளமைந்த வகைகளையும் மாற்றுப் பெயர்களையும் பட்டியலிடுகிறது. எதுவும் பதிவேற்றப்படாது.">
+  <link rel="canonical" href="https://vox.isolated.tech/ta/blog/obsidian-callout-generator/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="மொழி மாதிரிகளுக்கான Vox.md ஆவணங்கள்">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Obsidian callout உருவாக்கி: அனைத்து வகைகள், மாற்றுப் பெயர்கள், மடிப்பு விருப்பங்கள்">
+  <meta property="og:description" content="Obsidian callout Markdown-ஐ உருவாக்கும் இலவச உலாவிக் கருவி: வகை, தலைப்பு, உடல் உரையைத் தேர்ந்து, + அல்லது - மடிப்பையும் உள்ளடுக்கையும் தேர்ந்து, நகலெடுக்கவும். அனைத்து உள்ளமைந்த வகைகளையும் மாற்றுப் பெயர்களையும் பட்டியலிடுகிறது. எதுவும் பதிவேற்றப்படாது.">
+  <meta property="og:url" content="https://vox.isolated.tech/ta/blog/obsidian-callout-generator/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-11-27">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Obsidian callout உருவாக்கி: அனைத்து வகைகள், மாற்றுப் பெயர்கள், மடிப்பு விருப்பங்கள்">
+  <meta name="twitter:description" content="Obsidian callout Markdown-ஐ உருவாக்கும் இலவச உலாவிக் கருவி: வகை, தலைப்பு, உடல் உரையைத் தேர்ந்து, + அல்லது - மடிப்பையும் உள்ளடுக்கையும் தேர்ந்து, நகலெடுக்கவும். அனைத்து உள்ளமைந்த வகைகளையும் மாற்றுப் பெயர்களையும் பட்டியலிடுகிறது. எதுவும் பதிவேற்றப்படாது.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Obsidian callout உருவாக்கி: அனைத்து வகைகள், மாற்றுப் பெயர்கள், மடிப்பு விருப்பங்கள்",
+  "description": "Obsidian callout Markdown-ஐ உருவாக்கும் இலவச உலாவிக் கருவி: வகை, தலைப்பு, உடல் உரையைத் தேர்ந்து, + அல்லது - மடிப்பையும் உள்ளடுக்கையும் தேர்ந்து, நகலெடுக்கவும். அனைத்து உள்ளமைந்த வகைகளையும் மாற்றுப் பெயர்களையும் பட்டியலிடுகிறது. எதுவும் பதிவேற்றப்படாது.",
+  "image": "https://vox.isolated.tech/screenshots/01-route-heading-light.png",
+  "datePublished": "2026-11-27",
+  "dateModified": "2026-11-27",
+  "mainEntityOfPage": "https://vox.isolated.tech/ta/blog/obsidian-callout-generator/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "ta",
+  "name": "Obsidian callout உருவாக்கி: அனைத்து வகைகள், மாற்றுப் பெயர்கள், மடிப்பு விருப்பங்கள் | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/ta/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "வழிகாட்டிகள்",
+      "item": "https://vox.isolated.tech/ta/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Obsidian callout உருவாக்கி: அனைத்து வகைகள், மாற்றுப் பெயர்கள், மடிப்பு விருப்பங்கள்",
+      "item": "https://vox.isolated.tech/ta/blog/obsidian-callout-generator/"
+    }
+  ],
+  "inLanguage": "ta",
+  "name": "Obsidian callout உருவாக்கி: அனைத்து வகைகள், மாற்றுப் பெயர்கள், மடிப்பு விருப்பங்கள் | Vox.md",
+  "description": "Obsidian callout Markdown-ஐ உருவாக்கும் இலவச உலாவிக் கருவி: வகை, தலைப்பு, உடல் உரையைத் தேர்ந்து, + அல்லது - மடிப்பையும் உள்ளடுக்கையும் தேர்ந்து, நகலெடுக்கவும். அனைத்து உள்ளமைந்த வகைகளையும் மாற்றுப் பெயர்களையும் பட்டியலிடுகிறது. எதுவும் பதிவேற்றப்படாது."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/obsidian-callout-generator/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">வழிகாட்டிக்குச் செல்லவும்</a>
+<nav aria-label="முதன்மை வழிசெலுத்தல்">
+  <div class="nav-inner">
+    <a href="/ta/" class="logo" aria-label="Vox.md முகப்பு">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/ta/#how">இயங்கும் விதம்</a></li>
+      <li><a href="/ta/docs/">ஆவணங்கள்</a></li>
+      <li><a href="/ta/blog/">வழிகாட்டிகள்</a></li>
+      <li><a href="/ta/compare/">ஒப்பிடவும்</a></li>
+      <li><a href="/ta/privacy.html">தனியுரிமை</a></li>
+      <li><a href="/ta/terms.html">விதிமுறைகள்</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_ta_c7cb329bf8d9">Vox.md பதிவிறக்கவும்</a>
+  <details class="language-switcher"><summary>மொழி</summary><ul><li><a href="/blog/obsidian-callout-generator/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-callout-generator/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-callout-generator/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-callout-generator/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-callout-generator/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-callout-generator/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-callout-generator/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-callout-generator/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-callout-generator/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-callout-generator/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-callout-generator/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-callout-generator/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-callout-generator/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-callout-generator/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-callout-generator/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-callout-generator/" lang="ta" hreflang="ta" aria-current="page">தமிழ்</a></li><li><a href="/th/blog/obsidian-callout-generator/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-callout-generator/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-callout-generator/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-callout-generator/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-callout-generator/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-callout-generator/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-callout-generator/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">இலவசக் கருவி</div>
+        <h1 class="hero-title">Obsidian callout உருவாக்கி: அனைத்து வகைகள், மாற்றுப் பெயர்கள், மடிப்பு விருப்பங்கள்</h1>
+        <p class="hero-subtitle">ஒரு வகையைத் தேர்ந்தெடுத்து, தலைப்பும் உடல் உரையும் சேர்த்து, மடிப்பு மற்றும் உள்ளடுக்கைத் தேர்ந்து, சரியான &gt; [!type] callout-ஐ நகலெடுக்கவும்; வகைகள், மாற்றுப் பெயர்கள் முழுப் பட்டியலும் மடிக்கக்கூடிய callout-கள் செயல்படும் விதமும் இங்கே உள்ளன.</p>
+      </div>
+      <aside class="meta-card" aria-label="இவ்வழிகாட்டி பற்றி">
+        <dl>
+          <div><dt>எழுதியவர்</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>புதுப்பிப்பு</dt><dd><time datetime="2026-11-27">நவம்பர் 27, 2026</time></dd></div>
+          <div><dt>தேவை</dt><dd>iPhone-இல் Safari உட்பட எந்த நவீன உலாவியும். விருப்பம்: callout-களுக்கு Obsidian, குரல் அல்லது உரை மூலம் குறிப்புகளைப் பதிவு செய்ய iPhone அல்லது Mac-க்கான Vox.md.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Obsidian callout உருவாக்கி: அனைத்து வகைகள், மாற்றுப் பெயர்கள், மடிப்பு விருப்பங்கள்">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">சுருக்கமான பதில்</div>
+        <p>Callout என்பது ஒரு மேற்கோள் தொகுதி; அதன் முதல் வரி <code>&gt; [!type] Optional title</code>. அடுத்த ஒவ்வொரு வரியும் இதில் தொடங்கும்: <code>&gt; </code>. இதற்குப் பிறகு <code>+</code> அல்லது <code>-</code> என்பதை அடைப்புக்குறிகளுக்குப் பின் உடனே சேர்த்தால் அது மடிக்கக்கூடியதாகும். முன்னொட்டுகளைத் தட்டச்சு செய்யாமல் உருவாக்க, <a href="#tool">callout உருவாக்கி</a> கீழே.</p>
+      </div>
+      <pre class="guide-code" id="default-callout"><code>&gt; [!warning]- Back up first
+&gt; Copy the vault before you change the plugin settings.
+&gt;
+&gt; Then restart Obsidian.
+</code></pre>
+      <p>உருவாக்கி ஒவ்வொரு வரியிலும் <code>&gt; </code> முன்னொட்டை ஒவ்வொரு வரியிலும் சேர்க்கிறது (உள்ளடுக்குக்கு மீண்டும் மீண்டும்), callout-க்குள் வெற்று வரிகளை வைத்திருக்கிறது, மேலும் இதை இரட்டிப்பாக்காது: <code>&gt;</code> நீங்கள் ஒட்டியதை இரட்டிப்பாக்காது. இது முழுவதும் இந்தப் பக்கத்திலேயே இயங்குகிறது: உங்கள் உரை எப்போதும் பதிவேற்றப்படாது, பக்கமும் எந்த நெட்வொர்க் கோரிக்கையும் செய்யாது.</p>
+      <nav class="toc" aria-label="இவ்வழிகாட்டியில்"><div class="toc-title">இவ்வழிகாட்டியில்</div><ol>
+        <li><a href="#tool">உங்கள் callout-ஐ உருவாக்குங்கள்</a></li>
+        <li><a href="#syntax">Callout தொடரியல்</a></li>
+        <li><a href="#types">அனைத்து callout வகைகளும் மாற்றுப் பெயர்களும்</a></li>
+        <li><a href="#folding">மடிக்கக்கூடிய callout-கள்: + மற்றும் -</a></li>
+        <li><a href="#nesting">உள்ளடுக்கு callout-கள், பட்டியல்கள், குறியீடு, உட்பொதிவுகள்</a></li>
+        <li><a href="#custom">CSS ஸ்னிப்பெட் மூலம் தனிப்பயன் callout வகைகள்</a></li>
+        <li><a href="#github">GitHub alerts மற்றும் Obsidian callout-கள்</a></li>
+        <li><a href="#capture">Vox.md மூலம் குரல் அல்லது உரையால் Obsidian-இல் பதிவுசெய்யுங்கள்</a></li>
+        <li><a href="#faq">கேள்விகள்</a></li>
+      </ol></nav>
+
+      <h2 id="tool">1. உங்கள் callout-ஐ உருவாக்குங்கள்</h2>
+      <p class="mt-nojs" id="co-nojs">Callout உருவாக்கிக்கு JavaScript தேவை. அது இல்லாவிட்டாலும், கீழே உள்ள தொடரியலும் வகை அட்டவணையும் குறிப்புக்குப் பயன்படும்.</p>
+      <form class="co-tool" id="co-tool" aria-label="Obsidian callout உருவாக்கி" hidden>
+        <fieldset class="mt-group">
+          <legend>வகை</legend>
+          <label class="mt-field" for="co-type">உள்ளமைந்த வகை அல்லது மாற்றுப் பெயர் <select id="co-type" name="type"></select></label>
+          <label class="mt-field" for="co-custom">தனிப்பயன் வகை (விருப்பம், மேலே உள்ள தேர்வை மாற்றும்) <input type="text" id="co-custom" name="custom" spellcheck="false" autocomplete="off" autocapitalize="off"></label>
+          <p class="mt-hint" id="co-custom-warning" role="status" hidden></p>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>உள்ளடக்கம்</legend>
+          <label class="mt-field" for="co-title">தலைப்பு (விருப்பம்) <input type="text" id="co-title" name="title" autocomplete="off" placeholder="இயல்புத் தலைப்புக்குக் காலியாக விடவும்"></label>
+          <p class="mt-hint" id="co-default-title" role="status"></p>
+          <label class="mt-field" for="co-body">உடல் உரை <textarea id="co-body" name="body" rows="7" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></label>
+          <div class="mt-actions">
+            <button type="button" class="btn-secondary" id="co-example">எடுத்துக்காட்டை ஏற்று</button>
+            <button type="button" class="btn-secondary" id="co-clear">அழி</button>
+          </div>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>மடிப்பு</legend>
+          <label class="mt-option"><input type="radio" name="fold" value="" checked> <span>இல்லை (எப்போதும் திறந்திருக்கும்)</span></label>
+          <label class="mt-option"><input type="radio" name="fold" value="+"> <span>+ மடிக்கக்கூடியது, விரிக்கப்பட்டது</span></label>
+          <label class="mt-option"><input type="radio" name="fold" value="-"> <span>- மடிக்கக்கூடியது, மடிக்கப்பட்டது</span></label>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>அமைப்பு</legend>
+          <label class="mt-field" for="co-depth">மற்றொரு callout-க்குள் உள்ளடுக்கு <select id="co-depth" name="depth">
+            <option value="0" selected>0: உள்ளடுக்கு இல்லை</option>
+            <option value="1">1 நிலை</option>
+            <option value="2">2 நிலைகள்</option>
+            <option value="3">3 நிலைகள்</option>
+          </select></label>
+          <label class="mt-option"><input type="checkbox" name="blank" checked> <span>callout-க்குள் வெற்று வரிகளை வைத்திரு</span></label>
+          <p class="mt-hint">உண்மையிலேயே வெற்று வரி callout-ஐ முடித்துவிடும்; எனவே வைக்கப்படும் வெற்று வரிகள் &gt; என எழுதப்படும். வெற்று வரிகளை நீக்க இதை அணைக்கவும்.</p>
+        </fieldset>
+      </form>
+      <div class="mt-output-head" id="co-output-head" hidden>
+        <h3 id="co-output-title">உங்கள் callout</h3>
+        <div class="mt-actions">
+          <button type="button" class="btn-primary" id="co-copy">நகலெடு</button>
+        </div>
+      </div>
+      <p class="mt-status" id="co-status" role="status"></p>
+      <pre class="guide-code co-output" id="co-output" aria-labelledby="co-output-title" tabindex="0" hidden><code id="co-output-code"></code></pre>
+      <p class="mt-hint" id="co-nest-hint" hidden>நீங்கள் உள்ளடுக்கும் வெளிப்புற callout-இன் உடல் பகுதிக்குள் இதை ஒட்டுங்கள்.</p>
+      <h3 id="co-preview-title" hidden>முன்னோட்டம் (தோராயமானது)</h3>
+      <div class="co-preview" id="co-preview" role="group" aria-labelledby="co-preview-title" hidden></div>
+      <p class="mt-hint" id="co-preview-note" hidden>முன்னோட்டம் தோராயமானது. உண்மையான நிறங்கள், ஐகான்கள், இடைவெளிகளை உங்கள் தீம் தீர்மானிக்கும்.</p>
+      <div class="co-gallery-wrap">
+        <h3 id="co-gallery-title">வகைக் காட்சியகம்</h3>
+        <p class="mt-hint">மேலே ஏற்ற ஒரு வகையைத் தேர்ந்தெடுக்கவும்.</p>
+        <div class="co-gallery" id="co-gallery" role="group" aria-labelledby="co-gallery-title"></div>
+      </div>
+      <div hidden id="co-messages">
+        <span data-message="copied">கிளிப்போர்டுக்குப் பிரதியெடுக்கப்பட்டது.</span>
+        <span data-message="copy-failed">பிரதியெடுக்க இயலவில்லை. உரையைத் தேர்ந்தெடுத்து நீங்களே பிரதியெடுக்கவும்.</span>
+        <span data-message="loaded">எடுத்துக்காட்டு ஏற்றப்பட்டது.</span>
+        <span data-message="cleared">அழிக்கப்பட்டது.</span>
+        <span data-message="default-title">காலியாக இருந்தால் இயல்புத் தலைப்பு: {title}</span>
+        <span data-message="custom-warning">இது உள்ளமைந்த வகை அல்ல. CSS ஸ்னிப்பெட் வரையறுக்காவிட்டால் Obsidian இதை note பாணியில் காட்டும்.</span>
+        <span data-message="type-loaded">வகை ஏற்றப்பட்டது.</span>
+      </div>
+
+      <h2 id="syntax">2. Callout தொடரியல்</h2>
+      <pre class="guide-code"><code>&gt; [!type] Title
+&gt; Body line one.
+&gt; Body line two.</code></pre>
+      <ul>
+        <li><strong>வகை.</strong> மேற்கோள் தொகுதியின் முதல் வரி ஆச்சரியக்குறிக்குப் பின் அடைப்புக்குறிக்குள் வகையுடன் தொடங்கும்: <code>&gt; [!info]</code>. <a href="https://obsidian.md/help/callouts" target="_blank" rel="noopener">Obsidian Help ஆவணம்</a> வகை அடையாளங்காட்டியில் பெரிய/சிறிய எழுத்து வேறுபாடு இல்லை என்றும், ஆதரிக்கப்படாத வகை இதற்குத் திரும்பும் என்றும் கூறுகிறது: <code>note</code>.</li>
+        <li><strong>தலைப்பு.</strong> அடைப்புக்குறிகளுக்குப் பின் உள்ள உரை தலைப்பை மாற்றும். அது இல்லையெனில் Obsidian வகை அடையாளங்காட்டியைத் தலைப்பு வடிவில் காட்டும்; எனவே <code>&gt; [!tip]</code> “Tip” எனக் காட்டப்படும்.</li>
+        <li><strong>உடல் உரை.</strong> ஒவ்வொரு அடுத்த வரியும் இதில் தொடங்கும்: <code>&gt; </code>. உடல் பகுதியில் Markdown, விக்கிஇணைப்புகள், உட்பொதிவுகள் இருக்கலாம்.</li>
+        <li><strong>தலைப்பு மட்டும்.</strong> உடல் பகுதியை விட்டுவிடலாம்: <code>&gt; [!tip] Remember to save</code> என்பது முழுமையான callout.</li>
+      </ul>
+
+      <h2 id="types">3. அனைத்து callout வகைகளும் மாற்றுப் பெயர்களும்</h2>
+      <p>இந்த உள்ளமைந்த வகைகளை Obsidian உதவி பட்டியலிடுகிறது. ஒவ்வொரு மாற்றுப் பெயரும் அது சேர்ந்த வகையுடன் பட்டியலிடப்பட்டுள்ளது, எடுத்துக்காட்டாக <code>tldr</code> உடன் <code>abstract</code>.</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th>வகை</th><th>மாற்றுப் பெயர்கள்</th><th>வழக்கமான பயன்பாடு</th></tr></thead>
+          <tbody>
+            <tr><td><code>note</code></td><td>எதுவுமில்லை</td><td>பொதுவான குறிப்பு. அறியாத வகை திரும்பிச் செல்லும் பாணியும் இதுவே.</td></tr>
+            <tr><td><code>abstract</code></td><td><code>summary</code>, <code>tldr</code></td><td>குறிப்பின் மேலே ஒரு சுருக்கம்.</td></tr>
+            <tr><td><code>info</code></td><td>எதுவுமில்லை</td><td>பின்னணித் தகவல்.</td></tr>
+            <tr><td><code>todo</code></td><td>எதுவுமில்லை</td><td>இன்னும் செய்ய வேண்டியது.</td></tr>
+            <tr><td><code>tip</code></td><td><code>hint</code>, <code>important</code></td><td>ஆலோசனை அல்லது முக்கியக் குறிப்பு.</td></tr>
+            <tr><td><code>success</code></td><td><code>check</code>, <code>done</code></td><td>முடிந்த படி அல்லது நல்ல முடிவு.</td></tr>
+            <tr><td><code>question</code></td><td><code>help</code>, <code>faq</code></td><td>திறந்த கேள்வி அல்லது அடிக்கடி கேட்கப்படும் கேள்வி.</td></tr>
+            <tr><td><code>warning</code></td><td><code>caution</code>, <code>attention</code></td><td>கவனமாக இருக்க வேண்டிய ஒன்று.</td></tr>
+            <tr><td><code>failure</code></td><td><code>fail</code>, <code>missing</code></td><td>என்ன தவறானது அல்லது எது இல்லை.</td></tr>
+            <tr><td><code>danger</code></td><td><code>error</code></td><td>கடுமையான ஆபத்து அல்லது பிழைச் செய்தி.</td></tr>
+            <tr><td><code>bug</code></td><td>எதுவுமில்லை</td><td>அறியப்பட்ட பிழை.</td></tr>
+            <tr><td><code>example</code></td><td>எதுவுமில்லை</td><td>ஒரு விளக்க எடுத்துக்காட்டு.</td></tr>
+            <tr><td><code>quote</code></td><td><code>cite</code></td><td>மூலத்துடன் ஒரு மேற்கோள்.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>வகைகளும் மாற்றுப் பெயர்களும் Obsidian உதவியிலிருந்து எடுக்கப்பட்டவை. “வழக்கமான பயன்பாடு” நெடுவரிசை ஒரு பரிந்துரை மட்டுமே; அதை Obsidian வரையறுக்கவில்லை. இயல்புத் தோற்றத்தில் ஒவ்வொரு வகைக்கும் தனி நிறமும் ஐகானும் உண்டு; தீம்கள் இரண்டையும் மாற்றலாம்.</p>
+
+      <h2 id="folding">4. மடிக்கக்கூடிய callout-கள்: + மற்றும் -</h2>
+      <p>மூடும் அடைப்புக்குறிக்குப் பின் உடனே ஒரு கூட்டல் அல்லது கழித்தல் குறியைச் சேர்க்கவும்:</p>
+      <pre class="guide-code"><code>&gt; [!faq]+ Open by default
+&gt; This callout is foldable and starts expanded.
+
+&gt; [!faq]- Closed by default
+&gt; This callout is foldable and starts collapsed.</code></pre>
+      <p>Obsidian உதவி விவரிப்பது: <code>+</code> என்பதை இயல்பாக மடிக்கக்கூடியதும் விரிக்கப்பட்டதுமாக, <code>-</code> என்பதை இயல்பாக மடிக்கக்கூடியதும் மடிக்கப்பட்டதுமாக. இரண்டும் இல்லையெனில் callout மடிக்க முடியாது. <code>+</code> அல்லது <code>-</code> Markdown-இன் பகுதி, எனவே அது கோப்பிலேயே இருக்கும்.</p>
+
+      <h2 id="nesting">5. உள்ளடுக்கு callout-கள், பட்டியல்கள், குறியீடு, உட்பொதிவுகள்</h2>
+      <p>உள்ளடுக்கு callout-க்கு, ஒவ்வொரு நிலைக்கும் மேலும் ஒரு <code>&gt;</code> என்பதை ஒவ்வொரு நிலைக்கும் சேர்க்கவும்:</p>
+      <pre class="guide-code"><code>&gt; [!question] Can callouts be nested?
+&gt; &gt; [!example] Yes
+&gt; &gt; Add one more &gt; for each level.</code></pre>
+      <p>உருவாக்கியின் “மற்றொரு callout-க்குள் உள்ளடுக்கு” அமைப்பு கூடுதலாக <code>&gt; </code> என்பதை ஒவ்வொரு வரியிலும் மூன்று நிலை வரை எழுதும். முடிவை வெளிப்புற callout-இன் உடல் பகுதிக்குள் ஒட்டுங்கள்.</p>
+      <p>பட்டியல்கள், குறியீடு, பிற Markdown ஆகியவை உடல் பகுதிக்குள் செல்லும்; ஒவ்வொரு வரியிலும் <code>&gt; </code> முன்னொட்டுடன். உடல் பகுதியில் Markdown, விக்கிஇணைப்புகள், உட்பொதிவுகள் இருக்கலாம் என்றும், ஏற்கெனவே உள்ள உள்ளடக்கத்தை (பட்டியல்கள், குறியீடுத் தொகுதிகள் உட்பட) தேர்ந்தெடுத்து இந்தக் கட்டளையை இயக்கி callout-க்குள் வைக்கலாம் என்றும் Obsidian உதவி கூறுகிறது: <strong>Callout செருகு</strong> கட்டளையை இயக்குங்கள். உருவாக்கியின் உடல் புலத்தில் பட்டியல் அல்லது குறியீடுத் தொகுதியை ஒட்டினால் அது முன்னொட்டுகளைச் சேர்க்கும்:</p>
+      <pre class="guide-code"><code>&gt; [!info] Checklist
+&gt; - [ ] first
+&gt; - [ ] second
+&gt;
+&gt; ```
+&gt; code line
+&gt; ```</code></pre>
+
+      <h2 id="custom">6. CSS ஸ்னிப்பெட் மூலம் தனிப்பயன் callout வகைகள்</h2>
+      <p>நீங்களே உருவாக்கும் வகை note பாணியில் காட்டப்படும். தனிப்பயன் callout-கள் CSS ஸ்னிப்பெட்டிலோ சமூகச் செருகுநிரலிலோ வரையறுக்கப்படுகின்றன என்று Obsidian உதவி கூறுகிறது. அதன் எடுத்துக்காட்டு:</p>
+      <pre class="guide-code"><code>.callout[data-callout="custom-question-type"] {
+  --callout-color: #000000;
+  --callout-icon: lucide-alert-circle;
+}</code></pre>
+      <p>உதவிப் பக்கத்தின்படி, <code>--callout-color</code> செல்லுபடியாகும் எந்த CSS நிறத்தையும் ஏற்கும்; <code>--callout-icon</code> lucide.dev-இலிருந்து ஐகான் ID-யை அல்லது SVG உறுப்பை ஏற்கும். பிறகு குறிப்பில் இதை எழுதுங்கள்: <code>&gt; [!custom-question-type]</code> என்று குறிப்பில் எழுதுங்கள். உருவாக்கியின் தனிப்பயன் வகைப் புலத்திலும் அதே பெயரை உள்ளிடுங்கள்.</p>
+
+      <h2 id="github">7. GitHub alerts மற்றும் Obsidian callout-கள்</h2>
+      <p>GitHub-இல் alerts என்ற இதே போன்ற வசதி உள்ளது. <a href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts" target="_blank" rel="noopener">GitHub Docs ஆவணம்</a> ஐந்தைப் பட்டியலிடுகிறது: <code>NOTE</code>, <code>TIP</code>, <code>IMPORTANT</code>, <code>WARNING</code> மற்றும் <code>CAUTION</code>.</p>
+      <pre class="guide-code"><code>&gt; [!NOTE]
+&gt; Useful information that users should know, even when skimming content.</code></pre>
+      <p>அந்தப் பக்கத்தில் மடிப்பு, தனிப்பயன் தலைப்பு, தனிப்பயன் வகைகள் எதுவும் விவரிக்கப்படவில்லை; Obsidian callout-களில் மூன்றும் உண்டு. முதல் வரி ஒரே மாதிரி இருப்பதால், அடிப்படை <code>&gt; [!note]</code> அல்லது <code>&gt; [!warning]</code> இரண்டிலும் பெரும்பாலும் வேலை செய்யும், ஆனால் Obsidian-க்கு மட்டுமான வகை, எடுத்துக்காட்டாக <code>[!bug]</code>, <code>+</code>/<code>-</code> மடிப்பு அல்லது தலைப்பு GitHub ஆவணப்படுத்துவதற்கு வெளியே உள்ளது. ஒரு கோப்பு இரண்டிலும் வாசிக்கப்பட்டால், கூடுதல் எதுவுமின்றி GitHub-இன் ஐந்து வகைகளையே பயன்படுத்துங்கள்.</p>
+
+      <h2 id="capture">8. Vox.md மூலம் குரல் அல்லது உரையால் Obsidian-இல் பதிவுசெய்யுங்கள்</h2>
+      <p>நீங்கள் பதிவு செய்வதை Vox.md உங்கள் Obsidian பெட்டகக் கோப்புறையில் Markdown குறிப்பாகச் சேமிக்கிறது. இது ஒரு பதிவுசெய்யும் செயலி; இது உங்களுக்காக callout-களை எழுதுகிறது என்று இந்தப் பக்கம் கூறவில்லை: பிறகு இங்கே உருவாக்கி ஒட்டுவதன் மூலமோ மேலே உள்ள தொடரியலைத் தட்டச்சு செய்வதன் மூலமோ ஒன்றைச் சேர்க்கலாம். உரைப்படியிலிருந்து உடல் உரைக்கு, உரையை உருவாக்கியில் ஒட்டினால் அது முன்னொட்டுகளைச் சேர்க்கும்.</p>
+      <p>தொடர்புடைய கருவிகளும் வழிகாட்டிகளும்: <a href="/ta/blog/markdown-checklist-maker/">Markdown சரிபார்ப்புப் பட்டியல் உருவாக்கி</a> மற்றும் <a href="/ta/blog/markdown-table-maker/">Markdown அட்டவணை உருவாக்கி</a> ஆகியவை callout-க்குள் வைக்கும் உள்ளடக்கத்துக்கும், <a href="/ta/blog/obsidian-properties-generator/">பண்புகள் உருவாக்கி</a>, <a href="/ta/blog/obsidian-daily-note-template/">தினசரிக் குறிப்பு வார்ப்புரு</a> மற்றும் <a href="/ta/blog/obsidian-meeting-notes-template/">கூட்டக் குறிப்புகள் வார்ப்புரு</a> குறிப்பின் கட்டமைப்புக்கும், <a href="/ta/blog/obsidian-capture-templates/">capture வார்ப்புருக்கள்</a> முன்னொட்டுகளுக்கும் பாதைகளுக்கும், <a href="/ta/blog/voice-notes-to-obsidian-iphone/">iPhone-இல் Obsidian-க்கான குரல் குறிப்புகள்</a>.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Vox.md மூலம் குரல் அல்லது உரையால் உங்கள் பெட்டகத்தில் குறிப்புகளைப் பதிவுசெய்யுங்கள்</h2>
+        <p>Vox.md உங்கள் சாதனத்திலேயே உரைப்படியாக்கி Markdown-ஐ உங்கள் Obsidian பெட்டகத்தில் சேமிக்கிறது. பதிவு, உரைப்படியாக்கம், Capture ஆகியவற்றுக்கு Vox.md Unlimited தேவை: தகுதியான கணக்குகளுக்கு 7 நாள் இலவச சோதனையுடன் வாராந்திர அல்லது வருடாந்திரச் சந்தா, அல்லது ஒருமுறை செலுத்தும் வாழ்நாள் வாங்குதல். App Store உங்கள் உள்ளூர் விலையைக் காட்டும்.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ta_c7cb329bf8d9">குரலால் குறிப்புகளைப் பதிவுசெய்யுங்கள்</a></p>
+        <p>மேலே உள்ள callout உருவாக்கி செயலி இல்லாமலே முழுமையாக வேலை செய்யும்.</p>
+      </section>
+
+      <h2 id="faq">9. கேள்விகள்</h2>
+      <h3>என் callout ஏன் காட்டப்படவில்லை?</h3>
+      <p>மூன்றைச் சரிபார்க்கவும். முதல் வரி இதில் தொடங்க வேண்டும்: <code>&gt; </code> பிறகு <code>[!type]</code>, ஆச்சரியக்குறியுடன், அடைப்புக்குறிகளுக்குள் இடைவெளி இல்லாமல். ஒவ்வொரு உடல் வரிக்கும் அதற்கே உரிய <code>&gt;</code>. ஒரு வெற்று வரியில் <code>&gt;</code> இல்லையெனில் மேற்கோள் தொகுதி முடிந்துவிடும்; அதன் பின் வரிகள் சாதாரண உரையாகும்; அதை இவ்வாறு எழுதவும்: <code>&gt;</code>. அப்போதும் சாதாரண மேற்கோள் தொகுதியாகவே தெரிந்தால், இவற்றுக்கு இடையே இடைவெளி அல்லது எழுத்துப்பிழை உள்ளதா எனப் பார்க்கவும்: <code>&gt;</code> மற்றும் <code>[!</code>.</p>
+      <h3>Callout-க்குத் தலைப்பு இல்லாமல் இருக்க முடியுமா?</h3>
+      <p>முழுமையாக இல்லை: தலைப்பை விட்டுவிட்டால் Obsidian வகை அடையாளங்காட்டியைத் தலைப்பு வடிவில் காட்டும். தலைப்பை மறைக்க CSS தேவை; தலைப்பை மறைப்பது போன்ற கூடுதல் பாணிக்கு நிலையான CSS தேர்வுக்குறிகளைப் பயன்படுத்தலாம் என்று Obsidian உதவி கூறுகிறது. நீங்கள் தலைப்பை அழித்தால் உருவாக்கி அதைக் காலியாக விடும், எனவே இயல்புத் தலைப்பு கிடைக்கும்.</p>
+      <h3>Admonition செருகுநிரலா, இயல்பான callout-களா?</h3>
+      <p>இயல்பான callout-களுக்குச் செருகுநிரல் தேவையில்லை; அவை பயன்படுத்தும் <code>&gt; [!type]</code> இந்தப் பக்கத்தில் உள்ள தொடரியல். Admonition செருகுநிரல் தனியான சமூகச் செருகுநிரல்; அதற்குத் தனி தொடரியல் உண்டு, அதை இந்தப் பக்கம் உள்ளடக்கவில்லை. தனிப்பயன் callout வகைகள் சமூகச் செருகுநிரலிலிருந்தும் வரலாம் என்று Obsidian உதவி கூறுகிறது.</p>
+      <h3>Obsidian மொபைலிலும் Publish-இலும் callout-கள் வேலை செய்கின்றனவா?</h3>
+      <p>Obsidian Publish-இல் callout-கள் இயல்பாகவே ஆதரிக்கப்படுகின்றன என்று Obsidian உதவி கூறுகிறது. அதன் callout பக்கம் மொபைலைப் பற்றி எதுவும் குறிப்பிடவில்லை, எனவே இந்தப் பக்கம் அதைப் பற்றி எந்தக் கூற்றையும் முன்வைக்கவில்லை.</p>
+      <h3>உருவாக்கி என் உரையைப் பதிவேற்றுமா?</h3>
+      <p>இல்லை. இந்தப் பக்கத்தில் உள்ள ஸ்கிரிப்ட் உங்கள் சாதனத்திலேயே callout-ஐ உருவாக்குகிறது, பக்கம் எந்த நெட்வொர்க் கோரிக்கையும் செய்யாது. எதுவும் சேமிக்கப்படாது: பக்கத்தை மீண்டும் ஏற்றினால் அனைத்தும் அழியும்.</p>
+
+      <nav class="toc" aria-label="தொடர்புடைய வழிகாட்டிகள்" id="related"><div class="toc-title">அமைப்பைத் தொடரவும்</div><ul>
+        <li><a href="/ta/blog/markdown-checklist-maker/">Markdown சரிபார்ப்புப் பட்டியல் உருவாக்கி</a></li>
+        <li><a href="/ta/blog/markdown-table-maker/">Markdown அட்டவணை உருவாக்கி</a></li>
+        <li><a href="/ta/blog/obsidian-properties-generator/">Obsidian பண்புகள் உருவாக்கி மற்றும் சரிபார்ப்பி</a></li>
+        <li><a href="/ta/blog/obsidian-daily-note-template/">Obsidian தினசரிக் குறிப்பு வார்ப்புரு உருவாக்கி</a></li>
+        <li><a href="/ta/blog/obsidian-meeting-notes-template/">Obsidian கூட்டக் குறிப்பு வார்ப்புரு ஜெனரேட்டர்</a></li>
+        <li><a href="/ta/blog/obsidian-capture-templates/">பாதை, வார்ப்புரு செய்முறைகள்</a></li>
+        <li><a href="/ta/blog/voice-notes-to-obsidian-iphone/">iPhone-ல் Obsidian-க்கு குரல் குறிப்புகள்</a></li>
+      </ul></nav>
+<style>
+.co-tool:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.co-tool [hidden] { display: none; }
+.mt-output-head[hidden], .co-output[hidden], #co-preview-title[hidden] { display: none; }
+.co-tool .mt-field input[type="text"], .co-tool .mt-field textarea, .co-tool .mt-field select { font: inherit; font-family: var(--font-mono); font-size: 16px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; padding: 8px 10px; width: 100%; box-sizing: border-box; min-height: 44px; }
+.co-tool .mt-field textarea { resize: vertical; min-height: 140px; }
+.co-tool input:focus-visible, .co-tool textarea:focus-visible, .co-tool select:focus-visible, .co-output:focus-visible, .co-gallery button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.co-tool .mt-option { min-height: 44px; }
+.co-tool .mt-option input { width: 22px; height: 22px; }
+.mt-actions button { font: inherit; font-size: 15px; min-height: 44px; padding: 0 18px; cursor: pointer; }
+.co-output { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 28rem; overflow: auto; }
+.co-preview { padding: 14px 18px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow-wrap: anywhere; }
+.co-preview[hidden] { display: none; }
+.co-callout { --c: 8, 109, 221; background: rgba(var(--c), 0.1); border-inline-start: 4px solid rgb(var(--c)); border-radius: 8px; padding: 10px 14px; margin: 4px 0; }
+.co-callout .co-head { display: flex; align-items: center; gap: 8px; font-weight: 700; color: rgb(var(--c)); }
+.co-callout .co-icon { width: 14px; height: 14px; border-radius: 50%; background: rgb(var(--c)); flex: none; }
+.co-callout .co-chev { margin-inline-start: auto; font-weight: 400; }
+.co-callout .co-body { white-space: pre-wrap; margin-top: 6px; }
+.co-callout.is-collapsed .co-body { display: none; }
+.co-gallery { display: flex; flex-wrap: wrap; gap: 8px; }
+.co-gallery button { font: inherit; font-family: var(--font-mono); font-size: 14px; min-height: 44px; padding: 0 14px; cursor: pointer; color: var(--ink); background: rgba(var(--c), 0.12); border: 1.5px solid rgb(var(--c)); border-radius: 10px; }
+</style>
+<script>
+/* Obsidian callout generator. Runs locally: no network requests. */
+(function () {
+  var TYPES = [
+    { id: 'note', aliases: [], title: 'Note', color: '8, 109, 221' },
+    { id: 'abstract', aliases: ['summary', 'tldr'], title: 'Abstract', color: '0, 176, 255' },
+    { id: 'info', aliases: [], title: 'Info', color: '8, 109, 221' },
+    { id: 'todo', aliases: [], title: 'Todo', color: '8, 109, 221' },
+    { id: 'tip', aliases: ['hint', 'important'], title: 'Tip', color: '0, 191, 188' },
+    { id: 'success', aliases: ['check', 'done'], title: 'Success', color: '8, 185, 78' },
+    { id: 'question', aliases: ['help', 'faq'], title: 'Question', color: '224, 172, 0' },
+    { id: 'warning', aliases: ['caution', 'attention'], title: 'Warning', color: '236, 117, 0' },
+    { id: 'failure', aliases: ['fail', 'missing'], title: 'Failure', color: '233, 49, 71' },
+    { id: 'danger', aliases: ['error'], title: 'Danger', color: '233, 49, 71' },
+    { id: 'bug', aliases: [], title: 'Bug', color: '233, 49, 71' },
+    { id: 'example', aliases: [], title: 'Example', color: '120, 82, 238' },
+    { id: 'quote', aliases: ['cite'], title: 'Quote', color: '158, 158, 158' }
+  ];
+
+  function lookup(name) {
+    var n = String(name || '').toLowerCase();
+    for (var i = 0; i < TYPES.length; i++) {
+      if (TYPES[i].id === n || TYPES[i].aliases.indexOf(n) !== -1) return TYPES[i];
+    }
+    return null;
+  }
+
+  function titleCase(name) {
+    return String(name || '').replace(/[-_]+/g, ' ').replace(/\S+/g, function (w) {
+      return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+    });
+  }
+
+  /* Remove any leading blockquote markers so pasted text is not doubled. */
+  function unquote(line) { return line.replace(/^[ \t]{0,3}(?:>[ \t]?)+/, ''); }
+
+  function cleanType(value) {
+    return String(value || '').trim().replace(/[\[\]!\s]+/g, '-').replace(/^-+|-+$/g, '');
+  }
+
+  /* Build a callout. Returns {output, type, builtin, defaultTitle, warnings, body}. */
+  function run(opts) {
+    opts = opts || {};
+    var custom = cleanType(opts.custom);
+    var type = custom || cleanType(opts.type) || 'note';
+    var known = lookup(type);
+    var warnings = [];
+    if (!known) warnings.push('custom-warning');
+    var fold = opts.fold === '+' || opts.fold === '-' ? opts.fold : '';
+    var depth = Math.max(0, Math.min(3, parseInt(opts.depth, 10) || 0));
+    var title = String(opts.title || '').replace(/\s+/g, ' ').trim();
+    var keep = opts.blank !== false;
+    var lines = String(opts.body || '').replace(/^﻿/, '').replace(/\r\n?/g, '\n').split('\n')
+      .map(function (l) { return unquote(l).replace(/[ \t]+$/, ''); });
+    while (lines.length && !lines[0].trim()) lines.shift();
+    while (lines.length && !lines[lines.length - 1].trim()) lines.pop();
+    if (!keep) lines = lines.filter(function (l) { return l.trim(); });
+    var mark = new Array(depth + 2).join('> ');
+    var bare = mark.replace(/ $/, '');
+    var out = [mark + '[!' + type + ']' + fold + (title ? ' ' + title : '')];
+    lines.forEach(function (l) { out.push(l.trim() ? mark + l : bare); });
+    return {
+      output: out.join('\n'),
+      type: type,
+      builtin: known,
+      defaultTitle: titleCase(type),
+      warnings: warnings,
+      body: lines.join('\n'),
+      title: title,
+      fold: fold,
+      depth: depth
+    };
+  }
+
+  if (typeof window !== 'undefined') {
+    window.voxCallout = { run: run, types: TYPES, lookup: lookup, titleCase: titleCase };
+  }
+
+  var form = document.getElementById('co-tool');
+  if (!form) return;
+  var select = document.getElementById('co-type');
+  var custom = document.getElementById('co-custom');
+  var titleInput = document.getElementById('co-title');
+  var body = document.getElementById('co-body');
+  var code = document.getElementById('co-output-code');
+  var pre = document.getElementById('co-output');
+  var head = document.getElementById('co-output-head');
+  var preview = document.getElementById('co-preview');
+  var previewTitle = document.getElementById('co-preview-title');
+  var previewNote = document.getElementById('co-preview-note');
+  var nestHint = document.getElementById('co-nest-hint');
+  var status = document.getElementById('co-status');
+  var customWarning = document.getElementById('co-custom-warning');
+  var defaultTitle = document.getElementById('co-default-title');
+  var gallery = document.getElementById('co-gallery');
+  custom.placeholder = 'my-type';
+  var EXAMPLE = {
+    type: 'warning', title: 'Back up first', fold: '-', depth: '0',
+    body: 'Copy the vault before you change the plugin settings.\n\nThen restart Obsidian.'
+  };
+
+  function message(name, fill) {
+    var el = document.querySelector('#co-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : '';
+    if (fill) Object.keys(fill).forEach(function (key) { text = text.split('{' + key + '}').join(fill[key]); });
+    return text;
+  }
+  function say(text) {
+    status.textContent = '';
+    window.setTimeout(function () { status.textContent = text; }, 30);
+  }
+
+  TYPES.forEach(function (t) {
+    var group = document.createElement('optgroup');
+    group.label = t.id;
+    [t.id].concat(t.aliases).forEach(function (name) {
+      var o = document.createElement('option');
+      o.value = name;
+      o.textContent = name;
+      group.appendChild(o);
+    });
+    select.appendChild(group);
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = t.id;
+    b.style.setProperty('--c', t.color);
+    b.addEventListener('click', function () {
+      select.value = t.id;
+      custom.value = '';
+      update();
+      say(message('type-loaded'));
+    });
+    gallery.appendChild(b);
+  });
+
+  function options() {
+    return {
+      type: select.value, custom: custom.value, title: titleInput.value, body: body.value,
+      fold: form.elements.fold.value, depth: form.elements.depth.value, blank: form.elements.blank.checked
+    };
+  }
+
+  function renderPreview(r) {
+    preview.textContent = '';
+    var color = r.builtin ? r.builtin.color : lookup('note').color;
+    var parent = preview;
+    for (var i = 0; i < r.depth; i++) {
+      var outer = document.createElement('div');
+      outer.className = 'co-callout';
+      outer.style.setProperty('--c', '158, 158, 158');
+      parent.appendChild(outer);
+      parent = outer;
+    }
+    var box = document.createElement('div');
+    box.className = 'co-callout' + (r.fold === '-' ? ' is-collapsed' : '');
+    box.style.setProperty('--c', color);
+    var h = document.createElement('div');
+    h.className = 'co-head';
+    var icon = document.createElement('span');
+    icon.className = 'co-icon';
+    icon.setAttribute('aria-hidden', 'true');
+    var t = document.createElement('span');
+    t.textContent = r.title || r.defaultTitle;
+    h.appendChild(icon);
+    h.appendChild(t);
+    if (r.fold) {
+      var chev = document.createElement('span');
+      chev.className = 'co-chev';
+      chev.setAttribute('aria-hidden', 'true');
+      chev.textContent = r.fold === '-' ? '▸' : '▾';
+      h.appendChild(chev);
+    }
+    box.appendChild(h);
+    if (r.body) {
+      var b = document.createElement('div');
+      b.className = 'co-body';
+      b.textContent = r.body;
+      box.appendChild(b);
+    }
+    parent.appendChild(box);
+  }
+
+  function update() {
+    var r = run(options());
+    code.textContent = r.output;
+    pre.hidden = head.hidden = preview.hidden = previewTitle.hidden = previewNote.hidden = false;
+    nestHint.hidden = !r.depth;
+    renderPreview(r);
+    defaultTitle.textContent = message('default-title', { title: r.defaultTitle });
+    customWarning.textContent = r.warnings.map(message).join(' ');
+    customWarning.hidden = !r.warnings.length;
+  }
+
+  form.addEventListener('input', update);
+  form.addEventListener('change', update);
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+  document.getElementById('co-example').addEventListener('click', function () {
+    select.value = EXAMPLE.type;
+    custom.value = '';
+    titleInput.value = EXAMPLE.title;
+    body.value = EXAMPLE.body;
+    form.elements.fold.value = EXAMPLE.fold;
+    form.elements.depth.value = EXAMPLE.depth;
+    form.elements.blank.checked = true;
+    update();
+    say(message('loaded'));
+  });
+  document.getElementById('co-clear').addEventListener('click', function () {
+    select.value = 'note';
+    custom.value = '';
+    titleInput.value = '';
+    body.value = '';
+    form.elements.fold.value = '';
+    form.elements.depth.value = '0';
+    form.elements.blank.checked = true;
+    update();
+    body.focus();
+    say(message('cleared'));
+  });
+  document.getElementById('co-copy').addEventListener('click', function () {
+    var text = code.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(code);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+
+  document.getElementById('co-nojs').hidden = true;
+  form.hidden = false;
+  update();
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ta/">முகப்பு</a></li>
+        <li><a href="/ta/docs/">ஆவணங்கள்</a></li>
+        <li><a href="/ta/blog/">வழிகாட்டிகள்</a></li>
+        <li><a href="/ta/compare/">ஒப்பிடவும்</a></li>
+        <li><a href="/ta/privacy.html">தனியுரிமை</a></li>
+        <li><a href="/ta/terms.html">விதிமுறைகள்</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">ஆதரவு</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ta_c7cb329bf8d9">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · உள்ளூர் குறிப்புகளுக்கு விரைவான பிடிப்பு · பதிவேற்றமில்லை.</div>
+    </div>
+  <details class="language-switcher"><summary>மொழி</summary><ul><li><a href="/blog/obsidian-callout-generator/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-callout-generator/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-callout-generator/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-callout-generator/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-callout-generator/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-callout-generator/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-callout-generator/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-callout-generator/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-callout-generator/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-callout-generator/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-callout-generator/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-callout-generator/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-callout-generator/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-callout-generator/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-callout-generator/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-callout-generator/" lang="ta" hreflang="ta" aria-current="page">தமிழ்</a></li><li><a href="/th/blog/obsidian-callout-generator/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-callout-generator/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-callout-generator/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-callout-generator/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-callout-generator/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-callout-generator/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-callout-generator/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
