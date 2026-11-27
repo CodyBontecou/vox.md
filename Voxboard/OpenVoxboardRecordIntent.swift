@@ -155,10 +155,18 @@ extension OpenVoxboardRecordIntent: AudioRecordingIntent, LiveActivityIntent {}
 struct VoxboardRecordingControlIntent: AppIntent {
     static let title: LocalizedStringResource = "Run Recording Control"
     static var isDiscoverable: Bool = false
-    static var openAppWhenRun: Bool = true
+    // Exported metadata already reads false for a background-only intent;
+    // keep the source in step with it (#200).
+    static var openAppWhenRun: Bool = false
 
+    // Same modes as Toggle Recording, which records without switching apps.
+    // A foreground mode makes the system perform this in the app process,
+    // where the recorder lives. Background-only let a press run in the widget
+    // extension, whose only option is the foreground handoff, so every press
+    // opened Vox.md even with Open App off (#200). Open App and Draft still
+    // open the app through that handoff.
     @available(iOS 26.0, *)
-    static var supportedModes: IntentModes { .background }
+    static var supportedModes: IntentModes { [.background, .foreground(.dynamic)] }
 
     @Parameter(title: "Route")
     var vox: VoxEntity?

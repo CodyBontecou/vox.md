@@ -69,6 +69,13 @@ recording cycle and actual foreground handoff are not verified.
 On iOS 18.2–25 execution always chains to the foreground helper. The compile-time
 legacy `openAppWhenRun = true` is retained for older-iOS foreground launching;
 current metadata exports supportedModes=3 and openAppWhenRun=true.
+The hidden control dispatcher `VoxboardRecordingControlIntent` declares the
+same modes as Toggle Recording, `[.background, .foreground(.dynamic)]`
+(metadata supportedModes=9, openAppWhenRun=false). With background-only modes
+(supportedModes=1) a control press could run in the widget extension, whose
+only option is the foreground handoff, so the Action button opened Vox.md even
+with Open App off (#200). Its exported openAppWhenRun was already false, so iOS
+18–25 behaviour does not change.
 On iOS 17.6–18.1, the already-foreground app queues the same handoff without using
 an iOS 18.2-only result overload. Do not add `ForegroundContinuableIntent` to the
 primary action: even an old-OS-only conformance is exported as a system protocol
