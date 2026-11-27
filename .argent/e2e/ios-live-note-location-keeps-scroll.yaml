@@ -1,0 +1,100 @@
+# Live Note keeps its scroll position when the location loads (iOS, #204):
+# with a Route that captures the current location, the first save of a new
+# note shows "Finding Location…", writes the location as frontmatter and loads
+# the whole daily note into the editor. The editor must stay at the bottom on
+# the words just added, not jump up to the frontmatter.
+#
+# Prerequisites: iOS simulator with a DEBUG build of Vox.md (bontecou.Voxboard)
+#   installed, location permission granted and a simulated location set, e.g.
+#   `xcrun simctl privacy <udid> grant location bontecou.Voxboard` and
+#   `xcrun simctl location <udid> set 37.7749,-122.4194`.
+#   `-VoxAdaptiveSeedDemo` creates the local "Vox Notes" demo vault and starter
+#   routes; `-VoxDebugSeedRouteLocation` turns on Use Current Location and
+#   Write Location Metadata on Meeting Notes (and Apple Intelligence off, so the
+#   entry keeps the typed words). `-VoxScreenshotUnlocked` gives access.
+# Side effects: appends a capture (and a location) to today's Meetings note in
+#   the demo vault on every run; leaves Meeting Notes with location on.
+#   Uninstall the app to reset.
+# Selectors: waits stay raw `tool: await-ui-element` steps because the runner's
+#   directive tree lacks the composer controls (see capture-route-label-suffix).
+#   The scroll check reads the editor's "Vertical scroll bar" value, the first
+#   scroll bar in reading order. New note is a documented coordinate tap: the
+#   recorder resolved it to the full-screen "Toolbar" group.
+version: 2
+requires:
+  platform: ios
+steps:
+  - echo: Launch Vox.md (DEBUG) with the demo vault; Meeting Notes gets location on.
+      Expect the composer
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+          - -VoxScreenshotUnlocked
+          - -VoxAdaptiveSeedDemo
+          - -VoxDebugSeedRouteLocation
+          - -VoxAdaptiveNoAutofocus
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_new_note
+      timeoutMs: 20000
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: live_note_status
+      expectedText: Saved
+      textMatch: equals
+      timeoutMs: 25000
+  - echo: Tap New note for a blank note, then type a long note so the editor scrolls
+      to its bottom
+  # New note (capture_new_note), keyboard hidden: frame (0.831,0.886,0.129,0.059)
+  # on a 6.3-inch iPhone simulator (iPhone 17).
+  - tap:
+      x: 0.895
+      y: 0.915
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: live_note_status
+      expectedText: Saves as you go
+      textMatch: equals
+      timeoutMs: 10000
+  - tap:
+      id: quick_capture_text
+  - tool: keyboard
+    args:
+      text: "line one\nline two\nline three\nline four\nline five\nline six\nline
+        seven\nline eight\nline nine\nline ten\nline eleven\nline twelve\nline
+        thirteen\nline fourteen\nline fifteen\nline sixteen end"
+      delayMs: 5
+  - echo: The first save finds the location, writes it as frontmatter and loads the
+      whole daily note. Expect Saved, with the editor still at the bottom on the
+      new words (scroll bar 100%), not at the frontmatter (#204)
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: live_note_status
+      expectedText: Saved
+      textMatch: equals
+      timeoutMs: 25000
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        text: Vertical scroll bar
+      expectedText: 100%
+      timeoutMs: 5000
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: quick_capture_text
+      expectedText: "locations:"
+      timeoutMs: 5000

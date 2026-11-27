@@ -260,9 +260,17 @@ struct MarkdownComposerTextView: UIViewRepresentable {
             textView.selectedRange = desired
         }
         // Follow programmatic edits (live speech lands at the cursor, not
-        // only at the end) while the writer is not typing.
-        if textChanged || selectionChanged,
-           desired.location + desired.length == textEnd || !textView.isFirstResponder {
+        // only at the end) while the writer is not typing. A caret moved from
+        // outside is always shown: replacing the text leaves the scroll
+        // position wherever UIKit put it (a Live Note loading its whole file
+        // jumped to the top, #204).
+        if Self.followsSelection(
+            textChanged: textChanged,
+            selectionChanged: selectionChanged,
+            selectionEnd: desired.location + desired.length,
+            textEnd: textEnd,
+            isFirstResponder: textView.isFirstResponder
+        ) {
             textView.scrollRangeToVisible(desired)
         }
         if isFocused, !textView.isFirstResponder {
@@ -279,6 +287,20 @@ struct MarkdownComposerTextView: UIViewRepresentable {
         } else if !isFocused, textView.isFirstResponder {
             textView.resignFirstResponder()
         }
+    }
+
+    /// Whether an update from outside scrolls to the selection: always when
+    /// the caret was moved from outside, and for new text when the caret sits
+    /// at its end or the writer is not typing.
+    static func followsSelection(
+        textChanged: Bool,
+        selectionChanged: Bool,
+        selectionEnd: Int,
+        textEnd: Int,
+        isFirstResponder: Bool
+    ) -> Bool {
+        if selectionChanged { return true }
+        return textChanged && (selectionEnd == textEnd || !isFirstResponder)
     }
 
     static func dismantleUIView(_ textView: UITextView, coordinator: Coordinator) {
