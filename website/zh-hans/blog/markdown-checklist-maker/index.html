@@ -289,6 +289,7 @@
       <p>GitHub Docs 将其描述为 <code>[ ]</code> 表示未完成的任务, <code>[x]</code> 来标记完成。GFM 规范将该标记定义为空白字符或字母 <code>x</code> 之间。Obsidian 接受任何字符。因此像这样的任务 <code>- [-] skipped</code> 或 <code>- [?] unsure</code> 在 Obsidian 中算作已完成,但它不在规范的标记定义之内,遵循规范的渲染器可能会将其显示为纯文本。如果该文件也会在 GitHub 上阅读,请使用 <code>[ ]</code> 和 <code>[x]</code> 。</p>
       <p>GitHub Docs 补充了一条规则:如果任务描述以圆括号开头,需要用反斜杠转义,例如 <code>- [ ] \(Optional) Open a followup issue</code>。生成器不会为你添加反斜杠;当任务以圆括号开头时,它会给出警告。</p>
       <p>表格是另一处 Obsidian 与 GitHub 细节有差异的语法。若要把电子表格单元格或 CSV 转成在 Obsidian 和 GitHub 上都能用的表格，请使用 <a href="/zh-hans/blog/markdown-table-maker/">Markdown 表格生成器</a>.</p>
+      <p>在任务清单上方用标注突出显示摘要或警告： <a href="/zh-hans/blog/obsidian-callout-generator/">Obsidian 标注生成器</a> 会生成 <code>&gt; [!type]</code> Markdown，包括可折叠的标注。</p>
 
       <h2 id="capture">6. 在 iPhone 和 Mac 上用 Vox.md 语音或文字捕获任务</h2>
       <p>Vox.md 的 Todo Checklist 处理模式会生成 Markdown <code>- [ ]</code> 会从捕获内容中提取任务项,其后备方案是确定性的清单格式化器。语音在你的设备上转写。在 Capture Bar 中, <strong>检查名单</strong> 应用 <code>- [ ]</code> 前缀,以及 <strong>两日期设置</strong> 插入 <code>(@yyyy-MM-dd)</code> 或带时间的形式。请参阅 <a href="/zh-hans/docs/#quick-capture">快速捕捉</a> 和 <a href="/zh-hans/docs/#presets">Routes 与处理模式</a> 文档。</p>

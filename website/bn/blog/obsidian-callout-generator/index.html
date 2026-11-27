@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="bn" dir="ltr" data-search-section="অংশ" data-search-guide="গাইড" data-search-empty="“{query}”-এর কোনো ফল নেই">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obsidian কলআউট জেনারেটর: সব টাইপ, অ্যালিয়াস ও ভাঁজের বিকল্প | Vox.md</title>
+  <meta name="description" content="ব্রাউজারে বিনামূল্যের টুল, যা Obsidian কলআউট Markdown তৈরি করে: টাইপ, শিরোনাম ও বডি বাছুন, + বা - দিয়ে ভাঁজ ও নেস্টিং ঠিক করুন, তারপর কপি করুন। প্রতিটি বিল্ট-ইন টাইপ ও অ্যালিয়াস তালিকাভুক্ত। কিছুই আপলোড হয় না।">
+  <link rel="canonical" href="https://vox.isolated.tech/bn/blog/obsidian-callout-generator/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="ভাষা মডেলের জন্য Vox.md নথি">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Obsidian কলআউট জেনারেটর: সব টাইপ, অ্যালিয়াস ও ভাঁজের বিকল্প">
+  <meta property="og:description" content="ব্রাউজারে বিনামূল্যের টুল, যা Obsidian কলআউট Markdown তৈরি করে: টাইপ, শিরোনাম ও বডি বাছুন, + বা - দিয়ে ভাঁজ ও নেস্টিং ঠিক করুন, তারপর কপি করুন। প্রতিটি বিল্ট-ইন টাইপ ও অ্যালিয়াস তালিকাভুক্ত। কিছুই আপলোড হয় না।">
+  <meta property="og:url" content="https://vox.isolated.tech/bn/blog/obsidian-callout-generator/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-11-27">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Obsidian কলআউট জেনারেটর: সব টাইপ, অ্যালিয়াস ও ভাঁজের বিকল্প">
+  <meta name="twitter:description" content="ব্রাউজারে বিনামূল্যের টুল, যা Obsidian কলআউট Markdown তৈরি করে: টাইপ, শিরোনাম ও বডি বাছুন, + বা - দিয়ে ভাঁজ ও নেস্টিং ঠিক করুন, তারপর কপি করুন। প্রতিটি বিল্ট-ইন টাইপ ও অ্যালিয়াস তালিকাভুক্ত। কিছুই আপলোড হয় না।">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Obsidian কলআউট জেনারেটর: সব টাইপ, অ্যালিয়াস ও ভাঁজের বিকল্প",
+  "description": "ব্রাউজারে বিনামূল্যের টুল, যা Obsidian কলআউট Markdown তৈরি করে: টাইপ, শিরোনাম ও বডি বাছুন, + বা - দিয়ে ভাঁজ ও নেস্টিং ঠিক করুন, তারপর কপি করুন। প্রতিটি বিল্ট-ইন টাইপ ও অ্যালিয়াস তালিকাভুক্ত। কিছুই আপলোড হয় না।",
+  "image": "https://vox.isolated.tech/screenshots/01-route-heading-light.png",
+  "datePublished": "2026-11-27",
+  "dateModified": "2026-11-27",
+  "mainEntityOfPage": "https://vox.isolated.tech/bn/blog/obsidian-callout-generator/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "bn",
+  "name": "Obsidian কলআউট জেনারেটর: সব টাইপ, অ্যালিয়াস ও ভাঁজের বিকল্প | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/bn/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "গাইড",
+      "item": "https://vox.isolated.tech/bn/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Obsidian কলআউট জেনারেটর: সব টাইপ, অ্যালিয়াস ও ভাঁজের বিকল্প",
+      "item": "https://vox.isolated.tech/bn/blog/obsidian-callout-generator/"
+    }
+  ],
+  "inLanguage": "bn",
+  "name": "Obsidian কলআউট জেনারেটর: সব টাইপ, অ্যালিয়াস ও ভাঁজের বিকল্প | Vox.md",
+  "description": "ব্রাউজারে বিনামূল্যের টুল, যা Obsidian কলআউট Markdown তৈরি করে: টাইপ, শিরোনাম ও বডি বাছুন, + বা - দিয়ে ভাঁজ ও নেস্টিং ঠিক করুন, তারপর কপি করুন। প্রতিটি বিল্ট-ইন টাইপ ও অ্যালিয়াস তালিকাভুক্ত। কিছুই আপলোড হয় না।"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/obsidian-callout-generator/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">সরাসরি গাইডে যান</a>
+<nav aria-label="প্রধান নেভিগেশন">
+  <div class="nav-inner">
+    <a href="/bn/" class="logo" aria-label="Vox.md হোম">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/bn/#how">যেভাবে কাজ করে</a></li>
+      <li><a href="/bn/docs/">নথি</a></li>
+      <li><a href="/bn/blog/">গাইড</a></li>
+      <li><a href="/bn/compare/">তুলনা করুন</a></li>
+      <li><a href="/bn/privacy.html">গোপনীয়তা</a></li>
+      <li><a href="/bn/terms.html">শর্তাবলি</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_bn_c7cb329bf8d9">Vox.md ডাউনলোড করুন</a>
+  <details class="language-switcher"><summary>ভাষা</summary><ul><li><a href="/blog/obsidian-callout-generator/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-callout-generator/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-callout-generator/" lang="bn" hreflang="bn" aria-current="page">বাংলা</a></li><li><a href="/de/blog/obsidian-callout-generator/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-callout-generator/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-callout-generator/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-callout-generator/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-callout-generator/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-callout-generator/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-callout-generator/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-callout-generator/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-callout-generator/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-callout-generator/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-callout-generator/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-callout-generator/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-callout-generator/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-callout-generator/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-callout-generator/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-callout-generator/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-callout-generator/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-callout-generator/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-callout-generator/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-callout-generator/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">বিনামূল্যের টুল</div>
+        <h1 class="hero-title">Obsidian কলআউট জেনারেটর: সব টাইপ, অ্যালিয়াস ও ভাঁজের বিকল্প</h1>
+        <p class="hero-subtitle">একটি টাইপ বাছুন, শিরোনাম ও বডি যোগ করুন, ভাঁজ ও নেস্টিং ঠিক করুন, এবং একটি বৈধ &gt; [!type] কলআউট কপি করুন; সঙ্গে টাইপ ও অ্যালিয়াসের পূর্ণ তালিকা এবং ভাঁজযোগ্য কলআউট কীভাবে কাজ করে তা।</p>
+      </div>
+      <aside class="meta-card" aria-label="এই গাইড সম্পর্কে">
+        <dl>
+          <div><dt>লিখেছেন</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>হালনাগাদ</dt><dd><time datetime="2026-11-27">২৭ নভেম্বর, ২০২৬</time></dd></div>
+          <div><dt>প্রয়োজন</dt><dd>যেকোনো আধুনিক ব্রাউজার, iPhone-এর Safari-সহ। ঐচ্ছিক: কলআউট দেখার জন্য Obsidian, আর ভয়েস বা টেক্সটে নোট ক্যাপচারের জন্য iPhone বা Mac-এর Vox.md।</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Obsidian কলআউট জেনারেটর: সব টাইপ, অ্যালিয়াস ও ভাঁজের বিকল্প">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">সংক্ষিপ্ত উত্তর</div>
+        <p>কলআউট হলো এমন একটি ব্লককোট, যার প্রথম লাইন <code>&gt; [!type] Optional title</code>। পরের প্রতিটি লাইন শুরু হয় <code>&gt; </code>। যোগ করুন <code>+</code> অথবা <code>-</code> ব্র্যাকেটের ঠিক পরে বসান, যাতে এটি ভাঁজযোগ্য হয়। প্রিফিক্স না লিখে একটি তৈরি করতে ব্যবহার করুন <a href="#tool">কলআউট জেনারেটর</a> নিচে।</p>
+      </div>
+      <pre class="guide-code" id="default-callout"><code>&gt; [!warning]- Back up first
+&gt; Copy the vault before you change the plugin settings.
+&gt;
+&gt; Then restart Obsidian.
+</code></pre>
+      <p>জেনারেটর যোগ করে <code>&gt; </code> প্রিফিক্স প্রতিটি লাইনে (নেস্টিংয়ে পুনরাবৃত্ত), কলআউটের ভেতরের ফাঁকা লাইন রেখে দেয়, এবং দ্বিগুণ করে না <code>&gt;</code> যা আপনি পেস্ট করেছেন। এটি পুরোপুরি এই পেজের ভেতরেই চলে: আপনার টেক্সট কখনও আপলোড হয় না, আর পেজ কোনো নেটওয়ার্ক অনুরোধ করে না।</p>
+      <nav class="toc" aria-label="এই গাইডে"><div class="toc-title">এই গাইডে</div><ol>
+        <li><a href="#tool">আপনার কলআউট তৈরি করুন</a></li>
+        <li><a href="#syntax">কলআউট সিনট্যাক্স</a></li>
+        <li><a href="#types">সব কলআউট টাইপ ও অ্যালিয়াস</a></li>
+        <li><a href="#folding">ভাঁজযোগ্য কলআউট: + বনাম -</a></li>
+        <li><a href="#nesting">নেস্টেড কলআউট, তালিকা, কোড ও এমবেড</a></li>
+        <li><a href="#custom">CSS স্নিপেট দিয়ে কাস্টম কলআউট টাইপ</a></li>
+        <li><a href="#github">GitHub অ্যালার্ট বনাম Obsidian কলআউট</a></li>
+        <li><a href="#capture">Vox.md দিয়ে ভয়েস বা টেক্সটে Obsidian-এ ক্যাপচার করুন</a></li>
+        <li><a href="#faq">প্রশ্ন</a></li>
+      </ol></nav>
+
+      <h2 id="tool">১. আপনার কলআউট তৈরি করুন</h2>
+      <p class="mt-nojs" id="co-nojs">কলআউট জেনারেটরের জন্য JavaScript লাগে। এটি ছাড়াও নিচের সিনট্যাক্স ও টাইপ টেবিল রেফারেন্স হিসেবে কাজ করে।</p>
+      <form class="co-tool" id="co-tool" aria-label="Obsidian কলআউট জেনারেটর" hidden>
+        <fieldset class="mt-group">
+          <legend>টাইপ</legend>
+          <label class="mt-field" for="co-type">বিল্ট-ইন টাইপ বা অ্যালিয়াস <select id="co-type" name="type"></select></label>
+          <label class="mt-field" for="co-custom">কাস্টম টাইপ (ঐচ্ছিক, উপরের পছন্দের জায়গায় বসে) <input type="text" id="co-custom" name="custom" spellcheck="false" autocomplete="off" autocapitalize="off"></label>
+          <p class="mt-hint" id="co-custom-warning" role="status" hidden></p>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>বিষয়বস্তু</legend>
+          <label class="mt-field" for="co-title">শিরোনাম (ঐচ্ছিক) <input type="text" id="co-title" name="title" autocomplete="off" placeholder="ডিফল্ট শিরোনামের জন্য ফাঁকা রাখুন"></label>
+          <p class="mt-hint" id="co-default-title" role="status"></p>
+          <label class="mt-field" for="co-body">বডি <textarea id="co-body" name="body" rows="7" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></label>
+          <div class="mt-actions">
+            <button type="button" class="btn-secondary" id="co-example">উদাহরণ লোড করুন</button>
+            <button type="button" class="btn-secondary" id="co-clear">মুছুন</button>
+          </div>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>ভাঁজ</legend>
+          <label class="mt-option"><input type="radio" name="fold" value="" checked> <span>নেই (সবসময় খোলা)</span></label>
+          <label class="mt-option"><input type="radio" name="fold" value="+"> <span>+ ভাঁজযোগ্য, খোলা</span></label>
+          <label class="mt-option"><input type="radio" name="fold" value="-"> <span>- ভাঁজযোগ্য, বন্ধ</span></label>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>লেআউট</legend>
+          <label class="mt-field" for="co-depth">অন্য কলআউটের ভেতরে নেস্ট করুন <select id="co-depth" name="depth">
+            <option value="0" selected>০: নেস্টেড নয়</option>
+            <option value="1">১ স্তর</option>
+            <option value="2">২ স্তর</option>
+            <option value="3">৩ স্তর</option>
+          </select></label>
+          <label class="mt-option"><input type="checkbox" name="blank" checked> <span>কলআউটের ভেতরে ফাঁকা লাইন রাখুন</span></label>
+          <p class="mt-hint">সম্পূর্ণ ফাঁকা লাইন কলআউট শেষ করে দেয়, তাই রেখে দেওয়া ফাঁকা লাইন &gt; হিসেবে লেখা হয়। এটি বন্ধ করলে ফাঁকা লাইন বাদ যাবে।</p>
+        </fieldset>
+      </form>
+      <div class="mt-output-head" id="co-output-head" hidden>
+        <h3 id="co-output-title">আপনার কলআউট</h3>
+        <div class="mt-actions">
+          <button type="button" class="btn-primary" id="co-copy">কপি করুন</button>
+        </div>
+      </div>
+      <p class="mt-status" id="co-status" role="status"></p>
+      <pre class="guide-code co-output" id="co-output" aria-labelledby="co-output-title" tabindex="0" hidden><code id="co-output-code"></code></pre>
+      <p class="mt-hint" id="co-nest-hint" hidden>যে বাইরের কলআউটের ভেতরে এটি নেস্ট করছেন, তার বডিতে এটি পেস্ট করুন।</p>
+      <h3 id="co-preview-title" hidden>প্রিভিউ (আনুমানিক)</h3>
+      <div class="co-preview" id="co-preview" role="group" aria-labelledby="co-preview-title" hidden></div>
+      <p class="mt-hint" id="co-preview-note" hidden>প্রিভিউ আনুমানিক। আসল রং, আইকন ও ফাঁক আপনার থিম ঠিক করে।</p>
+      <div class="co-gallery-wrap">
+        <h3 id="co-gallery-title">টাইপ গ্যালারি</h3>
+        <p class="mt-hint">উপরে লোড করতে একটি টাইপ বাছুন।</p>
+        <div class="co-gallery" id="co-gallery" role="group" aria-labelledby="co-gallery-title"></div>
+      </div>
+      <div hidden id="co-messages">
+        <span data-message="copied">ক্লিপবোর্ডে কপি হয়েছে।</span>
+        <span data-message="copy-failed">কপি করা যায়নি। টেক্সট নির্বাচন করে নিজে কপি করুন।</span>
+        <span data-message="loaded">উদাহরণ লোড হয়েছে।</span>
+        <span data-message="cleared">মুছে ফেলা হয়েছে।</span>
+        <span data-message="default-title">ফাঁকা থাকলে ডিফল্ট শিরোনাম: {title}</span>
+        <span data-message="custom-warning">এটি বিল্ট-ইন টাইপ নয়। CSS স্নিপেট সংজ্ঞায়িত না করলে Obsidian এটি note স্টাইলে দেখায়।</span>
+        <span data-message="type-loaded">টাইপ লোড হয়েছে।</span>
+      </div>
+
+      <h2 id="syntax">২. কলআউট সিনট্যাক্স</h2>
+      <pre class="guide-code"><code>&gt; [!type] Title
+&gt; Body line one.
+&gt; Body line two.</code></pre>
+      <ul>
+        <li><strong>টাইপ।</strong> ব্লককোটের প্রথম লাইন শুরু হয় বিস্ময়বোধক চিহ্নের পরে ব্র্যাকেটে টাইপ দিয়ে: <code>&gt; [!info]</code>. <a href="https://obsidian.md/help/callouts" target="_blank" rel="noopener">Obsidian সহায়তা</a> বলে টাইপ শনাক্তকারী ছোট-বড় হাতের অক্ষরে সংবেদনশীল নয়, আর অসমর্থিত টাইপ ফিরে যায় <code>note</code>.</li>
+        <li><strong>শিরোনাম।</strong> ব্র্যাকেটের পরের টেক্সট শিরোনামের জায়গা নেয়। এটি না থাকলে Obsidian টাইপ শনাক্তকারীটি টাইটেল কেসে দেখায়, তাই <code>&gt; [!tip]</code> “Tip” দেখায়।</li>
+        <li><strong>বডি।</strong> পরের প্রতিটি লাইন শুরু হয় <code>&gt; </code>। বডিতে Markdown, উইকিলিংক ও এমবেড থাকতে পারে।</li>
+        <li><strong>শুধু শিরোনাম।</strong> আপনি বডি বাদ দিতে পারেন: <code>&gt; [!tip] Remember to save</code> একটি সম্পূর্ণ কলআউট।</li>
+      </ul>
+
+      <h2 id="types">৩. সব কলআউট টাইপ ও অ্যালিয়াস</h2>
+      <p>Obsidian Help এই বিল্ট-ইন টাইপগুলো তালিকাভুক্ত করে। প্রতিটি অ্যালিয়াস যে টাইপের, তার সাথেই দেওয়া আছে, যেমন <code>tldr</code> সহ <code>abstract</code>.</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th>টাইপ</th><th>অ্যালিয়াস</th><th>সাধারণ ব্যবহার</th></tr></thead>
+          <tbody>
+            <tr><td><code>note</code></td><td>কিছুই নয়</td><td>একটি সাধারণ মন্তব্য। অজানা টাইপ যে স্টাইলে ফিরে যায়, সেটিও এটি।</td></tr>
+            <tr><td><code>abstract</code></td><td><code>summary</code>, <code>tldr</code></td><td>নোটের শুরুতে একটি সারসংক্ষেপ।</td></tr>
+            <tr><td><code>info</code></td><td>কিছুই নয়</td><td>পটভূমির তথ্য।</td></tr>
+            <tr><td><code>todo</code></td><td>কিছুই নয়</td><td>যা এখনও করা বাকি।</td></tr>
+            <tr><td><code>tip</code></td><td><code>hint</code>, <code>important</code></td><td>একটি পরামর্শ বা মূল বিষয়।</td></tr>
+            <tr><td><code>success</code></td><td><code>check</code>, <code>done</code></td><td>একটি সম্পন্ন ধাপ বা ভালো ফলাফল।</td></tr>
+            <tr><td><code>question</code></td><td><code>help</code>, <code>faq</code></td><td>একটি খোলা প্রশ্ন বা প্রায়ই জিজ্ঞাসিত প্রশ্ন।</td></tr>
+            <tr><td><code>warning</code></td><td><code>caution</code>, <code>attention</code></td><td>যে বিষয়ে সতর্ক থাকতে হবে।</td></tr>
+            <tr><td><code>failure</code></td><td><code>fail</code>, <code>missing</code></td><td>কী ভুল হয়েছে বা কী বাদ পড়েছে।</td></tr>
+            <tr><td><code>danger</code></td><td><code>error</code></td><td>গুরুতর ঝুঁকি বা একটি এরর বার্তা।</td></tr>
+            <tr><td><code>bug</code></td><td>কিছুই নয়</td><td>একটি পরিচিত বাগ।</td></tr>
+            <tr><td><code>example</code></td><td>কিছুই নয়</td><td>একটি কার্যকর উদাহরণ।</td></tr>
+            <tr><td><code>quote</code></td><td><code>cite</code></td><td>উৎসসহ একটি উদ্ধৃতি।</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>টাইপ ও অ্যালিয়াস Obsidian Help থেকে নেওয়া। “সাধারণ ব্যবহার” কলামটি একটি পরামর্শ, Obsidian এটি নির্ধারণ করে না। ডিফল্ট লুকে প্রতিটি টাইপের নিজস্ব রং ও আইকন আছে; থিম দুটিই বদলাতে পারে।</p>
+
+      <h2 id="folding">৪. ভাঁজযোগ্য কলআউট: + বনাম -</h2>
+      <p>শেষ ব্র্যাকেটের ঠিক পরে একটি প্লাস বা মাইনাস যোগ করুন:</p>
+      <pre class="guide-code"><code>&gt; [!faq]+ Open by default
+&gt; This callout is foldable and starts expanded.
+
+&gt; [!faq]- Closed by default
+&gt; This callout is foldable and starts collapsed.</code></pre>
+      <p>Obsidian Help বর্ণনা করে <code>+</code> ভাঁজযোগ্য এবং ডিফল্টে খোলা হিসেবে, এবং <code>-</code> ভাঁজযোগ্য এবং ডিফল্টে বন্ধ হিসেবে। দুটির কোনোটিই না থাকলে কলআউট ভাঁজযোগ্য নয়। <code>+</code> অথবা <code>-</code> Markdown-এর অংশ, তাই এটি ফাইলেই থাকে।</p>
+
+      <h2 id="nesting">৫. নেস্টেড কলআউট, তালিকা, কোড ও এমবেড</h2>
+      <p>নেস্টেড কলআউটের জন্য আরেকটি যোগ করুন <code>&gt;</code> প্রতিটি স্তরের জন্য:</p>
+      <pre class="guide-code"><code>&gt; [!question] Can callouts be nested?
+&gt; &gt; [!example] Yes
+&gt; &gt; Add one more &gt; for each level.</code></pre>
+      <p>জেনারেটরের “অন্য কলআউটের ভেতরে নেস্ট করুন” সেটিং বাড়তি লেখে <code>&gt; </code> প্রতিটি লাইনে, তিন স্তর পর্যন্ত। ফলাফলটি বাইরের কলআউটের বডিতে পেস্ট করুন।</p>
+      <p>তালিকা, কোড ও অন্যান্য Markdown বডির ভেতরে যায়, সাথে <code>&gt; </code> প্রিফিক্স প্রতিটি লাইনে। Obsidian Help বলে, বডিতে Markdown, উইকিলিংক ও এমবেড থাকতে পারে, এবং বিদ্যমান বিষয়বস্তু, তালিকা ও কোড ব্লকসহ, নির্বাচন করে চালিয়ে মুড়ে দিতে পারেন <strong>কলআউট ঢোকান</strong> কমান্ড। জেনারেটরের বডি ঘরে একটি তালিকা বা কোড ব্লক পেস্ট করুন, এটি আপনার জন্য প্রিফিক্স যোগ করে দেবে:</p>
+      <pre class="guide-code"><code>&gt; [!info] Checklist
+&gt; - [ ] first
+&gt; - [ ] second
+&gt;
+&gt; ```
+&gt; code line
+&gt; ```</code></pre>
+
+      <h2 id="custom">৬. CSS স্নিপেট দিয়ে কাস্টম কলআউট টাইপ</h2>
+      <p>আপনার বানানো টাইপ note স্টাইলে দেখায়। Obsidian Help বলে, কাস্টম কলআউট CSS স্নিপেট বা কমিউনিটি প্লাগইনে সংজ্ঞায়িত হয়। এর উদাহরণ:</p>
+      <pre class="guide-code"><code>.callout[data-callout="custom-question-type"] {
+  --callout-color: #000000;
+  --callout-icon: lucide-alert-circle;
+}</code></pre>
+      <p>Help পেজ অনুযায়ী, <code>--callout-color</code> যেকোনো বৈধ CSS রং গ্রহণ করে, এবং <code>--callout-icon</code> lucide.dev থেকে একটি আইকন ID বা একটি SVG এলিমেন্ট নেয়। তারপর লিখুন <code>&gt; [!custom-question-type]</code> নোটে। জেনারেটরের কাস্টম টাইপ ঘরে একই নাম টাইপ করুন।</p>
+
+      <h2 id="github">৭. GitHub অ্যালার্ট বনাম Obsidian কলআউট</h2>
+      <p>GitHub-এ অ্যালার্ট নামে একটি অনুরূপ ফিচার আছে। <a href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts" target="_blank" rel="noopener">GitHub ডকুমেন্টেশন</a> পাঁচটি তালিকাভুক্ত করে: <code>NOTE</code>, <code>TIP</code>, <code>IMPORTANT</code>, <code>WARNING</code> এবং <code>CAUTION</code>.</p>
+      <pre class="guide-code"><code>&gt; [!NOTE]
+&gt; Useful information that users should know, even when skimming content.</code></pre>
+      <p>ওই পেজে ভাঁজ, কাস্টম শিরোনাম বা কাস্টম টাইপের কোনো নথি নেই; Obsidian কলআউটে তিনটিই আছে। প্রথম লাইন একই দেখায়, তাই একটি সাধারণ <code>&gt; [!note]</code> অথবা <code>&gt; [!warning]</code> প্রায়ই দুটোতেই কাজ করে, কিন্তু শুধু Obsidian-এর টাইপ, যেমন <code>[!bug]</code>, একটি <code>+</code>/<code>-</code> ভাঁজ বা শিরোনাম GitHub যা নথিভুক্ত করে তার বাইরে। কোনো ফাইল দুই জায়গাতেই পড়া হলে GitHub-এর পাঁচটি টাইপে এবং বাড়তি কিছু ছাড়াই থাকুন।</p>
+
+      <h2 id="capture">৮. Vox.md দিয়ে ভয়েস বা টেক্সটে Obsidian-এ ক্যাপচার করুন</h2>
+      <p>Vox.md আপনার ক্যাপচার করা বিষয় আপনার Obsidian ভল্ট ফোল্ডারে একটি Markdown নোট হিসেবে সেভ করে। এটি একটি ক্যাপচার অ্যাপ, আর এই পেজ দাবি করে না যে এটি আপনার জন্য কলআউট লেখে: পরে একটি যোগ করুন, এখানে তৈরি করে পেস্ট করে, বা উপরের সিনট্যাক্স টাইপ করে। ট্রান্সক্রিপ্ট থেকে বডি নিতে টেক্সটটি জেনারেটরে পেস্ট করুন, এটি প্রিফিক্স যোগ করে দেবে।</p>
+      <p>সম্পর্কিত টুল ও গাইড: <a href="/bn/blog/markdown-checklist-maker/">Markdown চেকলিস্ট মেকার</a> এবং <a href="/bn/blog/markdown-table-maker/">Markdown টেবিল মেকার</a> কলআউটের ভেতরে রাখার বিষয়বস্তুর জন্য, <a href="/bn/blog/obsidian-properties-generator/">প্রপার্টি জেনারেটর</a>, এবং <a href="/bn/blog/obsidian-daily-note-template/">দৈনিক নোট টেমপ্লেট</a> এবং <a href="/bn/blog/obsidian-meeting-notes-template/">মিটিং নোট টেমপ্লেট</a> নোটের কাঠামোর জন্য, <a href="/bn/blog/obsidian-capture-templates/">ক্যাপচার টেমপ্লেট</a> প্রিফিক্স ও পাথের জন্য, এবং <a href="/bn/blog/voice-notes-to-obsidian-iphone/">iPhone-এ Obsidian-এ ভয়েস নোট</a>.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Vox.md দিয়ে ভয়েস বা টেক্সটে আপনার ভল্টে নোট ক্যাপচার করুন</h2>
+        <p>Vox.md আপনার ডিভাইসেই ট্রান্সক্রাইব করে এবং Markdown আপনার Obsidian ভল্টে সেভ করে। রেকর্ডিং, ট্রান্সক্রিপশন ও ক্যাপচারের জন্য Vox.md Unlimited লাগে: যোগ্য অ্যাকাউন্টের জন্য ৭ দিনের বিনামূল্যে ট্রায়ালসহ সাপ্তাহিক বা বার্ষিক সাবস্ক্রিপশন, অথবা একবারের লাইফটাইম ক্রয়। App Store আপনার স্থানীয় মূল্য দেখায়।</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_bn_c7cb329bf8d9">ভয়েসে নোট ক্যাপচার করুন</a></p>
+        <p>উপরের কলআউট জেনারেটর অ্যাপ ছাড়াই পুরোপুরি কাজ করে।</p>
+      </section>
+
+      <h2 id="faq">৯. প্রশ্নোত্তর</h2>
+      <h3>আমার কলআউট কেন রেন্ডার হচ্ছে না?</h3>
+      <p>তিনটি বিষয় দেখুন। প্রথম লাইন শুরু হতে হবে <code>&gt; </code> এবং তারপর <code>[!type]</code>, বিস্ময়বোধক চিহ্নসহ এবং ব্র্যাকেটের ভেতরে কোনো স্পেস ছাড়া। বডির প্রতিটি লাইনের নিজস্ব দরকার <code>&gt;</code>। একটি ফাঁকা লাইন যাতে নেই <code>&gt;</code> ব্লককোট শেষ করে দেয়, ফলে এর পরের লাইনগুলো সাধারণ টেক্সট; এটি লিখুন <code>&gt;</code>। তবু যদি এটি সাধারণ ব্লককোট হিসেবে দেখায়, তাহলে এর মাঝে স্পেস বা টাইপো আছে কি না দেখুন <code>&gt;</code> এবং <code>[!</code>.</p>
+      <h3>কলআউটে কি শিরোনাম না থাকতে পারে?</h3>
+      <p>ঠিক তা নয়: শিরোনাম বাদ দিলে Obsidian তার বদলে টাইপ শনাক্তকারীটি টাইটেল কেসে দেখায়। শিরোনাম লুকাতে CSS লাগবে; Obsidian Help বলে, শিরোনাম লুকানোর মতো বাড়তি স্টাইলিং স্ট্যান্ডার্ড CSS সিলেক্টর দিয়ে করা যায়। আপনি তা করলে জেনারেটর শিরোনাম ফাঁকা রাখে, ফলে ডিফল্টটি পান।</p>
+      <h3>Admonition প্লাগইন, না নেটিভ কলআউট?</h3>
+      <p>নেটিভ কলআউটে কোনো প্লাগইন লাগে না এবং এটি ব্যবহার করে <code>&gt; [!type]</code> সিনট্যাক্স নিয়ে এই পেজে আলোচনা করা হয়েছে। Admonition প্লাগইন একটি আলাদা কমিউনিটি প্লাগইন, যার নিজস্ব সিনট্যাক্স আছে, এই পেজে তা আলোচনা করা হয়নি। Obsidian Help বলে, কাস্টম কলআউট টাইপ কমিউনিটি প্লাগইন থেকেও আসতে পারে।</p>
+      <h3>Obsidian মোবাইলে ও Publish-এ কি কলআউট কাজ করে?</h3>
+      <p>Obsidian Help বলে, Obsidian Publish-এ কলআউট নেটিভভাবে সমর্থিত। এর কলআউট পেজে মোবাইল নিয়ে কোনো কথা নেই, তাই এই পেজও এ বিষয়ে কোনো দাবি করে না।</p>
+      <h3>জেনারেটর কি আমার টেক্সট আপলোড করে?</h3>
+      <p>না। এই পেজের একটি স্ক্রিপ্ট আপনার ডিভাইসেই কলআউট তৈরি করে, আর পেজ কোনো নেটওয়ার্ক অনুরোধ করে না। এটি কিছু সেভ করে না: পেজ রিলোড করলে সব মুছে যায়।</p>
+
+      <nav class="toc" aria-label="সম্পর্কিত গাইড" id="related"><div class="toc-title">সেটআপ চালিয়ে যান</div><ul>
+        <li><a href="/bn/blog/markdown-checklist-maker/">Markdown চেকলিস্ট মেকার</a></li>
+        <li><a href="/bn/blog/markdown-table-maker/">Markdown টেবিল মেকার</a></li>
+        <li><a href="/bn/blog/obsidian-properties-generator/">Obsidian প্রপার্টি জেনারেটর ও চেকার</a></li>
+        <li><a href="/bn/blog/obsidian-daily-note-template/">Obsidian দৈনিক নোট টেমপ্লেট জেনারেটর</a></li>
+        <li><a href="/bn/blog/obsidian-meeting-notes-template/">Obsidian মিটিং নোট টেমপ্লেট জেনারেটর</a></li>
+        <li><a href="/bn/blog/obsidian-capture-templates/">পাথ ও টেমপ্লেটের রেসিপি</a></li>
+        <li><a href="/bn/blog/voice-notes-to-obsidian-iphone/">iPhone-এ ভয়েস নোট থেকে Obsidian-এ</a></li>
+      </ul></nav>
+<style>
+.co-tool:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.co-tool [hidden] { display: none; }
+.mt-output-head[hidden], .co-output[hidden], #co-preview-title[hidden] { display: none; }
+.co-tool .mt-field input[type="text"], .co-tool .mt-field textarea, .co-tool .mt-field select { font: inherit; font-family: var(--font-mono); font-size: 16px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; padding: 8px 10px; width: 100%; box-sizing: border-box; min-height: 44px; }
+.co-tool .mt-field textarea { resize: vertical; min-height: 140px; }
+.co-tool input:focus-visible, .co-tool textarea:focus-visible, .co-tool select:focus-visible, .co-output:focus-visible, .co-gallery button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.co-tool .mt-option { min-height: 44px; }
+.co-tool .mt-option input { width: 22px; height: 22px; }
+.mt-actions button { font: inherit; font-size: 15px; min-height: 44px; padding: 0 18px; cursor: pointer; }
+.co-output { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 28rem; overflow: auto; }
+.co-preview { padding: 14px 18px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow-wrap: anywhere; }
+.co-preview[hidden] { display: none; }
+.co-callout { --c: 8, 109, 221; background: rgba(var(--c), 0.1); border-inline-start: 4px solid rgb(var(--c)); border-radius: 8px; padding: 10px 14px; margin: 4px 0; }
+.co-callout .co-head { display: flex; align-items: center; gap: 8px; font-weight: 700; color: rgb(var(--c)); }
+.co-callout .co-icon { width: 14px; height: 14px; border-radius: 50%; background: rgb(var(--c)); flex: none; }
+.co-callout .co-chev { margin-inline-start: auto; font-weight: 400; }
+.co-callout .co-body { white-space: pre-wrap; margin-top: 6px; }
+.co-callout.is-collapsed .co-body { display: none; }
+.co-gallery { display: flex; flex-wrap: wrap; gap: 8px; }
+.co-gallery button { font: inherit; font-family: var(--font-mono); font-size: 14px; min-height: 44px; padding: 0 14px; cursor: pointer; color: var(--ink); background: rgba(var(--c), 0.12); border: 1.5px solid rgb(var(--c)); border-radius: 10px; }
+</style>
+<script>
+/* Obsidian callout generator. Runs locally: no network requests. */
+(function () {
+  var TYPES = [
+    { id: 'note', aliases: [], title: 'Note', color: '8, 109, 221' },
+    { id: 'abstract', aliases: ['summary', 'tldr'], title: 'Abstract', color: '0, 176, 255' },
+    { id: 'info', aliases: [], title: 'Info', color: '8, 109, 221' },
+    { id: 'todo', aliases: [], title: 'Todo', color: '8, 109, 221' },
+    { id: 'tip', aliases: ['hint', 'important'], title: 'Tip', color: '0, 191, 188' },
+    { id: 'success', aliases: ['check', 'done'], title: 'Success', color: '8, 185, 78' },
+    { id: 'question', aliases: ['help', 'faq'], title: 'Question', color: '224, 172, 0' },
+    { id: 'warning', aliases: ['caution', 'attention'], title: 'Warning', color: '236, 117, 0' },
+    { id: 'failure', aliases: ['fail', 'missing'], title: 'Failure', color: '233, 49, 71' },
+    { id: 'danger', aliases: ['error'], title: 'Danger', color: '233, 49, 71' },
+    { id: 'bug', aliases: [], title: 'Bug', color: '233, 49, 71' },
+    { id: 'example', aliases: [], title: 'Example', color: '120, 82, 238' },
+    { id: 'quote', aliases: ['cite'], title: 'Quote', color: '158, 158, 158' }
+  ];
+
+  function lookup(name) {
+    var n = String(name || '').toLowerCase();
+    for (var i = 0; i < TYPES.length; i++) {
+      if (TYPES[i].id === n || TYPES[i].aliases.indexOf(n) !== -1) return TYPES[i];
+    }
+    return null;
+  }
+
+  function titleCase(name) {
+    return String(name || '').replace(/[-_]+/g, ' ').replace(/\S+/g, function (w) {
+      return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+    });
+  }
+
+  /* Remove any leading blockquote markers so pasted text is not doubled. */
+  function unquote(line) { return line.replace(/^[ \t]{0,3}(?:>[ \t]?)+/, ''); }
+
+  function cleanType(value) {
+    return String(value || '').trim().replace(/[\[\]!\s]+/g, '-').replace(/^-+|-+$/g, '');
+  }
+
+  /* Build a callout. Returns {output, type, builtin, defaultTitle, warnings, body}. */
+  function run(opts) {
+    opts = opts || {};
+    var custom = cleanType(opts.custom);
+    var type = custom || cleanType(opts.type) || 'note';
+    var known = lookup(type);
+    var warnings = [];
+    if (!known) warnings.push('custom-warning');
+    var fold = opts.fold === '+' || opts.fold === '-' ? opts.fold : '';
+    var depth = Math.max(0, Math.min(3, parseInt(opts.depth, 10) || 0));
+    var title = String(opts.title || '').replace(/\s+/g, ' ').trim();
+    var keep = opts.blank !== false;
+    var lines = String(opts.body || '').replace(/^﻿/, '').replace(/\r\n?/g, '\n').split('\n')
+      .map(function (l) { return unquote(l).replace(/[ \t]+$/, ''); });
+    while (lines.length && !lines[0].trim()) lines.shift();
+    while (lines.length && !lines[lines.length - 1].trim()) lines.pop();
+    if (!keep) lines = lines.filter(function (l) { return l.trim(); });
+    var mark = new Array(depth + 2).join('> ');
+    var bare = mark.replace(/ $/, '');
+    var out = [mark + '[!' + type + ']' + fold + (title ? ' ' + title : '')];
+    lines.forEach(function (l) { out.push(l.trim() ? mark + l : bare); });
+    return {
+      output: out.join('\n'),
+      type: type,
+      builtin: known,
+      defaultTitle: titleCase(type),
+      warnings: warnings,
+      body: lines.join('\n'),
+      title: title,
+      fold: fold,
+      depth: depth
+    };
+  }
+
+  if (typeof window !== 'undefined') {
+    window.voxCallout = { run: run, types: TYPES, lookup: lookup, titleCase: titleCase };
+  }
+
+  var form = document.getElementById('co-tool');
+  if (!form) return;
+  var select = document.getElementById('co-type');
+  var custom = document.getElementById('co-custom');
+  var titleInput = document.getElementById('co-title');
+  var body = document.getElementById('co-body');
+  var code = document.getElementById('co-output-code');
+  var pre = document.getElementById('co-output');
+  var head = document.getElementById('co-output-head');
+  var preview = document.getElementById('co-preview');
+  var previewTitle = document.getElementById('co-preview-title');
+  var previewNote = document.getElementById('co-preview-note');
+  var nestHint = document.getElementById('co-nest-hint');
+  var status = document.getElementById('co-status');
+  var customWarning = document.getElementById('co-custom-warning');
+  var defaultTitle = document.getElementById('co-default-title');
+  var gallery = document.getElementById('co-gallery');
+  custom.placeholder = 'my-type';
+  var EXAMPLE = {
+    type: 'warning', title: 'Back up first', fold: '-', depth: '0',
+    body: 'Copy the vault before you change the plugin settings.\n\nThen restart Obsidian.'
+  };
+
+  function message(name, fill) {
+    var el = document.querySelector('#co-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : '';
+    if (fill) Object.keys(fill).forEach(function (key) { text = text.split('{' + key + '}').join(fill[key]); });
+    return text;
+  }
+  function say(text) {
+    status.textContent = '';
+    window.setTimeout(function () { status.textContent = text; }, 30);
+  }
+
+  TYPES.forEach(function (t) {
+    var group = document.createElement('optgroup');
+    group.label = t.id;
+    [t.id].concat(t.aliases).forEach(function (name) {
+      var o = document.createElement('option');
+      o.value = name;
+      o.textContent = name;
+      group.appendChild(o);
+    });
+    select.appendChild(group);
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = t.id;
+    b.style.setProperty('--c', t.color);
+    b.addEventListener('click', function () {
+      select.value = t.id;
+      custom.value = '';
+      update();
+      say(message('type-loaded'));
+    });
+    gallery.appendChild(b);
+  });
+
+  function options() {
+    return {
+      type: select.value, custom: custom.value, title: titleInput.value, body: body.value,
+      fold: form.elements.fold.value, depth: form.elements.depth.value, blank: form.elements.blank.checked
+    };
+  }
+
+  function renderPreview(r) {
+    preview.textContent = '';
+    var color = r.builtin ? r.builtin.color : lookup('note').color;
+    var parent = preview;
+    for (var i = 0; i < r.depth; i++) {
+      var outer = document.createElement('div');
+      outer.className = 'co-callout';
+      outer.style.setProperty('--c', '158, 158, 158');
+      parent.appendChild(outer);
+      parent = outer;
+    }
+    var box = document.createElement('div');
+    box.className = 'co-callout' + (r.fold === '-' ? ' is-collapsed' : '');
+    box.style.setProperty('--c', color);
+    var h = document.createElement('div');
+    h.className = 'co-head';
+    var icon = document.createElement('span');
+    icon.className = 'co-icon';
+    icon.setAttribute('aria-hidden', 'true');
+    var t = document.createElement('span');
+    t.textContent = r.title || r.defaultTitle;
+    h.appendChild(icon);
+    h.appendChild(t);
+    if (r.fold) {
+      var chev = document.createElement('span');
+      chev.className = 'co-chev';
+      chev.setAttribute('aria-hidden', 'true');
+      chev.textContent = r.fold === '-' ? '▸' : '▾';
+      h.appendChild(chev);
+    }
+    box.appendChild(h);
+    if (r.body) {
+      var b = document.createElement('div');
+      b.className = 'co-body';
+      b.textContent = r.body;
+      box.appendChild(b);
+    }
+    parent.appendChild(box);
+  }
+
+  function update() {
+    var r = run(options());
+    code.textContent = r.output;
+    pre.hidden = head.hidden = preview.hidden = previewTitle.hidden = previewNote.hidden = false;
+    nestHint.hidden = !r.depth;
+    renderPreview(r);
+    defaultTitle.textContent = message('default-title', { title: r.defaultTitle });
+    customWarning.textContent = r.warnings.map(message).join(' ');
+    customWarning.hidden = !r.warnings.length;
+  }
+
+  form.addEventListener('input', update);
+  form.addEventListener('change', update);
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+  document.getElementById('co-example').addEventListener('click', function () {
+    select.value = EXAMPLE.type;
+    custom.value = '';
+    titleInput.value = EXAMPLE.title;
+    body.value = EXAMPLE.body;
+    form.elements.fold.value = EXAMPLE.fold;
+    form.elements.depth.value = EXAMPLE.depth;
+    form.elements.blank.checked = true;
+    update();
+    say(message('loaded'));
+  });
+  document.getElementById('co-clear').addEventListener('click', function () {
+    select.value = 'note';
+    custom.value = '';
+    titleInput.value = '';
+    body.value = '';
+    form.elements.fold.value = '';
+    form.elements.depth.value = '0';
+    form.elements.blank.checked = true;
+    update();
+    body.focus();
+    say(message('cleared'));
+  });
+  document.getElementById('co-copy').addEventListener('click', function () {
+    var text = code.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(code);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+
+  document.getElementById('co-nojs').hidden = true;
+  form.hidden = false;
+  update();
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/bn/">হোম</a></li>
+        <li><a href="/bn/docs/">নথি</a></li>
+        <li><a href="/bn/blog/">গাইড</a></li>
+        <li><a href="/bn/compare/">তুলনা করুন</a></li>
+        <li><a href="/bn/privacy.html">গোপনীয়তা</a></li>
+        <li><a href="/bn/terms.html">শর্তাবলি</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">সহায়তা</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_bn_c7cb329bf8d9">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© ২০২৬ Vox.md · স্থানীয় নোটের দ্রুত ক্যাপচার · বিষয়বস্তু আপলোড নেই।</div>
+    </div>
+  <details class="language-switcher"><summary>ভাষা</summary><ul><li><a href="/blog/obsidian-callout-generator/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-callout-generator/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-callout-generator/" lang="bn" hreflang="bn" aria-current="page">বাংলা</a></li><li><a href="/de/blog/obsidian-callout-generator/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-callout-generator/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-callout-generator/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-callout-generator/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-callout-generator/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-callout-generator/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-callout-generator/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-callout-generator/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-callout-generator/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-callout-generator/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-callout-generator/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-callout-generator/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-callout-generator/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-callout-generator/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-callout-generator/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-callout-generator/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-callout-generator/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-callout-generator/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-callout-generator/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-callout-generator/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

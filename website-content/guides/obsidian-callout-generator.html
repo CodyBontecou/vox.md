@@ -36,7 +36,7 @@
         <fieldset class="mt-group">
           <legend>Type</legend>
           <label class="mt-field" for="co-type">Built-in type or alias <select id="co-type" name="type"></select></label>
-          <label class="mt-field" for="co-custom">Custom type (optional, replaces the choice above) <input type="text" id="co-custom" name="custom" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="my-type"></label>
+          <label class="mt-field" for="co-custom">Custom type (optional, replaces the choice above) <input type="text" id="co-custom" name="custom" spellcheck="false" autocomplete="off" autocapitalize="off"></label>
           <p class="mt-hint" id="co-custom-warning" role="status" hidden></p>
         </fieldset>
         <fieldset class="mt-group">
@@ -316,6 +316,7 @@
   var customWarning = document.getElementById('co-custom-warning');
   var defaultTitle = document.getElementById('co-default-title');
   var gallery = document.getElementById('co-gallery');
+  custom.placeholder = 'my-type';
   var EXAMPLE = {
     type: 'warning', title: 'Back up first', fold: '-', depth: '0',
     body: 'Copy the vault before you change the plugin settings.\n\nThen restart Obsidian.'

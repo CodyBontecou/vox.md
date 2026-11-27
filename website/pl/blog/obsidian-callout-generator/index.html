@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="pl" dir="ltr" data-search-section="Sekcja" data-search-guide="Poradnik" data-search-empty="Brak wyników dla „{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generator calloutów Obsidiana: każdy typ, alias i opcja zwijania | Vox.md</title>
+  <meta name="description" content="Bezpłatne narzędzie w przeglądarce, które tworzy Markdown calloutów Obsidiana: wybierz typ, tytuł i treść, ustaw zwijanie za pomocą + lub - oraz zagnieżdżanie, a potem skopiuj. Wymienia każdy typ wbudowany i alias. Nic nie jest wysyłane.">
+  <link rel="canonical" href="https://vox.isolated.tech/pl/blog/obsidian-callout-generator/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Dokumentacja Vox.md dla modeli językowych">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Generator calloutów Obsidiana: każdy typ, alias i opcja zwijania">
+  <meta property="og:description" content="Bezpłatne narzędzie w przeglądarce, które tworzy Markdown calloutów Obsidiana: wybierz typ, tytuł i treść, ustaw zwijanie za pomocą + lub - oraz zagnieżdżanie, a potem skopiuj. Wymienia każdy typ wbudowany i alias. Nic nie jest wysyłane.">
+  <meta property="og:url" content="https://vox.isolated.tech/pl/blog/obsidian-callout-generator/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-11-27">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Generator calloutów Obsidiana: każdy typ, alias i opcja zwijania">
+  <meta name="twitter:description" content="Bezpłatne narzędzie w przeglądarce, które tworzy Markdown calloutów Obsidiana: wybierz typ, tytuł i treść, ustaw zwijanie za pomocą + lub - oraz zagnieżdżanie, a potem skopiuj. Wymienia każdy typ wbudowany i alias. Nic nie jest wysyłane.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Generator calloutów Obsidiana: każdy typ, alias i opcja zwijania",
+  "description": "Bezpłatne narzędzie w przeglądarce, które tworzy Markdown calloutów Obsidiana: wybierz typ, tytuł i treść, ustaw zwijanie za pomocą + lub - oraz zagnieżdżanie, a potem skopiuj. Wymienia każdy typ wbudowany i alias. Nic nie jest wysyłane.",
+  "image": "https://vox.isolated.tech/screenshots/01-route-heading-light.png",
+  "datePublished": "2026-11-27",
+  "dateModified": "2026-11-27",
+  "mainEntityOfPage": "https://vox.isolated.tech/pl/blog/obsidian-callout-generator/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "pl",
+  "name": "Generator calloutów Obsidiana: każdy typ, alias i opcja zwijania | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/pl/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Poradniki",
+      "item": "https://vox.isolated.tech/pl/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Generator calloutów Obsidiana: każdy typ, alias i opcja zwijania",
+      "item": "https://vox.isolated.tech/pl/blog/obsidian-callout-generator/"
+    }
+  ],
+  "inLanguage": "pl",
+  "name": "Generator calloutów Obsidiana: każdy typ, alias i opcja zwijania | Vox.md",
+  "description": "Bezpłatne narzędzie w przeglądarce, które tworzy Markdown calloutów Obsidiana: wybierz typ, tytuł i treść, ustaw zwijanie za pomocą + lub - oraz zagnieżdżanie, a potem skopiuj. Wymienia każdy typ wbudowany i alias. Nic nie jest wysyłane."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/obsidian-callout-generator/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/obsidian-callout-generator/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Przejdź do poradnika</a>
+<nav aria-label="Główna nawigacja">
+  <div class="nav-inner">
+    <a href="/pl/" class="logo" aria-label="Główna Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/pl/#how">Jak to działa</a></li>
+      <li><a href="/pl/docs/">Dokumentacja</a></li>
+      <li><a href="/pl/blog/">Poradniki</a></li>
+      <li><a href="/pl/compare/">Porównaj</a></li>
+      <li><a href="/pl/privacy.html">Prywatność</a></li>
+      <li><a href="/pl/terms.html">Warunki</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_pl_c7cb329bf8d9">Pobierz Vox.md</a>
+  <details class="language-switcher"><summary>Język</summary><ul><li><a href="/blog/obsidian-callout-generator/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-callout-generator/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-callout-generator/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-callout-generator/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-callout-generator/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-callout-generator/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-callout-generator/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-callout-generator/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-callout-generator/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-callout-generator/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-callout-generator/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-callout-generator/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-callout-generator/" lang="pl" hreflang="pl" aria-current="page">Polski</a></li><li><a href="/pt-br/blog/obsidian-callout-generator/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-callout-generator/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-callout-generator/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-callout-generator/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-callout-generator/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-callout-generator/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-callout-generator/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-callout-generator/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-callout-generator/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-callout-generator/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Bezpłatne narzędzie</div>
+        <h1 class="hero-title">Generator calloutów Obsidiana: każdy typ, alias i opcja zwijania</h1>
+        <p class="hero-subtitle">Wybierz typ, dodaj tytuł i treść, ustaw zwijanie i zagnieżdżanie, a następnie skopiuj poprawny callout &gt; [!type], wraz z pełną listą typów i aliasów oraz opisem zwijanych calloutów.</p>
+      </div>
+      <aside class="meta-card" aria-label="O poradniku">
+        <dl>
+          <div><dt>Autor:</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Aktualizacja</dt><dd><time datetime="2026-11-27">27 listopada 2026</time></dd></div>
+          <div><dt>Wymaga</dt><dd>Dowolna nowoczesna przeglądarka, także Safari na iPhone. Opcjonalnie: Obsidian dla calloutów oraz Vox.md na iPhone lub Mac do zapisywania notatek głosem lub tekstem.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Generator calloutów Obsidiana: każdy typ, alias i opcja zwijania">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Krótka odpowiedź</div>
+        <p>Callout to cytat, którego pierwszy wiersz to <code>&gt; [!type] Optional title</code>. Każdy kolejny wiersz zaczyna się od <code>&gt; </code>. Dodaj <code>+</code> lub <code>-</code> zaraz po nawiasach, aby callout można było zwijać. Aby zbudować taki callout bez wpisywania prefiksów, użyj <a href="#tool">generator calloutów</a> poniżej.</p>
+      </div>
+      <pre class="guide-code" id="default-callout"><code>&gt; [!warning]- Back up first
+&gt; Copy the vault before you change the plugin settings.
+&gt;
+&gt; Then restart Obsidian.
+</code></pre>
+      <p>Generator dodaje prefiks <code>&gt; </code> do każdego wiersza (powtórzony przy zagnieżdżaniu), zachowuje puste wiersze w calloucie i nie podwaja wklejonego <code>&gt;</code> , który wkleisz. Wszystko dzieje się na tej stronie: Twój tekst nie jest nigdy wysyłany, a strona nie wysyła żadnych żądań sieciowych.</p>
+      <nav class="toc" aria-label="W poradniku"><div class="toc-title">W poradniku</div><ol>
+        <li><a href="#tool">Utwórz swój callout</a></li>
+        <li><a href="#syntax">Składnia calloutów</a></li>
+        <li><a href="#types">Wszystkie typy calloutów i aliasy</a></li>
+        <li><a href="#folding">Zwijane callouty: + a -</a></li>
+        <li><a href="#nesting">Zagnieżdżone callouty, listy, kod i osadzenia</a></li>
+        <li><a href="#custom">Własne typy calloutów z fragmentem CSS</a></li>
+        <li><a href="#github">Alerty GitHub a callouty Obsidiana</a></li>
+        <li><a href="#capture">Zapisuj w Obsidianie głosem lub tekstem z Vox.md</a></li>
+        <li><a href="#faq">Pytania</a></li>
+      </ol></nav>
+
+      <h2 id="tool">1. Utwórz swój callout</h2>
+      <p class="mt-nojs" id="co-nojs">Generator calloutów wymaga JavaScriptu. Bez niego składnia i tabela typów poniżej nadal działają jako ściągawka.</p>
+      <form class="co-tool" id="co-tool" aria-label="Generator calloutów Obsidiana" hidden>
+        <fieldset class="mt-group">
+          <legend>Typ</legend>
+          <label class="mt-field" for="co-type">Typ wbudowany lub alias <select id="co-type" name="type"></select></label>
+          <label class="mt-field" for="co-custom">Własny typ (opcjonalnie, zastępuje wybór powyżej) <input type="text" id="co-custom" name="custom" spellcheck="false" autocomplete="off" autocapitalize="off"></label>
+          <p class="mt-hint" id="co-custom-warning" role="status" hidden></p>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>Zawartość</legend>
+          <label class="mt-field" for="co-title">Tytuł (opcjonalnie) <input type="text" id="co-title" name="title" autocomplete="off" placeholder="Zostaw puste, aby użyć tytułu domyślnego"></label>
+          <p class="mt-hint" id="co-default-title" role="status"></p>
+          <label class="mt-field" for="co-body">Treść <textarea id="co-body" name="body" rows="7" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></label>
+          <div class="mt-actions">
+            <button type="button" class="btn-secondary" id="co-example">Wczytaj przykład</button>
+            <button type="button" class="btn-secondary" id="co-clear">Wyczyść</button>
+          </div>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>Zwijanie</legend>
+          <label class="mt-option"><input type="radio" name="fold" value="" checked> <span>Brak (zawsze otwarty)</span></label>
+          <label class="mt-option"><input type="radio" name="fold" value="+"> <span>+ zwijany, domyślnie rozwinięty</span></label>
+          <label class="mt-option"><input type="radio" name="fold" value="-"> <span>- zwijany, domyślnie zwinięty</span></label>
+        </fieldset>
+        <fieldset class="mt-group">
+          <legend>Układ</legend>
+          <label class="mt-field" for="co-depth">Zagnieźdź w innym calloucie <select id="co-depth" name="depth">
+            <option value="0" selected>0: bez zagnieżdżenia</option>
+            <option value="1">1 poziom</option>
+            <option value="2">2 poziomy</option>
+            <option value="3">3 poziomy</option>
+          </select></label>
+          <label class="mt-option"><input type="checkbox" name="blank" checked> <span>Zachowaj puste wiersze w calloucie</span></label>
+          <p class="mt-hint">Naprawdę pusty wiersz kończy callout, dlatego zachowane puste wiersze są zapisywane jako &gt;. Wyłącz to, aby puste wiersze pomijać.</p>
+        </fieldset>
+      </form>
+      <div class="mt-output-head" id="co-output-head" hidden>
+        <h3 id="co-output-title">Twój callout</h3>
+        <div class="mt-actions">
+          <button type="button" class="btn-primary" id="co-copy">Kopiuj</button>
+        </div>
+      </div>
+      <p class="mt-status" id="co-status" role="status"></p>
+      <pre class="guide-code co-output" id="co-output" aria-labelledby="co-output-title" tabindex="0" hidden><code id="co-output-code"></code></pre>
+      <p class="mt-hint" id="co-nest-hint" hidden>Wklej to do treści zewnętrznego calloutu, w którym go zagnieżdżasz.</p>
+      <h3 id="co-preview-title" hidden>Podgląd (przybliżony)</h3>
+      <div class="co-preview" id="co-preview" role="group" aria-labelledby="co-preview-title" hidden></div>
+      <p class="mt-hint" id="co-preview-note" hidden>Podgląd jest przybliżony. Prawdziwe kolory, ikony i odstępy ustawia Twój motyw.</p>
+      <div class="co-gallery-wrap">
+        <h3 id="co-gallery-title">Galeria typów</h3>
+        <p class="mt-hint">Wybierz typ, aby wczytać go powyżej.</p>
+        <div class="co-gallery" id="co-gallery" role="group" aria-labelledby="co-gallery-title"></div>
+      </div>
+      <div hidden id="co-messages">
+        <span data-message="copied">Skopiowano do schowka.</span>
+        <span data-message="copy-failed">Kopiowanie nie powiodło się. Zaznacz tekst i skopiuj go samodzielnie.</span>
+        <span data-message="loaded">Przykład wczytany.</span>
+        <span data-message="cleared">Wyczyszczono.</span>
+        <span data-message="default-title">Tytuł domyślny, gdy puste: {title}</span>
+        <span data-message="custom-warning">To nie jest typ wbudowany. Obsidian wyświetla go ze stylem notatki, chyba że zdefiniuje go fragment CSS.</span>
+        <span data-message="type-loaded">Wczytano typ.</span>
+      </div>
+
+      <h2 id="syntax">2. Składnia calloutów</h2>
+      <pre class="guide-code"><code>&gt; [!type] Title
+&gt; Body line one.
+&gt; Body line two.</code></pre>
+      <ul>
+        <li><strong>Typ.</strong> Pierwszy wiersz cytatu zaczyna się od typu w nawiasach po wykrzykniku: <code>&gt; [!info]</code>. <a href="https://obsidian.md/help/callouts" target="_blank" rel="noopener">Pomoc Obsidian</a> identyfikator typu nie rozróżnia wielkości liter, a nieobsługiwany typ zamienia się na <code>note</code>.</li>
+        <li><strong>Tytuł.</strong> Tekst po nawiasach zastępuje tytuł. Bez niego Obsidian pokazuje identyfikator typu z wielką literą na początku, więc <code>&gt; [!tip]</code> pokazuje „Tip”.</li>
+        <li><strong>Treść.</strong> Każdy kolejny wiersz zaczyna się od <code>&gt; </code>. Treść może zawierać Markdown, wikilinki i osadzenia.</li>
+        <li><strong>Tylko tytuł.</strong> Treść można pominąć: <code>&gt; [!tip] Remember to save</code> to kompletny callout.</li>
+      </ul>
+
+      <h2 id="types">3. Wszystkie typy calloutów i aliasy</h2>
+      <p>Pomoc Obsidiana wymienia te typy wbudowane. Każdy alias podano przy typie, do którego należy, na przykład <code>tldr</code> z <code>abstract</code>.</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th>Typ</th><th>Aliasy</th><th>Typowe użycie</th></tr></thead>
+          <tbody>
+            <tr><td><code>note</code></td><td>brak</td><td>Uwaga ogólna. Także styl, na który zamienia się nieznany typ.</td></tr>
+            <tr><td><code>abstract</code></td><td><code>summary</code>, <code>tldr</code></td><td>Podsumowanie na początku notatki.</td></tr>
+            <tr><td><code>info</code></td><td>brak</td><td>Informacje ogólne.</td></tr>
+            <tr><td><code>todo</code></td><td>brak</td><td>Coś jeszcze do zrobienia.</td></tr>
+            <tr><td><code>tip</code></td><td><code>hint</code>, <code>important</code></td><td>Rada lub najważniejszy punkt.</td></tr>
+            <tr><td><code>success</code></td><td><code>check</code>, <code>done</code></td><td>Ukończony krok lub dobry wynik.</td></tr>
+            <tr><td><code>question</code></td><td><code>help</code>, <code>faq</code></td><td>Otwarte pytanie lub często zadawane.</td></tr>
+            <tr><td><code>warning</code></td><td><code>caution</code>, <code>attention</code></td><td>Coś, na co trzeba uważać.</td></tr>
+            <tr><td><code>failure</code></td><td><code>fail</code>, <code>missing</code></td><td>Co poszło nie tak lub czego brakuje.</td></tr>
+            <tr><td><code>danger</code></td><td><code>error</code></td><td>Poważne ryzyko lub komunikat o błędzie.</td></tr>
+            <tr><td><code>bug</code></td><td>brak</td><td>Znany błąd.</td></tr>
+            <tr><td><code>example</code></td><td>brak</td><td>Przykład krok po kroku.</td></tr>
+            <tr><td><code>quote</code></td><td><code>cite</code></td><td>Cytat ze źródłem.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Typy i aliasy pochodzą z Pomocy Obsidiana. Kolumna „Typowe użycie” to sugestia, a nie coś, co definiuje Obsidian. W domyślnym wyglądzie każdy typ ma własny kolor i ikonę; motywy mogą zmienić jedno i drugie.</p>
+
+      <h2 id="folding">4. Zwijane callouty: + a -</h2>
+      <p>Dodaj plus lub minus bezpośrednio po zamykającym nawiasie:</p>
+      <pre class="guide-code"><code>&gt; [!faq]+ Open by default
+&gt; This callout is foldable and starts expanded.
+
+&gt; [!faq]- Closed by default
+&gt; This callout is foldable and starts collapsed.</code></pre>
+      <p>Pomoc Obsidiana opisuje <code>+</code> jako zwijany i domyślnie rozwinięty, a <code>-</code> jako zwijany i domyślnie zwinięty. Bez żadnego z nich callout nie jest zwijany. <code>+</code> lub <code>-</code> jest częścią Markdowna, więc zostaje w pliku.</p>
+
+      <h2 id="nesting">5. Zagnieżdżone callouty, listy, kod i osadzenia</h2>
+      <p>Aby zagnieździć callout, dodaj kolejny <code>&gt;</code> dla każdego poziomu:</p>
+      <pre class="guide-code"><code>&gt; [!question] Can callouts be nested?
+&gt; &gt; [!example] Yes
+&gt; &gt; Add one more &gt; for each level.</code></pre>
+      <p>Ustawienie generatora „Zagnieźdź w innym calloucie” zapisuje dodatkowy <code>&gt; </code> w każdym wierszu, do trzech poziomów. Wklej wynik do treści zewnętrznego calloutu.</p>
+      <p>Listy, kod i inny Markdown umieszcza się w treści, z prefiksem <code>&gt; </code> w każdym wierszu. Pomoc Obsidiana mówi, że treść może zawierać Markdown, wikilinki i osadzenia oraz że istniejącą zawartość, w tym listy i bloki kodu, można objąć, zaznaczając ją i uruchamiając polecenie <strong>Wstaw callout</strong> . Wklej listę lub blok kodu w pole treści generatora, a on doda prefiksy za Ciebie:</p>
+      <pre class="guide-code"><code>&gt; [!info] Checklist
+&gt; - [ ] first
+&gt; - [ ] second
+&gt;
+&gt; ```
+&gt; code line
+&gt; ```</code></pre>
+
+      <h2 id="custom">6. Własne typy calloutów z fragmentem CSS</h2>
+      <p>Wymyślony przez Ciebie typ jest wyświetlany ze stylem notatki. Pomoc Obsidiana mówi, że własne callouty definiuje się w fragmencie CSS lub we wtyczce społeczności. Jej przykład:</p>
+      <pre class="guide-code"><code>.callout[data-callout="custom-question-type"] {
+  --callout-color: #000000;
+  --callout-icon: lucide-alert-circle;
+}</code></pre>
+      <p>Według strony Pomocy <code>--callout-color</code> przyjmuje dowolny poprawny kolor CSS, a <code>--callout-icon</code> przyjmuje identyfikator ikony z lucide.dev lub element SVG. Następnie zapisz <code>&gt; [!custom-question-type]</code> w notatce. Wpisz tę samą nazwę w polu własnego typu w generatorze.</p>
+
+      <h2 id="github">7. Alerty GitHub a callouty Obsidiana</h2>
+      <p>GitHub ma podobną funkcję o nazwie alerty. <a href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts" target="_blank" rel="noopener">Dokumentacja GitHub</a> wymienia pięć: <code>NOTE</code>, <code>TIP</code>, <code>IMPORTANT</code>, <code>WARNING</code> i <code>CAUTION</code>.</p>
+      <pre class="guide-code"><code>&gt; [!NOTE]
+&gt; Useful information that users should know, even when skimming content.</code></pre>
+      <p>Ta strona nie opisuje zwijania, własnego tytułu ani własnych typów; callouty Obsidiana mają wszystkie trzy. Pierwszy wiersz wygląda tak samo, więc podstawowy <code>&gt; [!note]</code> lub <code>&gt; [!warning]</code> często działa w obu miejscach, ale typ tylko dla Obsidiana, taki jak <code>[!bug]</code>, <code>+</code>/<code>-</code> lub tytuł wykracza poza to, co dokumentuje GitHub. Jeśli plik jest czytany w obu miejscach, trzymaj się pięciu typów GitHub i bez dodatków.</p>
+
+      <h2 id="capture">8. Zapisuj w Obsidianie głosem lub tekstem z Vox.md</h2>
+      <p>Vox.md zapisuje to, co przechwycisz, jako notatkę Markdown w folderze Twojego skarbca Obsidian. To aplikacja do zapisywania i ta strona nie twierdzi, że sama wstawia callouty: dodaj je później, generując callout tutaj i wklejając go, albo wpisując składnię opisaną wyżej. Aby użyć treści z transkrypcji, wklej tekst do generatora, a on doda prefiksy.</p>
+      <p>Powiązane narzędzia i poradniki: <a href="/pl/blog/markdown-checklist-maker/">Kreator list kontrolnych Markdown</a> i <a href="/pl/blog/markdown-table-maker/">Kreator tabel Markdown</a> dla treści do umieszczenia w calloucie, <a href="/pl/blog/obsidian-properties-generator/">generator właściwości</a>, <a href="/pl/blog/obsidian-daily-note-template/">szablon notatki dziennej</a> i <a href="/pl/blog/obsidian-meeting-notes-template/">szablonie notatek ze spotkań</a> dla struktury notatki, <a href="/pl/blog/obsidian-capture-templates/">szablony przechwytywania</a> dla prefiksów i ścieżek oraz <a href="/pl/blog/voice-notes-to-obsidian-iphone/">notatki głosowe do Obsidiana na iPhone</a>.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Zapisuj notatki w skarbcu głosem lub tekstem z Vox.md</h2>
+        <p>Vox.md transkrybuje na Twoim urządzeniu i zapisuje Markdown w Twoim skarbcu Obsidian. Nagrywanie, transkrypcja i Capture wymagają Vox.md Unlimited: tygodniowej lub rocznej subskrypcji z 7-dniowym bezpłatnym okresem próbnym dla kwalifikujących się kont albo jednorazowego zakupu dożywotniego. App Store pokazuje cenę w Twojej walucie.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_pl_c7cb329bf8d9">Zapisuj notatki głosem</a></p>
+        <p>Generator calloutów powyżej w pełni działa bez aplikacji.</p>
+      </section>
+
+      <h2 id="faq">9. Pytania</h2>
+      <h3>Dlaczego mój callout się nie wyświetla?</h3>
+      <p>Sprawdź trzy rzeczy. Pierwszy wiersz musi zaczynać się od <code>&gt; </code> a potem <code>[!type]</code>, z wykrzyknikiem i bez spacji w nawiasach. Każdy wiersz treści potrzebuje własnego <code>&gt;</code>. Pusty wiersz bez <code>&gt;</code> kończy cytat, więc kolejne wiersze to zwykły tekst; zapisz go jako <code>&gt;</code>. Jeśli nadal wyświetla się jako zwykły cytat, sprawdź, czy nie ma spacji lub literówki między <code>&gt;</code> i <code>[!</code>.</p>
+      <h3>Czy callout może nie mieć tytułu?</h3>
+      <p>Niezupełnie: jeśli pominiesz tytuł, Obsidian pokaże zamiast niego identyfikator typu z wielką literą na początku. Aby ukryć tytuł, potrzebny jest CSS; Pomoc Obsidiana mówi, że dodatkowe stylowanie, takie jak ukrycie tytułu, można zrobić standardowymi selektorami CSS. Generator zostawia tytuł pusty, gdy to zrobisz, więc dostajesz tytuł domyślny.</p>
+      <h3>Wtyczka Admonition czy natywne callouty?</h3>
+      <p>Natywne callouty nie wymagają wtyczki i używają składni <code>&gt; [!type]</code> z tej strony. Wtyczka Admonition to osobna wtyczka społeczności z własną składnią, której ta strona nie omawia. Pomoc Obsidiana mówi, że własne typy calloutów mogą pochodzić także z wtyczki społeczności.</p>
+      <h3>Czy calloutów można używać w Obsidianie na telefonie i w Publish?</h3>
+      <p>Pomoc Obsidiana mówi, że callouty są natywnie obsługiwane w Obsidian Publish. Jej strona o calloutach nie wspomina o telefonach, więc ta strona niczego o nich nie twierdzi.</p>
+      <h3>Czy generator wysyła mój tekst?</h3>
+      <p>Nie. Skrypt na tej stronie tworzy callout na Twoim urządzeniu, a strona nie wysyła żadnych żądań sieciowych. Nic nie jest zapisywane: odświeżenie strony czyści dane.</p>
+
+      <nav class="toc" aria-label="Powiązane poradniki" id="related"><div class="toc-title">Kontynuuj konfigurację</div><ul>
+        <li><a href="/pl/blog/markdown-checklist-maker/">Kreator list kontrolnych Markdown</a></li>
+        <li><a href="/pl/blog/markdown-table-maker/">Kreator tabel Markdown</a></li>
+        <li><a href="/pl/blog/obsidian-properties-generator/">Generator i weryfikator właściwości Obsidian</a></li>
+        <li><a href="/pl/blog/obsidian-daily-note-template/">Generator szablonu notatki dziennej Obsidiana</a></li>
+        <li><a href="/pl/blog/obsidian-meeting-notes-template/">Generator szablonów notatek ze spotkań dla Obsidian</a></li>
+        <li><a href="/pl/blog/obsidian-capture-templates/">Przepisy na ścieżki i szablony</a></li>
+        <li><a href="/pl/blog/voice-notes-to-obsidian-iphone/">Notatki głosowe do Obsidian na iPhone</a></li>
+      </ul></nav>
+<style>
+.co-tool:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.co-tool [hidden] { display: none; }
+.mt-output-head[hidden], .co-output[hidden], #co-preview-title[hidden] { display: none; }
+.co-tool .mt-field input[type="text"], .co-tool .mt-field textarea, .co-tool .mt-field select { font: inherit; font-family: var(--font-mono); font-size: 16px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; padding: 8px 10px; width: 100%; box-sizing: border-box; min-height: 44px; }
+.co-tool .mt-field textarea { resize: vertical; min-height: 140px; }
+.co-tool input:focus-visible, .co-tool textarea:focus-visible, .co-tool select:focus-visible, .co-output:focus-visible, .co-gallery button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.co-tool .mt-option { min-height: 44px; }
+.co-tool .mt-option input { width: 22px; height: 22px; }
+.mt-actions button { font: inherit; font-size: 15px; min-height: 44px; padding: 0 18px; cursor: pointer; }
+.co-output { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 28rem; overflow: auto; }
+.co-preview { padding: 14px 18px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow-wrap: anywhere; }
+.co-preview[hidden] { display: none; }
+.co-callout { --c: 8, 109, 221; background: rgba(var(--c), 0.1); border-inline-start: 4px solid rgb(var(--c)); border-radius: 8px; padding: 10px 14px; margin: 4px 0; }
+.co-callout .co-head { display: flex; align-items: center; gap: 8px; font-weight: 700; color: rgb(var(--c)); }
+.co-callout .co-icon { width: 14px; height: 14px; border-radius: 50%; background: rgb(var(--c)); flex: none; }
+.co-callout .co-chev { margin-inline-start: auto; font-weight: 400; }
+.co-callout .co-body { white-space: pre-wrap; margin-top: 6px; }
+.co-callout.is-collapsed .co-body { display: none; }
+.co-gallery { display: flex; flex-wrap: wrap; gap: 8px; }
+.co-gallery button { font: inherit; font-family: var(--font-mono); font-size: 14px; min-height: 44px; padding: 0 14px; cursor: pointer; color: var(--ink); background: rgba(var(--c), 0.12); border: 1.5px solid rgb(var(--c)); border-radius: 10px; }
+</style>
+<script>
+/* Obsidian callout generator. Runs locally: no network requests. */
+(function () {
+  var TYPES = [
+    { id: 'note', aliases: [], title: 'Note', color: '8, 109, 221' },
+    { id: 'abstract', aliases: ['summary', 'tldr'], title: 'Abstract', color: '0, 176, 255' },
+    { id: 'info', aliases: [], title: 'Info', color: '8, 109, 221' },
+    { id: 'todo', aliases: [], title: 'Todo', color: '8, 109, 221' },
+    { id: 'tip', aliases: ['hint', 'important'], title: 'Tip', color: '0, 191, 188' },
+    { id: 'success', aliases: ['check', 'done'], title: 'Success', color: '8, 185, 78' },
+    { id: 'question', aliases: ['help', 'faq'], title: 'Question', color: '224, 172, 0' },
+    { id: 'warning', aliases: ['caution', 'attention'], title: 'Warning', color: '236, 117, 0' },
+    { id: 'failure', aliases: ['fail', 'missing'], title: 'Failure', color: '233, 49, 71' },
+    { id: 'danger', aliases: ['error'], title: 'Danger', color: '233, 49, 71' },
+    { id: 'bug', aliases: [], title: 'Bug', color: '233, 49, 71' },
+    { id: 'example', aliases: [], title: 'Example', color: '120, 82, 238' },
+    { id: 'quote', aliases: ['cite'], title: 'Quote', color: '158, 158, 158' }
+  ];
+
+  function lookup(name) {
+    var n = String(name || '').toLowerCase();
+    for (var i = 0; i < TYPES.length; i++) {
+      if (TYPES[i].id === n || TYPES[i].aliases.indexOf(n) !== -1) return TYPES[i];
+    }
+    return null;
+  }
+
+  function titleCase(name) {
+    return String(name || '').replace(/[-_]+/g, ' ').replace(/\S+/g, function (w) {
+      return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+    });
+  }
+
+  /* Remove any leading blockquote markers so pasted text is not doubled. */
+  function unquote(line) { return line.replace(/^[ \t]{0,3}(?:>[ \t]?)+/, ''); }
+
+  function cleanType(value) {
+    return String(value || '').trim().replace(/[\[\]!\s]+/g, '-').replace(/^-+|-+$/g, '');
+  }
+
+  /* Build a callout. Returns {output, type, builtin, defaultTitle, warnings, body}. */
+  function run(opts) {
+    opts = opts || {};
+    var custom = cleanType(opts.custom);
+    var type = custom || cleanType(opts.type) || 'note';
+    var known = lookup(type);
+    var warnings = [];
+    if (!known) warnings.push('custom-warning');
+    var fold = opts.fold === '+' || opts.fold === '-' ? opts.fold : '';
+    var depth = Math.max(0, Math.min(3, parseInt(opts.depth, 10) || 0));
+    var title = String(opts.title || '').replace(/\s+/g, ' ').trim();
+    var keep = opts.blank !== false;
+    var lines = String(opts.body || '').replace(/^﻿/, '').replace(/\r\n?/g, '\n').split('\n')
+      .map(function (l) { return unquote(l).replace(/[ \t]+$/, ''); });
+    while (lines.length && !lines[0].trim()) lines.shift();
+    while (lines.length && !lines[lines.length - 1].trim()) lines.pop();
+    if (!keep) lines = lines.filter(function (l) { return l.trim(); });
+    var mark = new Array(depth + 2).join('> ');
+    var bare = mark.replace(/ $/, '');
+    var out = [mark + '[!' + type + ']' + fold + (title ? ' ' + title : '')];
+    lines.forEach(function (l) { out.push(l.trim() ? mark + l : bare); });
+    return {
+      output: out.join('\n'),
+      type: type,
+      builtin: known,
+      defaultTitle: titleCase(type),
+      warnings: warnings,
+      body: lines.join('\n'),
+      title: title,
+      fold: fold,
+      depth: depth
+    };
+  }
+
+  if (typeof window !== 'undefined') {
+    window.voxCallout = { run: run, types: TYPES, lookup: lookup, titleCase: titleCase };
+  }
+
+  var form = document.getElementById('co-tool');
+  if (!form) return;
+  var select = document.getElementById('co-type');
+  var custom = document.getElementById('co-custom');
+  var titleInput = document.getElementById('co-title');
+  var body = document.getElementById('co-body');
+  var code = document.getElementById('co-output-code');
+  var pre = document.getElementById('co-output');
+  var head = document.getElementById('co-output-head');
+  var preview = document.getElementById('co-preview');
+  var previewTitle = document.getElementById('co-preview-title');
+  var previewNote = document.getElementById('co-preview-note');
+  var nestHint = document.getElementById('co-nest-hint');
+  var status = document.getElementById('co-status');
+  var customWarning = document.getElementById('co-custom-warning');
+  var defaultTitle = document.getElementById('co-default-title');
+  var gallery = document.getElementById('co-gallery');
+  custom.placeholder = 'my-type';
+  var EXAMPLE = {
+    type: 'warning', title: 'Back up first', fold: '-', depth: '0',
+    body: 'Copy the vault before you change the plugin settings.\n\nThen restart Obsidian.'
+  };
+
+  function message(name, fill) {
+    var el = document.querySelector('#co-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : '';
+    if (fill) Object.keys(fill).forEach(function (key) { text = text.split('{' + key + '}').join(fill[key]); });
+    return text;
+  }
+  function say(text) {
+    status.textContent = '';
+    window.setTimeout(function () { status.textContent = text; }, 30);
+  }
+
+  TYPES.forEach(function (t) {
+    var group = document.createElement('optgroup');
+    group.label = t.id;
+    [t.id].concat(t.aliases).forEach(function (name) {
+      var o = document.createElement('option');
+      o.value = name;
+      o.textContent = name;
+      group.appendChild(o);
+    });
+    select.appendChild(group);
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = t.id;
+    b.style.setProperty('--c', t.color);
+    b.addEventListener('click', function () {
+      select.value = t.id;
+      custom.value = '';
+      update();
+      say(message('type-loaded'));
+    });
+    gallery.appendChild(b);
+  });
+
+  function options() {
+    return {
+      type: select.value, custom: custom.value, title: titleInput.value, body: body.value,
+      fold: form.elements.fold.value, depth: form.elements.depth.value, blank: form.elements.blank.checked
+    };
+  }
+
+  function renderPreview(r) {
+    preview.textContent = '';
+    var color = r.builtin ? r.builtin.color : lookup('note').color;
+    var parent = preview;
+    for (var i = 0; i < r.depth; i++) {
+      var outer = document.createElement('div');
+      outer.className = 'co-callout';
+      outer.style.setProperty('--c', '158, 158, 158');
+      parent.appendChild(outer);
+      parent = outer;
+    }
+    var box = document.createElement('div');
+    box.className = 'co-callout' + (r.fold === '-' ? ' is-collapsed' : '');
+    box.style.setProperty('--c', color);
+    var h = document.createElement('div');
+    h.className = 'co-head';
+    var icon = document.createElement('span');
+    icon.className = 'co-icon';
+    icon.setAttribute('aria-hidden', 'true');
+    var t = document.createElement('span');
+    t.textContent = r.title || r.defaultTitle;
+    h.appendChild(icon);
+    h.appendChild(t);
+    if (r.fold) {
+      var chev = document.createElement('span');
+      chev.className = 'co-chev';
+      chev.setAttribute('aria-hidden', 'true');
+      chev.textContent = r.fold === '-' ? '▸' : '▾';
+      h.appendChild(chev);
+    }
+    box.appendChild(h);
+    if (r.body) {
+      var b = document.createElement('div');
+      b.className = 'co-body';
+      b.textContent = r.body;
+      box.appendChild(b);
+    }
+    parent.appendChild(box);
+  }
+
+  function update() {
+    var r = run(options());
+    code.textContent = r.output;
+    pre.hidden = head.hidden = preview.hidden = previewTitle.hidden = previewNote.hidden = false;
+    nestHint.hidden = !r.depth;
+    renderPreview(r);
+    defaultTitle.textContent = message('default-title', { title: r.defaultTitle });
+    customWarning.textContent = r.warnings.map(message).join(' ');
+    customWarning.hidden = !r.warnings.length;
+  }
+
+  form.addEventListener('input', update);
+  form.addEventListener('change', update);
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+  document.getElementById('co-example').addEventListener('click', function () {
+    select.value = EXAMPLE.type;
+    custom.value = '';
+    titleInput.value = EXAMPLE.title;
+    body.value = EXAMPLE.body;
+    form.elements.fold.value = EXAMPLE.fold;
+    form.elements.depth.value = EXAMPLE.depth;
+    form.elements.blank.checked = true;
+    update();
+    say(message('loaded'));
+  });
+  document.getElementById('co-clear').addEventListener('click', function () {
+    select.value = 'note';
+    custom.value = '';
+    titleInput.value = '';
+    body.value = '';
+    form.elements.fold.value = '';
+    form.elements.depth.value = '0';
+    form.elements.blank.checked = true;
+    update();
+    body.focus();
+    say(message('cleared'));
+  });
+  document.getElementById('co-copy').addEventListener('click', function () {
+    var text = code.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(code);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+
+  document.getElementById('co-nojs').hidden = true;
+  form.hidden = false;
+  update();
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/pl/">Strona główna</a></li>
+        <li><a href="/pl/docs/">Dokumentacja</a></li>
+        <li><a href="/pl/blog/">Poradniki</a></li>
+        <li><a href="/pl/compare/">Porównaj</a></li>
+        <li><a href="/pl/privacy.html">Prywatność</a></li>
+        <li><a href="/pl/terms.html">Warunki</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Wsparcie</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_pl_c7cb329bf8d9">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Szybki zapis lokalnych notatek · Bez wysyłania treści.</div>
+    </div>
+  <details class="language-switcher"><summary>Język</summary><ul><li><a href="/blog/obsidian-callout-generator/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-callout-generator/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-callout-generator/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-callout-generator/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-callout-generator/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-callout-generator/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-callout-generator/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-callout-generator/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-callout-generator/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-callout-generator/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-callout-generator/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-callout-generator/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-callout-generator/" lang="pl" hreflang="pl" aria-current="page">Polski</a></li><li><a href="/pt-br/blog/obsidian-callout-generator/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-callout-generator/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-callout-generator/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-callout-generator/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-callout-generator/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-callout-generator/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-callout-generator/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-callout-generator/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-callout-generator/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-callout-generator/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
