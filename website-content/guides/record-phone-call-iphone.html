@@ -1,0 +1,121 @@
+<!--{
+  "slug": "record-phone-call-iphone",
+  "title": "How to record a phone call on iPhone and transcribe it privately",
+  "description": "Record a call with the iPhone Phone app, find it in Notes, save the audio to Files, then transcribe it on your iPhone with Vox.md and keep a Markdown note.",
+  "subtitle": "Apple’s built-in call recording, step by step, and what to do next to get a transcript you keep without uploading the call.",
+  "eyebrow": "iPhone · Call recording · On-device",
+  "requirements": "iPhone with Call Recording (iOS 18 or later, where Apple offers it) · Vox.md: iOS 17.6+ · prepared transcription backend",
+  "published": "2026-11-27",
+  "modified": "2026-11-27",
+  "image": "/screenshots/00-capture-light.png"
+}-->
+<div class="answer-box" id="short-answer"><div class="label">The short answer</div>
+        <p>Start the call, tap <strong>More</strong>, then tap <strong>Call Recording</strong>. Both people hear a notice. The recording and, where supported, a transcript are saved to the Call Recordings folder in Notes. To keep a private transcript as a Markdown note, save the audio to Files and import it into Vox.md, which transcribes it on your iPhone.</p>
+      </div>
+      <p>The recording steps come from Apple’s own documentation, linked where they are used. The Vox.md steps follow the <a href="../../docs/#inline-voice">inline voice documentation</a> and the app’s shipped behavior; they were traced through documentation and source, not performed on a new device walkthrough.</p>
+      <nav class="toc" aria-label="In this guide"><div class="toc-title">In this guide</div><ol>
+        <li><a href="#consent">Before you record: consent and the law</a></li>
+        <li><a href="#record">Record a call with the Phone app</a></li>
+        <li><a href="#notes">Find the recording and Apple’s transcript in Notes</a></li>
+        <li><a href="#save-audio">Save the call audio to Files</a></li>
+        <li><a href="#when">When Apple’s transcript isn’t enough</a></li>
+        <li><a href="#vox">Transcribe the call on your iPhone with Vox.md</a></li>
+        <li><a href="#privacy">What leaves your iPhone</a></li>
+        <li><a href="#limits">Limits</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ol></nav>
+
+      <h2 id="consent">Before you record: consent and the law</h2>
+      <p>Apple’s guide says to make sure the other person on the call is willing to be recorded. Rules on recording calls differ by state and country, and some places require everyone on the call to agree. Check the law where you and the other person are. This is general information, not legal advice.</p>
+      <p>A simple habit: say at the start that you would like to record, and wait for a yes. For interviews, also decide how the audio will be stored and used; the <a href="../transcribe-interview/">interview transcription guide</a> covers consent and review for a recorded phone interview.</p>
+
+      <h2 id="record">Record a call with the Phone app</h2>
+      <p>Apple documents these steps in <a href="https://support.apple.com/guide/iphone/record-and-transcribe-a-call-iph57c6590e9/ios" target="_blank" rel="noopener">Record and transcribe a call on iPhone</a>:</p>
+      <ol>
+        <li>Open the <strong>Phone</strong> app and make a call.</li>
+        <li>During the call, tap <strong>More</strong>, then tap <strong>Call Recording</strong>.</li>
+        <li>Both call participants hear an audio notice that the call is being recorded.</li>
+        <li>To stop, tap the stop control or hang up.</li>
+        <li>iPhone saves the recording to a <strong>Call Recordings</strong> folder in the Notes app. Tap <strong>View Saved Call</strong> to open it.</li>
+      </ol>
+      <p><strong>Requirements.</strong> Apple’s support article <a href="https://support.apple.com/en-us/121583" target="_blank" rel="noopener">How to record and transcribe a call on iPhone</a> says you can record a phone call or FaceTime audio call on iPhone starting in iOS 18. Call Recording is not offered in every language and region. Before you begin, check Apple’s <a href="https://www.apple.com/ios/feature-availability/" target="_blank" rel="noopener">iOS and iPadOS Feature Availability</a> page for yours.</p>
+      <p>Apple also says Call Recording is on by default and can be turned off in <strong>Settings → Apps → Phone → Call Recording</strong>. If you do not see the option during a call, check that setting, your iOS version and the availability page.</p>
+
+      <h2 id="notes">Find the recording and Apple’s transcript in Notes</h2>
+      <ol>
+        <li>Open the <strong>Notes</strong> app.</li>
+        <li>Open the <strong>Call Recordings</strong> folder and tap a note.</li>
+        <li>Tap the recording to play it.</li>
+      </ol>
+      <p>Per Apple, a transcript is available only in select regions and languages, and it may not be ready right away: you may see a message that transcription is in progress. If you see no transcript, Apple says your iPhone does not meet the minimum requirements or did not detect a supported language. Apple’s note is to verify a transcript’s accuracy before relying on it. In the transcript, Apple identifies the speaker of each statement, and you can copy the transcript or add it to the note.</p>
+      <p>Apple says a <strong>Summary</strong> option appears if your iPhone supports Apple Intelligence. Check <a href="https://support.apple.com/guide/iphone/record-and-transcribe-a-call-iph57c6590e9/ios" target="_blank" rel="noopener">Apple’s page</a> for the supported devices and languages.</p>
+
+      <h2 id="save-audio">Save the call audio to Files</h2>
+      <p>To use the audio in another app, get it out of Notes. Per Apple’s guide, with the recording open:</p>
+      <ol>
+        <li>Tap <strong>More</strong>, then tap <strong>Save Audio Files</strong>, and choose where to save the recording. Pick a folder in Files you can find again.</li>
+        <li>Or tap <strong>More</strong>, then <strong>Share Audio</strong>, and choose how to share it.</li>
+      </ol>
+      <p><strong>Do not delete the audio in Notes until you have a copy you trust.</strong> Apple says that deleting the audio recording also deletes its transcript. If saving stalls, try again after checking that your iPhone has free storage and that the destination folder is available.</p>
+
+      <h2 id="when">When Apple’s transcript isn’t enough</h2>
+      <p>If Apple’s transcript is enough, use it: copy it from Notes and you are done. People look further when:</p>
+      <ul>
+        <li>No transcript appears for their region or language.</li>
+        <li>They want the text in their own notes app or Obsidian vault, as a plain Markdown file.</li>
+        <li>They want a transcription backend they chose, with speakers labeled by their own names.</li>
+        <li>They want the call text next to their other notes, such as a <a href="../obsidian-meeting-notes-template/">meeting notes</a> structure.</li>
+      </ul>
+
+      <h2 id="vox">Transcribe the call on your iPhone with Vox.md</h2>
+      <p>This is the same export-then-import pattern as <a href="../transcribe-voice-memos-iphone/">transcribing Voice Memos</a>; for calls, the audio comes from Notes instead.</p>
+      <ol>
+        <li><strong>Choose a backend.</strong> Automatic uses Apple Speech on a supported iOS 26 device and language. Otherwise download Whisper or Parakeet first, while you have a connection. <a href="../../compare/whisper-vs-parakeet/">Whisper vs Parakeet</a> helps you choose, and the <a href="../../docs/#models">models reference</a> lists requirements. <a href="../offline-transcription-iphone-markdown/">Offline transcription on iPhone</a> covers preparing a model.</li>
+        <li><strong>Optional: turn on Identify Speakers</strong> in the Route. Labels are anonymous and best effort (“Speaker 1”, “Speaker 2”), and you rename them yourself. The first use prepares a separate speaker model. If it cannot run, the plain transcript is kept.</li>
+        <li><strong>Import the file.</strong> In Quick Capture’s voice controls, open <strong>Import audio or video</strong> and pick the saved call audio from Files.</li>
+        <li><strong>Review and send.</strong> Use <strong>Add to Draft</strong> so you can check names, numbers and dates against the audio, then send it to the Route’s destination, such as an Obsidian vault folder or a Files folder.</li>
+        <li><strong>Optional: keep the audio</strong> and embed it in the note with <code>![[recording.m4a]]</code>. See the <a href="../../docs/#inline-voice">documentation</a> for the retained-audio options.</li>
+      </ol>
+      <p><strong>Importing re-transcribes the audio.</strong> Vox.md does not import Apple’s transcript, so the wording can differ from what Notes shows.</p>
+      <section class="cta" aria-labelledby="guide-cta-mid">
+        <h2 id="guide-cta-mid">Transcribe your call recordings on your iPhone.</h2>
+        <p>Download Vox.md to transcribe your call recordings on your iPhone and save them as Markdown notes.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Download Vox.md</a></p>
+      </section>
+
+      <h2 id="privacy">What leaves your iPhone</h2>
+      <p>Vox.md transcribes on the device with Apple Speech, Whisper or Parakeet, and the call audio is not sent to Vox.md servers. Downloading a model contacts the model host. If your destination folder syncs, such as iCloud Drive, that provider syncs the file under its own terms. See the <a href="../../privacy.html">privacy policy</a>.</p>
+
+      <h2 id="limits">Limits</h2>
+      <ul>
+        <li>Vox.md does not record calls. Recording works only where Apple offers Call Recording.</li>
+        <li>There is no live transcription during the call in Vox.md. You transcribe after the call, from a saved audio file.</li>
+        <li>Vox.md does not import Apple’s transcript.</li>
+        <li>Accuracy is best effort and depends on the audio, language and backend. Review the text against the recording.</li>
+        <li>Recording, transcription and Capture need Vox.md Unlimited: a weekly or yearly subscription with a 7-day free trial for eligible accounts, or a one-time lifetime purchase. See <a href="../../docs/#history-settings">pricing in the docs</a>; the App Store price is authoritative.</li>
+      </ul>
+      <p>To dictate into any app instead of transcribing a recording, see <a href="../speech-to-text-iphone/">speech to text on iPhone</a>.</p>
+
+      <h2 id="faq">FAQ</h2>
+      <h3>Does the other person know I am recording?</h3>
+      <p>Yes. Per Apple, both call participants hear an audio notice that the call is being recorded.</p>
+      <h3>Why don’t I see Call Recording?</h3>
+      <p>It may not be available in your language and region (see <a href="https://www.apple.com/ios/feature-availability/" target="_blank" rel="noopener">Apple’s availability page</a>), your iOS version may be older than iOS 18, or the feature may be turned off in Settings → Apps → Phone.</p>
+      <h3>Where are call recordings saved?</h3>
+      <p>In the Call Recordings folder in the Notes app.</p>
+      <h3>Can I get the audio file?</h3>
+      <p>Yes. Open the recording in Notes, tap More, then tap Save Audio Files and choose a location.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Keep your call transcripts as notes you own.</h2>
+        <p>Download Vox.md to transcribe your call recordings on your iPhone and save them as Markdown notes.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Get Vox.md</a></p>
+      </section>
+      <nav class="toc" aria-label="Related guides" id="related"><div class="toc-title">Continue</div><ul>
+        <li><a href="../transcribe-interview/">Transcribe an interview privately</a></li>
+        <li><a href="../transcribe-voice-memos-iphone/">Transcribe iPhone Voice Memos to Markdown</a></li>
+        <li><a href="../offline-transcription-iphone-markdown/">Transcribe audio to Markdown offline</a></li>
+        <li><a href="../speech-to-text-iphone/">Speech to text on iPhone</a></li>
+        <li><a href="../obsidian-meeting-notes-template/">Obsidian meeting notes template</a></li>
+        <li><a href="../../docs/#inline-voice">Documentation</a></li>
+      </ul></nav>
