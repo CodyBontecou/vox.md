@@ -93,7 +93,7 @@ class ExtractionTests(unittest.TestCase):
 
     def test_source_catalog_covers_all_english_pages(self):
         sources = locales.sources()
-        self.assertEqual(len(sources),43)
+        self.assertEqual(len(sources),44)
         self.assertIn('blog/transcribe-voice-memos-iphone/index.html',sources)
         self.assertIn('docs/location/index.html',sources)
         self.assertNotIn('zh-hans/index.html',sources)
@@ -264,7 +264,7 @@ class RenderingTests(unittest.TestCase):
             site = root/'website'
             with patch.object(locales,'CATALOGS',root), patch.object(locales,'SITE',site), patch.object(locales,'sources',return_value=originals), patch.object(locales,'_PATHS',list(originals)), patch.object(locales,'active_locales',return_value=languages), patch('download_links.load_config',return_value=config):
                 outputs = locales.output_files()
-            self.assertEqual(len(outputs),991)
+            self.assertEqual(len(outputs),1014)
             self.assertFalse(site.exists())
             from check_site import Page
             canonical_pages = {}
@@ -312,7 +312,7 @@ class RenderingTests(unittest.TestCase):
                 actual = [(a.get('hreflang'),a.get('href')) for a in entry.findall('{http://www.w3.org/1999/xhtml}link')]
                 self.assertEqual(sorted(actual),sorted(page.alternates))
                 self.assertIn(url,outputs[site/'llms.txt'])
-            self.assertEqual(len(submitted),966)
+            self.assertEqual(len(submitted),989)
             self.assertEqual(set(submitted),{url for url,(target,_) in canonical_pages.items() if target.name != '404.html'})
             self.assertEqual(len(submitted),len(set(submitted)))
 
