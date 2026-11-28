@@ -52,6 +52,10 @@ enum AdaptiveDebugSeed {
         let preferred = ProcessInfo.processInfo.arguments.contains("-VoxAdaptiveSeedInbox")
             ? StarterRoute.inbox.name : StarterRoute.meetingNotes.name
         if let route = viewModel.voxProfiles.first(where: { $0.name == preferred }) {
+            if ProcessInfo.processInfo.arguments.contains("-VoxDebugSeedRouteLocation") {
+                seedRouteLocation(presetID: route.id)
+                viewModel.refreshVoxProfiles()
+            }
             _ = viewModel.selectVox(route.id)
         }
         if ProcessInfo.processInfo.arguments.contains("-VoxAdaptiveSeedLibrary") {
@@ -63,6 +67,19 @@ enum AdaptiveDebugSeed {
         if viewModel.draft.text.isEmpty {
             viewModel.draft.text = SeedSamples.current.draft
         }
+    }
+
+    /// DEBUG only. `-VoxDebugSeedRouteLocation`: the seeded route acquires
+    /// the current location and writes it as metadata ("Finding Location…"
+    /// on the first save), with on-device AI off so the entry keeps the
+    /// typed words. Used by the #204 scroll-position e2e test.
+    private static func seedRouteLocation(presetID: String) {
+        var flows = CapturePresetStore.loadFlows()
+        guard let index = flows.firstIndex(where: { $0.id == presetID }) else { return }
+        flows[index].locationPolicy.isEnabled = true
+        flows[index].locationPolicy.metadataOutputEnabled = true
+        flows[index].captureProcessingEnabled = false
+        CapturePresetStore.saveFlows(flows)
     }
 
     private static let seededLibraryKey = "vox.debug.adaptiveSeedLibrary.v1"

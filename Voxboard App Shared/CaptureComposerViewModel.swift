@@ -66,6 +66,12 @@ final class QuickCaptureViewModel {
     /// Append presets: the entry this capture added inside the whole file,
     /// highlighted with "JUST ADDED" until the note is closed.
     var liveNoteHighlightedEntry: String?
+    /// Where the composer caret goes when the first save swaps the draft for
+    /// the whole file: just past the words the writer just added. Without it
+    /// the caret kept its draft offset, which in the longer file points at
+    /// frontmatter (e.g. location metadata) or earlier entries, and the
+    /// editor scrolled up there (#204). A new value per binding.
+    private(set) var liveNoteBoundCaret: LiveNoteBoundCaret?
     @ObservationIgnored private var autoFirstSaveTask: Task<Void, Never>?
     /// Live preview embeds: the open note's vault, kept in security scope
     /// while the note is open, and resolved embed files by target.
@@ -3139,6 +3145,12 @@ extension QuickCaptureViewModel {
         var next = CaptureDraft(voxID: presetID, destinationSelectionMode: .inherited)
         next.text = editorText
         draft = next
+        // Same update as the text, so the editor never shows the stale caret.
+        liveNoteBoundCaret = LiveNoteBoundCaret(utf16Offset: Self.boundNoteCaretOffset(
+            editorText: editorText,
+            fileText: fileText,
+            renderedEntry: receipt.renderedEntry
+        ))
         try await draftStore.save(draft)
         // Highlight the entry only when the file holds more than it (daily
         // notes, fixed notes): a new note *is* the entry.
@@ -3161,6 +3173,25 @@ extension QuickCaptureViewModel {
             ),
             text: editorText
         )
+    }
+
+    /// The caret after the first save loads the whole file: the end of the
+    /// editor when words typed during the save were appended after the file,
+    /// otherwise just past this capture's entry in the file (the last match,
+    /// as append presets add at the end), else the end of the file.
+    nonisolated static func boundNoteCaretOffset(
+        editorText: String,
+        fileText: String,
+        renderedEntry: String?
+    ) -> Int {
+        let editorEnd = (editorText as NSString).length
+        let fileEnd = (fileText as NSString).length
+        guard editorEnd == fileEnd else { return editorEnd }
+        let entry = renderedEntry?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        guard !entry.isEmpty else { return fileEnd }
+        let range = (fileText as NSString).range(of: entry, options: .backwards)
+        guard range.location != NSNotFound else { return fileEnd }
+        return range.location + range.length
     }
 
     private func attachLiveNote(binding: LiveNoteBinding, text: String) {
@@ -3635,4 +3666,11 @@ extension QuickCaptureViewModel {
             return names
         }.value
     }
+}
+
+/// A caret placement for the composer after a Live Note binds. Each value is
+/// distinct so the same offset twice still moves the caret.
+struct LiveNoteBoundCaret: Equatable {
+    let id = UUID()
+    let utf16Offset: Int
 }

@@ -847,6 +847,12 @@ struct QuickCaptureView: View {
                 .onChange(of: viewModel.recordedTranscriptCaretOffset) { previous, caret in
                     followRecordedTranscriptCaret(from: previous, to: caret)
                 }
+                .onChange(of: viewModel.liveNoteBoundCaret) { _, caret in
+                    // The first save loaded the whole file: keep the caret,
+                    // and so the scroll position, on the words just added.
+                    guard let caret else { return }
+                    composerSelection = NSRange(location: caret.utf16Offset, length: 0)
+                }
                 .onChange(of: viewModel.draft.voxID) { _, id in
                     viewModel.scheduleDraftSave()
                     if let id { selectedFlowId = id }
