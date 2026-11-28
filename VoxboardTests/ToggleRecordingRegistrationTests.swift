@@ -192,7 +192,9 @@ final class ToggleRecordingRegistrationTests: XCTestCase {
         XCTAssertFalse(OpenVoxboardRecordIntent.supportedModes.contains(.foreground(.dynamic)))
         XCTAssertTrue(OpenVoxboardRecordIntent.isDiscoverable)
         XCTAssertFalse(VoxboardRecordingControlIntent.isDiscoverable)
-        XCTAssertEqual(VoxboardRecordingControlIntent.supportedModes, .background)
+        XCTAssertFalse(VoxboardRecordingControlIntent.openAppWhenRun)
+        XCTAssertEqual(VoxboardRecordingControlIntent.supportedModes, ToggleVoxboardRecordingIntent.supportedModes,
+                       "Background-only let a control press run in the widget extension, which always opens the app (#200)")
         XCTAssertFalse(ToggleVoxboardRecordingIntent.isDiscoverable)
         XCTAssertFalse(OpenVoxboardRecordingActionIntent.isDiscoverable)
         XCTAssertTrue(OpenVoxboardRecordingActionIntent.openAppWhenRun)
@@ -260,7 +262,11 @@ final class ToggleRecordingRegistrationTests: XCTestCase {
         XCTAssertEqual(actions["ToggleVoxboardRecordingIntent"]?["outputFlags"] as? Int, 1)
         let control = try XCTUnwrap(actions["VoxboardRecordingControlIntent"])
         XCTAssertEqual(control["outputFlags"] as? Int, 1)
-        XCTAssertEqual(control["supportedModes"] as? Int, 1)
+        XCTAssertEqual(control["supportedModes"] as? Int, actions["ToggleVoxboardRecordingIntent"]?["supportedModes"] as? Int,
+                       "Controls need the Toggle's modes to run in the app process and record without switching apps (#200)")
+        XCTAssertNotEqual(control["openAppWhenRun"] as? Bool, true, "A foreground default would open the app on every press")
+        let controlProtocols = try XCTUnwrap(control["systemProtocols"] as? [String])
+        XCTAssertTrue(controlProtocols.contains("com.apple.link.systemProtocol.AudioRecording"))
         let controlParameters = try XCTUnwrap(control["parameters"] as? [[String: Any]])
         XCTAssertEqual(Set(controlParameters.compactMap { $0["name"] as? String }), ["vox", "recordingAction", "openApp", "delivery", "attachAudio"])
         let foreground = try XCTUnwrap(actions["OpenVoxboardRecordingActionIntent"])
