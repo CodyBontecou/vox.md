@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr" data-search-section="Abschnitt" data-search-guide="Anleitung" data-search-empty="Keine Treffer für „{query}“">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obsidian Bases-Generator: Filter, Ansichten und Formeln | Vox.md</title>
+  <meta name="description" content="Kostenloses Browser-Tool, das gültiges Obsidian-Bases-YAML erstellt: Filter, Formeln, Tabellen-, Karten- oder Listenansichten und Zusammenfassungen hinzufügen, dann eine .base-Datei oder einen base-Codeblock kopieren. Mit kopierfertigen Beispielen. Nichts wird hochgeladen.">
+  <link rel="canonical" href="https://vox.isolated.tech/de/blog/obsidian-bases-generator/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Vox.md-Dokumentation für Sprachmodelle">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Obsidian Bases-Generator: Filter, Ansichten und Formeln">
+  <meta property="og:description" content="Kostenloses Browser-Tool, das gültiges Obsidian-Bases-YAML erstellt: Filter, Formeln, Tabellen-, Karten- oder Listenansichten und Zusammenfassungen hinzufügen, dann eine .base-Datei oder einen base-Codeblock kopieren. Mit kopierfertigen Beispielen. Nichts wird hochgeladen.">
+  <meta property="og:url" content="https://vox.isolated.tech/de/blog/obsidian-bases-generator/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-11-28">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Obsidian Bases-Generator: Filter, Ansichten und Formeln">
+  <meta name="twitter:description" content="Kostenloses Browser-Tool, das gültiges Obsidian-Bases-YAML erstellt: Filter, Formeln, Tabellen-, Karten- oder Listenansichten und Zusammenfassungen hinzufügen, dann eine .base-Datei oder einen base-Codeblock kopieren. Mit kopierfertigen Beispielen. Nichts wird hochgeladen.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Obsidian Bases-Generator: Filter, Ansichten und Formeln",
+  "description": "Kostenloses Browser-Tool, das gültiges Obsidian-Bases-YAML erstellt: Filter, Formeln, Tabellen-, Karten- oder Listenansichten und Zusammenfassungen hinzufügen, dann eine .base-Datei oder einen base-Codeblock kopieren. Mit kopierfertigen Beispielen. Nichts wird hochgeladen.",
+  "image": "https://vox.isolated.tech/screenshots/01-route-heading-light.png",
+  "datePublished": "2026-11-28",
+  "dateModified": "2026-11-28",
+  "mainEntityOfPage": "https://vox.isolated.tech/de/blog/obsidian-bases-generator/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "de",
+  "name": "Obsidian Bases-Generator: Filter, Ansichten und Formeln | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/de/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Anleitungen",
+      "item": "https://vox.isolated.tech/de/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Obsidian Bases-Generator: Filter, Ansichten und Formeln",
+      "item": "https://vox.isolated.tech/de/blog/obsidian-bases-generator/"
+    }
+  ],
+  "inLanguage": "de",
+  "name": "Obsidian Bases-Generator: Filter, Ansichten und Formeln | Vox.md",
+  "description": "Kostenloses Browser-Tool, das gültiges Obsidian-Bases-YAML erstellt: Filter, Formeln, Tabellen-, Karten- oder Listenansichten und Zusammenfassungen hinzufügen, dann eine .base-Datei oder einen base-Codeblock kopieren. Mit kopierfertigen Beispielen. Nichts wird hochgeladen."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/obsidian-bases-generator/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Zur Anleitung springen</a>
+<nav aria-label="Hauptnavigation">
+  <div class="nav-inner">
+    <a href="/de/" class="logo" aria-label="Vox.md-Startseite">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/de/#how">So funktioniert es</a></li>
+      <li><a href="/de/docs/">Dokumentation</a></li>
+      <li><a href="/de/blog/">Anleitungen</a></li>
+      <li><a href="/de/compare/">Vergleichen</a></li>
+      <li><a href="/de/privacy.html">Datenschutz</a></li>
+      <li><a href="/de/terms.html">Bedingungen</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_de_a4dab2e250af">Vox.md laden</a>
+  <details class="language-switcher"><summary>Sprache</summary><ul><li><a href="/blog/obsidian-bases-generator/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-bases-generator/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-bases-generator/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-bases-generator/" lang="de" hreflang="de" aria-current="page">Deutsch</a></li><li><a href="/es/blog/obsidian-bases-generator/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-bases-generator/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-bases-generator/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-bases-generator/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-bases-generator/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-bases-generator/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-bases-generator/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-bases-generator/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-bases-generator/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-bases-generator/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-bases-generator/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-bases-generator/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-bases-generator/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-bases-generator/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-bases-generator/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-bases-generator/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-bases-generator/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-bases-generator/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-bases-generator/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Kostenloses Tool</div>
+        <h1 class="hero-title">Obsidian Bases-Generator: Filter, Ansichten und Formeln</h1>
+        <p class="hero-subtitle">Erstelle das YAML für eine Obsidian-Base, ohne zuerst das Schema zu lernen: Filter wählen, Ansichten hinzufügen, eine .base-Datei oder einen Codeblock kopieren und mit Links zur Obsidian-Dokumentation sehen, was jeder Schlüssel bewirkt.</p>
+      </div>
+      <aside class="meta-card" aria-label="Über diese Anleitung">
+        <dl>
+          <div><dt>Von</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Aktualisiert</dt><dd><time datetime="2026-11-28">28. November 2026</time></dd></div>
+          <div><dt>Erfordert</dt><dd>Jeder moderne Browser, auch Safari auf dem iPhone. Optional: Obsidian mit dem Core-Plugin Bases und Vox.md für iPhone oder Mac, um Notizen per Sprache oder Text aufzunehmen.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Obsidian Bases-Generator: Filter, Ansichten und Formeln">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Die kurze Antwort</div>
+        <p>Eine Base ist eine datenbankartige Ansicht deiner Notizen, geschrieben als YAML mit bis zu fünf Schlüsseln auf oberster Ebene: <code>filters</code>, <code>formulas</code>, <code>properties</code>, <code>summaries</code> und <code>views</code>. Speichere das YAML als <code>.base</code> Datei oder füge ihn in eine Notiz innerhalb eines <code>base</code> Codeblock. Der <a href="#tool">Generator</a> unten schreibt ihn für dich. Welche Obsidian-Version du brauchst, hängt vom Ansichtstyp ab: Die <a href="https://obsidian.md/help/bases/views" target="_blank" rel="noopener">Seite zu Ansichten</a> führt Table und Cards ab 1.9, List und Map ab 1.10 und Kanban ab 1.14 auf.</p>
+      </div>
+      <pre class="guide-code" id="default-base"><code>filters:
+  and:
+    - file.hasTag("project")
+properties:
+  status:
+    displayName: "Status"
+views:
+  - type: table
+    name: "Projects by status"
+    groupBy:
+      property: status
+      direction: ASC
+    order:
+      - file.name
+      - status
+      - file.mtime
+</code></pre>
+      <p>Der Generator läuft vollständig auf dieser Seite. Nichts, was du eingibst, wird hochgeladen, und die Seite stellt keine Netzwerkanfragen.</p>
+      <nav class="toc" aria-label="In dieser Anleitung"><div class="toc-title">In dieser Anleitung</div><ol>
+        <li><a href="#tool">Base erstellen</a></li>
+        <li><a href="#syntax">Bases-Syntax im Überblick</a></li>
+        <li><a href="#filters">Filter: and, or, not</a></li>
+        <li><a href="#formulas">Formeln und Zusammenfassungen</a></li>
+        <li><a href="#this">Was das bedeutet</a></li>
+        <li><a href="#examples">Beispiele zum Kopieren</a></li>
+        <li><a href="#capture">Captures in einer Base anzeigen</a></li>
+        <li><a href="#troubleshooting">Fehlerbehebung</a></li>
+        <li><a href="#faq">Fragen</a></li>
+      </ol></nav>
+
+      <h2 id="tool">1. Base erstellen</h2>
+      <p class="mt-nojs" id="bg-nojs">Der Generator benötigt JavaScript. Ohne funktionieren die Syntaxtabelle und die kopierfertigen Beispiele unten weiterhin.</p>
+      <form class="bg-tool" id="bg-tool" aria-label="Obsidian Bases-Generator" hidden>
+        <fieldset class="mt-group bg-wide">
+          <legend>Voreinstellungen</legend>
+          <div class="mt-actions" id="bg-presets"></div>
+          <p class="mt-hint">Eine Voreinstellung füllt das Formular aus. Danach kannst du alles bearbeiten.</p>
+        </fieldset>
+        <fieldset class="mt-group bg-wide">
+          <legend>Quellfilter (gelten für jede Ansicht)</legend>
+          <label class="mt-field" for="bg-mode">Übereinstimmung <select id="bg-mode" name="mode">
+            <option value="and" selected>and: alle Zeilen müssen wahr sein</option>
+            <option value="or">or: jede Zeile darf wahr sein</option>
+            <option value="not">not: keine der Zeilen darf wahr sein</option>
+          </select></label>
+          <div id="bg-filter-rows"></div>
+          <div class="mt-actions"><button type="button" class="btn-secondary" id="bg-add-filter">Filterzeile hinzufügen</button></div>
+        </fieldset>
+        <fieldset class="mt-group bg-wide">
+          <legend>Formeln (optional)</legend>
+          <div id="bg-formula-rows"></div>
+          <div class="mt-actions"><button type="button" class="btn-secondary" id="bg-add-formula">Formel hinzufügen</button></div>
+          <p class="mt-hint">Auf eine Formel verweist du als <code>formula.name</code> in order, groupBy und summaries.</p>
+        </fieldset>
+        <fieldset class="mt-group bg-wide">
+          <legend>Anzeigenamen (optional)</legend>
+          <div id="bg-prop-rows"></div>
+          <div class="mt-actions"><button type="button" class="btn-secondary" id="bg-add-prop">Anzeigenamen hinzufügen</button></div>
+        </fieldset>
+        <div class="bg-wide" id="bg-views"></div>
+        <div class="mt-actions bg-wide"><button type="button" class="btn-secondary" id="bg-add-view">Ansicht hinzufügen</button></div>
+        <fieldset class="mt-group bg-wide">
+          <legend>Ausgabe</legend>
+          <label class="mt-option"><input type="radio" name="output" value="base" checked> <span>.base-Datei</span></label>
+          <label class="mt-option"><input type="radio" name="output" value="block"> <span>base-Codeblock für eine Notiz</span></label>
+          <label class="mt-field" for="bg-name">Base-Name <input type="text" id="bg-name" name="basename" value="My base" autocomplete="off" spellcheck="false"></label>
+        </fieldset>
+      </form>
+      <div class="mt-output-head" id="bg-output-head" hidden>
+        <h3 id="bg-output-title">Deine Base</h3>
+        <div class="mt-actions">
+          <button type="button" class="btn-primary" id="bg-copy">Kopieren</button>
+          <button type="button" class="btn-secondary" id="bg-download">.base herunterladen</button>
+        </div>
+      </div>
+      <p class="mt-status" id="bg-status" role="status"></p>
+      <pre class="guide-code bg-output" id="bg-output" aria-labelledby="bg-output-title" tabindex="0" hidden><code id="bg-output-code"></code></pre>
+      <div id="bg-embed" hidden>
+        <h3 id="bg-embed-title">In eine Notiz einbetten</h3>
+        <pre class="guide-code" aria-labelledby="bg-embed-title" tabindex="0"><code id="bg-embed-code"></code></pre>
+      </div>
+      <div id="bg-issues-wrap" hidden>
+        <h3 id="bg-issues-title">Prüfungen</h3>
+        <ul id="bg-issues" aria-labelledby="bg-issues-title"></ul>
+      </div>
+      <div hidden id="bg-messages">
+        <span data-message="copied">In die Zwischenablage kopiert.</span>
+        <span data-message="copy-failed">Kopieren fehlgeschlagen. Markiere den Text und kopiere ihn selbst.</span>
+        <span data-message="downloaded">{file} heruntergeladen.</span>
+        <span data-message="preset-loaded">Voreinstellung geladen: {name}.</span>
+        <span data-message="remove">Entfernen</span>
+        <span data-message="remove-view">Ansicht entfernen</span>
+        <span data-message="view-title">Ansicht {n}</span>
+        <span data-message="l-kind">Filtertyp</span>
+        <span data-message="k-prop">Eigenschaftsvergleich</span>
+        <span data-message="l-prop">Eigenschaft</span>
+        <span data-message="l-op">Vergleichsoperator</span>
+        <span data-message="l-value">Wert</span>
+        <span data-message="l-arg">Wert oder Name</span>
+        <span data-message="l-fname">Formelname</span>
+        <span data-message="l-fexpr">Ausdruck</span>
+        <span data-message="l-pname">Eigenschaft</span>
+        <span data-message="l-pdisplay">Anzeigename</span>
+        <span data-message="l-vtype">Typ</span>
+        <span data-message="l-vname">Name</span>
+        <span data-message="l-vorder">Anzuzeigende Eigenschaften (Reihenfolge), eine pro Zeile</span>
+        <span data-message="l-vlimit">Höchstzahl der Zeilen (optional)</span>
+        <span data-message="l-vgroup">Nach Eigenschaft gruppieren (optional)</span>
+        <span data-message="l-vdir">Richtung</span>
+        <span data-message="l-vfilters">Ansichtsfilter, ein Ausdruck pro Zeile (alle müssen wahr sein)</span>
+        <span data-message="l-vsum">Zusammenfassungen</span>
+        <span data-message="l-sprop">Zusammenfassungseigenschaft</span>
+        <span data-message="l-sfn">Zusammenfassung</span>
+        <span data-message="add-summary">Zusammenfassung hinzufügen</span>
+        <span data-message="i-view-name">Ansicht {n} hat keinen Namen. Gib jeder Ansicht einen Namen.</span>
+        <span data-message="i-no-views">Füge mindestens eine Ansicht hinzu, sonst zeigt die Base nichts.</span>
+        <span data-message="i-formula-self">Die Formel {name} verweist auf sich selbst. Obsidian erlaubt keine zirkulären Verweise.</span>
+        <span data-message="i-formula-name">Der Formelname {name} sollte mit einem Buchstaben oder Unterstrich beginnen und nur Buchstaben, Ziffern und Unterstriche enthalten.</span>
+        <span data-message="i-formula-empty">Die Formel {name} hat keinen Ausdruck und wurde weggelassen.</span>
+        <span data-message="i-formula-dup">Zwei Formeln heißen {name}.</span>
+        <span data-message="i-space">Der Text {value} enthält Leerzeichen und wurde daher als String in Anführungszeichen geschrieben. Textwerte brauchen Anführungszeichen.</span>
+        <span data-message="i-empty-value">Eine Filterzeile hat einen leeren Wert und wurde weggelassen.</span>
+        <span data-message="i-group-order">Die groupBy-Eigenschaft {name} steht nicht in der order-Liste der Ansicht {n}. Die Base funktioniert weiterhin, aber die Spalte wird nicht angezeigt.</span>
+        <span data-message="i-summary-bad">{name} ist keine dokumentierte Zusammenfassung. Wähle eine aus der Liste.</span>
+        <span data-message="i-no-filter">Es ist kein Quellfilter gesetzt, daher enthält diese Base jede Notiz im Vault. Füge einen Ordner- oder Tag-Filter hinzu, um sie einzugrenzen.</span>
+        <span data-message="i-map">Der Ansichtstyp map benötigt das Plugin Maps.</span>
+        <span data-message="i-kanban">Der Ansichtstyp kanban ist auf der Seite zu Ansichten als ab Obsidian 1.14 verfügbar aufgeführt.</span>
+        <span data-message="i-order-space">Der Eigenschaftsname {name} enthält Leerzeichen. Prüfe, wie Obsidian diese Eigenschaft benennt, bevor du dich darauf verlässt.</span>
+        <span data-message="i-ok">Keine Probleme gefunden.</span>
+      </div>
+
+      <h2 id="syntax">2. Bases-Syntax im Überblick</h2>
+      <p>Das sind die Schlüssel, <a href="https://obsidian.md/help/bases/syntax" target="_blank" rel="noopener">Syntaxseite von Obsidian</a> dokumentiert. Es gibt kein weiteres Schema zu lernen.</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th>Schlüssel</th><th>Was es tut</th><th>Beispiel</th></tr></thead>
+          <tbody>
+            <tr><td><code>filters</code></td><td>Grenzt die Notizen für jede Ansicht ein.</td><td><code>file.hasTag("project")</code></td></tr>
+            <tr><td><code>formulas</code></td><td>Definiert berechnete Eigenschaften, verwendet als <code>formula.name</code>.</td><td><code>total: 'price * qty'</code></td></tr>
+            <tr><td><code>properties</code></td><td>Einstellungen pro Eigenschaft. <code>displayName</code> legt die Spaltenüberschrift fest.</td><td><code>displayName: "Status"</code></td></tr>
+            <tr><td><code>summaries</code></td><td>Definiert eigene Zusammenfassungsformeln mit <code>values</code>.</td><td>Benutzerdefiniert, optional</td></tr>
+            <tr><td><code>views</code></td><td>Eine Liste von Ansichten auf dieselben Notizen.</td><td><code>- type: table</code></td></tr>
+            <tr><td><code>type</code> (Ansicht)</td><td>Das Layout der Ansicht.</td><td><code>table</code>, <code>cards</code>, <code>list</code></td></tr>
+            <tr><td><code>name</code> (Ansicht)</td><td>Der Name der Ansicht.</td><td><code>name: "Projects"</code></td></tr>
+            <tr><td><code>filters</code> (Ansicht)</td><td>Filter nur für diese Ansicht.</td><td><code>file.inFolder("Work")</code></td></tr>
+            <tr><td><code>groupBy</code> (Ansicht)</td><td>Gruppiert Zeilen nach einer <code>property</code> in einem <code>direction</code>.</td><td><code>direction: DESC</code></td></tr>
+            <tr><td><code>order</code> (Ansicht)</td><td>Die angezeigten Eigenschaften, in Reihenfolge.</td><td><code>- file.name</code></td></tr>
+            <tr><td><code>limit</code> (Ansicht)</td><td>Begrenzt die Zeilenanzahl.</td><td><code>limit: 10</code></td></tr>
+            <tr><td><code>summaries</code> (Ansicht)</td><td>Ordnet eine Eigenschaft einer Zusammenfassung zu.</td><td><code>price: Sum</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Der Generator schreibt nicht jeden dokumentierten Schlüssel. Die Syntaxseite beschreibt außerdem <code>groupOrder</code>, und Ansichten können zusätzlichen Zustand wie die Sortierspalte enthalten, den Obsidian selbst verwaltet. Füge das bei Bedarf von Hand hinzu: Das YAML gehört dir.</p>
+
+      <h2 id="filters">3. Filter: and, or, not</h2>
+      <p>Ein Filter ist eine Textanweisung, die für jede Notiz wahr oder falsch ist, oder ein Objekt mit <code>and</code>, <code>or</code> oder <code>not</code> mit einer Liste weiterer Filter. Globale <code>filters</code> gelten für jede Ansicht. Der eigene <code>filters</code> gelten nur für diese Ansicht, und beide werden mit AND kombiniert.</p>
+      <pre class="guide-code"><code>filters:
+  or:
+    - file.hasTag("meeting")
+    - file.inFolder("Meetings")</code></pre>
+      <p>Es gibt keinen <code>from</code> oder <code>source</code> Schlüssel wie in SQL oder Dataview. Ohne Filter enthält eine Base jede Datei im Vault, setze also immer einen, außer du willst das.</p>
+      <p>Textwerte brauchen innerhalb der Anweisung Anführungszeichen, daher braucht das YAML verschachtelte Anführungszeichen: <code>'status == "done"'</code>. Der Generator übernimmt das für dich. Funktionsfilter wie <code>file.hasTag()</code>, <code>file.inFolder()</code> und <code>file.hasLink()</code> stehen auf der <a href="https://obsidian.md/help/bases/functions" target="_blank" rel="noopener">Seite zu Funktionen</a>.</p>
+
+      <h2 id="formulas">4. Formeln und Zusammenfassungen</h2>
+      <p>Jeder Eintrag unter <code>formulas</code> wird zu einer Eigenschaft, die du in jeder Ansicht verwenden kannst als <code>formula.name</code>. Eine Formel kann eine andere Formel verwenden, zirkuläre Verweise sind aber nicht erlaubt, eine Formel kann sich also nicht auf sich selbst beziehen. Das Ergebnis wird als YAML-String gespeichert, deshalb steht der Ausdruck in Anführungszeichen.</p>
+      <pre class="guide-code"><code>formulas:
+  formatted_price: 'if(price, price.toFixed(2) + " dollars")'</code></pre>
+      <p>Der <code>summaries</code> ordnet einer Eigenschaft eine Zusammenfassung zu. Die Syntaxseite nennt diese Standardwerte:</p>
+      <ul>
+        <li><strong>Zahl:</strong> <code>Average</code>, <code>Min</code>, <code>Max</code>, <code>Sum</code>, <code>Range</code>, <code>Median</code>, <code>Stddev</code></li>
+        <li><strong>Datum:</strong> <code>Earliest</code>, <code>Latest</code>, <code>Range</code></li>
+        <li><strong>Boolesch:</strong> <code>Checked</code>, <code>Unchecked</code></li>
+        <li><strong>Beliebig:</strong> <code>Empty</code>, <code>Filled</code>, <code>Unique</code></li>
+      </ul>
+      <p>Für Datumsberechnungen sagt die Syntaxseite <code>file.mtime &gt; now() - "1 week"</code> ist wahr für eine Datei, die in der letzten Woche geändert wurde.</p>
+
+      <h2 id="this">5. Was das bedeutet</h2>
+      <p>In einem Filter oder einer Formel <code>this</code> ist die Datei, in der die Base angezeigt wird. Laut Syntaxseite ist es die Base-Datei selbst, wenn die Base im Hauptbereich geöffnet wird, die einbettende Datei, wenn die Base in eine Notiz oder ein Canvas eingebettet ist, und die aktive Datei im Hauptbereich, wenn die Base in der Seitenleiste liegt. Die Seite nennt <code>file.hasLink(this.file)</code> als Möglichkeit, das Backlinks-Fenster nachzubilden.</p>
+
+      <h2 id="examples">6. Beispiele zum Kopieren</h2>
+      <p>Das sind die Voreinstellungen des Generators als reiner Code, sie funktionieren also ohne JavaScript. Ersetze Ordner-, Tag- und Eigenschaftsnamen durch deine eigenen. Speichere den Text als <code>.base</code> Datei oder umschließe ihn mit einem <code>base</code> Codeblock. Siehe <a href="https://obsidian.md/help/bases/create-base" target="_blank" rel="noopener">Base erstellen</a> für die Befehle, und bette eine gespeicherte Datei ein mit <code>![[Name.base]]</code> oder <code>![[Name.base#View]]</code> um die Standardansicht zu wählen.</p>
+      <h3>Leseliste</h3>
+      <pre class="guide-code" id="example-reading"><code>filters:
+  and:
+    - file.inFolder("Reading")
+    - 'status == "to read"'
+properties:
+  status:
+    displayName: "Status"
+views:
+  - type: cards
+    name: "Reading list"
+    order:
+      - file.name
+      - status
+</code></pre>
+      <h3>Projekte nach Status</h3>
+      <pre class="guide-code" id="example-projects"><code>filters:
+  and:
+    - file.hasTag("project")
+properties:
+  status:
+    displayName: "Status"
+views:
+  - type: table
+    name: "Projects by status"
+    groupBy:
+      property: status
+      direction: ASC
+    order:
+      - file.name
+      - status
+      - file.mtime
+</code></pre>
+      <h3>Notizen mit einem Tag, diese Woche geändert</h3>
+      <pre class="guide-code" id="example-week"><code>filters:
+  and:
+    - file.hasTag("project")
+    - 'file.mtime &gt; now() - "1 week"'
+views:
+  - type: table
+    name: "Modified this week"
+    order:
+      - file.name
+      - file.mtime
+</code></pre>
+      <h3>Backlinks dieser Notiz</h3>
+      <pre class="guide-code" id="example-backlinks"><code>filters:
+  and:
+    - file.hasLink(this.file)
+views:
+  - type: table
+    name: "Backlinks"
+    order:
+      - file.name
+      - file.folder
+</code></pre>
+      <h3>Mit Vox.md aufgenommene Sprachnotizen</h3>
+      <pre class="guide-code" id="example-voice"><code>filters:
+  and:
+    - file.inFolder("Vox")
+    - file.hasTag("voice")
+views:
+  - type: table
+    name: "Voice notes"
+    order:
+      - file.ctime
+      - file.name
+      - file.tags
+</code></pre>
+      <p>Die <code>order</code> list wählt die Spalten. Die Sortierung ist eine Ansichtseinstellung, die du in der Ansichtsleiste von Obsidian änderst, deshalb schreiben die Beispiele keine.</p>
+
+      <h2 id="capture">7. Captures in einer Base anzeigen</h2>
+      <p>Vox.md speichert deine Aufnahmen als Markdown-Notizen in einem Ordner in deinem Vault. Der <a href="/de/docs/#preset-metadata">Dokumentation zu Metadaten</a> sagt, dass eine Route statische Metadaten hinzufügen kann als <code>key: value</code> Zeilen, etwa <code>tags: [journal, idea]</code>, und dass <strong>Notiz-Frontmatter</strong> schreibt sie auf Dokumentebene. Es beschreibt auch optionale Standortmetadaten. Eine Base, die nach diesem Ordner oder Tag gefiltert ist, wie im letzten Beispiel oben, listet deine Captures dann in einer Tabelle auf. Erstelle die Metadaten mit dem <a href="/de/blog/obsidian-properties-generator/">Properties-Generator</a>, und siehe <a href="/de/blog/voice-notes-to-obsidian-iphone/">Sprachnotizen in Obsidian auf dem iPhone</a> für die Einrichtung.</p>
+      <p>Verwandte Tools: der <a href="/de/blog/obsidian-daily-note-template/">Generator für Tagesnotiz-Vorlagen</a> um datierte Notizen zu erstellen, der <a href="/de/blog/obsidian-callout-generator/">Callout-Generator</a> und die <a href="/de/blog/markdown-table-maker/">Markdown-Tabellen-Generator</a> für den Notizinhalt.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Notizen, die sich abfragen lassen?</h2>
+        <p>Vox.md nimmt Sprache und Text auf iPhone und Mac auf und legt sie direkt als Markdown mit den von dir gewählten Eigenschaften in deinem Vault ab. Aufnahme, Transkription und Capture erfordern Vox.md Unlimited; berechtigte Konten erhalten eine 7-tägige kostenlose Testphase.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_de_a4dab2e250af">Notizen per Sprache erfassen</a></p>
+        <p>Der Generator oben funktioniert vollständig ohne die App.</p>
+      </section>
+
+      <h2 id="troubleshooting">8. Fehlerbehebung</h2>
+      <ul>
+        <li><strong>Die Base zeigt jede Notiz.</strong> Es ist kein Quellfilter gesetzt. Eine Base enthält standardmäßig den ganzen Vault, füge also einen hinzu: <code>file.inFolder()</code> oder <code>file.hasTag()</code> Filter.</li>
+        <li><strong>Eine Eigenschaftsspalte ist leer.</strong> Der Name stimmt nicht überein (auch in der Groß-/Kleinschreibung), oder die Notiz hat diese Eigenschaft nicht im Frontmatter. Prüfe die Eigenschaften der Notiz und den Spaltennamen.</li>
+        <li><strong>YAML-Fehler.</strong> Prüfe die Einrückung, die Leerzeichen verwendet, und die Anführungszeichen. Ein Filter mit Text braucht verschachtelte Anführungszeichen: <code>'status == "done"'</code>.</li>
+        <li><strong>Eine Map-Ansicht ist leer.</strong> Das Map-Layout benötigt laut Seite zu Ansichten das Plugin Maps.</li>
+      </ul>
+
+      <h2 id="faq">9. Fragen</h2>
+      <h3>Ist Bases ein Core-Plugin?</h3>
+      <p>Ja. <a href="https://obsidian.md/help/bases" target="_blank" rel="noopener">Obsidian-Hilfe</a> sagt: „Bases ist ein Core-Plugin, mit dem du datenbankähnliche Ansichten deiner Notizen erstellen kannst.“</p>
+      <h3>Bases oder Dataview?</h3>
+      <p>Sie sind getrennt. Dataview ist ein Community-Plugin mit eigener Abfragesprache. Eine Base ist YAML, das Obsidian selbst liest, ohne <code>from</code> Schlüssel: Notizen grenzt du mit Filtern ein. Diese Seite vergleicht die Funktionen nicht weiter.</p>
+      <h3>Kann ich das YAML von Hand bearbeiten?</h3>
+      <p>Ja. Ein <code>.base</code> Datei ist YAML-Text, und die Syntaxseite dokumentiert die Schlüssel. Öffne die erzeugte Datei in einem beliebigen Editor oder füge den Codeblock in eine Notiz ein und bearbeite ihn dort.</p>
+      <h3>Lädt der Generator meine Daten hoch?</h3>
+      <p>Nein. Ein Skript auf dieser Seite erstellt das YAML auf deinem Gerät, und die Seite stellt keine Netzwerkanfragen. Beim Neuladen wird alles gelöscht.</p>
+
+      <nav class="toc" aria-label="Verwandte Anleitungen" id="related"><div class="toc-title">Einrichtung fortsetzen</div><ul>
+        <li><a href="/de/blog/obsidian-properties-generator/">Obsidian-Properties-Generator und -Prüfer</a></li>
+        <li><a href="/de/blog/obsidian-daily-note-template/">Generator für Obsidian-Tagesnotiz-Vorlagen</a></li>
+        <li><a href="/de/blog/obsidian-callout-generator/">Obsidian-Callout-Generator</a></li>
+        <li><a href="/de/blog/markdown-table-maker/">Markdown-Tabellen-Generator</a></li>
+        <li><a href="/de/blog/voice-notes-to-obsidian-iphone/">Sprachnotizen in Obsidian auf dem iPhone</a></li>
+      </ul></nav>
+<style>
+.bg-tool:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.bg-tool [hidden], #bg-embed[hidden], #bg-issues-wrap[hidden] { display: none; }
+.bg-wide { grid-column: 1 / -1; min-width: 0; }
+.mt-output-head[hidden], .bg-output[hidden] { display: none; }
+.bg-tool input[type="text"], .bg-tool textarea, .bg-tool select { font: inherit; font-family: var(--font-mono); font-size: 16px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; padding: 8px 10px; width: 100%; box-sizing: border-box; min-height: 44px; }
+.bg-tool textarea { resize: vertical; min-height: 90px; }
+.bg-tool input:focus-visible, .bg-tool textarea:focus-visible, .bg-tool select:focus-visible, .bg-output:focus-visible, .bg-tool button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.bg-tool .mt-option { min-height: 44px; }
+.bg-tool .mt-option input { width: 22px; height: 22px; }
+.bg-tool button, .mt-actions button { font: inherit; font-size: 15px; min-height: 44px; padding: 0 18px; cursor: pointer; }
+.bg-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin: 8px 0; align-items: end; }
+.bg-row > * { min-width: 0; }
+.bg-view { border: 1px solid var(--line); border-radius: 16px; padding: 12px 16px; margin: 0 0 12px; background: var(--card); }
+.bg-view-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.bg-output { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 32rem; overflow: auto; }
+.bg-issues-error { font-weight: 700; }
+</style>
+<script>
+/* Obsidian Bases generator. Runs locally: no network requests. */
+(function () {
+  var VIEW_TYPES = ['table', 'cards', 'list', 'map', 'kanban'];
+  var SUMMARIES = ['Average', 'Min', 'Max', 'Sum', 'Range', 'Median', 'Stddev', 'Earliest', 'Latest', 'Checked', 'Unchecked', 'Empty', 'Filled', 'Unique'];
+  var OPS = ['==', '!=', '>', '<', '>=', '<='];
+  var KINDS = ['hasTag', 'inFolder', 'hasLink', 'ext', 'prop'];
+
+  function q1(s) { return "'" + String(s).replace(/'/g, "''") + "'"; }
+  function q2(s) { return '"' + String(s).replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"'; }
+  function needsQuote(s) { return /^[\s\-?:,\[\]{}#&*!|>'"%@`]/.test(s) || /: | #|:$|\s$/.test(s) || s === ''; }
+  function plain(s) { return needsQuote(s) ? q1(s) : s; }
+  function key(s) { return /^[A-Za-z_][\w.\-]*$/.test(s) ? s : q1(s); }
+  function bare(s) { return String(s || '').trim(); }
+  function unwrap(s) {
+    s = bare(s);
+    var m = /^(["'])(.*)\1$/.exec(s);
+    return m ? m[2] : s;
+  }
+  function lines(text) { return String(text || '').split(/\r?\n|,/).map(bare).filter(Boolean); }
+
+  /* Turn a typed value into an expression operand. */
+  function operand(value, issues) {
+    var v = bare(value);
+    if (/^-?\d+(\.\d+)?$/.test(v) || /^(true|false|null)$/.test(v)) return v;
+    if (/^(["']).*\1$/.test(v) && v.length > 1) return q2(v.slice(1, -1));
+    if (/^[A-Za-z_]\w*\(/.test(v) || /^(this|formula|note|file)\./.test(v)) return v;
+    if (/\s/.test(v)) issues.push({ level: 'info', code: 'i-space', fill: { value: v } });
+    return q2(v);
+  }
+
+  function filterStatement(row, issues) {
+    var a = bare(row.a);
+    if (row.kind === 'raw') return a ? (/"/.test(a) && !/^[\w.]+\(.*\)$/.test(a) ? q1(a) : plain(a)) : null;
+    if (row.kind === 'prop') {
+      var v = bare(row.b);
+      if (!a || !v) { issues.push({ level: 'warn', code: 'i-empty-value' }); return null; }
+      var op = OPS.indexOf(row.op) !== -1 ? row.op : '==';
+      return q1(a + ' ' + op + ' ' + operand(v, issues));
+    }
+    if (!a) { issues.push({ level: 'warn', code: 'i-empty-value' }); return null; }
+    if (row.kind === 'ext') return q1('file.ext == ' + q2(unwrap(a).replace(/^\./, '')));
+    if (row.kind === 'hasLink' && /^this\./.test(a)) return 'file.hasLink(' + a + ')';
+    if (row.kind === 'hasTag') a = unwrap(a).replace(/^#/, '');
+    else a = unwrap(a);
+    var out = 'file.' + row.kind + '(' + q2(a) + ')';
+    return plain(out);
+  }
+
+  function filterBlock(mode, rows, indent, issues) {
+    var items = [];
+    (rows || []).forEach(function (r) { var s = filterStatement(r, issues); if (s) items.push(s); });
+    if (!items.length) return null;
+    var m = mode === 'or' || mode === 'not' ? mode : 'and';
+    var pad = new Array(indent + 1).join(' ');
+    var out = [pad + m + ':'];
+    items.forEach(function (s) { out.push(pad + '  - ' + s); });
+    return out;
+  }
+
+  function viewFilterRows(text) {
+    return String(text || '').split(/\r?\n/).map(bare).filter(Boolean);
+  }
+
+  /* state -> { yaml, output, issues, filename, embed, embedView } */
+  function build(state) {
+    state = state || {};
+    var issues = [];
+    var out = [];
+    var gl = filterBlock(state.mode, state.filters, 2, issues);
+    if (gl) { out.push('filters:'); out = out.concat(gl); }
+    else issues.push({ level: 'info', code: 'i-no-filter' });
+
+    var formulas = (state.formulas || []).filter(function (f) { return bare(f.name) || bare(f.expr); });
+    var seen = {};
+    var fl = [];
+    formulas.forEach(function (f) {
+      var name = bare(f.name), expr = bare(f.expr);
+      if (!/^[A-Za-z_]\w*$/.test(name)) { issues.push({ level: 'error', code: 'i-formula-name', fill: { name: name || '(empty)' } }); return; }
+      if (seen[name]) issues.push({ level: 'error', code: 'i-formula-dup', fill: { name: name } });
+      seen[name] = true;
+      if (!expr) { issues.push({ level: 'warn', code: 'i-formula-empty', fill: { name: name } }); return; }
+      if (new RegExp('formula\\.' + name + '(?![\\w])').test(expr)) issues.push({ level: 'error', code: 'i-formula-self', fill: { name: name } });
+      fl.push('  ' + key(name) + ': ' + q1(expr));
+    });
+    if (fl.length) { out.push('formulas:'); out = out.concat(fl); }
+
+    var pl = [];
+    (state.props || []).forEach(function (p) {
+      if (!bare(p.name) || !bare(p.display)) return;
+      pl.push('  ' + key(bare(p.name)) + ':');
+      pl.push('    displayName: ' + q2(bare(p.display)));
+    });
+    if (pl.length) { out.push('properties:'); out = out.concat(pl); }
+
+    var views = state.views || [];
+    if (!views.length) issues.push({ level: 'error', code: 'i-no-views' });
+    else out.push('views:');
+    views.forEach(function (v, i) {
+      var n = i + 1;
+      var type = VIEW_TYPES.indexOf(v.type) !== -1 ? v.type : 'table';
+      var name = bare(v.name);
+      if (!name) issues.push({ level: 'error', code: 'i-view-name', fill: { n: n } });
+      if (type === 'map') issues.push({ level: 'info', code: 'i-map' });
+      if (type === 'kanban') issues.push({ level: 'info', code: 'i-kanban' });
+      out.push('  - type: ' + type);
+      out.push('    name: ' + q2(name));
+      var limit = parseInt(v.limit, 10);
+      if (limit > 0) out.push('    limit: ' + limit);
+      var order = lines(v.order);
+      var group = bare(v.group);
+      if (group) {
+        out.push('    groupBy:');
+        out.push('      property: ' + plain(group));
+        out.push('      direction: ' + (v.dir === 'DESC' ? 'DESC' : 'ASC'));
+        if (order.length && order.indexOf(group) === -1) issues.push({ level: 'warn', code: 'i-group-order', fill: { name: group, n: n } });
+      }
+      var vf = filterBlock('and', viewFilterRows(v.filters).map(function (s) { return { kind: 'raw', a: s }; }), 6, []);
+      if (vf) { out.push('    filters:'); out = out.concat(vf); }
+      if (order.length) {
+        out.push('    order:');
+        order.forEach(function (o) {
+          if (/\s/.test(o) && !/^(["']).*\1$/.test(o)) issues.push({ level: 'warn', code: 'i-order-space', fill: { name: o } });
+          out.push('      - ' + plain(o));
+        });
+      }
+      var sl = [];
+      (v.summaries || []).forEach(function (s) {
+        var p = bare(s.prop), fn = bare(s.fn);
+        if (!p || !fn) return;
+        if (SUMMARIES.indexOf(fn) === -1) { issues.push({ level: 'error', code: 'i-summary-bad', fill: { name: fn } }); return; }
+        sl.push('      ' + key(p) + ': ' + fn);
+      });
+      if (sl.length) { out.push('    summaries:'); out = out.concat(sl); }
+    });
+
+    var yaml = out.join('\n');
+    var file = bare(state.basename).replace(/[\\\/:*?"<>|#^\[\]]+/g, ' ').replace(/\s+/g, ' ').trim() || 'Base';
+    var first = views.length ? bare(views[0].name) : '';
+    return {
+      yaml: yaml,
+      output: state.output === 'block' ? '```base\n' + yaml + '\n```' : yaml,
+      issues: issues,
+      file: file,
+      filename: file + '.base',
+      embed: '![[' + file + '.base]]',
+      embedView: first ? '![[' + file + '.base#' + first.replace(/[#^\[\]|]/g, ' ').replace(/\s+/g, ' ').trim() + ']]' : ''
+    };
+  }
+
+  function F(kind, a, op, b) { return { kind: kind, a: a || '', op: op || '==', b: b || '' }; }
+  function V(type, name, order, extra) {
+    var v = { type: type, name: name, order: order.join('\n'), limit: '', group: '', dir: 'ASC', filters: '', summaries: [] };
+    Object.keys(extra || {}).forEach(function (k) { v[k] = extra[k]; });
+    return v;
+  }
+  var PRESETS = {
+    reading: { name: 'Reading list', state: { mode: 'and', basename: 'Reading list', output: 'base', formulas: [],
+      filters: [F('inFolder', 'Reading'), F('prop', 'status', '==', 'to read')],
+      props: [{ name: 'status', display: 'Status' }],
+      views: [V('cards', 'Reading list', ['file.name', 'status'])] } },
+    projects: { name: 'Projects by status', state: { mode: 'and', basename: 'Projects', output: 'base', formulas: [],
+      filters: [F('hasTag', 'project')],
+      props: [{ name: 'status', display: 'Status' }],
+      views: [V('table', 'Projects by status', ['file.name', 'status', 'file.mtime'], { group: 'status' })] } },
+    week: { name: 'Tag, modified this week', state: { mode: 'and', basename: 'This week', output: 'base', formulas: [], props: [],
+      filters: [F('hasTag', 'project'), F('prop', 'file.mtime', '>', 'now() - "1 week"')],
+      views: [V('table', 'Modified this week', ['file.name', 'file.mtime'])] } },
+    backlinks: { name: 'Backlinks of this note', state: { mode: 'and', basename: 'Backlinks', output: 'base', formulas: [], props: [],
+      filters: [F('hasLink', 'this.file')],
+      views: [V('table', 'Backlinks', ['file.name', 'file.folder'])] } },
+    voice: { name: 'Voice notes (Vox.md)', state: { mode: 'and', basename: 'Voice notes', output: 'base', formulas: [], props: [],
+      filters: [F('inFolder', 'Vox'), F('hasTag', 'voice')],
+      views: [V('table', 'Voice notes', ['file.ctime', 'file.name', 'file.tags'])] } }
+  };
+
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+
+  if (typeof window !== 'undefined') {
+    window.voxBases = { build: build, presets: PRESETS, summaries: SUMMARIES, viewTypes: VIEW_TYPES };
+  }
+
+  var form = document.getElementById('bg-tool');
+  if (!form) return;
+  var state = clone(PRESETS.projects.state);
+  var statusEl = document.getElementById('bg-status');
+
+  function message(name, fill) {
+    var el = document.querySelector('#bg-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : name;
+    if (fill) Object.keys(fill).forEach(function (k) { text = text.split('{' + k + '}').join(fill[k]); });
+    return text;
+  }
+  function say(text) {
+    statusEl.textContent = '';
+    window.setTimeout(function () { statusEl.textContent = text; }, 30);
+  }
+
+  function el(tag, attrs, children) {
+    var e = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      if (k === 'text') e.textContent = attrs[k]; else e.setAttribute(k, attrs[k]);
+    });
+    (children || []).forEach(function (c) { e.appendChild(c); });
+    return e;
+  }
+  function input(obj, prop, label, extra) {
+    var i = el('input', Object.assign({ type: 'text', 'aria-label': label, autocomplete: 'off', spellcheck: 'false', autocapitalize: 'off' }, extra || {}));
+    i.value = obj[prop] || '';
+    i.addEventListener('input', function () { obj[prop] = i.value; render(); });
+    return i;
+  }
+  function select(obj, prop, label, values, labels) {
+    var s = el('select', { 'aria-label': label });
+    values.forEach(function (v, i) { s.appendChild(el('option', { value: v, text: labels ? labels[i] : v })); });
+    s.value = obj[prop];
+    s.addEventListener('change', function () { obj[prop] = s.value; render(); });
+    return s;
+  }
+  function removeBtn(list, i, label) {
+    var b = el('button', { type: 'button', class: 'btn-secondary', text: label || message('remove') });
+    b.addEventListener('click', function () { list.splice(i, 1); rebuild(); });
+    return b;
+  }
+
+  var KIND_LABELS = ['file.hasTag("…")', 'file.inFolder("…")', 'file.hasLink("…")', 'file.ext == "…"'];
+
+  function filterRow(list, i) {
+    var r = list[i];
+    var kinds = el('select', { 'aria-label': message('l-kind') });
+    KINDS.forEach(function (k, n) { kinds.appendChild(el('option', { value: k, text: n < 4 ? KIND_LABELS[n] : message('k-prop') })); });
+    kinds.value = r.kind;
+    kinds.addEventListener('change', function () { r.kind = kinds.value; rebuild(); });
+    var row = el('div', { class: 'bg-row' }, [kinds]);
+    row.appendChild(input(r, 'a', message(r.kind === 'prop' ? 'l-prop' : 'l-arg')));
+    if (r.kind === 'prop') {
+      row.appendChild(select(r, 'op', message('l-op'), OPS));
+      row.appendChild(input(r, 'b', message('l-value')));
+    }
+    row.appendChild(removeBtn(list, i));
+    return row;
+  }
+
+  function fillRows(container, list, make) {
+    container.textContent = '';
+    list.forEach(function (_, i) { container.appendChild(make(list, i)); });
+  }
+
+  function viewBlock(i) {
+    var v = state.views[i];
+    var box = el('fieldset', { class: 'bg-view' }, [el('legend', { text: message('view-title', { n: i + 1 }) })]);
+    var grid = el('div', { class: 'bg-view-grid' });
+    function field(label, control) {
+      var l = el('label', { class: 'mt-field', text: label + ' ' });
+      l.appendChild(control);
+      grid.appendChild(l);
+    }
+    field(message('l-vtype'), select(v, 'type', message('l-vtype'), VIEW_TYPES));
+    field(message('l-vname'), input(v, 'name', message('l-vname')));
+    var order = el('textarea', { 'aria-label': message('l-vorder'), rows: '4', spellcheck: 'false', autocapitalize: 'off' });
+    order.value = v.order;
+    order.addEventListener('input', function () { v.order = order.value; render(); });
+    field(message('l-vorder'), order);
+    field(message('l-vlimit'), input(v, 'limit', message('l-vlimit'), { inputmode: 'numeric' }));
+    field(message('l-vgroup'), input(v, 'group', message('l-vgroup')));
+    field(message('l-vdir'), select(v, 'dir', message('l-vdir'), ['ASC', 'DESC']));
+    var vf = el('textarea', { 'aria-label': message('l-vfilters'), rows: '3', spellcheck: 'false', autocapitalize: 'off' });
+    vf.value = v.filters;
+    vf.addEventListener('input', function () { v.filters = vf.value; render(); });
+    field(message('l-vfilters'), vf);
+    box.appendChild(grid);
+    box.appendChild(el('p', { class: 'mt-hint', text: message('l-vsum') }));
+    var sums = el('div');
+    fillRows(sums, v.summaries, function (list, n) {
+      var s = list[n];
+      var row = el('div', { class: 'bg-row' }, [input(s, 'prop', message('l-sprop')), select(s, 'fn', message('l-sfn'), SUMMARIES), removeBtn(list, n)]);
+      return row;
+    });
+    box.appendChild(sums);
+    var add = el('button', { type: 'button', class: 'btn-secondary', text: message('add-summary') });
+    add.addEventListener('click', function () { v.summaries.push({ prop: '', fn: 'Sum' }); rebuild(); });
+    box.appendChild(el('div', { class: 'mt-actions' }, [add]));
+    var rm = removeBtn(state.views, i, message('remove-view'));
+    box.appendChild(el('div', { class: 'mt-actions' }, [rm]));
+    return box;
+  }
+
+  function rebuild() {
+    document.getElementById('bg-mode').value = state.mode;
+    form.elements.basename.value = state.basename;
+    form.elements.output.value = state.output;
+    fillRows(document.getElementById('bg-filter-rows'), state.filters, filterRow);
+    fillRows(document.getElementById('bg-formula-rows'), state.formulas, function (list, i) {
+      return el('div', { class: 'bg-row' }, [input(list[i], 'name', message('l-fname')), input(list[i], 'expr', message('l-fexpr')), removeBtn(list, i)]);
+    });
+    fillRows(document.getElementById('bg-prop-rows'), state.props, function (list, i) {
+      return el('div', { class: 'bg-row' }, [input(list[i], 'name', message('l-pname')), input(list[i], 'display', message('l-pdisplay')), removeBtn(list, i)]);
+    });
+    var views = document.getElementById('bg-views');
+    views.textContent = '';
+    state.views.forEach(function (_, i) { views.appendChild(viewBlock(i)); });
+    render();
+  }
+
+  var code = document.getElementById('bg-output-code');
+  function render() {
+    var r = build(state);
+    code.textContent = r.output;
+    document.getElementById('bg-output').hidden = false;
+    document.getElementById('bg-output-head').hidden = false;
+    document.getElementById('bg-download').hidden = state.output === 'block';
+    var embed = document.getElementById('bg-embed');
+    embed.hidden = false;
+    document.getElementById('bg-embed-code').textContent = r.embed + (r.embedView ? '\n' + r.embedView : '');
+    var list = document.getElementById('bg-issues');
+    list.textContent = '';
+    var seen = {};
+    var items = r.issues.length ? r.issues : [{ level: 'info', code: 'i-ok' }];
+    items.forEach(function (it) {
+      var text = message(it.code, it.fill);
+      if (seen[text]) return;
+      seen[text] = true;
+      list.appendChild(el('li', { class: 'bg-issues-' + it.level, text: text }));
+    });
+    document.getElementById('bg-issues-wrap').hidden = false;
+    return r;
+  }
+
+  var presetBox = document.getElementById('bg-presets');
+  Object.keys(PRESETS).forEach(function (k) {
+    var b = el('button', { type: 'button', class: 'btn-secondary', text: PRESETS[k].name });
+    b.addEventListener('click', function () {
+      state = clone(PRESETS[k].state);
+      rebuild();
+      say(message('preset-loaded', { name: PRESETS[k].name }));
+    });
+    presetBox.appendChild(b);
+  });
+  document.getElementById('bg-add-filter').addEventListener('click', function () { state.filters.push(F('hasTag', '')); rebuild(); });
+  document.getElementById('bg-add-formula').addEventListener('click', function () { state.formulas.push({ name: '', expr: '' }); rebuild(); });
+  document.getElementById('bg-add-prop').addEventListener('click', function () { state.props.push({ name: '', display: '' }); rebuild(); });
+  document.getElementById('bg-add-view').addEventListener('click', function () { state.views.push(V('table', '', ['file.name'])); rebuild(); });
+  document.getElementById('bg-mode').addEventListener('change', function (e) { state.mode = e.target.value; render(); });
+  form.elements.basename.addEventListener('input', function (e) { state.basename = e.target.value; render(); });
+  Array.prototype.forEach.call(form.elements.output, function (r) {
+    r.addEventListener('change', function () { state.output = form.elements.output.value; render(); });
+  });
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+
+  document.getElementById('bg-copy').addEventListener('click', function () {
+    var text = code.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(code);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+  document.getElementById('bg-download').addEventListener('click', function () {
+    var r = build(state);
+    var blob = new Blob([r.yaml + '\n'], { type: 'text/plain;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = r.filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    say(message('downloaded', { file: r.filename }));
+  });
+
+  document.getElementById('bg-nojs').hidden = true;
+  form.hidden = false;
+  rebuild();
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/de/">Startseite</a></li>
+        <li><a href="/de/docs/">Dokumentation</a></li>
+        <li><a href="/de/blog/">Anleitungen</a></li>
+        <li><a href="/de/compare/">Vergleichen</a></li>
+        <li><a href="/de/privacy.html">Datenschutz</a></li>
+        <li><a href="/de/terms.html">Bedingungen</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Unterstützung</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_de_a4dab2e250af">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Schnellerfassung für lokale Notizen · Keine Inhaltsuploads.</div>
+    </div>
+  <details class="language-switcher"><summary>Sprache</summary><ul><li><a href="/blog/obsidian-bases-generator/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-bases-generator/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-bases-generator/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-bases-generator/" lang="de" hreflang="de" aria-current="page">Deutsch</a></li><li><a href="/es/blog/obsidian-bases-generator/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-bases-generator/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-bases-generator/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-bases-generator/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-bases-generator/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-bases-generator/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-bases-generator/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-bases-generator/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-bases-generator/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-bases-generator/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-bases-generator/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-bases-generator/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-bases-generator/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-bases-generator/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-bases-generator/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-bases-generator/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-bases-generator/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-bases-generator/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-bases-generator/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

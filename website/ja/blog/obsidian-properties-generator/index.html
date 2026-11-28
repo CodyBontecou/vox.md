@@ -332,6 +332,7 @@ tags:
       <p>オンにする項目は、 <strong>テンプレートプラグインのトークン</strong> をジェネレーターで使うと、日付フィールドを固定の日付ではなくトークンとして書き込めます。コアの Templates プラグインは次を使います: <code>{{date:YYYY-MM-DD}}</code>。Templater コミュニティプラグインは次を使います: <code>&lt;% tp.date.now("YYYY-MM-DD") %&gt;</code> （次の Templater を参照: <a href="https://silentvoid13.github.io/Templater/" target="_blank" rel="noopener">ドキュメント本文</a>）。日付と時刻のフィールドは次を使います: <code>YYYY-MM-DD[T]HH:mm:ss</code> をトークンに指定し、次を併用します: <code>T</code> を角括弧で囲むと、文字として書き込まれます。</p>
       <p>リンクには注意が必要です。Obsidian はプロパティ UI で入力したリンクには引用符を付けますが、テンプレートプラグインはテキストをそのままファイルに書き込むため、テンプレートでは自分で引用符を書いてください: <code>project: "[[Vox.md launch]]"</code>.</p>
       <p>これらのプロパティを使うテンプレート全体については、次を参照してください: <a href="/ja/blog/obsidian-daily-note-template/">デイリーノートテンプレートジェネレーター</a> および <a href="/ja/blog/obsidian-meeting-notes-template/">会議メモテンプレートジェネレーター</a>.</p>
+      <p>ノートにプロパティがあれば、base で検索できます。 <a href="/ja/blog/obsidian-bases-generator/">Obsidian Bases ジェネレーター</a> がフィルターとビューを作成します。</p>
       <p>ノート本文には、次を使います: <a href="/ja/blog/markdown-table-maker/">Markdown 表メーカー</a> は、スプレッドシートのセルや CSV を、プロパティブロックの下に貼り付けられる表に変換します。</p>
 
       <h2 id="vox">6. キャプチャするノートにプロパティを追加</h2>

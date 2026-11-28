@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" dir="ltr" data-search-section="段落" data-search-guide="指南" data-search-empty="沒有與“{query}”匹配的結果">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obsidian Bases 產生器:篩選器、檢視和公式 | Vox.md</title>
+  <meta name="description" content="免費的瀏覽器內工具,可產生有效的 Obsidian Bases YAML:添加篩選器、公式、table、cards 或 list 檢視及摘要,然後複製 .base 檔案或 base 程式碼塊。內含可直接複製的範例。不會上傳任何內容。">
+  <link rel="canonical" href="https://vox.isolated.tech/zh-hant/blog/obsidian-bases-generator/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="供語言模型使用的 Vox.md 文件">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Obsidian Bases 產生器:篩選器、檢視和公式">
+  <meta property="og:description" content="免費的瀏覽器內工具,可產生有效的 Obsidian Bases YAML:添加篩選器、公式、table、cards 或 list 檢視及摘要,然後複製 .base 檔案或 base 程式碼塊。內含可直接複製的範例。不會上傳任何內容。">
+  <meta property="og:url" content="https://vox.isolated.tech/zh-hant/blog/obsidian-bases-generator/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-11-28">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Obsidian Bases 產生器:篩選器、檢視和公式">
+  <meta name="twitter:description" content="免費的瀏覽器內工具,可產生有效的 Obsidian Bases YAML:添加篩選器、公式、table、cards 或 list 檢視及摘要,然後複製 .base 檔案或 base 程式碼塊。內含可直接複製的範例。不會上傳任何內容。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Obsidian Bases 產生器:篩選器、檢視和公式",
+  "description": "免費的瀏覽器內工具,可產生有效的 Obsidian Bases YAML:添加篩選器、公式、table、cards 或 list 檢視及摘要,然後複製 .base 檔案或 base 程式碼塊。內含可直接複製的範例。不會上傳任何內容。",
+  "image": "https://vox.isolated.tech/screenshots/01-route-heading-light.png",
+  "datePublished": "2026-11-28",
+  "dateModified": "2026-11-28",
+  "mainEntityOfPage": "https://vox.isolated.tech/zh-hant/blog/obsidian-bases-generator/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "zh-Hant",
+  "name": "Obsidian Bases 產生器:篩選器、檢視和公式 | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/zh-hant/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "指南",
+      "item": "https://vox.isolated.tech/zh-hant/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Obsidian Bases 產生器:篩選器、檢視和公式",
+      "item": "https://vox.isolated.tech/zh-hant/blog/obsidian-bases-generator/"
+    }
+  ],
+  "inLanguage": "zh-Hant",
+  "name": "Obsidian Bases 產生器:篩選器、檢視和公式 | Vox.md",
+  "description": "免費的瀏覽器內工具,可產生有效的 Obsidian Bases YAML:添加篩選器、公式、table、cards 或 list 檢視及摘要,然後複製 .base 檔案或 base 程式碼塊。內含可直接複製的範例。不會上傳任何內容。"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/obsidian-bases-generator/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳至指南</a>
+<nav aria-label="主導航">
+  <div class="nav-inner">
+    <a href="/zh-hant/" class="logo" aria-label="Vox.md 首頁">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/zh-hant/#how">工作原理</a></li>
+      <li><a href="/zh-hant/docs/">文件</a></li>
+      <li><a href="/zh-hant/blog/">指南</a></li>
+      <li><a href="/zh-hant/compare/">比較</a></li>
+      <li><a href="/zh-hant/privacy.html">隱私</a></li>
+      <li><a href="/zh-hant/terms.html">條款</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_a4dab2e250af">下載 Vox.md</a>
+  <details class="language-switcher"><summary>語言</summary><ul><li><a href="/blog/obsidian-bases-generator/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-bases-generator/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-bases-generator/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-bases-generator/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-bases-generator/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-bases-generator/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-bases-generator/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-bases-generator/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-bases-generator/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-bases-generator/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-bases-generator/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-bases-generator/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-bases-generator/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-bases-generator/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-bases-generator/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-bases-generator/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-bases-generator/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-bases-generator/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-bases-generator/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-bases-generator/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-bases-generator/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-bases-generator/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-bases-generator/" lang="zh-Hant" hreflang="zh-Hant" aria-current="page">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">免費工具</div>
+        <h1 class="hero-title">Obsidian Bases 產生器:篩選器、檢視和公式</h1>
+        <p class="hero-subtitle">無需先學習結構描述,即可建立 Obsidian base 的 YAML:選擇篩選器、添加檢視、複製 .base 檔案或程式碼塊,並通過指向 Obsidian 官方文件的連結了解每個鍵的作用。</p>
+      </div>
+      <aside class="meta-card" aria-label="關於本指南">
+        <dl>
+          <div><dt>作者：</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>更新於</dt><dd><time datetime="2026-11-28">2026年11月28日</time></dd></div>
+          <div><dt>需要</dt><dd>任何現代瀏覽器均可,包括 iPhone 上的 Safari。可選:啟用 Bases 核心外掛的 Obsidian,以及用於語音或文字擷取筆記的 iPhone 或 Mac 版 Vox.md。</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Obsidian Bases 產生器:篩選器、檢視和公式">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">簡短回答</div>
+        <p>base 是基於筆記的資料庫式檢視,以 YAML 編寫,最多包含五個頂層鍵: <code>filters</code>, <code>formulas</code>, <code>properties</code>, <code>summaries</code> 和 <code>views</code>。將 YAML 儲存為 <code>.base</code> 檔案,或將其貼上到筆記中的 <code>base</code> 程式碼塊。 <a href="#tool">產生器</a> 下方的工具會為你產生。所需的 Obsidian 版本取決於檢視類型: <a href="https://obsidian.md/help/bases/views" target="_blank" rel="noopener">檢視頁面</a> 列出了自 1.9 起的 Table 和 Cards、自 1.10 起的 List 和 Map,以及自 1.14 起的 Kanban。</p>
+      </div>
+      <pre class="guide-code" id="default-base"><code>filters:
+  and:
+    - file.hasTag("project")
+properties:
+  status:
+    displayName: "Status"
+views:
+  - type: table
+    name: "Projects by status"
+    groupBy:
+      property: status
+      direction: ASC
+    order:
+      - file.name
+      - status
+      - file.mtime
+</code></pre>
+      <p>產生器完全在本頁中運行。你輸入的任何內容都不會上傳,頁面也不會發出網路請求。</p>
+      <nav class="toc" aria-label="本指南中"><div class="toc-title">本指南中</div><ol>
+        <li><a href="#tool">建立你的 base</a></li>
+        <li><a href="#syntax">Bases 語法速覽</a></li>
+        <li><a href="#filters">篩選器:and、or、not</a></li>
+        <li><a href="#formulas">公式和摘要</a></li>
+        <li><a href="#this">這意味著什麼</a></li>
+        <li><a href="#examples">可複製的範例</a></li>
+        <li><a href="#capture">讓你的擷取內容顯示在 base 中</a></li>
+        <li><a href="#troubleshooting">故障排查</a></li>
+        <li><a href="#faq">常見問題</a></li>
+      </ol></nav>
+
+      <h2 id="tool">1. 建立你的 base</h2>
+      <p class="mt-nojs" id="bg-nojs">產生器需要 JavaScript。若未啟用,下方的語法表和可直接複製的範例仍然可用。</p>
+      <form class="bg-tool" id="bg-tool" aria-label="Obsidian Bases 產生器" hidden>
+        <fieldset class="mt-group bg-wide">
+          <legend>預設</legend>
+          <div class="mt-actions" id="bg-presets"></div>
+          <p class="mt-hint">預設會填充表單,之後可隨意編輯。</p>
+        </fieldset>
+        <fieldset class="mt-group bg-wide">
+          <legend>來源篩選器(適用於所有檢視)</legend>
+          <label class="mt-field" for="bg-mode">匹配 <select id="bg-mode" name="mode">
+            <option value="and" selected>and:所有行都必須為真</option>
+            <option value="or">or:任意一行為真即可</option>
+            <option value="not">not:所有行都不能為真</option>
+          </select></label>
+          <div id="bg-filter-rows"></div>
+          <div class="mt-actions"><button type="button" class="btn-secondary" id="bg-add-filter">添加篩選行</button></div>
+        </fieldset>
+        <fieldset class="mt-group bg-wide">
+          <legend>公式(可選)</legend>
+          <div id="bg-formula-rows"></div>
+          <div class="mt-actions"><button type="button" class="btn-secondary" id="bg-add-formula">添加公式</button></div>
+          <p class="mt-hint">參照公式的方式為 <code>formula.name</code> 中的 order、groupBy 和摘要。</p>
+        </fieldset>
+        <fieldset class="mt-group bg-wide">
+          <legend>顯示名稱(可選)</legend>
+          <div id="bg-prop-rows"></div>
+          <div class="mt-actions"><button type="button" class="btn-secondary" id="bg-add-prop">添加顯示名稱</button></div>
+        </fieldset>
+        <div class="bg-wide" id="bg-views"></div>
+        <div class="mt-actions bg-wide"><button type="button" class="btn-secondary" id="bg-add-view">添加檢視</button></div>
+        <fieldset class="mt-group bg-wide">
+          <legend>輸出</legend>
+          <label class="mt-option"><input type="radio" name="output" value="base" checked> <span>.base 檔案</span></label>
+          <label class="mt-option"><input type="radio" name="output" value="block"> <span>筆記用的 base 程式碼塊</span></label>
+          <label class="mt-field" for="bg-name">base 名稱 <input type="text" id="bg-name" name="basename" value="My base" autocomplete="off" spellcheck="false"></label>
+        </fieldset>
+      </form>
+      <div class="mt-output-head" id="bg-output-head" hidden>
+        <h3 id="bg-output-title">你的 base</h3>
+        <div class="mt-actions">
+          <button type="button" class="btn-primary" id="bg-copy">複製</button>
+          <button type="button" class="btn-secondary" id="bg-download">下載 .base</button>
+        </div>
+      </div>
+      <p class="mt-status" id="bg-status" role="status"></p>
+      <pre class="guide-code bg-output" id="bg-output" aria-labelledby="bg-output-title" tabindex="0" hidden><code id="bg-output-code"></code></pre>
+      <div id="bg-embed" hidden>
+        <h3 id="bg-embed-title">嵌入到筆記中</h3>
+        <pre class="guide-code" aria-labelledby="bg-embed-title" tabindex="0"><code id="bg-embed-code"></code></pre>
+      </div>
+      <div id="bg-issues-wrap" hidden>
+        <h3 id="bg-issues-title">檢查</h3>
+        <ul id="bg-issues" aria-labelledby="bg-issues-title"></ul>
+      </div>
+      <div hidden id="bg-messages">
+        <span data-message="copied">已復制到剪貼簿。</span>
+        <span data-message="copy-failed">復制失敗。請選中文字後自行復制。</span>
+        <span data-message="downloaded">已下載 {file}。</span>
+        <span data-message="preset-loaded">已載入預設:{name}。</span>
+        <span data-message="remove">刪除</span>
+        <span data-message="remove-view">移除檢視</span>
+        <span data-message="view-title">檢視 {n}</span>
+        <span data-message="l-kind">篩選類型</span>
+        <span data-message="k-prop">屬性比較</span>
+        <span data-message="l-prop">屬性</span>
+        <span data-message="l-op">運算子</span>
+        <span data-message="l-value">值</span>
+        <span data-message="l-arg">參數</span>
+        <span data-message="l-fname">公式名稱</span>
+        <span data-message="l-fexpr">運算式</span>
+        <span data-message="l-pname">屬性</span>
+        <span data-message="l-pdisplay">顯示名稱</span>
+        <span data-message="l-vtype">類型</span>
+        <span data-message="l-vname">名稱</span>
+        <span data-message="l-vorder">要顯示的屬性(按順序),每行一個</span>
+        <span data-message="l-vlimit">限制(可選)</span>
+        <span data-message="l-vgroup">分組屬性(可選)</span>
+        <span data-message="l-vdir">方向</span>
+        <span data-message="l-vfilters">檢視篩選器,每行一個運算式(必須全部為真)</span>
+        <span data-message="l-vsum">摘要</span>
+        <span data-message="l-sprop">摘要屬性</span>
+        <span data-message="l-sfn">摘要</span>
+        <span data-message="add-summary">添加摘要</span>
+        <span data-message="i-view-name">檢視 {n} 沒有名稱。請為每個檢視命名。</span>
+        <span data-message="i-no-views">請至少添加一個檢視,否則該 base 不會顯示任何內容。</span>
+        <span data-message="i-formula-self">公式 {name} 參照了自身。Obsidian 不允許循環參照。</span>
+        <span data-message="i-formula-name">公式名稱 {name} 應以字母或底線開頭,且只能使用字母、數字和底線。</span>
+        <span data-message="i-formula-empty">公式 {name} 沒有運算式,已將其忽略。</span>
+        <span data-message="i-formula-dup">有兩個公式都名為 {name}。</span>
+        <span data-message="i-space">文字 {value} 含有空格,因此已寫成帶引號的字串。文字值需要加引號。</span>
+        <span data-message="i-empty-value">有一個篩選行的值為空,已將其忽略。</span>
+        <span data-message="i-group-order">groupBy 屬性 {name} 不在檢視 {n} 的 order 列表中。base 仍可使用,但該列不會顯示。</span>
+        <span data-message="i-summary-bad">{name} 不是有文件說明的摘要。請從列表中選擇一個。</span>
+        <span data-message="i-no-filter">未設定來源篩選器,因此該 base 會包含庫中的所有筆記。請添加資料夾或標籤篩選器來縮小範圍。</span>
+        <span data-message="i-map">map 檢視類型需要 Maps 外掛。</span>
+        <span data-message="i-kanban">檢視頁面中說明,kanban 檢視類型自 Obsidian 1.14 起可用。</span>
+        <span data-message="i-order-space">屬性名稱 {name} 包含空格。依賴它之前,請先確認 Obsidian 如何命名該屬性。</span>
+        <span data-message="i-ok">未發現問題。</span>
+      </div>
+
+      <h2 id="syntax">2. Bases 語法速覽</h2>
+      <p>這些是 <a href="https://obsidian.md/help/bases/syntax" target="_blank" rel="noopener">Obsidian 的語法頁面</a> 所說明的內容。無需學習其他結構描述。</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th>鍵</th><th>作用</th><th>範例</th></tr></thead>
+          <tbody>
+            <tr><td><code>filters</code></td><td>縮小所有檢視的筆記範圍。</td><td><code>file.hasTag("project")</code></td></tr>
+            <tr><td><code>formulas</code></td><td>定義計算屬性,用作 <code>formula.name</code>.</td><td><code>total: 'price * qty'</code></td></tr>
+            <tr><td><code>properties</code></td><td>各屬性的設定。 <code>displayName</code> 設定列標題。</td><td><code>displayName: "Status"</code></td></tr>
+            <tr><td><code>summaries</code></td><td>定義你自己的摘要公式,使用 <code>values</code>.</td><td>自定義,可選</td></tr>
+            <tr><td><code>views</code></td><td>針對同一批筆記的檢視列表。</td><td><code>- type: table</code></td></tr>
+            <tr><td><code>type</code> (檢視)</td><td>檢視的版面配置。</td><td><code>table</code>, <code>cards</code>, <code>list</code></td></tr>
+            <tr><td><code>name</code> (檢視)</td><td>檢視的名稱。</td><td><code>name: "Projects"</code></td></tr>
+            <tr><td><code>filters</code> (檢視)</td><td>僅用於此檢視的篩選器。</td><td><code>file.inFolder("Work")</code></td></tr>
+            <tr><td><code>groupBy</code> (檢視)</td><td>按某個 <code>property</code> 位於 <code>direction</code>.</td><td><code>direction: DESC</code></td></tr>
+            <tr><td><code>order</code> (檢視)</td><td>按順序顯示的屬性。</td><td><code>- file.name</code></td></tr>
+            <tr><td><code>limit</code> (檢視)</td><td>限制行數。</td><td><code>limit: 10</code></td></tr>
+            <tr><td><code>summaries</code> (檢視)</td><td>將屬性對應到摘要。</td><td><code>price: Sum</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>產生器不會寫入所有有文件說明的鍵。語法頁面還介紹了 <code>groupOrder</code>,檢視還可以儲存額外狀態(例如排序列),這些由 Obsidian 自行管理。如有需要,可手動添加:YAML 由你隨意編輯。</p>
+
+      <h2 id="filters">3. 篩選器:and、or、not</h2>
+      <p>篩選器是對每條筆記判斷真假的文字語句,或是帶有以下鍵的物件: <code>and</code>, <code>or</code> 或 <code>not</code> 其中包含更多篩選器的列表。全域 <code>filters</code> 適用於所有檢視。檢視自身的 <code>filters</code> 僅適用於該檢視,兩者以 AND 組合。</p>
+      <pre class="guide-code"><code>filters:
+  or:
+    - file.hasTag("meeting")
+    - file.inFolder("Meetings")</code></pre>
+      <p>沒有 <code>from</code> 或 <code>source</code> 鍵。沒有篩選器時,base 會包含庫中的所有檔案,因此除非你有意如此,否則請務必設定篩選器。</p>
+      <p>語句內的文字值需要加引號,因此 YAML 需要巢狀引號: <code>'status == "done"'</code>。產生器會自動為你處理。函式篩選器,例如 <code>file.hasTag()</code>, <code>file.inFolder()</code> 和 <code>file.hasLink()</code> 位於 <a href="https://obsidian.md/help/bases/functions" target="_blank" rel="noopener">函式頁面</a>.</p>
+
+      <h2 id="formulas">4. 公式和摘要</h2>
+      <p>下的每個條目 <code>formulas</code> 會成為可在每個檢視中使用的屬性,寫作 <code>formula.name</code>。公式可以使用其他公式,但不允許循環參照,因此公式不能參照自身。結果以 YAML 字串存儲,所以運算式要放在引號內。</p>
+      <pre class="guide-code"><code>formulas:
+  formatted_price: 'if(price, price.toFixed(2) + " dollars")'</code></pre>
+      <p>檢視的 <code>summaries</code> 將屬性對應到摘要。語法頁面列出了以下預設值:</p>
+      <ul>
+        <li><strong>數字:</strong> <code>Average</code>, <code>Min</code>, <code>Max</code>, <code>Sum</code>, <code>Range</code>, <code>Median</code>, <code>Stddev</code></li>
+        <li><strong>日期:</strong> <code>Earliest</code>, <code>Latest</code>, <code>Range</code></li>
+        <li><strong>布林值:</strong> <code>Checked</code>, <code>Unchecked</code></li>
+        <li><strong>任一:</strong> <code>Empty</code>, <code>Filled</code>, <code>Unique</code></li>
+      </ul>
+      <p>關於日期運算,語法頁面說明 <code>file.mtime &gt; now() - "1 week"</code> 對最近一周內修改過的檔案為 true。</p>
+
+      <h2 id="this">5. 這意味著什麼</h2>
+      <p>在篩選器或公式中, <code>this</code> 是顯示該 base 的檔案。語法頁面說明:當 base 在主內容區開啟時,它就是 base 檔案本身;當 base 嵌入筆記或 Canvas 時,它是嵌入它的檔案;當 base 位於側邊欄時,它是主內容區中的當前檔案。該頁面給出了 <code>file.hasLink(this.file)</code> ,以此重現反向連結面板。</p>
+
+      <h2 id="examples">6. 可複製的範例</h2>
+      <p>以下是產生器預設的純程式碼形式,無需 JavaScript 即可使用。請將資料夾、標籤和屬性名稱替換為你自己的。將文字儲存為 <code>.base</code> 檔案,或將其包裹在 <code>base</code> 程式碼塊。請參閱 <a href="https://obsidian.md/help/bases/create-base" target="_blank" rel="noopener">建立 base</a> 了解相關命令,並使用以下方式嵌入已儲存的檔案: <code>![[Name.base]]</code> 或 <code>![[Name.base#View]]</code> 來選擇預設檢視。</p>
+      <h3>閱讀清單</h3>
+      <pre class="guide-code" id="example-reading"><code>filters:
+  and:
+    - file.inFolder("Reading")
+    - 'status == "to read"'
+properties:
+  status:
+    displayName: "Status"
+views:
+  - type: cards
+    name: "Reading list"
+    order:
+      - file.name
+      - status
+</code></pre>
+      <h3>按狀態劃分的項目</h3>
+      <pre class="guide-code" id="example-projects"><code>filters:
+  and:
+    - file.hasTag("project")
+properties:
+  status:
+    displayName: "Status"
+views:
+  - type: table
+    name: "Projects by status"
+    groupBy:
+      property: status
+      direction: ASC
+    order:
+      - file.name
+      - status
+      - file.mtime
+</code></pre>
+      <h3>帶有某標籤且本周修改過的筆記</h3>
+      <pre class="guide-code" id="example-week"><code>filters:
+  and:
+    - file.hasTag("project")
+    - 'file.mtime &gt; now() - "1 week"'
+views:
+  - type: table
+    name: "Modified this week"
+    order:
+      - file.name
+      - file.mtime
+</code></pre>
+      <h3>此筆記的反向連結</h3>
+      <pre class="guide-code" id="example-backlinks"><code>filters:
+  and:
+    - file.hasLink(this.file)
+views:
+  - type: table
+    name: "Backlinks"
+    order:
+      - file.name
+      - file.folder
+</code></pre>
+      <h3>用 Vox.md 擷取的語音筆記</h3>
+      <pre class="guide-code" id="example-voice"><code>filters:
+  and:
+    - file.inFolder("Vox")
+    - file.hasTag("voice")
+views:
+  - type: table
+    name: "Voice notes"
+    order:
+      - file.ctime
+      - file.name
+      - file.tags
+</code></pre>
+      <p>該 <code>order</code> list 用於選擇列。排序是在 Obsidian 的檢視工具列中更改的檢視設定,因此範例中沒有寫入排序。</p>
+
+      <h2 id="capture">7. 讓你的擷取內容顯示在 base 中</h2>
+      <p>Vox.md 會將你擷取的內容以 Markdown 筆記形式儲存到庫中的某個資料夾。其 <a href="/zh-hant/docs/#preset-metadata">中繼資料文件</a> 說明路由可以將靜態中繼資料添加為 <code>key: value</code> 行,例如 <code>tags: [journal, idea]</code>,並且 <strong>筆記 frontmatter</strong> 在文件範圍寫入它,還介紹了可選的位置中繼資料。按該資料夾或標籤篩選的 base(如上面最後一個範例)隨後會在一張表中列出你的擷取內容。請使用以下工具建立中繼資料: <a href="/zh-hant/blog/obsidian-properties-generator/">屬性產生器</a>,並參閱 <a href="/zh-hant/blog/voice-notes-to-obsidian-iphone/">在 iPhone 上用語音記筆記到 Obsidian</a> 了解設定方法。</p>
+      <p>相關工具: <a href="/zh-hant/blog/obsidian-daily-note-template/">每日筆記範本產生器</a> 來建立帶日期的筆記, <a href="/zh-hant/blog/obsidian-callout-generator/">標註產生器</a> 以及 <a href="/zh-hant/blog/markdown-table-maker/">Markdown 表格產生器</a> 用於筆記內容。</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">想要值得查詢的筆記?</h2>
+        <p>Vox.md 可在 iPhone 和 Mac 上通過語音和文字擷取內容,並按你選擇的屬性以 Markdown 形式直接存入你的庫。錄音、轉錄和擷取功能需要 Vox.md Unlimited;符合條件的帳戶可享 7 天免費試用。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_a4dab2e250af">用語音擷取筆記</a></p>
+        <p>上方的產生器無需App即可完整使用。</p>
+      </section>
+
+      <h2 id="troubleshooting">8. 疑難排解</h2>
+      <ul>
+        <li><strong>該 base 會顯示所有筆記。</strong> 未設定來源篩選器。base 預設包含整個庫,因此請添加 <code>file.inFolder()</code> 或 <code>file.hasTag()</code> 篩選器。</li>
+        <li><strong>某個屬性列是空白的。</strong> 名稱不匹配(包括大小寫),或者筆記的 frontmatter 中沒有該屬性。請檢查筆記的屬性和列名。</li>
+        <li><strong>YAML 錯誤。</strong> 請檢查縮排(使用空格)和引號。包含文字的篩選器需要巢狀引號: <code>'status == "done"'</code>.</li>
+        <li><strong>map 檢視為空。</strong> 根據檢視頁面,map 版面配置需要 Maps 外掛。</li>
+      </ul>
+
+      <h2 id="faq">9. 常見問題</h2>
+      <h3>Bases 是核心外掛嗎?</h3>
+      <p>可以。 <a href="https://obsidian.md/help/bases" target="_blank" rel="noopener">Obsidian Help 說明文件</a> 寫道:“Bases 是一個核心外掛,可讓你建立類似資料庫的筆記檢視。”</p>
+      <h3>Bases 還是 Dataview?</h3>
+      <p>二者互相獨立。Dataview 是擁有自己查詢語言的社區外掛。base 是 Obsidian 自行讀取的 YAML,沒有 <code>from</code> 鍵:通過篩選器來縮小筆記範圍。本頁不會進一步比較它們的功能。</p>
+      <h3>我可以手動編輯 YAML 嗎?</h3>
+      <p>可以。 <code>.base</code> 檔案是 YAML 文字,各個鍵在語法頁面中有說明。你可以用任意編輯器開啟產生的檔案,也可以將程式碼塊貼上到筆記中並在那裡編輯。</p>
+      <h3>產生器會上傳我的資料嗎?</h3>
+      <p>不會。本頁中的腳本在你的設備上建立 YAML,頁面不會發出任何網路請求。重新整理頁面會清除所有內容。</p>
+
+      <nav class="toc" aria-label="相關指南" id="related"><div class="toc-title">繼續設定</div><ul>
+        <li><a href="/zh-hant/blog/obsidian-properties-generator/">Obsidian 屬性產生與檢查工具</a></li>
+        <li><a href="/zh-hant/blog/obsidian-daily-note-template/">Obsidian 每日筆記範本產生器</a></li>
+        <li><a href="/zh-hant/blog/obsidian-callout-generator/">Obsidian 標註產生器</a></li>
+        <li><a href="/zh-hant/blog/markdown-table-maker/">Markdown 表格產生器</a></li>
+        <li><a href="/zh-hant/blog/voice-notes-to-obsidian-iphone/">iPhone 上的語音筆記到 Obsidian</a></li>
+      </ul></nav>
+<style>
+.bg-tool:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.bg-tool [hidden], #bg-embed[hidden], #bg-issues-wrap[hidden] { display: none; }
+.bg-wide { grid-column: 1 / -1; min-width: 0; }
+.mt-output-head[hidden], .bg-output[hidden] { display: none; }
+.bg-tool input[type="text"], .bg-tool textarea, .bg-tool select { font: inherit; font-family: var(--font-mono); font-size: 16px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; padding: 8px 10px; width: 100%; box-sizing: border-box; min-height: 44px; }
+.bg-tool textarea { resize: vertical; min-height: 90px; }
+.bg-tool input:focus-visible, .bg-tool textarea:focus-visible, .bg-tool select:focus-visible, .bg-output:focus-visible, .bg-tool button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.bg-tool .mt-option { min-height: 44px; }
+.bg-tool .mt-option input { width: 22px; height: 22px; }
+.bg-tool button, .mt-actions button { font: inherit; font-size: 15px; min-height: 44px; padding: 0 18px; cursor: pointer; }
+.bg-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin: 8px 0; align-items: end; }
+.bg-row > * { min-width: 0; }
+.bg-view { border: 1px solid var(--line); border-radius: 16px; padding: 12px 16px; margin: 0 0 12px; background: var(--card); }
+.bg-view-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.bg-output { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 32rem; overflow: auto; }
+.bg-issues-error { font-weight: 700; }
+</style>
+<script>
+/* Obsidian Bases generator. Runs locally: no network requests. */
+(function () {
+  var VIEW_TYPES = ['table', 'cards', 'list', 'map', 'kanban'];
+  var SUMMARIES = ['Average', 'Min', 'Max', 'Sum', 'Range', 'Median', 'Stddev', 'Earliest', 'Latest', 'Checked', 'Unchecked', 'Empty', 'Filled', 'Unique'];
+  var OPS = ['==', '!=', '>', '<', '>=', '<='];
+  var KINDS = ['hasTag', 'inFolder', 'hasLink', 'ext', 'prop'];
+
+  function q1(s) { return "'" + String(s).replace(/'/g, "''") + "'"; }
+  function q2(s) { return '"' + String(s).replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"'; }
+  function needsQuote(s) { return /^[\s\-?:,\[\]{}#&*!|>'"%@`]/.test(s) || /: | #|:$|\s$/.test(s) || s === ''; }
+  function plain(s) { return needsQuote(s) ? q1(s) : s; }
+  function key(s) { return /^[A-Za-z_][\w.\-]*$/.test(s) ? s : q1(s); }
+  function bare(s) { return String(s || '').trim(); }
+  function unwrap(s) {
+    s = bare(s);
+    var m = /^(["'])(.*)\1$/.exec(s);
+    return m ? m[2] : s;
+  }
+  function lines(text) { return String(text || '').split(/\r?\n|,/).map(bare).filter(Boolean); }
+
+  /* Turn a typed value into an expression operand. */
+  function operand(value, issues) {
+    var v = bare(value);
+    if (/^-?\d+(\.\d+)?$/.test(v) || /^(true|false|null)$/.test(v)) return v;
+    if (/^(["']).*\1$/.test(v) && v.length > 1) return q2(v.slice(1, -1));
+    if (/^[A-Za-z_]\w*\(/.test(v) || /^(this|formula|note|file)\./.test(v)) return v;
+    if (/\s/.test(v)) issues.push({ level: 'info', code: 'i-space', fill: { value: v } });
+    return q2(v);
+  }
+
+  function filterStatement(row, issues) {
+    var a = bare(row.a);
+    if (row.kind === 'raw') return a ? (/"/.test(a) && !/^[\w.]+\(.*\)$/.test(a) ? q1(a) : plain(a)) : null;
+    if (row.kind === 'prop') {
+      var v = bare(row.b);
+      if (!a || !v) { issues.push({ level: 'warn', code: 'i-empty-value' }); return null; }
+      var op = OPS.indexOf(row.op) !== -1 ? row.op : '==';
+      return q1(a + ' ' + op + ' ' + operand(v, issues));
+    }
+    if (!a) { issues.push({ level: 'warn', code: 'i-empty-value' }); return null; }
+    if (row.kind === 'ext') return q1('file.ext == ' + q2(unwrap(a).replace(/^\./, '')));
+    if (row.kind === 'hasLink' && /^this\./.test(a)) return 'file.hasLink(' + a + ')';
+    if (row.kind === 'hasTag') a = unwrap(a).replace(/^#/, '');
+    else a = unwrap(a);
+    var out = 'file.' + row.kind + '(' + q2(a) + ')';
+    return plain(out);
+  }
+
+  function filterBlock(mode, rows, indent, issues) {
+    var items = [];
+    (rows || []).forEach(function (r) { var s = filterStatement(r, issues); if (s) items.push(s); });
+    if (!items.length) return null;
+    var m = mode === 'or' || mode === 'not' ? mode : 'and';
+    var pad = new Array(indent + 1).join(' ');
+    var out = [pad + m + ':'];
+    items.forEach(function (s) { out.push(pad + '  - ' + s); });
+    return out;
+  }
+
+  function viewFilterRows(text) {
+    return String(text || '').split(/\r?\n/).map(bare).filter(Boolean);
+  }
+
+  /* state -> { yaml, output, issues, filename, embed, embedView } */
+  function build(state) {
+    state = state || {};
+    var issues = [];
+    var out = [];
+    var gl = filterBlock(state.mode, state.filters, 2, issues);
+    if (gl) { out.push('filters:'); out = out.concat(gl); }
+    else issues.push({ level: 'info', code: 'i-no-filter' });
+
+    var formulas = (state.formulas || []).filter(function (f) { return bare(f.name) || bare(f.expr); });
+    var seen = {};
+    var fl = [];
+    formulas.forEach(function (f) {
+      var name = bare(f.name), expr = bare(f.expr);
+      if (!/^[A-Za-z_]\w*$/.test(name)) { issues.push({ level: 'error', code: 'i-formula-name', fill: { name: name || '(empty)' } }); return; }
+      if (seen[name]) issues.push({ level: 'error', code: 'i-formula-dup', fill: { name: name } });
+      seen[name] = true;
+      if (!expr) { issues.push({ level: 'warn', code: 'i-formula-empty', fill: { name: name } }); return; }
+      if (new RegExp('formula\\.' + name + '(?![\\w])').test(expr)) issues.push({ level: 'error', code: 'i-formula-self', fill: { name: name } });
+      fl.push('  ' + key(name) + ': ' + q1(expr));
+    });
+    if (fl.length) { out.push('formulas:'); out = out.concat(fl); }
+
+    var pl = [];
+    (state.props || []).forEach(function (p) {
+      if (!bare(p.name) || !bare(p.display)) return;
+      pl.push('  ' + key(bare(p.name)) + ':');
+      pl.push('    displayName: ' + q2(bare(p.display)));
+    });
+    if (pl.length) { out.push('properties:'); out = out.concat(pl); }
+
+    var views = state.views || [];
+    if (!views.length) issues.push({ level: 'error', code: 'i-no-views' });
+    else out.push('views:');
+    views.forEach(function (v, i) {
+      var n = i + 1;
+      var type = VIEW_TYPES.indexOf(v.type) !== -1 ? v.type : 'table';
+      var name = bare(v.name);
+      if (!name) issues.push({ level: 'error', code: 'i-view-name', fill: { n: n } });
+      if (type === 'map') issues.push({ level: 'info', code: 'i-map' });
+      if (type === 'kanban') issues.push({ level: 'info', code: 'i-kanban' });
+      out.push('  - type: ' + type);
+      out.push('    name: ' + q2(name));
+      var limit = parseInt(v.limit, 10);
+      if (limit > 0) out.push('    limit: ' + limit);
+      var order = lines(v.order);
+      var group = bare(v.group);
+      if (group) {
+        out.push('    groupBy:');
+        out.push('      property: ' + plain(group));
+        out.push('      direction: ' + (v.dir === 'DESC' ? 'DESC' : 'ASC'));
+        if (order.length && order.indexOf(group) === -1) issues.push({ level: 'warn', code: 'i-group-order', fill: { name: group, n: n } });
+      }
+      var vf = filterBlock('and', viewFilterRows(v.filters).map(function (s) { return { kind: 'raw', a: s }; }), 6, []);
+      if (vf) { out.push('    filters:'); out = out.concat(vf); }
+      if (order.length) {
+        out.push('    order:');
+        order.forEach(function (o) {
+          if (/\s/.test(o) && !/^(["']).*\1$/.test(o)) issues.push({ level: 'warn', code: 'i-order-space', fill: { name: o } });
+          out.push('      - ' + plain(o));
+        });
+      }
+      var sl = [];
+      (v.summaries || []).forEach(function (s) {
+        var p = bare(s.prop), fn = bare(s.fn);
+        if (!p || !fn) return;
+        if (SUMMARIES.indexOf(fn) === -1) { issues.push({ level: 'error', code: 'i-summary-bad', fill: { name: fn } }); return; }
+        sl.push('      ' + key(p) + ': ' + fn);
+      });
+      if (sl.length) { out.push('    summaries:'); out = out.concat(sl); }
+    });
+
+    var yaml = out.join('\n');
+    var file = bare(state.basename).replace(/[\\\/:*?"<>|#^\[\]]+/g, ' ').replace(/\s+/g, ' ').trim() || 'Base';
+    var first = views.length ? bare(views[0].name) : '';
+    return {
+      yaml: yaml,
+      output: state.output === 'block' ? '```base\n' + yaml + '\n```' : yaml,
+      issues: issues,
+      file: file,
+      filename: file + '.base',
+      embed: '![[' + file + '.base]]',
+      embedView: first ? '![[' + file + '.base#' + first.replace(/[#^\[\]|]/g, ' ').replace(/\s+/g, ' ').trim() + ']]' : ''
+    };
+  }
+
+  function F(kind, a, op, b) { return { kind: kind, a: a || '', op: op || '==', b: b || '' }; }
+  function V(type, name, order, extra) {
+    var v = { type: type, name: name, order: order.join('\n'), limit: '', group: '', dir: 'ASC', filters: '', summaries: [] };
+    Object.keys(extra || {}).forEach(function (k) { v[k] = extra[k]; });
+    return v;
+  }
+  var PRESETS = {
+    reading: { name: 'Reading list', state: { mode: 'and', basename: 'Reading list', output: 'base', formulas: [],
+      filters: [F('inFolder', 'Reading'), F('prop', 'status', '==', 'to read')],
+      props: [{ name: 'status', display: 'Status' }],
+      views: [V('cards', 'Reading list', ['file.name', 'status'])] } },
+    projects: { name: 'Projects by status', state: { mode: 'and', basename: 'Projects', output: 'base', formulas: [],
+      filters: [F('hasTag', 'project')],
+      props: [{ name: 'status', display: 'Status' }],
+      views: [V('table', 'Projects by status', ['file.name', 'status', 'file.mtime'], { group: 'status' })] } },
+    week: { name: 'Tag, modified this week', state: { mode: 'and', basename: 'This week', output: 'base', formulas: [], props: [],
+      filters: [F('hasTag', 'project'), F('prop', 'file.mtime', '>', 'now() - "1 week"')],
+      views: [V('table', 'Modified this week', ['file.name', 'file.mtime'])] } },
+    backlinks: { name: 'Backlinks of this note', state: { mode: 'and', basename: 'Backlinks', output: 'base', formulas: [], props: [],
+      filters: [F('hasLink', 'this.file')],
+      views: [V('table', 'Backlinks', ['file.name', 'file.folder'])] } },
+    voice: { name: 'Voice notes (Vox.md)', state: { mode: 'and', basename: 'Voice notes', output: 'base', formulas: [], props: [],
+      filters: [F('inFolder', 'Vox'), F('hasTag', 'voice')],
+      views: [V('table', 'Voice notes', ['file.ctime', 'file.name', 'file.tags'])] } }
+  };
+
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+
+  if (typeof window !== 'undefined') {
+    window.voxBases = { build: build, presets: PRESETS, summaries: SUMMARIES, viewTypes: VIEW_TYPES };
+  }
+
+  var form = document.getElementById('bg-tool');
+  if (!form) return;
+  var state = clone(PRESETS.projects.state);
+  var statusEl = document.getElementById('bg-status');
+
+  function message(name, fill) {
+    var el = document.querySelector('#bg-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : name;
+    if (fill) Object.keys(fill).forEach(function (k) { text = text.split('{' + k + '}').join(fill[k]); });
+    return text;
+  }
+  function say(text) {
+    statusEl.textContent = '';
+    window.setTimeout(function () { statusEl.textContent = text; }, 30);
+  }
+
+  function el(tag, attrs, children) {
+    var e = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      if (k === 'text') e.textContent = attrs[k]; else e.setAttribute(k, attrs[k]);
+    });
+    (children || []).forEach(function (c) { e.appendChild(c); });
+    return e;
+  }
+  function input(obj, prop, label, extra) {
+    var i = el('input', Object.assign({ type: 'text', 'aria-label': label, autocomplete: 'off', spellcheck: 'false', autocapitalize: 'off' }, extra || {}));
+    i.value = obj[prop] || '';
+    i.addEventListener('input', function () { obj[prop] = i.value; render(); });
+    return i;
+  }
+  function select(obj, prop, label, values, labels) {
+    var s = el('select', { 'aria-label': label });
+    values.forEach(function (v, i) { s.appendChild(el('option', { value: v, text: labels ? labels[i] : v })); });
+    s.value = obj[prop];
+    s.addEventListener('change', function () { obj[prop] = s.value; render(); });
+    return s;
+  }
+  function removeBtn(list, i, label) {
+    var b = el('button', { type: 'button', class: 'btn-secondary', text: label || message('remove') });
+    b.addEventListener('click', function () { list.splice(i, 1); rebuild(); });
+    return b;
+  }
+
+  var KIND_LABELS = ['file.hasTag("…")', 'file.inFolder("…")', 'file.hasLink("…")', 'file.ext == "…"'];
+
+  function filterRow(list, i) {
+    var r = list[i];
+    var kinds = el('select', { 'aria-label': message('l-kind') });
+    KINDS.forEach(function (k, n) { kinds.appendChild(el('option', { value: k, text: n < 4 ? KIND_LABELS[n] : message('k-prop') })); });
+    kinds.value = r.kind;
+    kinds.addEventListener('change', function () { r.kind = kinds.value; rebuild(); });
+    var row = el('div', { class: 'bg-row' }, [kinds]);
+    row.appendChild(input(r, 'a', message(r.kind === 'prop' ? 'l-prop' : 'l-arg')));
+    if (r.kind === 'prop') {
+      row.appendChild(select(r, 'op', message('l-op'), OPS));
+      row.appendChild(input(r, 'b', message('l-value')));
+    }
+    row.appendChild(removeBtn(list, i));
+    return row;
+  }
+
+  function fillRows(container, list, make) {
+    container.textContent = '';
+    list.forEach(function (_, i) { container.appendChild(make(list, i)); });
+  }
+
+  function viewBlock(i) {
+    var v = state.views[i];
+    var box = el('fieldset', { class: 'bg-view' }, [el('legend', { text: message('view-title', { n: i + 1 }) })]);
+    var grid = el('div', { class: 'bg-view-grid' });
+    function field(label, control) {
+      var l = el('label', { class: 'mt-field', text: label + ' ' });
+      l.appendChild(control);
+      grid.appendChild(l);
+    }
+    field(message('l-vtype'), select(v, 'type', message('l-vtype'), VIEW_TYPES));
+    field(message('l-vname'), input(v, 'name', message('l-vname')));
+    var order = el('textarea', { 'aria-label': message('l-vorder'), rows: '4', spellcheck: 'false', autocapitalize: 'off' });
+    order.value = v.order;
+    order.addEventListener('input', function () { v.order = order.value; render(); });
+    field(message('l-vorder'), order);
+    field(message('l-vlimit'), input(v, 'limit', message('l-vlimit'), { inputmode: 'numeric' }));
+    field(message('l-vgroup'), input(v, 'group', message('l-vgroup')));
+    field(message('l-vdir'), select(v, 'dir', message('l-vdir'), ['ASC', 'DESC']));
+    var vf = el('textarea', { 'aria-label': message('l-vfilters'), rows: '3', spellcheck: 'false', autocapitalize: 'off' });
+    vf.value = v.filters;
+    vf.addEventListener('input', function () { v.filters = vf.value; render(); });
+    field(message('l-vfilters'), vf);
+    box.appendChild(grid);
+    box.appendChild(el('p', { class: 'mt-hint', text: message('l-vsum') }));
+    var sums = el('div');
+    fillRows(sums, v.summaries, function (list, n) {
+      var s = list[n];
+      var row = el('div', { class: 'bg-row' }, [input(s, 'prop', message('l-sprop')), select(s, 'fn', message('l-sfn'), SUMMARIES), removeBtn(list, n)]);
+      return row;
+    });
+    box.appendChild(sums);
+    var add = el('button', { type: 'button', class: 'btn-secondary', text: message('add-summary') });
+    add.addEventListener('click', function () { v.summaries.push({ prop: '', fn: 'Sum' }); rebuild(); });
+    box.appendChild(el('div', { class: 'mt-actions' }, [add]));
+    var rm = removeBtn(state.views, i, message('remove-view'));
+    box.appendChild(el('div', { class: 'mt-actions' }, [rm]));
+    return box;
+  }
+
+  function rebuild() {
+    document.getElementById('bg-mode').value = state.mode;
+    form.elements.basename.value = state.basename;
+    form.elements.output.value = state.output;
+    fillRows(document.getElementById('bg-filter-rows'), state.filters, filterRow);
+    fillRows(document.getElementById('bg-formula-rows'), state.formulas, function (list, i) {
+      return el('div', { class: 'bg-row' }, [input(list[i], 'name', message('l-fname')), input(list[i], 'expr', message('l-fexpr')), removeBtn(list, i)]);
+    });
+    fillRows(document.getElementById('bg-prop-rows'), state.props, function (list, i) {
+      return el('div', { class: 'bg-row' }, [input(list[i], 'name', message('l-pname')), input(list[i], 'display', message('l-pdisplay')), removeBtn(list, i)]);
+    });
+    var views = document.getElementById('bg-views');
+    views.textContent = '';
+    state.views.forEach(function (_, i) { views.appendChild(viewBlock(i)); });
+    render();
+  }
+
+  var code = document.getElementById('bg-output-code');
+  function render() {
+    var r = build(state);
+    code.textContent = r.output;
+    document.getElementById('bg-output').hidden = false;
+    document.getElementById('bg-output-head').hidden = false;
+    document.getElementById('bg-download').hidden = state.output === 'block';
+    var embed = document.getElementById('bg-embed');
+    embed.hidden = false;
+    document.getElementById('bg-embed-code').textContent = r.embed + (r.embedView ? '\n' + r.embedView : '');
+    var list = document.getElementById('bg-issues');
+    list.textContent = '';
+    var seen = {};
+    var items = r.issues.length ? r.issues : [{ level: 'info', code: 'i-ok' }];
+    items.forEach(function (it) {
+      var text = message(it.code, it.fill);
+      if (seen[text]) return;
+      seen[text] = true;
+      list.appendChild(el('li', { class: 'bg-issues-' + it.level, text: text }));
+    });
+    document.getElementById('bg-issues-wrap').hidden = false;
+    return r;
+  }
+
+  var presetBox = document.getElementById('bg-presets');
+  Object.keys(PRESETS).forEach(function (k) {
+    var b = el('button', { type: 'button', class: 'btn-secondary', text: PRESETS[k].name });
+    b.addEventListener('click', function () {
+      state = clone(PRESETS[k].state);
+      rebuild();
+      say(message('preset-loaded', { name: PRESETS[k].name }));
+    });
+    presetBox.appendChild(b);
+  });
+  document.getElementById('bg-add-filter').addEventListener('click', function () { state.filters.push(F('hasTag', '')); rebuild(); });
+  document.getElementById('bg-add-formula').addEventListener('click', function () { state.formulas.push({ name: '', expr: '' }); rebuild(); });
+  document.getElementById('bg-add-prop').addEventListener('click', function () { state.props.push({ name: '', display: '' }); rebuild(); });
+  document.getElementById('bg-add-view').addEventListener('click', function () { state.views.push(V('table', '', ['file.name'])); rebuild(); });
+  document.getElementById('bg-mode').addEventListener('change', function (e) { state.mode = e.target.value; render(); });
+  form.elements.basename.addEventListener('input', function (e) { state.basename = e.target.value; render(); });
+  Array.prototype.forEach.call(form.elements.output, function (r) {
+    r.addEventListener('change', function () { state.output = form.elements.output.value; render(); });
+  });
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+
+  document.getElementById('bg-copy').addEventListener('click', function () {
+    var text = code.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(code);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+  document.getElementById('bg-download').addEventListener('click', function () {
+    var r = build(state);
+    var blob = new Blob([r.yaml + '\n'], { type: 'text/plain;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = r.filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    say(message('downloaded', { file: r.filename }));
+  });
+
+  document.getElementById('bg-nojs').hidden = true;
+  form.hidden = false;
+  rebuild();
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/zh-hant/">首頁</a></li>
+        <li><a href="/zh-hant/docs/">文件</a></li>
+        <li><a href="/zh-hant/blog/">指南</a></li>
+        <li><a href="/zh-hant/compare/">比較</a></li>
+        <li><a href="/zh-hant/privacy.html">隱私</a></li>
+        <li><a href="/zh-hant/terms.html">條款</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">支援</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_a4dab2e250af">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · 本地筆記快速擷取 · 不上傳內容。</div>
+    </div>
+  <details class="language-switcher"><summary>語言</summary><ul><li><a href="/blog/obsidian-bases-generator/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-bases-generator/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-bases-generator/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-bases-generator/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-bases-generator/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-bases-generator/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-bases-generator/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-bases-generator/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-bases-generator/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-bases-generator/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-bases-generator/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-bases-generator/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-bases-generator/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-bases-generator/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-bases-generator/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-bases-generator/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-bases-generator/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-bases-generator/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-bases-generator/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-bases-generator/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-bases-generator/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-bases-generator/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-bases-generator/" lang="zh-Hant" hreflang="zh-Hant" aria-current="page">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
