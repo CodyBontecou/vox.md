@@ -38,4 +38,18 @@ final class CaptureRecordBarTests: XCTestCase {
         // Without Live Notes there is no note to leave.
         XCTAssertFalse(QuickCaptureView.speakOffersNewNote(liveNotesEnabled: false, canRecordNewNote: true))
     }
+
+    func testButtonLabelsDefaultOnAndPersistWhenTurnedOff() throws {
+        XCTAssertEqual(CapturePreferenceKeys.showsBarButtonLabels, "capture.bar.showsButtonLabels.v1")
+        let suiteName = "CaptureRecordBarTests-\(UUID().uuidString)"
+        let suite = try XCTUnwrap(UserDefaults(suiteName: suiteName))
+        addTeardownBlock { suite.removePersistentDomain(forName: suiteName) }
+
+        // Fresh install: nothing stored, labels show.
+        XCTAssertTrue(CaptureBarButtonLabels.areShown(in: suite))
+        suite.set(false, forKey: CapturePreferenceKeys.showsBarButtonLabels)
+        XCTAssertFalse(CaptureBarButtonLabels.areShown(in: suite))
+        suite.set(true, forKey: CapturePreferenceKeys.showsBarButtonLabels)
+        XCTAssertTrue(CaptureBarButtonLabels.areShown(in: suite))
+    }
 }

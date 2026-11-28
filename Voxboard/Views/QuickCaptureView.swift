@@ -182,6 +182,8 @@ struct QuickCaptureView: View {
     @State private var sentToastPresentationID: UUID?
     @State private var showsPresetSendConfirmation = false
     @AppStorage(CapturePreferenceKeys.confirmPresetSend) private var confirmsPresetSend = false
+    @AppStorage(CapturePreferenceKeys.showsBarButtonLabels)
+    private var showsBarButtonLabels = CaptureBarButtonLabels.defaultValue
     @State private var composerSelection = NSRange(location: 0, length: 0)
     @State private var composerIsFocused = false
     /// The editor's text height, so the iPad Pencil card can sit right under it.
@@ -1387,6 +1389,20 @@ struct QuickCaptureView: View {
         }
     }
 
+    /// Voice Control names for Speak, starting with the visible text.
+    private var voiceCaptureInputLabels: [Text] {
+        if persistentRecorder.isAppRecordingSegmentActive {
+            return [Text("Stop"), Text(recordingStatusTitle)]
+        }
+        if persistentRecorder.isAppRecordingTranscribing {
+            return [Text("Transcribing"), Text(recordingStatusTitle)]
+        }
+        if showsSpeakNewNoteButton {
+            return [Text("Speak"), Text("Add to note"), Text(recordingStatusTitle)]
+        }
+        return [Text("Speak"), Text(recordingStatusTitle)]
+    }
+
     private var voiceCapturePressArea: CaptureViewSection {
         CaptureViewSection {
             // One container keeps the press gesture alive while the label swaps
@@ -1415,6 +1431,7 @@ struct QuickCaptureView: View {
                 persistentRecorder.toggleInAppSegmentPause()
             }
             .accessibilityIdentifier("capture_voice_recording")
+            .accessibilityInputLabels(voiceCaptureInputLabels)
             .opacity(isProcessingMedia ? 0.35 : 1)
             .task(id: persistentRecorder.isAppRecordingSegmentActive) {
                 await updateRecordingAudioLevels()
@@ -1510,6 +1527,7 @@ struct QuickCaptureView: View {
             .buttonStyle(.plain)
             .disabled(isProcessingMedia || persistentRecorder.ownsCaptureRoute)
             .accessibilityLabel("Record into a new note")
+            .accessibilityInputLabels([Text("Record new"), Text("Record into a new note")])
             .accessibilityHint(Text("Closes this file, starts a blank note and starts recording"))
             .accessibilityIdentifier("capture_speak_record_new_note")
             .keyboardShortcut("n", modifiers: [.command, .shift])
@@ -2611,6 +2629,7 @@ struct QuickCaptureView: View {
             .disabled(!viewModel.canSubmit || captureSubmissionIsBlocked)
             .opacity(viewModel.canSubmit && !captureSubmissionIsBlocked ? 1 : 0.35)
             .accessibilityIdentifier("quick_capture_submit")
+            .accessibilityInputLabels([Text("Send"), Text(sendRouteAccessibilityLabel)])
             .keyboardShortcut(.return, modifiers: .command)
         }
     }
@@ -2751,29 +2770,34 @@ struct QuickCaptureView: View {
                 if !composerIsFocused, captureHintRowHasContent {
                     captureHintRow
                 }
-                HStack(spacing: Geist.Spacing.three) {
+                // Controls line up on their centres; captions hang below.
+                HStack(alignment: .captureBarControlCenter, spacing: Geist.Spacing.three) {
                     if !captureFooterIsVaultUnreachable {
-                        Button {
-                            dismissComposer()
-                            showsAttachSheet = true
-                        } label: {
-                            Image(systemName: "plus")
-                                .accessibilityLabel("Attach")
-                        }
-                        .buttonStyle(SignalCircleButtonStyle(diameter: Geist.ControlHeight.large))
-                        .disabled(isProcessingMedia)
-                        .accessibilityIdentifier("capture_attach")
+                        CaptureBarLabeledControl(
+                            control: attachControl,
+                            caption: barCaption(String(localized: "Attach"))
+                        )
                     }
 
-                    voiceCaptureButton
+                    CaptureBarLabeledControl(control: voiceCaptureButton, caption: voiceCaptureCaption)
 
                     // Remote only has no note to keep editing; it always Sends.
                     if viewModel.liveNotesEnabled, !viewModel.selectedRouteIsRemoteOnly {
-                        if footerShowsSend { newNoteControl }
+                        if footerShowsSend {
+                            CaptureBarLabeledControl(
+                                control: newNoteControl,
+                                caption: barCaption(String(localized: "New note"))
+                            )
+                        }
                     } else if captureFooterIsVaultUnreachable {
+                        // Save already says what it does.
                         queueSaveControl
                     } else if footerShowsSend {
-                        sendRouteControl
+                        CaptureBarLabeledControl(
+                            control: sendRouteControl,
+                            // The iPad pill already reads "Send".
+                            caption: layout == .regularSidebar ? nil : barCaption(String(localized: "Send"))
+                        )
                     }
                 }
                 .animation(reduceMotion ? nil : .easeInOut(duration: 0.18), value: showsSpeakNewNoteButton)
@@ -2808,6 +2832,50 @@ struct QuickCaptureView: View {
                 Text("Optional confirmation for Route sends. Turn it off in Settings › Capture Bar.")
             }
         }
+    }
+
+    private var attachControl: CaptureViewSection {
+        CaptureViewSection {
+            Button {
+                dismissComposer()
+                showsAttachSheet = true
+            } label: {
+                Image(systemName: "plus")
+                    .accessibilityLabel("Attach")
+            }
+            .buttonStyle(SignalCircleButtonStyle(diameter: Geist.ControlHeight.large))
+            .disabled(isProcessingMedia)
+            .accessibilityIdentifier("capture_attach")
+        }
+    }
+
+    /// Visible names under the bar's controls (#199), on by default and
+    /// turned off in Settings › Capture Bar. Kept out of the keyboard-up
+    /// layout, which stays as it was.
+    private var showsBarCaptions: Bool {
+        showsBarButtonLabels && !composerIsFocused
+    }
+
+    private func barCaption(_ title: String) -> CaptureBarCaption? {
+        showsBarCaptions ? CaptureBarCaption(title) : nil
+    }
+
+    /// Speak names itself; with a note open its two halves get captions
+    /// (record into this note | record into a new one), and while
+    /// recording the ring is captioned Stop.
+    private var voiceCaptureCaption: CaptureBarCaption? {
+        guard showsBarCaptions else { return nil }
+        if persistentRecorder.isAppRecordingSegmentActive {
+            return CaptureBarCaption(String(localized: "Stop"))
+        }
+        if showsSpeakNewNoteButton {
+            return CaptureBarCaption(
+                String(localized: "Add to note"),
+                trailing: String(localized: "Record new"),
+                trailingWidth: Self.speakNewNoteButtonWidth
+            )
+        }
+        return nil
     }
 
     private var showsPendingCaptureHint: Bool {
