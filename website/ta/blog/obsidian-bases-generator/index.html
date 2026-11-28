@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="ta" dir="ltr" data-search-section="பிரிவு" data-search-guide="வழிகாட்டி" data-search-empty="“{query}” என்பதற்குப் பொருத்தங்கள் இல்லை">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obsidian Bases உருவாக்கி: வடிகட்டிகள், காட்சிகள், சூத்திரங்கள் | Vox.md</title>
+  <meta name="description" content="செல்லுபடியாகும் Obsidian Bases YAML-ஐ உருவாக்கும் இலவச உலாவிக் கருவி: வடிகட்டிகள், சூத்திரங்கள், table, cards அல்லது list காட்சிகள் மற்றும் சுருக்கங்களைச் சேர்த்து, .base கோப்பையோ base குறியீட்டுத் தொகுதியையோ நகலெடுங்கள். நகலெடுக்கத் தயாரான எடுத்துக்காட்டுகள் உண்டு. எதுவும் பதிவேற்றப்படாது.">
+  <link rel="canonical" href="https://vox.isolated.tech/ta/blog/obsidian-bases-generator/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="மொழி மாதிரிகளுக்கான Vox.md ஆவணங்கள்">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Obsidian Bases உருவாக்கி: வடிகட்டிகள், காட்சிகள், சூத்திரங்கள்">
+  <meta property="og:description" content="செல்லுபடியாகும் Obsidian Bases YAML-ஐ உருவாக்கும் இலவச உலாவிக் கருவி: வடிகட்டிகள், சூத்திரங்கள், table, cards அல்லது list காட்சிகள் மற்றும் சுருக்கங்களைச் சேர்த்து, .base கோப்பையோ base குறியீட்டுத் தொகுதியையோ நகலெடுங்கள். நகலெடுக்கத் தயாரான எடுத்துக்காட்டுகள் உண்டு. எதுவும் பதிவேற்றப்படாது.">
+  <meta property="og:url" content="https://vox.isolated.tech/ta/blog/obsidian-bases-generator/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-11-28">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Obsidian Bases உருவாக்கி: வடிகட்டிகள், காட்சிகள், சூத்திரங்கள்">
+  <meta name="twitter:description" content="செல்லுபடியாகும் Obsidian Bases YAML-ஐ உருவாக்கும் இலவச உலாவிக் கருவி: வடிகட்டிகள், சூத்திரங்கள், table, cards அல்லது list காட்சிகள் மற்றும் சுருக்கங்களைச் சேர்த்து, .base கோப்பையோ base குறியீட்டுத் தொகுதியையோ நகலெடுங்கள். நகலெடுக்கத் தயாரான எடுத்துக்காட்டுகள் உண்டு. எதுவும் பதிவேற்றப்படாது.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Obsidian Bases உருவாக்கி: வடிகட்டிகள், காட்சிகள், சூத்திரங்கள்",
+  "description": "செல்லுபடியாகும் Obsidian Bases YAML-ஐ உருவாக்கும் இலவச உலாவிக் கருவி: வடிகட்டிகள், சூத்திரங்கள், table, cards அல்லது list காட்சிகள் மற்றும் சுருக்கங்களைச் சேர்த்து, .base கோப்பையோ base குறியீட்டுத் தொகுதியையோ நகலெடுங்கள். நகலெடுக்கத் தயாரான எடுத்துக்காட்டுகள் உண்டு. எதுவும் பதிவேற்றப்படாது.",
+  "image": "https://vox.isolated.tech/screenshots/01-route-heading-light.png",
+  "datePublished": "2026-11-28",
+  "dateModified": "2026-11-28",
+  "mainEntityOfPage": "https://vox.isolated.tech/ta/blog/obsidian-bases-generator/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "ta",
+  "name": "Obsidian Bases உருவாக்கி: வடிகட்டிகள், காட்சிகள், சூத்திரங்கள் | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/ta/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "வழிகாட்டிகள்",
+      "item": "https://vox.isolated.tech/ta/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Obsidian Bases உருவாக்கி: வடிகட்டிகள், காட்சிகள், சூத்திரங்கள்",
+      "item": "https://vox.isolated.tech/ta/blog/obsidian-bases-generator/"
+    }
+  ],
+  "inLanguage": "ta",
+  "name": "Obsidian Bases உருவாக்கி: வடிகட்டிகள், காட்சிகள், சூத்திரங்கள் | Vox.md",
+  "description": "செல்லுபடியாகும் Obsidian Bases YAML-ஐ உருவாக்கும் இலவச உலாவிக் கருவி: வடிகட்டிகள், சூத்திரங்கள், table, cards அல்லது list காட்சிகள் மற்றும் சுருக்கங்களைச் சேர்த்து, .base கோப்பையோ base குறியீட்டுத் தொகுதியையோ நகலெடுங்கள். நகலெடுக்கத் தயாரான எடுத்துக்காட்டுகள் உண்டு. எதுவும் பதிவேற்றப்படாது."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/obsidian-bases-generator/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/obsidian-bases-generator/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">வழிகாட்டிக்குச் செல்லவும்</a>
+<nav aria-label="முதன்மை வழிசெலுத்தல்">
+  <div class="nav-inner">
+    <a href="/ta/" class="logo" aria-label="Vox.md முகப்பு">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/ta/#how">இயங்கும் விதம்</a></li>
+      <li><a href="/ta/docs/">ஆவணங்கள்</a></li>
+      <li><a href="/ta/blog/">வழிகாட்டிகள்</a></li>
+      <li><a href="/ta/compare/">ஒப்பிடவும்</a></li>
+      <li><a href="/ta/privacy.html">தனியுரிமை</a></li>
+      <li><a href="/ta/terms.html">விதிமுறைகள்</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_ta_a4dab2e250af">Vox.md பதிவிறக்கவும்</a>
+  <details class="language-switcher"><summary>மொழி</summary><ul><li><a href="/blog/obsidian-bases-generator/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-bases-generator/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-bases-generator/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-bases-generator/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-bases-generator/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-bases-generator/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-bases-generator/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-bases-generator/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-bases-generator/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-bases-generator/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-bases-generator/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-bases-generator/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-bases-generator/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-bases-generator/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-bases-generator/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-bases-generator/" lang="ta" hreflang="ta" aria-current="page">தமிழ்</a></li><li><a href="/th/blog/obsidian-bases-generator/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-bases-generator/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-bases-generator/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-bases-generator/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-bases-generator/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-bases-generator/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-bases-generator/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">இலவசக் கருவி</div>
+        <h1 class="hero-title">Obsidian Bases உருவாக்கி: வடிகட்டிகள், காட்சிகள், சூத்திரங்கள்</h1>
+        <p class="hero-subtitle">schema-வை முதலில் கற்காமலே Obsidian base-க்கான YAML-ஐ உருவாக்குங்கள்: வடிகட்டிகளைத் தேர்ந்தெடுங்கள், காட்சிகளைச் சேருங்கள், .base கோப்பையோ குறியீட்டுத் தொகுதியையோ நகலெடுங்கள்; ஒவ்வொரு விசையும் என்ன செய்கிறது என்பதை Obsidian-இன் சொந்த ஆவணங்களுக்கான இணைப்புகளுடன் பாருங்கள்.</p>
+      </div>
+      <aside class="meta-card" aria-label="இவ்வழிகாட்டி பற்றி">
+        <dl>
+          <div><dt>எழுதியவர்</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>புதுப்பிப்பு</dt><dd><time datetime="2026-11-28">நவம்பர் 28, 2026</time></dd></div>
+          <div><dt>தேவை</dt><dd>iPhone-இல் Safari உட்பட எந்த நவீன உலாவியும். விருப்பத்திற்குரியது: Bases core plugin உள்ள Obsidian, மற்றும் குரல் அல்லது உரை மூலம் குறிப்புகளைப் பதிவுசெய்ய iPhone அல்லது Mac-க்கான Vox.md.</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Obsidian Bases உருவாக்கி: வடிகட்டிகள், காட்சிகள், சூத்திரங்கள்">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">சுருக்கமான பதில்</div>
+        <p>base என்பது உங்கள் குறிப்புகள் மீதான தரவுத்தள பாணிக் காட்சி; இது YAML ஆக எழுதப்படுகிறது, அதிகபட்சம் ஐந்து மேல்நிலை விசைகளுடன்: <code>filters</code>, <code>formulas</code>, <code>properties</code>, <code>summaries</code> மற்றும் <code>views</code>. YAML-ஐ இவ்வாறு சேமியுங்கள்: <code>.base</code> கோப்பு, அல்லது ஒரு குறிப்பில் இதற்குள் ஒட்டுங்கள் <code>base</code> குறியீட்டுத் தொகுதி. இந்த <a href="#tool">உருவாக்கி</a> கீழே உள்ளது அதை உங்களுக்காக எழுதும். உங்களுக்குத் தேவையான Obsidian பதிப்பு காட்சி வகையைப் பொறுத்தது: <a href="https://obsidian.md/help/bases/views" target="_blank" rel="noopener">காட்சிகள் பக்கம்</a> Table மற்றும் Cards 1.9 முதல், List மற்றும் Map 1.10 முதல், Kanban 1.14 முதல் உள்ளதாகப் பட்டியலிடுகிறது.</p>
+      </div>
+      <pre class="guide-code" id="default-base"><code>filters:
+  and:
+    - file.hasTag("project")
+properties:
+  status:
+    displayName: "Status"
+views:
+  - type: table
+    name: "Projects by status"
+    groupBy:
+      property: status
+      direction: ASC
+    order:
+      - file.name
+      - status
+      - file.mtime
+</code></pre>
+      <p>உருவாக்கி முழுவதுமாக இந்தப் பக்கத்திலேயே இயங்குகிறது. நீங்கள் தட்டச்சு செய்வது எதுவும் பதிவேற்றப்படாது, பக்கம் எந்த நெட்வொர்க் கோரிக்கையும் அனுப்பாது.</p>
+      <nav class="toc" aria-label="இவ்வழிகாட்டியில்"><div class="toc-title">இவ்வழிகாட்டியில்</div><ol>
+        <li><a href="#tool">உங்கள் base-ஐ உருவாக்குங்கள்</a></li>
+        <li><a href="#syntax">Bases syntax ஒரு பார்வையில்</a></li>
+        <li><a href="#filters">வடிகட்டிகள்: and, or, not</a></li>
+        <li><a href="#formulas">சூத்திரங்களும் சுருக்கங்களும்</a></li>
+        <li><a href="#this">இதன் பொருள்</a></li>
+        <li><a href="#examples">நகலெடுக்கக்கூடிய எடுத்துக்காட்டுகள்</a></li>
+        <li><a href="#capture">உங்கள் பதிவுகளை base-இல் தெரியச் செய்யுங்கள்</a></li>
+        <li><a href="#troubleshooting">சிக்கல் தீர்த்தல்</a></li>
+        <li><a href="#faq">கேள்விகள்</a></li>
+      </ol></nav>
+
+      <h2 id="tool">1. உங்கள் base-ஐ உருவாக்குங்கள்</h2>
+      <p class="mt-nojs" id="bg-nojs">உருவாக்கிக்கு JavaScript தேவை. அது இல்லாவிட்டாலும் syntax அட்டவணையும் கீழே உள்ள நகலெடுக்கத் தயாரான எடுத்துக்காட்டுகளும் செயல்படும்.</p>
+      <form class="bg-tool" id="bg-tool" aria-label="Obsidian Bases உருவாக்கி" hidden>
+        <fieldset class="mt-group bg-wide">
+          <legend>முன்னமைவுகள்</legend>
+          <div class="mt-actions" id="bg-presets"></div>
+          <p class="mt-hint">முன்னமைவு படிவத்தை நிரப்பும். பிறகு எதை வேண்டுமானாலும் திருத்தலாம்.</p>
+        </fieldset>
+        <fieldset class="mt-group bg-wide">
+          <legend>மூல வடிகட்டிகள் (எல்லா காட்சிகளுக்கும் பொருந்தும்)</legend>
+          <label class="mt-field" for="bg-mode">பொருந்துதல் <select id="bg-mode" name="mode">
+            <option value="and" selected>and: எல்லா வரிசைகளும் உண்மையாக இருக்க வேண்டும்</option>
+            <option value="or">or: ஏதேனும் ஒரு வரிசை உண்மையாக இருக்கலாம்</option>
+            <option value="not">not: எந்த வரிசையும் உண்மையாக இருக்கக் கூடாது</option>
+          </select></label>
+          <div id="bg-filter-rows"></div>
+          <div class="mt-actions"><button type="button" class="btn-secondary" id="bg-add-filter">வடிகட்டி வரிசை சேர்</button></div>
+        </fieldset>
+        <fieldset class="mt-group bg-wide">
+          <legend>சூத்திரங்கள் (விருப்பத்திற்குரியது)</legend>
+          <div id="bg-formula-rows"></div>
+          <div class="mt-actions"><button type="button" class="btn-secondary" id="bg-add-formula">சூத்திரம் சேர்</button></div>
+          <p class="mt-hint">சூத்திரத்தை இவ்வாறு குறிப்பிடுங்கள் <code>formula.name</code> order, groupBy மற்றும் summaries-இல்.</p>
+        </fieldset>
+        <fieldset class="mt-group bg-wide">
+          <legend>காட்சிப் பெயர்கள் (விருப்பத்திற்குரியது)</legend>
+          <div id="bg-prop-rows"></div>
+          <div class="mt-actions"><button type="button" class="btn-secondary" id="bg-add-prop">காட்சிப் பெயர் சேர்</button></div>
+        </fieldset>
+        <div class="bg-wide" id="bg-views"></div>
+        <div class="mt-actions bg-wide"><button type="button" class="btn-secondary" id="bg-add-view">காட்சி சேர்</button></div>
+        <fieldset class="mt-group bg-wide">
+          <legend>வெளியீடு</legend>
+          <label class="mt-option"><input type="radio" name="output" value="base" checked> <span>.base கோப்பு</span></label>
+          <label class="mt-option"><input type="radio" name="output" value="block"> <span>ஒரு குறிப்புக்கான base குறியீட்டுத் தொகுதி</span></label>
+          <label class="mt-field" for="bg-name">Base பெயர் <input type="text" id="bg-name" name="basename" value="My base" autocomplete="off" spellcheck="false"></label>
+        </fieldset>
+      </form>
+      <div class="mt-output-head" id="bg-output-head" hidden>
+        <h3 id="bg-output-title">உங்கள் base</h3>
+        <div class="mt-actions">
+          <button type="button" class="btn-primary" id="bg-copy">நகலெடு</button>
+          <button type="button" class="btn-secondary" id="bg-download">.base பதிவிறக்கு</button>
+        </div>
+      </div>
+      <p class="mt-status" id="bg-status" role="status"></p>
+      <pre class="guide-code bg-output" id="bg-output" aria-labelledby="bg-output-title" tabindex="0" hidden><code id="bg-output-code"></code></pre>
+      <div id="bg-embed" hidden>
+        <h3 id="bg-embed-title">ஒரு குறிப்பில் உட்பொதியுங்கள்</h3>
+        <pre class="guide-code" aria-labelledby="bg-embed-title" tabindex="0"><code id="bg-embed-code"></code></pre>
+      </div>
+      <div id="bg-issues-wrap" hidden>
+        <h3 id="bg-issues-title">சரிபார்ப்புகள்</h3>
+        <ul id="bg-issues" aria-labelledby="bg-issues-title"></ul>
+      </div>
+      <div hidden id="bg-messages">
+        <span data-message="copied">கிளிப்போர்டுக்குப் பிரதியெடுக்கப்பட்டது.</span>
+        <span data-message="copy-failed">பிரதியெடுக்க இயலவில்லை. உரையைத் தேர்ந்தெடுத்து நீங்களே பிரதியெடுக்கவும்.</span>
+        <span data-message="downloaded">{file} பதிவிறக்கப்பட்டது.</span>
+        <span data-message="preset-loaded">முன்னமைவு ஏற்றப்பட்டது: {name}.</span>
+        <span data-message="remove">நீக்கு</span>
+        <span data-message="remove-view">காட்சியை நீக்கு</span>
+        <span data-message="view-title">காட்சி {n}</span>
+        <span data-message="l-kind">வடிகட்டி வகை</span>
+        <span data-message="k-prop">பண்பு ஒப்பீடு</span>
+        <span data-message="l-prop">பண்பு</span>
+        <span data-message="l-op">செயல்குறி</span>
+        <span data-message="l-value">மதிப்பு</span>
+        <span data-message="l-arg">வாதம்</span>
+        <span data-message="l-fname">சூத்திரப் பெயர்</span>
+        <span data-message="l-fexpr">கோவை</span>
+        <span data-message="l-pname">பண்பு</span>
+        <span data-message="l-pdisplay">காட்சிப் பெயர்</span>
+        <span data-message="l-vtype">வகை</span>
+        <span data-message="l-vname">பெயர்</span>
+        <span data-message="l-vorder">காட்ட வேண்டிய பண்புகள் (வரிசை), ஒரு வரிக்கு ஒன்று</span>
+        <span data-message="l-vlimit">வரம்பு (விருப்பத்திற்குரியது)</span>
+        <span data-message="l-vgroup">பண்பின்படி குழுவாக்கு (விருப்பத்திற்குரியது)</span>
+        <span data-message="l-vdir">திசை</span>
+        <span data-message="l-vfilters">காட்சி வடிகட்டிகள், ஒரு வரிக்கு ஒரு கோவை (அனைத்தும் உண்மையாக இருக்க வேண்டும்)</span>
+        <span data-message="l-vsum">சுருக்கங்கள்</span>
+        <span data-message="l-sprop">சுருக்கப் பண்பு</span>
+        <span data-message="l-sfn">சுருக்கம்</span>
+        <span data-message="add-summary">சுருக்கம் சேர்</span>
+        <span data-message="i-view-name">காட்சி {n}-க்குப் பெயர் இல்லை. ஒவ்வொரு காட்சிக்கும் பெயர் கொடுங்கள்.</span>
+        <span data-message="i-no-views">குறைந்தது ஒரு காட்சியைச் சேருங்கள், இல்லையெனில் base எதையும் காட்டாது.</span>
+        <span data-message="i-formula-self">சூத்திரம் {name} தன்னையே குறிப்பிடுகிறது. Obsidian சுழற்சிக் குறிப்புகளை அனுமதிப்பதில்லை.</span>
+        <span data-message="i-formula-name">சூத்திரப் பெயர் {name} ஒரு எழுத்து அல்லது அடிக்கோட்டுடன் தொடங்க வேண்டும்; எழுத்துகள், இலக்கங்கள், அடிக்கோடுகள் மட்டுமே பயன்படுத்த வேண்டும்.</span>
+        <span data-message="i-formula-empty">சூத்திரம் {name}-இல் கோவை இல்லை, எனவே அது தவிர்க்கப்பட்டது.</span>
+        <span data-message="i-formula-dup">இரண்டு சூத்திரங்களுக்கு {name} என்று பெயரிடப்பட்டுள்ளது.</span>
+        <span data-message="i-space">உரை {value}-இல் இடைவெளிகள் உள்ளன, எனவே அது மேற்கோளிட்ட சரமாக எழுதப்பட்டது. உரை மதிப்புகளுக்கு மேற்கோள்கள் தேவை.</span>
+        <span data-message="i-empty-value">ஒரு வடிகட்டி வரிசையில் மதிப்பு காலியாக உள்ளது, எனவே அது தவிர்க்கப்பட்டது.</span>
+        <span data-message="i-group-order">groupBy பண்பு {name} காட்சி {n}-இன் order பட்டியலில் இல்லை. base தொடர்ந்து செயல்படும், ஆனால் அந்த நெடுவரிசை காட்டப்படாது.</span>
+        <span data-message="i-summary-bad">{name} என்பது ஆவணப்படுத்தப்பட்ட சுருக்கம் அல்ல. பட்டியலிலிருந்து ஒன்றைத் தேர்ந்தெடுங்கள்.</span>
+        <span data-message="i-no-filter">மூல வடிகட்டி அமைக்கப்படவில்லை, எனவே இந்த base vault-இல் உள்ள எல்லா குறிப்புகளையும் சேர்க்கும். குறுக்க ஒரு கோப்புறை அல்லது tag வடிகட்டியைச் சேர்க்கவும்.</span>
+        <span data-message="i-map">map காட்சி வகைக்கு Maps plugin தேவை.</span>
+        <span data-message="i-kanban">kanban காட்சி வகை Obsidian 1.14 முதல் கிடைக்கும் என்று காட்சிகள் பக்கத்தில் பட்டியலிடப்பட்டுள்ளது.</span>
+        <span data-message="i-order-space">பண்புப் பெயர் {name}-இல் இடைவெளிகள் உள்ளன. அந்தப் பண்பை நம்புவதற்கு முன் Obsidian அதற்கு எப்படிப் பெயரிடுகிறது என்று சரிபாருங்கள்.</span>
+        <span data-message="i-ok">சிக்கல்கள் எதுவும் இல்லை.</span>
+      </div>
+
+      <h2 id="syntax">2. Bases syntax ஒரு பார்வையில்</h2>
+      <p>இவை விசைகள் <a href="https://obsidian.md/help/bases/syntax" target="_blank" rel="noopener">Obsidian-இன் syntax பக்கம்</a> விவரிக்கிறது. கற்க வேறு schema எதுவும் இல்லை.</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead><tr><th>விசை</th><th>இது என்ன செய்கிறது</th><th>எடுத்துக்காட்டு</th></tr></thead>
+          <tbody>
+            <tr><td><code>filters</code></td><td>எல்லா காட்சிகளுக்கும் குறிப்புகளைக் குறுக்குகிறது.</td><td><code>file.hasTag("project")</code></td></tr>
+            <tr><td><code>formulas</code></td><td>கணக்கிடப்பட்ட பண்புகளை வரையறுக்கிறது; இவ்வாறு பயன்படுத்தப்படும் <code>formula.name</code>.</td><td><code>total: 'price * qty'</code></td></tr>
+            <tr><td><code>properties</code></td><td>ஒவ்வொரு பண்புக்கான அமைப்புகள். <code>displayName</code> நெடுவரிசைத் தலைப்பை அமைக்கிறது.</td><td><code>displayName: "Status"</code></td></tr>
+            <tr><td><code>summaries</code></td><td>உங்கள் சொந்த சுருக்கச் சூத்திரங்களை வரையறுக்கிறது, இதைப் பயன்படுத்தி <code>values</code>.</td><td>தனிப்பயன், விருப்பத்திற்குரியது</td></tr>
+            <tr><td><code>views</code></td><td>ஒரே குறிப்புகள் மீதான காட்சிகளின் பட்டியல்.</td><td><code>- type: table</code></td></tr>
+            <tr><td><code>type</code> (காட்சி)</td><td>காட்சியின் தளவமைப்பு.</td><td><code>table</code>, <code>cards</code>, <code>list</code></td></tr>
+            <tr><td><code>name</code> (காட்சி)</td><td>காட்சியின் பெயர்.</td><td><code>name: "Projects"</code></td></tr>
+            <tr><td><code>filters</code> (காட்சி)</td><td>இந்தக் காட்சிக்கு மட்டுமான வடிகட்டிகள்.</td><td><code>file.inFolder("Work")</code></td></tr>
+            <tr><td><code>groupBy</code> (காட்சி)</td><td>வரிசைகளைக் குழுவாக்குகிறது, இதன் மூலம் <code>property</code> இதில் <code>direction</code>.</td><td><code>direction: DESC</code></td></tr>
+            <tr><td><code>order</code> (காட்சி)</td><td>காட்டப்படும் பண்புகள், வரிசைப்படி.</td><td><code>- file.name</code></td></tr>
+            <tr><td><code>limit</code> (காட்சி)</td><td>வரிசைகளின் எண்ணிக்கையை வரம்பிடுகிறது.</td><td><code>limit: 10</code></td></tr>
+            <tr><td><code>summaries</code> (காட்சி)</td><td>ஒரு பண்பை ஒரு சுருக்கத்துடன் இணைக்கிறது.</td><td><code>price: Sum</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>உருவாக்கி ஆவணப்படுத்தப்பட்ட ஒவ்வொரு விசையையும் எழுதுவதில்லை. syntax பக்கம் இவற்றையும் விவரிக்கிறது: <code>groupOrder</code>, மேலும் காட்சிகள் வரிசைப்படுத்தும் நெடுவரிசை போன்ற கூடுதல் நிலையையும் கொண்டிருக்கலாம்; அதை Obsidian தானே நிர்வகிக்கிறது. தேவைப்பட்டால் அவற்றைக் கையால் சேர்க்கலாம்: YAML உங்கள் திருத்தத்திற்கே.</p>
+
+      <h2 id="filters">3. வடிகட்டிகள்: and, or, not</h2>
+      <p>வடிகட்டி என்பது ஒவ்வொரு குறிப்புக்கும் உண்மை அல்லது பொய்யாகும் ஒரு உரை அறிக்கை, அல்லது இதைக் கொண்ட ஒரு பொருள்: <code>and</code>, <code>or</code> அல்லது <code>not</code> மேலும் பல வடிகட்டிகளைக் கொண்ட பட்டியல். பொது <code>filters</code> எல்லா காட்சிகளுக்கும் பொருந்தும். காட்சியின் சொந்த <code>filters</code> அந்தக் காட்சிக்கு மட்டும் பொருந்தும்; இரண்டும் AND மூலம் இணைக்கப்படும்.</p>
+      <pre class="guide-code"><code>filters:
+  or:
+    - file.hasTag("meeting")
+    - file.inFolder("Meetings")</code></pre>
+      <p>இல்லை <code>from</code> அல்லது <code>source</code> விசை SQL அல்லது Dataview போல இல்லை. வடிகட்டி இல்லையெனில், base vault-இல் உள்ள எல்லா கோப்புகளையும் சேர்க்கும்; அது வேண்டாமெனில் எப்போதும் ஒரு வடிகட்டியை அமையுங்கள்.</p>
+      <p>அறிக்கைக்குள் உரை மதிப்புகளுக்கு மேற்கோள்கள் தேவை, எனவே YAML-இல் உள்ளமை மேற்கோள்கள் வேண்டும்: <code>'status == "done"'</code>. உருவாக்கி இதை உங்களுக்காகச் செய்கிறது. இது போன்ற செயல்பாட்டு வடிகட்டிகள் <code>file.hasTag()</code>, <code>file.inFolder()</code> மற்றும் <code>file.hasLink()</code> உள்ளன <a href="https://obsidian.md/help/bases/functions" target="_blank" rel="noopener">செயல்பாடுகள் பக்கம்</a>.</p>
+
+      <h2 id="formulas">4. சூத்திரங்களும் சுருக்கங்களும்</h2>
+      <p>இதன் கீழ் ஒவ்வொரு உள்ளீடும் <code>formulas</code> என்பது எல்லா காட்சிகளிலும் இவ்வாறு பயன்படுத்தக்கூடிய பண்பாகிறது <code>formula.name</code>. ஒரு சூத்திரம் மற்றொரு சூத்திரத்தைப் பயன்படுத்தலாம், ஆனால் சுழற்சிக் குறிப்புகள் அனுமதிக்கப்படாது; ஆகவே ஒரு சூத்திரம் தன்னையே குறிப்பிட முடியாது. முடிவு YAML சரமாகச் சேமிக்கப்படுகிறது, அதனால்தான் கோவை மேற்கோள்களுக்குள் இருக்கிறது.</p>
+      <pre class="guide-code"><code>formulas:
+  formatted_price: 'if(price, price.toFixed(2) + " dollars")'</code></pre>
+      <p>காட்சியின் <code>summaries</code> ஒரு பண்பை ஒரு சுருக்கத்துடன் இணைக்கிறது. syntax பக்கம் இந்த இயல்புநிலைகளைப் பட்டியலிடுகிறது:</p>
+      <ul>
+        <li><strong>எண்:</strong> <code>Average</code>, <code>Min</code>, <code>Max</code>, <code>Sum</code>, <code>Range</code>, <code>Median</code>, <code>Stddev</code></li>
+        <li><strong>தேதி:</strong> <code>Earliest</code>, <code>Latest</code>, <code>Range</code></li>
+        <li><strong>பூலியன்:</strong> <code>Checked</code>, <code>Unchecked</code></li>
+        <li><strong>ஏதேனும்:</strong> <code>Empty</code>, <code>Filled</code>, <code>Unique</code></li>
+      </ul>
+      <p>தேதிக் கணக்கீட்டுக்கு, syntax பக்கம் கூறுவது <code>file.mtime &gt; now() - "1 week"</code> கடந்த வாரத்தில் மாற்றப்பட்ட கோப்புக்கு உண்மையாகும்.</p>
+
+      <h2 id="this">5. இதன் பொருள்</h2>
+      <p>ஒரு வடிகட்டியில் அல்லது சூத்திரத்தில், <code>this</code> என்பது base காட்டப்படும் கோப்பு. base முதன்மை உள்ளடக்கப் பகுதியில் திறக்கும்போது அது base கோப்பே என்றும், ஒரு குறிப்பிலோ Canvas-இலோ உட்பொதிக்கப்படும்போது உட்பொதிக்கும் கோப்பு என்றும், பக்கப்பட்டியில் இருக்கும்போது முதன்மை உள்ளடக்கப் பகுதியில் செயலில் உள்ள கோப்பு என்றும் syntax பக்கம் கூறுகிறது. அந்தப் பக்கம் தருவது <code>file.hasLink(this.file)</code> backlinks பலகத்தைப் போலவே செய்வதற்கான வழியாக.</p>
+
+      <h2 id="examples">6. நகலெடுக்கக்கூடிய எடுத்துக்காட்டுகள்</h2>
+      <p>இவை உருவாக்கியின் முன்னமைவுகள் எளிய குறியீடாக, அதனால் JavaScript இல்லாமலும் செயல்படும். கோப்புறை, tag, பண்புப் பெயர்களை உங்களுடையவற்றால் மாற்றுங்கள். உரையை இவ்வாறு சேமியுங்கள்: <code>.base</code> கோப்பு, அல்லது அதைச் சுற்றி வையுங்கள் <code>base</code> குறியீட்டுத் தொகுதி. பாருங்கள் <a href="https://obsidian.md/help/bases/create-base" target="_blank" rel="noopener">base உருவாக்குங்கள்</a> கட்டளைகளுக்கு, மற்றும் சேமித்த கோப்பை இதனுடன் உட்பொதியுங்கள் <code>![[Name.base]]</code> அல்லது <code>![[Name.base#View]]</code> இயல்புநிலைக் காட்சியைத் தேர்ந்தெடுக்க.</p>
+      <h3>வாசிப்புப் பட்டியல்</h3>
+      <pre class="guide-code" id="example-reading"><code>filters:
+  and:
+    - file.inFolder("Reading")
+    - 'status == "to read"'
+properties:
+  status:
+    displayName: "Status"
+views:
+  - type: cards
+    name: "Reading list"
+    order:
+      - file.name
+      - status
+</code></pre>
+      <h3>நிலைப்படி திட்டங்கள்</h3>
+      <pre class="guide-code" id="example-projects"><code>filters:
+  and:
+    - file.hasTag("project")
+properties:
+  status:
+    displayName: "Status"
+views:
+  - type: table
+    name: "Projects by status"
+    groupBy:
+      property: status
+      direction: ASC
+    order:
+      - file.name
+      - status
+      - file.mtime
+</code></pre>
+      <h3>ஒரு tag உள்ள, இந்த வாரம் மாற்றப்பட்ட குறிப்புகள்</h3>
+      <pre class="guide-code" id="example-week"><code>filters:
+  and:
+    - file.hasTag("project")
+    - 'file.mtime &gt; now() - "1 week"'
+views:
+  - type: table
+    name: "Modified this week"
+    order:
+      - file.name
+      - file.mtime
+</code></pre>
+      <h3>இந்தக் குறிப்பின் backlinks</h3>
+      <pre class="guide-code" id="example-backlinks"><code>filters:
+  and:
+    - file.hasLink(this.file)
+views:
+  - type: table
+    name: "Backlinks"
+    order:
+      - file.name
+      - file.folder
+</code></pre>
+      <h3>Vox.md மூலம் பதிவுசெய்த குரல் குறிப்புகள்</h3>
+      <pre class="guide-code" id="example-voice"><code>filters:
+  and:
+    - file.inFolder("Vox")
+    - file.hasTag("voice")
+views:
+  - type: table
+    name: "Voice notes"
+    order:
+      - file.ctime
+      - file.name
+      - file.tags
+</code></pre>
+      <p>இந்த <code>order</code> பட்டியல் நெடுவரிசைகளைத் தேர்ந்தெடுக்கிறது. வரிசை முறை என்பது Obsidian-இன் காட்சிக் கருவிப்பட்டியில் மாற்றும் காட்சி அமைப்பு, எனவே எடுத்துக்காட்டுகள் அதை எழுதுவதில்லை.</p>
+
+      <h2 id="capture">7. உங்கள் பதிவுகளை base-இல் தெரியச் செய்யுங்கள்</h2>
+      <p>Vox.md நீங்கள் பதிவுசெய்வதை உங்கள் vault-இல் உள்ள ஒரு கோப்புறையில் Markdown குறிப்புகளாகச் சேமிக்கிறது. அதன் <a href="/ta/docs/#preset-metadata">மெட்டாடேட்டா ஆவணம்</a> ஒரு Route நிலையான மெட்டாடேட்டாவை இவ்வாறு சேர்க்கலாம் என்று கூறுகிறது <code>key: value</code> வரிகள், எடுத்துக்காட்டாக <code>tags: [journal, idea]</code>, மற்றும் அந்த <strong>குறிப்பின் முன்தரவு</strong> அதை ஆவண அளவில் எழுதுகிறது. இது விருப்பத்திற்குரிய இருப்பிட மெட்டாடேட்டாவையும் விவரிக்கிறது. மேலே உள்ள கடைசி எடுத்துக்காட்டு போல அந்தக் கோப்புறை அல்லது tag மூலம் வடிகட்டிய base உங்கள் பதிவுகளை ஒரே table-இல் பட்டியலிடும். மெட்டாடேட்டாவை இதைக் கொண்டு உருவாக்குங்கள்: <a href="/ta/blog/obsidian-properties-generator/">பண்புகள் உருவாக்கி</a>, மேலும் பாருங்கள் <a href="/ta/blog/voice-notes-to-obsidian-iphone/">iPhone-இல் Obsidian-க்கான குரல் குறிப்புகள்</a> அமைப்புக்கு.</p>
+      <p>தொடர்புடைய கருவிகள்: <a href="/ta/blog/obsidian-daily-note-template/">தினசரிக் குறிப்பு வார்ப்புரு உருவாக்கி</a> தேதியிட்ட குறிப்புகளை உருவாக்க, <a href="/ta/blog/obsidian-callout-generator/">callout உருவாக்கி</a> மேலும் <a href="/ta/blog/markdown-table-maker/">Markdown அட்டவணை உருவாக்கி</a> குறிப்பின் உள்ளடக்கத்திற்கு.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">வினவத் தகுந்த குறிப்புகள் வேண்டுமா?</h2>
+        <p>Vox.md iPhone மற்றும் Mac-இல் குரலையும் உரையையும் நீங்கள் தேர்ந்தெடுக்கும் பண்புகளுடன் நேரடியாக உங்கள் vault-இல் Markdown ஆகப் பதிவுசெய்கிறது. பதிவு, Transcription மற்றும் Capture-க்கு Vox.md Unlimited தேவை; தகுதியுள்ள கணக்குகளுக்கு 7 நாள் Free trial கிடைக்கும்.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ta_a4dab2e250af">குரலால் குறிப்புகளைப் பதிவுசெய்யுங்கள்</a></p>
+        <p>மேலே உள்ள உருவாக்கி செயலி இல்லாமலும் முழுமையாகச் செயல்படும்.</p>
+      </section>
+
+      <h2 id="troubleshooting">8. சிக்கல் தீர்வு</h2>
+      <ul>
+        <li><strong>base எல்லா குறிப்புகளையும் காட்டுகிறது.</strong> மூல வடிகட்டி அமைக்கப்படவில்லை. base இயல்பாக முழு vault-ஐயும் சேர்க்கும், எனவே ஒன்றைச் சேர்க்கவும் <code>file.inFolder()</code> அல்லது <code>file.hasTag()</code> வடிகட்டி.</li>
+        <li><strong>ஒரு பண்பு நெடுவரிசை காலியாக உள்ளது.</strong> பெயர் (எழுத்துவடிவம் உட்பட) பொருந்தவில்லை, அல்லது குறிப்பின் frontmatter-இல் அந்தப் பண்பு இல்லை. குறிப்பின் Properties-ஐயும் நெடுவரிசைப் பெயரையும் சரிபாருங்கள்.</li>
+        <li><strong>YAML பிழை.</strong> இடைவெளிகளால் ஆன உள்தள்ளலையும் மேற்கோள்களையும் சரிபாருங்கள். உரையைக் கொண்ட வடிகட்டிக்கு உள்ளமை மேற்கோள்கள் தேவை: <code>'status == "done"'</code>.</li>
+        <li><strong>map காட்சி காலியாக உள்ளது.</strong> காட்சிகள் பக்கத்தின்படி, map தளவமைப்புக்கு Maps plugin தேவை.</li>
+      </ul>
+
+      <h2 id="faq">9. கேள்விகள்</h2>
+      <h3>Bases ஒரு core plugin-ஆ?</h3>
+      <p>ஆம். <a href="https://obsidian.md/help/bases" target="_blank" rel="noopener">Obsidian Help ஆவணம்</a> இவ்வாறு கூறுகிறது: “Bases என்பது உங்கள் குறிப்புகளின் தரவுத்தள வகைக் காட்சிகளை உருவாக்க உதவும் ஒரு core plugin.”</p>
+      <h3>Bases அல்லது Dataview?</h3>
+      <p>அவை தனித்தனியானவை. Dataview என்பது தனக்கே உரிய வினவல் மொழியுடைய ஒரு community plugin. base என்பது Obsidian தானே படிக்கும் YAML; அதில் இல்லை <code>from</code> விசை: நீங்கள் வடிகட்டிகளால் குறிப்புகளைக் குறுக்குகிறீர்கள். இந்தப் பக்கம் அவற்றின் அம்சங்களை மேலும் ஒப்பிடுவதில்லை.</p>
+      <h3>YAML-ஐக் கையால் திருத்தலாமா?</h3>
+      <p>ஆம். ஒரு <code>.base</code> கோப்பு YAML உரை, அதன் விசைகளை syntax பக்கம் விவரிக்கிறது. உருவாக்கிய கோப்பை எந்த எடிட்டரிலும் திறக்கலாம், அல்லது குறியீட்டுத் தொகுதியை ஒரு குறிப்பில் ஒட்டி அங்கே திருத்தலாம்.</p>
+      <h3>உருவாக்கி என் தரவைப் பதிவேற்றுகிறதா?</h3>
+      <p>இல்லை. இந்தப் பக்கத்தில் உள்ள ஒரு script உங்கள் சாதனத்திலேயே YAML-ஐ உருவாக்குகிறது; பக்கம் எந்த நெட்வொர்க் கோரிக்கையும் அனுப்புவதில்லை. மீண்டும் ஏற்றினால் அனைத்தும் அழியும்.</p>
+
+      <nav class="toc" aria-label="தொடர்புடைய வழிகாட்டிகள்" id="related"><div class="toc-title">அமைப்பைத் தொடரவும்</div><ul>
+        <li><a href="/ta/blog/obsidian-properties-generator/">Obsidian பண்புகள் உருவாக்கி மற்றும் சரிபார்ப்பி</a></li>
+        <li><a href="/ta/blog/obsidian-daily-note-template/">Obsidian தினசரிக் குறிப்பு வார்ப்புரு உருவாக்கி</a></li>
+        <li><a href="/ta/blog/obsidian-callout-generator/">Obsidian callout உருவாக்கி</a></li>
+        <li><a href="/ta/blog/markdown-table-maker/">Markdown அட்டவணை உருவாக்கி</a></li>
+        <li><a href="/ta/blog/voice-notes-to-obsidian-iphone/">iPhone-ல் Obsidian-க்கு குரல் குறிப்புகள்</a></li>
+      </ul></nav>
+<style>
+.bg-tool:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.bg-tool [hidden], #bg-embed[hidden], #bg-issues-wrap[hidden] { display: none; }
+.bg-wide { grid-column: 1 / -1; min-width: 0; }
+.mt-output-head[hidden], .bg-output[hidden] { display: none; }
+.bg-tool input[type="text"], .bg-tool textarea, .bg-tool select { font: inherit; font-family: var(--font-mono); font-size: 16px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px; padding: 8px 10px; width: 100%; box-sizing: border-box; min-height: 44px; }
+.bg-tool textarea { resize: vertical; min-height: 90px; }
+.bg-tool input:focus-visible, .bg-tool textarea:focus-visible, .bg-tool select:focus-visible, .bg-output:focus-visible, .bg-tool button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.bg-tool .mt-option { min-height: 44px; }
+.bg-tool .mt-option input { width: 22px; height: 22px; }
+.bg-tool button, .mt-actions button { font: inherit; font-size: 15px; min-height: 44px; padding: 0 18px; cursor: pointer; }
+.bg-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin: 8px 0; align-items: end; }
+.bg-row > * { min-width: 0; }
+.bg-view { border: 1px solid var(--line); border-radius: 16px; padding: 12px 16px; margin: 0 0 12px; background: var(--card); }
+.bg-view-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.bg-output { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 32rem; overflow: auto; }
+.bg-issues-error { font-weight: 700; }
+</style>
+<script>
+/* Obsidian Bases generator. Runs locally: no network requests. */
+(function () {
+  var VIEW_TYPES = ['table', 'cards', 'list', 'map', 'kanban'];
+  var SUMMARIES = ['Average', 'Min', 'Max', 'Sum', 'Range', 'Median', 'Stddev', 'Earliest', 'Latest', 'Checked', 'Unchecked', 'Empty', 'Filled', 'Unique'];
+  var OPS = ['==', '!=', '>', '<', '>=', '<='];
+  var KINDS = ['hasTag', 'inFolder', 'hasLink', 'ext', 'prop'];
+
+  function q1(s) { return "'" + String(s).replace(/'/g, "''") + "'"; }
+  function q2(s) { return '"' + String(s).replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"'; }
+  function needsQuote(s) { return /^[\s\-?:,\[\]{}#&*!|>'"%@`]/.test(s) || /: | #|:$|\s$/.test(s) || s === ''; }
+  function plain(s) { return needsQuote(s) ? q1(s) : s; }
+  function key(s) { return /^[A-Za-z_][\w.\-]*$/.test(s) ? s : q1(s); }
+  function bare(s) { return String(s || '').trim(); }
+  function unwrap(s) {
+    s = bare(s);
+    var m = /^(["'])(.*)\1$/.exec(s);
+    return m ? m[2] : s;
+  }
+  function lines(text) { return String(text || '').split(/\r?\n|,/).map(bare).filter(Boolean); }
+
+  /* Turn a typed value into an expression operand. */
+  function operand(value, issues) {
+    var v = bare(value);
+    if (/^-?\d+(\.\d+)?$/.test(v) || /^(true|false|null)$/.test(v)) return v;
+    if (/^(["']).*\1$/.test(v) && v.length > 1) return q2(v.slice(1, -1));
+    if (/^[A-Za-z_]\w*\(/.test(v) || /^(this|formula|note|file)\./.test(v)) return v;
+    if (/\s/.test(v)) issues.push({ level: 'info', code: 'i-space', fill: { value: v } });
+    return q2(v);
+  }
+
+  function filterStatement(row, issues) {
+    var a = bare(row.a);
+    if (row.kind === 'raw') return a ? (/"/.test(a) && !/^[\w.]+\(.*\)$/.test(a) ? q1(a) : plain(a)) : null;
+    if (row.kind === 'prop') {
+      var v = bare(row.b);
+      if (!a || !v) { issues.push({ level: 'warn', code: 'i-empty-value' }); return null; }
+      var op = OPS.indexOf(row.op) !== -1 ? row.op : '==';
+      return q1(a + ' ' + op + ' ' + operand(v, issues));
+    }
+    if (!a) { issues.push({ level: 'warn', code: 'i-empty-value' }); return null; }
+    if (row.kind === 'ext') return q1('file.ext == ' + q2(unwrap(a).replace(/^\./, '')));
+    if (row.kind === 'hasLink' && /^this\./.test(a)) return 'file.hasLink(' + a + ')';
+    if (row.kind === 'hasTag') a = unwrap(a).replace(/^#/, '');
+    else a = unwrap(a);
+    var out = 'file.' + row.kind + '(' + q2(a) + ')';
+    return plain(out);
+  }
+
+  function filterBlock(mode, rows, indent, issues) {
+    var items = [];
+    (rows || []).forEach(function (r) { var s = filterStatement(r, issues); if (s) items.push(s); });
+    if (!items.length) return null;
+    var m = mode === 'or' || mode === 'not' ? mode : 'and';
+    var pad = new Array(indent + 1).join(' ');
+    var out = [pad + m + ':'];
+    items.forEach(function (s) { out.push(pad + '  - ' + s); });
+    return out;
+  }
+
+  function viewFilterRows(text) {
+    return String(text || '').split(/\r?\n/).map(bare).filter(Boolean);
+  }
+
+  /* state -> { yaml, output, issues, filename, embed, embedView } */
+  function build(state) {
+    state = state || {};
+    var issues = [];
+    var out = [];
+    var gl = filterBlock(state.mode, state.filters, 2, issues);
+    if (gl) { out.push('filters:'); out = out.concat(gl); }
+    else issues.push({ level: 'info', code: 'i-no-filter' });
+
+    var formulas = (state.formulas || []).filter(function (f) { return bare(f.name) || bare(f.expr); });
+    var seen = {};
+    var fl = [];
+    formulas.forEach(function (f) {
+      var name = bare(f.name), expr = bare(f.expr);
+      if (!/^[A-Za-z_]\w*$/.test(name)) { issues.push({ level: 'error', code: 'i-formula-name', fill: { name: name || '(empty)' } }); return; }
+      if (seen[name]) issues.push({ level: 'error', code: 'i-formula-dup', fill: { name: name } });
+      seen[name] = true;
+      if (!expr) { issues.push({ level: 'warn', code: 'i-formula-empty', fill: { name: name } }); return; }
+      if (new RegExp('formula\\.' + name + '(?![\\w])').test(expr)) issues.push({ level: 'error', code: 'i-formula-self', fill: { name: name } });
+      fl.push('  ' + key(name) + ': ' + q1(expr));
+    });
+    if (fl.length) { out.push('formulas:'); out = out.concat(fl); }
+
+    var pl = [];
+    (state.props || []).forEach(function (p) {
+      if (!bare(p.name) || !bare(p.display)) return;
+      pl.push('  ' + key(bare(p.name)) + ':');
+      pl.push('    displayName: ' + q2(bare(p.display)));
+    });
+    if (pl.length) { out.push('properties:'); out = out.concat(pl); }
+
+    var views = state.views || [];
+    if (!views.length) issues.push({ level: 'error', code: 'i-no-views' });
+    else out.push('views:');
+    views.forEach(function (v, i) {
+      var n = i + 1;
+      var type = VIEW_TYPES.indexOf(v.type) !== -1 ? v.type : 'table';
+      var name = bare(v.name);
+      if (!name) issues.push({ level: 'error', code: 'i-view-name', fill: { n: n } });
+      if (type === 'map') issues.push({ level: 'info', code: 'i-map' });
+      if (type === 'kanban') issues.push({ level: 'info', code: 'i-kanban' });
+      out.push('  - type: ' + type);
+      out.push('    name: ' + q2(name));
+      var limit = parseInt(v.limit, 10);
+      if (limit > 0) out.push('    limit: ' + limit);
+      var order = lines(v.order);
+      var group = bare(v.group);
+      if (group) {
+        out.push('    groupBy:');
+        out.push('      property: ' + plain(group));
+        out.push('      direction: ' + (v.dir === 'DESC' ? 'DESC' : 'ASC'));
+        if (order.length && order.indexOf(group) === -1) issues.push({ level: 'warn', code: 'i-group-order', fill: { name: group, n: n } });
+      }
+      var vf = filterBlock('and', viewFilterRows(v.filters).map(function (s) { return { kind: 'raw', a: s }; }), 6, []);
+      if (vf) { out.push('    filters:'); out = out.concat(vf); }
+      if (order.length) {
+        out.push('    order:');
+        order.forEach(function (o) {
+          if (/\s/.test(o) && !/^(["']).*\1$/.test(o)) issues.push({ level: 'warn', code: 'i-order-space', fill: { name: o } });
+          out.push('      - ' + plain(o));
+        });
+      }
+      var sl = [];
+      (v.summaries || []).forEach(function (s) {
+        var p = bare(s.prop), fn = bare(s.fn);
+        if (!p || !fn) return;
+        if (SUMMARIES.indexOf(fn) === -1) { issues.push({ level: 'error', code: 'i-summary-bad', fill: { name: fn } }); return; }
+        sl.push('      ' + key(p) + ': ' + fn);
+      });
+      if (sl.length) { out.push('    summaries:'); out = out.concat(sl); }
+    });
+
+    var yaml = out.join('\n');
+    var file = bare(state.basename).replace(/[\\\/:*?"<>|#^\[\]]+/g, ' ').replace(/\s+/g, ' ').trim() || 'Base';
+    var first = views.length ? bare(views[0].name) : '';
+    return {
+      yaml: yaml,
+      output: state.output === 'block' ? '```base\n' + yaml + '\n```' : yaml,
+      issues: issues,
+      file: file,
+      filename: file + '.base',
+      embed: '![[' + file + '.base]]',
+      embedView: first ? '![[' + file + '.base#' + first.replace(/[#^\[\]|]/g, ' ').replace(/\s+/g, ' ').trim() + ']]' : ''
+    };
+  }
+
+  function F(kind, a, op, b) { return { kind: kind, a: a || '', op: op || '==', b: b || '' }; }
+  function V(type, name, order, extra) {
+    var v = { type: type, name: name, order: order.join('\n'), limit: '', group: '', dir: 'ASC', filters: '', summaries: [] };
+    Object.keys(extra || {}).forEach(function (k) { v[k] = extra[k]; });
+    return v;
+  }
+  var PRESETS = {
+    reading: { name: 'Reading list', state: { mode: 'and', basename: 'Reading list', output: 'base', formulas: [],
+      filters: [F('inFolder', 'Reading'), F('prop', 'status', '==', 'to read')],
+      props: [{ name: 'status', display: 'Status' }],
+      views: [V('cards', 'Reading list', ['file.name', 'status'])] } },
+    projects: { name: 'Projects by status', state: { mode: 'and', basename: 'Projects', output: 'base', formulas: [],
+      filters: [F('hasTag', 'project')],
+      props: [{ name: 'status', display: 'Status' }],
+      views: [V('table', 'Projects by status', ['file.name', 'status', 'file.mtime'], { group: 'status' })] } },
+    week: { name: 'Tag, modified this week', state: { mode: 'and', basename: 'This week', output: 'base', formulas: [], props: [],
+      filters: [F('hasTag', 'project'), F('prop', 'file.mtime', '>', 'now() - "1 week"')],
+      views: [V('table', 'Modified this week', ['file.name', 'file.mtime'])] } },
+    backlinks: { name: 'Backlinks of this note', state: { mode: 'and', basename: 'Backlinks', output: 'base', formulas: [], props: [],
+      filters: [F('hasLink', 'this.file')],
+      views: [V('table', 'Backlinks', ['file.name', 'file.folder'])] } },
+    voice: { name: 'Voice notes (Vox.md)', state: { mode: 'and', basename: 'Voice notes', output: 'base', formulas: [], props: [],
+      filters: [F('inFolder', 'Vox'), F('hasTag', 'voice')],
+      views: [V('table', 'Voice notes', ['file.ctime', 'file.name', 'file.tags'])] } }
+  };
+
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+
+  if (typeof window !== 'undefined') {
+    window.voxBases = { build: build, presets: PRESETS, summaries: SUMMARIES, viewTypes: VIEW_TYPES };
+  }
+
+  var form = document.getElementById('bg-tool');
+  if (!form) return;
+  var state = clone(PRESETS.projects.state);
+  var statusEl = document.getElementById('bg-status');
+
+  function message(name, fill) {
+    var el = document.querySelector('#bg-messages [data-message="' + name + '"]');
+    var text = el ? el.textContent : name;
+    if (fill) Object.keys(fill).forEach(function (k) { text = text.split('{' + k + '}').join(fill[k]); });
+    return text;
+  }
+  function say(text) {
+    statusEl.textContent = '';
+    window.setTimeout(function () { statusEl.textContent = text; }, 30);
+  }
+
+  function el(tag, attrs, children) {
+    var e = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      if (k === 'text') e.textContent = attrs[k]; else e.setAttribute(k, attrs[k]);
+    });
+    (children || []).forEach(function (c) { e.appendChild(c); });
+    return e;
+  }
+  function input(obj, prop, label, extra) {
+    var i = el('input', Object.assign({ type: 'text', 'aria-label': label, autocomplete: 'off', spellcheck: 'false', autocapitalize: 'off' }, extra || {}));
+    i.value = obj[prop] || '';
+    i.addEventListener('input', function () { obj[prop] = i.value; render(); });
+    return i;
+  }
+  function select(obj, prop, label, values, labels) {
+    var s = el('select', { 'aria-label': label });
+    values.forEach(function (v, i) { s.appendChild(el('option', { value: v, text: labels ? labels[i] : v })); });
+    s.value = obj[prop];
+    s.addEventListener('change', function () { obj[prop] = s.value; render(); });
+    return s;
+  }
+  function removeBtn(list, i, label) {
+    var b = el('button', { type: 'button', class: 'btn-secondary', text: label || message('remove') });
+    b.addEventListener('click', function () { list.splice(i, 1); rebuild(); });
+    return b;
+  }
+
+  var KIND_LABELS = ['file.hasTag("…")', 'file.inFolder("…")', 'file.hasLink("…")', 'file.ext == "…"'];
+
+  function filterRow(list, i) {
+    var r = list[i];
+    var kinds = el('select', { 'aria-label': message('l-kind') });
+    KINDS.forEach(function (k, n) { kinds.appendChild(el('option', { value: k, text: n < 4 ? KIND_LABELS[n] : message('k-prop') })); });
+    kinds.value = r.kind;
+    kinds.addEventListener('change', function () { r.kind = kinds.value; rebuild(); });
+    var row = el('div', { class: 'bg-row' }, [kinds]);
+    row.appendChild(input(r, 'a', message(r.kind === 'prop' ? 'l-prop' : 'l-arg')));
+    if (r.kind === 'prop') {
+      row.appendChild(select(r, 'op', message('l-op'), OPS));
+      row.appendChild(input(r, 'b', message('l-value')));
+    }
+    row.appendChild(removeBtn(list, i));
+    return row;
+  }
+
+  function fillRows(container, list, make) {
+    container.textContent = '';
+    list.forEach(function (_, i) { container.appendChild(make(list, i)); });
+  }
+
+  function viewBlock(i) {
+    var v = state.views[i];
+    var box = el('fieldset', { class: 'bg-view' }, [el('legend', { text: message('view-title', { n: i + 1 }) })]);
+    var grid = el('div', { class: 'bg-view-grid' });
+    function field(label, control) {
+      var l = el('label', { class: 'mt-field', text: label + ' ' });
+      l.appendChild(control);
+      grid.appendChild(l);
+    }
+    field(message('l-vtype'), select(v, 'type', message('l-vtype'), VIEW_TYPES));
+    field(message('l-vname'), input(v, 'name', message('l-vname')));
+    var order = el('textarea', { 'aria-label': message('l-vorder'), rows: '4', spellcheck: 'false', autocapitalize: 'off' });
+    order.value = v.order;
+    order.addEventListener('input', function () { v.order = order.value; render(); });
+    field(message('l-vorder'), order);
+    field(message('l-vlimit'), input(v, 'limit', message('l-vlimit'), { inputmode: 'numeric' }));
+    field(message('l-vgroup'), input(v, 'group', message('l-vgroup')));
+    field(message('l-vdir'), select(v, 'dir', message('l-vdir'), ['ASC', 'DESC']));
+    var vf = el('textarea', { 'aria-label': message('l-vfilters'), rows: '3', spellcheck: 'false', autocapitalize: 'off' });
+    vf.value = v.filters;
+    vf.addEventListener('input', function () { v.filters = vf.value; render(); });
+    field(message('l-vfilters'), vf);
+    box.appendChild(grid);
+    box.appendChild(el('p', { class: 'mt-hint', text: message('l-vsum') }));
+    var sums = el('div');
+    fillRows(sums, v.summaries, function (list, n) {
+      var s = list[n];
+      var row = el('div', { class: 'bg-row' }, [input(s, 'prop', message('l-sprop')), select(s, 'fn', message('l-sfn'), SUMMARIES), removeBtn(list, n)]);
+      return row;
+    });
+    box.appendChild(sums);
+    var add = el('button', { type: 'button', class: 'btn-secondary', text: message('add-summary') });
+    add.addEventListener('click', function () { v.summaries.push({ prop: '', fn: 'Sum' }); rebuild(); });
+    box.appendChild(el('div', { class: 'mt-actions' }, [add]));
+    var rm = removeBtn(state.views, i, message('remove-view'));
+    box.appendChild(el('div', { class: 'mt-actions' }, [rm]));
+    return box;
+  }
+
+  function rebuild() {
+    document.getElementById('bg-mode').value = state.mode;
+    form.elements.basename.value = state.basename;
+    form.elements.output.value = state.output;
+    fillRows(document.getElementById('bg-filter-rows'), state.filters, filterRow);
+    fillRows(document.getElementById('bg-formula-rows'), state.formulas, function (list, i) {
+      return el('div', { class: 'bg-row' }, [input(list[i], 'name', message('l-fname')), input(list[i], 'expr', message('l-fexpr')), removeBtn(list, i)]);
+    });
+    fillRows(document.getElementById('bg-prop-rows'), state.props, function (list, i) {
+      return el('div', { class: 'bg-row' }, [input(list[i], 'name', message('l-pname')), input(list[i], 'display', message('l-pdisplay')), removeBtn(list, i)]);
+    });
+    var views = document.getElementById('bg-views');
+    views.textContent = '';
+    state.views.forEach(function (_, i) { views.appendChild(viewBlock(i)); });
+    render();
+  }
+
+  var code = document.getElementById('bg-output-code');
+  function render() {
+    var r = build(state);
+    code.textContent = r.output;
+    document.getElementById('bg-output').hidden = false;
+    document.getElementById('bg-output-head').hidden = false;
+    document.getElementById('bg-download').hidden = state.output === 'block';
+    var embed = document.getElementById('bg-embed');
+    embed.hidden = false;
+    document.getElementById('bg-embed-code').textContent = r.embed + (r.embedView ? '\n' + r.embedView : '');
+    var list = document.getElementById('bg-issues');
+    list.textContent = '';
+    var seen = {};
+    var items = r.issues.length ? r.issues : [{ level: 'info', code: 'i-ok' }];
+    items.forEach(function (it) {
+      var text = message(it.code, it.fill);
+      if (seen[text]) return;
+      seen[text] = true;
+      list.appendChild(el('li', { class: 'bg-issues-' + it.level, text: text }));
+    });
+    document.getElementById('bg-issues-wrap').hidden = false;
+    return r;
+  }
+
+  var presetBox = document.getElementById('bg-presets');
+  Object.keys(PRESETS).forEach(function (k) {
+    var b = el('button', { type: 'button', class: 'btn-secondary', text: PRESETS[k].name });
+    b.addEventListener('click', function () {
+      state = clone(PRESETS[k].state);
+      rebuild();
+      say(message('preset-loaded', { name: PRESETS[k].name }));
+    });
+    presetBox.appendChild(b);
+  });
+  document.getElementById('bg-add-filter').addEventListener('click', function () { state.filters.push(F('hasTag', '')); rebuild(); });
+  document.getElementById('bg-add-formula').addEventListener('click', function () { state.formulas.push({ name: '', expr: '' }); rebuild(); });
+  document.getElementById('bg-add-prop').addEventListener('click', function () { state.props.push({ name: '', display: '' }); rebuild(); });
+  document.getElementById('bg-add-view').addEventListener('click', function () { state.views.push(V('table', '', ['file.name'])); rebuild(); });
+  document.getElementById('bg-mode').addEventListener('change', function (e) { state.mode = e.target.value; render(); });
+  form.elements.basename.addEventListener('input', function (e) { state.basename = e.target.value; render(); });
+  Array.prototype.forEach.call(form.elements.output, function (r) {
+    r.addEventListener('change', function () { state.output = form.elements.output.value; render(); });
+  });
+  form.addEventListener('submit', function (event) { event.preventDefault(); });
+
+  document.getElementById('bg-copy').addEventListener('click', function () {
+    var text = code.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(code);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      say(message(ok ? 'copied' : 'copy-failed'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(message('copied')); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+  document.getElementById('bg-download').addEventListener('click', function () {
+    var r = build(state);
+    var blob = new Blob([r.yaml + '\n'], { type: 'text/plain;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = r.filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    say(message('downloaded', { file: r.filename }));
+  });
+
+  document.getElementById('bg-nojs').hidden = true;
+  form.hidden = false;
+  rebuild();
+})();
+</script>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ta/">முகப்பு</a></li>
+        <li><a href="/ta/docs/">ஆவணங்கள்</a></li>
+        <li><a href="/ta/blog/">வழிகாட்டிகள்</a></li>
+        <li><a href="/ta/compare/">ஒப்பிடவும்</a></li>
+        <li><a href="/ta/privacy.html">தனியுரிமை</a></li>
+        <li><a href="/ta/terms.html">விதிமுறைகள்</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">ஆதரவு</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ta_a4dab2e250af">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · உள்ளூர் குறிப்புகளுக்கு விரைவான பிடிப்பு · பதிவேற்றமில்லை.</div>
+    </div>
+  <details class="language-switcher"><summary>மொழி</summary><ul><li><a href="/blog/obsidian-bases-generator/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-bases-generator/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-bases-generator/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-bases-generator/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-bases-generator/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-bases-generator/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-bases-generator/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-bases-generator/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-bases-generator/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-bases-generator/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-bases-generator/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-bases-generator/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-bases-generator/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-bases-generator/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-bases-generator/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-bases-generator/" lang="ta" hreflang="ta" aria-current="page">தமிழ்</a></li><li><a href="/th/blog/obsidian-bases-generator/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-bases-generator/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-bases-generator/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-bases-generator/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-bases-generator/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-bases-generator/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-bases-generator/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
