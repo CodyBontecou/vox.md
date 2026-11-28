@@ -515,3 +515,84 @@ struct CaptureStatusCard: View {
         )
     }
 }
+
+extension VerticalAlignment {
+    private enum CaptureBarControlCenter: AlignmentID {
+        static func defaultValue(in dimensions: ViewDimensions) -> CGFloat {
+            dimensions[VerticalAlignment.center]
+        }
+    }
+
+    /// Lines the capture bar's controls up on their centres, so a caption
+    /// under one control does not push it off the others' line.
+    static let captureBarControlCenter = VerticalAlignment(CaptureBarControlCenter.self)
+}
+
+/// Visible name(s) under a capture-bar control (#199). `trailing` names an
+/// overlaid control at the trailing end (Speak's record-new-note icon) and
+/// sits under it, `trailingWidth` wide.
+struct CaptureBarCaption: Equatable {
+    let title: String
+    var trailing: String?
+    var trailingWidth: CGFloat = 0
+
+    init(_ title: String, trailing: String? = nil, trailingWidth: CGFloat = 0) {
+        self.title = title
+        self.trailing = trailing
+        self.trailingWidth = trailingWidth
+    }
+}
+
+/// A capture-bar control with its caption underneath. The caption is hidden
+/// from VoiceOver: the control's own label (and Voice Control input labels)
+/// carry the same words.
+struct CaptureBarLabeledControl: View {
+    let control: CaptureViewSection
+    let caption: CaptureBarCaption?
+
+    var body: some View {
+        VStack(spacing: Geist.Spacing.one) {
+            control
+                // Circles sit in a Speak-high box so every caption shares a line.
+                .frame(minHeight: Geist.ControlHeight.hero)
+                .alignmentGuide(.captureBarControlCenter) { $0[VerticalAlignment.center] }
+            if let caption {
+                Group {
+                    if let trailing = caption.trailing {
+                        // Only inside Speak, which is already full width:
+                        // a flexible caption elsewhere would widen its column.
+                        HStack(spacing: 0) {
+                            CaptureBarCaptionText(title: caption.title)
+                                .frame(maxWidth: .infinity)
+                            // A little wider than the icon, so it keeps full
+                            // size; it stays inside Speak's trailing end.
+                            CaptureBarCaptionText(title: trailing)
+                                .frame(width: caption.trailingWidth + Geist.Spacing.four)
+                        }
+                    } else {
+                        CaptureBarCaptionText(title: caption.title)
+                    }
+                }
+                .transition(.opacity)
+            }
+        }
+    }
+}
+
+struct CaptureBarCaptionText: View {
+    let title: String
+
+    var body: some View {
+        Text(verbatim: title)
+            .font(Geist.label(.caption2))
+            .foregroundStyle(Geist.muted)
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
+            // They grow with Dynamic Type up to here; any larger and the
+            // narrow ones ("Record new") would truncate. VoiceOver reads the
+            // controls' own labels at any size.
+            .dynamicTypeSize(...DynamicTypeSize.xLarge)
+            .fixedSize(horizontal: false, vertical: true)
+            .accessibilityHidden(true)
+    }
+}

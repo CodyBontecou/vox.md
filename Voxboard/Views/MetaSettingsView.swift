@@ -678,6 +678,7 @@ struct MetaSettingsView: View {
             ) {
                 CaptureToolbarSettingsView(preferences: captureToolbarPreferences)
             }
+            .accessibilityIdentifier("settings_capture_bar")
 
             rowDivider
 

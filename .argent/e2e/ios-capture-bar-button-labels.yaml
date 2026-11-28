@@ -1,0 +1,297 @@
+# Issue #199: text captions under the capture screen's bottom-bar buttons
+# (Attach | Speak "Add to note" / "Record new" | New note), on by default and
+# turned off with Settings > Capture Bar > Bottom Bar > Show Button Labels.
+# Checks: captions show on a fresh install, turning the toggle off hides them
+# as soon as you return to Capture, the choice survives a relaunch, and the
+# toggle turns them back on.
+#
+# Prerequisites: iOS simulator (iPhone 17 layout) with a DEBUG build of
+#   Vox.md (bontecou.Voxboard) installed, labels setting at its default (on),
+#   and microphone access already granted (a fresh install asks on launch and
+#   the system alert hides the app's tree).
+#   `-VoxAdaptiveSeedDemo` creates the local "Vox Notes" demo vault and opens
+#   the Meeting Notes note, so Speak shows both its halves.
+# Side effects: the demo seed appends its "Project sync" entry to today's
+#   Meetings note on every launch. The run ends with labels back on.
+#   Uninstall the app to reset.
+# Selectors: as in ios-route-side-rail.yaml, the runner's directive tree
+#   carries none of these SwiftUI ids, so checks stay raw
+#   `tool: await-ui-element` steps, and taps the recorder could only derive as
+#   the editor or a bare role are documented coordinates (frames from
+#   `describe` on an iPhone 17). Every tap is followed by a check, so a mis-hit
+#   fails the run. Captions are hidden from VoiceOver but present in the
+#   ax-service tree, which is what the StaticText checks read.
+version: 2
+requires:
+  platform: ios
+steps:
+  - echo: Launch Vox.md (DEBUG) with the seeded demo vault. Expect the bar captions
+      (default on)
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+          - -VoxScreenshotUnlocked
+          - -VoxAdaptiveSeedDemo
+          - -VoxAdaptiveNoAutofocus
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: live_note_status
+      expectedText: Saved
+      textMatch: equals
+      timeoutMs: 20000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Add to note
+        role: StaticText
+      timeoutMs: 10000
+  - tool: screenshot
+    args:
+      scale: 0.5
+  - echo: Open Settings from the capture header
+  # Coordinate tap: Settings gear `capture_settings`, frame
+  # (0.841,0.080,0.109,0.050). The recorder resolved it to the editor beneath.
+  - tap:
+      x: 0.895
+      y: 0.105
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: settings_routes
+      timeoutMs: 5000
+  - echo: Scroll to Customization and open Capture Bar
+  # Fling to the end of Settings, then one fixed drag back, so the Capture
+  # Bar row always lands at the same spot (a drag from an arbitrary offset
+  # does not). `settings_capture_bar` there: frame (0.040,0.244,0.920,0.070).
+  - tool: run-sequence
+    args:
+      steps:
+        - tool: gesture-swipe
+          args:
+            fromX: 0.5
+            fromY: 0.85
+            toX: 0.5
+            toY: 0.15
+            durationMs: 120
+        - tool: gesture-swipe
+          args:
+            fromX: 0.5
+            fromY: 0.85
+            toX: 0.5
+            toY: 0.15
+            durationMs: 120
+        - tool: gesture-swipe
+          args:
+            fromX: 0.5
+            fromY: 0.85
+            toX: 0.5
+            toY: 0.15
+            durationMs: 120
+          # Let the fling come to rest at the end before the fixed drag.
+          delayMs: 1500
+        - tool: gesture-swipe
+          args:
+            fromX: 0.5
+            fromY: 0.3
+            toX: 0.5
+            toY: 0.6
+            momentum: false
+          # Let the list settle so the row tap lands on Capture Bar.
+          delayMs: 800
+        - tool: await-ui-element
+          args:
+            condition: visible
+            selector:
+              identifier: settings_capture_bar
+  - tap:
+      x: 0.5
+      y: 0.279
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: capture_show_button_labels
+      expectedText: Show Button Labels 1
+      textMatch: equals
+      timeoutMs: 5000
+  - echo: Turn Show Button Labels off
+  # Coordinate tap: the toggle's switch inside `capture_show_button_labels`,
+  # frame (0.040,0.179,0.920,0.059); the recorder derived a bare AXAdjustable.
+  - tap:
+      x: 0.83
+      y: 0.208
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: capture_show_button_labels
+      expectedText: Show Button Labels 0
+      textMatch: equals
+      timeoutMs: 5000
+  - echo: Back to Settings, then back to Capture. Expect no captions
+  # Coordinate tap: navigation Back (`BackButton`), frame (0.040,0.071,0.109,0.050).
+  - tap:
+      x: 0.094
+      y: 0.096
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: settings_capture_bar
+      timeoutMs: 5000
+  - tool: run-sequence
+    args:
+      steps:
+        - tool: gesture-swipe
+          args:
+            fromX: 0.5
+            fromY: 0.3
+            toX: 0.5
+            toY: 0.9
+        - tool: gesture-swipe
+          args:
+            fromX: 0.5
+            fromY: 0.3
+            toX: 0.5
+            toY: 0.9
+        - tool: await-ui-element
+          args:
+            condition: visible
+            selector:
+              identifier: signal.back
+            timeoutMs: 3000
+  # Coordinate tap: Settings' back circle `signal.back`, frame (0.050,0.080,0.109,0.050).
+  - tap:
+      x: 0.104
+      y: 0.105
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_speak_record_new_note
+      timeoutMs: 5000
+  - await:
+      idle: true
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        text: Add to note
+        role: StaticText
+      timeoutMs: 5000
+  - tool: screenshot
+    args:
+      scale: 0.5
+  - echo: Relaunch. Expect captions still off
+  - launch:
+      native: bontecou.Voxboard
+      ios:
+        app: bontecou.Voxboard
+        args:
+          - --disable-release-notes
+          - -VoxScreenshotUnlocked
+          - -VoxAdaptiveSeedDemo
+          - -VoxAdaptiveNoAutofocus
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: live_note_status
+      expectedText: Saved
+      textMatch: equals
+      timeoutMs: 20000
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: capture_speak_record_new_note
+      timeoutMs: 10000
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        text: Add to note
+        role: StaticText
+      timeoutMs: 3000
+  - echo: Restore. Settings > Capture Bar > turn Show Button Labels back on
+  - tap:
+      x: 0.895
+      y: 0.105
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: settings_routes
+      timeoutMs: 5000
+  # Fling to the end of Settings, then one fixed drag back, so the Capture
+  # Bar row always lands at the same spot (a drag from an arbitrary offset
+  # does not). `settings_capture_bar` there: frame (0.040,0.244,0.920,0.070).
+  - tool: run-sequence
+    args:
+      steps:
+        - tool: gesture-swipe
+          args:
+            fromX: 0.5
+            fromY: 0.85
+            toX: 0.5
+            toY: 0.15
+            durationMs: 120
+        - tool: gesture-swipe
+          args:
+            fromX: 0.5
+            fromY: 0.85
+            toX: 0.5
+            toY: 0.15
+            durationMs: 120
+        - tool: gesture-swipe
+          args:
+            fromX: 0.5
+            fromY: 0.85
+            toX: 0.5
+            toY: 0.15
+            durationMs: 120
+          # Let the fling come to rest at the end before the fixed drag.
+          delayMs: 1500
+        - tool: gesture-swipe
+          args:
+            fromX: 0.5
+            fromY: 0.3
+            toX: 0.5
+            toY: 0.6
+            momentum: false
+          # Let the list settle so the row tap lands on Capture Bar.
+          delayMs: 800
+        - tool: await-ui-element
+          args:
+            condition: visible
+            selector:
+              identifier: settings_capture_bar
+  - tap:
+      x: 0.5
+      y: 0.279
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: capture_show_button_labels
+      expectedText: Show Button Labels 0
+      textMatch: equals
+      timeoutMs: 5000
+  - tap:
+      x: 0.83
+      y: 0.208
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: capture_show_button_labels
+      expectedText: Show Button Labels 1
+      textMatch: equals
+      timeoutMs: 5000

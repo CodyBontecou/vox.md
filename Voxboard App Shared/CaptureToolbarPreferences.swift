@@ -7,6 +7,9 @@ enum CapturePreferenceKeys {
     static let firstNoteSaved = "capture.firstNote.saved.v1"
     static let confirmVoiceNoteBeforeAdding = "capture.voice.confirmBeforeAdding.v1"
     static let confirmPresetSend = "capture.voice.confirmPresetSend.v1"
+    /// Text captions under the capture screen's bottom-bar buttons (#199).
+    /// Absent means on (`CaptureBarButtonLabels.defaultValue`).
+    static let showsBarButtonLabels = "capture.bar.showsButtonLabels.v1"
     /// Persisted default recording result mode ("Add to Draft" vs
     /// "Send Immediately"). Stored as the `CaptureRecordingMode` raw value;
     /// absent means `.draft` (the fresh-install and 2.8 migration default).
@@ -18,6 +21,16 @@ enum CapturePreferenceKeys {
     /// Pre-3.0 rail keys, read once to restore the rail for users who had it open.
     static let legacyPresetQuickAccessRailExpanded = "capture.presets.quickAccess.railExpanded.v1"
     static let legacyPresetQuickAccessRailSide = "capture.presets.quickAccess.railSide.v1"
+}
+
+/// Captions under the bottom-bar buttons (Attach, Speak, New note, Send)
+/// so their actions are learnable; on unless turned off in Settings.
+enum CaptureBarButtonLabels {
+    static let defaultValue = true
+
+    static func areShown(in defaults: UserDefaults) -> Bool {
+        defaults.object(forKey: CapturePreferenceKeys.showsBarButtonLabels) as? Bool ?? defaultValue
+    }
 }
 
 /// Where the phone capture screen shows its vertical route rail: a thumb-reach
@@ -479,6 +492,16 @@ struct CaptureToolbarSettingsView: View {
     var body: some View {
         List {
             Section {
+                Toggle("Show Button Labels", isOn: $showsBarButtonLabels)
+                    .tint(Geist.Palette.gray1000)
+                    .accessibilityIdentifier("capture_show_button_labels")
+            } header: {
+                Text("Bottom Bar")
+            } footer: {
+                Text("Show a short name under Attach, Speak, New note and Send.")
+            }
+
+            Section {
                 ForEach(preferences.orderedActions) { action in
                     HStack(spacing: Geist.Spacing.three) {
                         actionIcon(action)
@@ -638,6 +661,9 @@ struct CaptureToolbarSettingsView: View {
 
     @AppStorage(CapturePreferenceKeys.confirmPresetSend)
     private var confirmsPresetSend = false
+
+    @AppStorage(CapturePreferenceKeys.showsBarButtonLabels)
+    private var showsBarButtonLabels = CaptureBarButtonLabels.defaultValue
 
     private var presetSendConfirmationBinding: Binding<Bool> {
         Binding(
