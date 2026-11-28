@@ -66,3 +66,6 @@ __pycache__/
 # Store screenshot intermediates (regenerable: CAPTURE.md + render.mjs --set as)
 artifacts/localization/store-signal-captures/
 artifacts/localization/store-signal-as/
+
+# Per-worktree Xcode DerivedData (-derivedDataPath .derived/<lane>)
+.derived/
